@@ -117,7 +117,7 @@ namespace MCForge
 			all.Add(new CmdFreeze());
 			all.Add(new CmdGarbage());
             all.Add(new CmdGcaccept());
-			//all.Add(new CmdGifToCin());
+			all.Add(new CmdGifToCin());
 			all.Add(new CmdGive());
 			all.Add(new CmdGlobal());
 			all.Add(new CmdGlobalCLS());
