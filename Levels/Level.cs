@@ -1424,7 +1424,9 @@ namespace MCForge
                         wait = speedPhysics;
                         break;
                     }
-
+                    //Dont know weather to break or continue if the listcheck == 0 ...
+                    //Would be to break the loop when the listcheck is 0
+                    //But appears to cause problems :/
                     DateTime Start = DateTime.Now;
 
                     if (physics > 0) CalcPhysics();
