@@ -112,7 +112,7 @@ namespace MCForge.Commands
             new CommandKeywords((new CmdFollow()), "posses impersonate");
             new CommandKeywords((new CmdFreeze()), "ice move player");
             new CommandKeywords((new CmdGarbage()), "memory clean unused");
-            new CommandKeywords((new CmdGifToCin()), "gif image cinema cin");
+            //new CommandKeywords((new CmdGifToCin()), "gif image cinema cin");
             new CommandKeywords((new CmdGive()), "money pay " + Server.moneys);
             new CommandKeywords((new CmdGlobal()), "irc mcforge " + Server.ircChannel);
             new CommandKeywords((new CmdGlobalCLS()), "clear global chat");

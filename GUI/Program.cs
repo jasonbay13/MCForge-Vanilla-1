@@ -140,7 +140,6 @@ namespace MCForge_.Gui
                     }
 
                     updateTimer.Elapsed += delegate { UpdateCheck(); }; updateTimer.Start();
-
                     Application.Run(new MCForge.Gui.Window());
                 }
             }

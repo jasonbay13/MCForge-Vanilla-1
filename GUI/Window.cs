@@ -504,7 +504,7 @@ namespace MCForge.Gui
                                     }
                                     catch
                                     {
-                                        Server.s.Log("The command data sending failed! If this happens often you should turn it off.");
+                                        Server.s.Log("The command data sending failed! If this happens more often I suggest to turn it off.");
                                     }
                                 }
                             }).Start();
@@ -550,7 +550,7 @@ namespace MCForge.Gui
 
         private void Window_Resize(object sender, EventArgs e)
         {
-            this.ShowInTaskbar = (this.WindowState != FormWindowState.Minimized);
+            this.ShowInTaskbar = !this.ShowInTaskbar;
         }
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
@@ -1941,6 +1941,16 @@ namespace MCForge.Gui
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void dgvPlayers_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void UnloadedList_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

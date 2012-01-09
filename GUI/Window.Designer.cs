@@ -980,6 +980,7 @@ namespace MCForge.Gui
             this.dgvPlayers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvPlayers.Size = new System.Drawing.Size(246, 250);
             this.dgvPlayers.TabIndex = 37;
+            this.dgvPlayers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPlayers_CellContentClick);
             this.dgvPlayers.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.dgvPlayers_RowPrePaint);
             // 
             // label1
@@ -1041,6 +1042,7 @@ namespace MCForge.Gui
             this.UnloadedList.Name = "UnloadedList";
             this.UnloadedList.Size = new System.Drawing.Size(155, 160);
             this.UnloadedList.TabIndex = 1;
+            this.UnloadedList.SelectedIndexChanged += new System.EventHandler(this.UnloadedList_SelectedIndexChanged);
             // 
             // ldmapbt
             // 

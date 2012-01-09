@@ -1417,7 +1417,7 @@ namespace MCForge
                 try
                 {
                     if (wait > 0) Thread.Sleep(wait);
-                    if (physics == 0 || ListCheck.Count == 0)
+                    if (physics == 0)
                     {
                         lastCheck = 0;
                         wait = speedPhysics;
