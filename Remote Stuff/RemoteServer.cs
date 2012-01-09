@@ -29,7 +29,7 @@ namespace MCForge.Remote
         public static int Protocol = 2;
         public static string Username = "head";
         public static string Password = "lols";
-        public static bool enableRemote = true;
+        public static bool enableRemote = false;
         public static int tries = 0;
 
 
