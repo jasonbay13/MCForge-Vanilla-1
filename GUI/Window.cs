@@ -550,7 +550,7 @@ namespace MCForge.Gui
 
         private void Window_Resize(object sender, EventArgs e)
         {
-            this.ShowInTaskbar = !this.ShowInTaskbar;
+            this.ShowInTaskbar = (this.WindowState != FormWindowState.Minimized);
         }
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)

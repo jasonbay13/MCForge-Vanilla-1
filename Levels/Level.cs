@@ -1403,7 +1403,7 @@ namespace MCForge
                     if (physThread.ThreadState == ThreadState.Running)
                         return;
                 }
-                if (ListCheck.Count == 0)
+                if (ListCheck.Count == 0 || physicssate)
                     return;
                 physThread = new Thread(Physics);
                 physThread.Start();
