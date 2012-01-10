@@ -437,7 +437,14 @@ namespace MCForge
             IntToPos(b, out x, out y, out z);
             return GetTile(x, y, z);
         }
-
+        public void SetTile(int b, byte type)
+        {
+            if (blocks == null) return;
+            if (b >= blocks.Length) return;
+            if (b < 0) return;
+            blocks[b] = type;
+            //blockchanges[x + width * z + width * height * y] = pName;
+        }
         public void SetTile(ushort x, ushort y, ushort z, byte type)
         {
             if (blocks == null) return;
@@ -770,7 +777,66 @@ namespace MCForge
                 Server.s.Log("Failed to save level properties!");
             }
         }
+        public void Blockchange(int b, byte type, bool overRide = false, string extraInfo = "")
+        //Block change made by physics
+        {
+            if (b < 0) return;
+            if (b >= blocks.Length) return;
+            byte bb = GetTile(b);
 
+            try
+            {
+                if (!overRide)
+                    if (Block.OPBlocks(bb) || Block.OPBlocks(type)) return;
+
+                if (Block.Convert(bb) != Block.Convert(type))
+                    //Should save bandwidth sending identical looking blocks, like air/op_air changes.
+                    Player.GlobalBlockchange(this, b, type);
+
+                if (b == Block.sponge && physics > 0 && type != Block.sponge)
+                    PhysSpongeRemoved(b);
+
+                if (b == Block.lava_sponge && physics > 0 && type != Block.lava_sponge)
+                    PhysSpongeRemoved(b, true);
+
+                try
+                {
+                    UndoPos uP;
+                    uP.location = b;
+                    uP.newType = type;
+                    uP.oldType = bb;
+                    uP.timePerformed = DateTime.Now;
+
+                    if (currentUndo > Server.physUndo)
+                    {
+                        currentUndo = 0;
+                        UndoBuffer[currentUndo] = uP;
+                    }
+                    else if (UndoBuffer.Count < Server.physUndo)
+                    {
+                        currentUndo++;
+                        UndoBuffer.Add(uP);
+                    }
+                    else
+                    {
+                        currentUndo++;
+                        UndoBuffer[currentUndo] = uP;
+                    }
+                }
+                catch
+                {
+                }
+
+                SetTile(b, type); //Updates server level blocks
+
+                if (physics > 0)
+                    if (Block.Physics(type) || extraInfo != "") AddCheck(b, extraInfo);
+            }
+            catch
+            {
+                SetTile(b, type);
+            }
+        }
         public void Blockchange(ushort x, ushort y, ushort z, byte type, bool overRide = false, string extraInfo = "")
             //Block change made by physics
         {
@@ -5108,8 +5174,8 @@ namespace MCForge
                                            {
                                                try
                                                {
-                                                   IntToPos(C.b, out x, out y, out z);
-                                                   Blockchange(x, y, z, C.type, false, C.extraInfo);
+                                                   //IntToPos(C.b, out x, out y, out z); NO!
+                                                   Blockchange(C.b, C.type, false, C.extraInfo);
                                                }
                                                catch
                                                {

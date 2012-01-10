@@ -3169,6 +3169,12 @@ changed |= 4;*/
         }
         #endregion
         #region == GLOBAL MESSAGES ==
+        public static void GlobalBlockchange(Level level, int b, byte type)
+        {
+            ushort x, y, z;
+            level.IntToPos(b, out x, out y, out z);
+            GlobalBlockchange(level, x, y, z, type);
+        }
         public static void GlobalBlockchange(Level level, ushort x, ushort y, ushort z, byte type)
         {
             players.ForEach(delegate(Player p) { if (p.level == level) { p.SendBlockchange(x, y, z, type); } });
