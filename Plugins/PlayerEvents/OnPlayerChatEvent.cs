@@ -15,7 +15,7 @@ namespace MCForge
         Player.OnPlayerChat method;
         Priority priority;
         internal OnPlayerChatEvent(Player.OnPlayerChat method, Priority priority, Plugin plugin) { this.plugin = plugin; this.priority = priority; this.method = method; }
-        internal static void Call(Player p, string message)
+        public static void Call(Player p, string message)
         {
             events.ForEach(delegate(OnPlayerChatEvent p1)
             {

@@ -15,7 +15,7 @@ namespace MCForge
         Player.OnPlayerConnect method;
         Priority priority;
         internal OnPlayerConnectEvent(Player.OnPlayerConnect method, Priority priority, Plugin plugin) { this.plugin = plugin; this.priority = priority; this.method = method; }
-        internal static void Call(Player p)
+        public static void Call(Player p)
         {
             events.ForEach(delegate(OnPlayerConnectEvent p1)
             {

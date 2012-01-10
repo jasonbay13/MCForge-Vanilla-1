@@ -164,7 +164,7 @@ namespace MCForge
 
         public Level(string n, ushort x, ushort y, ushort z, string type, int seed = 0, bool useSeed = false)
         {
-            onLevelSave += null;
+            //onLevelSave += null;
             width = x;
             depth = y;
             height = z;
@@ -298,14 +298,18 @@ namespace MCForge
         }
 
         #endregion
-
+        [Obsolete("Please use OnPhysicsUpdate.Register()")]
         public event OnPhysicsUpdate PhysicsUpdate = null;
         [Obsolete("Please use OnLevelUnloadEvent.Register()")]
         public static event OnLevelUnload LevelUnload = null;
+        [Obsolete("Please use OnLevelSaveEvent.Register()")]
         public static event OnLevelSave LevelSave = null;
-        public static event OnLevelSave onLevelSave = null;
+        //public static event OnLevelSave onLevelSave = null;
+        [Obsolete("Please use OnLevelUnloadEvent.Register()")]
         public event OnLevelUnload onLevelUnload = null;
+        [Obsolete("Please use OnLevelUnloadEvent.Register()")]
         public static event OnLevelLoad LevelLoad = null;
+        [Obsolete("Please use OnLevelUnloadEvent.Register()")]
         public static event OnLevelLoaded LevelLoaded;
 
         public void CopyBlocks(byte[] source, int offset)
@@ -921,18 +925,17 @@ namespace MCForge
             if (blocks == null) return;
             string path = "levels/" + name + ".lvl";
             if (LevelSave != null)
-            {
                 LevelSave(this);
-                if (cancelsave1)
-                {
-                    cancelsave1 = false;
-                    return;
-                }
-                if (cancelsave)
-                {
-                    cancelsave = false;
-                    return;
-                }
+            OnLevelSaveEvent.Call(this);
+            if (cancelsave1)
+            {
+                cancelsave1 = false;
+                return;
+            }
+            if (cancelsave)
+            {
+                cancelsave = false;
+                return;
             }
             try
             {
@@ -1100,13 +1103,12 @@ namespace MCForge
         public static Level Load(string givenName, byte phys)
         {
             if (LevelLoad != null)
-            {
                 LevelLoad(givenName);
-                if (cancelload)
-                {
-                    cancelload = false;
-                    return null;
-                }
+            OnLevelLoadEvent.Call(givenName);
+            if (cancelload)
+            {
+                cancelload = false;
+                return null;
             }
             CreateLeveldb(givenName);
 
@@ -1854,9 +1856,8 @@ namespace MCForge
                                                   int oldNum;
                                                   string foundInfo = C.extraInfo;
                                                   if (PhysicsUpdate != null)
-                                                  {
                                                       PhysicsUpdate(x, y, z, C.time, C.extraInfo, this);
-                                                  }
+                                                  OnPhysicsUpdateEvent.Call(x, y, z, C.time, C.extraInfo, this);
                                                   newPhysic:
                                                   if (foundInfo != "")
                                                   {

@@ -15,7 +15,7 @@ namespace MCForge
         Player.OnPlayerDeath method;
         Priority priority;
         internal OnPlayerDeathEvent(Player.OnPlayerDeath method, Priority priority, Plugin plugin) { this.plugin = plugin; this.priority = priority; this.method = method; }
-        internal static void Call(Player p, byte type)
+        public static void Call(Player p, byte type)
         {
             events.ForEach(delegate(OnPlayerDeathEvent p1)
             {

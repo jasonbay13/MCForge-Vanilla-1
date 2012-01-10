@@ -15,7 +15,7 @@ namespace MCForge
         Player.OnPlayerCommand method;
         Priority priority;
         internal OnPlayerCommandEvent(Player.OnPlayerCommand method, Priority priority, Plugin plugin) { this.plugin = plugin; this.priority = priority; this.method = method; }
-        internal static void Call(string cmd, Player p, string message)
+        public static void Call(string cmd, Player p, string message)
         {
             events.ForEach(delegate(OnPlayerCommandEvent p1)
             {
