@@ -560,7 +560,9 @@ namespace MCForge
                 Buffer.BlockCopy(p.tempbuffer, 0, b, p.buffer.Length, length);
 
                 p.buffer = p.HandleMessage(b);
-                //if (p.buffer.Length == 0) return;
+                if (!p.disconnected)
+                    p.socket.BeginReceive(p.tempbuffer, 0, p.tempbuffer.Length, SocketFlags.None,
+                                          new AsyncCallback(Receive), p);
             }
             catch (SocketException)
             {
