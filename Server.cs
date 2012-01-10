@@ -1035,6 +1035,9 @@ processThread.Start();
                     Gui.Window.thisWindow.UnloadedlistUpdate();
                 }
                 catch { }
+#if DEBUG
+      UseTextures = true;          
+#endif
                 Log("Finished setting up server");
                 ServerSetupFinished = true;
                 Checktimer.StartTimer();

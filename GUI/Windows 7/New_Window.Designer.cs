@@ -44,6 +44,10 @@
             this.ribbonPanel4 = new System.Windows.Forms.RibbonPanel();
             this.ribbonPanel5 = new System.Windows.Forms.RibbonPanel();
             this.ribbonColorChooser1 = new System.Windows.Forms.RibbonColorChooser();
+            this.blue = new System.Windows.Forms.RibbonButton();
+            this.black = new System.Windows.Forms.RibbonButton();
+            this.red = new System.Windows.Forms.RibbonButton();
+            this.orange = new System.Windows.Forms.RibbonButton();
             this.ribbonTab10 = new System.Windows.Forms.RibbonTab();
             this.ribbonTab11 = new System.Windows.Forms.RibbonTab();
             this.ribbonTab12 = new System.Windows.Forms.RibbonTab();
@@ -116,6 +120,9 @@
             this.label13 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.SaveMap = new System.Windows.Forms.Button();
+            this.ribbonPanel6 = new System.Windows.Forms.RibbonPanel();
+            this.ribbonTextBox1 = new System.Windows.Forms.RibbonTextBox();
+            this.ribbonComboBox1 = new System.Windows.Forms.RibbonComboBox();
             this.dgvMapsTab = new System.Windows.Forms.DataGridView();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -316,6 +323,10 @@
             this.ribbonColorChooser1.Color = System.Drawing.Color.Transparent;
             this.ribbonColorChooser1.DropDownArrowDirection = System.Windows.Forms.RibbonArrowDirection.Down;
             this.ribbonColorChooser1.DropDownArrowSize = new System.Drawing.Size(5, 3);
+            this.ribbonColorChooser1.DropDownItems.Add(this.blue);
+            this.ribbonColorChooser1.DropDownItems.Add(this.black);
+            this.ribbonColorChooser1.DropDownItems.Add(this.red);
+            this.ribbonColorChooser1.DropDownItems.Add(this.orange);
             this.ribbonColorChooser1.Image = ((System.Drawing.Image)(resources.GetObject("ribbonColorChooser1.Image")));
             this.ribbonColorChooser1.MaxSizeMode = System.Windows.Forms.RibbonElementSizeMode.Medium;
             this.ribbonColorChooser1.SmallImage = ((System.Drawing.Image)(resources.GetObject("ribbonColorChooser1.SmallImage")));
@@ -328,8 +339,73 @@
             this.ribbonColorChooser1.ColorChanged += new System.EventHandler(this.ribbonColorChooser1_ColorChanged);
             this.ribbonColorChooser1.Click += new System.EventHandler(this.ribbonColorChooser1_Click);
             // 
+            // blue
+            // 
+            this.blue.AltKey = null;
+            this.blue.DropDownArrowDirection = System.Windows.Forms.RibbonArrowDirection.Left;
+            this.blue.DropDownArrowSize = new System.Drawing.Size(5, 3);
+            this.blue.Image = ((System.Drawing.Image)(resources.GetObject("blue.Image")));
+            this.blue.MaxSizeMode = System.Windows.Forms.RibbonElementSizeMode.Compact;
+            this.blue.MinSizeMode = System.Windows.Forms.RibbonElementSizeMode.Compact;
+            this.blue.SmallImage = ((System.Drawing.Image)(resources.GetObject("blue.SmallImage")));
+            this.blue.Style = System.Windows.Forms.RibbonButtonStyle.Normal;
+            this.blue.Tag = null;
+            this.blue.Text = "Blue";
+            this.blue.ToolTip = null;
+            this.blue.ToolTipImage = null;
+            this.blue.ToolTipTitle = null;
+            this.blue.Click += new System.EventHandler(this.blue_Click);
+            // 
+            // black
+            // 
+            this.black.AltKey = null;
+            this.black.DropDownArrowDirection = System.Windows.Forms.RibbonArrowDirection.Left;
+            this.black.DropDownArrowSize = new System.Drawing.Size(5, 3);
+            this.black.Image = ((System.Drawing.Image)(resources.GetObject("black.Image")));
+            this.black.MaxSizeMode = System.Windows.Forms.RibbonElementSizeMode.Compact;
+            this.black.MinSizeMode = System.Windows.Forms.RibbonElementSizeMode.Compact;
+            this.black.SmallImage = ((System.Drawing.Image)(resources.GetObject("black.SmallImage")));
+            this.black.Style = System.Windows.Forms.RibbonButtonStyle.Normal;
+            this.black.Tag = null;
+            this.black.Text = "Black";
+            this.black.ToolTip = null;
+            this.black.ToolTipImage = null;
+            this.black.ToolTipTitle = null;
+            this.black.Click += new System.EventHandler(this.black_Click);
+            // 
+            // red
+            // 
+            this.red.AltKey = null;
+            this.red.DropDownArrowDirection = System.Windows.Forms.RibbonArrowDirection.Left;
+            this.red.DropDownArrowSize = new System.Drawing.Size(5, 3);
+            this.red.Image = ((System.Drawing.Image)(resources.GetObject("red.Image")));
+            this.red.MaxSizeMode = System.Windows.Forms.RibbonElementSizeMode.Compact;
+            this.red.MinSizeMode = System.Windows.Forms.RibbonElementSizeMode.Compact;
+            this.red.SmallImage = ((System.Drawing.Image)(resources.GetObject("red.SmallImage")));
+            this.red.Style = System.Windows.Forms.RibbonButtonStyle.Normal;
+            this.red.Tag = null;
+            this.red.Text = "Red";
+            this.red.ToolTip = null;
+            this.red.ToolTipImage = null;
+            this.red.ToolTipTitle = null;
+            // 
+            // orange
+            // 
+            this.orange.AltKey = null;
+            this.orange.DropDownArrowDirection = System.Windows.Forms.RibbonArrowDirection.Left;
+            this.orange.DropDownArrowSize = new System.Drawing.Size(5, 3);
+            this.orange.Image = ((System.Drawing.Image)(resources.GetObject("orange.Image")));
+            this.orange.SmallImage = ((System.Drawing.Image)(resources.GetObject("orange.SmallImage")));
+            this.orange.Style = System.Windows.Forms.RibbonButtonStyle.Normal;
+            this.orange.Tag = null;
+            this.orange.Text = "Orange";
+            this.orange.ToolTip = null;
+            this.orange.ToolTipImage = null;
+            this.orange.ToolTipTitle = null;
+            // 
             // ribbonTab10
             // 
+            this.ribbonTab10.Panels.Add(this.ribbonPanel6);
             this.ribbonTab10.Tag = null;
             this.ribbonTab10.Text = "Maps";
             // 
@@ -408,6 +484,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
             this.label2.Location = new System.Drawing.Point(497, 354);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(57, 13);
@@ -490,10 +567,10 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.tabPage2.Controls.Add(this.dgvMapsTab);
             this.tabPage2.Controls.Add(this.panel3);
             this.tabPage2.Controls.Add(this.panel1);
             this.tabPage2.Controls.Add(this.panel2);
-            this.tabPage2.Controls.Add(this.dgvMapsTab);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -1082,6 +1159,36 @@
             this.SaveMap.Text = "Save Map Properties";
             this.SaveMap.UseVisualStyleBackColor = true;
             // 
+            // ribbonPanel6
+            // 
+            this.ribbonPanel6.Items.Add(this.ribbonTextBox1);
+            this.ribbonPanel6.Items.Add(this.ribbonComboBox1);
+            this.ribbonPanel6.Tag = null;
+            this.ribbonPanel6.Text = "Map Properties";
+            // 
+            // ribbonTextBox1
+            // 
+            this.ribbonTextBox1.AltKey = null;
+            this.ribbonTextBox1.Image = null;
+            this.ribbonTextBox1.Tag = null;
+            this.ribbonTextBox1.Text = "MOTD:";
+            this.ribbonTextBox1.TextBoxText = null;
+            this.ribbonTextBox1.TextBoxWidth = 80;
+            this.ribbonTextBox1.ToolTip = null;
+            this.ribbonTextBox1.ToolTipImage = null;
+            this.ribbonTextBox1.ToolTipTitle = null;
+            // 
+            // ribbonComboBox1
+            // 
+            this.ribbonComboBox1.AltKey = null;
+            this.ribbonComboBox1.Image = null;
+            this.ribbonComboBox1.Tag = null;
+            this.ribbonComboBox1.Text = "Physics";
+            this.ribbonComboBox1.TextBoxText = null;
+            this.ribbonComboBox1.ToolTip = null;
+            this.ribbonComboBox1.ToolTipImage = null;
+            this.ribbonComboBox1.ToolTipTitle = null;
+            // 
             // dgvMapsTab
             // 
             this.dgvMapsTab.AllowUserToAddRows = false;
@@ -1089,14 +1196,14 @@
             this.dgvMapsTab.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvMapsTab.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgvMapsTab.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvMapsTab.Location = new System.Drawing.Point(20, 235);
+            this.dgvMapsTab.Location = new System.Drawing.Point(16, 235);
             this.dgvMapsTab.MultiSelect = false;
             this.dgvMapsTab.Name = "dgvMapsTab";
             this.dgvMapsTab.ReadOnly = true;
             this.dgvMapsTab.RowHeadersVisible = false;
             this.dgvMapsTab.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvMapsTab.Size = new System.Drawing.Size(730, 136);
-            this.dgvMapsTab.TabIndex = 64;
+            this.dgvMapsTab.TabIndex = 68;
             // 
             // New_Window
             // 
@@ -1213,7 +1320,6 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button SaveMap;
-        private System.Windows.Forms.DataGridView dgvMapsTab;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label12;
@@ -1234,5 +1340,13 @@
         private System.Windows.Forms.RibbonPanel ribbonPanel4;
         private System.Windows.Forms.RibbonPanel ribbonPanel5;
         private System.Windows.Forms.RibbonColorChooser ribbonColorChooser1;
+        private System.Windows.Forms.RibbonButton blue;
+        private System.Windows.Forms.RibbonButton black;
+        private System.Windows.Forms.RibbonButton red;
+        private System.Windows.Forms.RibbonButton orange;
+        private System.Windows.Forms.RibbonPanel ribbonPanel6;
+        private System.Windows.Forms.RibbonTextBox ribbonTextBox1;
+        private System.Windows.Forms.RibbonComboBox ribbonComboBox1;
+        private System.Windows.Forms.DataGridView dgvMapsTab;
     }
 }

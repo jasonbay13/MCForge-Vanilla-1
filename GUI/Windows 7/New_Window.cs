@@ -144,11 +144,7 @@ namespace MCForge.GUI
 
             dgvMapsTab.DataSource = new LevelCollection(new LevelListViewForTab());
             dgvMapsTab.Font = new Font("Calibri", 8.25f);
-            //CUSTOM COLORS ===========================
-            /*RibbonProfessionalRenderer rend = new RibbonProfessionalRenderer();
-            rend.ColorTable.RibbonBackground = FromHex("#30fd30");
-            ribbon2.Renderer = rend;*/
-            //CUSTOM COLORS ===========================
+
             updatetimer.Elapsed += delegate
             {
                 UnloadedlistUpdate();
@@ -208,6 +204,8 @@ namespace MCForge.GUI
 
         private void dgvPlayers_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
+            if (dgvPlayers.ColumnCount == 0)
+                return;
             foreach (RibbonTab r in this.ribbon2.Tabs.ToArray())
             {
                 switch (r.Text)
@@ -456,19 +454,71 @@ namespace MCForge.GUI
 
         private void ribbonColorChooser1_ColorChanged(object sender, EventArgs e)
         {
-            RibbonProfessionalRenderer rend = new RibbonProfessionalRenderer();
+            /*RibbonProfessionalRenderer rend = new RibbonProfessionalRenderer();
             rend.ColorTable.RibbonBackground = ribbonColorChooser1.Color;
             rend.ColorTable.PanelOverflowBackgroundSelectedNorth = ribbonColorChooser1.Color;
             this.BackColor = ribbonColorChooser1.Color;
+            ribbon2.Renderer = rend;*/
+        }
+        //CUSTOM COLORS ===========================
+        /*RibbonProfessionalRenderer rend = new RibbonProfessionalRenderer();
+        rend.ColorTable.RibbonBackground = FromHex("#30fd30");
+        ribbon2.Renderer = rend;*/
+        //CUSTOM COLORS ===========================
+        private void ribbonColorChooser1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void blue_Click(object sender, EventArgs e)
+        {
+            RibbonProfessionalRenderer rend = new RibbonProfessionalRenderer();
+            rend.ColorTable.PanelOverflowBackgroundSelectedNorth = FromHex("#B8D7FD");
+            this.BackColor = FromHex("#B8D7FD");
             ribbon2.Renderer = rend;
         }
 
-        private void ribbonColorChooser1_Click(object sender, EventArgs e)
+        private void black_Click(object sender, EventArgs e)
         {
-            if (ribbonColorChooser1.DropDownVisible)
-                ribbonColorChooser1.CloseDropDown();
-            else
-                ribbonColorChooser1.ShowDropDown();
+            RibbonProfessionalRenderer rend = new RibbonProfessionalRenderer();
+            rend.ColorTable.TabNorth = FromHex("#000000");
+            rend.ColorTable.TabContentNorth = FromHex("#000000");
+            rend.ColorTable.TabContentSouth = Color.DarkGray;
+            rend.ColorTable.TabBorder = FromHex("#000000");
+            rend.ColorTable.TabGlow = FromHex("#000000");
+            rend.ColorTable.RibbonBackground = FromHex("#000000");
+            rend.ColorTable.PanelOverflowBackgroundSelectedNorth = FromHex("#000000");
+            this.BackColor = FromHex("#000000");
+            tabPage1.BackColor = this.BackColor;
+            tabPage2.BackColor = this.BackColor;
+            label1.ForeColor = FromHex("#FFFFFF");
+            label2.ForeColor = FromHex("#FFFFFF");
+            label3.ForeColor = FromHex("#FFFFFF");
+            label5.ForeColor = FromHex("#FFFFFF");
+            label6.ForeColor = FromHex("#FFFFFF");
+            label11.ForeColor = FromHex("#FFFFFF");
+            label12.ForeColor = FromHex("#FFFFFF");
+            label13.ForeColor = FromHex("#FFFFFF");
+            label14.ForeColor = FromHex("#FFFFFF");
+            label15.ForeColor = FromHex("#FFFFFF");
+            label16.ForeColor = FromHex("#FFFFFF");
+            label17.ForeColor = FromHex("#FFFFFF");
+            label18.ForeColor = FromHex("#FFFFFF");
+            label19.ForeColor = FromHex("#FFFFFF");
+            label20.ForeColor = FromHex("#FFFFFF");
+            label21.ForeColor = FromHex("#FFFFFF");
+            label22.ForeColor = FromHex("#FFFFFF");
+            label23.ForeColor = FromHex("#FFFFFF");
+            label24.ForeColor = FromHex("#FFFFFF");
+            label25.ForeColor = FromHex("#FFFFFF");
+            label26.ForeColor = FromHex("#FFFFFF");
+            label27.ForeColor = FromHex("#FFFFFF");
+            label35.ForeColor = FromHex("#FFFFFF");
+            label36.ForeColor = FromHex("#FFFFFF");
+            label37.ForeColor = FromHex("#FFFFFF");
+            label38.ForeColor = FromHex("#FFFFFF");
+            label39.ForeColor = FromHex("#FFFFFF");
+            ribbon2.Renderer = rend;
         }
     }
 }

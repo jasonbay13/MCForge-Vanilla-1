@@ -25,7 +25,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using MCForge.Gui;
-//using MCForge.Levels.Textures;
+using MCForge.Levels.Textures;
 using MCForge.SQL;
 using Timer = System.Timers.Timer;
 
@@ -150,7 +150,7 @@ namespace MCForge
         public ushort spawnz;
 
         public int speedPhysics = 250;
-        //public LevelTextures textures;
+        public LevelTextures textures;
 
         public string theme = "Normal";
         public bool unload = true;
@@ -267,7 +267,7 @@ namespace MCForge
             spawnz = (ushort) (height/2);
             rotx = 0;
             roty = 0;
-            //textures = new LevelTextures(this);
+            textures = new LevelTextures(this);
             //season = new SeasonsCore(this);
         }
 
