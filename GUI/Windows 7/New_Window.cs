@@ -321,7 +321,7 @@ namespace MCForge.GUI
                         break;
                 }
             }
-            catch (Exception ee) { Server.s.Log("" + e);  }
+            catch (Exception ee) { Server.s.Log("" + ee);  }
         }
 
         private void ribbon2_Click(object sender, EventArgs e)

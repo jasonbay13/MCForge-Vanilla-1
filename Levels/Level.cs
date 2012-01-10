@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using MCForge.Gui;
 using MCForge.Levels.Textures;
 using MCForge.SQL;
+using System.Diagnostics;
 using Timer = System.Timers.Timer;
 
 //using MySql.Data.MySqlClient;
@@ -944,53 +945,55 @@ namespace MCForge
 
                 if (changed || !File.Exists(path) || Override)
                 {
-                    GZipStream gs;
                     using (FileStream fs = File.Create(string.Format("{0}.back", path)))
                     {
-                        gs = new GZipStream(fs, CompressionMode.Compress);
-
-                        var header = new byte[16];
-                        BitConverter.GetBytes(1874).CopyTo(header, 0);
-                        gs.Write(header, 0, 2);
-
-                        BitConverter.GetBytes(width).CopyTo(header, 0);
-                        BitConverter.GetBytes(height).CopyTo(header, 2);
-                        BitConverter.GetBytes(depth).CopyTo(header, 4);
-                        BitConverter.GetBytes(spawnx).CopyTo(header, 6);
-                        BitConverter.GetBytes(spawnz).CopyTo(header, 8);
-                        BitConverter.GetBytes(spawny).CopyTo(header, 10);
-                        header[12] = rotx;
-                        header[13] = roty;
-                        header[14] = (byte) permissionvisit;
-                        header[15] = (byte) permissionbuild;
-                        gs.Write(header, 0, header.Length);
-                        var level = new byte[blocks.Length];
-                        for (int i = 0; i < blocks.Length; ++i)
+                        using (GZipStream gs = new GZipStream(fs, CompressionMode.Compress))
                         {
-                            if (blocks[i] < 57)
+
+                            var header = new byte[16];
+                            BitConverter.GetBytes(1874).CopyTo(header, 0);
+                            gs.Write(header, 0, 2);
+
+                            BitConverter.GetBytes(width).CopyTo(header, 0);
+                            BitConverter.GetBytes(height).CopyTo(header, 2);
+                            BitConverter.GetBytes(depth).CopyTo(header, 4);
+                            BitConverter.GetBytes(spawnx).CopyTo(header, 6);
+                            BitConverter.GetBytes(spawnz).CopyTo(header, 8);
+                            BitConverter.GetBytes(spawny).CopyTo(header, 10);
+                            header[12] = rotx;
+                            header[13] = roty;
+                            header[14] = (byte)permissionvisit;
+                            header[15] = (byte)permissionbuild;
+                            gs.Write(header, 0, header.Length);
+                            var level = new byte[blocks.Length];
+                            for (int i = 0; i < blocks.Length; ++i)
+                            {
+                                if (blocks[i] < 57)
                                 //CHANGED THIS TO INCOPARATE SOME MORE SPACE THAT I NEEDED FOR THE door_orange_air ETC.
-                            {
-                                level[i] = blocks[i];
+                                {
+                                    level[i] = blocks[i];
+                                }
+                                else
+                                {
+                                    level[i] = Block.SaveConvert(blocks[i]);
+                                }
                             }
-                            else
-                            {
-                                level[i] = Block.SaveConvert(blocks[i]);
-                            }
+                            gs.Write(level, 0, level.Length);
+                            gs.Close();
+                            File.Delete(string.Format("{0}.backup", path));
+                            File.Copy(string.Format("{0}.back", path), path + ".backup");
+                            File.Delete(path);
+                            File.Move(string.Format("{0}.back", path), path);
+
+                            SaveSettings(this);
+
+                            Server.s.Log(string.Format("SAVED: Level \"{0}\". ({1}/{2}/{3})", name, players.Count,
+                                                       Player.players.Count, Server.players));
+                            changed = false;
+
+                            gs.Dispose();
+                            fs.Dispose();
                         }
-                        gs.Write(level, 0, level.Length);
-                        gs.Close();
-                        File.Delete(string.Format("{0}.backup", path));
-                        File.Copy(string.Format("{0}.back", path), path + ".backup");
-                        File.Delete(path);
-                        File.Move(string.Format("{0}.back", path), path);
-
-                        SaveSettings(this);
-
-                        Server.s.Log(string.Format("SAVED: Level \"{0}\". ({1}/{2}/{3})", name, players.Count,
-                                                   Player.players.Count, Server.players));
-                        changed = false;
-
-                        gs.Dispose();
                     }
 
                     // UNCOMPRESSED LEVEL SAVING! DO NOT USE!
@@ -1028,6 +1031,22 @@ namespace MCForge
                 {
                     Server.s.Log("Skipping level save for " + name + ".");
                 }
+            }
+            catch (OutOfMemoryException e)
+            {
+                Server.ErrorLog(e);
+                if (Server.mono)
+                {
+                    Process[] prs = Process.GetProcesses();
+                    foreach (Process pr in prs)
+                    {
+                        if (pr.ProcessName == "MCForge")
+                            pr.Kill();
+
+                    }
+                }
+                else
+                    Command.all.Find("restart").Use(null, "");
             }
             catch (Exception e)
             {
@@ -1468,7 +1487,7 @@ namespace MCForge
             {
                 if (physThread != null)
                 {
-                    if (physThread.ThreadState == ThreadState.Running)
+                    if (physThread.ThreadState == System.Threading.ThreadState.Running)
                         return;
                 }
                 if (ListCheck.Count == 0 || physicssate)
