@@ -201,12 +201,16 @@ namespace MCForge.Levels.Textures
         static readonly Regex HttpFirstLine = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
         public void ServeCfg(Player p, byte[] buffer)
         {
-            using (NetworkStream stream = new NetworkStream(p.socket))
+            var stream = new NetworkStream(p.socket);
+            using (StreamReader reader = new StreamReader(stream))
             {
-                using (StreamWriter textWriter = new StreamWriter(stream, Encoding.UTF8))
+                using (StreamWriter textWriter = new StreamWriter(stream, Encoding.ASCII))
                 {
                     string firstLine = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
-                    Server.s.Log(firstLine);
+                    //Server.s.Log(firstLine);
+                    //string text = "";
+                    //while ((text = reader.ReadLine()) != null)
+                    //    Server.s.Log(text);
                     var match = HttpFirstLine.Match(firstLine);
                     if (match.Success)
                     {
@@ -228,26 +232,31 @@ namespace MCForge.Levels.Textures
                                 cfg = cachecfg;
                             cfg.Replace("\r", "");*/
                             string cfg = GetCFG();
+                            //Server.s.Log(cfg);
                             byte[] content = Encoding.UTF8.GetBytes(cfg);
-                            textWriter.WriteLine("HTTP/1.1 200 OK");
+                            textWriter.Write("HTTP/1.1 200 OK");
                             textWriter.WriteLine("Date: " + DateTime.UtcNow.ToString("R"));
-                            textWriter.WriteLine("Content-Type: text/plain");
+                            textWriter.WriteLine("Server: Apache/2.2.21 (CentOS)");
+                            textWriter.WriteLine("Last-Modified: " + DateTime.UtcNow.ToString("R"));
+                            textWriter.WriteLine("Accept-Ranges: bytes");
                             textWriter.WriteLine("Content-Length: " + content.Length); //idk
+                            textWriter.WriteLine("Connection: close");
+                            textWriter.WriteLine("Content-Type: text/plain");
                             textWriter.WriteLine();
                             textWriter.WriteLine(cfg);
                         }
                         else
-                        {
-                            textWriter.WriteLine("HTTP/1.1 404 Not Found"); Server.s.Log("A");
-                        }
+                            textWriter.WriteLine("HTTP/1.1 404 Not Found");
                     }
                     else
-                    {
-                        textWriter.WriteLine("HTTP/1.1 400 Bad Request"); Server.s.Log("B");
-                    }
+                        textWriter.WriteLine("HTTP/1.1 400 Bad Request");
                     p.dontmindme = true;
                 }
             }
+            stream.Close();
+            stream.Dispose();
+            p.socket.Close();
+            p.disconnected = true;
         }
         static int ParseHexColor(string text)
         {
