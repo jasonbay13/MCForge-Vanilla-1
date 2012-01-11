@@ -122,7 +122,13 @@
       <DependentUpon>WoM.cs</DependentUpon>
     </Compile>
     <Compile Include="Levels\Texture_Settings.cs" />
+    <Compile Include="Plugins\GroupEvents\OnGroupLoadEvent.cs" />
+    <Compile Include="Plugins\GroupEvents\OnGroupSaveEvent.cs" />
+    <Compile Include="Plugins\GroupEvents\OnPlayerRankSetEvent.cs" />
+    <Compile Include="Plugins\LevelEvents\OnLevelLoadEvent.cs" />
+    <Compile Include="Plugins\LevelEvents\OnLevelSaveEvent.cs" />
     <Compile Include="Plugins\LevelEvents\OnLevelUnloadEvent.cs" />
+    <Compile Include="Plugins\LevelEvents\OnPhysicsUpdate.cs" />
     <Compile Include="Plugins\PlayerEvents\OnBlockChangeEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\OnMessageRecieveEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\OnMySQLSaveEvent.cs" />
@@ -641,9 +647,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\TranslateService\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Plugins\GroupEvents\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

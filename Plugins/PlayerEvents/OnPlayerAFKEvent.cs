@@ -15,7 +15,7 @@ namespace MCForge
         Player.OnAFK method;
         Priority priority;
         internal OnPlayerAFKEvent(Player.OnAFK method, Priority priority, Plugin plugin) { this.plugin = plugin; this.priority = priority; this.method = method; }
-        internal static void Call(Player p)
+        public static void Call(Player p)
         {
             events.ForEach(delegate(OnPlayerAFKEvent p1)
             {

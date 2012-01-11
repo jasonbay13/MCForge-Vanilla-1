@@ -27,6 +27,7 @@ using System.Windows.Forms;
 using MCForge.Gui;
 using MCForge.Levels.Textures;
 using MCForge.SQL;
+using System.Diagnostics;
 using Timer = System.Timers.Timer;
 
 //using MySql.Data.MySqlClient;
@@ -164,7 +165,7 @@ namespace MCForge
 
         public Level(string n, ushort x, ushort y, ushort z, string type, int seed = 0, bool useSeed = false)
         {
-            onLevelSave += null;
+            //onLevelSave += null;
             width = x;
             depth = y;
             height = z;
@@ -298,14 +299,18 @@ namespace MCForge
         }
 
         #endregion
-
+        [Obsolete("Please use OnPhysicsUpdate.Register()")]
         public event OnPhysicsUpdate PhysicsUpdate = null;
         [Obsolete("Please use OnLevelUnloadEvent.Register()")]
         public static event OnLevelUnload LevelUnload = null;
+        [Obsolete("Please use OnLevelSaveEvent.Register()")]
         public static event OnLevelSave LevelSave = null;
-        public static event OnLevelSave onLevelSave = null;
+        //public static event OnLevelSave onLevelSave = null;
+        [Obsolete("Please use OnLevelUnloadEvent.Register()")]
         public event OnLevelUnload onLevelUnload = null;
+        [Obsolete("Please use OnLevelUnloadEvent.Register()")]
         public static event OnLevelLoad LevelLoad = null;
+        [Obsolete("Please use OnLevelUnloadEvent.Register()")]
         public static event OnLevelLoaded LevelLoaded;
 
         public void CopyBlocks(byte[] source, int offset)
@@ -437,7 +442,14 @@ namespace MCForge
             IntToPos(b, out x, out y, out z);
             return GetTile(x, y, z);
         }
-
+        public void SetTile(int b, byte type)
+        {
+            if (blocks == null) return;
+            if (b >= blocks.Length) return;
+            if (b < 0) return;
+            blocks[b] = type;
+            //blockchanges[x + width * z + width * height * y] = pName;
+        }
         public void SetTile(ushort x, ushort y, ushort z, byte type)
         {
             if (blocks == null) return;
@@ -770,7 +782,66 @@ namespace MCForge
                 Server.s.Log("Failed to save level properties!");
             }
         }
+        public void Blockchange(int b, byte type, bool overRide = false, string extraInfo = "")
+        //Block change made by physics
+        {
+            if (b < 0) return;
+            if (b >= blocks.Length) return;
+            byte bb = GetTile(b);
 
+            try
+            {
+                if (!overRide)
+                    if (Block.OPBlocks(bb) || Block.OPBlocks(type)) return;
+
+                if (Block.Convert(bb) != Block.Convert(type))
+                    //Should save bandwidth sending identical looking blocks, like air/op_air changes.
+                    Player.GlobalBlockchange(this, b, type);
+
+                if (b == Block.sponge && physics > 0 && type != Block.sponge)
+                    PhysSpongeRemoved(b);
+
+                if (b == Block.lava_sponge && physics > 0 && type != Block.lava_sponge)
+                    PhysSpongeRemoved(b, true);
+
+                try
+                {
+                    UndoPos uP;
+                    uP.location = b;
+                    uP.newType = type;
+                    uP.oldType = bb;
+                    uP.timePerformed = DateTime.Now;
+
+                    if (currentUndo > Server.physUndo)
+                    {
+                        currentUndo = 0;
+                        UndoBuffer[currentUndo] = uP;
+                    }
+                    else if (UndoBuffer.Count < Server.physUndo)
+                    {
+                        currentUndo++;
+                        UndoBuffer.Add(uP);
+                    }
+                    else
+                    {
+                        currentUndo++;
+                        UndoBuffer[currentUndo] = uP;
+                    }
+                }
+                catch
+                {
+                }
+
+                SetTile(b, type); //Updates server level blocks
+
+                if (physics > 0)
+                    if (Block.Physics(type) || extraInfo != "") AddCheck(b, extraInfo);
+            }
+            catch
+            {
+                SetTile(b, type);
+            }
+        }
         public void Blockchange(ushort x, ushort y, ushort z, byte type, bool overRide = false, string extraInfo = "")
             //Block change made by physics
         {
@@ -855,18 +926,17 @@ namespace MCForge
             if (blocks == null) return;
             string path = "levels/" + name + ".lvl";
             if (LevelSave != null)
-            {
                 LevelSave(this);
-                if (cancelsave1)
-                {
-                    cancelsave1 = false;
-                    return;
-                }
-                if (cancelsave)
-                {
-                    cancelsave = false;
-                    return;
-                }
+            OnLevelSaveEvent.Call(this);
+            if (cancelsave1)
+            {
+                cancelsave1 = false;
+                return;
+            }
+            if (cancelsave)
+            {
+                cancelsave = false;
+                return;
             }
             try
             {
@@ -875,53 +945,55 @@ namespace MCForge
 
                 if (changed || !File.Exists(path) || Override)
                 {
-                    GZipStream gs;
                     using (FileStream fs = File.Create(string.Format("{0}.back", path)))
                     {
-                        gs = new GZipStream(fs, CompressionMode.Compress);
-
-                        var header = new byte[16];
-                        BitConverter.GetBytes(1874).CopyTo(header, 0);
-                        gs.Write(header, 0, 2);
-
-                        BitConverter.GetBytes(width).CopyTo(header, 0);
-                        BitConverter.GetBytes(height).CopyTo(header, 2);
-                        BitConverter.GetBytes(depth).CopyTo(header, 4);
-                        BitConverter.GetBytes(spawnx).CopyTo(header, 6);
-                        BitConverter.GetBytes(spawnz).CopyTo(header, 8);
-                        BitConverter.GetBytes(spawny).CopyTo(header, 10);
-                        header[12] = rotx;
-                        header[13] = roty;
-                        header[14] = (byte) permissionvisit;
-                        header[15] = (byte) permissionbuild;
-                        gs.Write(header, 0, header.Length);
-                        var level = new byte[blocks.Length];
-                        for (int i = 0; i < blocks.Length; ++i)
+                        using (GZipStream gs = new GZipStream(fs, CompressionMode.Compress))
                         {
-                            if (blocks[i] < 57)
+
+                            var header = new byte[16];
+                            BitConverter.GetBytes(1874).CopyTo(header, 0);
+                            gs.Write(header, 0, 2);
+
+                            BitConverter.GetBytes(width).CopyTo(header, 0);
+                            BitConverter.GetBytes(height).CopyTo(header, 2);
+                            BitConverter.GetBytes(depth).CopyTo(header, 4);
+                            BitConverter.GetBytes(spawnx).CopyTo(header, 6);
+                            BitConverter.GetBytes(spawnz).CopyTo(header, 8);
+                            BitConverter.GetBytes(spawny).CopyTo(header, 10);
+                            header[12] = rotx;
+                            header[13] = roty;
+                            header[14] = (byte)permissionvisit;
+                            header[15] = (byte)permissionbuild;
+                            gs.Write(header, 0, header.Length);
+                            var level = new byte[blocks.Length];
+                            for (int i = 0; i < blocks.Length; ++i)
+                            {
+                                if (blocks[i] < 57)
                                 //CHANGED THIS TO INCOPARATE SOME MORE SPACE THAT I NEEDED FOR THE door_orange_air ETC.
-                            {
-                                level[i] = blocks[i];
+                                {
+                                    level[i] = blocks[i];
+                                }
+                                else
+                                {
+                                    level[i] = Block.SaveConvert(blocks[i]);
+                                }
                             }
-                            else
-                            {
-                                level[i] = Block.SaveConvert(blocks[i]);
-                            }
+                            gs.Write(level, 0, level.Length);
+                            gs.Close();
+                            File.Delete(string.Format("{0}.backup", path));
+                            File.Copy(string.Format("{0}.back", path), path + ".backup");
+                            File.Delete(path);
+                            File.Move(string.Format("{0}.back", path), path);
+
+                            SaveSettings(this);
+
+                            Server.s.Log(string.Format("SAVED: Level \"{0}\". ({1}/{2}/{3})", name, players.Count,
+                                                       Player.players.Count, Server.players));
+                            changed = false;
+
+                            gs.Dispose();
+                            fs.Dispose();
                         }
-                        gs.Write(level, 0, level.Length);
-                        gs.Close();
-                        File.Delete(string.Format("{0}.backup", path));
-                        File.Copy(string.Format("{0}.back", path), path + ".backup");
-                        File.Delete(path);
-                        File.Move(string.Format("{0}.back", path), path);
-
-                        SaveSettings(this);
-
-                        Server.s.Log(string.Format("SAVED: Level \"{0}\". ({1}/{2}/{3})", name, players.Count,
-                                                   Player.players.Count, Server.players));
-                        changed = false;
-
-                        gs.Dispose();
                     }
 
                     // UNCOMPRESSED LEVEL SAVING! DO NOT USE!
@@ -959,6 +1031,22 @@ namespace MCForge
                 {
                     Server.s.Log("Skipping level save for " + name + ".");
                 }
+            }
+            catch (OutOfMemoryException e)
+            {
+                Server.ErrorLog(e);
+                if (Server.mono)
+                {
+                    Process[] prs = Process.GetProcesses();
+                    foreach (Process pr in prs)
+                    {
+                        if (pr.ProcessName == "MCForge")
+                            pr.Kill();
+
+                    }
+                }
+                else
+                    Command.all.Find("restart").Use(null, "");
             }
             catch (Exception e)
             {
@@ -1034,13 +1122,12 @@ namespace MCForge
         public static Level Load(string givenName, byte phys)
         {
             if (LevelLoad != null)
-            {
                 LevelLoad(givenName);
-                if (cancelload)
-                {
-                    cancelload = false;
-                    return null;
-                }
+            OnLevelLoadEvent.Call(givenName);
+            if (cancelload)
+            {
+                cancelload = false;
+                return null;
             }
             CreateLeveldb(givenName);
 
@@ -1400,7 +1487,7 @@ namespace MCForge
             {
                 if (physThread != null)
                 {
-                    if (physThread.ThreadState == ThreadState.Running)
+                    if (physThread.ThreadState == System.Threading.ThreadState.Running)
                         return;
                 }
                 if (ListCheck.Count == 0 || physicssate)
@@ -1788,9 +1875,8 @@ namespace MCForge
                                                   int oldNum;
                                                   string foundInfo = C.extraInfo;
                                                   if (PhysicsUpdate != null)
-                                                  {
                                                       PhysicsUpdate(x, y, z, C.time, C.extraInfo, this);
-                                                  }
+                                                  OnPhysicsUpdateEvent.Call(x, y, z, C.time, C.extraInfo, this);
                                                   newPhysic:
                                                   if (foundInfo != "")
                                                   {
@@ -5108,8 +5194,8 @@ namespace MCForge
                                            {
                                                try
                                                {
-                                                   IntToPos(C.b, out x, out y, out z);
-                                                   Blockchange(x, y, z, C.type, false, C.extraInfo);
+                                                   //IntToPos(C.b, out x, out y, out z); NO!
+                                                   Blockchange(C.b, C.type, false, C.extraInfo);
                                                }
                                                catch
                                                {

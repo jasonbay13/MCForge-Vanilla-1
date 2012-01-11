@@ -5,37 +5,34 @@ using System.Text;
 
 namespace MCForge
 {
-    /// <summary>
-    /// This event is called whenever the server saves data to MySQL or SQLite
-    /// </summary>
-    public class OnMySQLSaveEvent
+    public class OnGroupLoadEvent
     {
-        internal static List<OnMySQLSaveEvent> events = new List<OnMySQLSaveEvent>();
+        internal static List<OnGroupLoadEvent> events = new List<OnGroupLoadEvent>();
         Plugin plugin;
-        Player.OnMySQLSave method;
+        Group.GroupLoad method;
         Priority priority;
-        internal OnMySQLSaveEvent(Player.OnMySQLSave method, Priority priority, Plugin plugin) { this.plugin = plugin; this.priority = priority; this.method = method; }
-        public static void Call(Player p, string mysqlcommand)
+        internal OnGroupLoadEvent(Group.GroupLoad method, Priority priority, Plugin plugin) { this.plugin = plugin; this.priority = priority; this.method = method; }
+        public static void Call()
         {
-            events.ForEach(delegate(OnMySQLSaveEvent p1)
+            events.ForEach(delegate(OnGroupLoadEvent p1)
             {
                 try
                 {
-                    p1.method(p, mysqlcommand);
+                    p1.method();
                 }
-                catch (Exception e) { Server.s.Log("The plugin " + p1.plugin.name + " errored when calling the MySQLSave Event!"); Server.ErrorLog(e); }
+                catch (Exception e) { Server.s.Log("The plugin " + p1.plugin.name + " errored when calling the LevelUnload Event!"); Server.ErrorLog(e); }
             });
         }
         static void Organize()
         {
-            List<OnMySQLSaveEvent> temp = new List<OnMySQLSaveEvent>();
-            List<OnMySQLSaveEvent> temp2 = events;
-            OnMySQLSaveEvent temp3 = null;
+            List<OnGroupLoadEvent> temp = new List<OnGroupLoadEvent>();
+            List<OnGroupLoadEvent> temp2 = events;
+            OnGroupLoadEvent temp3 = null;
             int i = 0;
             int ii = temp2.Count;
             while (i < ii)
             {
-                foreach (OnMySQLSaveEvent p in temp2)
+                foreach (OnGroupLoadEvent p in temp2)
                 {
                     if (temp3 == null)
                         temp3 = p;
@@ -49,9 +46,14 @@ namespace MCForge
             }
             events = temp;
         }
-        public static OnMySQLSaveEvent Find(Plugin plugin)
+        /// <summary>
+        /// Find a event
+        /// </summary>
+        /// <param name="plugin">The plugin that registered this event</param>
+        /// <returns>The event</returns>
+        public static OnGroupLoadEvent Find(Plugin plugin)
         {
-            foreach (OnMySQLSaveEvent p in events.ToArray())
+            foreach (OnGroupLoadEvent p in events.ToArray())
             {
                 if (p.plugin == plugin)
                     return p;
@@ -64,11 +66,11 @@ namespace MCForge
         /// <param name="method">This is the delegate that will get called when this event occurs</param>
         /// <param name="priority">The priority (imporantce) of this call</param>
         /// <param name="plugin">The plugin object that is registering the event</param>
-        public static void Register(Player.OnMySQLSave method, Priority priority, Plugin plugin)
+        public static void Register(Group.GroupLoad method, Priority priority, Plugin plugin)
         {
             if (Find(plugin) != null)
                 throw new Exception("The user tried to register 2 of the same event!");
-            events.Add(new OnMySQLSaveEvent(method, priority, plugin));
+            events.Add(new OnGroupLoadEvent(method, priority, plugin));
             Organize();
         }
         /// <summary>

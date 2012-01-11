@@ -560,7 +560,9 @@ namespace MCForge
                 Buffer.BlockCopy(p.tempbuffer, 0, b, p.buffer.Length, length);
 
                 p.buffer = p.HandleMessage(b);
-                if (p.buffer.Length == 0) return;
+                if (!p.disconnected)
+                    p.socket.BeginReceive(p.tempbuffer, 0, p.tempbuffer.Length, SocketFlags.None,
+                                          new AsyncCallback(Receive), p);
             }
             catch (SocketException)
             {
@@ -3169,6 +3171,12 @@ changed |= 4;*/
         }
         #endregion
         #region == GLOBAL MESSAGES ==
+        public static void GlobalBlockchange(Level level, int b, byte type)
+        {
+            ushort x, y, z;
+            level.IntToPos(b, out x, out y, out z);
+            GlobalBlockchange(level, x, y, z, type);
+        }
         public static void GlobalBlockchange(Level level, ushort x, ushort y, ushort z, byte type)
         {
             players.ForEach(delegate(Player p) { if (p.level == level) { p.SendBlockchange(x, y, z, type); } });

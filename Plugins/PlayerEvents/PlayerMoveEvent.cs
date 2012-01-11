@@ -15,7 +15,7 @@ namespace MCForge
         Player.OnPlayerMove method;
         Priority priority;
         internal PlayerMoveEvent(Player.OnPlayerMove method, Priority priority, Plugin plugin) { this.plugin = plugin; this.priority = priority; this.method = method; }
-        internal static void Call(Player p, ushort x, ushort y,  ushort z)
+        public static void Call(Player p, ushort x, ushort y,  ushort z)
         {
             events.ForEach(delegate(PlayerMoveEvent p1)
             {

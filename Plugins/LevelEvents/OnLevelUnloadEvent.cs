@@ -15,7 +15,7 @@ namespace MCForge
         Level.OnLevelUnload method;
         Priority priority;
         internal OnLevelUnloadEvent(Level.OnLevelUnload method, Priority priority, Plugin plugin) { this.plugin = plugin; this.priority = priority; this.method = method; }
-        internal static void Call(Level l)
+        public static void Call(Level l)
         {
             events.ForEach(delegate(OnLevelUnloadEvent p1)
             {

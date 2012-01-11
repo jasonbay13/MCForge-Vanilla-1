@@ -28,14 +28,17 @@ namespace MCForge
     public class Group
     {
         public delegate void RankSet(Player p, Group newrank);
+        [Obsolete("Please use OnPlayerRankSetEvent.Register()")]
         public static event RankSet OnPlayerRankSet;
         public delegate void GroupSave();
+        [Obsolete("Please use OnGroupSaveEvent.Register()")]
         public static event GroupSave OnGroupSave;
         public delegate void GroupLoad();
+        [Obsolete("Please use OnGroupLoadEvent.Register()")]
         public static event GroupLoad OnGroupLoad;
         public static bool cancelrank = false;
         //Move along...nothing to see here...
-        internal static void because(Player p, Group newrank) { if (OnPlayerRankSet != null) OnPlayerRankSet(p, newrank); }
+        internal static void because(Player p, Group newrank) { if (OnPlayerRankSet != null) { OnPlayerRankSet(p, newrank); } OnPlayerRankSetEvent.Call(p, newrank); }
         public string name;
         public string trueName;
         public string color;
@@ -297,6 +300,7 @@ namespace MCForge
             }
             if (OnGroupLoad != null)
                 OnGroupLoad();
+            OnGroupLoadEvent.Call();
             saveGroups(GroupList);
         }
         /// <summary>
@@ -356,6 +360,7 @@ namespace MCForge
 			}
             if (OnGroupSave != null)
                 OnGroupSave();
+            OnGroupSaveEvent.Call();
         }
         /// <summary>
         /// Check to see if group /name/ exists
