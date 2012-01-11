@@ -1334,7 +1334,6 @@ namespace MCForge
                                     case "worldchat":
                                         level.worldChat = bool.Parse(value);
                                         break;
-
                                     case "perbuild":
                                         if (PermissionFromName(value) != LevelPermission.Null)
                                             level.permissionbuild = PermissionFromName(value);
