@@ -342,7 +342,7 @@ namespace MCForge.Commands
                                 Player.SendMessage(p, "You are not allowed to use hacks of any sort during the game!");
                                 return;
                             }
-							break;
+							//break;
 					}
 					break;
 
@@ -542,7 +542,7 @@ namespace MCForge.Commands
                                     TntWarsGame.GameList.Remove(it);
                                     return;
                                 }
-                                break;
+                                //break;
 
                             case "reset":
                             case "r":
@@ -818,7 +818,7 @@ namespace MCForge.Commands
                                             Player.SendMessage(p, "TNT Wars: Grace period is now " + numb.ToString() + " seconds long!");
                                             return;
                                         }
-                                        break;
+                                        //break;
                                 }
                                 it.CheckAllSetUp(p);
                                 break;
@@ -1189,7 +1189,7 @@ namespace MCForge.Commands
                                                     Player.SendMessage(p, "TNT Wars: Score limit is now " + numb.ToString() + " points!");
                                                     return;
                                                 }
-                                                break;
+                                                //break;
                                         }
                                         it.CheckAllSetUp(p);
                                         break;
@@ -1335,7 +1335,7 @@ namespace MCForge.Commands
                                                     Player.SendMessage(p, "TNT Wars: Mulitkill bonus per extra kill is now " + numb.ToString() + " points!");
                                                     return;
                                                 }
-                                                break;
+                                                //break;
                                         }
                                         it.CheckAllSetUp(p);
                                         break;
@@ -1370,7 +1370,7 @@ namespace MCForge.Commands
                                                     Player.SendMessage(p, "TNT Wars: Score per kill is now " + numb.ToString() + " points!");
                                                     return;
                                                 }
-                                                break;
+                                                //break;
                                         }
                                         it.CheckAllSetUp(p);
                                         break;
@@ -1448,7 +1448,7 @@ namespace MCForge.Commands
                                                     Player.SendMessage(p, "TNT Wars: Score per assist is now " + numb.ToString() + " points!");
                                                     return;
                                                 }
-                                                break;
+                                                //break;
                                         }
                                         it.CheckAllSetUp(p);
                                         break;
