@@ -259,16 +259,14 @@ namespace MCForge.Remote
         public void SendData(int id, byte[] send)
         {
             if (Socket == null || !Socket.Connected) return;
+            System.Threading.Thread.Sleep(30);
             var buffer = new byte[send.Length + 1];
             buffer[0] = (byte)id;
-            for (var i = 0; i < send.Length; i++)
-            {
-                buffer[i + 1] = send[i];
-            }
+            send.CopyTo(buffer, 1);
             try
             {
 
-                Socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, ar => { },  null);
+                Socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, delegate { }, this);
                 if (OnRemoteSendData != null) OnRemoteSendData(this, (short)(id + send.Length));
             }
             catch (SocketException)
