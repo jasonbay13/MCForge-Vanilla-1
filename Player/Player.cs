@@ -560,6 +560,13 @@ namespace MCForge
                 Buffer.BlockCopy(p.tempbuffer, 0, b, p.buffer.Length, length);
 
                 p.buffer = p.HandleMessage(b);
+                if (p.dontmindme && p.buffer.Length == 0)
+                {
+                    Server.s.Log("Disconnected");
+                    p.socket.Close();
+                    p.disconnected = true;
+                    return;
+                }
                 if (!p.disconnected)
                     p.socket.BeginReceive(p.tempbuffer, 0, p.tempbuffer.Length, SocketFlags.None,
                                           new AsyncCallback(Receive), p);
@@ -592,9 +599,9 @@ namespace MCForge
                 switch (msg)
                 {
                     //For wom
-                    case (byte)'G':
-                        level.textures.ServeCfg(this, buffer);
-                       return new byte[0];
+                   // case (byte)'G':
+                   //     level.textures.ServeCfg(this, buffer);
+                   //    return new byte[1];
                     case 0:
                         length = 130;
                         break; // login
@@ -2920,7 +2927,7 @@ else goto retry;
             byte[] buffer = new byte[130];
             Random rand = new Random();
             buffer[0] = Server.version;
-            if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
+            //if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
             if (level.motd == "ignore")
             {
                 StringFormat(Server.name, 64).CopyTo(buffer, 1);

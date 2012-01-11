@@ -103,12 +103,6 @@
     <Compile Include="Commands\CommandKeywords.cs" />
     <Compile Include="Games\CTF\Setup.cs" />
     <Compile Include="Games\TntWarsGame.cs" />
-    <Compile Include="GUI\Textures.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\Textures.Designer.cs">
-      <DependentUpon>Textures.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\Windows 7\New_Window.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,7 +115,6 @@
     <Compile Include="GUI\WoM.Designer.cs">
       <DependentUpon>WoM.cs</DependentUpon>
     </Compile>
-    <Compile Include="Levels\Texture_Settings.cs" />
     <Compile Include="Plugins\GroupEvents\OnGroupLoadEvent.cs" />
     <Compile Include="Plugins\GroupEvents\OnGroupSaveEvent.cs" />
     <Compile Include="Plugins\GroupEvents\OnPlayerRankSetEvent.cs" />
@@ -538,9 +531,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\LavaMapBrowser.resx">
       <DependentUpon>LavaMapBrowser.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Textures.resx">
-      <DependentUpon>Textures.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Windows 7\New_Window.resx">
       <DependentUpon>New_Window.cs</DependentUpon>

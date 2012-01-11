@@ -1327,7 +1327,7 @@ namespace MCForge
             w.WriteLine("wom-serveralt = " + Server.Server_ALT);
             w.WriteLine("wom-serverdis = " + Server.Server_Disc);
             w.WriteLine("wom-serverflag = " + Server.Server_Flag);
-            w.WriteLine("wom-textures = " + Server.UseTextures);
+            //w.WriteLine("wom-textures = " + Server.UseTextures);
             w.WriteLine("");
             w.WriteLine("#Review settings");
             w.WriteLine("review-view-perm = " + ((sbyte)Server.reviewview).ToString());
