@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.IO;
 
 namespace MCForge.Remote
 {
@@ -158,8 +159,25 @@ namespace MCForge.Remote
 
             SendPlayersDesktop();
             SendMapsDesktop();
+            SendServerInfo();
+            SendSettingsDesktop();
+        }
 
-            //SendSettingsDesktop();
+        private void SendSettingsDesktop()
+        {
+            if (File.Exists("properties/server.properties"))
+            {
+                byte[] readed = File.ReadAllBytes("properties/server.properties");
+                byte[] lotsOBytes = new byte[readed.Length + 4];
+                BitConverter.GetBytes(readed.Length).CopyTo(lotsOBytes, 0);
+                readed.CopyTo(lotsOBytes, 4);
+                this.SendData(0x16, lotsOBytes);
+            }
+            else
+            {
+                Server.s.Log("Error No server properties found");
+            }
+
         }
 
         private void SendMapsDesktop()
@@ -240,8 +258,19 @@ namespace MCForge.Remote
                 Kick();
                 return;
             }
-            RemoteChat(m);
+            RemoteDesktopChat(m);
 
+        }
+
+        private void RemoteDesktopChat(string m)
+        {
+            Player.GlobalMessage("Remote :" + m);
+            Server.s.Log("Remote: " + m);
+            var bytes = new byte[m.Length + 3];
+            bytes[0] = 1;
+            BitConverter.GetBytes((short)m.Length).CopyTo(bytes, 1);
+            Encoding.UTF8.GetBytes(m).CopyTo(bytes, 3);
+            this.SendData(0x12, bytes);
         }
         private void HandleDesktopRequest(byte[] message)
         {
