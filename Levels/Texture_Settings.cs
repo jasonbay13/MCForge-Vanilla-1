@@ -11,8 +11,12 @@ namespace MCForge.Levels.Textures
 {
     public class LevelTextures
     {
+        #region ==VARS==
         string cachecfg = "";
+        public Group LowestRank { get { return lowest; } }
+        Group lowest;
         bool update = false;
+        public bool autou = true;
         public bool enabled = false;
         public string terrainid = "";
         private string edgeid = "";
@@ -26,12 +30,22 @@ namespace MCForge.Levels.Textures
         public string MOTD = Server.motd;
         public string detail = "";
         private Level l;
+        #endregion
+
+
+        #region ==OBJECT==
         public LevelTextures(Level level) { 
             l = level;
             if (File.Exists("extra/cfg/" + l.name + ".cfg"))
-                cachecfg = File.ReadAllText("extra/cfg/" + l.name + ".cfg");
+                cachecfg = GetCFG();
+            if (!Directory.Exists("extra/cfg/internal")) Directory.CreateDirectory("extra/cfg/internal");
+            if (File.Exists("extra/cfg/" + l.name + ".internal"))
+                LoadSettings();
         }
-        #region Network
+        #endregion
+
+
+        #region ==SERVER-TO-WOM==
         public void SendDetail(Player p, string text = "")
         {
             byte[] buffer = new byte[65];
@@ -63,7 +77,10 @@ namespace MCForge.Levels.Textures
             });
         }
         #endregion
-        #region Change Settings
+
+
+        #region ==SETTINGS==
+        public void SetGroup(string name) { lowest = Group.Find(name); if (lowest == null) lowest = Group.Find(Server.defaultRank); }
         public void ChangeLevel(int size) { if (size == 0) level = -1; else level = size; }
         public void ChangeDetail(string text) { detail = "^detail.user=" + text; }
         public void ChangeSky(string hex) { sky = ParseHexColor(hex); }
@@ -72,7 +89,126 @@ namespace MCForge.Levels.Textures
         public void ChangeEdge(byte b) { edgeid = GetBlockTexture(b); }
         public void ChangeEdge(string id) { edgeid = id; }
         #endregion
-        #region Internal Settings
+
+
+        #region ==INTERNAL SETTINGS==
+        #region ==CONFIG==
+        public void SaveSettings()
+        {
+            File.WriteAllLines("extra/cfg/" + l.name + ".internal", new string[] { "USE:" + enabled, "AUTOU:" + autou, "GROUP:" + lowest.name });
+        }
+        public void LoadSettings()
+        {
+            string[] lines = File.ReadAllLines("extra/cfg/" + l.name + ".internal");
+            foreach (string ll in lines)
+            {
+                string setting = ll.Split(':')[0];
+                string value = ll.Split(':')[1];
+                switch (setting)
+                {
+                    case "USE":
+                        enabled = bool.Parse(value);
+                        break;
+                    case "AUTOU":
+                        autou = bool.Parse(value);
+                        break;
+                    case "GROUP":
+                        lowest = Group.Find(value);
+                        if (lowest == null)
+                            lowest = Group.Find(Server.defaultRank);
+                        break;
+                }
+            }
+            if (lowest == null)
+                lowest = Group.Find(Server.defaultRank);
+            SaveSettings();
+        }
+        #endregion
+        #region ==GET==
+        static int ParseHexColor(string text)
+        {
+            return int.Parse((text[0] == '#') ? text.Substring(1) : text, System.Globalization.NumberStyles.HexNumber);
+        }
+        static string ParseDecColor(int dec)
+        {
+            return dec.ToString("X");
+        }
+        public static byte GetBlock(string texture)
+        {
+            switch (texture)
+            {
+                case "4a781d8aaabca8eeab78e14a072a905816f201bf":
+                    return Block.water;
+                case "d0b6dc6d40dd3141fd58dc0aff7370fd623899df":
+                    return Block.lava;
+                case  "eea1b7e0a62d90b5b681f142bd2f483a671ba160":
+                    return Block.blue;
+                case "b4a23c66dc4ba488a97becd62f2bae8d61eb8ad2":
+                    return Block.brick;
+                case  "1f9eb8aff893a43860fcd1f9c1e7ef84e0bfd77b":
+                    return Block.coal;
+                case "b4d9c39d00102f1b3b67c9e885b62cb8e27efd03":
+                    return Block.rock;
+                case "2532a657b5525ad10a0ccab78bd4343d44a0bfb7":
+                    return Block.cyan;
+                case "e35227f0b78041e45523c3bf250f4922e82585e2":
+                    return Block.dirt;
+                case "1f61ef253653b9cd8f98a92922b3dbf50d939d09":
+                    return Block.goldrock;
+                case "7e2a41d578bde6fc253863ccc9a25eb099ff6daf":
+                    return Block.goldsolid;
+                case "1acfce7a8cd70b8ca6047b66a5734e9a3c1d737d":
+                    return Block.glass;
+                case "1cf2d2b250184516b22f351fa804c243d3ed64fe":
+                    return Block.lightgrey;
+                case "06f5ba518c5f943f14adf09cc257674e43d8133c":
+                    return Block.darkgrey;
+                case "e61083cd5396f207267391d5a1f0491c1ce6d404":
+                    return Block.gravel;
+                case "8f4be9678eb1b6cc4175ff7f45b78fc9f0d76962":
+                    return Block.green;
+                case "6ec104eba32c595dd7c8c08bb99c422e0e2fc1b7":
+                    return Block.iron;
+                case "6b8ad341eb0f3209e67f4a1723ca8994f9517fae":
+                    return Block.ironrock;
+                case "b6e1831c9b30d4e6f7012dd8b2f39e1150ef67fb":
+                    return Block.lightgreen;
+                case "f3a13b17c5d906d165581c019b2a44eddd0ad5b7":
+                    return Block.trunk;
+                case "eaecd6ec9c24ed8a2c20ffb10e83409f04409ddd":
+                    return Block.sponge;
+                case "9106fb8ac7a4eb6f30ce28921f071e6b31bdd74b":
+                    return Block.staircasestep;
+                case "c2eaac7631e184e4e7f6eeca4c4d6a74f6d953f9":
+                    return Block.stone;
+                case "7314851e18cdfe9dd1513f9eab86901221421239":
+                    return Block.tnt;
+                case "182bf0fe9cf4476a573df4f470ac1b7e55936543":
+                    return Block.stonevine;
+                case "73963ffce5d7d845eb3216a6766655fc405b473c":
+                    return Block.obsidian;
+                case "cfd84200707e41556d1bb0ace3ca37c69b51cc54":
+                    return Block.orange;
+                case "19fcc81e8204de91fdbfdc2b59cffe0bfb2ba823":
+                    return Block.pink;
+                case "be9c5e2ff1d4bbfcd0826c04db5684359acecf28":
+                    return Block.red;
+                case "1a2dda7ed25ad5e94da4c6a0ac7e63f4a9a72590":
+                    return Block.sand;
+                case "7abdd25d9229087f29655a1974aed01cbd3eb753":
+                    return Block.blackrock;
+                case "a171372d9fca63df911485602a5120fd5422f2b9":
+                    return Block.purple;
+                case "2d9077489d1d86217c89685b12c5a206b23b976f":
+                    return Block.white;
+                case "af65cd0d0756d357a1abd5390b8de2e5ad1f29af":
+                    return Block.wood;
+                case "eff6823a987deb65ad21020a3151bb809d3d062c":
+                    return Block.yellow;
+                default:
+                    return Block.Zero;
+            }
+        }
         public static string GetBlockTexture(byte b)
         {
             switch (b)
@@ -150,13 +286,15 @@ namespace MCForge.Levels.Textures
                     return "";
             }
         }
+        #endregion
+        #region ==CFG==
+        public string[] GetCFGLines()
+        {
+            return File.ReadAllLines("extra/cfg/" + l.name + ".cfg");
+        }
         public string GetCFG()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("server.name = Test");
-            sb.AppendLine("server.detail = Testing 1 2 3");
-            sb.AppendLine("server.sendwomid = true");
-            return sb.ToString();
+            return File.ReadAllText("extra/cfg/" + l.name + ".cfg");
         }
         //Create CFG
         public void CreateCFG()
@@ -192,12 +330,25 @@ namespace MCForge.Levels.Textures
             temp.Clear();
             Server.s.Log("CFG File created for " + l.name);
             update = true;
+            if (autou)
+            {
+                Player.players.ForEach(delegate(Player p1)
+                {
+                    if (p1.level == l)
+                        Command.all.Find("reveal").Use(null, p1.name);
+                });
+            }
+            Player.GlobalMessage("Level textures updated for " + l.name);
         }
         #endregion
+        #endregion
+
+
         #region Thanks FCRAFT
         //All credit for the code below goes to fcraft
         //Thanks fcraft...your awesome :D
         //Modified for use in mcforge
+        #region ==SERVER-TO-WOM==
         static readonly Regex HttpFirstLine = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
         public void ServeCfg(Player p, byte[] buffer)
         {
@@ -207,10 +358,6 @@ namespace MCForge.Levels.Textures
                 using (StreamWriter textWriter = new StreamWriter(stream, Encoding.ASCII))
                 {
                     string firstLine = Encoding.UTF8.GetString(buffer, 0, buffer.Length);
-                    //Server.s.Log(firstLine);
-                    //string text = "";
-                    //while ((text = reader.ReadLine()) != null)
-                    //    Server.s.Log(text);
                     var match = HttpFirstLine.Match(firstLine);
                     if (match.Success)
                     {
@@ -219,27 +366,24 @@ namespace MCForge.Levels.Textures
                         Level l = Level.Find(worldName);
                         if (l != null)
                         {
-                            /*string cfg = "";
+                            string cfg = "";
                             if (cachecfg == "" || update)
                             {
                                 if (!File.Exists("extra/cfg/" + l.name + ".cfg"))
                                     l.textures.CreateCFG();
-                                cfg = File.ReadAllText("extra/cfg/" + l.name + ".cfg");
+                                cfg = GetCFG();
                                 cachecfg = cfg;
                                 update = false;
                             }
                             else
                                 cfg = cachecfg;
-                            cfg.Replace("\r", "");*/
-                            string cfg = GetCFG();
-                            //Server.s.Log(cfg);
                             byte[] content = Encoding.UTF8.GetBytes(cfg);
                             textWriter.Write("HTTP/1.1 200 OK");
                             textWriter.WriteLine("Date: " + DateTime.UtcNow.ToString("R"));
                             textWriter.WriteLine("Server: Apache/2.2.21 (CentOS)");
                             textWriter.WriteLine("Last-Modified: " + DateTime.UtcNow.ToString("R"));
                             textWriter.WriteLine("Accept-Ranges: bytes");
-                            textWriter.WriteLine("Content-Length: " + content.Length); //idk
+                            textWriter.WriteLine("Content-Length: " + content.Length);
                             textWriter.WriteLine("Connection: close");
                             textWriter.WriteLine("Content-Type: text/plain");
                             textWriter.WriteLine();
@@ -258,58 +402,7 @@ namespace MCForge.Levels.Textures
             p.socket.Close();
             p.disconnected = true;
         }
-        static int ParseHexColor(string text)
-        {
-            byte red, green, blue;
-            switch (text.Length)
-            {
-                case 3:
-                    red = (byte)(HexToValue(text[0]) * 16 + HexToValue(text[0]));
-                    green = (byte)(HexToValue(text[1]) * 16 + HexToValue(text[1]));
-                    blue = (byte)(HexToValue(text[2]) * 16 + HexToValue(text[2]));
-                    break;
-                case 4:
-                    if (text[0] != '#') throw new FormatException();
-                    red = (byte)(HexToValue(text[1]) * 16 + HexToValue(text[1]));
-                    green = (byte)(HexToValue(text[2]) * 16 + HexToValue(text[2]));
-                    blue = (byte)(HexToValue(text[3]) * 16 + HexToValue(text[3]));
-                    break;
-                case 6:
-                    red = (byte)(HexToValue(text[0]) * 16 + HexToValue(text[1]));
-                    green = (byte)(HexToValue(text[2]) * 16 + HexToValue(text[3]));
-                    blue = (byte)(HexToValue(text[4]) * 16 + HexToValue(text[5]));
-                    break;
-                case 7:
-                    if (text[0] != '#') throw new FormatException();
-                    red = (byte)(HexToValue(text[1]) * 16 + HexToValue(text[2]));
-                    green = (byte)(HexToValue(text[3]) * 16 + HexToValue(text[4]));
-                    blue = (byte)(HexToValue(text[5]) * 16 + HexToValue(text[6]));
-                    break;
-                default:
-                    throw new FormatException();
-            }
-            return red * 256 * 256 + green * 256 + blue;
-        }
-
-        static byte HexToValue(char c)
-        {
-            if (c >= '0' && c <= '9')
-            {
-                return (byte)(c - '0');
-            }
-            else if (c >= 'A' && c <= 'F')
-            {
-                return (byte)(c - 'A' + 10);
-            }
-            else if (c >= 'a' && c <= 'f')
-            {
-                return (byte)(c - 'a' + 10);
-            }
-            else
-            {
-                throw new FormatException();
-            }
-        }
+        #endregion
         #endregion
     }
 }
