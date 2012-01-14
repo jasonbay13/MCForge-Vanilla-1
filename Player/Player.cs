@@ -57,7 +57,7 @@ namespace MCForge
         public System.Timers.Timer afkTimer = new System.Timers.Timer(2000);
         public int afkCount = 0;
         public DateTime afkStart;
-
+        public string WoMVersion = "";
         public bool megaBoid = false;
         public bool cmdTimer = false;
         public bool UsingWom = false;
@@ -599,9 +599,9 @@ namespace MCForge
                 switch (msg)
                 {
                     //For wom
-                   // case (byte)'G':
-                   //     level.textures.ServeCfg(this, buffer);
-                   //    return new byte[1];
+                    case (byte)'G':
+                        level.textures.ServeCfg(this, buffer);
+                       return new byte[1];
                     case 0:
                         length = 130;
                         break; // login
@@ -1994,6 +1994,9 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                 {
                     Server.s.Log(name + " is using " + text.Substring(7));
                     UsingWom = true;
+                    WoMVersion = text.Substring(7, 15);
+                    Player.GlobalMessageOps(color + name + "%4is using WoM. Version: " + text.Substring(7, 15));
+                    Server.s.Log(name + " is using WoM. Version " + text.Substring(7, 15));
                     return;
                 }
 
@@ -2927,7 +2930,7 @@ else goto retry;
             byte[] buffer = new byte[130];
             Random rand = new Random();
             buffer[0] = Server.version;
-            //if (UsingWom && (level.textures.enabled || level.motd == "texture")) { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
+            if (UsingWom && (level.textures.enabled || level.motd == "texture") && group.Permission >= level.textures.LowestRank.Permission) { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
             if (level.motd == "ignore")
             {
                 StringFormat(Server.name, 64).CopyTo(buffer, 1);
