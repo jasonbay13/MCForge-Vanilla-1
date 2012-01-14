@@ -20,8 +20,6 @@
 */
 using System;
 using System.Collections.Generic;
-using MCForge;
-using MCForge;
 namespace MCForge.Commands
 {
     class CmdExplode : Command

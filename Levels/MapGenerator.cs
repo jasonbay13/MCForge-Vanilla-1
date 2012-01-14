@@ -641,7 +641,7 @@ namespace MCForge
         public void AddNotchPineTree(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false, bool overwrite = true, Player p = null)
         {
             throw new NotImplementedException();
-            byte height = (byte)Rand.Next(7, 12);
+            //byte height = (byte)Rand.Next(7, 12);
         }
 
         public void AddNotchSwampTree(Level Lvl, ushort x, ushort y, ushort z, Random Rand, bool blockChange = false, bool overwrite = true, Player p = null)

@@ -1504,15 +1504,14 @@ namespace MCForge
                 try
                 {
                     if (wait > 0) Thread.Sleep(wait);
-                    if (physics == 0)
+                    if (physics == 0 || ListCheck.Count == 0)
                     {
                         lastCheck = 0;
                         wait = speedPhysics;
-                        break;
+                        if (physics == 0) break;
+                        continue;
                     }
-                    //Dont know weather to break or continue if the listcheck == 0 ...
-                    //Would be to break the loop when the listcheck is 0
-                    //But appears to cause problems :/
+
                     DateTime Start = DateTime.Now;
 
                     if (physics > 0) CalcPhysics();
