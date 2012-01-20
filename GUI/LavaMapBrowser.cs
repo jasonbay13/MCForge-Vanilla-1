@@ -31,6 +31,7 @@ namespace MCForge.Gui
 {
     public partial class LavaMapBrowser : Form
     {
+        Form mapSubmit;
         private bool listing = false, loadingDet = false;
         private string downloadUrl = "http://www.mcforge.net/lavamaps/dl.php";
         private string listUrl = "http://www.mcforge.net/lavamaps/listdata.php";
@@ -47,6 +48,7 @@ namespace MCForge.Gui
 
         private void LavaMapBrowser_Load(object sender, EventArgs e)
         {
+            mapSubmit = new LavaMapSubmit();
             downloadTextTimer = new System.Timers.Timer(500);
             downloadTextTimer.Elapsed += delegate
             {
@@ -133,14 +135,24 @@ namespace MCForge.Gui
 
         private void lnkSubmitMap_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            if (!MCForgeAccount.LoggedIn)
+            {
+                MessageBox.Show(this, new StringBuilder("You must be logged in to MCForge.net to submit a map.").Append(Environment.NewLine).Append("You can do this by going to: Properties -> Misc tab -> MCForge.net Account").ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
             try
             {
-                System.Diagnostics.Process.Start("http://www.mcforge.net/lavamaps/submit");
+                mapSubmit.Show();
+                mapSubmit.Focus();
             }
-            catch
+            catch (ObjectDisposedException)
             {
-                MessageBox.Show("Failed to open link!");
+                mapSubmit = new LavaMapSubmit();
+                mapSubmit.Show();
+                mapSubmit.Focus();
             }
+            catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
         private void updateMapList(string search, bool thread = false) {

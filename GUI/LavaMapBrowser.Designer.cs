@@ -29,6 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LavaMapBrowser));
             this.dgvMaps = new System.Windows.Forms.DataGridView();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
@@ -133,6 +134,8 @@
             this.Controls.Add(this.txtSearch);
             this.Controls.Add(this.dgvMaps);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "LavaMapBrowser";
             this.Text = "Lava Survival Map Browser";
             this.Load += new System.EventHandler(this.LavaMapBrowser_Load);

@@ -32,7 +32,7 @@ namespace MCForge.Gui
 {
     public partial class PropertyWindow : Form
     {
-        Form lavaMapBrowser;
+        Form lavaMapBrowser, accountSetup;
         System.Timers.Timer lavaUpdateTimer;
         string lsLoadedMap = "";
 
@@ -47,6 +47,7 @@ namespace MCForge.Gui
         private void PropertyWindow_Load(object sender, EventArgs e)
         {
             lavaMapBrowser = new LavaMapBrowser();
+            accountSetup = new MCForgeAccountSetup();
 
             Object[] colors = new Object[16];
             colors[0] = ("black"); colors[1] = ("navy");
@@ -194,6 +195,7 @@ namespace MCForge.Gui
         {
             lavaUpdateTimer.Dispose();
             lavaMapBrowser.Dispose();
+            accountSetup.Dispose();
             Window.prevLoaded = false;
             TntWarsGame.GuiLoaded = null;
         }
@@ -465,10 +467,6 @@ namespace MCForge.Gui
                                         cmbDefaultRank.SelectedIndex = cmbDefaultRank.Items.IndexOf(value.ToLower());
                                 }
                                 catch { cmbDefaultRank.SelectedIndex = 1; }
-                                break;
-
-                            case "old-help":
-                                chkHelp.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
 
                             case "cheapmessage":
@@ -813,7 +811,6 @@ namespace MCForge.Gui
             Server.rpLimit = int.Parse(txtRP.Text);
             Server.rpNormLimit = int.Parse(txtRP.Text);
             Server.physicsRestart = chkPhysicsRest.Checked;
-            Server.oldHelp = chkHelp.Checked;
             Server.deathcount = chkDeath.Checked;
             Server.afkminutes = int.Parse(txtafk.Text);
             Server.afkkick = int.Parse(txtAFKKick.Text);
@@ -2871,6 +2868,22 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             msg += Environment.NewLine;
             msg += "Extreme (1 Hit to die, TNT has short delay, big explosion and team kills are on)";
             MessageBox.Show(msg, "Difficulty");
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                accountSetup.Show();
+                accountSetup.Focus();
+            }
+            catch (ObjectDisposedException)
+            {
+                accountSetup = new MCForgeAccountSetup();
+                accountSetup.Show();
+                accountSetup.Focus();
+            }
+            catch (Exception ex) { Server.ErrorLog(ex); }
         }
     }
 }

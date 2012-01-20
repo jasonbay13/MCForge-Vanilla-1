@@ -103,6 +103,18 @@
     <Compile Include="Commands\CommandKeywords.cs" />
     <Compile Include="Games\CTF\Setup.cs" />
     <Compile Include="Games\TntWarsGame.cs" />
+    <Compile Include="GUI\LavaMapSubmit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\LavaMapSubmit.Designer.cs">
+      <DependentUpon>LavaMapSubmit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\MCForgeAccountSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\MCForgeAccountSetup.Designer.cs">
+      <DependentUpon>MCForgeAccountSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Textures.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +134,7 @@
       <DependentUpon>WoM.cs</DependentUpon>
     </Compile>
     <Compile Include="Levels\Texture_Settings.cs" />
+    <Compile Include="MCForgeAccount.cs" />
     <Compile Include="Plugins\GroupEvents\OnGroupLoadEvent.cs" />
     <Compile Include="Plugins\GroupEvents\OnGroupSaveEvent.cs" />
     <Compile Include="Plugins\GroupEvents\OnPlayerRankSetEvent.cs" />
@@ -539,6 +552,12 @@
     <EmbeddedResource Include="GUI\LavaMapBrowser.resx">
       <DependentUpon>LavaMapBrowser.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\LavaMapSubmit.resx">
+      <DependentUpon>LavaMapSubmit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\MCForgeAccountSetup.resx">
+      <DependentUpon>MCForgeAccountSetup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Textures.resx">
       <DependentUpon>Textures.cs</DependentUpon>

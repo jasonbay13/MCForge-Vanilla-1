@@ -29,6 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdateWindow));
             this.panel1 = new System.Windows.Forms.Panel();
             this.cmdUpdate = new System.Windows.Forms.Button();
             this.listRevisions = new System.Windows.Forms.ListBox();
@@ -36,10 +37,10 @@
             this.cmdDiscard = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.revisions_downloading = new System.Windows.Forms.Label();
             this.txtCountdown = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.chkNotify = new System.Windows.Forms.CheckBox();
-            this.revisions_downloading = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -119,6 +120,17 @@
             this.panel2.Size = new System.Drawing.Size(209, 82);
             this.panel2.TabIndex = 4;
             // 
+            // revisions_downloading
+            // 
+            this.revisions_downloading.AutoSize = true;
+            this.revisions_downloading.BackColor = System.Drawing.Color.Transparent;
+            this.revisions_downloading.ForeColor = System.Drawing.Color.Red;
+            this.revisions_downloading.Location = new System.Drawing.Point(-3, 68);
+            this.revisions_downloading.Name = "revisions_downloading";
+            this.revisions_downloading.Size = new System.Drawing.Size(216, 13);
+            this.revisions_downloading.TabIndex = 5;
+            this.revisions_downloading.Text = "Please Wait while downloading revisions list.";
+            // 
             // txtCountdown
             // 
             this.txtCountdown.Location = new System.Drawing.Point(161, 45);
@@ -147,17 +159,6 @@
             this.chkNotify.Text = "Notify in-game of restart";
             this.chkNotify.UseVisualStyleBackColor = true;
             // 
-            // revisions_downloading
-            // 
-            this.revisions_downloading.AutoSize = true;
-            this.revisions_downloading.BackColor = System.Drawing.Color.Transparent;
-            this.revisions_downloading.ForeColor = System.Drawing.Color.Red;
-            this.revisions_downloading.Location = new System.Drawing.Point(-3, 68);
-            this.revisions_downloading.Name = "revisions_downloading";
-            this.revisions_downloading.Size = new System.Drawing.Size(216, 13);
-            this.revisions_downloading.TabIndex = 5;
-            this.revisions_downloading.Text = "Please Wait while downloading revisions list.";
-            // 
             // UpdateWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -167,6 +168,9 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.cmdDiscard);
             this.Controls.Add(this.panel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "UpdateWindow";
             this.Text = "Update";
             this.Load += new System.EventHandler(this.UpdateWindow_Load);

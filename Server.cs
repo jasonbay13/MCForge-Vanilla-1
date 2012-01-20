@@ -199,6 +199,8 @@ namespace MCForge
         public static string lastLevelVote1 = "";
         public static string lastLevelVote2 = "";
         public static bool bufferblocks = true;
+        public static string mcforgeUser = "";
+        public static string mcforgePass = "";
 
         // Lava Survival
         public static LavaSurvival lava;
@@ -868,6 +870,14 @@ namespace MCForge
                 catch (Exception e)
                 {
                     Server.ErrorLog(e);
+                }
+            });
+
+            ml.Queue(delegate
+            {
+                if (mcforgeUser != String.Empty && mcforgePass != String.Empty)
+                {
+                    new Thread(new ThreadStart(delegate { MCForgeAccount.Login(); })).Start();
                 }
             });
 
