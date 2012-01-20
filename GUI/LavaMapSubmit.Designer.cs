@@ -163,6 +163,7 @@
             this.MaximizeBox = false;
             this.Name = "LavaMapSubmit";
             this.Text = "Lava Survival Map Submission";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LavaMapSubmit_FormClosing);
             this.Load += new System.EventHandler(this.LavaMapSubmit_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
