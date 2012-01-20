@@ -234,10 +234,10 @@ namespace MCForge.Commands
 				case "exit":
 					p.canBuild = true;
 					TntWarsGame game = TntWarsGame.GetTntWarsGame(p);
-					game.Players.Remove(game.FindPlayer(p));
+                    TntWarsGame.SetTitlesAndColor(game.FindPlayer(p), true);
 					game.SendAllPlayersMessage("TNT Wars: " + p.color + p.name + Server.DefaultColor + " left the TNT Wars game!");
-					TntWarsGame.SetTitlesAndColor(game.FindPlayer(p), true);
 					Player.SendMessage(p, "TNT Wars: You left the game");
+                    game.Players.Remove(game.FindPlayer(p));
 					break;
 
 				case "rules":
