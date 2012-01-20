@@ -1,12 +1,17 @@
 ﻿using System;
 using System.IO;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
+    /// <summary>
+    /// This is the command /infected
+    /// use /help infected in-game for more info
+    /// </summary>
     public class CmdInfected : Command
     {
         public override string name { get { return "infected"; } }
-        public override string shortcut { get { return "infected"; } }
+        public override string shortcut { get { return ""; } }
         public override string type { get { return "game"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
@@ -21,7 +26,7 @@ namespace MCForge
             }
             else
             {
-                Player.SendMessage(p, "Players who are " + c.red + "infected " + c.yellow + "are:");
+                Player.SendMessage(p, "Players who are " + c.red + "infected " + Server.DefaultColor + "are:");
                 string playerstring = "";
                 ZombieGame.infectd.ForEach(delegate(Player player)
                 {

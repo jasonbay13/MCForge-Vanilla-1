@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
+    /// <summary>
+    /// This is the command /splace
+    /// use /help splace in game for more info
+    /// </summary>
     public class CmdSPlace : Command
     {
         public override string name { get { return "splace"; } }

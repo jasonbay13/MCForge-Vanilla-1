@@ -18,7 +18,8 @@
 using System;
 using System.IO;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdBanlist : Command
     {
@@ -56,7 +57,7 @@ namespace MCForge
         }
         public override void Help(Player p)
         {
-            
+            Player.SendMessage(p, "/banlist - shows who's banned on server");
         }
     }
 }

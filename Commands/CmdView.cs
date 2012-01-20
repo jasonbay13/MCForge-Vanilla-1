@@ -21,7 +21,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdView : Command
     {
@@ -117,7 +118,7 @@ namespace MCForge
         {
             Player.SendMessage(p, "/view [file] [player] - Views [file]'s contents");
             Player.SendMessage(p, "/view by itself will list all files you can view");
-            Player.SendMessage(p, "If [player] is give, that player is shown the file");
+            Player.SendMessage(p, "If [player] is given, that player is shown the file");
         }
     }
 }

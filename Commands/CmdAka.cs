@@ -1,8 +1,12 @@
 ﻿using System;
 using System.IO;
-
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
+    /// <summary>
+    /// This is the command /aka
+    /// use /help aka in-game for more info
+    /// </summary>
     public class CmdAka : Command
     {
         public override string name { get { return "aka"; } }

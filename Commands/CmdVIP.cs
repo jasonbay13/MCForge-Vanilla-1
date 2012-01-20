@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
+    /// <summary>
+    /// This is the command /vip
+    /// use /help vip in-game for more info
+    /// </summary>
     public class CmdVIP : Command
     {
         public override string name { get { return "vip"; } }

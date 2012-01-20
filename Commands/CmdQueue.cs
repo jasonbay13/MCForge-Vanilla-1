@@ -19,12 +19,13 @@
 using System;
 using System.IO;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdQueue : Command
     {
         public override string name { get { return "queue"; } }
-        public override string shortcut { get { return "q"; } }
+        public override string shortcut { get { return "qz"; } }
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }

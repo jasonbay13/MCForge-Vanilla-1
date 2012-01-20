@@ -17,7 +17,8 @@
 */
 using System;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdWhisper : Command
     {
@@ -42,7 +43,7 @@ namespace MCForge
                 if (who == null) { p.whisperTo = ""; p.whisper = false; Player.SendMessage(p, "Could not find player."); return; }
                 if (who.hidden)
                 {
-                    if (p.hidden == false)
+                    if (p.hidden == false || who.group.Permission > p.group.Permission)
                     {
                         Player.SendMessage(p, "Could not find player.");
                         return;

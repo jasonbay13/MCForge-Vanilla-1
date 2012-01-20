@@ -20,7 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdJoker : Command
     {
@@ -29,6 +30,7 @@ namespace MCForge
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
+        public static string keywords { get { return ""; } }
         public CmdJoker() { }
 
         public override void Use(Player p, string message)

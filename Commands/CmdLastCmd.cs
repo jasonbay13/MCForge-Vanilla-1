@@ -19,7 +19,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdLastCmd : Command
     {
@@ -40,13 +41,20 @@ namespace MCForge
                     {
                         pl.lastCMD = "";
                     }
-                    Player.SendMessage(p, pl.color + pl.name + Server.DefaultColor + " last used \"" + pl.lastCMD + "\"");
+                    if (pl.group.Permission <= p.group.Permission && pl.hidden)
+					{
+						Player.SendMessage(p, pl.color + pl.name + Server.DefaultColor + " last used \"" + pl.lastCMD + "\"");
+					}
+                    if (!pl.hidden)
+					{
+						Player.SendMessage(p, pl.color + pl.name + Server.DefaultColor + " last used \"" + pl.lastCMD + "\"");
+					}
                 }
             }
             else
             {
                 Player who = Player.Find(message);
-                if (who == null) { Player.SendMessage(p, "Could not find player entered"); return; }
+                if (who == null || who.group.Permission > p.group.Permission && who.hidden) { Player.SendMessage(p, "Could not find player entered"); return; }
                 if (who.lastCMD.Contains("setpass") || who.lastCMD.Contains("pass"))
                 {
                     who.lastCMD = "";

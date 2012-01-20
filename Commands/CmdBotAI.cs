@@ -18,7 +18,8 @@
 using System;
 using System.IO;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdBotAI : Command
     {
@@ -146,7 +147,7 @@ namespace MCForge
 
 			try
 			{
-				using (SW = File.CreateText("bots/" + foundPath))
+				using (SW = File.AppendText("bots/" + foundPath))
 				{
 					switch (additional.ToLower())
 					{

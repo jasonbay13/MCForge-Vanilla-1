@@ -23,7 +23,8 @@ using MCForge.SQL;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     class CmdPCount : Command
     {
@@ -51,7 +52,7 @@ namespace MCForge
                 if (!pl.hidden || p == null || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower()))
                 {
                     playerCount++;
-                    if (pl.hidden && (p == null || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower())))
+                    if (pl.hidden && pl.group.Permission <= p.group.Permission && (p == null || p.group.Permission > LevelPermission.AdvBuilder || Server.devs.Contains(p.name.ToLower())))
                     {
                         hiddenCount++;
                     }

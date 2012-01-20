@@ -17,7 +17,8 @@
 */
 using System;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
 	public class CmdDraw : Command
 	{
@@ -25,7 +26,7 @@ namespace MCForge
 		public override string shortcut { get { return ""; } }
 		public override string type { get { return "build"; } }
 		public override bool museumUsable { get { return false; } }
-		public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
 		public CmdDraw() { }
 
 		public override void Use(Player p, string message)

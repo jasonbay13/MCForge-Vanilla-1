@@ -1,7 +1,11 @@
 ﻿using System;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
+    /// <summary>
+    /// This is the command /vote
+    /// </summary>
     public class CmdVote : Command
     {
         public override string name { get { return "vote"; } }

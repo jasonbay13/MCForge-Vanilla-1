@@ -15,7 +15,8 @@
 	or implied. See the Licenses for the specific language governing
 	permissions and limitations under the Licenses.
 */
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     using System;
     public class CmdUnflood : Command
@@ -45,6 +46,7 @@ namespace MCForge
                 Command.all.Find("replaceall").Use(p, "active_water air");
                 Command.all.Find("replaceall").Use(p, "active_hot_lava air");
                 Command.all.Find("replaceall").Use(p, "active_cold_water air");
+                Command.all.Find("replaceall").Use(p, "fast_hot_lava air");
                 Command.all.Find("replaceall").Use(p, "magma air");
             }
             else

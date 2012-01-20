@@ -18,7 +18,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdAwards : Command
     {
@@ -27,6 +28,7 @@ namespace MCForge
         public override string type { get { return "other"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
+
 
         public override void Use(Player p, string message)
         {

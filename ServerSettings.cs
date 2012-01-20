@@ -22,11 +22,12 @@ using System.Text;
 
 namespace MCForge
 {
+    //derp idk just need to edit this so I can commit :/
     public static class ServerSettings
     {
         // Don't even try referencing this from Program.cs, you'll break the updater and it will fail miserably.
         public static string RevisionList = "http://www.mcforge.net/revs.txt";
-        public static string HeartbeatAnnounce = "http://www.mcforge.net/hbannounce.php";
+        public static string HeartbeatAnnounce = "http://mcforge.mc-mycraft.com/heartbeat.php";
         public static string ArchivePath = "http://www.mcforge.net/archives/exe/";
     }
 }

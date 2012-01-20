@@ -105,7 +105,6 @@ namespace MCForge.Gui
             this.clonesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.promoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.demoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tmrRestart = new System.Windows.Forms.Timer(this.components);
             this.iconContext = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.shutdownServer = new System.Windows.Forms.ToolStripMenuItem();
@@ -626,11 +625,6 @@ namespace MCForge.Gui
             this.demoteToolStripMenuItem.Text = "Demote";
             this.demoteToolStripMenuItem.Click += new System.EventHandler(this.demoteToolStripMenuItem_Click);
             // 
-            // tmrRestart
-            // 
-            this.tmrRestart.Enabled = true;
-            this.tmrRestart.Interval = 1000;
-            // 
             // iconContext
             // 
             this.iconContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -986,6 +980,7 @@ namespace MCForge.Gui
             this.dgvPlayers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvPlayers.Size = new System.Drawing.Size(246, 250);
             this.dgvPlayers.TabIndex = 37;
+            this.dgvPlayers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPlayers_CellContentClick);
             this.dgvPlayers.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.dgvPlayers_RowPrePaint);
             // 
             // label1
@@ -1047,6 +1042,7 @@ namespace MCForge.Gui
             this.UnloadedList.Name = "UnloadedList";
             this.UnloadedList.Size = new System.Drawing.Size(155, 160);
             this.UnloadedList.TabIndex = 1;
+            this.UnloadedList.SelectedIndexChanged += new System.EventHandler(this.UnloadedList_SelectedIndexChanged);
             // 
             // ldmapbt
             // 
@@ -2428,7 +2424,6 @@ namespace MCForge.Gui
 
         #endregion
 
-        private Timer tmrRestart;
         private Button btnProperties;
         private Button btnClose;
         private ContextMenuStrip iconContext;

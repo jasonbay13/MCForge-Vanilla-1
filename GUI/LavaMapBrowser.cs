@@ -135,7 +135,7 @@ namespace MCForge.Gui
         {
             try
             {
-                System.Diagnostics.Process.Start("http://www.mcforge.net/lavamaps/submit");
+                System.Diagnostics.Process.Start("http://www.mcforge.net/maps/submit");
             }
             catch
             {

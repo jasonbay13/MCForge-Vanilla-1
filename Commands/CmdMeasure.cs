@@ -18,12 +18,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdMeasure : Command
     {
         public override string name { get { return "measure"; } }
-        public override string shortcut { get { return "m"; } }
+        public override string shortcut { get { return "ms"; } }
         public override string type { get { return "information"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }

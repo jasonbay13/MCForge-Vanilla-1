@@ -20,7 +20,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdLoad : Command
     {
@@ -84,17 +85,29 @@ namespace MCForge
                 {
                     if (File.Exists("levels/" + message + ".lvl.backup"))
                     {
-                        if (File.Exists("Levels/" + message + ".lvl"))
+                        if (File.Exists("levels/" + message + ".lvl"))
                         {
-                            Server.s.Log("Level file is corrupt. Deleting and replacing with lvl.backup file.");
-                            File.Delete("Levels/" + message + ".lvl");
+                            Server.s.Log(message + ".lvl file is corrupt. Deleting and replacing with " + message + ".lvl.backup file.");
+                            File.Delete("levels/" + message + ".lvl");
                         }
-                        Server.s.Log("Attempting to load backup.");
+                        Server.s.Log("Attempting to load backup");
                         File.Copy("levels/" + message + ".lvl.backup", "levels/" + message + ".lvl", true);
                         level = Level.Load(message);
                         if (level == null)
                         {
-                            Player.SendMessage(p, "Backup of " + message + " failed.");
+                            Player.SendMessage(p, "Loading backup failed.");
+                            string backupPath = @Server.backupLocation;
+                            if (Directory.Exists(backupPath + "/" + message))
+                            {
+                                int backupNumber = Directory.GetDirectories(backupPath + "/" + message).Length;
+                                Server.s.Log("Attempting to load latest backup, number " + backupNumber + " instead.");
+                                File.Copy(backupPath + "/" + message + "/" + backupNumber + "/" + message + ".lvl", "levels/" + message + ".lvl", true);
+                                level = Level.Load(message);
+                                if (level == null)
+                                {
+                                    Player.SendMessage(p, "Loading latest backup failed as well.");
+                                }
+                            } 
                             return;
                         }
                     }
@@ -127,8 +140,6 @@ namespace MCForge
                 lock (Server.levels) {
                     Server.addLevel(level);
                 }
-
-                level.physThread.Start();
                 Player.GlobalMessage("Level \"" + level.name + "\" loaded.");
                 try
                 {

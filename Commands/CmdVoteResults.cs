@@ -1,8 +1,13 @@
 ﻿using System;
 using System.IO;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
+    /// <summary>
+    /// This is the command /voteresults
+    /// use /help voteresults in-game for more info
+    /// </summary>
     public class CmdVoteResults : Command
     {
         public override string name { get { return "voteresults"; } }

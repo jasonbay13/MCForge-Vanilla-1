@@ -21,6 +21,7 @@ using System.Collections.Generic;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
+using MCForge;
 namespace MCForge
 {
     public class CmdCTF : Command
@@ -39,7 +40,7 @@ namespace MCForge
                 Server.s.Log("You must be in-game");
                 return;
             }
-            if (message == "") { Help(p); return; }
+            if ((message != null && String.IsNullOrEmpty(message))) { Help(p); return; }
             if (message == "start")
             {
                 //Prevent null errors :/

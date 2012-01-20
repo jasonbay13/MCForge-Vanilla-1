@@ -19,7 +19,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     public class CmdCuboid : Command
     {
@@ -286,7 +287,7 @@ namespace MCForge
                 Player.SendMessage(p, buffer.Count.ToString() + " blocks.");
             }
 
-            if (p.level.bufferblocks)
+            if (p.level.bufferblocks && !p.level.Instant)
             {
                 buffer.ForEach(delegate(Pos pos)
                 {

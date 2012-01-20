@@ -19,7 +19,8 @@ using System.Text;
 using System.IO;
 
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
     class CmdDelTempRank : Command
     {
@@ -32,10 +33,10 @@ namespace MCForge
         public override void Use(Player p, string message)
         {
             string alltext = File.ReadAllText("text/tempranks.txt");
-            if (alltext.Contains(message) == false)
+            if (!alltext.Contains(message))
             {
                 Player.SendMessage(p, "&cPlayer &a" + message + "&c Has not been assigned a temporary rank. Cannot unnasign.");
-                goto end;
+                return;
             }
             string alltempranks = "";
            Player who = Player.Find(message);
@@ -44,7 +45,6 @@ namespace MCForge
                if (line.Contains(message))
                {
                    string group = line.Split(' ')[2];
-                   Group oldgroup = Group.findPlayerGroup(who.name);
                    Group newgroup = Group.Find(group);
                    Command.all.Find("setrank").Use(null, who.name + " " + newgroup.name);
                    Player.SendMessage(p, "&eTemporary rank of &a" + message + "&e has been unassigned");
@@ -56,17 +56,10 @@ namespace MCForge
                }
            }
            File.WriteAllText("text/tempranks.txt", alltempranks);
-           
-
-           
-        end:
-            System.Threading.Thread.Sleep(0);
         }
         public override void Help(Player p)
         {
             Player.SendMessage(p, "/deltemprank - Deletes someones temporary rank");
         }
-        
-        
     }
 }

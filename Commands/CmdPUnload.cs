@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MCForge
+using MCForge;
+namespace MCForge.Commands
 {
+    /// <summary>
+    /// This is the command /punload
+    /// use /help punload in-game for more info
+    /// </summary>
     public class CmdPUnload : Command
     {
         public override LevelPermission defaultRank { get { return LevelPermission.Operator; } }
