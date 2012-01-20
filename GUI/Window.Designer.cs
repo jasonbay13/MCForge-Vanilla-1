@@ -1112,6 +1112,7 @@ namespace MCForge.Gui
             this.WoM.UseVisualStyleBackColor = true;
             this.WoM.Click += new System.EventHandler(this.button1_Click);
             // 
+
             // TreeGrowChk
             // 
             this.TreeGrowChk.AutoSize = true;
