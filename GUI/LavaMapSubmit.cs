@@ -107,7 +107,9 @@ namespace MCForge.Gui
             catch (Exception ex)
             {
                 Server.ErrorLog(ex);
-                this.Dispose();
+                MessageBox.Show("There was an error during the upload, see error log for details.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.ToggleAllShit(true);
+                this.Focus();
             }
         }
 
