@@ -63,7 +63,6 @@ namespace MCForge.Gui
                 formData.Add("name", txtLevelName.Text);
                 formData.Add("desc", txtMapDesc.Text);
                 byte[] requestData = BuildFormData(formData, boundary, boundaryBytes);
-                Server.s.Log(requestData.Length.ToString());
 
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri("http://www.mcforge.net/maps/submit"));
                 request.CookieContainer = MCForgeAccount.Cookies;
