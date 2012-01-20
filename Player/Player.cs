@@ -3615,6 +3615,31 @@ changed |= 4;*/
             }
             return false;
         }
+
+        public static string EscapeColours(string message)
+        {
+            int index = 1;
+            StringBuilder sb = new StringBuilder();
+            Regex r = new Regex("^[0-9a-fA-F]$");
+            foreach (char c in message)
+            {
+                if (c == '%')
+                {
+                    if (message.Length >= index)
+                        if (r.IsMatch(message[index].ToString()))
+                            sb.Append('&');
+                        else
+                            sb.Append('%');
+                    else
+                        sb.Append('%');
+                }
+                else
+                    sb.Append(c);
+                index++;
+            }
+            return sb.ToString();
+        }
+
         public static void GlobalChatWorld(Player from, string message, bool showname)
         {
             if (showname)
@@ -3667,7 +3692,8 @@ changed |= 4;*/
         public static void GlobalMessage(string message, bool global)
         {
             if (!global)
-                message = message.Replace("%", "&");
+                //message = message.Replace("%", "&");
+                message = EscapeColours(message);
             players.ForEach(delegate(Player p)
             {
                 if (p.level.worldChat && p.Chatroom == null && (!global || !p.muteGlobal))
