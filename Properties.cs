@@ -719,6 +719,12 @@ namespace MCForge
                                 }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); }
                                 break;
+                            case "mcforge-user":
+                                Server.mcforgeUser = value;
+                                break;
+                            case "mcforge-pass":
+                                Server.mcforgePass = value;
+                                break;
                             case "translation-enabled":
                                 Server.transenabled = (value.ToLower() == "true") ? true : false;
                                 break;
@@ -1328,7 +1334,7 @@ namespace MCForge
             w.WriteLine("wom-serverdis = " + Server.Server_Disc);
             w.WriteLine("wom-serverflag = " + Server.Server_Flag);
             w.WriteLine("wom-textures = " + Server.UseTextures);
-            w.WriteLine("");
+            w.WriteLine();
             w.WriteLine("#Review settings");
             w.WriteLine("review-view-perm = " + ((sbyte)Server.reviewview).ToString());
             w.WriteLine("review-enter-perm = " + ((sbyte)Server.reviewenter).ToString());
@@ -1337,10 +1343,14 @@ namespace MCForge
             w.WriteLine("review-clear-perm = " + ((sbyte)Server.reviewclear).ToString());
             w.WriteLine("review-next-perm = " + ((sbyte)Server.reviewnext).ToString());
             w.WriteLine("bufferblocks = " + Server.bufferblocks);
-            w.WriteLine("");
+            w.WriteLine();
             w.WriteLine("#Translation settings");
             w.WriteLine("translation-enabled = " + Server.transenabled.ToString().ToLower());
             w.WriteLine("translation-language = " + Server.translang.ToString().ToLower());
+            w.WriteLine();
+            w.WriteLine("#MCForge.net Account");
+            w.WriteLine("mcforge-user = " + Server.mcforgeUser);
+            w.WriteLine("mcforge-pass = " + Server.mcforgePass);
         }
     }
 }

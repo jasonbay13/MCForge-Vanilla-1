@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditText));
             this.EdittxtCombo = new System.Windows.Forms.ComboBox();
             this.LoadTxt = new System.Windows.Forms.Button();
             this.EditTextTxtBox = new System.Windows.Forms.TextBox();
@@ -105,6 +106,8 @@
             this.Controls.Add(this.EdittxtCombo);
             this.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "EditText";
             this.Text = "Edit Text";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditTxt_Unload);

@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.IO.Compression;
+using Microsoft.Win32;
 
 namespace MCForge
 {
@@ -137,6 +138,13 @@ namespace MCForge
                     sb.Append("*");
             }
             return sb.ToString();
+        }
+        public static string GetMimeType(this FileInfo file)
+        {
+            RegistryKey rk = Registry.ClassesRoot.OpenSubKey(file.Extension.ToLower());
+            if (rk != null && rk.GetValue("Content Type") != null)
+                return rk.GetValue("Content Type").ToString();
+            return "application/octet-stream";
         }
     }
 }
