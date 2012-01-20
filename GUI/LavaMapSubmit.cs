@@ -107,6 +107,7 @@ namespace MCForge.Gui
             catch (Exception ex)
             {
                 Server.ErrorLog(ex);
+                this.Dispose();
             }
         }
 
