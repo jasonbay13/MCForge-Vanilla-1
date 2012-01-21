@@ -50,6 +50,7 @@ namespace MCForge.Commands
                 return;
             }
             if (who != null) {
+                Command.all.Find("xundo").Use(p, msg);
                 Command.all.Find("ban").Use(p, msg);
                 Command.all.Find("kick").Use(p, message);
                 Command.all.Find("xundo").Use(p, msg);
