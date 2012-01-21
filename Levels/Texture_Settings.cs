@@ -41,6 +41,8 @@ namespace MCForge.Levels.Textures
             if (!Directory.Exists("extra/cfg/internal")) Directory.CreateDirectory("extra/cfg/internal");
             if (File.Exists("extra/cfg/" + l.name + ".internal"))
                 LoadSettings();
+            if (!Server.UseTextures)
+                enabled = false;
         }
         #endregion
 
@@ -48,6 +50,8 @@ namespace MCForge.Levels.Textures
         #region ==SERVER-TO-WOM==
         public void SendDetail(Player p, string text = "")
         {
+            if (!enabled)
+                return;
             byte[] buffer = new byte[65];
             if (p.level == l && p.UsingWom)
             {
@@ -69,11 +73,22 @@ namespace MCForge.Levels.Textures
             }
             buffer = null;
         }
-        public void GlobalSendDetail(string text = "")
+        public void LevelSendDetail(string text)
         {
+            if (!enabled)
+                return;
             Player.players.ForEach(delegate(Player p)
             {
-                SendDetail(p, text);
+                if (p.level == l)
+                    SendDetail(p, text);
+            });
+        }
+        public static void GlobalSendDetail(string text = "")
+        {
+
+            Player.players.ForEach(delegate(Player p)
+            {
+                p.level.textures.SendDetail(p, text);
             });
         }
         #endregion

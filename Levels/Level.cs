@@ -1197,7 +1197,7 @@ namespace MCForge
                     level.blocks = blocks;
                     gs.Close();
                     gs.Dispose();
-                    //level.textures = new LevelTextures(level);
+                    level.textures = new LevelTextures(level);
                     level.backedup = true;
 
                     using (DataTable ZoneDB = Database.fillData("SELECT * FROM `Zone" + givenName + "`"))
