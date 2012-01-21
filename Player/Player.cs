@@ -2766,7 +2766,7 @@ else goto retry;
 
             if (colorParse)
             {
-                for (int i = 0; i < 10; i++)
+                /*for (int i = 0; i < 10; i++)
                 {
                     sb.Replace("%" + i, "&" + i);
                     sb.Replace("&" + i + " &", " &");
@@ -2775,7 +2775,10 @@ else goto retry;
                 {
                     sb.Replace("%" + ch, "&" + ch);
                     sb.Replace("&" + ch + " &", " &");
-                }
+                }*/
+
+                sb = new StringBuilder(EscapeColours(message));
+
                 // Begin fix to replace all invalid color codes typed in console or chat with "."
                 for (char ch = (char)0; ch <= (char)47; ch++) // Characters that cause clients to disconnect
                     sb.Replace("&" + ch, String.Empty);
