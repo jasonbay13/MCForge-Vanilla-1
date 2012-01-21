@@ -3619,17 +3619,17 @@ changed |= 4;*/
             return false;
         }
 
-        public static string EscapeColours(string message)
+        public static string EscapeColours(string m)
         {
-            int index = 1;
+            int i = 1;
             StringBuilder sb = new StringBuilder();
             Regex r = new Regex("^[0-9a-fA-F]$");
-            foreach (char c in message)
+            foreach (char c in m)
             {
                 if (c == '%')
                 {
-                    if (message.Length >= index)
-                        if (r.IsMatch(message[index].ToString()))
+                    if (m.Length >= i)
+                        if (r.IsMatch(m[i].ToString()))
                             sb.Append('&');
                         else
                             sb.Append('%');
@@ -3638,9 +3638,13 @@ changed |= 4;*/
                 }
                 else
                     sb.Append(c);
-                index++;
+                i++;
             }
             return sb.ToString();
+        }
+        public static string EscapeColors(string message)
+        {
+            return EscapeColours(message);
         }
 
         public static void GlobalChatWorld(Player from, string message, bool showname)
