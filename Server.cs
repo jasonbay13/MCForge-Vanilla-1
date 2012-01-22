@@ -1043,7 +1043,7 @@ processThread.Start();
                     if (Server.lava.startOnStartup)
                         Server.lava.Start();
                     if (Server.zombie.StartOnStartup)
-                        Server.zombie.Start(0);
+                        //Server.zombie.Start(0);
                     //This doesnt use the main map
                     if (Server.UseCTF)
                         ctf = new Auto_CTF();
