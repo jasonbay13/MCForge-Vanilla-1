@@ -1352,6 +1352,13 @@ namespace MCForge
                 SendBlockchange(x, y, z, b);
                 return;
             }
+            
+            if (Server.ZombieOnlyServer == true && Block.canPlace(this, Block.blackrock) && !this.referee == true)
+            {
+                SendMessage("Cannot break/place adminium unless you are a Ref!");
+                SendBlockchange(x, y, z, b);
+                return;
+            }
 
             if (b >= 200 && b < 220)
             {
