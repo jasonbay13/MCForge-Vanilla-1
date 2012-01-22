@@ -25,7 +25,7 @@ using System.IO.Packaging;
 using MCForge.SQL;
 using System.Threading;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     class CmdServer : Command {

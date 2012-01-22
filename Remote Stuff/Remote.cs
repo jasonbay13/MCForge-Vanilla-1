@@ -22,7 +22,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
-using MCForge;
+
 
 namespace MCForge.Remote
 {

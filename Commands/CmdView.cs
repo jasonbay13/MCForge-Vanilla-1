@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdView : Command

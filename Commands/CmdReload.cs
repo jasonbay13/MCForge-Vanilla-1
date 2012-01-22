@@ -20,7 +20,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdReload : Command

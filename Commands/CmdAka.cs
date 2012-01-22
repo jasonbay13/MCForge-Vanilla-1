@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using MCForge;
+
 namespace MCForge.Commands
 {
     /// <summary>

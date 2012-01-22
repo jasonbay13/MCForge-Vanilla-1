@@ -19,7 +19,7 @@
 using System;
 using MCForge.SQL;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdTColor : Command

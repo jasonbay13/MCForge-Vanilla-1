@@ -27,7 +27,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdPass : Command
