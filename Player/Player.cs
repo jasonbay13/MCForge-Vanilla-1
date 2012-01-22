@@ -264,6 +264,10 @@ namespace MCForge
         //Waypoints
         public List<Waypoint.WP> Waypoints = new List<Waypoint.WP>();
 
+        //Zombie
+        public bool referee;
+        //Zombie
+
         //Random...
         public Random random = new Random();
 
@@ -3152,7 +3156,6 @@ changed |= 4;*/
                 }
             }
 
-            message = from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message;
             players.ForEach(delegate(Player p)
             {
                 if (p.level.worldChat && p.Chatroom == null)
