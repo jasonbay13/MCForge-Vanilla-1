@@ -101,9 +101,11 @@
     <Compile Include="Commands\CmdSearch.cs" />
     <Compile Include="Commands\CmdTntWars.cs" />
     <Compile Include="Commands\CmdVote.cs" />
+    <Compile Include="Commands\CmdZombieSurvival.cs" />
     <Compile Include="Commands\CommandKeywords.cs" />
     <Compile Include="Games\CTF\Setup.cs" />
     <Compile Include="Games\TntWarsGame.cs" />
+    <Compile Include="Games\ZombieSurvival.cs" />
     <Compile Include="GUI\LavaMapSubmit.cs">
       <SubType>Form</SubType>
     </Compile>

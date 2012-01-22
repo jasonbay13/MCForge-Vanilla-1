@@ -1630,6 +1630,8 @@ return;
                 ushort y = NTHO(message, 3);
                 ushort z = NTHO(message, 5);
 
+                Server.zombie.CheckLocation(this);
+
                 if (OnMove != null)
                     OnMove(this, x, y, z);
                 if (PlayerMove != null)

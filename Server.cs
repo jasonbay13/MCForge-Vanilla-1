@@ -87,6 +87,7 @@ namespace MCForge
         public static System.Timers.Timer updateTimer = new System.Timers.Timer(100);
         //static System.Timers.Timer heartbeatTimer = new System.Timers.Timer(60000); //Every 45 seconds
         static System.Timers.Timer messageTimer = new System.Timers.Timer(60000 * 5); //Every 5 mins
+        public System.Timers.Timer zombieTimer = new System.Timers.Timer(60000 * 9); //Every 5 mins
         public static System.Timers.Timer cloneTimer = new System.Timers.Timer(5000);
 
         //public static Thread physThread;
@@ -175,6 +176,12 @@ namespace MCForge
         public static bool bufferblocks = true;
         public static string mcforgeUser = "";
         public static string mcforgePass = "";
+
+        //Zombie
+        public static int ZombieMode;
+        public static bool ZombieRound;
+        public static ZombieSurvival zombie;
+        //Zombie
 
         // Lava Survival
         public static LavaSurvival lava;
@@ -581,6 +588,8 @@ namespace MCForge
             // LavaSurvival constructed here...
             lava = new LavaSurvival();
 
+            zombie = new ZombieSurvival();
+
             // OmniBan
             omniban = new OmniBan();
 
@@ -880,6 +889,11 @@ processThread.Start();
                 };
                 messageTimer.Start();
 
+                zombieTimer.Elapsed += delegate
+                {
+                    Server.zombie.EndRound();
+                };
+
                 process = System.Diagnostics.Process.GetCurrentProcess();
 
                 if (File.Exists("text/messages.txt"))
@@ -1028,6 +1042,8 @@ processThread.Start();
                 {
                     if (Server.lava.startOnStartup)
                         Server.lava.Start();
+                    if (Server.zombie.StartOnStartup)
+                        Server.zombie.Start(0);
                     //This doesnt use the main map
                     if (Server.UseCTF)
                         ctf = new Auto_CTF();
