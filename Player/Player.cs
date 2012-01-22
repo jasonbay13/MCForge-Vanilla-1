@@ -175,21 +175,7 @@ namespace MCForge
         public ushort countdowntempz;
         public bool countdownsettemps/* = false*/;
 
-        //Zombie
-        public bool referee/* = false*/;
-        public int blockCount = 50;
-        public bool voted/* = false*/;
-        public int blocksStacked/* = 0*/;
-        public int infectThisRound/* = 0*/;
-        public int lastYblock/* = 0*/;
-        public int lastXblock/* = 0*/;
-        public int lastZblock/* = 0*/;
-        public bool infected/* = false*/;
-        public bool aka/* = false*/;
-        public bool flipHead = true;
-        public int playersInfected/* = 0*/;
-        public int NoClipcount/* = 0*/;
-
+        public bool voted;
 
         //Tnt Wars
         public bool PlayingTntWars/* = false*/;
@@ -442,12 +428,6 @@ namespace MCForge
                     }
                     catch { }
                     try { Gui.Window.thisWindow.UpdatePlyersListBox(); }
-                    catch { }
-                    try
-                    {
-                        ZombieGame.alive.Remove(this);
-                        ZombieGame.infectd.Remove(this);
-                    }
                     catch { }
                     if (Server.lava.active) SendMessage("There is a &aLava Survival " + Server.DefaultColor + "game active! Join it by typing /ls go");
                     extraTimer.Dispose();
@@ -1123,8 +1103,6 @@ namespace MCForge
             {
                 Server.PopupNotify(name + " [" + ip + "] has joined the server.");
             }
-
-            if (Server.zombie.ZombieStatus() != 0) { Player.SendMessage(this, "There is a Zombie Survival game currently in-progress! Join it by typing /g " + Server.zombie.currentLevelName); }
         }
 
         public void SetPrefix()
@@ -1149,33 +1127,6 @@ namespace MCForge
                 ushort z = NTHO(message, 4);
                 byte action = message[6];
                 byte type = message[7];
-
-                if (action == 1 && Server.ZombieModeOn && Server.noPillaring)
-                {
-                    if (!referee)
-                    {
-                        if (lastYblock == y - 1 && lastXblock == x && lastZblock == z)
-                        {
-                            blocksStacked++;
-                        }
-                        else
-                        {
-                            blocksStacked = 0;
-                        }
-                        if (blocksStacked == 2)
-                        {
-                            SendMessage("You are pillaring! Stop before you get kicked!");
-                        }
-                        if (blocksStacked == 4)
-                        {
-                            Command.all.Find("kick").Use(null, name + " No pillaring allowed!");
-                        }
-                    }
-                }
-
-                lastYblock = y;
-                lastXblock = x;
-                lastZblock = z;
 
                 manualChange(x, y, z, action, type);
             }
@@ -1222,30 +1173,6 @@ namespace MCForge
                     SendBlockchange(x, y, z, b);
                     this.SendMessage("&cYou must use &a/pass [Password]&c to verify!");
                     return;
-                }
-            }
-
-            if (Server.ZombieModeOn && (action == 1 || (action == 0 && this.painting)))
-            {
-                if (Server.zombie != null && this.level.name == Server.zombie.currentLevelName)
-                {
-                    if (blockCount == 0)
-                    {
-                        if (!referee)
-                        {
-                            SendMessage("You have no blocks left.");
-                            SendBlockchange(x, y, z, b); return;
-                        }
-                    }
-
-                    if (!referee)
-                    {
-                        blockCount--;
-                        if (blockCount == 40 || blockCount == 30 || blockCount == 20 || blockCount <= 10 && blockCount >= 0)
-                        {
-                            SendMessage("Blocks Left: " + c.maroon + blockCount + Server.DefaultColor);
-                        }
-                    }
                 }
             }
 
@@ -1699,19 +1626,6 @@ return;
                 ushort y = NTHO(message, 3);
                 ushort z = NTHO(message, 5);
 
-                if (!this.referee && Server.noRespawn && Server.ZombieModeOn)
-                {
-                    if (this.pos[0] >= x + 70 || this.pos[0] <= x - 70)
-                    {
-                        unchecked { SendPos((byte)-1, pos[0], pos[1], pos[2], rot[0], rot[1]); }
-                        return;
-                    }
-                    if (this.pos[2] >= z + 70 || this.pos[2] <= z - 70)
-                    {
-                        unchecked { SendPos((byte)-1, pos[0], pos[1], pos[2], rot[0], rot[1]); }
-                        return;
-                    }
-                }
                 if (OnMove != null)
                     OnMove(this, x, y, z);
                 if (PlayerMove != null)
@@ -3104,7 +3018,7 @@ changed |= 4;*/
                 HTNO(pos[2]).CopyTo(buffer, 5);
                 buffer[7] = rot[0];
 
-                if (Server.flipHead || (this.flipHead && this.infected))
+                if (Server.flipHead)
                     if (rot[1] > 64 && rot[1] < 192)
                         buffer[8] = rot[1];
                     else
@@ -3133,7 +3047,7 @@ changed |= 4;*/
                 buffer = new byte[3]; buffer[0] = id;
                 buffer[1] = rot[0];
 
-                if (Server.flipHead || (this.flipHead && this.infected))
+                if (Server.flipHead)
                     if (rot[1] > 64 && rot[1] < 192)
                         buffer[2] = rot[1];
                     else
@@ -3155,7 +3069,7 @@ changed |= 4;*/
                     Buffer.BlockCopy(System.BitConverter.GetBytes((sbyte)(pos[2] - oldpos[2])), 0, buffer, 3, 1);
                     buffer[4] = rot[0];
 
-                    if (Server.flipHead || (this.flipHead && this.infected))
+                    if (Server.flipHead)
                         if (rot[1] > 64 && rot[1] < 192)
                             buffer[5] = rot[1];
                         else
@@ -3224,99 +3138,21 @@ changed |= 4;*/
             {
                 if (message.ToLower() == "yes" || message.ToLower() == "ye" || message.ToLower() == "y")
                 {
-                    if (!from.voted)
-                    {
-                        Server.YesVotes++;
-                        SendMessage(from, c.red + "Thanks For Voting!");
-                        from.voted = true;
-                        return;
-                    }
-                    else if (!from.voice)
-                    {
-                        from.SendMessage("Chat moderation is on while voting is on!");
-                        return;
-                    }
+                    Server.YesVotes++;
+                    SendMessage(from, c.red + "Thanks For Voting!");
+                    from.voted = true;
+                    return;
                 }
                 else if (message.ToLower() == "no" || message.ToLower() == "n")
                 {
-                    if (!from.voted)
-                    {
-                        Server.NoVotes++;
-                        SendMessage(from, c.red + "Thanks For Voting!");
-                        from.voted = true;
-                        return;
-                    }
-                    else if (!from.voice)
-                    {
-                        from.SendMessage("Chat moderation is on while voting is on!");
-                        return;
-                    }
-                }
-            }
-
-            if (Server.votingforlevel == true)
-            {
-                if (message.ToLower() == "1" || message.ToLower() == "one")
-                {
-                    if (!from.voted)
-                    {
-                        Server.Level1Vote++;
-                        SendMessage(from, c.red + "Thanks For Voting!");
-                        from.voted = true;
-                        return;
-                    }
-                    else if (!from.voice)
-                    {
-                        from.SendMessage("Chat moderation is on while voting is on!");
-                        return;
-                    }
-                }
-                else if (message.ToLower() == "2" || message.ToLower() == "two")
-                {
-                    if (!from.voted)
-                    {
-                        Server.Level2Vote++;
-                        SendMessage(from, c.red + "Thanks For Voting!");
-                        from.voted = true;
-                        return;
-                    }
-                    else if (!from.voice)
-                    {
-                        from.SendMessage("Chat moderation is on while voting is on!");
-                        return;
-                    }
-                }
-                else if (message.ToLower() == "3" || message.ToLower() == "random" || message.ToLower() == "rand")
-                {
-                    if (!from.voted)
-                    {
-                        Server.Level3Vote++;
-                        SendMessage(from, c.red + "Thanks For Voting!");
-                        from.voted = true;
-                        return;
-                    }
-                    else if (!from.voice)
-                    {
-                        from.SendMessage("Chat moderation is on while voting is on!");
-                        return;
-                    }
-                }
-                else if (!from.voice)
-                {
-                    from.SendMessage("Chat moderation is on while voting is on!");
+                    Server.NoVotes++;
+                    SendMessage(from, c.red + "Thanks For Voting!");
+                    from.voted = true;
                     return;
                 }
             }
 
-            if (showname)
-            {
-                String referee = "";
-                if (from.referee)
-                {
-                    referee = c.green + "[Referee] ";
-                }
-                message = referee + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message;
-            }
+            message = from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message;
             players.ForEach(delegate(Player p)
             {
                 if (p.level.worldChat && p.Chatroom == null)
@@ -3752,30 +3588,7 @@ changed |= 4;*/
                 if (p.level != from.level || (from.hidden && !self)) { return; }
                 if (p != from)
                 {
-                    if (Server.ZombieModeOn && !p.aka)
-                    {
-                        if (from.infected)
-                        {
-                            if (Server.ZombieName != "")
-                                p.SendSpawn(from.id, c.red + Server.ZombieName + possession, x, y, z, rotx, roty);
-                            else
-                                p.SendSpawn(from.id, c.red + from.name + possession, x, y, z, rotx, roty);
-                            return;
-                        }
-                        else if (from.referee)
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            p.SendSpawn(from.id, from.color + from.name + possession, x, y, z, rotx, roty);
-                            return;
-                        }
-                    }
-                    else
-                    {
                         p.SendSpawn(from.id, from.color + from.name + possession, x, y, z, rotx, roty);
-                    }
                 }
                 else if (self)
                 {
@@ -4044,8 +3857,6 @@ level.Unload();
                     if (Server.notifyOnJoinLeave)
                         Server.PopupNotify(ip + " disconnected.");
                 }
-
-                Server.zombie.InfectedPlayerDC();
 
             }
             catch (Exception e) { Server.ErrorLog(e); }

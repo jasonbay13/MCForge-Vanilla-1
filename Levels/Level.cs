@@ -356,7 +356,7 @@ namespace MCForge
             Player.players.ForEach(
                 delegate(Player pl) { if (pl.level == this) Command.all.Find("goto").Use(pl, Server.mainLevel.name); });
 
-            if (changed && (!Server.ZombieModeOn || !Server.noLevelSaving))
+            if (changed)
             {
                 if ((!Server.lava.active || !Server.lava.HasMap(name)) && save) Save();
                 saveChanges();

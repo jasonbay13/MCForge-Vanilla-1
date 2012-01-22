@@ -100,6 +100,7 @@
     <Compile Include="Commands\CmdGifToCin.cs" />
     <Compile Include="Commands\CmdSearch.cs" />
     <Compile Include="Commands\CmdTntWars.cs" />
+    <Compile Include="Commands\CmdVote.cs" />
     <Compile Include="Commands\CommandKeywords.cs" />
     <Compile Include="Games\CTF\Setup.cs" />
     <Compile Include="Games\TntWarsGame.cs" />
@@ -169,8 +170,6 @@
     <Compile Include="Commands\CmdServer.cs" />
     <Compile Include="Commands\CmdAdminChat.cs" />
     <Compile Include="Commands\CmdAgree.cs" />
-    <Compile Include="Commands\CmdAka.cs" />
-    <Compile Include="Commands\CmdAlive.cs" />
     <Compile Include="Commands\CmdAllowGuns.cs" />
     <Compile Include="Commands\CmdBaninfo.cs" />
     <Compile Include="Commands\CmdBanlist.cs" />
@@ -183,22 +182,17 @@
     <Compile Include="Commands\CmdCTF.cs" />
     <Compile Include="Commands\CmdDelTempRank.cs" />
     <Compile Include="Commands\CmdDisagree.cs" />
-    <Compile Include="Commands\CmdDisinfect.cs" />
     <Compile Include="Commands\CmdDraw.cs" />
     <Compile Include="Commands\CmdDurl.cs" />
     <Compile Include="Commands\CmdEconomy.cs" />
     <Compile Include="Commands\CmdEllipse.cs" />
-    <Compile Include="Commands\CmdEndRound.cs" />
     <Compile Include="Commands\CmdExplode.cs" />
     <Compile Include="Commands\CmdFakePay.cs" />
     <Compile Include="Commands\CmdFakerank.cs" />
     <Compile Include="Commands\CmdFaq.cs" />
     <Compile Include="Commands\CmdFetch.cs" />
-    <Compile Include="Commands\CmdFliphead.cs" />
     <Compile Include="Commands\CmdGarbage.cs" />
     <Compile Include="Commands\CmdGlobal.cs" />
-    <Compile Include="Commands\CmdInfect.cs" />
-    <Compile Include="Commands\CmdInfected.cs" />
     <Compile Include="Commands\CmdKillPhysics.cs" />
     <Compile Include="Commands\CmdLavaSurvival.cs" />
     <Compile Include="Commands\CmdNyan.cs" />
@@ -215,8 +209,6 @@
     <Compile Include="Commands\CmdMain.cs" />
     <Compile Include="Commands\CmdPerbuildMax.cs" />
     <Compile Include="Commands\CmdPervisitMax.cs" />
-    <Compile Include="Commands\CmdPlayerBlock.cs" />
-    <Compile Include="Commands\CmdQueue.cs" />
     <Compile Include="Commands\CmdQuick.cs" />
     <Compile Include="Commands\CmdMaze.cs" />
     <Compile Include="Commands\CmdMoney.cs" />
@@ -227,7 +219,6 @@
     <Compile Include="Commands\CmdP2P.cs" />
     <Compile Include="Commands\CmdPass.cs" />
     <Compile Include="Commands\CmdpCinema.cs" />
-    <Compile Include="Commands\CmdReferee.cs" />
     <Compile Include="Commands\CmdRemote.cs" />
     <Compile Include="Commands\CmdReport.cs" />
     <Compile Include="Commands\CmdResetPass.cs" />
@@ -276,15 +267,12 @@
     <Compile Include="Commands\CmdAwardMod.cs" />
     <Compile Include="Commands\CmdUnflood.cs" />
     <Compile Include="Commands\CmdUnlock.cs" />
-    <Compile Include="Commands\CmdVote.cs" />
-    <Compile Include="Commands\CmdVoteResults.cs" />
     <Compile Include="Commands\CmdWarp.cs" />
     <Compile Include="Commands\CmdWaypoint.cs" />
     <Compile Include="Commands\CmdXban.cs" />
     <Compile Include="Commands\CmdXmute.cs" />
     <Compile Include="Commands\CmdXspawn.cs" />
     <Compile Include="Commands\CmdXundo.cs" />
-    <Compile Include="Commands\CmdZombieGame.cs" />
     <Compile Include="Commands\CmdZz.cs" />
     <Compile Include="Commands\CmdOZone.cs" />
     <Compile Include="Commands\CmdXJail.cs" />
@@ -545,7 +533,6 @@
     <Compile Include="Remote Stuff\Remote.Handler.cs" />
     <Compile Include="Remote Stuff\RemoteProperties.cs" />
     <Compile Include="Remote Stuff\RemoteServer.cs" />
-    <Compile Include="Games\ZombieGame.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
     </EmbeddedResource>

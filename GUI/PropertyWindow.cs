@@ -829,22 +829,12 @@ namespace MCForge.Gui
             Server.agreetorulesonentry = chkAgreeToRules.Checked;
             Server.adminsjoinsilent = chkAdminsJoinSilent.Checked;
             Server.server_owner = txtServerOwner.Text;
-            Server.startZombieModeOnStartup = chkZombieOnServerStart.Checked;
-            Server.noRespawn = chkNoRespawnDuringZombie.Checked;
-            Server.noLevelSaving = chkNoLevelSavingDuringZombie.Checked;
-            Server.noPillaring = chkNoPillaringDuringZombie.Checked;
-            Server.ZombieName = ZombieName.Text;
-            Server.ChangeLevels = chkEnableChangingLevels.Checked;
 
             string input = levelList.Text.Replace(" ", "").ToString();
             int itndex = input.IndexOf("#");
             if (itndex > 0)
                 input = input.Substring(0, itndex);
 
-            Server.LevelList = input.Split(',').ToList<string>();
-
-            Server.ZombieOnlyServer = chkZombieOnlyServer.Checked;
-            Server.UseLevelList = chkUseLevelList.Checked;
             Server.guestLimitNotify = chkGuestLimitNotify.Checked;
 
 

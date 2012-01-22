@@ -168,17 +168,6 @@ namespace MCForge.Commands
             Server.voteKickInProgress = false;
             Server.voteKickVotesNeeded = 0;
 
-            //Zombie
-            Server.ZombieModeOn = false;
-            Server.startZombieModeOnStartup = false;
-            Server.noRespawn = true;
-            Server.noLevelSaving = true;
-            Server.noPillaring = true;
-            Server.ZombieName = "";
-            Server.ChangeLevels = false;
-            Server.LevelList.Clear();
-            Server.ZombieOnlyServer = false;
-            Server.UseLevelList = true;
             //Settings
             #region Server Settings
             Server.salt = "";

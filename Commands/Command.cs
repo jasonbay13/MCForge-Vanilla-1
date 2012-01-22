@@ -44,8 +44,6 @@ namespace MCForge
 			all.Add(new CmdAdminChat());
 			all.Add(new CmdAllowGuns());
 			all.Add(new CmdAfk());
-			all.Add(new CmdAka());
-			all.Add(new CmdAlive());
 			all.Add(new CmdAgree());
 			all.Add(new CmdAscend());
 			all.Add(new CmdAward());
@@ -97,12 +95,10 @@ namespace MCForge
 			all.Add(new CmdDevs());
 			all.Add(new CmdDisagree());
 			all.Add(new CmdDescend());
-			all.Add(new CmdDisInfect());
 			all.Add(new CmdDraw());
 			all.Add(new CmdDrill());
 			all.Add(new CmdEconomy());
 			all.Add(new CmdEmote());
-			all.Add(new CmdEndRound());
 			all.Add(new CmdExplode());
 			all.Add(new CmdFakePay());
 			all.Add(new CmdFakeRank());
@@ -110,7 +106,6 @@ namespace MCForge
 			all.Add(new CmdFetch());
 			all.Add(new CmdFill());
 			all.Add(new CmdFixGrass());
-			all.Add(new CmdFlipHead());
 			all.Add(new CmdFlipHeads());
 			all.Add(new CmdFly());
 			all.Add(new CmdFollow());
@@ -138,8 +133,6 @@ namespace MCForge
 			all.Add(new CmdImport());
 			all.Add(new CmdImageprint());
 			all.Add(new CmdInbox());
-			all.Add(new CmdInfect());
-			all.Add(new CmdInfected());
 			all.Add(new CmdInfo());
 			all.Add(new CmdInvincible());
 			all.Add(new CmdJail());
@@ -192,7 +185,6 @@ namespace MCForge
 			all.Add(new CmdPatrol());
 			all.Add(new CmdPause());
 			all.Add(new CmdPay());
-			all.Add(new CmdPlayerBlock());
 			all.Add(new CmdpCinema());
 			all.Add(new CmdpCinema2());
 			all.Add(new CmdPCount());
@@ -212,7 +204,6 @@ namespace MCForge
 			all.Add(new CmdPumpkin());
 			all.Add(new CmdPUnload());
 			all.Add(new CmdPyramid());
-			all.Add(new CmdQueue());
 			all.Add(new CmdQuick());
 			all.Add(new CmdRagequit());
 			all.Add(new CmdRainbow());
@@ -220,7 +211,6 @@ namespace MCForge
 			all.Add(new CmdRankMsg());            
 			all.Add(new CmdRedo());
 			all.Add(new CmdReload());
-			all.Add(new CmdReferee());
 			all.Add(new CmdRemote());
 			all.Add(new CmdRenameLvl());
 			all.Add(new CmdRepeat());
@@ -293,9 +283,8 @@ namespace MCForge
 			all.Add(new CmdViewRanks());
 			all.Add(new CmdVIP());
 			all.Add(new CmdVoice());
-			all.Add(new CmdVote());
+            all.Add(new CmdVote());
 			all.Add(new CmdVoteKick());
-			all.Add(new CmdVoteResults());
 			all.Add(new CmdWarn());
 			all.Add(new CmdWarp());
 			all.Add(new CmdWaypoint());
@@ -312,7 +301,6 @@ namespace MCForge
 			all.Add(new CmdXspawn());
 			all.Add(new CmdXundo());
 			all.Add(new CmdZTime());
-			all.Add(new CmdZombieGame());
 			all.Add(new CmdZone());
 			all.Add(new CmdZz());
 			core.commands = new List<Command>(all.commands);

@@ -35,13 +35,6 @@ namespace MCForge.Commands
             ushort x = (ushort)((0.5 + p.level.spawnx) * 32);
             ushort y = (ushort)((1 + p.level.spawny) * 32);
             ushort z = (ushort)((0.5 + p.level.spawnz) * 32);
-            if (!p.referee)
-            {
-                if (!p.infected && Server.zombie.GameInProgess())
-                {
-                    Server.zombie.InfectPlayer(p);
-                }
-            }
             if (p.PlayingTntWars)
             {
                 TntWarsGame it = TntWarsGame.GetTntWarsGame(p);
