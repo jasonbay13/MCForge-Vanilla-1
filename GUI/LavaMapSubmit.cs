@@ -83,7 +83,7 @@ namespace MCForge.Gui
                             {
                                 total += count;
                                 stream.Write(buffer, 0, count);
-                                this.Invoke(new MethodInvoker(delegate { progressBar1.Value = (int)(((float)total / (float)requestData.Length) * 100); }));
+                                this.Invoke(new MethodInvoker(delegate { progressBar1.Value = (int)(((float)total / (float)requestData.Length) * 1000); }));
                             }
                         }
                     }
