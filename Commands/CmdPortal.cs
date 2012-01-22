@@ -88,7 +88,7 @@ namespace MCForge.Commands
 
             if (bp.Multi && type == Block.red && bp.port.Count > 0) { ExitChange(p, x, y, z, type); return; }
 
-            byte b = p.level.GetTile(x, y, z);
+//            byte b = p.level.GetTile(x, y, z) // Unused method, wasting mah .exe spaces;
             p.level.Blockchange(p, x, y, z, bp.type);
             p.SendBlockchange(x, y, z, Block.green);
             portPos Port;

@@ -39,54 +39,54 @@ namespace MCForge
         public List<string> listignored = new List<string>();
         public List<string> mapgroups = new List<string>();
         public static List<string> globalignores = new List<string>();
-        public static int totalMySQLFailed = 0;
+        public static int totalMySQLFailed/* = 0*/;
         public static byte number { get { return (byte)players.Count; } }
         static System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
         static MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
         public static List<Player> totalplayers = new List<Player>();
         public static string lastMSG = "";
 
-        public static bool storeHelp = false;
+        public static bool storeHelp/* = false*/;
         public static string storedHelp = "";
-        internal bool dontmindme = false;
+        internal bool dontmindme/* = false*/;
         public Socket socket;
         System.Timers.Timer timespent = new System.Timers.Timer(1000);
         System.Timers.Timer loginTimer = new System.Timers.Timer(1000);
         public System.Timers.Timer pingTimer = new System.Timers.Timer(2000);
         System.Timers.Timer extraTimer = new System.Timers.Timer(22000);
         public System.Timers.Timer afkTimer = new System.Timers.Timer(2000);
-        public int afkCount = 0;
+        public int afkCount/* = 0*/;
         public DateTime afkStart;
         public string WoMVersion = "";
-        public bool megaBoid = false;
-        public bool cmdTimer = false;
-        public bool UsingWom = false;
+        public bool megaBoid/* = false*/;
+        public bool cmdTimer/* = false*/;
+        public bool UsingWom/* = false*/;
 
         byte[] buffer = new byte[0];
         byte[] tempbuffer = new byte[0xFF];
-        public bool disconnected = false;
+        public bool disconnected/* = false*/;
         public string time;
         public string name;
         public string realName;
-        public int warn = 0;
+        public int warn/* = 0*/;
         public byte id;
         public int userID = -1;
         public string ip;
         public string color;
         public Group group;
-        public bool hidden = false;
-        public bool painting = false;
-        public bool muted = false;
-        public bool jailed = false;
-        public bool invincible = false;
+        public bool hidden/* = false*/;
+        public bool painting/* = false*/;
+        public bool muted/* = false*/;
+        public bool jailed/* = false*/;
+        public bool invincible/* = false*/;
         public string prefix = "";
         public string title = "";
         public string titlecolor;
-        public int TotalMessagesSent = 0;
-        public int passtries = 0;
-        public int ponycount = 0;
-        public int rdcount = 0;
-        public bool hasreadrules = false;
+        public int TotalMessagesSent/* = 0*/;
+        public int passtries/* = 0*/;
+        public int ponycount/* = 0*/;
+        public int rdcount/* = 0*/;
+        public bool hasreadrules/* = false*/;
         public bool canusereview = true;
 
         // check what commands are being used much:
@@ -103,27 +103,27 @@ namespace MCForge
         public string pyramidblock;
         public int pyramidtotal;
         public int pyramidtotal2;
-        public bool pyramidsilent = false;
+        public bool pyramidsilent/* = false*/;
 
-        public bool deleteMode = false;
-        public bool ignorePermission = false;
-        public bool ignoreGrief = false;
+        public bool deleteMode/* = false*/;
+        public bool ignorePermission/* = false*/;
+        public bool ignoreGrief/* = false*/;
         public bool parseSmiley = true;
         public bool smileySaved = true;
-        public bool opchat = false;
-        public bool adminchat = false;
-        public bool onWhitelist = false;
-        public bool whisper = false;
+        public bool opchat/* = false*/;
+        public bool adminchat/* = false*/;
+        public bool onWhitelist/* = false*/;
+        public bool whisper/* = false*/;
         public string whisperTo = "";
-        public bool ignoreglobal = false;
+        public bool ignoreglobal/* = false*/;
 
         public string storedMessage = "";
 
-        public bool trainGrab = false;
-        public bool onTrain = false;
+        public bool trainGrab/* = false*/;
+        public bool onTrain/* = false*/;
         public bool allowTnt = true;
 
-        public bool frozen = false;
+        public bool frozen/* = false*/;
         public string following = "";
         public string possess = "";
 
@@ -131,81 +131,81 @@ namespace MCForge
         //Using for anything else can cause unintended effects!
         public bool canBuild = true;
 
-        public int money = 0;
-        public long overallBlocks = 0;
+        public int money/* = 0*/;
+        public long overallBlocks/* = 0*/;
 
-        public int loginBlocks = 0;
+        public int loginBlocks/* = 0*/;
 
         public DateTime timeLogged;
         public DateTime firstLogin;
-        public int totalLogins = 0;
-        public int totalKicked = 0;
-        public int overallDeath = 0;
+        public int totalLogins/* = 0*/;
+        public int totalKicked/* = 0*/;
+        public int overallDeath/* = 0*/;
 
         public string savedcolor = "";
 
-        public bool staticCommands = false;
+        public bool staticCommands/* = false*/;
 
         public DateTime ZoneSpam;
-        public bool ZoneCheck = false;
-        public bool zoneDel = false;
+        public bool ZoneCheck/* = false*/;
+        public bool zoneDel/* = false*/;
 
         public Thread commThread;
-        public bool commUse = false;
+        public bool commUse/* = false*/;
 
         public bool aiming;
-        public bool isFlying = false;
+        public bool isFlying/* = false*/;
 
-        public bool joker = false;
-        public bool adminpen = false;
+        public bool joker/* = false*/;
+        public bool adminpen/* = false*/;
 
-        public bool voice = false;
+        public bool voice/* = false*/;
         public string voicestring = "";
 
-        public int grieferStoneWarn = 0;
+        public int grieferStoneWarn/* = 0*/;
 
         //CTF
         public Team team;
         public Team hasflag;
 
         //Countdown
-        public bool playerofcountdown = false;
-        public bool incountdown = false;
+        public bool playerofcountdown/* = false*/;
+        public bool incountdown/* = false*/;
         public ushort countdowntempx;
         public ushort countdowntempz;
-        public bool countdownsettemps = false;
+        public bool countdownsettemps/* = false*/;
 
         //Zombie
-        public bool referee = false;
+        public bool referee/* = false*/;
         public int blockCount = 50;
-        public bool voted = false;
-        public int blocksStacked = 0;
-        public int infectThisRound = 0;
-        public int lastYblock = 0;
-        public int lastXblock = 0;
-        public int lastZblock = 0;
-        public bool infected = false;
-        public bool aka = false;
+        public bool voted/* = false*/;
+        public int blocksStacked/* = 0*/;
+        public int infectThisRound/* = 0*/;
+        public int lastYblock/* = 0*/;
+        public int lastXblock/* = 0*/;
+        public int lastZblock/* = 0*/;
+        public bool infected/* = false*/;
+        public bool aka/* = false*/;
         public bool flipHead = true;
-        public int playersInfected = 0;
-        public int NoClipcount = 0;
+        public int playersInfected/* = 0*/;
+        public int NoClipcount/* = 0*/;
 
 
         //Tnt Wars
-        public bool PlayingTntWars = false;
-        public int CurrentAmountOfTnt = 0;
+        public bool PlayingTntWars/* = false*/;
+        public int CurrentAmountOfTnt/* = 0*/;
         public int CurrentTntGameNumber; //For keeping track of which game is which
         public int TntWarsHealth = 2;
-        public int TntWarsKillStreak = 0;
+        public int TntWarsKillStreak/* = 0*/;
         public float TntWarsScoreMultiplier = 1f;
-        public int TNTWarsLastKillStreakAnnounced = 0;
-        public bool inTNTwarsMap = false;
+        public int TNTWarsLastKillStreakAnnounced/* = 0*/;
+        public bool inTNTwarsMap/* = false*/;
         public Player HarmedBy = null; //For Assists
 
         //Copy
         public List<CopyPos> CopyBuffer = new List<CopyPos>();
         public struct CopyPos { public ushort x, y, z; public byte type; }
-        public bool copyAir = false;
+        public bool copyAir/* = false*/;
         public int[] copyoffset = new int[3] { 0, 0, 0 };
         public ushort[] copystart = new ushort[3] { 0, 0, 0 };
 
@@ -215,8 +215,8 @@ namespace MCForge
         public List<UndoPos> RedoBuffer = new List<UndoPos>();
 
 
-        public bool showPortals = false;
-        public bool showMBs = false;
+        public bool showPortals/* = false*/;
+        public bool showMBs/* = false*/;
 
         public string prevMsg = "";
 
@@ -225,15 +225,15 @@ namespace MCForge
 
 
         //Movement
-        public ushort oldBlock = 0;
-        public ushort deathCount = 0;
+        public ushort oldBlock/* = 0*/;
+        public ushort deathCount/* = 0*/;
         public byte deathBlock;
 
         //Games
         public DateTime lastDeath = DateTime.Now;
 
-        public byte BlockAction = 0; //0-Nothing 1-solid 2-lava 3-water 4-active_lava 5 Active_water 6 OpGlass 7 BluePort 8 OrangePort
-        public byte modeType = 0;
+        public byte BlockAction/* = 0*/; //0-Nothing 1-solid 2-lava 3-water 4-active_lava 5 Active_water 6 OpGlass 7 BluePort 8 OrangePort
+        public byte modeType/* = 0*/;
         public byte[] bindings = new byte[128];
         public string[] cmdBind = new string[10];
         public string[] messageBind = new string[10];
@@ -258,7 +258,7 @@ namespace MCForge
         public static int spamBlockTimer = 5;
         Queue<DateTime> spamBlockLog = new Queue<DateTime>(spamBlockCount);
 
-        public int consecutivemessages = 0;
+        public int consecutivemessages/* = 0*/;
         private System.Timers.Timer resetSpamCount = new System.Timers.Timer(Server.spamcountreset * 1000);
         //public static int spamChatCount = 3;
         //public static int spamChatTimer = 4;
@@ -282,9 +282,9 @@ namespace MCForge
         public Random random = new Random();
 
         //Global Chat
-        public bool muteGlobal = false;
+        public bool muteGlobal/* = false*/;
 
-        public bool loggedIn = false;
+        public bool loggedIn/* = false*/;
 
         private Player()
         {
@@ -683,7 +683,7 @@ namespace MCForge
                 byte version = message[0];
                 name = enc.GetString(message, 1, 64).Trim();
                 string verify = enc.GetString(message, 65, 32).Trim();
-                byte type = message[129];
+//                byte type = message[129] // Unused method, wasting mah .exe spaces;
                 try
                 {
                     Server.TempBan tBan = Server.tempBans.Find(tB => tB.name.ToLower() == name.ToLower());
@@ -1382,7 +1382,7 @@ namespace MCForge
 
                 bP.deleted = true;
                 level.blockCache.Add(bP);
-                deleteBlock(b, type, x, y, z);
+                deleteBlock(b, x, y, z);
             }
             else
             {
@@ -1465,12 +1465,13 @@ namespace MCForge
             catch { Player.SendMessage(p, "No message was stored."); return; }
         }
 
-        private bool checkOp()
-        {
-            return group.Permission < LevelPermission.Operator;
-        }
+//  Unused method, wasting mah .exe spaces
+//        private bool checkOp()
+//        {
+//            return group.Permission < LevelPermission.Operator;
+//        }
 
-        private void deleteBlock(byte b, byte type, ushort x, ushort y, ushort z)
+        private void deleteBlock(byte b, ushort x, ushort y, ushort z)
         {
             Random rand = new Random();
             int mx, mz;
@@ -1668,7 +1669,7 @@ return;
 }*/
 
             byte[] message = (byte[])m;
-            byte thisid = message[0];
+//            byte thisid = message[0] // Unused method, wasting mah .exe spaces;
 
             if (this.incountdown == true && CountdownGame.gamestatus == CountdownGameStatus.InProgress && CountdownGame.freezemode == true)
             {
@@ -2931,7 +2932,7 @@ else goto retry;
         public void SendUserMOTD()
         {
             byte[] buffer = new byte[130];
-            Random rand = new Random();
+//            Random rand = new Random() // Unused method, wasting mah .exe spaces;
             buffer[0] = Server.version;
             if (UsingWom && (level.textures.enabled || level.motd == "texture") && group.Permission >= level.textures.LowestRank.Permission) { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
             if (level.motd == "ignore")
@@ -4341,19 +4342,13 @@ Next: continue;
         }
 
         #region getters
-        public ushort[] footLocation
+        public ushort[] GetfootLocation()
         {
-            get
-            {
-                return getLoc(false);
-            }
+            return getLoc(false);
         }
-        public ushort[] headLocation
+        public ushort[] GetheadLocation()
         {
-            get
-            {
-                return getLoc(true);
-            }
+            return getLoc(true);
         }
 
         public ushort[] getLoc(bool head)
@@ -4402,7 +4397,7 @@ Next: continue;
             return false;
         }
 
-        public class Waypoint
+        public static class Waypoint
         {
             public class WP
             {

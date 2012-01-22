@@ -29,15 +29,15 @@ using System.Threading;
 
 namespace MCForge
 {
-    public class ZombieGame
+    public class ZombieGame : IDisposable
     {
-        public int amountOfRounds = 0;
-        public int limitRounds = 0;
-        public int aliveCount = 0;
-        public int amountOfMilliseconds = 0;
+        public int amountOfRounds/* = 0*/;
+        public int limitRounds/* = 0*/;
+        public int aliveCount/* = 0*/;
+        public int amountOfMilliseconds/* = 0*/;
         public string currentZombieLevel = "";
         public static System.Timers.Timer timer;
-        public bool initialChangeLevel = false;
+        public bool initialChangeLevel/* = false*/;
         public string currentLevelName = "";
         public static List<Player> alive = new List<Player>();
         public static List<Player> infectd = new List<Player>();
@@ -263,7 +263,7 @@ namespace MCForge
             }
         }
 
-        public void EndRound(object sender, ElapsedEventArgs e)
+        private void EndRound(object sender, ElapsedEventArgs e)
         {
             if (Server.gameStatus == 0) return;
             Player.GlobalMessage("%4Round End:%f 5"); Thread.Sleep(1000);
@@ -585,7 +585,7 @@ namespace MCForge
             return;
         }
 
-        public void ChangeTime(object sender, ElapsedEventArgs e)
+        private void ChangeTime(object sender, ElapsedEventArgs e)
         {
             amountOfMilliseconds = amountOfMilliseconds - 10;
         }
@@ -595,5 +595,41 @@ namespace MCForge
             return p.level.name == currentLevelName;
         }
 
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (timer != null)
+                        timer.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

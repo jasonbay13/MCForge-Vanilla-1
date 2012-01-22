@@ -9,15 +9,15 @@ using System.Text.RegularExpressions;
 
 namespace MCForge.Levels.Textures
 {
-    public class LevelTextures
+    public class LevelTextures : IDisposable
     {
         #region ==VARS==
         string cachecfg = "";
         public Group LowestRank { get { return lowest; } }
         Group lowest;
-        bool update = false;
+        bool update/* = false*/;
         public bool autou = true;
-        public bool enabled = false;
+        public bool enabled/* = false*/;
         public string terrainid = "";
         private string edgeid = "";
         public string side = "";
@@ -129,10 +129,11 @@ namespace MCForge.Levels.Textures
         {
             return int.Parse((text[0] == '#') ? text.Substring(1) : text, System.Globalization.NumberStyles.HexNumber);
         }
-        static string ParseDecColor(int dec)
-        {
-            return dec.ToString("X");
-        }
+//  Unused method, wasting mah .exe spaces
+//        static string ParseDecColor(int dec)
+//        {
+//            return dec.ToString("X");
+//        }
         public static byte GetBlock(string texture)
         {
             switch (texture)
@@ -362,7 +363,7 @@ namespace MCForge.Levels.Textures
                     if (match.Success)
                     {
                         string worldName = match.Groups[1].Value;
-                        bool firstTime = match.Groups[2].Success;
+//                        bool firstTime = match.Groups[2].Success // Unused method, wasting mah .exe spaces;
                         Level l = Level.Find(worldName);
                         if (l != null)
                         {
@@ -403,6 +404,42 @@ namespace MCForge.Levels.Textures
             p.disconnected = true;
         }
         #endregion
+        #endregion
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (l != null)
+                        l.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
         #endregion
     }
 }

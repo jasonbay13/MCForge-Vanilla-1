@@ -37,8 +37,8 @@ namespace MCForge.Commands
         public override LevelPermission defaultRank { get { return LevelPermission.Admin; } }
 
         String msg = "";
-        int picHeight = 0;
-        int picWidth = 0;
+        int picHeight/* = 0*/;
+        int picWidth/* = 0*/;
         CmdImagePrint2 imgprnt = new CmdImagePrint2();
         CmdSCinema scin = new CmdSCinema();
         CmdCuboid cuboid = new CmdCuboid();
@@ -249,7 +249,7 @@ namespace MCForge.Commands
         public override string type { get { return ""; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Nobody; } }
-        public bool working = false;
+        public bool working/* = false*/;
 
         public override void Use(Player p, string message)
         {
@@ -519,7 +519,7 @@ namespace MCForge.Commands
         public struct CatchPos { public ushort x, y, z; }
 
         string bitmaplocation;
-        bool layer = false;
+        bool layer/* = false*/;
         byte popType = 1;
     }
 }

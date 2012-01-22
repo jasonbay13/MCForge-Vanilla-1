@@ -51,7 +51,7 @@ namespace MCForge.Commands
                 Server.ProcessCounter.NextValue();
             }
 
-            TimeSpan tp = Process.GetCurrentProcess().TotalProcessorTime;
+//            TimeSpan tp = Process.GetCurrentProcess().TotalProcessorTime // Unused method, wasting mah .exe spaces;
             TimeSpan up = (DateTime.Now - Process.GetCurrentProcess().StartTime);
 
             //To get actual CPU% is OS dependant

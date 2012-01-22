@@ -137,7 +137,7 @@ namespace MCForge.Commands
         }
 
         private void Save(bool withFiles, bool withDB, Player p) {
-            ParameterizedThreadStart pts = new ParameterizedThreadStart(CreatePackage);
+//            ParameterizedThreadStart pts = new ParameterizedThreadStart(CreatePackage) // Unused method, wasting mah .exe spaces;
             Thread doWork = new Thread(new ParameterizedThreadStart(CreatePackage));
             List<object> param = new List<object>();
             param.Add("MCForge.zip");

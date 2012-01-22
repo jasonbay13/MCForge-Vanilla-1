@@ -30,7 +30,7 @@ namespace MCForge.Commands
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
-        public int allowoffset = 0;
+        public int allowoffset/* = 0*/;
         public CmdCopy() { }
 
         public override void Use(Player p, string message)
@@ -189,7 +189,7 @@ namespace MCForge.Commands
             p.ClearBlockchange();
             byte b = p.level.GetTile(x, y, z);
             p.SendBlockchange(x, y, z, b);
-            CatchPos cpos = (CatchPos)p.blockchangeObject;
+//            CatchPos cpos = (CatchPos)p.blockchangeObject // Unused method, wasting mah .exe spaces;
 
 
             p.copyoffset[0] = (p.copystart[0] - x);

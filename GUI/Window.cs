@@ -38,8 +38,8 @@ namespace MCForge.Gui
         delegate void PlayerListCallback(List<Player> players);
         delegate void ReportCallback(Report r);
         delegate void VoidDelegate();
-        public static bool fileexists = false;
-        bool mapgen = false;
+        public static bool fileexists/* = false*/;
+        bool mapgen/* = false*/;
 
         PlayerCollection pc = new PlayerCollection(new PlayerListView());
         LevelCollection lc = new LevelCollection(new LevelListView());
@@ -545,7 +545,7 @@ namespace MCForge.Gui
             PropertyForm.Show();
         }
 
-        public static bool prevLoaded = false;
+        public static bool prevLoaded/* = false*/;
         Form PropertyForm;
 
         private void Window_Resize(object sender, EventArgs e)

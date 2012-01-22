@@ -21,7 +21,7 @@ using MCForge.Commands;
 
 namespace MCForge
 {
-	public abstract class Command
+    public abstract class Command : IDisposable
 	{
 		public abstract string name { get; }
 		public abstract string shortcut { get; }
@@ -318,5 +318,41 @@ namespace MCForge
 			core.commands = new List<Command>(all.commands);
 			Scripting.Autoload();
 		}
-	}
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (intervalUsingPlayer != null)
+                        intervalUsingPlayer.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
+    }
 }

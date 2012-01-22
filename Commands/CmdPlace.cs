@@ -62,7 +62,7 @@ namespace MCForge.Commands
             if (b == Block.Zero) b = (byte)1;
             if (!Block.canPlace(p, b)) { Player.SendMessage(p, "Cannot place that block type."); return; }
 
-            Level level = p.level;
+//            Level level = p.level // Unused method, wasting mah .exe spaces;
 
             if (y >= p.level.depth) y = (ushort)(p.level.depth - 1);
 

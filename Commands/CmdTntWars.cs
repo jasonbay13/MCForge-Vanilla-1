@@ -33,9 +33,9 @@ namespace MCForge.Commands
 		public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
 		public CmdTntWars() { }
 
-        public bool DeleteZone = false;
-        public bool CheckZone = false;
-        public bool NoTntZone = false;
+        public bool DeleteZone/* = false*/;
+        public bool CheckZone/* = false*/;
+        public bool NoTntZone/* = false*/;
 
 		public override void Use(Player p, string message)
 		{

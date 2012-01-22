@@ -13,19 +13,19 @@ using System.Threading;
 
 namespace MCForge
 {
-    public class TntWarsGame
+    public class TntWarsGame : IDisposable
     {
         //Vars
         public static List<TntWarsGame> GameList = new List<TntWarsGame>();
         public Level lvl;
         public TntWarsGameStatus GameStatus = TntWarsGameStatus.WaitingForPlayers;
         public int BackupNumber;
-        public bool AllSetUp = false;
+        public bool AllSetUp/* = false*/;
         public TntWarsGameMode GameMode = TntWarsGameMode.TDM;
         public TntWarsDifficulty GameDifficulty = TntWarsDifficulty.Normal;
         public int GameNumber;
-        public ushort[] RedSpawn = null;
-        public ushort[] BlueSpawn = null;
+        public ushort[] RedSpawn/* = null*/;
+        public ushort[] BlueSpawn/* = null*/;
             //incase they don't want the default
         public int TntPerPlayerAtATime = Properties.DefaultTntPerPlayerAtATime;
         public bool GracePeriod = Properties.DefaultGracePeriodAtStart;
@@ -37,7 +37,7 @@ namespace MCForge
         public int MultiKillBonus = Properties.DefaultMultiKillBonus; //This is the amount of extra points per each player that is killed per 1 tnt (if playerskilledforthistnt > 1)
         public int ScorePerKill = Properties.DefaultScorePerKill;
         public int ScorePerAssist = Properties.DefaultAssistScore;
-        public bool TeamKills = false;
+        public bool TeamKills/* = false*/;
         public Thread Starter;
 
         public static TntWarsGame GuiLoaded = null;
@@ -55,13 +55,13 @@ namespace MCForge
 
         //Player/Team stuff
         public List<player> Players = new List<player>();
-        public class player
+        public class player : IDisposable
         {
             public Player p;
-            public bool Red = false;
-            public bool Blue = false;
-            public bool spec = false;
-            public int Score = 0;
+            public bool Red/* = false*/;
+            public bool Blue/* = false*/;
+            public bool spec/* = false*/;
+            public int Score/* = 0*/;
             public string OldColor;
             public string OldTitle;
             public string OldTitleColor;
@@ -72,9 +72,45 @@ namespace MCForge
                 OldTitle = pl.title;
                 OldTitleColor = pl.titlecolor;
             }
+
+            #region IDisposable Implementation
+
+            protected bool disposed = false;
+
+            protected virtual void Dispose(bool disposing)
+            {
+                lock (this)
+                {
+                    // Do nothing if the object has already been disposed of.
+                    if (disposed)
+                        return;
+
+                    if (disposing)
+                    {
+                        // Release diposable objects used by this instance here.
+
+                        if (p != null)
+                            p.Dispose();
+                    }
+
+                    // Release unmanaged resources here. Don't access reference type fields.
+
+                    // Remember that the object has been disposed of.
+                    disposed = true;
+                }
+            }
+
+            public virtual void Dispose()
+            {
+                Dispose(true);
+                // Unregister object for finalization.
+                GC.SuppressFinalize(this);
+            }
+
+            #endregion
         }
-        public int RedScore = 0;
-        public int BlueScore = 0;
+        public int RedScore/* = 0*/;
+        public int BlueScore/* = 0*/;
 
         //Zones
         public List<Zone> NoTNTplacableZones = new List<Zone>();
@@ -940,5 +976,43 @@ namespace MCForge
             public static int DefaultStreakThreeAmount = 7;
             public static float DefaultStreakThreeMultiplier = 2f;
         }
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (lvl != null)
+                        lvl.Dispose();
+                    if (GuiLoaded != null)
+                        GuiLoaded.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

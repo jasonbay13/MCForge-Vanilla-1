@@ -22,7 +22,7 @@ namespace MCForge.Commands
             if (p.referee)
             {
                 p.referee = false;
-                LevelPermission perm = Group.findPlayerGroup(name).Permission;
+//                LevelPermission perm = Group.findPlayerGroup(name).Permission // Unused method, wasting mah .exe spaces;
                 Player.GlobalDie(p, false);
                 Player.GlobalChat(p, p.color + p.name + Server.DefaultColor + " is no longer a referee", false);
                 if (Server.zombie.GameInProgess())

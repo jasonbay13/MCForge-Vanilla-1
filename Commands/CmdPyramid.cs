@@ -555,10 +555,11 @@ namespace MCForge.Commands
             finaltotal -= total;
             return finaltotal;
         }
-        void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)
-        {
-            Pos pos; pos.x = x; pos.y = y; pos.z = z; list.Add(pos);
-        }
+//  Unused method, wasting mah .exe spaces
+//        void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)
+//        {
+//            Pos pos; pos.x = x; pos.y = y; pos.z = z; list.Add(pos);
+//        }
         struct Pos
         {
             public ushort x, y, z;

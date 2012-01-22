@@ -25,7 +25,7 @@ namespace MCForge
     /// <summary>
     /// These are server event that can be canceled
     /// </summary>
-    public enum ServerEvents
+    public enum ServerEvent
     {
     	//TODO
     	//Make these do things
@@ -37,7 +37,7 @@ namespace MCForge
     /// <summary>
     /// These are player events that can be canceled
     /// </summary>
-    public enum PlayerEvents
+    public enum PlayerEvent
     {
         PlayerCommand,
         PlayerChat,
@@ -50,7 +50,7 @@ namespace MCForge
     /// <summary>
     /// These are Global (static) level events that can be canceled
     /// </summary>
-    public enum GlobalLevelEvents
+    public enum GlobalLevelEvent
     {
         LevelLoad,
         LevelSave
@@ -58,7 +58,7 @@ namespace MCForge
     /// <summary>
     /// These are level events that can be canceled
     /// </summary>
-    public enum LevelEvents
+    public enum LevelEvent
     {
         LevelUnload,
         LevelSave
