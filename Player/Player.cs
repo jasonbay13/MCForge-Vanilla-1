@@ -1064,11 +1064,11 @@ namespace MCForge
             {
                 if (Server.guestJoinNotify == true && this.group.Permission <= LevelPermission.Guest)
                 {
-                    GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+                    GlobalMessage("&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
                 }
                 if (this.group.Permission > LevelPermission.Guest)
                 {
-                    GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+                    GlobalMessage("&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
                 }
                 //IRCBot.Say(this.name + " has joined the server.");
             }
@@ -3156,6 +3156,7 @@ changed |= 4;*/
                 }
             }
 
+            message = from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message;
             players.ForEach(delegate(Player p)
             {
                 if (p.level.worldChat && p.Chatroom == null)
