@@ -1354,7 +1354,7 @@ namespace MCForge
             }
             
             //Credit to Gamemakergm for if server is ZombieOnly, adminium is unbreakable unless Referee.
-            if (Server.ZombieOnlyServer == true && Block.canPlace(this, Block.blackrock) && !this.referee == true)
+            if (Server.ZombieOnlyServer == true && Block.OPBlocks(b) && !this.referee == true)
             {
                 SendMessage("Cannot break/place adminium unless you are a Ref!");
                 SendBlockchange(x, y, z, b);
