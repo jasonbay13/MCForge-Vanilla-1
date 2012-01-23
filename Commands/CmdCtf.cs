@@ -21,9 +21,9 @@ using System.Collections.Generic;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
-using MCForge;
 namespace MCForge
 {
+    //Dont
     public class CmdCTF : Command
     {
         public override string name { get { return "ctf"; } }
