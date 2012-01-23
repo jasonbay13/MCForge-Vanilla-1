@@ -42,8 +42,6 @@ namespace MCForge
         {
             Random = new Random();
             StartOnStartup = true;
-            StartTimer = new System.Timers.Timer(1000);
-            EndTimer = new System.Timers.Timer(30000);
             int randomMinutes = Random.Next(1, 2);
         }
 
@@ -55,6 +53,7 @@ namespace MCForge
 
         public void Start()
         {
+            StartTimer = new System.Timers.Timer(1000);
             ZombieLevel = Level.Find("main");
             int loop = 6;
             StartTimer.Start(); StartTimer.Elapsed += delegate
@@ -62,7 +61,7 @@ namespace MCForge
                 Server.s.Log(loop + "");
                 if (loop != 0)
                 {
-                    int amountOfPlayers = Player.players.Count();
+                    int amountOfPlayers = PlayerCount();
                     Player.players.ForEach(delegate(Player p)
                     {
                         if (p.referee)
@@ -92,6 +91,7 @@ namespace MCForge
                     EndRoundTimer.Start();
                     EndRoundTimer.Elapsed += delegate { EndRound(); };
                     StartTimer.Stop();
+                    StartTimer.Dispose();
                 }
             };
         }
@@ -99,6 +99,8 @@ namespace MCForge
         public void EndRound()
         {
             EndRoundTimer.Stop();
+            EndRoundTimer.Dispose();
+            EndTimer = new System.Timers.Timer(30000);
             int loop = 2;
             EndTimer.Start(); EndTimer.Elapsed += delegate
             {
@@ -113,10 +115,11 @@ namespace MCForge
                     loop = 2;
                     ElapsedRounds++;
                     Server.ZombieRound = false;
-                    Player.GlobalMessage(c.gray + " - " + "Zombie Survival has ended! " + c.gray + " - ");
+                    Player.GlobalMessage(c.gray + " - " + Server.DefaultColor + "Zombie Survival has ended! " + c.gray + " - ");
                     //DO VOTING
                     ChooseLevel();
                     EndTimer.Stop();
+                    EndTimer.Dispose();
                     Start();
                 }
             };
@@ -162,6 +165,71 @@ namespace MCForge
                     }
                 }
             });
+        }
+
+        public void InfectPlayer(Player p, Player p2, string message1, string message2, string message3 = "", bool announce = true)
+        {
+            p.infected = false;
+            if (announce)
+            {
+                if (p2 != null)
+                    Player.GlobalMessage(c.gray + " - " + Server.DefaultColor + message1 + " " + p.name + " " + message2 +
+                                         " " + p2 + " " + message3 + c.gray + " - ");
+                else
+                    Player.GlobalMessage(c.gray + " - " + Server.DefaultColor + message1 + " " + p.name + " " + message2 +
+                                         c.gray + " - ");
+            }
+            CheckEndRound();
+        }
+
+        public bool CheckEndRound()
+        {
+            int uninfectedPlayers = 0;
+            Player.players.ForEach(delegate(Player p2)
+            {
+                if (!p2.infected)
+                {
+                    uninfectedPlayers++;
+                }
+            });
+            if (uninfectedPlayers == 0 || PlayerCount() < 2)
+            {
+                EndRound();
+                return true;
+            }
+            return false;
+        }
+
+        public void DisconnectedPlayer(Player p)
+        {
+            if (CheckEndRound())
+            {
+                return;
+            }
+            int infectedPlayers = 0;
+            Player.players.ForEach(delegate(Player p2)
+            {
+                if (p2.infected)
+                {
+                    infectedPlayers++;
+                }
+            });
+            if (infectedPlayers == 0)
+            {
+                int randomPlayer = Random.Next(0, PlayerCount() - 1);
+                Player player = Player.players[randomPlayer];
+                while (player.infected)
+                {
+                    randomPlayer = Random.Next(0, PlayerCount() - 1);
+                    player = Player.players[randomPlayer];
+                }
+                InfectPlayer(p, null, "" , "got infected because the zombie disconnected!");
+            }
+        }
+
+        public int PlayerCount()
+        {
+            return ZombieLevel.getPlayers().Count;
         }
 
     }
