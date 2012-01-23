@@ -1916,7 +1916,7 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                     Server.s.Log(name + " is using " + text.Substring(7));
                     UsingWom = true;
                     WoMVersion = text.Substring(7, 15);
-                    Player.GlobalMessageOps(color + name + "%4is using WoM. Version: " + text.Substring(7, 15));
+                    Player.GlobalMessageOps(color + name + " %4is using WoM. Version: " + text.Substring(7, 15));
                     Server.s.Log(name + " is using WoM. Version " + text.Substring(7, 15));
                     return;
                 }
