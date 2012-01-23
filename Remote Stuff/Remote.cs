@@ -22,7 +22,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
-using MCForge;
+
 
 namespace MCForge.Remote
 {
@@ -291,20 +291,21 @@ namespace MCForge.Remote
             }
 
         }
-        void LogPacket(byte id, byte[] packet)
-        {
-            string s = "";
-
-            if (packet.Length >= 1)
-            {
-                s = packet.Aggregate(s, (current, b) => current + (b + ", "));
-                Server.s.Log(string.Format("Packet {0} {{ {1}}}", id, s));
-            }
-            else
-            {
-                Server.s.Log(string.Format("Packet {0} had no DATA!", id));
-            }
-        }
+//  Unused method, wasting mah .exe spaces
+//        void LogPacket(byte id, byte[] packet)
+//        {
+//            string s = "";
+//
+//            if (packet.Length >= 1)
+//            {
+//                s = packet.Aggregate(s, (current, b) => current + (b + ", "));
+//                Server.s.Log(string.Format("Packet {0} {{ {1}}}", id, s));
+//            }
+//            else
+//            {
+//                Server.s.Log(string.Format("Packet {0} had no DATA!", id));
+//            }
+//        }
 
 
         public void Dispose()

@@ -19,7 +19,7 @@
 using System;
 using System.Threading;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
         public class CmdXmute : Command

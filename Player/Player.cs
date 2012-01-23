@@ -39,54 +39,54 @@ namespace MCForge
         public List<string> listignored = new List<string>();
         public List<string> mapgroups = new List<string>();
         public static List<string> globalignores = new List<string>();
-        public static int totalMySQLFailed = 0;
+        public static int totalMySQLFailed/* = 0*/;
         public static byte number { get { return (byte)players.Count; } }
         static System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
         static MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
         public static List<Player> totalplayers = new List<Player>();
         public static string lastMSG = "";
 
-        public static bool storeHelp = false;
+        public static bool storeHelp/* = false*/;
         public static string storedHelp = "";
-        internal bool dontmindme = false;
+        internal bool dontmindme/* = false*/;
         public Socket socket;
         System.Timers.Timer timespent = new System.Timers.Timer(1000);
         System.Timers.Timer loginTimer = new System.Timers.Timer(1000);
         public System.Timers.Timer pingTimer = new System.Timers.Timer(2000);
         System.Timers.Timer extraTimer = new System.Timers.Timer(22000);
         public System.Timers.Timer afkTimer = new System.Timers.Timer(2000);
-        public int afkCount = 0;
+        public int afkCount/* = 0*/;
         public DateTime afkStart;
         public string WoMVersion = "";
-        public bool megaBoid = false;
-        public bool cmdTimer = false;
-        public bool UsingWom = false;
+        public bool megaBoid/* = false*/;
+        public bool cmdTimer/* = false*/;
+        public bool UsingWom/* = false*/;
 
         byte[] buffer = new byte[0];
         byte[] tempbuffer = new byte[0xFF];
-        public bool disconnected = false;
+        public bool disconnected/* = false*/;
         public string time;
         public string name;
         public string realName;
-        public int warn = 0;
+        public int warn/* = 0*/;
         public byte id;
         public int userID = -1;
         public string ip;
         public string color;
         public Group group;
-        public bool hidden = false;
-        public bool painting = false;
-        public bool muted = false;
-        public bool jailed = false;
-        public bool invincible = false;
+        public bool hidden/* = false*/;
+        public bool painting/* = false*/;
+        public bool muted/* = false*/;
+        public bool jailed/* = false*/;
+        public bool invincible/* = false*/;
         public string prefix = "";
         public string title = "";
         public string titlecolor;
-        public int TotalMessagesSent = 0;
-        public int passtries = 0;
-        public int ponycount = 0;
-        public int rdcount = 0;
-        public bool hasreadrules = false;
+        public int TotalMessagesSent/* = 0*/;
+        public int passtries/* = 0*/;
+        public int ponycount/* = 0*/;
+        public int rdcount/* = 0*/;
+        public bool hasreadrules/* = false*/;
         public bool canusereview = true;
 
         // check what commands are being used much:
@@ -103,27 +103,27 @@ namespace MCForge
         public string pyramidblock;
         public int pyramidtotal;
         public int pyramidtotal2;
-        public bool pyramidsilent = false;
+        public bool pyramidsilent/* = false*/;
 
-        public bool deleteMode = false;
-        public bool ignorePermission = false;
-        public bool ignoreGrief = false;
+        public bool deleteMode/* = false*/;
+        public bool ignorePermission/* = false*/;
+        public bool ignoreGrief/* = false*/;
         public bool parseSmiley = true;
         public bool smileySaved = true;
-        public bool opchat = false;
-        public bool adminchat = false;
-        public bool onWhitelist = false;
-        public bool whisper = false;
+        public bool opchat/* = false*/;
+        public bool adminchat/* = false*/;
+        public bool onWhitelist/* = false*/;
+        public bool whisper/* = false*/;
         public string whisperTo = "";
-        public bool ignoreglobal = false;
+        public bool ignoreglobal/* = false*/;
 
         public string storedMessage = "";
 
-        public bool trainGrab = false;
-        public bool onTrain = false;
+        public bool trainGrab/* = false*/;
+        public bool onTrain/* = false*/;
         public bool allowTnt = true;
 
-        public bool frozen = false;
+        public bool frozen/* = false*/;
         public string following = "";
         public string possess = "";
 
@@ -131,81 +131,67 @@ namespace MCForge
         //Using for anything else can cause unintended effects!
         public bool canBuild = true;
 
-        public int money = 0;
-        public long overallBlocks = 0;
+        public int money/* = 0*/;
+        public long overallBlocks/* = 0*/;
 
-        public int loginBlocks = 0;
+        public int loginBlocks/* = 0*/;
 
         public DateTime timeLogged;
         public DateTime firstLogin;
-        public int totalLogins = 0;
-        public int totalKicked = 0;
-        public int overallDeath = 0;
+        public int totalLogins/* = 0*/;
+        public int totalKicked/* = 0*/;
+        public int overallDeath/* = 0*/;
 
         public string savedcolor = "";
 
-        public bool staticCommands = false;
+        public bool staticCommands/* = false*/;
 
         public DateTime ZoneSpam;
-        public bool ZoneCheck = false;
-        public bool zoneDel = false;
+        public bool ZoneCheck/* = false*/;
+        public bool zoneDel/* = false*/;
 
         public Thread commThread;
-        public bool commUse = false;
+        public bool commUse/* = false*/;
 
         public bool aiming;
-        public bool isFlying = false;
+        public bool isFlying/* = false*/;
 
-        public bool joker = false;
-        public bool adminpen = false;
+        public bool joker/* = false*/;
+        public bool adminpen/* = false*/;
 
-        public bool voice = false;
+        public bool voice/* = false*/;
         public string voicestring = "";
 
-        public int grieferStoneWarn = 0;
+        public int grieferStoneWarn/* = 0*/;
 
         //CTF
         public Team team;
         public Team hasflag;
 
         //Countdown
-        public bool playerofcountdown = false;
-        public bool incountdown = false;
+        public bool playerofcountdown/* = false*/;
+        public bool incountdown/* = false*/;
         public ushort countdowntempx;
         public ushort countdowntempz;
-        public bool countdownsettemps = false;
+        public bool countdownsettemps/* = false*/;
 
-        //Zombie
-        public bool referee = false;
-        public int blockCount = 50;
-        public bool voted = false;
-        public int blocksStacked = 0;
-        public int infectThisRound = 0;
-        public int lastYblock = 0;
-        public int lastXblock = 0;
-        public int lastZblock = 0;
-        public bool infected = false;
-        public bool aka = false;
-        public bool flipHead = true;
-        public int playersInfected = 0;
-        public int NoClipcount = 0;
-
+        public bool voted;
 
         //Tnt Wars
-        public bool PlayingTntWars = false;
-        public int CurrentAmountOfTnt = 0;
+        public bool PlayingTntWars/* = false*/;
+        public int CurrentAmountOfTnt/* = 0*/;
         public int CurrentTntGameNumber; //For keeping track of which game is which
         public int TntWarsHealth = 2;
-        public int TntWarsKillStreak = 0;
+        public int TntWarsKillStreak/* = 0*/;
         public float TntWarsScoreMultiplier = 1f;
-        public int TNTWarsLastKillStreakAnnounced = 0;
-        public bool inTNTwarsMap = false;
+        public int TNTWarsLastKillStreakAnnounced/* = 0*/;
+        public bool inTNTwarsMap/* = false*/;
         public Player HarmedBy = null; //For Assists
 
         //Copy
         public List<CopyPos> CopyBuffer = new List<CopyPos>();
         public struct CopyPos { public ushort x, y, z; public byte type; }
-        public bool copyAir = false;
+        public bool copyAir/* = false*/;
         public int[] copyoffset = new int[3] { 0, 0, 0 };
         public ushort[] copystart = new ushort[3] { 0, 0, 0 };
 
@@ -215,8 +201,8 @@ namespace MCForge
         public List<UndoPos> RedoBuffer = new List<UndoPos>();
 
 
-        public bool showPortals = false;
-        public bool showMBs = false;
+        public bool showPortals/* = false*/;
+        public bool showMBs/* = false*/;
 
         public string prevMsg = "";
 
@@ -225,15 +211,15 @@ namespace MCForge
 
 
         //Movement
-        public ushort oldBlock = 0;
-        public ushort deathCount = 0;
+        public ushort oldBlock/* = 0*/;
+        public ushort deathCount/* = 0*/;
         public byte deathBlock;
 
         //Games
         public DateTime lastDeath = DateTime.Now;
 
-        public byte BlockAction = 0; //0-Nothing 1-solid 2-lava 3-water 4-active_lava 5 Active_water 6 OpGlass 7 BluePort 8 OrangePort
-        public byte modeType = 0;
+        public byte BlockAction/* = 0*/; //0-Nothing 1-solid 2-lava 3-water 4-active_lava 5 Active_water 6 OpGlass 7 BluePort 8 OrangePort
+        public byte modeType/* = 0*/;
         public byte[] bindings = new byte[128];
         public string[] cmdBind = new string[10];
         public string[] messageBind = new string[10];
@@ -258,7 +244,7 @@ namespace MCForge
         public static int spamBlockTimer = 5;
         Queue<DateTime> spamBlockLog = new Queue<DateTime>(spamBlockCount);
 
-        public int consecutivemessages = 0;
+        public int consecutivemessages/* = 0*/;
         private System.Timers.Timer resetSpamCount = new System.Timers.Timer(Server.spamcountreset * 1000);
         //public static int spamChatCount = 3;
         //public static int spamChatTimer = 4;
@@ -278,13 +264,18 @@ namespace MCForge
         //Waypoints
         public List<Waypoint.WP> Waypoints = new List<Waypoint.WP>();
 
+        //Zombie
+        public bool referee;
+        public bool infected;
+        //Zombie
+
         //Random...
         public Random random = new Random();
 
         //Global Chat
-        public bool muteGlobal = false;
+        public bool muteGlobal/* = false*/;
 
-        public bool loggedIn = false;
+        public bool loggedIn/* = false*/;
 
         private Player()
         {
@@ -442,12 +433,6 @@ namespace MCForge
                     }
                     catch { }
                     try { Gui.Window.thisWindow.UpdatePlyersListBox(); }
-                    catch { }
-                    try
-                    {
-                        ZombieGame.alive.Remove(this);
-                        ZombieGame.infectd.Remove(this);
-                    }
                     catch { }
                     if (Server.lava.active) SendMessage("There is a &aLava Survival " + Server.DefaultColor + "game active! Join it by typing /ls go");
                     extraTimer.Dispose();
@@ -683,7 +668,7 @@ namespace MCForge
                 byte version = message[0];
                 name = enc.GetString(message, 1, 64).Trim();
                 string verify = enc.GetString(message, 65, 32).Trim();
-                byte type = message[129];
+//                byte type = message[129] // Unused method, wasting mah .exe spaces;
                 try
                 {
                     Server.TempBan tBan = Server.tempBans.Find(tB => tB.name.ToLower() == name.ToLower());
@@ -1080,11 +1065,11 @@ namespace MCForge
             {
                 if (Server.guestJoinNotify == true && this.group.Permission <= LevelPermission.Guest)
                 {
-                    GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+                    GlobalMessage("&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
                 }
                 if (this.group.Permission > LevelPermission.Guest)
                 {
-                    GlobalChat(this, "&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
+                    GlobalMessage("&a+ " + this.color + this.prefix + this.name + Server.DefaultColor + " " + File.ReadAllText("text/login/" + this.name + ".txt"), false);
                 }
                 //IRCBot.Say(this.name + " has joined the server.");
             }
@@ -1123,8 +1108,6 @@ namespace MCForge
             {
                 Server.PopupNotify(name + " [" + ip + "] has joined the server.");
             }
-
-            if (Server.zombie.ZombieStatus() != 0) { Player.SendMessage(this, "There is a Zombie Survival game currently in-progress! Join it by typing /g " + Server.zombie.currentLevelName); }
         }
 
         public void SetPrefix()
@@ -1149,33 +1132,6 @@ namespace MCForge
                 ushort z = NTHO(message, 4);
                 byte action = message[6];
                 byte type = message[7];
-
-                if (action == 1 && Server.ZombieModeOn && Server.noPillaring)
-                {
-                    if (!referee)
-                    {
-                        if (lastYblock == y - 1 && lastXblock == x && lastZblock == z)
-                        {
-                            blocksStacked++;
-                        }
-                        else
-                        {
-                            blocksStacked = 0;
-                        }
-                        if (blocksStacked == 2)
-                        {
-                            SendMessage("You are pillaring! Stop before you get kicked!");
-                        }
-                        if (blocksStacked == 4)
-                        {
-                            Command.all.Find("kick").Use(null, name + " No pillaring allowed!");
-                        }
-                    }
-                }
-
-                lastYblock = y;
-                lastXblock = x;
-                lastZblock = z;
 
                 manualChange(x, y, z, action, type);
             }
@@ -1222,30 +1178,6 @@ namespace MCForge
                     SendBlockchange(x, y, z, b);
                     this.SendMessage("&cYou must use &a/pass [Password]&c to verify!");
                     return;
-                }
-            }
-
-            if (Server.ZombieModeOn && (action == 1 || (action == 0 && this.painting)))
-            {
-                if (Server.zombie != null && this.level.name == Server.zombie.currentLevelName)
-                {
-                    if (blockCount == 0)
-                    {
-                        if (!referee)
-                        {
-                            SendMessage("You have no blocks left.");
-                            SendBlockchange(x, y, z, b); return;
-                        }
-                    }
-
-                    if (!referee)
-                    {
-                        blockCount--;
-                        if (blockCount == 40 || blockCount == 30 || blockCount == 20 || blockCount <= 10 && blockCount >= 0)
-                        {
-                            SendMessage("Blocks Left: " + c.maroon + blockCount + Server.DefaultColor);
-                        }
-                    }
                 }
             }
 
@@ -1382,7 +1314,7 @@ namespace MCForge
 
                 bP.deleted = true;
                 level.blockCache.Add(bP);
-                deleteBlock(b, type, x, y, z);
+                deleteBlock(b, x, y, z);
             }
             else
             {
@@ -1465,12 +1397,13 @@ namespace MCForge
             catch { Player.SendMessage(p, "No message was stored."); return; }
         }
 
-        private bool checkOp()
-        {
-            return group.Permission < LevelPermission.Operator;
-        }
+//  Unused method, wasting mah .exe spaces
+//        private bool checkOp()
+//        {
+//            return group.Permission < LevelPermission.Operator;
+//        }
 
-        private void deleteBlock(byte b, byte type, ushort x, ushort y, ushort z)
+        private void deleteBlock(byte b, ushort x, ushort y, ushort z)
         {
             Random rand = new Random();
             int mx, mz;
@@ -1668,7 +1601,7 @@ return;
 }*/
 
             byte[] message = (byte[])m;
-            byte thisid = message[0];
+//            byte thisid = message[0] // Unused method, wasting mah .exe spaces;
 
             if (this.incountdown == true && CountdownGame.gamestatus == CountdownGameStatus.InProgress && CountdownGame.freezemode == true)
             {
@@ -1698,19 +1631,8 @@ return;
                 ushort y = NTHO(message, 3);
                 ushort z = NTHO(message, 5);
 
-                if (!this.referee && Server.noRespawn && Server.ZombieModeOn)
-                {
-                    if (this.pos[0] >= x + 70 || this.pos[0] <= x - 70)
-                    {
-                        unchecked { SendPos((byte)-1, pos[0], pos[1], pos[2], rot[0], rot[1]); }
-                        return;
-                    }
-                    if (this.pos[2] >= z + 70 || this.pos[2] <= z - 70)
-                    {
-                        unchecked { SendPos((byte)-1, pos[0], pos[1], pos[2], rot[0], rot[1]); }
-                        return;
-                    }
-                }
+                Server.zombie.CheckLocation(this);
+
                 if (OnMove != null)
                     OnMove(this, x, y, z);
                 if (PlayerMove != null)
@@ -1995,7 +1917,7 @@ try { SendBlockchange(pos1.x, pos1.y, pos1.z, Block.waterstill); } catch { }
                     Server.s.Log(name + " is using " + text.Substring(7));
                     UsingWom = true;
                     WoMVersion = text.Substring(7, 15);
-                    Player.GlobalMessageOps(color + name + "%4is using WoM. Version: " + text.Substring(7, 15));
+                    Player.GlobalMessageOps(color + name + " %4is using WoM. Version: " + text.Substring(7, 15));
                     Server.s.Log(name + " is using WoM. Version " + text.Substring(7, 15));
                     return;
                 }
@@ -2766,7 +2688,7 @@ else goto retry;
 
             if (colorParse)
             {
-                for (int i = 0; i < 10; i++)
+                /*for (int i = 0; i < 10; i++)
                 {
                     sb.Replace("%" + i, "&" + i);
                     sb.Replace("&" + i + " &", " &");
@@ -2775,7 +2697,10 @@ else goto retry;
                 {
                     sb.Replace("%" + ch, "&" + ch);
                     sb.Replace("&" + ch + " &", " &");
-                }
+                }*/
+
+                sb = new StringBuilder(EscapeColours(message));
+
                 // Begin fix to replace all invalid color codes typed in console or chat with "."
                 for (char ch = (char)0; ch <= (char)47; ch++) // Characters that cause clients to disconnect
                     sb.Replace("&" + ch, String.Empty);
@@ -2928,7 +2853,7 @@ else goto retry;
         public void SendUserMOTD()
         {
             byte[] buffer = new byte[130];
-            Random rand = new Random();
+//            Random rand = new Random() // Unused method, wasting mah .exe spaces;
             buffer[0] = Server.version;
             if (UsingWom && (level.textures.enabled || level.motd == "texture") && group.Permission >= level.textures.LowestRank.Permission) { StringFormat(Server.name, 64).CopyTo(buffer, 1); StringFormat("&0cfg=" + Server.IP + ":" + Server.port + "/" + level.name, 64).CopyTo(buffer, 65); }
             if (level.motd == "ignore")
@@ -3100,7 +3025,7 @@ changed |= 4;*/
                 HTNO(pos[2]).CopyTo(buffer, 5);
                 buffer[7] = rot[0];
 
-                if (Server.flipHead || (this.flipHead && this.infected))
+                if (Server.flipHead)
                     if (rot[1] > 64 && rot[1] < 192)
                         buffer[8] = rot[1];
                     else
@@ -3129,7 +3054,7 @@ changed |= 4;*/
                 buffer = new byte[3]; buffer[0] = id;
                 buffer[1] = rot[0];
 
-                if (Server.flipHead || (this.flipHead && this.infected))
+                if (Server.flipHead)
                     if (rot[1] > 64 && rot[1] < 192)
                         buffer[2] = rot[1];
                     else
@@ -3151,7 +3076,7 @@ changed |= 4;*/
                     Buffer.BlockCopy(System.BitConverter.GetBytes((sbyte)(pos[2] - oldpos[2])), 0, buffer, 3, 1);
                     buffer[4] = rot[0];
 
-                    if (Server.flipHead || (this.flipHead && this.infected))
+                    if (Server.flipHead)
                         if (rot[1] > 64 && rot[1] < 192)
                             buffer[5] = rot[1];
                         else
@@ -3220,99 +3145,21 @@ changed |= 4;*/
             {
                 if (message.ToLower() == "yes" || message.ToLower() == "ye" || message.ToLower() == "y")
                 {
-                    if (!from.voted)
-                    {
-                        Server.YesVotes++;
-                        SendMessage(from, c.red + "Thanks For Voting!");
-                        from.voted = true;
-                        return;
-                    }
-                    else if (!from.voice)
-                    {
-                        from.SendMessage("Chat moderation is on while voting is on!");
-                        return;
-                    }
+                    Server.YesVotes++;
+                    SendMessage(from, c.red + "Thanks For Voting!");
+                    from.voted = true;
+                    return;
                 }
                 else if (message.ToLower() == "no" || message.ToLower() == "n")
                 {
-                    if (!from.voted)
-                    {
-                        Server.NoVotes++;
-                        SendMessage(from, c.red + "Thanks For Voting!");
-                        from.voted = true;
-                        return;
-                    }
-                    else if (!from.voice)
-                    {
-                        from.SendMessage("Chat moderation is on while voting is on!");
-                        return;
-                    }
-                }
-            }
-
-            if (Server.votingforlevel == true)
-            {
-                if (message.ToLower() == "1" || message.ToLower() == "one")
-                {
-                    if (!from.voted)
-                    {
-                        Server.Level1Vote++;
-                        SendMessage(from, c.red + "Thanks For Voting!");
-                        from.voted = true;
-                        return;
-                    }
-                    else if (!from.voice)
-                    {
-                        from.SendMessage("Chat moderation is on while voting is on!");
-                        return;
-                    }
-                }
-                else if (message.ToLower() == "2" || message.ToLower() == "two")
-                {
-                    if (!from.voted)
-                    {
-                        Server.Level2Vote++;
-                        SendMessage(from, c.red + "Thanks For Voting!");
-                        from.voted = true;
-                        return;
-                    }
-                    else if (!from.voice)
-                    {
-                        from.SendMessage("Chat moderation is on while voting is on!");
-                        return;
-                    }
-                }
-                else if (message.ToLower() == "3" || message.ToLower() == "random" || message.ToLower() == "rand")
-                {
-                    if (!from.voted)
-                    {
-                        Server.Level3Vote++;
-                        SendMessage(from, c.red + "Thanks For Voting!");
-                        from.voted = true;
-                        return;
-                    }
-                    else if (!from.voice)
-                    {
-                        from.SendMessage("Chat moderation is on while voting is on!");
-                        return;
-                    }
-                }
-                else if (!from.voice)
-                {
-                    from.SendMessage("Chat moderation is on while voting is on!");
+                    Server.NoVotes++;
+                    SendMessage(from, c.red + "Thanks For Voting!");
+                    from.voted = true;
                     return;
                 }
             }
 
-            if (showname)
-            {
-                String referee = "";
-                if (from.referee)
-                {
-                    referee = c.green + "[Referee] ";
-                }
-                message = referee + from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message;
-            }
+            message = from.color + from.voicestring + from.color + from.prefix + from.name + ": &f" + message;
             players.ForEach(delegate(Player p)
             {
                 if (p.level.worldChat && p.Chatroom == null)
@@ -3616,17 +3463,17 @@ changed |= 4;*/
             return false;
         }
 
-        public static string EscapeColours(string message)
+        public static string EscapeColours(string m)
         {
-            int index = 1;
+            int i = 1;
             StringBuilder sb = new StringBuilder();
             Regex r = new Regex("^[0-9a-fA-F]$");
-            foreach (char c in message)
+            foreach (char c in m)
             {
                 if (c == '%')
                 {
-                    if (message.Length >= index)
-                        if (r.IsMatch(message[index].ToString()))
+                    if (m.Length >= i)
+                        if (r.IsMatch(m[i].ToString()))
                             sb.Append('&');
                         else
                             sb.Append('%');
@@ -3635,9 +3482,13 @@ changed |= 4;*/
                 }
                 else
                     sb.Append(c);
-                index++;
+                i++;
             }
             return sb.ToString();
+        }
+        public static string EscapeColors(string message)
+        {
+            return EscapeColours(message);
         }
 
         public static void GlobalChatWorld(Player from, string message, bool showname)
@@ -3744,30 +3595,7 @@ changed |= 4;*/
                 if (p.level != from.level || (from.hidden && !self)) { return; }
                 if (p != from)
                 {
-                    if (Server.ZombieModeOn && !p.aka)
-                    {
-                        if (from.infected)
-                        {
-                            if (Server.ZombieName != "")
-                                p.SendSpawn(from.id, c.red + Server.ZombieName + possession, x, y, z, rotx, roty);
-                            else
-                                p.SendSpawn(from.id, c.red + from.name + possession, x, y, z, rotx, roty);
-                            return;
-                        }
-                        else if (from.referee)
-                        {
-                            return;
-                        }
-                        else
-                        {
-                            p.SendSpawn(from.id, from.color + from.name + possession, x, y, z, rotx, roty);
-                            return;
-                        }
-                    }
-                    else
-                    {
                         p.SendSpawn(from.id, from.color + from.name + possession, x, y, z, rotx, roty);
-                    }
                 }
                 else if (self)
                 {
@@ -4036,8 +3864,6 @@ level.Unload();
                     if (Server.notifyOnJoinLeave)
                         Server.PopupNotify(ip + " disconnected.");
                 }
-
-                Server.zombie.InfectedPlayerDC();
 
             }
             catch (Exception e) { Server.ErrorLog(e); }
@@ -4334,19 +4160,13 @@ Next: continue;
         }
 
         #region getters
-        public ushort[] footLocation
+        public ushort[] GetfootLocation()
         {
-            get
-            {
-                return getLoc(false);
-            }
+            return getLoc(false);
         }
-        public ushort[] headLocation
+        public ushort[] GetheadLocation()
         {
-            get
-            {
-                return getLoc(true);
-            }
+            return getLoc(true);
         }
 
         public ushort[] getLoc(bool head)
@@ -4395,7 +4215,7 @@ Next: continue;
             return false;
         }
 
-        public class Waypoint
+        public static class Waypoint
         {
             public class WP
             {

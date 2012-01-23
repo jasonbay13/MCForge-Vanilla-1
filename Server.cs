@@ -37,12 +37,12 @@ using MCForge.SQL;
 
 namespace MCForge
 {
-    public class Server
+    public class Server : IDisposable
     {
-        public static bool cancelcommand = false;
-        public static bool canceladmin = false;
-        public static bool cancellog = false;
-        public static bool canceloplog = false;
+        public static bool cancelcommand/* = false*/;
+        public static bool canceladmin/* = false*/;
+        public static bool cancellog/* = false*/;
+        public static bool canceloplog/* = false*/;
         public static string apppath = Application.StartupPath;
         public delegate void OnConsoleCommand(string cmd, string message);
         public static event OnConsoleCommand ConsoleCommand;
@@ -70,7 +70,7 @@ namespace MCForge
         public static ForgeBot IRC;
         public static GlobalChatBot GlobalChat;
         public static Thread locationChecker;
-        public static bool UseTextures = false;
+        public static bool UseTextures/* = false*/;
         public static Thread blockThread;
         //public static List<MySql.Data.MySqlClient.MySqlCommand> mySQLCommands = new List<MySql.Data.MySqlClient.MySqlCommand>();
 
@@ -98,9 +98,9 @@ namespace MCForge
         public static List<string> Chatrooms = new List<string>();
         //Other
         public static bool higherranktp = true;
-        public static bool agreetorulesonentry = false;
-        public static bool UseCTF = false;
-        public static bool ServerSetupFinished = false;
+        public static bool agreetorulesonentry/* = false*/;
+        public static bool UseCTF/* = false*/;
+        public static bool ServerSetupFinished/* = false*/;
         public static Auto_CTF ctf = null;
         public static PlayerList bannedIP;
         public static PlayerList whiteList;
@@ -124,7 +124,7 @@ namespace MCForge
         //reviewlist intitialize
         public static List<string> reviewlist = new List<string>();
         //Translate settings initialize
-        public static bool transenabled = false;
+        public static bool transenabled/* = false*/;
         public static string translang = "en";
         public static List<string> transignore = new List<string>();
         //Global Chat Rules Accepted list
@@ -148,11 +148,11 @@ namespace MCForge
         public static bool autorestart;
         public static DateTime restarttime;
 
-        public static bool chatmod = false;
+        public static bool chatmod/* = false*/;
 
         //Global VoteKick In Progress Flag
-        public static bool voteKickInProgress = false;
-        public static int voteKickVotesNeeded = 0;
+        public static bool voteKickInProgress/* = false*/;
+        public static int voteKickVotesNeeded/* = 0*/;
 
 
         //WoM Direct
@@ -169,38 +169,18 @@ namespace MCForge
         //Color list as a char array
         public static Char[] ColourCodesNoPercent = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
-        //Zombie
-        public static ZombieGame zombie;
-        public static bool ZombieModeOn = false;
-        public static bool startZombieModeOnStartup = false;
-        public static bool noRespawn = true;
-        public static bool noLevelSaving = true;
-        public static bool noPillaring = true;
-        public static string ZombieName = "";
-        public static int gameStatus = 0; //0 = not started, 1 = always on, 2 = one time, 3 = certain amount of rounds, 4 = stop game next round
-        public static bool queLevel = false;
-        public static bool queZombie = false;
-        public static string nextZombie = "";
-        public static string nextLevel = "";
-        public static bool zombieRound = false;
-        public static string lastPlayerToInfect = "";
-        public static int infectCombo = 0;
-        public static int YesVotes = 0;
-        public static int NoVotes = 0;
-        public static bool voting = false;
-        public static bool votingforlevel = false;
-        public static int Level1Vote = 0;
-        public static int Level2Vote = 0;
-        public static int Level3Vote = 0;
-        public static bool ChangeLevels = true;
-        public static bool UseLevelList = false;
-        public static bool ZombieOnlyServer = true;
-        public static List<String> LevelList = new List<String>();
-        public static string lastLevelVote1 = "";
-        public static string lastLevelVote2 = "";
+        public static bool voting;
+        public static int YesVotes;
+        public static int NoVotes;
         public static bool bufferblocks = true;
         public static string mcforgeUser = "";
         public static string mcforgePass = "";
+
+        //Zombie
+        public static int ZombieMode;
+        public static bool ZombieRound;
+        public static ZombieSurvival zombie;
+        //Zombie
 
         // Lava Survival
         public static LavaSurvival lava;
@@ -228,7 +208,7 @@ namespace MCForge
 //        public static bool guestGoto = false;
 
         //Spam Prevention
-        public static bool checkspam = false;
+        public static bool checkspam/* = false*/;
         public static int spamcounter = 8;
         public static int mutespamtime = 60;
         public static int spamcountreset = 5;
@@ -243,15 +223,15 @@ namespace MCForge
 //        public static bool console = false; // never used
         public static bool reportBack = true;
 
-        public static bool irc = false;
-        public static bool ircColorsEnable = false;
+        public static bool irc/* = false*/;
+        public static bool ircColorsEnable/* = false*/;
 //        public static bool safemode = false; //Never used
         public static int ircPort = 6667;
         public static string ircNick = "ForgeBot";
         public static string ircServer = "irc.esper.net";
         public static string ircChannel = "#changethis";
         public static string ircOpChannel = "#changethistoo";
-        public static bool ircIdentify = false;
+        public static bool ircIdentify/* = false*/;
         public static string ircPassword = "";
         public static bool verifyadmins = true;
         public static LevelPermission verifyadminsrank = LevelPermission.Operator;
@@ -270,23 +250,23 @@ namespace MCForge
 
         public static bool physicsRestart = true;
         public static bool deathcount = true;
-        public static bool AutoLoad = false;
+        public static bool AutoLoad/* = false*/;
         public static int physUndo = 20000;
         public static int totalUndo = 200;
         public static bool rankSuper = true;
-        public static bool oldHelp = false;
+        public static bool oldHelp/* = false*/;
         public static bool parseSmiley = true;
-        public static bool useWhitelist = false;
-        public static bool PremiumPlayersOnly = false;
-        public static bool forceCuboid = false;
-        public static bool profanityFilter = false;
-        public static bool notifyOnJoinLeave = false;
-        public static bool repeatMessage = false;
-        public static bool globalignoreops = false;
+        public static bool useWhitelist/* = false*/;
+        public static bool PremiumPlayersOnly/* = false*/;
+        public static bool forceCuboid/* = false*/;
+        public static bool profanityFilter/* = false*/;
+        public static bool notifyOnJoinLeave/* = false*/;
+        public static bool repeatMessage/* = false*/;
+        public static bool globalignoreops/* = false*/;
 
         public static bool checkUpdates = true;
 
-        public static bool useMySQL = false;
+        public static bool useMySQL/* = false*/;
         public static string MySQLHost = "127.0.0.1";
         public static string MySQLPort = "3306";
         public static string MySQLUsername = "root";
@@ -313,38 +293,38 @@ namespace MCForge
         public static bool unsafe_plugin = true;
         public static bool cheapMessage = true;
         public static string cheapMessageGiven = " is now being cheap and being immortal";
-        public static bool customBan = false;
+        public static bool customBan/* = false*/;
         public static string customBanMessage = "You're banned!";
-        public static bool customShutdown = false;
+        public static bool customShutdown/* = false*/;
         public static string customShutdownMessage = "Server shutdown. Rejoin in 10 seconds.";
-        public static bool customGrieferStone = false;
+        public static bool customGrieferStone/* = false*/;
         public static string customGrieferStoneMessage = "Oh noes! You were caught griefing!";
         public static string customPromoteMessage = "&6Congratulations for working hard and getting &2PROMOTED!";
         public static string customDemoteMessage = "&4DEMOTED! &6We're sorry for your loss. Good luck on your future endeavors! &1:'(";
         public static string moneys = "moneys";
         public static LevelPermission opchatperm = LevelPermission.Operator;
         public static LevelPermission adminchatperm = LevelPermission.Admin;
-        public static bool logbeat = false;
-        public static bool adminsjoinsilent = false;
+        public static bool logbeat/* = false*/;
+        public static bool adminsjoinsilent/* = false*/;
         public static bool mono { get { return (Type.GetType("Mono.Runtime") != null); } }
         public static string server_owner = "Notch";
-        public static bool WomDirect = false;
-        public static bool UseSeasons = false;
-        public static bool guestLimitNotify = false;
+        public static bool WomDirect/* = false*/;
+        public static bool UseSeasons/* = false*/;
+        public static bool guestLimitNotify/* = false*/;
         public static bool guestJoinNotify = true;
         public static bool guestLeaveNotify = true;
 
-        public static bool flipHead = false;
+        public static bool flipHead/* = false*/;
 
-        public static bool shuttingDown = false;
-        public static bool restarting = false;
+        public static bool shuttingDown/* = false*/;
+        public static bool restarting/* = false*/;
 
         //hackrank stuff
         public static bool hackrank_kick = true;
         public static int hackrank_kick_time = 5; //seconds, it converts it to milliseconds in the command.
 
         // lol useless junk here lolololasdf poop
-        public static bool showEmptyRanks = false;
+        public static bool showEmptyRanks/* = false*/;
         public static byte grieferStoneType = 1;
         public static bool grieferStoneBan = true;
         public static LevelPermission grieferStoneRank = LevelPermission.Guest;
@@ -607,7 +587,7 @@ namespace MCForge
             // LavaSurvival constructed here...
             lava = new LavaSurvival();
 
-            zombie = new ZombieGame();
+            zombie = new ZombieSurvival();
 
             // OmniBan
             omniban = new OmniBan();
@@ -1056,8 +1036,8 @@ processThread.Start();
                 {
                     if (Server.lava.startOnStartup)
                         Server.lava.Start();
-                    if (Server.startZombieModeOnStartup)
-                        Server.zombie.StartGame(1, 0);
+                    if (Server.zombie.StartOnStartup)
+                        //Server.zombie.Start(0);
                     //This doesnt use the main map
                     if (Server.UseCTF)
                         ctf = new Auto_CTF();
@@ -1339,5 +1319,63 @@ processThread.Start();
             }
             catch { }
         }
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (process != null)
+                        process.Dispose();
+                    if (updateTimer != null)
+                        updateTimer.Dispose();
+                    if (messageTimer != null)
+                        messageTimer.Dispose();
+                    if (cloneTimer != null)
+                        cloneTimer.Dispose();
+                    if (ctf != null)
+                        ctf.Dispose();
+                    if (PCCounter != null)
+                        PCCounter.Dispose();
+                    if (ProcessCounter != null)
+                        ProcessCounter.Dispose();
+                    if (mainLevel != null)
+                        mainLevel.Dispose();
+                    if (Extras != null)
+                        Extras.Dispose();
+                    if (lava != null)
+                        lava.Dispose();
+                    if (omnibanCheckTimer != null)
+                        omnibanCheckTimer.Dispose();
+                    if (s != null)
+                        s.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

@@ -75,26 +75,27 @@ namespace MCForge
         }
 
         // Replace bad words only if the whole word matches
-        private static string ParseMatchWholeWords(string text)
-        {
-            var result = new List<string>();
-            var originalWords = text.Split(' ');
-            var reducedWords = Reduce(text).Split(' ');
-            for (var i = 0; i < originalWords.Length; i++)
-            {
-                if (BadWords.Contains(reducedWords[i].ToLower()))
-                {
-                    // A reduced word matched a bad word from our file!
-                    result.Add(new String('*', originalWords[i].Length));
-                }
-                else
-                {
-                    result.Add(originalWords[i]);
-                }
-            }
-
-            return String.Join(" ", result.ToArray());
-        }
+//  Unused method, wasting mah .exe spaces
+//        private static string ParseMatchWholeWords(string text)
+//        {
+//            var result = new List<string>();
+//            var originalWords = text.Split(' ');
+//            var reducedWords = Reduce(text).Split(' ');
+//            for (var i = 0; i < originalWords.Length; i++)
+//            {
+//                if (BadWords.Contains(reducedWords[i].ToLower()))
+//                {
+//                    // A reduced word matched a bad word from our file!
+//                    result.Add(new String('*', originalWords[i].Length));
+//                }
+//                else
+//                {
+//                    result.Add(originalWords[i]);
+//                }
+//            }
+//
+//            return String.Join(" ", result.ToArray());
+//        }
 
         // Replace any whole word containing a bad word inside it (including partial word matches)
         private static string ParseMatchPartialWords(string text)

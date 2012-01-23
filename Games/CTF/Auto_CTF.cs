@@ -31,7 +31,7 @@ namespace MCForge
     public class Teams
     {
         public string color;
-        public int points = 0;
+        public int points/* = 0*/;
         public List<Player> members;
         /// <summary>
         /// Create a new Team Object
@@ -63,29 +63,65 @@ namespace MCForge
                 return false;
         }
     }
-    internal class Data
+    internal class Data : IDisposable
     {
         public Player p;
-        public int cap = 0;
-        public int tag = 0;
-        public int points = 0;
+        public int cap/* = 0*/;
+        public int tag/* = 0*/;
+        public int points/* = 0*/;
         public bool hasflag;
         public bool blue;
-        public bool tagging = false;
-        public bool chatting = false;
+        public bool tagging/* = false*/;
+        public bool chatting/* = false*/;
         public Data(bool team, Player p)
         {
             blue = team; this.p = p;
         }
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (p != null)
+                        p.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
     internal class Base
     {
         public ushort x;
         public ushort y;
         public ushort z;
-        public ushort spawnx = 0;
-        public ushort spawny = 0;
-        public ushort spawnz = 0;
+        public ushort spawnx/* = 0*/;
+        public ushort spawny/* = 0*/;
+        public ushort spawnz/* = 0*/;
         public byte block;
         public void SendToSpawn(Level mainlevel, Auto_CTF game, Player p1)
         {
@@ -118,25 +154,25 @@ namespace MCForge
     /// <summary>
     /// This is the CTF gamemode
     /// </summary>
-    public class Auto_CTF
+    public class Auto_CTF : IDisposable
     {
         public System.Timers.Timer tagging = new System.Timers.Timer(500);
-        public bool voting = false;
-        int vote1 = 0;
-        int vote2 = 0;
-        int vote3 = 0;
+        public bool voting/* = false*/;
+        int vote1/* = 0*/;
+        int vote2/* = 0*/;
+        int vote3/* = 0*/;
         string map1 = "";
         string map2 = "";
         string map3 = "";
         public int xline;
-        public bool started = false;
+        public bool started/* = false*/;
         public int zline;
         public int yline;
         int tagpoint = 5;
         int cappoint = 10;
         int taglose = 5;
         int caplose = 10;
-        bool look = false;
+        bool look/* = false*/;
         public int maxpoints = 3;
         Teams redteam;
         Teams blueteam;
@@ -349,7 +385,7 @@ namespace MCForge
             if (started && l == mainlevel)
             {
                 Server.s.Log("Failed!, A ctf game is curretnly going on!");
-                Plugin.CancelLevelEvent(LevelEvents.LevelUnload, l);
+                Plugin.CancelLevelEvent(LevelEvent.LevelUnload, l);
             }
 
         }
@@ -491,7 +527,7 @@ namespace MCForge
                 {
                     p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
                     Player.SendMessage(p, "You are not on a team!");
-                    Plugin.CancelPlayerEvent(PlayerEvents.BlockChange, p);
+                    Plugin.CancelPlayerEvent(PlayerEvent.BlockChange, p);
                 }
                 if (p.level == mainlevel && blueteam.members.Contains(p) && x == redbase.x && y == redbase.y && z == redbase.z && mainlevel.GetTile(redbase.x, redbase.y, redbase.z) != Block.air)
                 {
@@ -514,7 +550,7 @@ namespace MCForge
                         blueteam.points++;
                         mainlevel.Blockchange(redbase.x, redbase.y, redbase.z, Block.red);
                         p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
-                        Plugin.CancelPlayerEvent(PlayerEvents.BlockChange, p);
+                        Plugin.CancelPlayerEvent(PlayerEvent.BlockChange, p);
                         if (blueteam.points >= maxpoints)
                         {
                             End();
@@ -525,7 +561,7 @@ namespace MCForge
                     {
                         Player.SendMessage(p, "You cant take your own flag!");
                         p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
-                        Plugin.CancelPlayerEvent(PlayerEvents.BlockChange, p);
+                        Plugin.CancelPlayerEvent(PlayerEvent.BlockChange, p);
                     }
                 }
                 if (p.level == mainlevel && redteam.members.Contains(p) && x == redbase.x && y == redbase.y && z == redbase.z && mainlevel.GetTile(redbase.x, redbase.y, redbase.z) != Block.air)
@@ -539,7 +575,7 @@ namespace MCForge
                         redteam.points++;
                         mainlevel.Blockchange(bluebase.x, bluebase.y, bluebase.z, Block.blue);
                         p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
-                        Plugin.CancelPlayerEvent(PlayerEvents.BlockChange, p);
+                        Plugin.CancelPlayerEvent(PlayerEvent.BlockChange, p);
                         if (redteam.points >= maxpoints)
                         {
                             End();
@@ -550,7 +586,7 @@ namespace MCForge
                     {
                         Player.SendMessage(p, "You cant take your own flag!");
                         p.SendBlockchange(x, y, z, p.level.GetTile(x, y, z));
-                        Plugin.CancelPlayerEvent(PlayerEvents.BlockChange, p);
+                        Plugin.CancelPlayerEvent(PlayerEvent.BlockChange, p);
                     }
                 }
             }
@@ -583,7 +619,7 @@ namespace MCForge
                             Player.SendMessage(d.p, "You are now chatting with your team!");
                             d.chatting = !d.chatting;
                         }
-                        Plugin.CancelPlayerEvent(PlayerEvents.PlayerCommand, p);
+                        Plugin.CancelPlayerEvent(PlayerEvent.PlayerCommand, p);
                     }
                 }
                 if (cmd == "goto")
@@ -669,25 +705,25 @@ namespace MCForge
                 {
                     Player.SendMessage(p, "Thanks for voting :D");
                     vote1++;
-                    Plugin.CancelPlayerEvent(PlayerEvents.PlayerChat, p);
+                    Plugin.CancelPlayerEvent(PlayerEvent.PlayerChat, p);
                 }
                 else if (message == "2" || message.ToLower() == map2)
                 {
                     Player.SendMessage(p, "Thanks for voting :D");
                     vote2++;
-                    Plugin.CancelPlayerEvent(PlayerEvents.PlayerChat, p);
+                    Plugin.CancelPlayerEvent(PlayerEvent.PlayerChat, p);
                 }
                 else if (message == "3" || message.ToLower() == map3)
                 {
                     Player.SendMessage(p, "Thanks for voting :D");
                     vote3++;
-                    Plugin.CancelPlayerEvent(PlayerEvents.PlayerChat, p);
+                    Plugin.CancelPlayerEvent(PlayerEvent.PlayerChat, p);
                 }
                 else
                 {
                     Player.SendMessage(p, "%2VOTE:");
                     Player.SendMessage(p, "1. " + map1 + " 2. " + map2 + " 3. " + map3);
-                    Plugin.CancelPlayerEvent(PlayerEvents.PlayerChat, p);
+                    Plugin.CancelPlayerEvent(PlayerEvent.PlayerChat, p);
                 }
             }
             if (started)
@@ -703,7 +739,7 @@ namespace MCForge
                                 if (blueteam.members.Contains(p1))
                                     Player.SendMessage(p1, "(Blue) " + p.color + p.name + ":&f " + message);
                             });
-                            Plugin.CancelPlayerEvent(PlayerEvents.PlayerChat, p);
+                            Plugin.CancelPlayerEvent(PlayerEvent.PlayerChat, p);
                         }
                         if (redteam.members.Contains(p))
                         {
@@ -712,7 +748,7 @@ namespace MCForge
                                 if (redteam.members.Contains(p1))
                                     Player.SendMessage(p1, "(Red) " + p.color + p.name + ":&f " + message);
                             });
-                            Plugin.CancelPlayerEvent(PlayerEvents.PlayerChat, p);
+                            Plugin.CancelPlayerEvent(PlayerEvent.PlayerChat, p);
                         }
                     }
                 }
@@ -761,5 +797,43 @@ namespace MCForge
             else
                 return false;
         }
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (tagging != null)
+                        tagging.Dispose();
+                    if (mainlevel != null)
+                        mainlevel.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

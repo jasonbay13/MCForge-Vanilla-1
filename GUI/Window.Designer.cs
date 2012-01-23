@@ -36,6 +36,10 @@ namespace MCForge.Gui
             if (disposing && (components != null))
             {
                 components.Dispose();
+                if (prpertiesofplyer != null) prpertiesofplyer.Dispose();
+                if (prpertiesoflvl != null) prpertiesoflvl.Dispose();
+
+
             }
             base.Dispose(disposing);
         }

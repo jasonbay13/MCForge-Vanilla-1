@@ -16,12 +16,9 @@ namespace MCForge
         /// <summary>
         /// An array of keys in the collection
         /// </summary>
-        public String[] Keys
+        public String[] GetKeys()
         {
-            get
-            {
-                return _objects.Keys.ToArray();
-            }
+            return _objects.Keys.ToArray();
         }
 
         /// <summary>

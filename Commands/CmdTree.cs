@@ -18,7 +18,7 @@
 using System;
 using System.IO;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdTree : Command
@@ -61,16 +61,18 @@ namespace MCForge.Commands
             Server.MapGen.AddNotchTree(p.level, x, y, z, p.random, true, true, p);
             if (!p.staticCommands) p.ClearBlockchange();
         }
-        void AddNotchBigTree(Player p, ushort x, ushort y, ushort z, byte type)
-        {
-            Server.MapGen.AddNotchBigTree(p.level, x, y, z, p.random, true, true, p);
-            if (!p.staticCommands) p.ClearBlockchange();
-        }
-        void AddNotchPineTree(Player p, ushort x, ushort y, ushort z, byte type)
-        {
-            Server.MapGen.AddNotchPineTree(p.level, x, y, z, p.random, true, true, p);
-            if (!p.staticCommands) p.ClearBlockchange();
-        }
+//  Unused method, wasting mah .exe spaces
+//        void AddNotchBigTree(Player p, ushort x, ushort y, ushort z, byte type)
+//        {
+//            Server.MapGen.AddNotchBigTree(p.level, x, y, z, p.random, true, true, p);
+//            if (!p.staticCommands) p.ClearBlockchange();
+//        }
+//  Unused method, wasting mah .exe spaces
+//        void AddNotchPineTree(Player p, ushort x, ushort y, ushort z, byte type)
+//        {
+//            Server.MapGen.AddNotchPineTree(p.level, x, y, z, p.random, true, true, p);
+//            if (!p.staticCommands) p.ClearBlockchange();
+//        }
         void AddNotchSwampTree(Player p, ushort x, ushort y, ushort z, byte type)
         {
             Server.MapGen.AddNotchSwampTree(p.level, x, y, z, p.random, true, true, p);

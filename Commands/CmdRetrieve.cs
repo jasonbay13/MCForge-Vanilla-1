@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdRetrieve : Command
@@ -78,7 +78,7 @@ namespace MCForge.Commands
                             cO.name = s.Split(' ')[1];
                             list.Add(cO);
                         }
-                        List<CopyOwner> results = new List<CopyOwner>();
+//                        List<CopyOwner> results = new List<CopyOwner>() // Unused method, wasting mah .exe spaces;
                         for (int i = 0; i < list.Count; i++)
                         {
                             if (list[i].name.ToLower() == message.ToLower())

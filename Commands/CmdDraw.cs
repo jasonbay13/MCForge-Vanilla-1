@@ -17,7 +17,7 @@
 */
 using System;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
 	public class CmdDraw : Command
@@ -403,7 +403,7 @@ namespace MCForge.Commands
 		#region Sphere Blockchanges
 		public void BlockchangeSphere(Player p, ushort x, ushort y, ushort z, byte type)
 		{
-			int height = p.BcVar[0];
+//			int height = p.BcVar[0] // Unused method, wasting mah .exe spaces;
 			int radius = p.BcVar[1];
 
 			byte b = p.level.GetTile(x, y, z);
@@ -413,7 +413,7 @@ namespace MCForge.Commands
 		}
 		public void BlockchangeHSphere(Player p, ushort x, ushort y, ushort z, byte type)
 		{
-			int height = p.BcVar[0];
+//			int height = p.BcVar[0] // Unused method, wasting mah .exe spaces;
 			int radius = p.BcVar[1];
 
 			byte b = p.level.GetTile(x, y, z);

@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
-
+using MCForge;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -32,13 +32,13 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.Net;
 using System.Reflection;
-using MCForge;
+
 
 namespace MCForge_.Gui
 {
     public static class Program
     {
-        public static bool usingConsole = false;
+        public static bool usingConsole/* = false*/;
         public static string parent = Path.GetFileName(Assembly.GetEntryAssembly().Location);
         public static string parentfullpath = Assembly.GetEntryAssembly().Location;
         public static string parentfullpathdir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
@@ -50,10 +50,10 @@ namespace MCForge_.Gui
         //private static string HeartbeatAnnounce = "http://www.mcforge.net/hbannounce.php";
 
         [DllImport("kernel32")]
-        public static extern IntPtr GetConsoleWindow();
+        private static extern IntPtr GetConsoleWindow();
         [DllImport("user32.dll")]
-        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-        public static void GlobalExHandler(object sender, UnhandledExceptionEventArgs e)
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private static void GlobalExHandler(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = (Exception)e.ExceptionObject;
             Server.ErrorLog(ex);
@@ -63,7 +63,7 @@ namespace MCForge_.Gui
                 ExitProgram(true);
         }
 
-        public static void ThreadExHandler(object sender, ThreadExceptionEventArgs e)
+        private static void ThreadExHandler(object sender, ThreadExceptionEventArgs e)
         {
             Exception ex = e.Exception;
             Server.ErrorLog(ex);
@@ -296,8 +296,8 @@ namespace MCForge_.Gui
 
         } */
 
-        public static bool CurrentUpdate = false;
-        static bool msgOpen = false;
+        public static bool CurrentUpdate/* = false*/;
+        static bool msgOpen/* = false*/;
         public static System.Timers.Timer updateTimer = new System.Timers.Timer(120 * 60 * 1000);
 
         public static void UpdateCheck(bool wait = false, Player p = null)
