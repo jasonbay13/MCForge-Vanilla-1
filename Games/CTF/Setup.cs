@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 namespace MCForge.CTF
 {
+    //FUCK
     /// <summary>
     /// This is the plugin CTFSetup
     /// This plugin will create CTF Config files for you by using the command
