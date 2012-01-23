@@ -1,5 +1,5 @@
 ﻿/*
-	Copyright 2011 MCForge
+	Copyright 2012 Snowl (David Diaz) for use with MCForge
 		
 	Dual-licensed under the	Educational Community License, Version 2.0 and
 	the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -32,6 +32,7 @@ namespace MCForge
         public static Random Random;
         public static System.Timers.Timer StartTimer;
         public static System.Timers.Timer EndTimer;
+        public static System.Timers.Timer EndRoundTimer;
         public static Level ZombieLevel;
         public static int ElapsedRounds;
         public bool MoreThanTwoPlayers = true;
@@ -42,7 +43,8 @@ namespace MCForge
             Random = new Random();
             StartOnStartup = true;
             StartTimer = new System.Timers.Timer(1000);
-            EndTimer = new System.Timers.Timer(1000);
+            EndTimer = new System.Timers.Timer(30000);
+            int randomMinutes = Random.Next(1, 2);
         }
 
         public void Start(int x)
@@ -57,72 +59,64 @@ namespace MCForge
             int loop = 6;
             StartTimer.Start(); StartTimer.Elapsed += delegate
             {
+                Server.s.Log(loop + "");
                 if (loop != 0)
                 {
                     int amountOfPlayers = Player.players.Count();
                     Player.players.ForEach(delegate(Player p)
                     {
                         if (p.referee)
-                            amountOfPlayers--; 
+                            amountOfPlayers--;
                     });
-                    if (amountOfPlayers >= 2)
-                    {
+                    //if (amountOfPlayers >= 2)
+                    //{
                         MoreThanTwoPlayers = true;
                         loop--;
                         Player.GlobalMessage(c.gray + " - " + Server.DefaultColor + "Zombie Survival starts in " + loop + " seconds on level " +
                                              ZombieLevel.name + c.gray + " - ");
-                    }
+                    /*}
                     else
                     {
                         if (MoreThanTwoPlayers)
                             Player.GlobalMessage(c.gray + " - " + Server.DefaultColor + "Zombie Survival requires more than 2 non-referee players online to play" + c.gray + " - ");
                         MoreThanTwoPlayers = false;
-                    }
+                    }*/
                 }
                 else
                 {
+                    loop = 6;
                     Server.ZombieRound = true;
-                    Player.GlobalMessage(c.gray + " - " + "Zombie Survival has started on level " + ZombieLevel.name + "! Type /g " + ZombieLevel.name + " to join! "+ c.gray + " - ");
+                    int randomMinutes = Random.Next(1, 4);
+                    Player.GlobalMessage(c.gray + " - " + "Zombie Survival has started on level " + ZombieLevel.name + " for " + randomMinutes + " minutes! Type /g " + ZombieLevel.name + " to join! " + c.gray + " - ");
+                    EndRoundTimer = new System.Timers.Timer((60000 * randomMinutes) - 30000);
+                    EndRoundTimer.Start();
+                    EndRoundTimer.Elapsed += delegate { EndRound(); };
                     StartTimer.Stop();
-                    Server.s.zombieTimer = new System.Timers.Timer((60000 * Random.Next(7, 11)) + 10);
-                    Server.s.zombieTimer.Start();
                 }
             };
         }
 
         public void EndRound()
         {
-            int loop = 6;
+            EndRoundTimer.Stop();
+            int loop = 2;
             EndTimer.Start(); EndTimer.Elapsed += delegate
             {
-                if (loop != 0)
+                if (loop == 2)
                 {
-                    int amountOfPlayers = Player.players.Count();
-                    Player.players.ForEach(delegate(Player p)
-                    {
-                        if (p.referee)
-                            amountOfPlayers--; 
-                    });
-                    if (amountOfPlayers >= 2)
-                    {
-                        MoreThanTwoPlayers = true;
-                        loop--;
-                        Player.GlobalMessage(c.gray + " - " + Server.DefaultColor + "Zombie Survival ends in " + loop + " seconds" +
-                                             ZombieLevel.name + c.gray + " - ");
-                    }
-                    else
-                    {
-                        loop = 0;
-                    }
+                    loop--;
+                    Player.GlobalMessage(c.gray + " - " + Server.DefaultColor + "Zombie Survival ends in 30 seconds" + 
+                                            c.gray + " - ");
                 }
-                else
+                else if (loop == 1)
                 {
+                    loop = 2;
                     ElapsedRounds++;
                     Server.ZombieRound = false;
-                    Player.GlobalMessage(c.gray + " - " + "Zombie Survival has ended! "+ c.gray + " - ");
-                    EndTimer.Stop();
-                    Server.s.zombieTimer.Stop();
+                    Player.GlobalMessage(c.gray + " - " + "Zombie Survival has ended! " + c.gray + " - ");
+                    //DO VOTING
                     ChooseLevel();
+                    EndTimer.Stop();
                     Start();
                 }
             };
@@ -137,7 +131,7 @@ namespace MCForge
             {
                 al.Add(fil.Name.Split('.')[0]);
             }
-            if (al.Count <= 2) { Server.s.Log("You must have more than 2 levels to choose levels in Zombie Survival! Choosing last level!"); return; }
+            if (al.Count <= 2) { Server.s.Log("You must have more than 2 levels to choose levels in Zombie Survival! Choosing last level!"); if (ZombieLevel == null) ZombieLevel = Level.Find("main"); return; }
             int x = 0; string level = "";
             x = Random.Next(0, al.Count);
             level = al[x].ToString();
@@ -146,9 +140,29 @@ namespace MCForge
 
         public void CheckLocation(Player p)
         {
+            if (!Server.ZombieRound) return;
+            if (p.level != ZombieLevel || p.referee) return;
             Player.players.ForEach(delegate(Player p2)
             {
+                if (p2.level != ZombieLevel || p2.referee) ;
+                else
+                {
+                    if (p2.pos[0] / 32 == p.pos[0] / 32 || p2.pos[0] / 32 == p.pos[0] / 32 + 1 ||
+                        p2.pos[0] / 32 == p.pos[0] / 32 - 1 && (p.infected != p2.infected))
+                    {
+                        if (p2.pos[1] / 32 == p.pos[1] / 32 || p2.pos[1] / 32 == p.pos[1] / 32 - 1 ||
+                            p2.pos[1] / 32 == p.pos[1] / 32 + 1)
+                        {
+                            if (p2.pos[2] / 32 == p.pos[2] / 32 || p2.pos[2] / 32 == p.pos[2] / 32 + 1 ||
+                                p2.pos[2] / 32 == p.pos[2] / 32 - 1)
+                            {
 
+                            }
+                        }
+                    }
+                }
             });
         }
+
+    }
 }

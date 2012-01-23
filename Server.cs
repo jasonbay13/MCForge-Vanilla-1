@@ -87,7 +87,6 @@ namespace MCForge
         public static System.Timers.Timer updateTimer = new System.Timers.Timer(100);
         //static System.Timers.Timer heartbeatTimer = new System.Timers.Timer(60000); //Every 45 seconds
         static System.Timers.Timer messageTimer = new System.Timers.Timer(60000 * 5); //Every 5 mins
-        public System.Timers.Timer zombieTimer = new System.Timers.Timer(60000 * 9); //Every 5 mins
         public static System.Timers.Timer cloneTimer = new System.Timers.Timer(5000);
 
         //public static Thread physThread;
@@ -888,11 +887,6 @@ processThread.Start();
                     RandomMessage();
                 };
                 messageTimer.Start();
-
-                zombieTimer.Elapsed += delegate
-                {
-                    Server.zombie.EndRound();
-                };
 
                 process = System.Diagnostics.Process.GetCurrentProcess();
 
