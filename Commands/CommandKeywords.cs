@@ -81,7 +81,7 @@ namespace MCForge.Commands
             new CommandKeywords((new CmdCopySaveNet()), "copy save clipboard");
             new CommandKeywords((new CmdCountdown()), "count down");
             new CommandKeywords((new CmdCrashServer()), "error stop server");
-            new CommandKeywords((new CmdCTF()), "capture flag");
+            //new CommandKeywords((new CmdCTF()), "capture flag");
             new CommandKeywords((new CmdCuboid()), "box set area block");
             new CommandKeywords((new CmdDelete()), "del mode");
             new CommandKeywords((new CmdDeleteLvl()), "delete remove level lvl");

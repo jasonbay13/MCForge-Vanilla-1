@@ -86,7 +86,7 @@ namespace MCForge
 			all.Add(new CmdCopySaveNet());
 			all.Add(new CmdCountdown());
 			all.Add(new CmdCrashServer());
-			all.Add(new CmdCTF());
+			//all.Add(new CmdCTF());
 			all.Add(new CmdCuboid());
 			all.Add(new CmdDelete());
 			all.Add(new CmdDeleteLvl());

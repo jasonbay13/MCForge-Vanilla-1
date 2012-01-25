@@ -70,6 +70,9 @@ namespace MCForge
         public static ForgeBot IRC;
         public static GlobalChatBot GlobalChat;
         public static Thread locationChecker;
+        /// <summary>
+        /// Is the server using WoM textures?
+        /// </summary>
         public static bool UseTextures/* = false*/;
         public static Thread blockThread;
         //public static List<MySql.Data.MySqlClient.MySqlCommand> mySQLCommands = new List<MySql.Data.MySqlClient.MySqlCommand>();
