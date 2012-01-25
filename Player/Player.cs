@@ -70,7 +70,7 @@ namespace MCForge
         /// <summary>
         /// A total list of players that have been onthe server since startup
         /// </summary>
-        public static List<Player> totalplayers = new List<Player>(); //WHY THE FUCK IS THIS HERE?!
+        //public static List<Player> totalplayers = new List<Player>(); //WHY THE FUCK IS THIS HERE?!
         internal static string lastMSG = "";
 
         internal static bool storeHelp/* = false*/;
@@ -992,7 +992,7 @@ namespace MCForge
                         Server.s.Log("Failed to load global ignore list!");
                     }
                 }
-                totalplayers.Add(this);
+                //totalplayers.Add(this);
 
 
 
