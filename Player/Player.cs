@@ -1513,6 +1513,14 @@ namespace MCForge
                 SendBlockchange(x, y, z, b);
                 return;
             }
+            
+            //Credit to Gamemakergm
+            if (Server.ZombieOnlyServer == true && Block.OPBlocks(b) && !this.referee == true)
+            {
+                SendMessage("Cannot break/place adminium unless you are a Ref!");
+                SendBlockchange(x, y, z, b);
+                return;
+            }
 
             if (b >= 200 && b < 220)
             {
