@@ -45,17 +45,13 @@ namespace MCForge
         public bool Contains(Command cmd) { return commands.Contains(cmd); }
         public bool Contains(string name)
         {
-            name = name.ToLower(); foreach (Command cmd in commands)
-            {
-                if (cmd.name == name.ToLower()) { return true; }
-            } return false;
+            name = name.ToLower();
+            return commands.Exists((cmd) => { if (cmd.name == name) return true; return false; }); 
         }
         public Command Find(string name)
         {
-            name = name.ToLower(); foreach (Command cmd in commands)
-            {
-                if (cmd.name == name || cmd.shortcut == name) { return cmd; }
-            } return null;
+            name = name.ToLower();
+            return commands.Find((cmd) => { if (cmd.name == name || cmd.shortcut == name) return true; return false; });
         }
 
         public string FindShort(string shortcut)
