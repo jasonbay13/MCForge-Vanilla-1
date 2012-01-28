@@ -86,9 +86,9 @@ namespace MCForge
         internal event LogHandler OnAdmin;
         internal event HeartBeatHandler HeartBeatFail;
         internal event MessageEventHandler OnURLChange;
+        internal event PlayerListHandler OnPlayerListChange;
+        internal event VoidHandler OnSettingsUpdate;
         //INTERNAL FOR GUI/CLI ==============================================
-        public event PlayerListHandler OnPlayerListChange;
-        public event VoidHandler OnSettingsUpdate;
         public static ForgeBot IRC;
         public static GlobalChatBot GlobalChat;
         public static Thread locationChecker;
@@ -1479,7 +1479,8 @@ processThread.Start();
         {
             if (ServerLog != null)
             {
-                ServerLog(message);
+                OnServerLogEvent.Call(message, LogType.Normal);
+                ServerLog(message, LogType.Normal);
                 if (cancellog)
                 {
                     cancellog = false;
@@ -1505,7 +1506,8 @@ processThread.Start();
         {
             if (ServerOpLog != null)
             {
-                OpLog(message);
+                OnServerLogEvent.Call(message, LogType.OpLog);
+                ServerOpLog(message, LogType.OpLog);
                 if (canceloplog)
                 {
                     canceloplog = false;
@@ -1531,7 +1533,8 @@ processThread.Start();
         {
             if (ServerAdminLog != null)
             {
-                ServerAdminLog(message);
+                OnServerLogEvent.Call(message, LogType.AdminLog);
+                ServerAdminLog(message, LogType.AdminLog);
                 if (canceladmin)
                 {
                     canceladmin = false;
