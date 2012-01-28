@@ -1515,12 +1515,13 @@ namespace MCForge
             }
             
             //Credit to Gamemakergm
-            if (Server.ZombieOnlyServer == true && Block.OPBlocks(b) && !this.referee == true)
+            /*if (Server.ZombieMode == true && Block.OPBlocks(b) && !this.referee == true)
             {
                 SendMessage("Cannot break/place adminium unless you are a Ref!");
                 SendBlockchange(x, y, z, b);
                 return;
-            }
+            } Must wait for new zombie to be made
+             */
 
             if (b >= 200 && b < 220)
             {
