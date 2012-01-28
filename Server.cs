@@ -39,32 +39,54 @@ namespace MCForge
 {
     public class Server : IDisposable
     {
-        public static bool cancelcommand/* = false*/;
-        public static bool canceladmin/* = false*/;
-        public static bool cancellog/* = false*/;
-        public static bool canceloplog/* = false*/;
-        public static string apppath = Application.StartupPath;
+        internal static bool cancelcommand/* = false*/;
+        internal static bool canceladmin/* = false*/;
+        internal static bool cancellog/* = false*/;
+        internal static bool canceloplog/* = false*/;
+        internal static string apppath = Application.StartupPath;
+        /// <summary>
+        /// This is called when the console uses a command
+        /// </summary>
+        /// <param name="cmd">The command</param>
+        /// <param name="message">The message</param>
         public delegate void OnConsoleCommand(string cmd, string message);
+        [Obsolete("Please use OnConsoleCommandEvent.Register()")]
         public static event OnConsoleCommand ConsoleCommand;
+        /// <summary>
+        /// This is called when the server errors
+        /// </summary>
+        /// <param name="error">The error</param>
         public delegate void OnServerError(Exception error);
+        [Obsolete("Please use OnServerErrorEvent.Register()")]
         public static event OnServerError ServerError = null;
-        public delegate void OnServerLog(string message);
+        /// <summary>
+        /// This is called when the server logs something to the console
+        /// </summary>
+        /// <param name="message">The string that was logged</param>
+        public delegate void OnServerLog(string message, LogType type);
+        [Obsolete("Please use OnServerLogEvent.Register()")]
         public static event OnServerLog ServerLog;
+        [Obsolete("Please use OnServerLogEvent.Register()")]
         public static event OnServerLog ServerAdminLog;
+        [Obsolete("Please use OnServerLogEvent.Register()")]
         public static event OnServerLog ServerOpLog;
-        public delegate void HeartBeatHandler();
-        public delegate void MessageEventHandler(string message);
-        public delegate void PlayerListHandler(List<Player> playerList);
-        public delegate void VoidHandler();
-        public delegate void LogHandler(string message);
-        public event LogHandler OnLog;
-        public event LogHandler OnSystem;
-        public event LogHandler OnCommand;
-        public event LogHandler OnError;
-        public event LogHandler OnOp;
-        public event LogHandler OnAdmin;
-        public event HeartBeatHandler HeartBeatFail;
-        public event MessageEventHandler OnURLChange;
+        //TODO:
+        //change these to work with current event system
+        //INTERNAL FOR GUI/CLI ==============================================
+        internal delegate void HeartBeatHandler();
+        internal delegate void MessageEventHandler(string message);
+        internal delegate void PlayerListHandler(List<Player> playerList);
+        internal delegate void VoidHandler();
+        internal delegate void LogHandler(string message);
+        internal event LogHandler OnLog;
+        internal event LogHandler OnSystem;
+        internal event LogHandler OnCommand;
+        internal event LogHandler OnError;
+        internal event LogHandler OnOp;
+        internal event LogHandler OnAdmin;
+        internal event HeartBeatHandler HeartBeatFail;
+        internal event MessageEventHandler OnURLChange;
+        //INTERNAL FOR GUI/CLI ==============================================
         public event PlayerListHandler OnPlayerListChange;
         public event VoidHandler OnSettingsUpdate;
         public static ForgeBot IRC;
@@ -74,23 +96,41 @@ namespace MCForge
         /// Is the server using WoM textures?
         /// </summary>
         public static bool UseTextures/* = false*/;
-        public static Thread blockThread;
+        internal static Thread blockThread;
         //public static List<MySql.Data.MySqlClient.MySqlCommand> mySQLCommands = new List<MySql.Data.MySqlClient.MySqlCommand>();
 
-        public static int speedPhysics = 250;
+        //public static int speedPhysics = 250; derp
 
+        /// <summary>
+        /// The current server version
+        /// </summary>
         public static Version Version { get { return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version; } }
 
         // URL hash for connecting to the server
+        /// <summary>
+        /// The server hash for connecting to the server
+        /// </summary>
         public static string Hash = String.Empty;
+        /// <summary>
+        /// The server URL for connecting to the server
+        /// </summary>
         public static string URL = String.Empty;
         
+        /// <summary>
+        /// The listening socket for listening to incoming connections
+        /// </summary>
         public static Socket listen;
-        public static System.Diagnostics.Process process = System.Diagnostics.Process.GetCurrentProcess();
+        internal static System.Diagnostics.Process process = System.Diagnostics.Process.GetCurrentProcess();
+        /// <summary>
+        /// The update checker timer
+        /// </summary>
         public static System.Timers.Timer updateTimer = new System.Timers.Timer(100);
         //static System.Timers.Timer heartbeatTimer = new System.Timers.Timer(60000); //Every 45 seconds
-        static System.Timers.Timer messageTimer = new System.Timers.Timer(60000 * 5); //Every 5 mins
-        public static System.Timers.Timer cloneTimer = new System.Timers.Timer(5000);
+        /// <summary>
+        /// The server message timer
+        /// </summary>
+        public static System.Timers.Timer messageTimer = new System.Timers.Timer(60000 * 5); //Every 5 mins
+        //public static System.Timers.Timer cloneTimer = new System.Timers.Timer(5000);
 
         //public static Thread physThread;
         //public static bool physPause;
@@ -100,148 +140,391 @@ namespace MCForge
         //Chatrooms
         public static List<string> Chatrooms = new List<string>();
         //Other
+        /// <summary>
+        /// Can people TP to higher ranks
+        /// </summary>
         public static bool higherranktp = true;
+        /// <summary>
+        /// Do guest have to agree to rules when they first join
+        /// </summary>
         public static bool agreetorulesonentry/* = false*/;
+        /// <summary>
+        /// Is the server using CTF
+        /// </summary>
         public static bool UseCTF/* = false*/;
+        /// <summary>
+        /// Is the server done setting up
+        /// </summary>
         public static bool ServerSetupFinished/* = false*/;
+        /// <summary>
+        /// The server CTF object
+        /// </summary>
         public static Auto_CTF ctf = null;
+        /// <summary>
+        /// All banned IP's
+        /// </summary>
         public static PlayerList bannedIP;
+        /// <summary>
+        /// Players on the WhiteList
+        /// </summary>
         public static PlayerList whiteList;
+        /// <summary>
+        /// 
+        /// </summary>
         public static PlayerList ircControllers;
+        /// <summary>
+        /// All players who are muted
+        /// </summary>
         public static PlayerList muted;
+        /// <summary>
+        /// All players who are ignored by globalchat
+        /// </summary>
         public static PlayerList ignored;
         // The MCForge Developer List
         internal static readonly List<string> devs = new List<string>(new string[] { "dmitchell94", "501st_commander", "edh649", "shade2010", "hypereddie10", "erickilla", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "jasonbay13", "cazzar", "snowl", "techjar", "nerketur", "anthonyani", "wouto1997", "lavoaster", "bemacized", "meinigeshandwerk" });
+        /// <summary>
+        /// A list of MCForge devs
+        /// </summary>
         public static List<string> Devs { get { return new List<string>(devs); } }
 
+        /// <summary>
+        /// A list of temp bans (Players who are banned temporally)
+        /// </summary>
         public static List<TempBan> tempBans = new List<TempBan>();
-        public struct TempBan { public string name; public DateTime allowedJoin; }
+        /// <summary>
+        /// Temp Ban object
+        /// </summary>
+        public struct TempBan { 
+            /// <summary>
+            /// The player name who is banned
+            /// </summary>
+            public string name; 
+            /// <summary>
+            /// When this player can join back in
+            /// </summary>
+            public DateTime allowedJoin; 
+        }
 
-        public static MapGenerator MapGen;
+        internal static MapGenerator MapGen;
 
-        public static PerformanceCounter PCCounter = null;
-        public static PerformanceCounter ProcessCounter = null;
+        internal static PerformanceCounter PCCounter = null;
+        internal static PerformanceCounter ProcessCounter = null;
 
+        /// <summary>
+        /// The server's main level
+        /// </summary>
         public static Level mainLevel;
+        /// <summary>
+        /// A list of levels that are loaded on the server
+        /// </summary>
         public static List<Level> levels;
         //reviewlist intitialize
+        /// <summary>
+        /// A list of players the OP's of the server has to review <seealso cref="CmdReview"/>
+        /// </summary>
         public static List<string> reviewlist = new List<string>();
         //Translate settings initialize
+        /// <summary>
+        /// Will the server translate messages
+        /// </summary>
         public static bool transenabled/* = false*/;
+        /// <summary>
+        /// The default server lang.
+        /// </summary>
         public static string translang = "en";
+        /// <summary>
+        /// List of playernames who will not be translated
+        /// </summary>
         public static List<string> transignore = new List<string>();
         //Global Chat Rules Accepted list
+        /// <summary>
+        /// A list of playernames who agreed to the Global Chat Rules
+        /// </summary>
         public static List<string> gcaccepted = new List<string>();
         //public static List<levelID> allLevels = new List<levelID>();
-        public struct levelID { public int ID; public string name; }
+        //public struct levelID { public int ID; public string name; }
 
+        /// <summary>
+        /// A list of player names who are AFK
+        /// </summary>
         public static List<string> afkset = new List<string>();
+        /// <summary>
+        /// A list of nick's who are AFK on IRC
+        /// </summary>
         public static List<string> ircafkset = new List<string>();
+
+        /// <summary>
+        /// A list of AFK messages (This is currently not used)
+        /// </summary>
         public static List<string> afkmessages = new List<string>();
+
+        /// <summary>
+        /// A list of messages the server will make every 5 minutes <seealso cref="Server.messageTimer"/>
+        /// </summary>
         public static List<string> messages = new List<string>();
 
+        /// <summary>
+        /// The Date and Time when the server went online
+        /// </summary>
         public static DateTime timeOnline;
+        /// <summary>
+        /// The server's IP
+        /// </summary>
         public static string IP;
         //auto updater stuff
+        /// <summary>
+        /// Will the server autoupdate when an update is found
+        /// </summary>
         public static bool autoupdate;
+        /// <summary>
+        /// Will the server auto notify when an update is found
+        /// </summary>
         public static bool autonotify;
+        /// <summary>
+        /// Will the server notify players when an update is found
+        /// </summary>
         public static bool notifyPlayers;
-        public static string restartcountdown = "";
-        public static string selectedrevision = "";
+        internal static string restartcountdown = "";
+        internal static string selectedrevision = "";
+        /// <summary>
+        /// Will the server auto restart when the server errors
+        /// </summary>
         public static bool autorestart;
+        /// <summary>
+        /// The time the server will restart
+        /// </summary>
         public static DateTime restarttime;
 
+        /// <summary>
+        /// Is the server using /moderate <seealso cref="CmdModerate"/>
+        /// </summary>
         public static bool chatmod/* = false*/;
 
         //Global VoteKick In Progress Flag
+        /// <summary>
+        /// Is there a votekick in progress? <seealso cref="Server.voteKickVotesNeeded"/>
+        /// </summary>
         public static bool voteKickInProgress/* = false*/;
+        /// <summary>
+        /// How many votes are needed <seealso cref="Server.voteKickInProgress"/>
+        /// </summary>
         public static int voteKickVotesNeeded/* = 0*/;
 
 
         //WoM Direct
+        /// <summary>
+        /// The server Alternate name for WoM Direct
+        /// </summary>
         public static string Server_ALT = "";
+        /// <summary>
+        /// The server discription for WoM Direct
+        /// </summary>
         public static string Server_Disc = "";
+        /// <summary>
+        /// The server flag for WoM Direct
+        /// </summary>
         public static string Server_Flag = "";
 
 
-        public static Dictionary<string, string> customdollars = new Dictionary<string, string>();
+        internal static Dictionary<string, string> customdollars = new Dictionary<string, string>();
 
         // Extra storage for custom commands
+        /// <summary>
+        /// Extra storage for custom commands
+        /// Information that is put in here will be kept by the server
+        /// </summary>
         public ExtrasCollection Extras = new ExtrasCollection();
 
         //Color list as a char array
-        public static Char[] ColourCodesNoPercent = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+        internal static Char[] ColourCodesNoPercent = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
+        /// <summary>
+        /// Is there a vote currently going on
+        /// This can also be used to start a vote
+        /// </summary>
         public static bool voting;
+        /// <summary>
+        /// How many yes votes are there <seealso cref="Server.voting"/>
+        /// </summary>
         public static int YesVotes;
+        /// <summary>
+        /// How many no votes are there <seealso cref=" Server.voting"/>
+        /// </summary>
         public static int NoVotes;
+        /// <summary>
+        /// Will the server buffer blocks before sending them
+        /// </summary>
         public static bool bufferblocks = true;
+        /// <summary>
+        /// The server's MCForge username
+        /// </summary>
         public static string mcforgeUser = "";
-        public static string mcforgePass = "";
+        internal static string mcforgePass = ""; //We dont want this public >_>
 
         //Zombie
         public static int ZombieMode;
         public static bool ZombieRound;
+        /// <summary>
+        /// Server's Zombie Survival gamemode
+        /// </summary>
         public static ZombieSurvival zombie;
         //Zombie
 
         // Lava Survival
+        /// <summary>
+        /// Server's Lava Survival gamemode
+        /// </summary>
         public static LavaSurvival lava;
 
         // OmniBan
+        /// <summary>
+        /// MCForge OmniBan system
+        /// </summary>
         public static OmniBan omniban;
+        /// <summary>
+        /// The OmniBan updater <seealso cref="OmniBan"/>
+        /// </summary>
         public static System.Timers.Timer omnibanCheckTimer = new System.Timers.Timer(60000 * 120);
 
         //Settings
         #region Server Settings
+        /// <summary>
+        /// Minecraft Server Protocall version
+        /// </summary>
         public const byte version = 7;
+        /// <summary>
+        /// The server salt
+        /// </summary>
         public static string salt = "";
 
+        /// <summary>
+        /// The server name
+        /// </summary>
         public static string name = "[MCForge] Default";
+        /// <summary>
+        /// The server motd
+        /// </summary>
         public static string motd = "Welcome!";
+        /// <summary>
+        /// The max amount of players that can join the server
+        /// </summary>
         public static byte players = 12;
         //for the limiting no. of guests:
+        /// <summary>
+        /// The max amount of guests that can join the server
+        /// </summary>
         public static byte maxGuests = 10;
 
+        /// <summary>
+        /// The max amount of maps that can be loaded
+        /// </summary>
         public static byte maps = 5;
+        /// <summary>
+        /// The port the server is using for the listening socket <seealso cref="Server.listen"/>
+        /// </summary>
         public static int port = 25565;
+        /// <summary>
+        /// Is the server public
+        /// </summary>
         public static bool pub = true;
+        /// <summary>
+        /// Will the server verify the usernames that join the server
+        /// </summary>
         public static bool verify = true;
+        /// <summary>
+        /// Can players talk to other players on different levels
+        /// </summary>
         public static bool worldChat = true;
 //        public static bool guestGoto = false;
 
         //Spam Prevention
+        /// <summary>
+        /// Will the server check for chat spam
+        /// </summary>
         public static bool checkspam/* = false*/;
+        /// <summary>
+        /// Amount of messages that count as spamming
+        /// </summary>
         public static int spamcounter = 8;
+        /// <summary>
+        /// How long the player will be muted
+        /// </summary>
         public static int mutespamtime = 60;
+        /// <summary>
+        /// How long should the server wait before resetting the player spam count
+        /// </summary>
         public static int spamcountreset = 5;
 
+        /// <summary>
+        /// The console status
+        /// </summary>
         public static string ZallState = "Alive";
 
         //public static string[] userMOTD;
 
+        /// <summary>
+        /// The main level <seealso cref="Server.mainLevel"/>
+        /// </summary>
         public static string level = "main";
         public static string errlog = "error.log";
 
 //        public static bool console = false; // never used
         public static bool reportBack = true;
 
+        /// <summary>
+        /// Will the server use IRC
+        /// </summary>
         public static bool irc/* = false*/;
+        /// <summary>
+        /// Will the server use IRC Colors
+        /// </summary>
         public static bool ircColorsEnable/* = false*/;
 //        public static bool safemode = false; //Never used
+        /// <summary>
+        /// The port of the IRC Server
+        /// </summary>
         public static int ircPort = 6667;
+        /// <summary>
+        /// The server's nick
+        /// </summary>
         public static string ircNick = "ForgeBot";
+        /// <summary>
+        /// The IRC server
+        /// </summary>
         public static string ircServer = "irc.esper.net";
+        /// <summary>
+        /// The IRC channel (main)
+        /// </summary>
         public static string ircChannel = "#changethis";
+        /// <summary>
+        /// The IRC channel (OP)
+        /// </summary>
         public static string ircOpChannel = "#changethistoo";
+        /// <summary>
+        /// Will the server login to NickServ
+        /// </summary>
         public static bool ircIdentify/* = false*/;
+        /// <summary>
+        /// The server's NickServ password
+        /// </summary>
         public static string ircPassword = "";
+        /// <summary>
+        /// Do admins have to login to the server
+        /// </summary>
         public static bool verifyadmins = true;
         public static LevelPermission verifyadminsrank = LevelPermission.Operator;
 
+        /// <summary>
+        /// Will the server restart on error
+        /// </summary>
         public static bool restartOnError = true;
-
+        /// <summary>
+        /// Prevent tunneling
+        /// </summary>
         public static bool antiTunnel = true;
+        /// <summary>
+        /// The max depth guests can dig to
+        /// </summary>
         public static byte maxDepth = 4;
         public static int Overload = 1500;
         public static int rpLimit = 500;
@@ -342,7 +625,10 @@ namespace MCForge
 
         #endregion
 
-        public static MainLoop ml;
+        internal static MainLoop ml;
+        /// <summary>
+        /// The server
+        /// </summary>
         public static Server s;
         public Server()
         {
@@ -351,7 +637,7 @@ namespace MCForge
         }
         //True = cancel event
         //Fale = dont cacnel event
-        public static bool Check(string cmd, string message)
+        internal static bool Check(string cmd, string message)
         {
             if (ConsoleCommand != null)
                 ConsoleCommand(cmd, message);
@@ -1345,8 +1631,8 @@ processThread.Start();
                         updateTimer.Dispose();
                     if (messageTimer != null)
                         messageTimer.Dispose();
-                    if (cloneTimer != null)
-                        cloneTimer.Dispose();
+                    //if (cloneTimer != null)
+                    //    cloneTimer.Dispose();
                     if (ctf != null)
                         ctf.Dispose();
                     if (PCCounter != null)
