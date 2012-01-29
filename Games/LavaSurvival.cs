@@ -24,7 +24,7 @@ using System.Linq;
 
 namespace MCForge
 {
-    public class LavaSurvival
+    public class LavaSurvival : IDisposable
     {
         // Private variables
         private string propsPath = "properties/lavasurvival/";
@@ -35,7 +35,7 @@ namespace MCForge
         private DateTime startTime;
 
         // Public variables
-        public bool active = false, roundActive = false, flooded = false, voteActive = false, sendingPlayers = false;
+        public bool active/* = false*/, roundActive/* = false*/, flooded/* = false*/, voteActive/* = false*/, sendingPlayers/* = false*/;
         public Level map;
         public MapSettings mapSettings;
         public MapData mapData;
@@ -85,7 +85,7 @@ namespace MCForge
                 if (!flooded) AnnounceTimeLeft(true, false);
             };
 
-            startOnStartup = false;
+            /*startOnStartup = false*/;
             sendAfkMain = true;
             voteCount = 2;
             voteTime = 2;
@@ -96,13 +96,14 @@ namespace MCForge
         }
 
         // Private methods
-        private void LevelCommand(string name, string msg = "")
-        {
-            Command cmd = Command.all.Find(name.Trim());
-            if (cmd != null && map != null)
-                try { cmd.Use(null, map.name + " " + msg.Trim()); }
-                catch (Exception e) { Server.ErrorLog(e); }
-        }
+//  Unused method, wasting mah .exe spaces
+//        private void LevelCommand(string name, string msg = "")
+//        {
+//            Command cmd = Command.all.Find(name.Trim());
+//            if (cmd != null && map != null)
+//                try { cmd.Use(null, map.name + " " + msg.Trim()); }
+//                catch (Exception e) { Server.ErrorLog(e); }
+//        }
 
         // Public methods
         public byte Start(string mapName = "")
@@ -685,11 +686,11 @@ namespace MCForge
             public MapSettings(string name)
             {
                 this.name = name;
-                fast = 0;
+                /*fast = 0*/;
                 killer = 100;
-                destroy = 0;
-                water = 0;
-                layer = 0;
+                /*destroy = 0*/;
+                /*water = 0*/;
+                /*layer = 0*/;
                 layerHeight = 3;
                 layerCount = 10;
                 layerInterval = 2;
@@ -710,11 +711,11 @@ namespace MCForge
 
             public MapData(MapSettings settings)
             {
-                fast = false;
-                killer = false;
-                destroy = false;
-                water = false;
-                layer = false;
+                /*fast = false*/;
+                /*killer = false*/;
+                /*destroy = false*/;
+                /*water = false*/;
+                /*layer = false*/;
                 block = Block.lava;
                 currentLayer = 1;
                 roundTimer = new Timer(TimeSpan.FromMinutes(settings.roundTime).TotalMilliseconds); roundTimer.AutoReset = false;
@@ -752,5 +753,49 @@ namespace MCForge
                 return String.Format("{1}{0}{2}{0}{3}", separator, this.x, this.y, this.z);
             }
         }
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (announceTimer != null)
+                        announceTimer.Dispose();
+                    if (voteTimer != null)
+                        voteTimer.Dispose();
+                    if (transferTimer != null)
+                        transferTimer.Dispose();
+                    if (map != null)
+                        map.Dispose();
+                    if (mapData != null)
+                        mapData.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

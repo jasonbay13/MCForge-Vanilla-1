@@ -75,7 +75,7 @@ namespace MCForge.Commands
         /// <param name="newRank">Group</param>
         public void ranker(Player p, Group newRank)
         {
-            string color = newRank.color;
+//            string color = newRank.color // Unused method, wasting mah .exe spaces;
             string oldrank = p.group.name;
 
             p.color = newRank.color;

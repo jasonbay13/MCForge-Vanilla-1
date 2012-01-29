@@ -75,7 +75,7 @@ namespace MCForge.Commands
             Player.SendMessage(p, "&c" + message);
             return;
         }
-        public class Crypto
+        public static class Crypto
         {
             private static byte[] _salt = Encoding.ASCII.GetBytes("o6806642kbM7c5");
 

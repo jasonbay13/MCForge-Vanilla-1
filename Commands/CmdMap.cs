@@ -29,7 +29,7 @@ namespace MCForge.Commands
         public override bool museumUsable { get { return true; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
         public CmdMap() { }
-        public static bool gettinginfo = false;
+        public static bool gettinginfo/* = false*/;
 
         public override void Use(Player p, string message)
         {

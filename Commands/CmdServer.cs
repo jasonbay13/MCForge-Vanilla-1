@@ -137,7 +137,7 @@ namespace MCForge.Commands
         }
 
         private void Save(bool withFiles, bool withDB, Player p) {
-            ParameterizedThreadStart pts = new ParameterizedThreadStart(CreatePackage);
+//            ParameterizedThreadStart pts = new ParameterizedThreadStart(CreatePackage) // Unused method, wasting mah .exe spaces;
             Thread doWork = new Thread(new ParameterizedThreadStart(CreatePackage));
             List<object> param = new List<object>();
             param.Add("MCForge.zip");
@@ -168,17 +168,6 @@ namespace MCForge.Commands
             Server.voteKickInProgress = false;
             Server.voteKickVotesNeeded = 0;
 
-            //Zombie
-            Server.ZombieModeOn = false;
-            Server.startZombieModeOnStartup = false;
-            Server.noRespawn = true;
-            Server.noLevelSaving = true;
-            Server.noPillaring = true;
-            Server.ZombieName = "";
-            Server.ChangeLevels = false;
-            Server.LevelList.Clear();
-            Server.ZombieOnlyServer = false;
-            Server.UseLevelList = true;
             //Settings
             #region Server Settings
             Server.salt = "";

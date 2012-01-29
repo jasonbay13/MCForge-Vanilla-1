@@ -38,8 +38,9 @@ namespace MCForge.Gui
         delegate void PlayerListCallback(List<Player> players);
         delegate void ReportCallback(Report r);
         delegate void VoidDelegate();
-        public static bool fileexists = false;
-        bool mapgen = false;
+        delegate void ShitOnAStick();
+        public static bool fileexists/* = false*/;
+        bool mapgen/* = false*/;
 
         PlayerCollection pc = new PlayerCollection(new PlayerListView());
         LevelCollection lc = new LevelCollection(new LevelListView());
@@ -146,13 +147,30 @@ namespace MCForge.Gui
                 try {
                     UpdateClientList(Player.players);
                     UpdateMapList("'");
+                    UpdateRanks();
+                    UpdateRankPlayers();
                 } catch {} // needed for slower computers
                 //Server.s.Log("Lists updated!");
 			}; UpdateListTimer.Start();
         }
 
         void btnPropertiesenable() { btnProperties.Enabled = true; }
-
+        void UpdateRanks()
+        {
+            if (this.InvokeRequired)
+            {
+                ShitOnAStick s = new ShitOnAStick(UpdateRanks);
+                this.Invoke(s);
+            }
+            else
+            {
+                Ranks.Items.Clear();
+                Group.GroupList.ForEach(delegate(Group g)
+                {
+                    Ranks.Items.Add(g.name);
+                });
+            }
+        }
         void SettingsUpdate()
         {
             if (Server.shuttingDown) return;
@@ -545,7 +563,7 @@ namespace MCForge.Gui
             PropertyForm.Show();
         }
 
-        public static bool prevLoaded = false;
+        public static bool prevLoaded/* = false*/;
         Form PropertyForm;
 
         private void Window_Resize(object sender, EventArgs e)
@@ -1960,6 +1978,89 @@ namespace MCForge.Gui
         private void UnloadedList_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            onlinep.Enabled = true;
+            offlinep.Enabled = false;
+            UpdateRankPlayers();
+        }
+        void UpdateRankPlayers()
+        {
+            if (this.InvokeRequired)
+            {
+                ShitOnAStick s = new ShitOnAStick(UpdateRankPlayers);
+                this.Invoke(s);
+            }
+            else
+            {
+                try
+                {
+                    Group g = Group.Find(Ranks.Items[Ranks.SelectedIndex].ToString());
+                    if (g == null)
+                        return;
+                    Players.Items.Clear();
+                    label41.Text = "Players in " + g.name + " Group:";
+                    g.playerList.All().ForEach(delegate(string name)
+                    {
+                        if (Player.Find(name) != null || onlinep.Enabled)
+                            Players.Items.Add(name);
+                    });
+                }
+                catch { }
+            }
+        }
+        private void Ranks_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                UpdateRankPlayers();
+            }
+            catch { }
+        }
+
+        private void tabPage8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void onlinep_Click(object sender, EventArgs e)
+        {
+            onlinep.Enabled = false;
+            offlinep.Enabled = true;
+            UpdateRankPlayers();
+        }
+
+        private void promote_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Command.all.Find("promote").Use(null, Players.Items[Players.SelectedIndex].ToString());
+                UpdateRankPlayers();
+            }
+            catch { }
+        }
+
+        private void demote_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Command.all.Find("demote").Use(null, Players.Items[Players.SelectedIndex].ToString());
+                UpdateRankPlayers();
+            }
+            catch { }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Group found = Group.findPlayerGroup(Players.Items[Players.SelectedIndex].ToString());
+                found.playerList.Remove(Players.Items[Players.SelectedIndex].ToString());
+                UpdateRankPlayers();
+            }
+            catch { }
         }
     }
 }

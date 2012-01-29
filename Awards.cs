@@ -24,7 +24,7 @@ using System.IO;
 
 namespace MCForge
 {
-    public class Awards
+    public static class Awards
     {
         public struct playerAwards { public string playerName; public List<string> awards; }
         public class awardData { 

@@ -189,7 +189,7 @@ namespace MCForge.Gui
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
-        public static bool EditTextOpen = false;
+        public static bool EditTextOpen/* = false*/;
 
         private void PropertyWindow_Unload(object sender, EventArgs e)
         {
@@ -259,7 +259,7 @@ namespace MCForge.Gui
             if (listBlocks.SelectedIndex == -1)
                 listBlocks.SelectedIndex = 0;
         }
-        public static bool prevLoaded = false;
+        public static bool prevLoaded/* = false*/;
         Form PropertyForm;
         //Form UpdateForm; // doesnt seem to be used, uncomment as needed.
         //Form EditTxtForm;
@@ -829,22 +829,12 @@ namespace MCForge.Gui
             Server.agreetorulesonentry = chkAgreeToRules.Checked;
             Server.adminsjoinsilent = chkAdminsJoinSilent.Checked;
             Server.server_owner = txtServerOwner.Text;
-            Server.startZombieModeOnStartup = chkZombieOnServerStart.Checked;
-            Server.noRespawn = chkNoRespawnDuringZombie.Checked;
-            Server.noLevelSaving = chkNoLevelSavingDuringZombie.Checked;
-            Server.noPillaring = chkNoPillaringDuringZombie.Checked;
-            Server.ZombieName = ZombieName.Text;
-            Server.ChangeLevels = chkEnableChangingLevels.Checked;
 
             string input = levelList.Text.Replace(" ", "").ToString();
             int itndex = input.IndexOf("#");
             if (itndex > 0)
                 input = input.Substring(0, itndex);
 
-            Server.LevelList = input.Split(',').ToList<string>();
-
-            Server.ZombieOnlyServer = chkZombieOnlyServer.Checked;
-            Server.UseLevelList = chkUseLevelList.Checked;
             Server.guestLimitNotify = chkGuestLimitNotify.Checked;
 
 
@@ -937,7 +927,7 @@ namespace MCForge.Gui
         {
             try
             {
-                int lastChar = int.Parse(foundTxt.Text[foundTxt.Text.Length - 1].ToString());
+//                int lastChar = int.Parse(foundTxt.Text[foundTxt.Text.Length - 1].ToString()) // Unused method, wasting mah .exe spaces;
             }
             catch
             {
@@ -1038,7 +1028,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             storedRanks[listRanks.SelectedIndex].color = c.Parse(cmbColor.Items[cmbColor.SelectedIndex].ToString());
         }
 
-        bool skip = false;
+        bool skip/* = false*/;
         private void listRanks_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (skip) return;

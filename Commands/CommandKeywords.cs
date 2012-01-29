@@ -39,8 +39,6 @@ namespace MCForge.Commands
             new CommandKeywords((new CmdAdminChat()), "admin chat opchat");
             new CommandKeywords((new CmdAfk()), "away dnd");
             new CommandKeywords((new CmdAgree()), "accept yes rules");
-            new CommandKeywords((new CmdAka()), "nick reset user name");
-            new CommandKeywords((new CmdAlive()), "life health living");
             new CommandKeywords((new CmdAllowGuns()), "allow gun missile shoot boom terrorism");
             new CommandKeywords((new CmdAscend()), "up level block move player");
             new CommandKeywords((new CmdAward()), "reward trophy price");
@@ -83,7 +81,7 @@ namespace MCForge.Commands
             new CommandKeywords((new CmdCopySaveNet()), "copy save clipboard");
             new CommandKeywords((new CmdCountdown()), "count down");
             new CommandKeywords((new CmdCrashServer()), "error stop server");
-            new CommandKeywords((new CmdCTF()), "capture flag");
+            //new CommandKeywords((new CmdCTF()), "capture flag");
             new CommandKeywords((new CmdCuboid()), "box set area block");
             new CommandKeywords((new CmdDelete()), "del mode");
             new CommandKeywords((new CmdDeleteLvl()), "delete remove level lvl");
@@ -92,13 +90,11 @@ namespace MCForge.Commands
             new CommandKeywords((new CmdDevs()), "dev mcforge forgeware forgecraft");
             new CommandKeywords((new CmdDisagree()), "no rules");
             new CommandKeywords((new CmdDescend()), "down below");
-            new CommandKeywords((new CmdDisInfect()), "infect player");
             new CommandKeywords((new CmdDraw()), "cone sphere pyramid create");
             new CommandKeywords((new CmdDrill()), "dig distance");
             new CommandKeywords((new CmdEconomy()), "money cash " + Server.moneys);
             new CommandKeywords((new CmdEllipse()), "create art");
             new CommandKeywords((new CmdEmote()), "smiley emoticon");
-            new CommandKeywords((new CmdEndRound()), "end round game");
             new CommandKeywords((new CmdExplode()), "explosion boom");
             new CommandKeywords((new CmdFakePay()), "fake troll pay " + Server.moneys);
             new CommandKeywords((new CmdFakeRank()), "rank mod fake troll");
@@ -106,7 +102,6 @@ namespace MCForge.Commands
             new CommandKeywords((new CmdFetch()), "summon move");
             new CommandKeywords((new CmdFill()), "cuboid edit");
             new CommandKeywords((new CmdFixGrass()), "grass fix");
-            new CommandKeywords((new CmdFlipHead()), "head fix flip troll");
             new CommandKeywords((new CmdFlipHeads()), "head fix flip troll");
             new CommandKeywords((new CmdFly()), "air ctf glass carpet");
             new CommandKeywords((new CmdFollow()), "posses impersonate");
@@ -133,8 +128,6 @@ namespace MCForge.Commands
             new CommandKeywords((new CmdImport()), "dat imp extra");
             new CommandKeywords((new CmdImageprint()), "jpg bmp gif png image print");
             new CommandKeywords((new CmdInbox()), "mail box");
-            new CommandKeywords((new CmdInfect()), "virus inf");
-            new CommandKeywords((new CmdInfected()), "infect player list");
             new CommandKeywords((new CmdInfo()), "server detail");
             new CommandKeywords((new CmdInvincible()), "god life inf");
             new CommandKeywords((new CmdJail()), "prison punish");
@@ -187,7 +180,6 @@ namespace MCForge.Commands
             new CommandKeywords((new CmdPatrol()), "teleport random");
             new CommandKeywords((new CmdPause()), "physics reset");
             new CommandKeywords((new CmdPay()), "money give " + Server.moneys);
-            new CommandKeywords((new CmdPlayerBlock()), "player block limit mod edit");
             new CommandKeywords((new CmdpCinema()), "cinema gif");
             new CommandKeywords((new CmdpCinema2()), "cinema gif");
             new CommandKeywords((new CmdPCount()), "player online total number count");
@@ -207,7 +199,6 @@ namespace MCForge.Commands
             new CommandKeywords((new CmdPumpkin()), "halloween");
             new CommandKeywords((new CmdPUnload()), "plugin unload");
             new CommandKeywords((new CmdPyramid()), "egypt pyram piram sand");
-            new CommandKeywords((new CmdQueue()), "zombie");
             new CommandKeywords((new CmdQuick()), "fast cuboid box");
             new CommandKeywords((new CmdRagequit()), "rage quit exit stop leave");
             new CommandKeywords((new CmdRainbow()), "rain bow dash");
@@ -215,7 +206,6 @@ namespace MCForge.Commands
             new CommandKeywords((new CmdRankMsg()), "rank msg edit set");
             new CommandKeywords((new CmdRedo()), "undo edit block change");
             new CommandKeywords((new CmdReload()), "level lvl map");
-            new CommandKeywords((new CmdReferee()), "enable disable ref mode");
             new CommandKeywords((new CmdRemote()), "rem access");
             new CommandKeywords((new CmdRenameLvl()), "rename lvl level map");
             new CommandKeywords((new CmdRepeat()), "rep again");
@@ -290,7 +280,6 @@ namespace MCForge.Commands
             new CommandKeywords((new CmdVoice()), "speak moderate");
             new CommandKeywords((new CmdVote()), "yes no ");
             new CommandKeywords((new CmdVoteKick()), "vote kick");
-            new CommandKeywords((new CmdVoteResults()), "vote result");
             new CommandKeywords((new CmdWarn()), "kick user");
             new CommandKeywords((new CmdWarp()), "move teleport tp pos");
             new CommandKeywords((new CmdWaypoint()), "way point");
@@ -307,7 +296,6 @@ namespace MCForge.Commands
             new CommandKeywords((new CmdXspawn()), "extra spawn");
             new CommandKeywords((new CmdXundo()), "undo extra");
             new CommandKeywords((new CmdZTime()), "zombie time");
-            new CommandKeywords((new CmdZombieGame()), "zombie game");
             new CommandKeywords((new CmdZone()), "area");
             new CommandKeywords((new CmdZz()), "static cuboid");
         }

@@ -21,6 +21,7 @@ using System;
 
 namespace MCForge.Commands
 {
+    //Give
     public class CmdDevs : Command
     {
         public override string name { get { return "devs"; } }

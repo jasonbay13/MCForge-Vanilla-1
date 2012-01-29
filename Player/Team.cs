@@ -22,10 +22,10 @@ using System.Collections.Generic;
 
 namespace MCForge
 {
-    public class Team
+    public class Team : IDisposable
     {
         public char color;
-        public int points = 0;
+        public int points/* = 0*/;
         public ushort[] flagBase = { 0, 0, 0 };
         public ushort[] flagLocation = { 0, 0, 0 };
         public List<Spawn> spawns = new List<Spawn>();
@@ -38,7 +38,7 @@ namespace MCForge
         public Player holdingFlag = null;
         public CatchPos tempFlagblock;
         public CatchPos tfb;
-        public int ftcount = 0;
+        public int ftcount/* = 0*/;
 
         public void AddMember(Player p)
         {
@@ -203,5 +203,43 @@ namespace MCForge
 
         public struct CatchPos { public ushort x, y, z; public byte type; }
         public struct Spawn { public ushort x, y, z, rotx, roty; }
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (mapOn != null)
+                        mapOn.Dispose();
+                    if (holdingFlag != null)
+                        holdingFlag.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

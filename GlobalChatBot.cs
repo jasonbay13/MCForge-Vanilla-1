@@ -35,8 +35,8 @@ namespace MCForge
 
         private Connection connection;
         private string server, channel, nick;
-        private bool reset = false;
-        private byte retries = 0;
+        private bool reset/* = false*/;
+        private byte retries/* = 0*/;
         public GlobalChatBot(string nick)
         {
             server = "irc.geekshed.net"; channel = "#MCForge"; this.nick = nick.Replace(" ", "");

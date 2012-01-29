@@ -1,3 +1,13 @@
+v5.4.1.0 (possibly 5.5 ...)
+- Custom level textures added
+- /patrol shortcut is /pa
+- Fix for invalid colors codes
+- Added GUI for submitting lava maps
+- Fix TNT Wars restting titles on leave
+- /xundo now happens before /kick in /uban
+- Zombie Survival has been re-made
+(to be continued)
+
 v5.4.0.4
 -Fixed physics error
 -Fixed physics not starting automaticly
