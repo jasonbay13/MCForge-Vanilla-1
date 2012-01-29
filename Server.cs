@@ -532,43 +532,116 @@ namespace MCForge
 
         public static int backupInterval = 300;
         public static int blockInterval = 60;
+        /// <summary>
+        /// Level backup location
+        /// </summary>
         public static string backupLocation = Application.StartupPath + "/levels/backups";
 
+
         public static bool physicsRestart = true;
+        /// <summary>
+        /// Have the server keep track of how many times a player dies?
+        /// </summary>
         public static bool deathcount = true;
+        /// <summary>
+        /// Autoload a level if a player tries to join and the level is unloaded?
+        /// </summary>
         public static bool AutoLoad/* = false*/;
+        /// <summary>
+        /// Max physics undo <seealso cref="CmdUndo"/>
+        /// </summary>
         public static int physUndo = 20000;
+        /// <summary>
+        /// Max undo <seealso cref="CmdUndo"/>
+        /// </summary>
         public static int totalUndo = 200;
         public static bool rankSuper = true;
+        /// <summary>
+        /// Use the old help from MCSharp
+        /// </summary>
         public static bool oldHelp/* = false*/;
         public static bool parseSmiley = true;
+        /// <summary>
+        /// Use a whitelist
+        /// </summary>
         public static bool useWhitelist/* = false*/;
+        /// <summary>
+        /// Only players who bought minecraft can join the server
+        /// </summary>
         public static bool PremiumPlayersOnly/* = false*/;
         public static bool forceCuboid/* = false*/;
+        /// <summary>
+        /// Add a profanity filter?
+        /// </summary>
         public static bool profanityFilter/* = false*/;
+        /// <summary>
+        /// Have the server announce a player has left or joined the server
+        /// </summary>
         public static bool notifyOnJoinLeave/* = false*/;
         public static bool repeatMessage/* = false*/;
         public static bool globalignoreops/* = false*/;
 
+        /// <summary>
+        /// Have the server check for updates?
+        /// </summary>
         public static bool checkUpdates = true;
 
+        /// <summary>
+        /// Use mysql (if set to false sqlite will be used)
+        /// </summary>
         public static bool useMySQL/* = false*/;
+        /// <summary>
+        /// The MySQL hostname
+        /// </summary>
         public static string MySQLHost = "127.0.0.1";
+        /// <summary>
+        /// The MySQL port
+        /// </summary>
         public static string MySQLPort = "3306";
+        /// <summary>
+        /// MySQL username
+        /// </summary>
         public static string MySQLUsername = "root";
+        /// <summary>
+        /// The MySQL password
+        /// </summary>
         public static string MySQLPassword = "password";
+        /// <summary>
+        /// The MySQL database name where the data will be stored
+        /// </summary>
         public static string MySQLDatabaseName = "MCZallDB";
         public static bool DatabasePooling = true;
 
+        /// <summary>
+        /// The default chat color for when a server makes an announcement
+        /// </summary>
         public static string DefaultColor = "&e";
+        /// <summary>
+        /// The default IRC Color
+        /// </summary>
         public static string IRCColour = "&5";
 
+        /// <summary>
+        /// Use globalchat
+        /// GlobalChat allows you to talk to other MCForge servers!
+        /// </summary>
         public static bool UseGlobalChat = true;
+        /// <summary>
+        /// The server's GlobalChat username
+        /// </summary>
         public static string GlobalChatNick = "MCF" + new Random().Next();
+        /// <summary>
+        /// The server's GlobalChat chat color
+        /// </summary>
         public static string GlobalChatColor = "&6";
 
-
+        /// <summary>
+        /// The number of minutes a player has to be not moving to be afk
+        /// </summary>
         public static int afkminutes = 10;
+        /// <summary>
+        /// The number of minutes a player has to be afk to be kicked by the server
+        /// </summary>
         public static int afkkick = 45;
         public static LevelPermission afkkickperm = LevelPermission.AdvBuilder;
         //public static int RemotePort = 1337; // Never used
@@ -579,34 +652,100 @@ namespace MCForge
         public static bool unsafe_plugin = true;
         public static bool cheapMessage = true;
         public static string cheapMessageGiven = " is now being cheap and being immortal";
+        /// <summary>
+        /// Use custom ban message
+        /// </summary>
         public static bool customBan/* = false*/;
+        /// <summary>
+        /// The kick message players get when they join a server that they are banned from
+        /// </summary>
         public static string customBanMessage = "You're banned!";
+        /// <summary>
+        /// Use custom shutdown message
+        /// </summary>
         public static bool customShutdown/* = false*/;
+        /// <summary>
+        /// The kick message players get when the server is about to shutdown
+        /// </summary>
         public static string customShutdownMessage = "Server shutdown. Rejoin in 10 seconds.";
         public static bool customGrieferStone/* = false*/;
+        /// <summary>
+        /// The message players get when they are caught griefing
+        /// </summary>
         public static string customGrieferStoneMessage = "Oh noes! You were caught griefing!";
+        /// <summary>
+        /// The message players get when they get promoted
+        /// </summary>
         public static string customPromoteMessage = "&6Congratulations for working hard and getting &2PROMOTED!";
+        /// <summary>
+        /// The message players get when they get demoted
+        /// </summary>
         public static string customDemoteMessage = "&4DEMOTED! &6We're sorry for your loss. Good luck on your future endeavors! &1:'(";
+        /// <summary>
+        /// What is the server currency
+        /// </summary>
         public static string moneys = "moneys";
+        /// <summary>
+        /// What ranks can see opchat
+        /// </summary>
         public static LevelPermission opchatperm = LevelPermission.Operator;
+        /// <summary>
+        /// What ranks can see adminchat
+        /// </summary>
         public static LevelPermission adminchatperm = LevelPermission.Admin;
+        /// <summary>
+        /// Log the heartbeart (Useful for debugging)
+        /// </summary>
         public static bool logbeat/* = false*/;
+        /// <summary>
+        /// Will the server not notify if an admin joins the server
+        /// </summary>
         public static bool adminsjoinsilent/* = false*/;
+        /// <summary>
+        /// Is the server using mono (This can't be set)
+        /// </summary>
         public static bool mono { get { return (Type.GetType("Mono.Runtime") != null); } }
+        /// <summary>
+        /// The server owner username
+        /// </summary>
         public static string server_owner = "Notch";
+        /// <summary>
+        /// Will the server pump to Wom Direct heartbeat
+        /// </summary>
         public static bool WomDirect/* = false*/;
-        public static bool UseSeasons/* = false*/;
+        //public static bool UseSeasons/* = false*/;
         public static bool guestLimitNotify/* = false*/;
+        /// <summary>
+        /// Will the server announce if a guest joins the server
+        /// </summary>
         public static bool guestJoinNotify = true;
+        /// <summary>
+        /// Will the server announce if a guest leaves the server
+        /// </summary>
         public static bool guestLeaveNotify = true;
 
+        /// <summary>
+        /// Is the server flipping everyones head?
+        /// </summary>
         public static bool flipHead/* = false*/;
 
+        /// <summary>
+        /// Is the server shutting down
+        /// </summary>
         public static bool shuttingDown/* = false*/;
+        /// <summary>
+        /// Is the server restarting
+        /// </summary>
         public static bool restarting/* = false*/;
 
         //hackrank stuff
+        /// <summary>
+        /// Kick the player if they use /hackrank
+        /// </summary>
         public static bool hackrank_kick = true;
+        /// <summary>
+        /// How many seconds it should wait before kicking the player when using hackrank
+        /// </summary>
         public static int hackrank_kick_time = 5; //seconds, it converts it to milliseconds in the command.
 
         // lol useless junk here lolololasdf poop
