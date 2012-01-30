@@ -2696,10 +2696,7 @@ return;
                                     {
                                         try
                                         {
-                                            if (Commands.core.Contains(command))
-                                            {
-                                            	wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + command.name);
-                                            }
+                                            wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + command.name);
                                         }
                                         catch
                                         {
