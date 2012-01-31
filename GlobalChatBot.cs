@@ -41,7 +41,8 @@ namespace MCForge
         {
             server = "irc.geekshed.net"; channel = "#MCForge"; this.nick = nick.Replace(" ", "");
             connection = new Connection(new ConnectionArgs(nick, server), true, false);
-            connection.CtcpResponder.VersionResponse = "MCForge " + Server.Version;
+            connection.CtcpResponder = new CtcpResponder(connection);
+            connection.CtcpResponder.VersionResponse = "MCForge " + Server.Version; // cant set Null.VersonResponse, tis why i added the line above.
             if (Server.UseGlobalChat)
             {
                 // Register events for server
