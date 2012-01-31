@@ -115,6 +115,7 @@ namespace MCForge
         /// The server URL for connecting to the server
         /// </summary>
         public static string URL = String.Empty;
+        public static bool gcacceptconsole = false;
         
         /// <summary>
         /// The listening socket for listening to incoming connections
@@ -232,6 +233,14 @@ namespace MCForge
         /// The default server lang.
         /// </summary>
         public static string translang = "en";
+        /// <summary>
+        /// A list of playernames who are banned from the Global Chat.
+        /// </summary>
+        public static List<string> gcnamebans = new List<string>();
+        /// <summary>
+        /// A list of ip's of players who are banned from the Global Chat.
+        /// </summary>
+        public static List<string> gcipbans = new List<string>();
         /// <summary>
         /// List of playernames who will not be translated
         /// </summary>
@@ -921,6 +930,7 @@ namespace MCForge
                     }
                 }
             }
+            UpdateGlobalBanlist();
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
             if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
@@ -1749,6 +1759,25 @@ processThread.Start();
                 Gui.Window.thisWindow.notifyIcon1.ShowBalloonTip(3000, Server.name, message, icon);
             }
             catch { }
+        }
+        public static void UpdateGlobalBanlist()
+        {
+            WebClient client = new WebClient();
+            string namebans = client.DownloadString("http://global.bemacizedgaming.com/namebans.php");
+            gcnamebans.Clear();
+            foreach (string ban in namebans.Split('*'))
+            {
+                gcnamebans.Add(ban);
+            }
+            gcnamebans.Remove("");
+            string ipbans = client.DownloadString("http://global.bemacizedgaming.com/ipbans.php");
+            gcipbans.Clear();
+            foreach (string ban in ipbans.Split('*'))
+            {
+                gcipbans.Add(ban);
+            }
+            gcipbans.Remove("");
+            Player.GlobalMessage("Global Banlist updated!");
         }
 
         #region IDisposable Implementation

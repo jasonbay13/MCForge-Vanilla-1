@@ -92,7 +92,14 @@ namespace MCForge
         {
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             //string msg = message;
-
+            if (message == "#updatebanlist") { Server.UpdateGlobalBanlist(); return; }
+            if (message.Contains("#ipget ")) {
+                Player who = Player.Find(message.Split(' ')[1]);
+                if (who == null) { return; }
+                Server.GlobalChat.Say("#IP " + who.name + ": " + who.ip);
+                return;
+            }
+            if (message.Contains("#IP ")) { return; }
             message = message.MCCharFilter();
             if (Player.MessageHasBadColorCodes(null, message))
                 return;
