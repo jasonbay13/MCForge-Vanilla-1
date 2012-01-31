@@ -40,10 +40,14 @@ namespace MCForge
         public GlobalChatBot(string nick)
         {
             server = "irc.geekshed.net"; channel = "#MCForge"; this.nick = nick.Replace(" ", "");
-            connection = new Connection(new ConnectionArgs(nick, server), false, false);
+            connection = new Connection(new ConnectionArgs(nick, server), true, false);
+            connection.CtcpResponder.VersionResponse = "MCForge " + Server.Version;
             if (Server.UseGlobalChat)
             {
-                // Regster events for incoming
+                // Register events for server
+                Server.s.OnURLChange += new Server.MessageEventHandler(Server_URLChange);
+
+                // Register events for incoming
                 connection.Listener.OnNickError += new NickErrorEventHandler(Listener_OnNickError);
                 connection.Listener.OnRegistered += new RegisteredEventHandler(Listener_OnRegistered);
                 connection.Listener.OnPublic += new PublicMessageEventHandler(Listener_OnPublic);
@@ -128,6 +132,11 @@ namespace MCForge
                 connection.Sender.Join(channel);
             }
 
+        }
+
+        void Server_URLChange(string url)
+        {
+            connection.CtcpResponder.VersionResponse = "MCForge " + Server.Version + " - " + url;
         }
 
         public void Connect()
