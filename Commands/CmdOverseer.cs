@@ -18,7 +18,7 @@
 using System;
 using System.IO;
 using System.Linq;
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdOverseer : Command
@@ -33,7 +33,7 @@ namespace MCForge.Commands
         {
 
             if (message == "") { Help(p); return; }
-            Player who = Player.Find(message.Split(' ')[0]);
+//            Player who = Player.Find(message.Split(' ')[0]) // Unused method, wasting mah .exe spaces;
             string cmd = message.Split(' ')[0].ToUpper();
 
             string par;

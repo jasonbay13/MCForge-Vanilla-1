@@ -26,7 +26,7 @@ using System.Net;
 using System.Security.Authentication;
 using System.Text;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdSetPass : Command
@@ -75,7 +75,7 @@ namespace MCForge.Commands
             Player.SendMessage(p, "&c" + message);
             return;
         }
-        public class Crypto
+        public static class Crypto
         {
             private static byte[] _salt = Encoding.ASCII.GetBytes("o6806642kbM7c5");
 

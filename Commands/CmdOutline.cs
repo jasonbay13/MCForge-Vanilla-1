@@ -18,7 +18,7 @@
 using System;
 using System.Collections.Generic;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdOutline : Command
@@ -108,10 +108,11 @@ namespace MCForge.Commands
 
             if (p.staticCommands) p.Blockchange += new Player.BlockchangeEventHandler(Blockchange1);
         }
-        void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)
-        {
-            Pos pos; pos.x = x; pos.y = y; pos.z = z; list.Add(pos);
-        }
+//  Unused method, wasting mah .exe spaces
+//        void BufferAdd(List<Pos> list, ushort x, ushort y, ushort z)
+//        {
+//            Pos pos; pos.x = x; pos.y = y; pos.z = z; list.Add(pos);
+//        }
 
         struct Pos
         {

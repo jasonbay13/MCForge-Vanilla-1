@@ -32,7 +32,7 @@ namespace MCForge.Gui
 {
     public partial class PropertyWindow : Form
     {
-        Form lavaMapBrowser;
+        Form lavaMapBrowser, accountSetup;
         System.Timers.Timer lavaUpdateTimer;
         string lsLoadedMap = "";
 
@@ -47,6 +47,7 @@ namespace MCForge.Gui
         private void PropertyWindow_Load(object sender, EventArgs e)
         {
             lavaMapBrowser = new LavaMapBrowser();
+            accountSetup = new MCForgeAccountSetup();
 
             Object[] colors = new Object[16];
             colors[0] = ("black"); colors[1] = ("navy");
@@ -188,12 +189,13 @@ namespace MCForge.Gui
             catch (Exception ex) { Server.ErrorLog(ex); }
         }
 
-        public static bool EditTextOpen = false;
+        public static bool EditTextOpen/* = false*/;
 
         private void PropertyWindow_Unload(object sender, EventArgs e)
         {
             lavaUpdateTimer.Dispose();
             lavaMapBrowser.Dispose();
+            accountSetup.Dispose();
             Window.prevLoaded = false;
             TntWarsGame.GuiLoaded = null;
         }
@@ -257,7 +259,7 @@ namespace MCForge.Gui
             if (listBlocks.SelectedIndex == -1)
                 listBlocks.SelectedIndex = 0;
         }
-        public static bool prevLoaded = false;
+        public static bool prevLoaded/* = false*/;
         Form PropertyForm;
         //Form UpdateForm; // doesnt seem to be used, uncomment as needed.
         //Form EditTxtForm;
@@ -465,10 +467,6 @@ namespace MCForge.Gui
                                         cmbDefaultRank.SelectedIndex = cmbDefaultRank.Items.IndexOf(value.ToLower());
                                 }
                                 catch { cmbDefaultRank.SelectedIndex = 1; }
-                                break;
-
-                            case "old-help":
-                                chkHelp.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
 
                             case "cheapmessage":
@@ -813,7 +811,6 @@ namespace MCForge.Gui
             Server.rpLimit = int.Parse(txtRP.Text);
             Server.rpNormLimit = int.Parse(txtRP.Text);
             Server.physicsRestart = chkPhysicsRest.Checked;
-            Server.oldHelp = chkHelp.Checked;
             Server.deathcount = chkDeath.Checked;
             Server.afkminutes = int.Parse(txtafk.Text);
             Server.afkkick = int.Parse(txtAFKKick.Text);
@@ -832,22 +829,12 @@ namespace MCForge.Gui
             Server.agreetorulesonentry = chkAgreeToRules.Checked;
             Server.adminsjoinsilent = chkAdminsJoinSilent.Checked;
             Server.server_owner = txtServerOwner.Text;
-            Server.startZombieModeOnStartup = chkZombieOnServerStart.Checked;
-            Server.noRespawn = chkNoRespawnDuringZombie.Checked;
-            Server.noLevelSaving = chkNoLevelSavingDuringZombie.Checked;
-            Server.noPillaring = chkNoPillaringDuringZombie.Checked;
-            Server.ZombieName = ZombieName.Text;
-            Server.ChangeLevels = chkEnableChangingLevels.Checked;
 
             string input = levelList.Text.Replace(" ", "").ToString();
             int itndex = input.IndexOf("#");
             if (itndex > 0)
                 input = input.Substring(0, itndex);
 
-            Server.LevelList = input.Split(',').ToList<string>();
-
-            Server.ZombieOnlyServer = chkZombieOnlyServer.Checked;
-            Server.UseLevelList = chkUseLevelList.Checked;
             Server.guestLimitNotify = chkGuestLimitNotify.Checked;
 
 
@@ -940,7 +927,7 @@ namespace MCForge.Gui
         {
             try
             {
-                int lastChar = int.Parse(foundTxt.Text[foundTxt.Text.Length - 1].ToString());
+//                int lastChar = int.Parse(foundTxt.Text[foundTxt.Text.Length - 1].ToString()) // Unused method, wasting mah .exe spaces;
             }
             catch
             {
@@ -1041,7 +1028,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             storedRanks[listRanks.SelectedIndex].color = c.Parse(cmbColor.Items[cmbColor.SelectedIndex].ToString());
         }
 
-        bool skip = false;
+        bool skip/* = false*/;
         private void listRanks_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (skip) return;
@@ -2871,6 +2858,22 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             msg += Environment.NewLine;
             msg += "Extreme (1 Hit to die, TNT has short delay, big explosion and team kills are on)";
             MessageBox.Show(msg, "Difficulty");
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                accountSetup.Show();
+                accountSetup.Focus();
+            }
+            catch (ObjectDisposedException)
+            {
+                accountSetup = new MCForgeAccountSetup();
+                accountSetup.Show();
+                accountSetup.Focus();
+            }
+            catch (Exception ex) { Server.ErrorLog(ex); }
         }
     }
 }

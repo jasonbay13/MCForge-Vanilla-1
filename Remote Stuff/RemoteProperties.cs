@@ -20,7 +20,7 @@ using System.IO;
 
 namespace MCForge.Remote
 {
-    public class RemoteProperties
+    public static class RemoteProperties
     {
         public static void Load()
         {

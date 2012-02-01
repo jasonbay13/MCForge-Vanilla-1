@@ -138,5 +138,12 @@ namespace MCForge
             }
             return sb.ToString();
         }
+        public static string GetMimeType(this FileInfo file)
+        {
+            Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(file.Extension.ToLower());
+            if (rk != null && rk.GetValue("Content Type") != null)
+                return rk.GetValue("Content Type").ToString();
+            return "application/octet-stream";
+        }
     }
 }

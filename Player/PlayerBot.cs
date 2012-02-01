@@ -27,21 +27,21 @@ using System.Security.Cryptography;
 
 namespace MCForge
 {
-    public sealed class PlayerBot
+    public sealed class PlayerBot : IDisposable
     {
         public static List<PlayerBot> playerbots = new List<PlayerBot>(64);
 
-        public bool hunt = false;
-        public bool kill = false;
+        public bool hunt/* = false*/;
+        public bool kill/* = false*/;
 
         public string AIName = "";
         public string name;
         public byte id;
         public string color;
         public Level level;
-        public int currentPoint = 0;
-        public int countdown = 0;
-        public bool nodUp = false;
+        public int currentPoint/* = 0*/;
+        public int countdown/* = 0*/;
+        public bool nodUp/* = false*/;
         public List<Pos> Waypoints = new List<Pos>();
         public struct Pos { public string type, newscript; public int seconds, rotspeed; public ushort x, y, z; public byte rotx, roty; }
 
@@ -53,10 +53,10 @@ namespace MCForge
 
         ushort[] foundPos = new ushort[3] { 0, 0, 0 };
         byte[] foundRot = new byte[2] { 0, 0 };
-        bool movement = false;
+        bool movement/* = false*/;
         public int movementSpeed = 24;
-        bool jumping = false;
-        int currentjump = 0;
+        bool jumping/* = false*/;
+        int currentjump/* = 0*/;
 
         public System.Timers.Timer botTimer = new System.Timers.Timer(100);
         public System.Timers.Timer moveTimer = new System.Timers.Timer(100 / 24);
@@ -541,16 +541,60 @@ namespace MCForge
         {
             byte[] y = BitConverter.GetBytes(x); Array.Reverse(y); return y;
         }
-        ushort NTHO(byte[] x, int offset)
+//  Unused method, wasting mah .exe spaces
+//        ushort NTHO(byte[] x, int offset)
+//        {
+//            byte[] y = new byte[2];
+//            Buffer.BlockCopy(x, offset, y, 0, 2); Array.Reverse(y);
+//            return BitConverter.ToUInt16(y, 0);
+//        }
+//  Unused method, wasting mah .exe spaces
+//        byte[] HTNO(short x)
+//        {
+//            byte[] y = BitConverter.GetBytes(x); Array.Reverse(y); return y;
+//        }
+        #endregion
+
+        #region IDisposable Implementation
+
+        private bool disposed = false;
+
+        public void Dispose(bool disposing)
         {
-            byte[] y = new byte[2];
-            Buffer.BlockCopy(x, offset, y, 0, 2); Array.Reverse(y);
-            return BitConverter.ToUInt16(y, 0);
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (level != null)
+                        level.Dispose();
+                    if (botTimer != null)
+                        botTimer.Dispose();
+                    if (moveTimer != null)
+                        moveTimer.Dispose();
+                    if (jumpTimer != null)
+                        jumpTimer.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
         }
-        byte[] HTNO(short x)
+
+        public void Dispose()
         {
-            byte[] y = BitConverter.GetBytes(x); Array.Reverse(y); return y;
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
         }
+
         #endregion
     }
 }

@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 namespace MCForge.CTF
 {
+    //FUCK
     /// <summary>
     /// This is the plugin CTFSetup
     /// This plugin will create CTF Config files for you by using the command
@@ -190,7 +191,7 @@ namespace MCForge.CTF
             if (cmd.ToLower() == "ctfsetup")
             {
                 Level current = p.level;
-                int middle = p.level.height / 2;
+//                int middle = p.level.height / 2 // Unused method, wasting mah .exe spaces;
                 Player.SendMessage(p, "%2Hello and welcome to the noob friendly CTF setup :D");
                 if (!Directory.Exists("CTF")) Directory.CreateDirectory("CTF");
                 Player.SendMessage(p, "I'll setup this map, but first can you stand in the middle of the map?");
@@ -217,17 +218,17 @@ namespace MCForge.CTF
             Player.PlayerDisconnect -= disconnect;
         }
     }
-    class Data
+    class Data : IDisposable
     {
         public Step s;
         public Level current;
-        public int middle = 0;
-        public int bx = 0;
-        public int by = 0;
-        public int bz = 0;
-        public int rx = 0;
-        public int ry = 0;
-        public int rz = 0;
+        public int middle/* = 0*/;
+        public int bx/* = 0*/;
+        public int by/* = 0*/;
+        public int bz/* = 0*/;
+        public int rx/* = 0*/;
+        public int ry/* = 0*/;
+        public int rz/* = 0*/;
         public byte blue;
         public byte red;
         public int bluex;
@@ -237,6 +238,42 @@ namespace MCForge.CTF
         {
 
         }
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (current != null)
+                        current.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
     enum Step
     {

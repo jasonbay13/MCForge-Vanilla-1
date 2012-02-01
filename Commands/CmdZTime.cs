@@ -17,7 +17,7 @@
 */
 using System;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdZTime : Command
@@ -31,8 +31,7 @@ namespace MCForge.Commands
 
         public override void Use(Player p, string message)
         {        
-        	return;
-            if (Server.zombie.ZombieStatus() == 0) { Player.SendMessage(p, "There is no Zombie Survival game currently in progress."); return; }
+            /*if (Server.zombie.ZombieStatus() == 0) { Player.SendMessage(p, "There is no Zombie Survival game currently in progress."); return; }
             if (!Server.zombieRound) { p.SendMessage("The current zombie round hasn't started yet!"); return; }
 
             TimeSpan t = TimeSpan.FromMilliseconds(Server.zombie.amountOfMilliseconds);
@@ -41,7 +40,7 @@ namespace MCForge.Commands
                                     t.Minutes,
                                     t.Seconds);
             message = time + " remaining for the current round!";
-            Player.SendMessage(p, message);
+            Player.SendMessage(p, message);*/
         }
         public override void Help(Player p)
         {

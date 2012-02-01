@@ -26,15 +26,15 @@ namespace MCForge
 {
     public class ForgeBot
     {
-        public static readonly string ColorSignal = "\x03";
-        public static readonly string ResetSignal = "\x0F";
+        public const string ColorSignal = "\x03";
+        public const string ResetSignal = "\x0F";
         private Connection connection;
         private List<string> banCmd;
         private string channel, opchannel;
         private string nick;
         private string server;
-        private bool reset = false;
-        private byte retries = 0;
+        private bool reset/* = false*/;
+        private byte retries/* = 0*/;
         public string usedCmd = "";
         public ForgeBot(string channel, string opchannel, string nick, string server)
         {

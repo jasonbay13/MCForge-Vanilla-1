@@ -24,7 +24,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdImageprint : Command
@@ -327,7 +327,7 @@ namespace MCForge.Commands
         public struct CatchPos { public ushort x, y, z; }
 
         string bitmaplocation;
-        bool layer = false;
+        bool layer/* = false*/;
         byte popType = 1;
     }
 }

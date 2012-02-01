@@ -18,7 +18,7 @@
 using System;
 using System.IO;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdGoto : Command
@@ -103,19 +103,6 @@ namespace MCForge.Commands
                                 }
                             }
 
-                            if (Server.zombie.GameInProgess())
-                            {
-                                if (p.level.name == Server.zombie.currentLevelName)
-                                    Server.zombie.InfectedPlayerLogin(p);
-                            }
-
-                            if (p.level.name != Server.zombie.currentLevelName)
-                            {
-                                if(ZombieGame.alive.Contains(p))
-                                ZombieGame.alive.Remove(p);
-                                if (ZombieGame.infectd.Contains(p))
-                                ZombieGame.infectd.Remove(p);
-                            }
                             if (p.inTNTwarsMap)
                             {
                                 p.canBuild = true;

@@ -22,7 +22,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Threading;
-using MCForge;
+
 using System.Net;
 
 namespace MCForge.Gui
@@ -38,8 +38,9 @@ namespace MCForge.Gui
         delegate void PlayerListCallback(List<Player> players);
         delegate void ReportCallback(Report r);
         delegate void VoidDelegate();
-        public static bool fileexists = false;
-        bool mapgen = false;
+        delegate void ShitOnAStick();
+        public static bool fileexists/* = false*/;
+        bool mapgen/* = false*/;
 
         PlayerCollection pc = new PlayerCollection(new PlayerListView());
         LevelCollection lc = new LevelCollection(new LevelListView());
@@ -146,13 +147,30 @@ namespace MCForge.Gui
                 try {
                     UpdateClientList(Player.players);
                     UpdateMapList("'");
+                    UpdateRanks();
+                    UpdateRankPlayers();
                 } catch {} // needed for slower computers
                 //Server.s.Log("Lists updated!");
 			}; UpdateListTimer.Start();
         }
 
         void btnPropertiesenable() { btnProperties.Enabled = true; }
-
+        void UpdateRanks()
+        {
+            if (this.InvokeRequired)
+            {
+                ShitOnAStick s = new ShitOnAStick(UpdateRanks);
+                this.Invoke(s);
+            }
+            else
+            {
+                Ranks.Items.Clear();
+                Group.GroupList.ForEach(delegate(Group g)
+                {
+                    Ranks.Items.Add(g.name);
+                });
+            }
+        }
         void SettingsUpdate()
         {
             if (Server.shuttingDown) return;
@@ -504,7 +522,7 @@ namespace MCForge.Gui
                                     }
                                     catch
                                     {
-                                        Server.s.Log("The command data sending failed! If this happens more often I suggest to turn it off.");
+                                        Server.s.Log("The command data sending failed! If this happens often you should turn it off.");
                                     }
                                 }
                             }).Start();
@@ -545,7 +563,7 @@ namespace MCForge.Gui
             PropertyForm.Show();
         }
 
-        public static bool prevLoaded = false;
+        public static bool prevLoaded/* = false*/;
         Form PropertyForm;
 
         private void Window_Resize(object sender, EventArgs e)
@@ -1910,10 +1928,18 @@ namespace MCForge.Gui
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (txtGlobalInput.Text == null || txtGlobalInput.Text.Trim() == "") { return; }
-                try { Command.all.Find("global").Use(null, txtGlobalInput.Text.Trim()); }
-                catch (Exception ex) { Server.ErrorLog(ex); }
-                txtGlobalInput.Clear();
+                if (Server.gcacceptconsole)
+                {
+                    if (txtGlobalInput.Text == null || txtGlobalInput.Text.Trim() == "") { return; }
+                    try { Command.all.Find("global").Use(null, txtGlobalInput.Text.Trim()); }
+                    catch (Exception ex) { Server.ErrorLog(ex); }
+                    txtGlobalInput.Clear();
+                }
+                else
+                {
+                    MessageBox.Show("By using the Global Chat you agree to the following rules:" + Environment.NewLine + "1. No Spamming" + Environment.NewLine + "2. No Advertising (Trying to get people to come to your server)" + Environment.NewLine + "3. No links" + Environment.NewLine + "4. No excessive Cursing (You are allowed to curse, but not pointed at anybody)" + Environment.NewLine + "5. No use of $ variables." + Environment.NewLine + "6. English only. No exceptions" + Environment.NewLine + "7. Be respectful" + Environment.NewLine + "8. Do not ask for ranks" + Environment.NewLine + "9. Do not ask for a server's name" + Environment.NewLine + "10. use common sense" + Environment.NewLine + "11. Don't say your server name.");
+                    Server.gcacceptconsole = true;
+                }
             }
         }
 
@@ -1932,12 +1958,19 @@ namespace MCForge.Gui
 
         private void button1_Click(object sender, EventArgs e)
         {
-            /*if (GetSelectedLevel() != null)
+            if (GetSelectedLevelTab() != null)
             {
                 GUI.Textures textures = new GUI.Textures();
-                textures.l = GetSelectedLevel();
+                textures.l = GetSelectedLevelTab();
+                Server.s.Log(textures.l.name);
                 textures.Show();
-            }*/
+                textures.FormClosing += delegate
+                {
+                    textures.l = null;
+                    textures.Hide();
+                    textures.Dispose();
+                };
+            }
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
@@ -1953,6 +1986,89 @@ namespace MCForge.Gui
         private void UnloadedList_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            onlinep.Enabled = true;
+            offlinep.Enabled = false;
+            UpdateRankPlayers();
+        }
+        void UpdateRankPlayers()
+        {
+            if (this.InvokeRequired)
+            {
+                ShitOnAStick s = new ShitOnAStick(UpdateRankPlayers);
+                this.Invoke(s);
+            }
+            else
+            {
+                try
+                {
+                    Group g = Group.Find(Ranks.Items[Ranks.SelectedIndex].ToString());
+                    if (g == null)
+                        return;
+                    Players.Items.Clear();
+                    label41.Text = "Players in " + g.name + " Group:";
+                    g.playerList.All().ForEach(delegate(string name)
+                    {
+                        if (Player.Find(name) != null || onlinep.Enabled)
+                            Players.Items.Add(name);
+                    });
+                }
+                catch { }
+            }
+        }
+        private void Ranks_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                UpdateRankPlayers();
+            }
+            catch { }
+        }
+
+        private void tabPage8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void onlinep_Click(object sender, EventArgs e)
+        {
+            onlinep.Enabled = false;
+            offlinep.Enabled = true;
+            UpdateRankPlayers();
+        }
+
+        private void promote_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Command.all.Find("promote").Use(null, Players.Items[Players.SelectedIndex].ToString());
+                UpdateRankPlayers();
+            }
+            catch { }
+        }
+
+        private void demote_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Command.all.Find("demote").Use(null, Players.Items[Players.SelectedIndex].ToString());
+                UpdateRankPlayers();
+            }
+            catch { }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Group found = Group.findPlayerGroup(Players.Items[Players.SelectedIndex].ToString());
+                found.playerList.Remove(Players.Items[Players.SelectedIndex].ToString());
+                UpdateRankPlayers();
+            }
+            catch { }
         }
     }
 }

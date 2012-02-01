@@ -21,7 +21,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdpCinema : Command
@@ -116,15 +116,15 @@ namespace MCForge.Commands
         }
     }
 
-    public class CmdpCinema2 : Command
+    public class CmdpCinema2 : Command, IDisposable
     {
 
         String FilePath;
         int frameLonging;
         String temp = "";
         CFrame[] Frames;
-        int FrameCount = 0;
-        int Framenow = 0;
+        int FrameCount/* = 0*/;
+        int Framenow/* = 0*/;
         System.Timers.Timer lool;
         Player MEEE;
         public bool running;
@@ -302,5 +302,45 @@ namespace MCForge.Commands
         {
             Player.SendMessage(p, "/pcinema2 should not be used directly. better use pcinema.");
         }
+
+        #region IDisposable Implementation
+
+        protected bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this)
+            {
+                // Do nothing if the object has already been disposed of.
+                if (disposed)
+                    return;
+
+                if (disposing)
+                {
+                    // Release diposable objects used by this instance here.
+
+                    if (lool != null)
+                        lool.Dispose();
+                    if (MEEE != null)
+                        MEEE.Dispose();
+                    if (plLevel != null)
+                        plLevel.Dispose();
+                }
+
+                // Release unmanaged resources here. Don't access reference type fields.
+
+                // Remember that the object has been disposed of.
+                disposed = true;
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Dispose(true);
+            // Unregister object for finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
     }
 }

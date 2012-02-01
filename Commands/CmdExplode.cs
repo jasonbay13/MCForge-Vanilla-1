@@ -20,8 +20,6 @@
 */
 using System;
 using System.Collections.Generic;
-using MCForge;
-using MCForge;
 namespace MCForge.Commands
 {
     class CmdExplode : Command
@@ -107,7 +105,7 @@ namespace MCForge.Commands
                     }
                     catch { Player.SendMessage(p, "Invalid parameters"); return; }
 
-                    Level level = p.level;
+//                    Level level = p.level // Unused method, wasting mah .exe spaces;
 
                     if (y >= p.level.depth) y = (ushort)(p.level.depth - 1);
 

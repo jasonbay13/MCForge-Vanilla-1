@@ -87,7 +87,6 @@ namespace MCForge.Gui
             this.extracmdpermperm = new System.Windows.Forms.TextBox();
             this.listCommandsExtraCmdPerms = new System.Windows.Forms.ListBox();
             this.label24 = new System.Windows.Forms.Label();
-            this.chkHelp = new System.Windows.Forms.CheckBox();
             this.chkPhysicsRest = new System.Windows.Forms.CheckBox();
             this.chkDeath = new System.Windows.Forms.CheckBox();
             this.chkCheap = new System.Windows.Forms.CheckBox();
@@ -161,7 +160,7 @@ namespace MCForge.Gui
             this.listBlocks = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.txtGrpMOTD = new System.Windows.Forms.TextBox();
-            this.label85 = new System.Windows.Forms.Label();
+            this.lblMOTD = new System.Windows.Forms.Label();
             this.txtMaxUndo = new System.Windows.Forms.TextBox();
             this.label52 = new System.Windows.Forms.Label();
             this.lblColor = new System.Windows.Forms.Label();
@@ -178,6 +177,7 @@ namespace MCForge.Gui
             this.button1 = new System.Windows.Forms.Button();
             this.btnAddRank = new System.Windows.Forms.Button();
             this.listRanks = new System.Windows.Forms.ListBox();
+            this.label85 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.groupBox24 = new System.Windows.Forms.GroupBox();
             this.groupBox18 = new System.Windows.Forms.GroupBox();
@@ -325,26 +325,11 @@ namespace MCForge.Gui
             this.lsRemoveMap = new System.Windows.Forms.Button();
             this.lsMapNoUse = new System.Windows.Forms.ListBox();
             this.lsMapUse = new System.Windows.Forms.ListBox();
-            this.tabPage11 = new System.Windows.Forms.TabPage();
-            this.groupBox16 = new System.Windows.Forms.GroupBox();
-            this.levelList = new System.Windows.Forms.TextBox();
-            this.label78 = new System.Windows.Forms.Label();
-            this.label77 = new System.Windows.Forms.Label();
-            this.chkEnableChangingLevels = new System.Windows.Forms.CheckBox();
-            this.chkZombieOnlyServer = new System.Windows.Forms.CheckBox();
-            this.chkUseLevelList = new System.Windows.Forms.CheckBox();
-            this.chkNoPillaringDuringZombie = new System.Windows.Forms.CheckBox();
-            this.ZombieName = new System.Windows.Forms.TextBox();
-            this.label46 = new System.Windows.Forms.Label();
-            this.chkNoLevelSavingDuringZombie = new System.Windows.Forms.CheckBox();
-            this.chkNoRespawnDuringZombie = new System.Windows.Forms.CheckBox();
-            this.chkZombieOnServerStart = new System.Windows.Forms.CheckBox();
             this.tabPage14 = new System.Windows.Forms.TabPage();
             this.SlctdTntWrsPlyrs = new System.Windows.Forms.TextBox();
             this.label87 = new System.Windows.Forms.Label();
             this.SlctdTntWrdStatus = new System.Windows.Forms.TextBox();
             this.label86 = new System.Windows.Forms.Label();
-            this.lblMOTD = new System.Windows.Forms.Label();
             this.SlctdTntWrsLvl = new System.Windows.Forms.TextBox();
             this.groupBox29 = new System.Windows.Forms.GroupBox();
             this.groupBox36 = new System.Windows.Forms.GroupBox();
@@ -380,6 +365,20 @@ namespace MCForge.Gui
             this.TntWrsRstGame = new System.Windows.Forms.Button();
             this.EditTntWarsGameBT = new System.Windows.Forms.Button();
             this.TntWarsGamesList = new System.Windows.Forms.ListBox();
+            this.tabPage11 = new System.Windows.Forms.TabPage();
+            this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.levelList = new System.Windows.Forms.TextBox();
+            this.label78 = new System.Windows.Forms.Label();
+            this.label77 = new System.Windows.Forms.Label();
+            this.chkEnableChangingLevels = new System.Windows.Forms.CheckBox();
+            this.chkZombieOnlyServer = new System.Windows.Forms.CheckBox();
+            this.chkUseLevelList = new System.Windows.Forms.CheckBox();
+            this.chkNoPillaringDuringZombie = new System.Windows.Forms.CheckBox();
+            this.ZombieName = new System.Windows.Forms.TextBox();
+            this.label46 = new System.Windows.Forms.Label();
+            this.chkNoLevelSavingDuringZombie = new System.Windows.Forms.CheckBox();
+            this.chkNoRespawnDuringZombie = new System.Windows.Forms.CheckBox();
+            this.chkZombieOnServerStart = new System.Windows.Forms.CheckBox();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.numCountReset = new System.Windows.Forms.NumericUpDown();
@@ -413,6 +412,7 @@ namespace MCForge.Gui
             this.groupBox25 = new System.Windows.Forms.GroupBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.button5 = new System.Windows.Forms.Button();
             this.tabPage3.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -469,8 +469,6 @@ namespace MCForge.Gui
             this.groupBox22.SuspendLayout();
             this.groupBox21.SuspendLayout();
             this.groupBox20.SuspendLayout();
-            this.tabPage11.SuspendLayout();
-            this.groupBox16.SuspendLayout();
             this.tabPage14.SuspendLayout();
             this.groupBox29.SuspendLayout();
             this.groupBox36.SuspendLayout();
@@ -485,6 +483,8 @@ namespace MCForge.Gui
             ((System.ComponentModel.ISupportInitialize)(this.TntWrsScrPrKlUpDwn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.TntWrsScrLmtUpDwn)).BeginInit();
             this.groupBox30.SuspendLayout();
+            this.tabPage11.SuspendLayout();
+            this.groupBox16.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.groupBox15.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numCountReset)).BeginInit();
@@ -948,18 +948,6 @@ namespace MCForge.Gui
             this.label24.Text = "/rp limit:";
             this.toolTip.SetToolTip(this.label24, "Limit for custom physics set by /rp");
             // 
-            // chkHelp
-            // 
-            this.chkHelp.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkHelp.AutoSize = true;
-            this.chkHelp.Location = new System.Drawing.Point(18, 56);
-            this.chkHelp.Name = "chkHelp";
-            this.chkHelp.Size = new System.Drawing.Size(56, 23);
-            this.chkHelp.TabIndex = 20;
-            this.chkHelp.Text = "Old help";
-            this.toolTip.SetToolTip(this.chkHelp, "Should the old, cluttered help menu be used?");
-            this.chkHelp.UseVisualStyleBackColor = true;
-            // 
             // chkPhysicsRest
             // 
             this.chkPhysicsRest.Appearance = System.Windows.Forms.Appearance.Button;
@@ -1062,7 +1050,7 @@ namespace MCForge.Gui
             this.chkIRC.AutoSize = true;
             this.chkIRC.Location = new System.Drawing.Point(22, 14);
             this.chkIRC.Name = "chkIRC";
-            this.chkIRC.Size = new System.Drawing.Size(57, 23);
+            this.chkIRC.Size = new System.Drawing.Size(52, 23);
             this.chkIRC.TabIndex = 22;
             this.chkIRC.Text = "Use IRC";
             this.toolTip.SetToolTip(this.chkIRC, "Whether to use the IRC bot or not.\nIRC stands for Internet Relay Chat and allows " +
@@ -1121,7 +1109,7 @@ namespace MCForge.Gui
             this.ChkTunnels.AutoSize = true;
             this.ChkTunnels.Location = new System.Drawing.Point(18, 20);
             this.ChkTunnels.Name = "ChkTunnels";
-            this.ChkTunnels.Size = new System.Drawing.Size(85, 23);
+            this.ChkTunnels.Size = new System.Drawing.Size(83, 23);
             this.ChkTunnels.TabIndex = 4;
             this.ChkTunnels.Text = "Anti-Tunneling";
             this.toolTip.SetToolTip(this.ChkTunnels, "Should guests be limited to digging a certain depth?");
@@ -1133,7 +1121,7 @@ namespace MCForge.Gui
             this.chkVerify.AutoSize = true;
             this.chkVerify.Location = new System.Drawing.Point(68, 22);
             this.chkVerify.Name = "chkVerify";
-            this.chkVerify.Size = new System.Drawing.Size(79, 23);
+            this.chkVerify.Size = new System.Drawing.Size(78, 23);
             this.chkVerify.TabIndex = 4;
             this.chkVerify.Text = "Verify Names";
             this.toolTip.SetToolTip(this.chkVerify, "Make sure the user is who they claim to be.");
@@ -1158,7 +1146,7 @@ namespace MCForge.Gui
             this.chkAutoload.AutoSize = true;
             this.chkAutoload.Location = new System.Drawing.Point(16, 80);
             this.chkAutoload.Name = "chkAutoload";
-            this.chkAutoload.Size = new System.Drawing.Size(85, 23);
+            this.chkAutoload.Size = new System.Drawing.Size(81, 23);
             this.chkAutoload.TabIndex = 4;
             this.chkAutoload.Text = "Load on /goto";
             this.toolTip.SetToolTip(this.chkAutoload, "Load a map when a user wishes to go to it, and unload empty maps");
@@ -1259,7 +1247,7 @@ namespace MCForge.Gui
             this.chkLogBeat.AutoSize = true;
             this.chkLogBeat.Location = new System.Drawing.Point(16, 80);
             this.chkLogBeat.Name = "chkLogBeat";
-            this.chkLogBeat.Size = new System.Drawing.Size(91, 23);
+            this.chkLogBeat.Size = new System.Drawing.Size(89, 23);
             this.chkLogBeat.TabIndex = 24;
             this.chkLogBeat.Text = "Log Heartbeat?";
             this.toolTip.SetToolTip(this.chkLogBeat, "Debugging feature -- Toggles whether to log heartbeat activity.\r\nUseful when your" +
@@ -1294,7 +1282,7 @@ namespace MCForge.Gui
             this.chkUseSQL.AutoSize = true;
             this.chkUseSQL.Location = new System.Drawing.Point(22, 281);
             this.chkUseSQL.Name = "chkUseSQL";
-            this.chkUseSQL.Size = new System.Drawing.Size(74, 23);
+            this.chkUseSQL.Size = new System.Drawing.Size(68, 23);
             this.chkUseSQL.TabIndex = 28;
             this.chkUseSQL.Tag = "Whether or not the use of MySQL is enabled. You will need to have installed it fo" +
                 "r this to work. MySQL includes features such as block tracking, colors, titles a" +
@@ -1614,7 +1602,7 @@ namespace MCForge.Gui
             // 
             this.chkGrieferStoneBan.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkGrieferStoneBan.AutoSize = true;
-            this.chkGrieferStoneBan.Location = new System.Drawing.Point(210, 138);
+            this.chkGrieferStoneBan.Location = new System.Drawing.Point(210, 137);
             this.chkGrieferStoneBan.Name = "chkGrieferStoneBan";
             this.chkGrieferStoneBan.Size = new System.Drawing.Size(127, 23);
             this.chkGrieferStoneBan.TabIndex = 43;
@@ -1982,6 +1970,15 @@ namespace MCForge.Gui
             this.listRanks.TabIndex = 0;
             this.listRanks.SelectedIndexChanged += new System.EventHandler(this.listRanks_SelectedIndexChanged);
             // 
+            // label85
+            // 
+            this.label85.AutoSize = true;
+            this.label85.Location = new System.Drawing.Point(6, 9);
+            this.label85.Name = "label85";
+            this.label85.Size = new System.Drawing.Size(35, 13);
+            this.label85.TabIndex = 5;
+            this.label85.Text = "Level:";
+            // 
             // tabPage4
             // 
             this.tabPage4.BackColor = System.Drawing.SystemColors.Control;
@@ -2076,6 +2073,7 @@ namespace MCForge.Gui
             // 
             // groupBox13
             // 
+            this.groupBox13.Controls.Add(this.button5);
             this.groupBox13.Controls.Add(this.chkGuestLimitNotify);
             this.groupBox13.Controls.Add(this.cmbGrieferStoneRank);
             this.groupBox13.Controls.Add(this.label48);
@@ -2087,7 +2085,6 @@ namespace MCForge.Gui
             this.groupBox13.Controls.Add(this.chkNotifyOnJoinLeave);
             this.groupBox13.Controls.Add(this.chkRepeatMessages);
             this.groupBox13.Controls.Add(this.chkDeath);
-            this.groupBox13.Controls.Add(this.chkHelp);
             this.groupBox13.Controls.Add(this.txtRestartTime);
             this.groupBox13.Controls.Add(this.txtMoneys);
             this.groupBox13.Controls.Add(this.chkrankSuper);
@@ -2124,11 +2121,11 @@ namespace MCForge.Gui
             // 
             this.chkShowEmptyRanks.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkShowEmptyRanks.AutoSize = true;
-            this.chkShowEmptyRanks.Location = new System.Drawing.Point(192, 56);
+            this.chkShowEmptyRanks.Location = new System.Drawing.Point(220, 56);
             this.chkShowEmptyRanks.Name = "chkShowEmptyRanks";
-            this.chkShowEmptyRanks.Size = new System.Drawing.Size(154, 23);
+            this.chkShowEmptyRanks.Size = new System.Drawing.Size(126, 23);
             this.chkShowEmptyRanks.TabIndex = 41;
-            this.chkShowEmptyRanks.Text = "Show empty ranks in /players";
+            this.chkShowEmptyRanks.Text = "Empty ranks in /players";
             this.chkShowEmptyRanks.UseVisualStyleBackColor = true;
             // 
             // chkIgnoreGlobal
@@ -2204,7 +2201,7 @@ namespace MCForge.Gui
             // 
             this.chkSmile.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkSmile.AutoSize = true;
-            this.chkSmile.Location = new System.Drawing.Point(92, 56);
+            this.chkSmile.Location = new System.Drawing.Point(136, 56);
             this.chkSmile.Name = "chkSmile";
             this.chkSmile.Size = new System.Drawing.Size(82, 23);
             this.chkSmile.TabIndex = 19;
@@ -2632,7 +2629,7 @@ namespace MCForge.Gui
             this.chkIrcId.AutoSize = true;
             this.chkIrcId.Location = new System.Drawing.Point(15, 198);
             this.chkIrcId.Name = "chkIrcId";
-            this.chkIrcId.Size = new System.Drawing.Size(120, 23);
+            this.chkIrcId.Size = new System.Drawing.Size(117, 23);
             this.chkIrcId.TabIndex = 27;
             this.chkIrcId.Text = "Identify with NickServ";
             this.chkIrcId.UseVisualStyleBackColor = true;
@@ -2757,7 +2754,7 @@ namespace MCForge.Gui
             this.notifyInGameUpdate.AutoSize = true;
             this.notifyInGameUpdate.Location = new System.Drawing.Point(5, 78);
             this.notifyInGameUpdate.Name = "notifyInGameUpdate";
-            this.notifyInGameUpdate.Size = new System.Drawing.Size(87, 23);
+            this.notifyInGameUpdate.Size = new System.Drawing.Size(86, 23);
             this.notifyInGameUpdate.TabIndex = 7;
             this.notifyInGameUpdate.Text = "Notify In-Game";
             this.notifyInGameUpdate.UseVisualStyleBackColor = true;
@@ -2768,7 +2765,7 @@ namespace MCForge.Gui
             this.autoUpdate.AutoSize = true;
             this.autoUpdate.Location = new System.Drawing.Point(6, 49);
             this.autoUpdate.Name = "autoUpdate";
-            this.autoUpdate.Size = new System.Drawing.Size(77, 23);
+            this.autoUpdate.Size = new System.Drawing.Size(76, 23);
             this.autoUpdate.TabIndex = 6;
             this.autoUpdate.Text = "Auto Update";
             this.autoUpdate.UseVisualStyleBackColor = true;
@@ -2779,7 +2776,7 @@ namespace MCForge.Gui
             this.chkUpdates.AutoSize = true;
             this.chkUpdates.Location = new System.Drawing.Point(5, 20);
             this.chkUpdates.Name = "chkUpdates";
-            this.chkUpdates.Size = new System.Drawing.Size(104, 23);
+            this.chkUpdates.Size = new System.Drawing.Size(101, 23);
             this.chkUpdates.TabIndex = 4;
             this.chkUpdates.Text = "Check for updates";
             this.chkUpdates.UseVisualStyleBackColor = true;
@@ -2819,7 +2816,7 @@ namespace MCForge.Gui
             this.forceUpdateBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.forceUpdateBtn.Location = new System.Drawing.Point(17, 70);
             this.forceUpdateBtn.Name = "forceUpdateBtn";
-            this.forceUpdateBtn.Size = new System.Drawing.Size(80, 23);
+            this.forceUpdateBtn.Size = new System.Drawing.Size(79, 23);
             this.forceUpdateBtn.TabIndex = 6;
             this.forceUpdateBtn.Text = "Force update";
             this.forceUpdateBtn.UseVisualStyleBackColor = true;
@@ -2891,7 +2888,7 @@ namespace MCForge.Gui
             this.chkAgreeToRules.AutoSize = true;
             this.chkAgreeToRules.Location = new System.Drawing.Point(15, 77);
             this.chkAgreeToRules.Name = "chkAgreeToRules";
-            this.chkAgreeToRules.Size = new System.Drawing.Size(189, 17);
+            this.chkAgreeToRules.Size = new System.Drawing.Size(188, 17);
             this.chkAgreeToRules.TabIndex = 32;
             this.chkAgreeToRules.Tag = "Forces guests to use /agree on entry to the server";
             this.chkAgreeToRules.Text = "Force guests to read rules on entry\r\n";
@@ -2988,7 +2985,7 @@ namespace MCForge.Gui
             this.chkAdminsJoinSilent.AutoSize = true;
             this.chkAdminsJoinSilent.Location = new System.Drawing.Point(170, 20);
             this.chkAdminsJoinSilent.Name = "chkAdminsJoinSilent";
-            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(113, 17);
+            this.chkAdminsJoinSilent.Size = new System.Drawing.Size(118, 17);
             this.chkAdminsJoinSilent.TabIndex = 39;
             this.chkAdminsJoinSilent.Tag = "Players who have the adminchat rank join the game silently.";
             this.chkAdminsJoinSilent.Text = "Admins join silently";
@@ -3079,7 +3076,7 @@ namespace MCForge.Gui
             this.chkWomDirect.AutoSize = true;
             this.chkWomDirect.Location = new System.Drawing.Point(114, 51);
             this.chkWomDirect.Name = "chkWomDirect";
-            this.chkWomDirect.Size = new System.Drawing.Size(110, 23);
+            this.chkWomDirect.Size = new System.Drawing.Size(107, 23);
             this.chkWomDirect.TabIndex = 25;
             this.chkWomDirect.Text = "Enable WoM Direct";
             this.chkWomDirect.UseVisualStyleBackColor = true;
@@ -3091,7 +3088,7 @@ namespace MCForge.Gui
             this.chkRestart.AutoSize = true;
             this.chkRestart.Location = new System.Drawing.Point(16, 51);
             this.chkRestart.Name = "chkRestart";
-            this.chkRestart.Size = new System.Drawing.Size(90, 23);
+            this.chkRestart.Size = new System.Drawing.Size(92, 23);
             this.chkRestart.TabIndex = 4;
             this.chkRestart.Text = "Restart on error";
             this.chkRestart.UseVisualStyleBackColor = true;
@@ -3225,8 +3222,8 @@ namespace MCForge.Gui
             // tabControl2
             // 
             this.tabControl2.Controls.Add(this.tabPage10);
-            this.tabControl2.Controls.Add(this.tabPage11);
             this.tabControl2.Controls.Add(this.tabPage14);
+            this.tabControl2.Controls.Add(this.tabPage11);
             this.tabControl2.Location = new System.Drawing.Point(9, 7);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
@@ -3579,159 +3576,6 @@ namespace MCForge.Gui
             this.lsMapUse.TabIndex = 0;
             this.lsMapUse.SelectedIndexChanged += new System.EventHandler(this.lsMapUse_SelectedIndexChanged);
             // 
-            // tabPage11
-            // 
-            this.tabPage11.BackColor = System.Drawing.SystemColors.Control;
-            this.tabPage11.Controls.Add(this.groupBox16);
-            this.tabPage11.Location = new System.Drawing.Point(4, 22);
-            this.tabPage11.Name = "tabPage11";
-            this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(468, 473);
-            this.tabPage11.TabIndex = 1;
-            this.tabPage11.Text = "Misc";
-            // 
-            // groupBox16
-            // 
-            this.groupBox16.Controls.Add(this.levelList);
-            this.groupBox16.Controls.Add(this.label78);
-            this.groupBox16.Controls.Add(this.label77);
-            this.groupBox16.Controls.Add(this.chkEnableChangingLevels);
-            this.groupBox16.Controls.Add(this.chkZombieOnlyServer);
-            this.groupBox16.Controls.Add(this.chkUseLevelList);
-            this.groupBox16.Controls.Add(this.chkNoPillaringDuringZombie);
-            this.groupBox16.Controls.Add(this.ZombieName);
-            this.groupBox16.Controls.Add(this.label46);
-            this.groupBox16.Controls.Add(this.chkNoLevelSavingDuringZombie);
-            this.groupBox16.Controls.Add(this.chkNoRespawnDuringZombie);
-            this.groupBox16.Controls.Add(this.chkZombieOnServerStart);
-            this.groupBox16.Location = new System.Drawing.Point(6, 6);
-            this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(134, 378);
-            this.groupBox16.TabIndex = 41;
-            this.groupBox16.TabStop = false;
-            this.groupBox16.Text = "Zombie Survival";
-            // 
-            // levelList
-            // 
-            this.levelList.Location = new System.Drawing.Point(8, 351);
-            this.levelList.Name = "levelList";
-            this.levelList.Size = new System.Drawing.Size(120, 21);
-            this.levelList.TabIndex = 12;
-            // 
-            // label78
-            // 
-            this.label78.AutoSize = true;
-            this.label78.Location = new System.Drawing.Point(0, 335);
-            this.label78.Name = "label78";
-            this.label78.Size = new System.Drawing.Size(133, 13);
-            this.label78.TabIndex = 11;
-            this.label78.Text = "Must be comma seperated";
-            // 
-            // label77
-            // 
-            this.label77.AutoSize = true;
-            this.label77.Location = new System.Drawing.Point(38, 320);
-            this.label77.Name = "label77";
-            this.label77.Size = new System.Drawing.Size(51, 13);
-            this.label77.TabIndex = 10;
-            this.label77.Text = "Level List";
-            // 
-            // chkEnableChangingLevels
-            // 
-            this.chkEnableChangingLevels.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkEnableChangingLevels.AutoSize = true;
-            this.chkEnableChangingLevels.Location = new System.Drawing.Point(5, 223);
-            this.chkEnableChangingLevels.Name = "chkEnableChangingLevels";
-            this.chkEnableChangingLevels.Size = new System.Drawing.Size(126, 23);
-            this.chkEnableChangingLevels.TabIndex = 9;
-            this.chkEnableChangingLevels.Text = "Enable Changing Levels";
-            this.chkEnableChangingLevels.UseVisualStyleBackColor = true;
-            // 
-            // chkZombieOnlyServer
-            // 
-            this.chkZombieOnlyServer.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkZombieOnlyServer.AutoSize = true;
-            this.chkZombieOnlyServer.Location = new System.Drawing.Point(6, 253);
-            this.chkZombieOnlyServer.Name = "chkZombieOnlyServer";
-            this.chkZombieOnlyServer.Size = new System.Drawing.Size(122, 36);
-            this.chkZombieOnlyServer.TabIndex = 8;
-            this.chkZombieOnlyServer.Text = "Zombie Only \r\nServer (Experimental!)";
-            this.chkZombieOnlyServer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.chkZombieOnlyServer.UseVisualStyleBackColor = true;
-            // 
-            // chkUseLevelList
-            // 
-            this.chkUseLevelList.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkUseLevelList.AutoSize = true;
-            this.chkUseLevelList.Location = new System.Drawing.Point(25, 293);
-            this.chkUseLevelList.Name = "chkUseLevelList";
-            this.chkUseLevelList.Size = new System.Drawing.Size(81, 23);
-            this.chkUseLevelList.TabIndex = 7;
-            this.chkUseLevelList.Text = "Use Level List";
-            this.chkUseLevelList.UseVisualStyleBackColor = true;
-            // 
-            // chkNoPillaringDuringZombie
-            // 
-            this.chkNoPillaringDuringZombie.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkNoPillaringDuringZombie.AutoSize = true;
-            this.chkNoPillaringDuringZombie.Location = new System.Drawing.Point(21, 129);
-            this.chkNoPillaringDuringZombie.Name = "chkNoPillaringDuringZombie";
-            this.chkNoPillaringDuringZombie.Size = new System.Drawing.Size(83, 36);
-            this.chkNoPillaringDuringZombie.TabIndex = 6;
-            this.chkNoPillaringDuringZombie.Text = "No pillaring \r\nduring zombie";
-            this.chkNoPillaringDuringZombie.UseVisualStyleBackColor = true;
-            // 
-            // ZombieName
-            // 
-            this.ZombieName.Location = new System.Drawing.Point(16, 196);
-            this.ZombieName.Name = "ZombieName";
-            this.ZombieName.Size = new System.Drawing.Size(100, 21);
-            this.ZombieName.TabIndex = 4;
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(8, 167);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(119, 26);
-            this.label46.TabIndex = 3;
-            this.label46.Text = "Name while Infected \r\nleave blank for no name\r\n";
-            this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // chkNoLevelSavingDuringZombie
-            // 
-            this.chkNoLevelSavingDuringZombie.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkNoLevelSavingDuringZombie.AutoSize = true;
-            this.chkNoLevelSavingDuringZombie.Location = new System.Drawing.Point(8, 89);
-            this.chkNoLevelSavingDuringZombie.Name = "chkNoLevelSavingDuringZombie";
-            this.chkNoLevelSavingDuringZombie.Size = new System.Drawing.Size(112, 36);
-            this.chkNoLevelSavingDuringZombie.TabIndex = 2;
-            this.chkNoLevelSavingDuringZombie.Text = "Disable level saving \r\n      during Zombie";
-            this.chkNoLevelSavingDuringZombie.UseVisualStyleBackColor = true;
-            // 
-            // chkNoRespawnDuringZombie
-            // 
-            this.chkNoRespawnDuringZombie.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkNoRespawnDuringZombie.AutoSize = true;
-            this.chkNoRespawnDuringZombie.Location = new System.Drawing.Point(9, 47);
-            this.chkNoRespawnDuringZombie.Name = "chkNoRespawnDuringZombie";
-            this.chkNoRespawnDuringZombie.Size = new System.Drawing.Size(110, 36);
-            this.chkNoRespawnDuringZombie.TabIndex = 1;
-            this.chkNoRespawnDuringZombie.Text = "Disable respawning\r\n      during Zombie";
-            this.chkNoRespawnDuringZombie.UseVisualStyleBackColor = true;
-            // 
-            // chkZombieOnServerStart
-            // 
-            this.chkZombieOnServerStart.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkZombieOnServerStart.AutoSize = true;
-            this.chkZombieOnServerStart.Location = new System.Drawing.Point(8, 19);
-            this.chkZombieOnServerStart.Name = "chkZombieOnServerStart";
-            this.chkZombieOnServerStart.Size = new System.Drawing.Size(111, 23);
-            this.chkZombieOnServerStart.TabIndex = 0;
-            this.chkZombieOnServerStart.Text = "Start on server start";
-            this.chkZombieOnServerStart.UseVisualStyleBackColor = true;
-            this.chkZombieOnServerStart.CheckedChanged += new System.EventHandler(this.chkZombieOnServerStart_CheckedChanged);
-            // 
             // tabPage14
             // 
             this.tabPage14.BackColor = System.Drawing.SystemColors.Control;
@@ -3784,15 +3628,6 @@ namespace MCForge.Gui
             this.label86.Size = new System.Drawing.Size(40, 13);
             this.label86.TabIndex = 6;
             this.label86.Text = "Status:";
-            // 
-            // label85
-            // 
-            this.label85.AutoSize = true;
-            this.label85.Location = new System.Drawing.Point(6, 9);
-            this.label85.Name = "label85";
-            this.label85.Size = new System.Drawing.Size(35, 13);
-            this.label85.TabIndex = 5;
-            this.label85.Text = "Level:";
             // 
             // SlctdTntWrsLvl
             // 
@@ -4251,6 +4086,159 @@ namespace MCForge.Gui
             this.TntWarsGamesList.Size = new System.Drawing.Size(453, 134);
             this.TntWarsGamesList.TabIndex = 0;
             // 
+            // tabPage11
+            // 
+            this.tabPage11.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage11.Controls.Add(this.groupBox16);
+            this.tabPage11.Location = new System.Drawing.Point(4, 22);
+            this.tabPage11.Name = "tabPage11";
+            this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage11.Size = new System.Drawing.Size(468, 473);
+            this.tabPage11.TabIndex = 1;
+            this.tabPage11.Text = "Misc";
+            // 
+            // groupBox16
+            // 
+            this.groupBox16.Controls.Add(this.levelList);
+            this.groupBox16.Controls.Add(this.label78);
+            this.groupBox16.Controls.Add(this.label77);
+            this.groupBox16.Controls.Add(this.chkEnableChangingLevels);
+            this.groupBox16.Controls.Add(this.chkZombieOnlyServer);
+            this.groupBox16.Controls.Add(this.chkUseLevelList);
+            this.groupBox16.Controls.Add(this.chkNoPillaringDuringZombie);
+            this.groupBox16.Controls.Add(this.ZombieName);
+            this.groupBox16.Controls.Add(this.label46);
+            this.groupBox16.Controls.Add(this.chkNoLevelSavingDuringZombie);
+            this.groupBox16.Controls.Add(this.chkNoRespawnDuringZombie);
+            this.groupBox16.Controls.Add(this.chkZombieOnServerStart);
+            this.groupBox16.Location = new System.Drawing.Point(6, 6);
+            this.groupBox16.Name = "groupBox16";
+            this.groupBox16.Size = new System.Drawing.Size(134, 378);
+            this.groupBox16.TabIndex = 41;
+            this.groupBox16.TabStop = false;
+            this.groupBox16.Text = "Zombie Survival";
+            // 
+            // levelList
+            // 
+            this.levelList.Location = new System.Drawing.Point(8, 351);
+            this.levelList.Name = "levelList";
+            this.levelList.Size = new System.Drawing.Size(120, 21);
+            this.levelList.TabIndex = 12;
+            // 
+            // label78
+            // 
+            this.label78.AutoSize = true;
+            this.label78.Location = new System.Drawing.Point(0, 335);
+            this.label78.Name = "label78";
+            this.label78.Size = new System.Drawing.Size(133, 13);
+            this.label78.TabIndex = 11;
+            this.label78.Text = "Must be comma seperated";
+            // 
+            // label77
+            // 
+            this.label77.AutoSize = true;
+            this.label77.Location = new System.Drawing.Point(38, 320);
+            this.label77.Name = "label77";
+            this.label77.Size = new System.Drawing.Size(51, 13);
+            this.label77.TabIndex = 10;
+            this.label77.Text = "Level List";
+            // 
+            // chkEnableChangingLevels
+            // 
+            this.chkEnableChangingLevels.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkEnableChangingLevels.AutoSize = true;
+            this.chkEnableChangingLevels.Location = new System.Drawing.Point(5, 223);
+            this.chkEnableChangingLevels.Name = "chkEnableChangingLevels";
+            this.chkEnableChangingLevels.Size = new System.Drawing.Size(126, 23);
+            this.chkEnableChangingLevels.TabIndex = 9;
+            this.chkEnableChangingLevels.Text = "Enable Changing Levels";
+            this.chkEnableChangingLevels.UseVisualStyleBackColor = true;
+            // 
+            // chkZombieOnlyServer
+            // 
+            this.chkZombieOnlyServer.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkZombieOnlyServer.AutoSize = true;
+            this.chkZombieOnlyServer.Location = new System.Drawing.Point(6, 253);
+            this.chkZombieOnlyServer.Name = "chkZombieOnlyServer";
+            this.chkZombieOnlyServer.Size = new System.Drawing.Size(122, 36);
+            this.chkZombieOnlyServer.TabIndex = 8;
+            this.chkZombieOnlyServer.Text = "Zombie Only \r\nServer (Experimental!)";
+            this.chkZombieOnlyServer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.chkZombieOnlyServer.UseVisualStyleBackColor = true;
+            // 
+            // chkUseLevelList
+            // 
+            this.chkUseLevelList.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkUseLevelList.AutoSize = true;
+            this.chkUseLevelList.Location = new System.Drawing.Point(25, 293);
+            this.chkUseLevelList.Name = "chkUseLevelList";
+            this.chkUseLevelList.Size = new System.Drawing.Size(81, 23);
+            this.chkUseLevelList.TabIndex = 7;
+            this.chkUseLevelList.Text = "Use Level List";
+            this.chkUseLevelList.UseVisualStyleBackColor = true;
+            // 
+            // chkNoPillaringDuringZombie
+            // 
+            this.chkNoPillaringDuringZombie.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkNoPillaringDuringZombie.AutoSize = true;
+            this.chkNoPillaringDuringZombie.Location = new System.Drawing.Point(21, 129);
+            this.chkNoPillaringDuringZombie.Name = "chkNoPillaringDuringZombie";
+            this.chkNoPillaringDuringZombie.Size = new System.Drawing.Size(83, 36);
+            this.chkNoPillaringDuringZombie.TabIndex = 6;
+            this.chkNoPillaringDuringZombie.Text = "No pillaring \r\nduring zombie";
+            this.chkNoPillaringDuringZombie.UseVisualStyleBackColor = true;
+            // 
+            // ZombieName
+            // 
+            this.ZombieName.Location = new System.Drawing.Point(16, 196);
+            this.ZombieName.Name = "ZombieName";
+            this.ZombieName.Size = new System.Drawing.Size(100, 21);
+            this.ZombieName.TabIndex = 4;
+            // 
+            // label46
+            // 
+            this.label46.AutoSize = true;
+            this.label46.Location = new System.Drawing.Point(8, 167);
+            this.label46.Name = "label46";
+            this.label46.Size = new System.Drawing.Size(119, 26);
+            this.label46.TabIndex = 3;
+            this.label46.Text = "Name while Infected \r\nleave blank for no name\r\n";
+            this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // chkNoLevelSavingDuringZombie
+            // 
+            this.chkNoLevelSavingDuringZombie.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkNoLevelSavingDuringZombie.AutoSize = true;
+            this.chkNoLevelSavingDuringZombie.Location = new System.Drawing.Point(8, 89);
+            this.chkNoLevelSavingDuringZombie.Name = "chkNoLevelSavingDuringZombie";
+            this.chkNoLevelSavingDuringZombie.Size = new System.Drawing.Size(112, 36);
+            this.chkNoLevelSavingDuringZombie.TabIndex = 2;
+            this.chkNoLevelSavingDuringZombie.Text = "Disable level saving \r\n      during Zombie";
+            this.chkNoLevelSavingDuringZombie.UseVisualStyleBackColor = true;
+            // 
+            // chkNoRespawnDuringZombie
+            // 
+            this.chkNoRespawnDuringZombie.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkNoRespawnDuringZombie.AutoSize = true;
+            this.chkNoRespawnDuringZombie.Location = new System.Drawing.Point(9, 47);
+            this.chkNoRespawnDuringZombie.Name = "chkNoRespawnDuringZombie";
+            this.chkNoRespawnDuringZombie.Size = new System.Drawing.Size(110, 36);
+            this.chkNoRespawnDuringZombie.TabIndex = 1;
+            this.chkNoRespawnDuringZombie.Text = "Disable respawning\r\n      during Zombie";
+            this.chkNoRespawnDuringZombie.UseVisualStyleBackColor = true;
+            // 
+            // chkZombieOnServerStart
+            // 
+            this.chkZombieOnServerStart.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkZombieOnServerStart.AutoSize = true;
+            this.chkZombieOnServerStart.Location = new System.Drawing.Point(8, 19);
+            this.chkZombieOnServerStart.Name = "chkZombieOnServerStart";
+            this.chkZombieOnServerStart.Size = new System.Drawing.Size(111, 23);
+            this.chkZombieOnServerStart.TabIndex = 0;
+            this.chkZombieOnServerStart.Text = "Start on server start";
+            this.chkZombieOnServerStart.UseVisualStyleBackColor = true;
+            this.chkZombieOnServerStart.CheckedChanged += new System.EventHandler(this.chkZombieOnServerStart_CheckedChanged);
+            // 
             // tabPage8
             // 
             this.tabPage8.BackColor = System.Drawing.Color.Transparent;
@@ -4605,6 +4593,17 @@ namespace MCForge.Gui
             this.listBox1.Size = new System.Drawing.Size(129, 472);
             this.listBox1.TabIndex = 0;
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(18, 56);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(116, 23);
+            this.button5.TabIndex = 47;
+            this.button5.Text = "MCForge.net Account";
+            this.toolTip.SetToolTip(this.button5, "This is needed for certain thing like Lava Survival Map Submission.");
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // PropertyWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4617,6 +4616,7 @@ namespace MCForge.Gui
             this.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "PropertyWindow";
             this.Text = "Properties";
             this.Load += new System.EventHandler(this.PropertyWindow_Load);
@@ -4706,9 +4706,6 @@ namespace MCForge.Gui
             this.groupBox21.PerformLayout();
             this.groupBox20.ResumeLayout(false);
             this.groupBox20.PerformLayout();
-            this.tabPage11.ResumeLayout(false);
-            this.groupBox16.ResumeLayout(false);
-            this.groupBox16.PerformLayout();
             this.tabPage14.ResumeLayout(false);
             this.tabPage14.PerformLayout();
             this.groupBox29.ResumeLayout(false);
@@ -4728,6 +4725,9 @@ namespace MCForge.Gui
             ((System.ComponentModel.ISupportInitialize)(this.TntWrsScrPrKlUpDwn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TntWrsScrLmtUpDwn)).EndInit();
             this.groupBox30.ResumeLayout(false);
+            this.tabPage11.ResumeLayout(false);
+            this.groupBox16.ResumeLayout(false);
+            this.groupBox16.PerformLayout();
             this.tabPage8.ResumeLayout(false);
             this.groupBox15.ResumeLayout(false);
             this.groupBox15.PerformLayout();
@@ -4819,7 +4819,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.CheckBox chk17Dollar;
         private System.Windows.Forms.CheckBox chkPhysicsRest;
         private System.Windows.Forms.CheckBox chkSmile;
-        private System.Windows.Forms.CheckBox chkHelp;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label34;
@@ -5116,5 +5115,6 @@ namespace MCForge.Gui
         private System.Windows.Forms.ListBox TntWrsMpsList;
         private System.Windows.Forms.Button TntWrsDiffSlctBt;
         private System.Windows.Forms.CheckBox TntWrsStreaksChck;
+        private System.Windows.Forms.Button button5;
     }
 }

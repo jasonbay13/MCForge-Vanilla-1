@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     class CmdSay : Command
@@ -35,10 +35,11 @@ namespace MCForge.Commands
         {
             if (message == "") { Help(p); return; }
 
-            for (int i = 0; i < 10; i++)
-                message = message.Replace("%" + i, "&" + i);
-            for (char c = 'a'; c <= 'f'; c++)
-                message = message.Replace("%" + c, "&" + c);
+            //for (int i = 0; i < 10; i++)
+            //    message = message.Replace("%" + i, "&" + i);
+            //for (char c = 'a'; c <= 'f'; c++)
+            //    message = message.Replace("%" + c, "&" + c);
+            message = Player.EscapeColours(message);
             Player.GlobalMessage(message);
 
             for (int i = 0; i < 10; i++)

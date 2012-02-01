@@ -1,6 +1,6 @@
 ﻿/*
-	Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
-	
+	Copyright 2011 MCForge
+		
 	Dual-licensed under the	Educational Community License, Version 2.0 and
 	the GNU General Public License, Version 3 (the "Licenses"); you may
 	not use this file except in compliance with the Licenses. You may
@@ -17,30 +17,24 @@
 */
 using System;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
-    public class CmdFlipHead : Command
+    public class CmdGcbanlistupdate : Command
     {
-        public override string name { get { return "fliphead"; } }
-        public override string shortcut { get { return "fh"; } }
-        public override string type { get { return "other"; } }
-        public override bool museumUsable { get { return true; } }
-        public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
-        public CmdFlipHead() { }
-
+        public override string name { get { return "gcbanlistupdate"; } }
+        public override string shortcut { get { return "gcbu"; } }
+        public override string type { get { return "mod"; } }
+        public override bool museumUsable { get { return false; } }
+        public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
         public override void Use(Player p, string message)
         {
-            p.flipHead = !p.flipHead;
-
-            if (p.flipHead)
-                p.SendMessage("Your head was broken!");
-            else
-                p.SendMessage("Your head was healed!");
+            Server.UpdateGlobalBanlist();
+            
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/fliphead - Does as it says on the tin (only works while infected)");
+            Player.SendMessage(p, "/gcbanlistupdate - Updates the global chat ban list for this server.");
         }
     }
 }

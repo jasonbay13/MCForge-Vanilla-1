@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace MCForge
 {
-    class CountdownGame
+    internal static class CountdownGame
     {
         public static List<Player> players = new List<Player>();
 
@@ -20,9 +20,9 @@ namespace MCForge
 
         public static int speed;
 
-        public static bool freezemode = false;
+        public static bool freezemode/* = false*/;
 
-        public static bool cancel = false;
+        public static bool cancel/* = false*/;
 
         public static string speedtype;
 

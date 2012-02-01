@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.IO;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     class CmdTempRankInfo : Command

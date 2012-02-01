@@ -16,6 +16,8 @@
             if (disposing && (components != null))
             {
                 components.Dispose();
+                if (l != null) l.Dispose();
+
             }
             base.Dispose(disposing);
         }
@@ -28,6 +30,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Textures));
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
@@ -36,6 +39,8 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.cloud = new System.Windows.Forms.TextBox();
             this.fog = new System.Windows.Forms.TextBox();
             this.sky = new System.Windows.Forms.TextBox();
@@ -54,8 +59,13 @@
             this.custom_side = new System.Windows.Forms.TextBox();
             this.side = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
             this.SuspendLayout();
@@ -167,6 +177,8 @@
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.label8);
+            this.panel2.Controls.Add(this.numericUpDown1);
             this.panel2.Controls.Add(this.cloud);
             this.panel2.Controls.Add(this.fog);
             this.panel2.Controls.Add(this.sky);
@@ -180,12 +192,29 @@
             this.panel2.Size = new System.Drawing.Size(260, 98);
             this.panel2.TabIndex = 5;
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(184, 26);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(33, 13);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "Level";
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(182, 42);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(71, 20);
+            this.numericUpDown1.TabIndex = 15;
+            // 
             // cloud
             // 
             this.cloud.Location = new System.Drawing.Point(6, 73);
             this.cloud.Name = "cloud";
             this.cloud.Size = new System.Drawing.Size(100, 20);
             this.cloud.TabIndex = 14;
+            this.cloud.TextChanged += new System.EventHandler(this.cloud_TextChanged);
             // 
             // fog
             // 
@@ -193,6 +222,7 @@
             this.fog.Name = "fog";
             this.fog.Size = new System.Drawing.Size(100, 20);
             this.fog.TabIndex = 13;
+            this.fog.TextChanged += new System.EventHandler(this.fog_TextChanged);
             // 
             // sky
             // 
@@ -200,6 +230,7 @@
             this.sky.Name = "sky";
             this.sky.Size = new System.Drawing.Size(100, 20);
             this.sky.TabIndex = 12;
+            this.sky.TextChanged += new System.EventHandler(this.sky_TextChanged);
             // 
             // label6
             // 
@@ -283,7 +314,6 @@
             this.terr.Name = "terr";
             this.terr.Size = new System.Drawing.Size(242, 20);
             this.terr.TabIndex = 2;
-            this.terr.Text = "bc4acee575474f5266105430c3cc628b8b3948a2";
             this.terr.TextChanged += new System.EventHandler(this.terr_TextChanged);
             // 
             // panel4
@@ -379,27 +409,75 @@
             this.label10.TabIndex = 0;
             this.label10.Text = "Side Block";
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(350, 210);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(65, 17);
+            this.checkBox1.TabIndex = 7;
+            this.checkBox1.Text = "Enabled";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(418, 210);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(120, 17);
+            this.checkBox2.TabIndex = 8;
+            this.checkBox2.Text = "Auto Update Clients";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(2, 214);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(114, 13);
+            this.label11.TabIndex = 9;
+            this.label11.Text = "Lowest Rank Visablity:";
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Location = new System.Drawing.Point(122, 211);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(91, 21);
+            this.comboBox2.TabIndex = 10;
+            // 
             // Textures
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(546, 233);
+            this.Controls.Add(this.comboBox2);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.checkBox2);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Textures";
             this.Text = "Textures";
+            this.Load += new System.EventHandler(this.Textures_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -431,5 +509,11 @@
         private System.Windows.Forms.TextBox cloud;
         private System.Windows.Forms.TextBox fog;
         private System.Windows.Forms.TextBox sky;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.ComboBox comboBox2;
     }
 }

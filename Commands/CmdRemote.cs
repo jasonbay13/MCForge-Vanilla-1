@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Text;
 using MCForge.Remote;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     class CmdRemote : Command

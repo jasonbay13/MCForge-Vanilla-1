@@ -487,50 +487,6 @@ namespace MCForge
                                 if (value != "")
                                     Server.server_owner = value;
                                 break;
-                            case "zombie-on-server-start":
-                                try { Server.startZombieModeOnStartup = bool.Parse(value); }
-                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
-                                break;
-                            case "no-respawning-during-zombie":
-                                try { Server.noRespawn = bool.Parse(value); }
-                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
-                                break;
-                            case "no-level-saving-during-zombie":
-                                try { Server.noLevelSaving = bool.Parse(value); }
-                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
-                                break;
-                            case "no-pillaring-during-zombie":
-                                try { Server.noPillaring = bool.Parse(value); }
-                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
-                                break;
-                            case "zombie-name-while-infected":
-                                if (value != "")
-                                    Server.ZombieName = value;
-                                break;
-                            case "enable-changing-levels":
-                                try { Server.ChangeLevels = bool.Parse(value); }
-                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
-                                break;
-                            case "zombie-survival-only-server":
-                                try { Server.ZombieOnlyServer = bool.Parse(value); }
-                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
-                                break;
-                            case "use-level-list":
-                                try { Server.UseLevelList = bool.Parse(value); }
-                                catch { Server.s.Log("Invalid " + key + ". Using default"); }
-                                break;
-                            case "zombie-level-list":
-                                if (value != "")
-                                {
-
-                                    string input = value.Replace(" ", "").ToString();
-                                        int itndex = input.IndexOf("#");
-                                    if (itndex > 0)
-                                        input = input.Substring(0, itndex);
-
-                                    Server.LevelList = input.Split(',').ToList<string>();
-                                }
-                                break;
                             case "guest-limit-notify":
                                 try { Server.guestLimitNotify = bool.Parse(value); }
                                 catch { Server.s.Log("Invalid " + key + ". Using default"); }
@@ -718,6 +674,12 @@ namespace MCForge
                                     Server.bufferblocks = bool.Parse(value);
                                 }
                                 catch { Server.s.Log("Invalid " + key + ". Using default."); }
+                                break;
+                            case "mcforge-user":
+                                Server.mcforgeUser = value;
+                                break;
+                            case "mcforge-pass":
+                                Server.mcforgePass = value;
                                 break;
                             case "translation-enabled":
                                 Server.transenabled = (value.ToLower() == "true") ? true : false;
@@ -1239,16 +1201,6 @@ namespace MCForge
             w.WriteLine("agree-to-rules-on-entry = " + Server.agreetorulesonentry.ToString().ToLower());
             w.WriteLine("admins-join-silent = " + Server.adminsjoinsilent.ToString().ToLower());
             w.WriteLine("server-owner = " + Server.server_owner.ToString());
-            w.WriteLine("zombie-on-server-start = " + Server.startZombieModeOnStartup);
-            w.WriteLine("no-respawning-during-zombie = " + Server.noRespawn);
-            w.WriteLine("no-level-saving-during-zombie = " + Server.noLevelSaving);
-            w.WriteLine("no-pillaring-during-zombie = " + Server.noPillaring);
-            w.WriteLine("zombie-name-while-infected = " + Server.ZombieName);
-            w.WriteLine("enable-changing-levels = " + Server.ChangeLevels);
-            w.WriteLine("zombie-survival-only-server = " + Server.ZombieOnlyServer);
-            w.WriteLine("use-level-list = " + Server.UseLevelList);
-            string dogCsv = string.Join(",", Server.LevelList.ToArray());
-            w.WriteLine("zombie-level-list = " + dogCsv + "#(Must be comma seperated, no spaces. Must have changing levels and use level list enabled.)");
             w.WriteLine("guest-limit-notify = " + Server.guestLimitNotify.ToString().ToLower());
             w.WriteLine("guest-join-notify = " + Server.guestJoinNotify.ToString().ToLower());
             w.WriteLine("guest-leave-notify = " + Server.guestLeaveNotify.ToString().ToLower());
@@ -1328,7 +1280,7 @@ namespace MCForge
             w.WriteLine("wom-serverdis = " + Server.Server_Disc);
             w.WriteLine("wom-serverflag = " + Server.Server_Flag);
             w.WriteLine("wom-textures = " + Server.UseTextures);
-            w.WriteLine("");
+            w.WriteLine();
             w.WriteLine("#Review settings");
             w.WriteLine("review-view-perm = " + ((sbyte)Server.reviewview).ToString());
             w.WriteLine("review-enter-perm = " + ((sbyte)Server.reviewenter).ToString());
@@ -1337,10 +1289,14 @@ namespace MCForge
             w.WriteLine("review-clear-perm = " + ((sbyte)Server.reviewclear).ToString());
             w.WriteLine("review-next-perm = " + ((sbyte)Server.reviewnext).ToString());
             w.WriteLine("bufferblocks = " + Server.bufferblocks);
-            w.WriteLine("");
+            w.WriteLine();
             w.WriteLine("#Translation settings");
             w.WriteLine("translation-enabled = " + Server.transenabled.ToString().ToLower());
             w.WriteLine("translation-language = " + Server.translang.ToString().ToLower());
+            w.WriteLine();
+            w.WriteLine("#MCForge.net Account");
+            w.WriteLine("mcforge-user = " + Server.mcforgeUser);
+            w.WriteLine("mcforge-pass = " + Server.mcforgePass);
         }
     }
 }
