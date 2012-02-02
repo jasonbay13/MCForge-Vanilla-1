@@ -2,6 +2,7 @@
 {
     public partial class Remote
     {
+
         /// <summary>
         /// This is called when a Remote successfully logs into the server
         /// </summary>
