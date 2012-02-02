@@ -40,10 +40,15 @@ namespace MCForge
         public GlobalChatBot(string nick)
         {
             server = "irc.geekshed.net"; channel = "#MCForge"; this.nick = nick.Replace(" ", "");
-            connection = new Connection(new ConnectionArgs(nick, server), false, false);
+            connection = new Connection(new ConnectionArgs(nick, server), true, false);
+            connection.CtcpResponder = new CtcpResponder(connection);
+            connection.CtcpResponder.VersionResponse = "MCForge " + Server.Version; // cant set Null.VersonResponse, tis why i added the line above.
             if (Server.UseGlobalChat)
             {
-                // Regster events for incoming
+                // Register events for server
+                Server.s.OnURLChange += new Server.MessageEventHandler(Server_URLChange);
+
+                // Register events for incoming
                 connection.Listener.OnNickError += new NickErrorEventHandler(Listener_OnNickError);
                 connection.Listener.OnRegistered += new RegisteredEventHandler(Listener_OnRegistered);
                 connection.Listener.OnPublic += new PublicMessageEventHandler(Listener_OnPublic);
@@ -87,7 +92,14 @@ namespace MCForge
         {
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             //string msg = message;
-
+            if (message == "#updatebanlist") { Server.UpdateGlobalBanlist(); return; }
+            if (message.Contains("#ipget ")) {
+                Player who = Player.Find(message.Split(' ')[1]);
+                if (who == null) { return; }
+                Server.GlobalChat.Say("#IP " + who.name + ": " + who.ip);
+                return;
+            }
+            if (message.Contains("#IP ")) { return; }
             message = message.MCCharFilter();
             if (Player.MessageHasBadColorCodes(null, message))
                 return;
@@ -128,6 +140,11 @@ namespace MCForge
                 connection.Sender.Join(channel);
             }
 
+        }
+
+        void Server_URLChange(string url)
+        {
+            connection.CtcpResponder.VersionResponse = "MCForge " + Server.Version + " - " + url;
         }
 
         public void Connect()

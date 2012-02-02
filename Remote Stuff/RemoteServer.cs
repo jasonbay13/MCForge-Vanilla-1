@@ -19,12 +19,14 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.IO;
 
 namespace MCForge.Remote
 {
     public class RemoteServer
     {
-        public static Socket listen;
+        //public static Socket listen;
+        public static TcpListener listener;
         public static int port = 5050;
         public static int Protocol = 2;
         public static string Username = "head";
@@ -42,10 +44,9 @@ namespace MCForge.Remote
             {
 
                 IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
-                listen = new Socket(endpoint.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                listen.Bind(endpoint);
-                listen.Listen((int)SocketOptionName.MaxConnections);
-                listen.BeginAccept(new AsyncCallback(Accept), null);
+                listener = new TcpListener(endpoint);
+                listener.Start();
+                listener.BeginAcceptTcpClient(new AsyncCallback(Accept), this);
                 Server.s.Log(string.Format("Creating listening socket on port {0} for remote console...", port));
             }
             catch (SocketException e) { Server.s.Log(e.Message + e.StackTrace); }
@@ -59,17 +60,33 @@ namespace MCForge.Remote
             var begin = false;
             try
             {
-                p = new Remote();
+                
 
                 if (tries < 7)
                 {
                     if (tries < 5)
                     {
-                        p.Socket = listen.EndAccept(result);
-                        new Thread(p.Start).Start();
 
-                        listen.BeginAccept(Accept, null);
-                        begin = true;
+                        TcpClient sock = listener.EndAcceptTcpClient(result);
+                        
+                        
+                        var read = new BinaryReader(sock.GetStream());
+                        var write = new BinaryWriter(sock.GetStream());
+                            byte l = read.ReadByte();
+                            if (l == 1)
+                            {
+                                p = new RemoteMobile(sock, read, write);
+                            }
+                            else
+                            {
+                                p = new RemoteDesktop(sock, read, write);
+                            }
+
+                            new Thread(p.Start).Start();
+
+                            listener.BeginAcceptSocket(Accept, null);
+                            begin = true;
+                        
                     }
                     else
                     {
@@ -88,7 +105,7 @@ namespace MCForge.Remote
                 if (p != null)
                     p.Disconnect();
                 if (begin) return;
-                listen.BeginAccept(Accept, null);
+                listener.BeginAcceptSocket(Accept, null);
             }
             catch (Exception e)
             {
@@ -97,14 +114,15 @@ namespace MCForge.Remote
                 if (p != null)
                     p.Disconnect();
                 if (begin) return;
-                listen.BeginAccept(Accept, null);
+                listener.BeginAcceptSocket(Accept, null);
             }
         }
 
 
         public static void Close()
         {
-            if (listen != null) listen.Close();
+            if (listener != null)
+                listener.Stop();
         }
     }
 }

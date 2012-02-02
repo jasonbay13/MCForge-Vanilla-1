@@ -1,6 +1,6 @@
 ﻿namespace MCForge.Remote
 {
-    public partial class Remote
+    public partial class RemoteEvents
     {
 
         /// <summary>

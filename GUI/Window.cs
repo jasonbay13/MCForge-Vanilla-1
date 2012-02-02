@@ -1928,10 +1928,18 @@ namespace MCForge.Gui
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (txtGlobalInput.Text == null || txtGlobalInput.Text.Trim() == "") { return; }
-                try { Command.all.Find("global").Use(null, txtGlobalInput.Text.Trim()); }
-                catch (Exception ex) { Server.ErrorLog(ex); }
-                txtGlobalInput.Clear();
+                if (Server.gcacceptconsole)
+                {
+                    if (txtGlobalInput.Text == null || txtGlobalInput.Text.Trim() == "") { return; }
+                    try { Command.all.Find("global").Use(null, txtGlobalInput.Text.Trim()); }
+                    catch (Exception ex) { Server.ErrorLog(ex); }
+                    txtGlobalInput.Clear();
+                }
+                else
+                {
+                    MessageBox.Show("By using the Global Chat you agree to the following rules:" + Environment.NewLine + "1. No Spamming" + Environment.NewLine + "2. No Advertising (Trying to get people to come to your server)" + Environment.NewLine + "3. No links" + Environment.NewLine + "4. No excessive Cursing (You are allowed to curse, but not pointed at anybody)" + Environment.NewLine + "5. No use of $ variables." + Environment.NewLine + "6. English only. No exceptions" + Environment.NewLine + "7. Be respectful" + Environment.NewLine + "8. Do not ask for ranks" + Environment.NewLine + "9. Do not ask for a server's name" + Environment.NewLine + "10. use common sense" + Environment.NewLine + "11. Don't say your server name.");
+                    Server.gcacceptconsole = true;
+                }
             }
         }
 

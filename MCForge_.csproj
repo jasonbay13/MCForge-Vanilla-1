@@ -97,6 +97,8 @@
     <Compile Include="Block.cs" />
     <Compile Include="Commands\CmdC4.cs" />
     <Compile Include="Commands\CmdGcaccept.cs" />
+    <Compile Include="Commands\CmdGcbanlistupdate.cs" />
+    <Compile Include="Commands\CmdGcrules.cs" />
     <Compile Include="Commands\CmdGifToCin.cs" />
     <Compile Include="Commands\CmdSearch.cs" />
     <Compile Include="Commands\CmdTntWars.cs" />
@@ -159,6 +161,9 @@
     <Compile Include="Plugins\ServerEvents\OnServerLogEvent.cs" />
     <Compile Include="Plugins\Utils\LoggerType.cs" />
     <Compile Include="Plugins\Utils\Priority.cs" />
+    <Compile Include="Remote Stuff\Packet.cs" />
+    <Compile Include="Remote Stuff\RemoteDesktop.cs" />
+    <Compile Include="Remote Stuff\RemoteMobile.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />

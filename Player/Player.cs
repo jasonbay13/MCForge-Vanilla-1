@@ -4388,8 +4388,8 @@ catch { }*/
         /// <returns>True if the player was found, false if the player was not found</returns>
         public static bool Exists(string name)
         {
-            foreach (Player p in players)
-            { if (p.name.ToLower() == name.ToLower()) { return true; } } return false;
+            name = name.ToLower();
+            return players.Exists((p) => { if (p.name.ToLower() == name) return true; return false; });
         }
         /// <summary>
         /// Is a player with the ID of "ID" on the server
@@ -4398,8 +4398,7 @@ catch { }*/
         /// <returns>True if the player was found, false if the player was not found</returns>
         public static bool Exists(byte id)
         {
-            foreach (Player p in players)
-            { if (p.id == id) { return true; } } return false;
+            return players.Exists((p) => { if (p.id == id) return true; return false; });
         }
         /// <summary>
         /// Get the player by the name "name"
@@ -4408,23 +4407,13 @@ catch { }*/
         /// <returns>The player with that name</returns>
         public static Player Find(string name)
         {
-            List<Player> tempList = new List<Player>();
-            tempList.AddRange(players);
-            Player tempPlayer = null; bool returnNull = false;
-
-            foreach (Player p in tempList)
+            name.ToLower();
+            return Player.players.Find((pl) =>
             {
-                if (p.name.ToLower() == name.ToLower()) return p;
-                if (p.name.ToLower().IndexOf(name.ToLower()) != -1)
-                {
-                    if (tempPlayer == null) tempPlayer = p;
-                    else returnNull = true;
-                }
-            }
-
-            if (returnNull == true) return null;
-            if (tempPlayer != null) return tempPlayer;
-            return null;
+                if (pl.name.ToLower() == name) return true;
+                if (pl.name.ToLower().IndexOf(name) != -1) return true;
+                return false;
+            });
         }
         /// <summary>
         /// Get the group/rank of the player with the name "name"
