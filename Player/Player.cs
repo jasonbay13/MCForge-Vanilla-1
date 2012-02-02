@@ -160,7 +160,12 @@ namespace MCForge
         /// Is the player invincible
         /// </summary>
         public bool invincible/* = false*/;
-        internal string prefix = ""; //This shouldnt be public
+        internal string Prefix = ""; //This shouldnt be public
+        public string prefix
+        {
+            get { return Prefix; }
+            internal set { prefix = value; }
+        }
         /// <summary>
         /// The player's title (This appears before the player's name in a chat message)
         /// </summary>
@@ -323,7 +328,12 @@ namespace MCForge
         public bool adminpen/* = false*/;
 
         internal bool voice/* = false*/;
-        internal string voicestring = "";
+        internal string Voicestring = "";
+        public string voicestring
+        {
+            get { return Voicestring; }
+            internal set { Voicestring = value; }
+        }
 
         internal int grieferStoneWarn/* = 0*/;
 
