@@ -1763,14 +1763,14 @@ processThread.Start();
         public static void UpdateGlobalBanlist()
         {
             WebClient client = new WebClient();
-            string namebans = client.DownloadString("http://global.bemacizedgaming.com/namebans.php");
+            string namebans = client.DownloadString("http://global.bemacizedgaming.com/mcforge/namebans.php");
             gcnamebans.Clear();
             foreach (string ban in namebans.Split('*'))
             {
                 gcnamebans.Add(ban);
             }
             gcnamebans.Remove("");
-            string ipbans = client.DownloadString("http://global.bemacizedgaming.com/ipbans.php");
+            string ipbans = client.DownloadString("http://global.bemacizedgaming.com/mcforge/ipbans.php");
             gcipbans.Clear();
             foreach (string ban in ipbans.Split('*'))
             {
