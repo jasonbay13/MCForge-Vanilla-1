@@ -146,6 +146,7 @@
     </Compile>
     <Compile Include="Levels\Texture_Settings.cs" />
     <Compile Include="MCForgeAccount.cs" />
+    <Compile Include="Plugins\GroupEvents\OnGroupLoadedEvent.cs" />
     <Compile Include="Plugins\GroupEvents\OnGroupLoadEvent.cs" />
     <Compile Include="Plugins\GroupEvents\OnGroupSaveEvent.cs" />
     <Compile Include="Plugins\GroupEvents\OnPlayerRankSetEvent.cs" />
