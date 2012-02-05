@@ -206,7 +206,6 @@ namespace MCForge.Commands
             new CommandKeywords((new CmdRankMsg()), "rank msg edit set");
             new CommandKeywords((new CmdRedo()), "undo edit block change");
             new CommandKeywords((new CmdReload()), "level lvl map");
-            new CommandKeywords((new CmdRemote()), "rem access");
             new CommandKeywords((new CmdRenameLvl()), "rename lvl level map");
             new CommandKeywords((new CmdRepeat()), "rep again");
             new CommandKeywords((new CmdReplace()), "block level lvl map");

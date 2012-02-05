@@ -116,7 +116,7 @@ namespace MCForge
         /// </summary>
         public static string URL = String.Empty;
         public static bool gcacceptconsole = false;
-        
+
         /// <summary>
         /// The listening socket for listening to incoming connections
         /// </summary>
@@ -195,15 +195,16 @@ namespace MCForge
         /// <summary>
         /// Temp Ban object
         /// </summary>
-        public struct TempBan { 
+        public struct TempBan
+        {
             /// <summary>
             /// The player name who is banned
             /// </summary>
-            public string name; 
+            public string name;
             /// <summary>
             /// When this player can join back in
             /// </summary>
-            public DateTime allowedJoin; 
+            public DateTime allowedJoin;
         }
 
         internal static MapGenerator MapGen;
@@ -444,7 +445,7 @@ namespace MCForge
         /// Can players talk to other players on different levels
         /// </summary>
         public static bool worldChat = true;
-//        public static bool guestGoto = false;
+        //        public static bool guestGoto = false;
 
         //Spam Prevention
         /// <summary>
@@ -477,7 +478,7 @@ namespace MCForge
         public static string level = "main";
         public static string errlog = "error.log";
 
-//        public static bool console = false; // never used
+        //        public static bool console = false; // never used
         public static bool reportBack = true;
 
         /// <summary>
@@ -488,7 +489,7 @@ namespace MCForge
         /// Will the server use IRC Colors
         /// </summary>
         public static bool ircColorsEnable/* = false*/;
-//        public static bool safemode = false; //Never used
+        //        public static bool safemode = false; //Never used
         /// <summary>
         /// The port of the IRC Server
         /// </summary>
@@ -793,7 +794,7 @@ namespace MCForge
         }
         public void Start()
         {
-           
+
             shuttingDown = false;
             Log("Starting Server");
             {
@@ -1049,10 +1050,11 @@ namespace MCForge
                     return;
                 }
                 Database.executeQuery("CREATE TABLE if not exists Players (ID INTEGER " + (Server.useMySQL ? "" : "PRIMARY KEY ") + "AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT NOT NULL, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6)" + (Server.useMySQL ? ", PRIMARY KEY (ID)" : "") + ");");
-				Database.executeQuery("CREATE TABLE if not exists Playercmds (ID INTEGER " + (Server.useMySQL ? "" : "PRIMARY KEY ") + "AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT NOT NULL, Time DATETIME, Name VARCHAR(20), Rank VARCHAR(20), Mapname VARCHAR(40), Cmd VARCHAR(40), Cmdmsg VARCHAR(40)" + (Server.useMySQL ? ", PRIMARY KEY (ID)" : "") + ");");
+                Database.executeQuery("CREATE TABLE if not exists Playercmds (ID INTEGER " + (Server.useMySQL ? "" : "PRIMARY KEY ") + "AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT NOT NULL, Time DATETIME, Name VARCHAR(20), Rank VARCHAR(20), Mapname VARCHAR(40), Cmd VARCHAR(40), Cmdmsg VARCHAR(40)" + (Server.useMySQL ? ", PRIMARY KEY (ID)" : "") + ");");
 
                 // Here, since SQLite is a NEW thing from 5.3.0.0, we do not have to check for existing tables in SQLite.
-                if (Server.useMySQL) {
+                if (Server.useMySQL)
+                {
                     // Check if the color column exists.
                     DataTable colorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
 
@@ -1258,13 +1260,7 @@ namespace MCForge
                     return;
                 }
             });
-            ml.Queue(delegate
-            {
-                Remote.RemoteServer webServer;
-                Remote.RemoteProperties.Load();
-                (webServer = new Remote.RemoteServer()).Start();
-            });
-            
+
             ml.Queue(delegate
             {
                 updateTimer.Elapsed += delegate
@@ -1341,7 +1337,7 @@ processThread.Start();
                 // We always construct this to prevent errors...
                 IRC = new ForgeBot(Server.ircChannel, Server.ircOpChannel, Server.ircNick, Server.ircServer);
                 GlobalChat = new GlobalChatBot(GlobalChatNick);
-                
+
                 if (Server.irc) IRC.Connect();
                 if (Server.UseGlobalChat) GlobalChat.Connect();
 
@@ -1476,16 +1472,17 @@ processThread.Start();
                         Server.lava.Start();
                     if (Server.zombie.StartOnStartup)
                         //Server.zombie.Start(0);
-                    //This doesnt use the main map
-                    if (Server.UseCTF)
-                        ctf = new Auto_CTF();
+                        //This doesnt use the main map
+                        if (Server.UseCTF)
+                            ctf = new Auto_CTF();
                 }
                 catch (Exception e) { Server.ErrorLog(e); }
                 BlockQueue.Start();
             });
         }
 
-        public static void LoadAllSettings() {
+        public static void LoadAllSettings()
+        {
             SrvProperties.Load("properties/server.properties");
             Updater.Load("properties/update.properties");
             Group.InitAll();
@@ -1498,7 +1495,7 @@ processThread.Start();
             CommandOtherPerms.Load();
             ProfanityFilter.Init();
         }
-        
+
         public static bool Setup()
         {
             try
@@ -1525,7 +1522,7 @@ processThread.Start();
                 bool begin = false;
                 try
                 {
-					p = new Player(listen.EndAccept(result));
+                    p = new Player(listen.EndAccept(result));
                     listen.BeginAccept(new AsyncCallback(Accept), null);
                     begin = true;
                 }
@@ -1574,12 +1571,6 @@ processThread.Start();
             {
                 listen.Close();
             }
-            try
-            {
-                Remote.RemoteServer.enableRemote = false;
-                Remote.RemoteServer.Close();
-            }
-            catch { }
             try
             {
                 if (GlobalChat.IsConnected())
@@ -1647,7 +1638,7 @@ processThread.Start();
                     OnSystem(DateTime.Now.ToString("(HH:mm:ss) ") + message);
                 }
             }
-            
+
             Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + message + Environment.NewLine);
         }
 
@@ -1719,13 +1710,14 @@ processThread.Start();
 
         public static void ErrorLog(Exception ex)
         {
-			if (ServerError != null)
-				ServerError(ex);
+            if (ServerError != null)
+                ServerError(ex);
             Logger.WriteError(ex);
             try
             {
                 s.Log("!!!Error! See " + Logger.ErrorLogPath + " for more information.");
-            } catch { }
+            }
+            catch { }
         }
 
         public static void RandomMessage()
@@ -1763,19 +1755,17 @@ processThread.Start();
         public static void UpdateGlobalBanlist()
         {
             WebClient client = new WebClient();
-            string namebans = client.DownloadString("http://global.bemacizedgaming.com/namebans.php");
+            string namebans = client.DownloadString("http://global.bemacizedgaming.com/mcforge/namebans.php");
             gcnamebans.Clear();
             foreach (string ban in namebans.Split('*'))
-            {
                 gcnamebans.Add(ban);
-            }
+            
             gcnamebans.Remove("");
-            string ipbans = client.DownloadString("http://global.bemacizedgaming.com/ipbans.php");
+            string ipbans = client.DownloadString("http://global.bemacizedgaming.com/mcforge/ipbans.php");
             gcipbans.Clear();
             foreach (string ban in ipbans.Split('*'))
-            {
                 gcipbans.Add(ban);
-            }
+
             gcipbans.Remove("");
             Player.GlobalMessage("Global Banlist updated!");
         }

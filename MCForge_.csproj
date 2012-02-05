@@ -149,6 +149,7 @@
     <Compile Include="Plugins\GroupEvents\OnGroupLoadEvent.cs" />
     <Compile Include="Plugins\GroupEvents\OnGroupSaveEvent.cs" />
     <Compile Include="Plugins\GroupEvents\OnPlayerRankSetEvent.cs" />
+    <Compile Include="Plugins\LevelEvents\OnLevelLoadedEvent.cs" />
     <Compile Include="Plugins\LevelEvents\OnLevelLoadEvent.cs" />
     <Compile Include="Plugins\LevelEvents\OnLevelSaveEvent.cs" />
     <Compile Include="Plugins\LevelEvents\OnLevelUnloadEvent.cs" />
@@ -161,15 +162,13 @@
     <Compile Include="Plugins\PlayerEvents\OnPlayerCommandEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\OnPlayerConnectEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\OnPlayerDeathEvent.cs" />
+    <Compile Include="Plugins\PlayerEvents\OnPlayerDisconnectEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\PlayerMoveEvent.cs" />
     <Compile Include="Plugins\ServerEvents\OnConsoleCommandEvent.cs" />
     <Compile Include="Plugins\ServerEvents\OnServerErrorEvent.cs" />
     <Compile Include="Plugins\ServerEvents\OnServerLogEvent.cs" />
     <Compile Include="Plugins\Utils\LoggerType.cs" />
     <Compile Include="Plugins\Utils\Priority.cs" />
-    <Compile Include="Remote Stuff\Packet.cs" />
-    <Compile Include="Remote Stuff\RemoteDesktop.cs" />
-    <Compile Include="Remote Stuff\RemoteMobile.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />
@@ -235,7 +234,6 @@
     <Compile Include="Commands\CmdP2P.cs" />
     <Compile Include="Commands\CmdPass.cs" />
     <Compile Include="Commands\CmdpCinema.cs" />
-    <Compile Include="Commands\CmdRemote.cs" />
     <Compile Include="Commands\CmdReport.cs" />
     <Compile Include="Commands\CmdResetPass.cs" />
     <Compile Include="Commands\CmdPlayerCLS.cs" />
@@ -328,8 +326,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Remote Stuff\Remote.Desktop.cs" />
-    <Compile Include="Remote Stuff\Remote.Mobile.cs" />
     <Compile Include="ScriptingVB.cs" />
     <Compile Include="Checktimer.cs" />
     <Compile Include="Service References\TranslateService\Reference.cs">
@@ -545,10 +541,6 @@
     <Compile Include="Util\Serializer.cs" />
     <Compile Include="VIP.cs" />
     <Compile Include="Warp.cs" />
-    <Compile Include="Remote Stuff\Remote.cs" />
-    <Compile Include="Remote Stuff\Remote.Handler.cs" />
-    <Compile Include="Remote Stuff\RemoteProperties.cs" />
-    <Compile Include="Remote Stuff\RemoteServer.cs" />
     <EmbeddedResource Include="GUI\Bugs.resx">
       <DependentUpon>Bugs.cs</DependentUpon>
     </EmbeddedResource>
@@ -637,7 +629,6 @@
     <None Include="README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Compile Include="Remote Stuff\Remote.Events.cs" />
     <None Include="Service References\TranslateService\soap.wsdl" />
     <None Include="Service References\TranslateService\soap.xsd">
       <SubType>Designer</SubType>
