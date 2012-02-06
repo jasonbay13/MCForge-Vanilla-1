@@ -318,5 +318,13 @@ namespace MCForge
 			core.commands = new List<Command>(all.commands);
 			Scripting.Autoload();
 		}
+        /// <summary>
+        /// Add a command to the server
+        /// </summary>
+        /// <param name="command">The command to add</param>
+        public void AddCommand(Command command)
+        {
+            all.Add(command);
+        }
 	}
 }

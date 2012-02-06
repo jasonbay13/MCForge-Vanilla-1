@@ -38,6 +38,12 @@ namespace MCForge
         public string usedCmd = "";
         public ForgeBot(string channel, string opchannel, string nick, string server)
         {
+            if (!File.Exists("Sharkbite.Thresher.dll"))
+            {
+                Server.irc = false;
+                Server.s.Log("[IRC] The IRC dll was not found!");
+                return;
+            }
             this.channel = channel.Trim(); this.opchannel = opchannel.Trim(); this.nick = nick.Replace(" ", ""); this.server = server;
             ConnectionArgs con = new ConnectionArgs(nick, server);
             con.Port = Server.ircPort;
