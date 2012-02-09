@@ -65,9 +65,10 @@ namespace MCForge
         /// <param name="method">This is the delegate that will get called when this event occurs</param>
         /// <param name="priority">The priority (imporantce) of this call</param>
         /// <param name="plugin">The plugin object that is registering the event</param>
-        public static void Register(Player.OnPlayerConnect method, Priority priority, Plugin plugin)
+        public static void Register(Player.OnPlayerConnect method, Priority priority, Plugin plugin, bool bypass = false)
         {
             if (Find(plugin) != null)
+                if (!bypass)
                 throw new Exception("The user tried to register 2 of the same event!");
             events.Add(new OnPlayerConnectEvent(method, priority, plugin));
             Organize();
