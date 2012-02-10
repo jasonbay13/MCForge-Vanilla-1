@@ -714,9 +714,6 @@ namespace MCForge.Gui
                             case "premium-only":
                                 chkPrmOnly.Checked = (value.ToLower() == "true") ? true : false;
                                 break;
-                            case "send-command-data":
-                                sndcmddataChk.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
                             case "view":
                                 Server.reviewview = Level.PermissionFromName(value.ToLower());
                                 break;
@@ -914,7 +911,6 @@ namespace MCForge.Gui
             //Server.Server_Flag = ;
             Server.PremiumPlayersOnly = chkPrmOnly.Checked;
 
-            Player.sendcommanddata = sndcmddataChk.Checked;
             Server.reviewview = Group.GroupList.Find(grp => grp.name == cmbViewQueue.SelectedItem.ToString()).Permission;
             Server.reviewenter = Group.GroupList.Find(grp => grp.name == cmbEnterQueue.SelectedItem.ToString()).Permission;
             Server.reviewleave = Group.GroupList.Find(grp => grp.name == cmbLeaveQueue.SelectedItem.ToString()).Permission;

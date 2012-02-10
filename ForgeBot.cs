@@ -89,26 +89,24 @@ namespace MCForge
         }
         public void Say(string message, bool opchat = false, bool color = true)
         {
-            if (Server.irc && IsConnected())
-            {
-                StringBuilder sb = new StringBuilder(message);
+            if (!Server.irc || !IsConnected()) return;
+            StringBuilder sb = new StringBuilder(message);
 
-                if (color)
+            if (color)
+            {
+                for (int i = 0; i < 10; i++)
                 {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        sb.Replace("%" + i, ColorSignal + c.MCtoIRC("&" + i));
-                        sb.Replace("&" + i, ColorSignal + c.MCtoIRC("&" + i));
-                    }
-                    for (char ch = 'a'; ch <= 'f'; ch++)
-                    {
-                        sb.Replace("%" + ch, ColorSignal + c.MCtoIRC("&" + ch));
-                        sb.Replace("&" + ch, ColorSignal + c.MCtoIRC("&" + ch));
-                    }
+                    sb.Replace("%" + i, ColorSignal + c.MCtoIRC("&" + i));
+                    sb.Replace("&" + i, ColorSignal + c.MCtoIRC("&" + i));
                 }
-                
-                connection.Sender.PublicMessage(opchat ? opchannel : channel, sb.ToString());
+                for (char ch = 'a'; ch <= 'f'; ch++)
+                {
+                    sb.Replace("%" + ch, ColorSignal + c.MCtoIRC("&" + ch));
+                    sb.Replace("&" + ch, ColorSignal + c.MCtoIRC("&" + ch));
+                }
             }
+                
+            connection.Sender.PublicMessage(opchat ? opchannel : channel, sb.ToString());
         }
         public void Pm(string user, string message)
         {

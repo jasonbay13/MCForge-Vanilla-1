@@ -642,9 +642,6 @@ namespace MCForge
                             case "wom-textures":
                                 Server.UseTextures = bool.Parse(value);
                                 break;
-                            case "send-command-usage":
-                                Player.sendcommanddata = (value.ToLower() == "true") ? true : false;
-                                break;
                             case "review-view-perm":
                                 try
                                 {
@@ -1258,7 +1255,6 @@ namespace MCForge
             w.WriteLine("guest-limit-notify = " + Server.guestLimitNotify.ToString().ToLower());
             w.WriteLine("guest-join-notify = " + Server.guestJoinNotify.ToString().ToLower());
             w.WriteLine("guest-leave-notify = " + Server.guestLeaveNotify.ToString().ToLower());
-            w.WriteLine("send-command-usage = " + Player.sendcommanddata.ToString());
             w.WriteLine("total-undo = " + Server.totalUndo.ToString());
             w.WriteLine();
             w.WriteLine("# backup options");

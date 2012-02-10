@@ -21,11 +21,10 @@ namespace MCForge.Commands
             if (!Server.UseGlobalChat) { Player.SendMessage(p, "Global Chat is disabled."); return; }
             if (p != null && p.muted) { Player.SendMessage(p, "You are muted."); return; }
             if (p != null && p.muteGlobal) { Player.SendMessage(p, "You cannot use Global Chat while you have it muted."); return; }
-            if (p != null && !Server.gcaccepted.Contains(p.name.ToLower())) { RulesMethod(p); return; }    
-            Server.GlobalChat.Say((p != null ? p.name + ": " : "Console: ") + message);
+            if (p != null && !Server.gcaccepted.Contains(p.name.ToLower())) { RulesMethod(p); return; }
+            Server.GlobalChat.Say((p != null ? p.name + ": " : "Console: ") + message, p);
             Player.GlobalMessage(Server.GlobalChatColor + "<[Global] " + (p != null ? p.name + ": " : "Console: ") + "&f" + (Server.profanityFilter ? ProfanityFilter.Parse(message) : message), true);
-            try { Gui.Window.thisWindow.LogGlobalChat("< " + (p != null ? p.name + ": " : "Console: ") + message); }
-            catch { Server.s.Log("<[Global] " + (p != null ? p.name + ": " : "Console: ") + message); }
+
         }
         public void RulesMethod(Player p)
         {

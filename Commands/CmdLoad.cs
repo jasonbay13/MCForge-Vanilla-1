@@ -141,15 +141,15 @@ namespace MCForge.Commands
                     Server.addLevel(level);
                 }
                 Player.GlobalMessage("Level \"" + level.name + "\" loaded.");
-                try
+                /*try
                 {
                     Gui.Window.thisWindow.UpdatePlayerMapCombo();
                     Gui.Window.thisWindow.UnloadedlistUpdate();
                     Gui.Window.thisWindow.UpdateMapList("'");
-                   ;
+                   
                     
                 }
-                catch { }
+                catch { }*/
                 try
                 {
                     int temp = int.Parse(phys);

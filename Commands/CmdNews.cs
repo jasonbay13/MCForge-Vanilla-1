@@ -32,26 +32,32 @@ namespace MCForge.Commands
             string newsFile = "text/news.txt";
             if (!File.Exists(newsFile) || (File.Exists(newsFile) && File.ReadAllLines(newsFile).Length == -1))
             {
-				using (StreamWriter SW = new StreamWriter(newsFile))
-				{
-					SW.WriteLine("News have not been created. Put News in '" + newsFile + "'.");
-				}
+                using (var SW = new StreamWriter(newsFile))
+                {
+                    SW.WriteLine("News have not been created. Put News in '" + newsFile + "'.");
+                }
                 return;
             }
             string[] strArray = File.ReadAllLines(newsFile);
-            if (message == "") { for (int j = 0; j < strArray.Length; j++) { Player.SendMessage(p, strArray[j]); } }
+            if (message == "")
+            {
+                foreach (string t in strArray)
+                {
+                    Player.SendMessage(p, t);
+                }
+            }
             else
             {
                 string[] split = message.Split(' ');
                 if (split[0] == "all") { if ((int)p.group.Permission < CommandOtherPerms.GetPerm(this)) { Player.SendMessage(p, "You must be at least " + Group.findPermInt(CommandOtherPerms.GetPerm(this)).name + " to send this to all players."); return; } for (int k = 0; k < strArray.Length; k++) { Player.GlobalMessage(strArray[k]); } return; }
-                else
+                Player player = Player.Find(split[0]);
+                if (player == null) { Player.SendMessage(p, "Could not find player \"" + split[0] + "\"!"); return; }
+                foreach (string t in strArray)
                 {
-                    Player player = Player.Find(split[0]);
-                    if (player == null) { Player.SendMessage(p, "Could not find player \"" + split[0] + "\"!"); return; }
-                    for (int l = 0; l < strArray.Length; l++) { Player.SendMessage(player, strArray[l]); }
-                    Player.SendMessage(p, "The News were successfully sent to " + player.name + ".");
-                    return;
+                    Player.SendMessage(player, t);
                 }
+                Player.SendMessage(p, "The News were successfully sent to " + player.name + ".");
+               
             }
         }
         public override void Help(Player p)

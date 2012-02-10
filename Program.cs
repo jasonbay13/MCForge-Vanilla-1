@@ -68,7 +68,7 @@ namespace Starter
                 if (!needsToRestart)
                     openServer(args);
                 else
-                    System.Diagnostics.Process.Start(parent);
+                    Process.Start(parent);
             }
             else
             {

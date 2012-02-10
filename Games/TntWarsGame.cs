@@ -5,10 +5,8 @@
 ///------|        them in the sidebar!!     |------\\\
 //-------|__________________________________|-------\\
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace MCForge
@@ -141,14 +139,11 @@ namespace MCForge
             }
             //Spawn them (And if needed, move them to the correct level!)
             {
-                foreach (player p in Players)
+                foreach (player p in Players.Where(p => p.p.level != lvl))
                 {
-                    if (p.p.level != lvl)
-                    {
-                        Command.all.Find("goto").Use(p.p, lvl.name);
-                        while (p.p.Loading) { Thread.Sleep(250); }
-                        p.p.inTNTwarsMap = true;
-                    }
+                    Command.all.Find("goto").Use(p.p, lvl.name);
+                    while (p.p.Loading) { Thread.Sleep(250); }
+                    p.p.inTNTwarsMap = true;
                 }
                 if (GameMode == TntWarsGameMode.TDM) { Command.all.Find("reveal").Use(null, "all " + lvl.name); }//So peoples names apear above their heads in the right color!
                 foreach (player p in Players)
@@ -310,7 +305,7 @@ namespace MCForge
                 {
                     if (i < 3)
                     {
-                        SendAllPlayersScore(true, true, false);
+                        SendAllPlayersScore(true, true);
                     }
                     if (i >= 3)
                     {
@@ -432,13 +427,8 @@ namespace MCForge
             {
                 HealthDamage = 2;
             }
-            foreach (Player Kld in Killed)
+            foreach (Player Kld in Killed.Where(Kld => !FindPlayer(Kld).spec).Where(Kld => !TeamKill(Killer, Kld) || TeamKills != false))
             {
-                if (FindPlayer(Kld).spec)
-                {
-                    continue;
-                }
-                if (TeamKill(Killer, Kld) && TeamKills == false) continue;
                 if (Kld.TntWarsHealth - HealthDamage <= 0)
                 {
                     Kld.TntWarsHealth = 0;
@@ -570,43 +560,21 @@ namespace MCForge
         public void ChangeScore(player p, int Amount, float multiplier = 1f)
         {
             p.Score += (int)(Amount * multiplier);
-            if (GameMode == TntWarsGameMode.TDM)
+            if (GameMode != TntWarsGameMode.TDM) return;
+            if (p.Red)
             {
-                if (p.Red)
-                {
-                    RedScore += (int)(Amount * multiplier);
-                }
-                if (p.Blue)
-                {
-                    BlueScore += (int)(Amount * multiplier);
-                }
+                RedScore += (int)(Amount * multiplier);
+            }
+            if (p.Blue)
+            {
+                BlueScore += (int)(Amount * multiplier);
             }
         }
 
         public bool InZone(ushort x, ushort y, ushort z, bool CheckForPlacingTnt)
         {
-            if (CheckForPlacingTnt)
-            {
-                foreach (Zone Zn in NoTNTplacableZones)
-                {
-                    if (Zn.smallX <= x && x <= Zn.bigX && Zn.smallY <= y && y <= Zn.bigY && Zn.smallZ <= z && z <= Zn.bigZ)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-            else
-            {
-                foreach (Zone Zn in NoBlockDeathZones)
-                {
-                    if (Zn.smallX <= x && x <= Zn.bigX && Zn.smallY <= y && y <= Zn.bigY && Zn.smallZ <= z && z <= Zn.bigZ)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
+            return CheckForPlacingTnt ? NoTNTplacableZones.Any(Zn => Zn.smallX <= x && x <= Zn.bigX && Zn.smallY <= y && y <= Zn.bigY && Zn.smallZ <= z && z <= Zn.bigZ) :
+                NoBlockDeathZones.Any(Zn => Zn.smallX <= x && x <= Zn.bigX && Zn.smallY <= y && y <= Zn.bigY && Zn.smallZ <= z && z <= Zn.bigZ);
         }
 
         public void DeleteZone(ushort x, ushort y, ushort z, bool NoTntZone, Player p = null)
@@ -708,12 +676,9 @@ namespace MCForge
                 }
                 if (TheirTotalScore)
                 {
-                    foreach (player p in Players)
+                    foreach (player p in Players.Where(p => !p.spec))
                     {
-                        if (!p.spec)
-                        {
-                            Player.SendMessage(p.p, "TNT Wars: Your Score: " + c.white + p.Score.ToString());
-                        }
+                        Player.SendMessage(p.p, "TNT Wars: Your Score: " + c.white + p.Score.ToString());
                     }
                     Thread.Sleep(1000);
                 }
@@ -731,12 +696,9 @@ namespace MCForge
             {
                 try
                 {
-                    foreach (player p in Players)
+                    if (Players.Any(p => p.Score >= ScoreLimit))
                     {
-                        if (p.Score >= ScoreLimit)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
                 catch { }
@@ -779,31 +741,19 @@ namespace MCForge
         //Other stuff
         public int RedTeam()
         {
-            int count = 0;
-            foreach (player p in Players)
-            {
-                if (p.Red) count++;
-            }
-            return count;
+            return Players.Count(p => p.Red);
         }
+
         public int BlueTeam()
         {
-            int count = 0;
-            foreach (player p in Players)
-            {
-                if (p.Blue) count++;
-            }
-            return count;
+            return Players.Count(p => p.Blue);
         }
+
         public int PlayingPlayers()
         {
-            int count = 0;
-            foreach (player p in Players)
-            {
-                if (!p.spec) count++;
-            }
-            return count;
+            return Players.Count(p => !p.spec);
         }
+
         public static void SetTitlesAndColor(player p, bool reset = false)
         {
             try
@@ -832,14 +782,11 @@ namespace MCForge
             if (lvl != null
                 && GameStatus == 0)
             {
-                foreach (TntWarsGame g in GameList)
+                if (GameList.Any(g => g.lvl == this.lvl && g != this))
                 {
-                    if (g.lvl == this.lvl && g != this)
-                    {
-                        if (ReturnErrors) Player.SendMessage(p, "There is already a TNT Wars game on that map");
-                        AllSetUp = false;
-                        return false;
-                    }
+                    if (ReturnErrors) Player.SendMessage(p, "There is already a TNT Wars game on that map");
+                    AllSetUp = false;
+                    return false;
                 }
                 if (TellPlayerOnSuccess) Player.SendMessage(p, "TNT Wars setup is done!");
                 AllSetUp = true;
@@ -865,59 +812,28 @@ namespace MCForge
 
         public static TntWarsGame Find(Level level)
         {
-            foreach (TntWarsGame g in GameList)
-            {
-                if (g.lvl == level)
-                {
-                    return g;
-                }
-            }
-            return null;
+            return GameList.FirstOrDefault(g => g.lvl == level);
         }
 
         public static TntWarsGame FindFromGameNumber(int Number)
         {
-            foreach (TntWarsGame g in GameList)
-            {
-                if (g.GameNumber == Number)
-                {
-                    return g;
-                }
-            }
-            return null;
+            return GameList.FirstOrDefault(g => g.GameNumber == Number);
         }
 
         public player FindPlayer(Player pla)
         {
-            foreach (player p in Players)
-            {
-                if (p.p == pla)
-                {
-                    return p;
-                }
-            }
-            return null;
+            return Players.FirstOrDefault(p => p.p == pla);
         }
 
         public static TntWarsGame GetTntWarsGame(Player p)
         {
             TntWarsGame it = TntWarsGame.Find(p.level);
-            if (it == null)
-            {
-                it = TntWarsGame.FindFromGameNumber(p.CurrentTntGameNumber);
-                if (it == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    return it;
-                }
-            }
-            else
+            if (it != null)
             {
                 return it;
             }
+            it = FindFromGameNumber(p.CurrentTntGameNumber);
+            return it;
         }
 
         //Static Stuff

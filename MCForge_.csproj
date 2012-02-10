@@ -135,6 +135,7 @@
     </Compile>
     <Compile Include="Levels\Texture_Settings.cs" />
     <Compile Include="MCForgeAccount.cs" />
+    <Compile Include="Player\Packet.cs" />
     <Compile Include="Plugins\GroupEvents\OnGroupLoadEvent.cs" />
     <Compile Include="Plugins\GroupEvents\OnGroupSaveEvent.cs" />
     <Compile Include="Plugins\GroupEvents\OnPlayerRankSetEvent.cs" />
@@ -228,7 +229,6 @@
     <Compile Include="Commands\CmdPass.cs" />
     <Compile Include="Commands\CmdpCinema.cs" />
     <Compile Include="Commands\CmdReferee.cs" />
-    <Compile Include="Commands\CmdRemote.cs" />
     <Compile Include="Commands\CmdReport.cs" />
     <Compile Include="Commands\CmdResetPass.cs" />
     <Compile Include="Commands\CmdPlayerCLS.cs" />
@@ -324,8 +324,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Remote Stuff\Remote.Desktop.cs" />
-    <Compile Include="Remote Stuff\Remote.Mobile.cs" />
     <Compile Include="ScriptingVB.cs" />
     <Compile Include="Checktimer.cs" />
     <Compile Include="Service References\TranslateService\Reference.cs">
@@ -541,10 +539,6 @@
     <Compile Include="Util\Serializer.cs" />
     <Compile Include="VIP.cs" />
     <Compile Include="Warp.cs" />
-    <Compile Include="Remote Stuff\Remote.cs" />
-    <Compile Include="Remote Stuff\Remote.Handler.cs" />
-    <Compile Include="Remote Stuff\RemoteProperties.cs" />
-    <Compile Include="Remote Stuff\RemoteServer.cs" />
     <Compile Include="Games\ZombieGame.cs" />
     <EmbeddedResource Include="GUI\EditText.resx">
       <DependentUpon>EditText.cs</DependentUpon>
@@ -629,7 +623,6 @@
     <None Include="README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Compile Include="Remote Stuff\Remote.Events.cs" />
     <None Include="Service References\TranslateService\soap.wsdl" />
     <None Include="Service References\TranslateService\soap.xsd">
       <SubType>Designer</SubType>

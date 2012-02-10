@@ -16,6 +16,7 @@
 	permissions and limitations under the Licenses.
 */
 using System;
+using System.Linq;
 using System.Threading;
 using System.Net;
 using System.Net.Sockets;
@@ -396,45 +397,6 @@ namespace MCForge
                     }
                 }
                 catch { }
-                //dl restarter stuff [Restarter is no longer needed]
-                //if (!File.Exists("Restarter.exe"))
-                //{
-                //    Log("Restarter.exe doesn't exist, Downloading");
-                //    try
-                //    {
-                //        using (WebClient WEB = new WebClient())
-                //        {
-                //            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.exe", "Restarter.exe");
-                //        }
-                //        if (File.Exists("Restarter.exe"))
-                //        {
-                //            Log("Restarter.exe download succesful!");
-                //        }
-                //    }
-                //    catch
-                //    {
-                //        Log("Downloading Restarter.exe failed, please try again later");
-                //    }
-                //}
-                //if (!File.Exists("Restarter.pdb"))
-                //{
-                //    Log("Restarter.pdb doesn't exist, Downloading");
-                //    try
-                //    {
-                //        using (WebClient WEB = new WebClient())
-                //        {
-                //            WEB.DownloadFile("http://mcforge.net/uploads/Restarter.pdb", "Restarter.pdb");
-                //        }
-                //        if (File.Exists("Restarter.pdb"))
-                //        {
-                //            Log("Restarter.pdb download succesful!");
-                //        }
-                //    }
-                //    catch
-                //    {
-                //        Log("Downloading Restarter.pdb failed, please try again later");
-                //    }
-                //}
                 if (!File.Exists("MySql.Data.dll"))
                 {
                     Log("MySql.Data.dll doesn't exist, Downloading");
@@ -552,7 +514,7 @@ namespace MCForge
                 if (File.Exists("externalurl.txt")) File.Move("externalurl.txt", "text/externalurl.txt");
                 if (File.Exists("autoload.txt")) File.Move("autoload.txt", "text/autoload.txt");
                 if (File.Exists("IRC_Controllers.txt")) File.Move("IRC_Controllers.txt", "ranks/IRC_Controllers.txt");
-                if (Server.useWhitelist) if (File.Exists("whitelist.txt")) File.Move("whitelist.txt", "ranks/whitelist.txt");
+                if (useWhitelist) if (File.Exists("whitelist.txt")) File.Move("whitelist.txt", "ranks/whitelist.txt");
             }
             catch { }
 
@@ -563,13 +525,11 @@ namespace MCForge
                     string line;
                     while ((line = r.ReadLine()) != null)
                     {
-                        if (!line.StartsWith("//"))
+                        if (line.StartsWith("//")) continue;
+                        var split = line.Split(new[] { ':' }, 2);
+                        if (split.Length == 2 && !String.IsNullOrEmpty(split[0]))
                         {
-                            var split = line.Split(new char[] { ':' }, 2);
-                            if (split.Length == 2 && !String.IsNullOrEmpty(split[0]))
-                            {
-                                customdollars.Add(split[0], split[1]);
-                            }
+                            customdollars.Add(split[0], split[1]);
                         }
                     }
                 }
@@ -625,16 +585,16 @@ namespace MCForge
                 //}
                 catch (Exception e)
                 {
-                    Server.ErrorLog(e);
-                    Server.s.Log("MySQL settings have not been set! Please Setup using the properties window.");
+                    ErrorLog(e);
+                    s.Log("MySQL settings have not been set! Please Setup using the properties window.");
                     //process.Kill();
                     return;
                 }
-                Database.executeQuery("CREATE TABLE if not exists Players (ID INTEGER " + (Server.useMySQL ? "" : "PRIMARY KEY ") + "AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT NOT NULL, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6)" + (Server.useMySQL ? ", PRIMARY KEY (ID)" : "") + ");");
-				Database.executeQuery("CREATE TABLE if not exists Playercmds (ID INTEGER " + (Server.useMySQL ? "" : "PRIMARY KEY ") + "AUTO" + (Server.useMySQL ? "_" : "") + "INCREMENT NOT NULL, Time DATETIME, Name VARCHAR(20), Rank VARCHAR(20), Mapname VARCHAR(40), Cmd VARCHAR(40), Cmdmsg VARCHAR(40)" + (Server.useMySQL ? ", PRIMARY KEY (ID)" : "") + ");");
+                Database.executeQuery(string.Format("CREATE TABLE if not exists Players (ID INTEGER {0}AUTO{1}INCREMENT NOT NULL, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6){2});", (useMySQL ? "" : "PRIMARY KEY "), (useMySQL ? "_" : ""), (Server.useMySQL ? ", PRIMARY KEY (ID)" : "")));
+				Database.executeQuery(string.Format("CREATE TABLE if not exists Playercmds (ID INTEGER {0}AUTO{1}INCREMENT NOT NULL, Time DATETIME, Name VARCHAR(20), Rank VARCHAR(20), Mapname VARCHAR(40), Cmd VARCHAR(40), Cmdmsg VARCHAR(40){2});", (useMySQL ? "" : "PRIMARY KEY "), (useMySQL ? "_" : ""), (Server.useMySQL ? ", PRIMARY KEY (ID)" : "")));
 
                 // Here, since SQLite is a NEW thing from 5.3.0.0, we do not have to check for existing tables in SQLite.
-                if (Server.useMySQL) {
+                if (useMySQL) {
                     // Check if the color column exists.
                     DataTable colorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
 
@@ -675,20 +635,20 @@ namespace MCForge
             {
                 try
                 {
-                    levels = new List<Level>(Server.maps);
+                    levels = new List<Level>(maps);
                     MapGen = new MapGenerator();
 
-                    if (File.Exists("levels/" + Server.level + ".lvl"))
+                    if (File.Exists("levels/" + level + ".lvl"))
                     {
-                        mainLevel = Level.Load(Server.level);
+                        mainLevel = Level.Load(level);
                         mainLevel.unload = false;
                         if (mainLevel == null)
                         {
-                            if (File.Exists("levels/" + Server.level + ".lvl.backup"))
+                            if (File.Exists("levels/" + level + ".lvl.backup"))
                             {
-                                Log("Attempting to load backup of " + Server.level + ".");
-                                File.Copy("levels/" + Server.level + ".lvl.backup", "levels/" + Server.level + ".lvl", true);
-                                mainLevel = Level.Load(Server.level);
+                                Log("Attempting to load backup of " + level + ".");
+                                File.Copy("levels/" + level + ".lvl.backup", "levels/" + level + ".lvl", true);
+                                mainLevel = Level.Load(level);
                                 if (mainLevel == null)
                                 {
                                     Log("BACKUP FAILED!");
@@ -698,26 +658,26 @@ namespace MCForge
                             else
                             {
                                 Log("mainlevel not found");
-                                mainLevel = new Level(Server.level, 128, 64, 128, "flat") { permissionvisit = LevelPermission.Guest, permissionbuild = LevelPermission.Guest };
+                                mainLevel = new Level(level, 128, 64, 128, "flat") { permissionvisit = LevelPermission.Guest, permissionbuild = LevelPermission.Guest };
                                 mainLevel.Save();
-                                Level.CreateLeveldb(Server.level);
+                                Level.CreateLeveldb(level);
                             }
                         }
                         //Wom Textures
-                        if (Server.UseTextures)
+                        if (UseTextures)
                         {
                             mainLevel.textures.sendwomid = true;
                             mainLevel.textures.enabled = true;
-                            mainLevel.textures.MOTD = Server.motd;
+                            mainLevel.textures.MOTD = motd;
                             mainLevel.textures.CreateCFG();
                         }
                     }
                     else
                     {
                         Log("mainlevel not found");
-                        mainLevel = new Level(Server.level, 128, 64, 128, "flat") { permissionvisit = LevelPermission.Guest, permissionbuild = LevelPermission.Guest };
+                        mainLevel = new Level(level, 128, 64, 128, "flat") { permissionvisit = LevelPermission.Guest, permissionbuild = LevelPermission.Guest };
                         mainLevel.Save();
-                        Level.CreateLeveldb(Server.level);
+                        Level.CreateLeveldb(level);
                     }
 
                     addLevel(mainLevel);
@@ -726,7 +686,7 @@ namespace MCForge
                     if (mainLevel.physThread == null)
                         mainLevel.StartPhysics();
                 }
-                catch (Exception e) { Server.ErrorLog(e); }
+                catch (Exception e) { ErrorLog(e); }
             });
             Plugin.Load();
             ml.Queue(delegate
@@ -737,7 +697,7 @@ namespace MCForge
 
                 foreach (Group grp in Group.GroupList)
                     grp.playerList = PlayerList.Load(grp.fileName, grp);
-                if (Server.useWhitelist)
+                if (useWhitelist)
                     whiteList = PlayerList.Load("whitelist.txt", null);
             });
 
@@ -749,15 +709,12 @@ namespace MCForge
                     try
                     {
                         string[] lines = File.ReadAllLines("text/autoload.txt");
-                        foreach (string line in lines)
+                        foreach (string _line in lines.Select(line => line.Trim()))
                         {
-                            //int temp = 0;
-                            string _line = line.Trim();
                             try
                             {
                                 if (_line == "") { continue; }
                                 if (_line[0] == '#') { continue; }
-                                int index = _line.IndexOf("=");
 
                                 string key = _line.Split('=')[0].Trim();
                                 string value;
@@ -774,13 +731,6 @@ namespace MCForge
                                 {
                                     Command.all.Find("load").Use(null, key + " " + value);
                                     Level l = Level.FindExact(key);
-                                    //Not needed, as load does it for us.
-                                    //try
-                                    //{
-                                    //        Gui.Window.thisWindow.UpdateMapList("'");
-                                    //        Gui.Window.thisWindow.UnloadedlistUpdate();
-                                    //}
-                                    //catch { }
                                 }
                                 else
                                 {
@@ -794,7 +744,7 @@ namespace MCForge
                                     }
                                     catch
                                     {
-                                        Server.s.Log("Physics variable invalid");
+                                        s.Log("Physics variable invalid");
                                     }
                                 }
 
@@ -802,13 +752,13 @@ namespace MCForge
                             }
                             catch
                             {
-                                Server.s.Log(_line + " failed.");
+                                s.Log(_line + " failed.");
                             }
                         }
                     }
                     catch
                     {
-                        Server.s.Log("autoload.txt error");
+                        s.Log("autoload.txt error");
                     }
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
@@ -830,22 +780,9 @@ namespace MCForge
                 {
                     gcaccepted.Add(line); //loading all playernames of people who turned off translation
                 }
-                Log("Creating listening socket on port " + Server.port + "... ");
-                if (Setup())
-                {
-                    s.Log("Done.");
-                }
-                else
-                {
-                    s.Log("Could not create socket connection. Shutting down.");
-                    return;
-                }
-            });
-            ml.Queue(delegate
-            {
-                Remote.RemoteServer webServer;
-                Remote.RemoteProperties.Load();
-                (webServer = new Remote.RemoteServer()).Start();
+                Log("Creating listening socket on port " + port + "... ");
+                Setup();
+                //s.Log(Setup() ? "Done." : "Could not create socket connection. Shutting down.");
             });
             
             ml.Queue(delegate
@@ -878,28 +815,9 @@ namespace MCForge
             {
                 if (mcforgeUser != String.Empty && mcforgePass != String.Empty)
                 {
-                    new Thread(new ThreadStart(delegate { MCForgeAccount.Login(); })).Start();
+                    new Thread(new ThreadStart(() => MCForgeAccount.Login())).Start();
                 }
             });
-
-            // END Heartbeat code
-
-            /*
-Thread processThread = new Thread(new ThreadStart(delegate
-{
-try
-{
-PCCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-ProcessCounter = new PerformanceCounter("Process", "% Processor Time", Process.GetCurrentProcess().ProcessName);
-PCCounter.BeginInit();
-ProcessCounter.BeginInit();
-PCCounter.NextValue();
-ProcessCounter.NextValue();
-}
-catch { }
-}));
-processThread.Start();
-*/
 
             ml.Queue(delegate
             {
@@ -929,10 +847,7 @@ processThread.Start();
                 if (Server.UseGlobalChat) GlobalChat.Connect();
 
                 // OmniBan stuff!
-                new Thread(new ThreadStart(delegate
-                {
-                    omniban.Load(true);
-                })).Start();
+                new Thread(new ThreadStart(() => omniban.Load(true))).Start();
 
                 omnibanCheckTimer.Elapsed += delegate
                 {
@@ -942,10 +857,7 @@ processThread.Start();
                 omnibanCheckTimer.Start();
 
 
-                // string CheckName = "FROSTEDBUTTS";
-
-                // if (Server.name.IndexOf(CheckName.ToLower())!= -1){ Server.s.Log("FROSTEDBUTTS DETECTED");}
-                new AutoSaver(Server.backupInterval); //2 and a half mins
+                new AutoSaver(Server.backupInterval);
 
                 blockThread = new Thread(new ThreadStart(delegate
                 {
@@ -1039,13 +951,6 @@ processThread.Start();
                         IP = web.DownloadString("http://www.mcforge.net/serverdata/ip.php");
                 }
                 catch { }
-                try
-                {
-                    Gui.Window.thisWindow.UpdateMapList("'");
-                    Thread.Sleep(100);
-                    Gui.Window.thisWindow.UnloadedlistUpdate();
-                }
-                catch { }
 #if DEBUG
       UseTextures = true;          
 #endif
@@ -1082,34 +987,31 @@ processThread.Start();
             ProfanityFilter.Init();
         }
         
-        public static bool Setup()
+        public static void Setup()
         {
             try
             {
-                IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, Server.port);
+                IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, port);
                 listen = new Socket(endpoint.Address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 listen.Bind(endpoint);
                 listen.Listen((int)SocketOptionName.MaxConnections);
-
-                listen.BeginAccept(new AsyncCallback(Accept), null);
-                return true;
+                listen.BeginAccept(Accept, null);
             }
-            catch (SocketException e) { ErrorLog(e); return false; }
-            catch (Exception e) { ErrorLog(e); return false; }
+            catch (SocketException e) { ErrorLog(e); s.Log("Error Creating listener, socket shutting down");}
+            catch (Exception e) { ErrorLog(e); s.Log("Error Creating listener, socket shutting down"); }
         }
 
-        static void Accept(IAsyncResult result)
+       static void Accept(IAsyncResult result)
         {
-            if (!shuttingDown)
-            {
-                // found information: http://www.codeguru.com/csharp/csharp/cs_network/sockets/article.php/c7695
-                // -Descention
+            if (shuttingDown) return;
+            
                 Player p = null;
                 bool begin = false;
                 try
                 {
 					p = new Player(listen.EndAccept(result));
-                    listen.BeginAccept(new AsyncCallback(Accept), null);
+                    new Thread(p.Start).Start();
+                    listen.BeginAccept(Accept, null);
                     begin = true;
                 }
                 catch (SocketException)
@@ -1117,7 +1019,7 @@ processThread.Start();
                     if (p != null)
                         p.Disconnect();
                     if (!begin)
-                        listen.BeginAccept(new AsyncCallback(Accept), null);
+                        listen.BeginAccept(Accept, null);
                 }
                 catch (Exception e)
                 {
@@ -1125,9 +1027,9 @@ processThread.Start();
                     if (p != null)
                         p.Disconnect();
                     if (!begin)
-                        listen.BeginAccept(new AsyncCallback(Accept), null);
+                        listen.BeginAccept(Accept, null);
                 }
-            }
+            
         }
 
         public static void Exit(bool AutoRestart)
@@ -1159,30 +1061,16 @@ processThread.Start();
             }
             try
             {
-                Remote.RemoteServer.enableRemote = false;
-                Remote.RemoteServer.Close();
-            }
-            catch { }
-            try
-            {
                 if (GlobalChat.IsConnected())
                 {
-                    if (!AutoRestart)
-                        GlobalChat.Disconnect("Server is shutting down.");
-                    else
-                        GlobalChat.Disconnect("Server is restarting.");
+                    GlobalChat.Disconnect(!AutoRestart ? "Server is shutting down." : "Server is restarting.");
                 }
             }
             catch { }
             try
             {
-                if (IRC.IsConnected())
-                {
-                    if (!AutoRestart)
-                        IRC.Disconnect("Server is shutting down.");
-                    else
-                        IRC.Disconnect("Server is restarting.");
-                }
+                if (!IRC.IsConnected()) return;
+                IRC.Disconnect(!AutoRestart ? "Server is shutting down." : "Server is restarting.");
             }
             catch { }
         }
@@ -1232,7 +1120,6 @@ processThread.Start();
             
             Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + message + Environment.NewLine);
         }
-
         public void OpLog(string message, bool systemMsg = false)
         {
             if (ServerOpLog != null)
@@ -1304,7 +1191,7 @@ processThread.Start();
             Logger.WriteError(ex);
             try
             {
-                s.Log("!!!Error! See " + Logger.ErrorLogPath + " for more information.");
+                s.Log("!!!Error! See " + Logger.ErrorLogPath + " for more information." );
             } catch { }
         }
 
@@ -1321,24 +1208,11 @@ processThread.Start();
 
         public static string FindColor(string Username)
         {
-            foreach (Group grp in Group.GroupList)
+            foreach (Group grp in Group.GroupList.Where(grp => grp.playerList.Contains(Username)))
             {
-                if (grp.playerList.Contains(Username)) return grp.color;
+                return grp.color;
             }
             return Group.standard.color;
-        }
-
-        public static void PopupNotify(string message)
-        {
-            PopupNotify(message, System.Windows.Forms.ToolTipIcon.Info);
-        }
-        public static void PopupNotify(string message, System.Windows.Forms.ToolTipIcon icon)
-        {
-            try
-            {
-                Gui.Window.thisWindow.notifyIcon1.ShowBalloonTip(3000, Server.name, message, icon);
-            }
-            catch { }
         }
     }
 }
