@@ -1557,7 +1557,7 @@ namespace MCForge
                 if (!deleteMode)
                 {
                     if (Block.portal(b)) { HandlePortal(this, x, y, z, b); return; }
-                    if (Block.mb(b)) { HandleMsgBlock(this, x, y, z, b); return; }
+                    if (Block.mb(b)) { HandleMsgBlock(x, y, z, b); return; }
                 }
 
                 bP.deleted = true;
@@ -1610,7 +1610,7 @@ namespace MCForge
         }
 
 
-        internal void HandleMsgBlock(Player p, ushort x, ushort y, ushort z, byte b)
+        internal void HandleMsgBlock(ushort x, ushort y, ushort z, byte b)
         {
             try
             {
@@ -1630,8 +1630,7 @@ namespace MCForge
                             string args = string.Join(" ", Message.ToArray());
                             HandleCommand(command, args);
                         }
-                        else
-                            Player.SendMessage(p, message);
+                        else SendMessage(message);
 
                         prevMsg = message;
                     }
@@ -1643,7 +1642,7 @@ namespace MCForge
                 }
                 Messages.Dispose();
             }
-            catch { Player.SendMessage(p, "No message was stored."); return; }
+            catch { SendMessage("No message was stored."); return; }
         }
 
 //  Unused method, wasting mah .exe spaces
@@ -1985,11 +1984,11 @@ cliprot = rot;
 
                     if (b == Block.MsgAir || b == Block.MsgWater || b == Block.MsgLava)
                     {
-                        HandleMsgBlock(this, x, y, z, b);
+                        HandleMsgBlock(x, y, z, b);
                     }
                     else if (b1 == Block.MsgAir || b1 == Block.MsgWater || b1 == Block.MsgLava)
                     {
-                        HandleMsgBlock(this, x, (ushort)((int)y - 1), z, b1);
+                        HandleMsgBlock(x, (ushort)((int)y - 1), z, b1);
                     }
                     /*else if (b1 == Block.flagbase)
 {
