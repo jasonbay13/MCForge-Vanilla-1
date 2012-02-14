@@ -19,7 +19,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdUnload : Command

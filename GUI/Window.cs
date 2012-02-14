@@ -23,7 +23,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Threading;
-using MCForge;
+
 using System.Net;
 
 namespace MCForge.Gui

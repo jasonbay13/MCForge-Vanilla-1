@@ -23,7 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdResetPass : Command

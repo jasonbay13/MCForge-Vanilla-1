@@ -10,7 +10,7 @@ Unless required by applicable law or agreed to in writing,
 software distributed under the Licenses are distributed on an "AS IS"
 BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
-permissions and limitations under the Licenses.
+permiusing MCForge;ssions and limitations under the Licenses.
 */
 
 

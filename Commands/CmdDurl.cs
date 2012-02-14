@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdDurl : Command

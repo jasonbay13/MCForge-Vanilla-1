@@ -18,7 +18,7 @@
 
 using System;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdHasirc : Command

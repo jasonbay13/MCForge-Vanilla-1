@@ -15,7 +15,7 @@
 	permissions and limitations under the License.
 */
 using System;
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdFakePay : Command

@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdIgnore : Command

@@ -24,7 +24,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdImageprint : Command

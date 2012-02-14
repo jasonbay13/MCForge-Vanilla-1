@@ -22,7 +22,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Threading;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdServerReport : Command

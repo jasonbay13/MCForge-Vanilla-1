@@ -18,7 +18,7 @@
 using System;
 using System.IO;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdHide : Command
