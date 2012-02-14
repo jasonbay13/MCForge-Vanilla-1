@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     class CmdPlayers : Command

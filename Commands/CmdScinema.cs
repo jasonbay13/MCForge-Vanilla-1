@@ -19,10 +19,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
-    public class CmdSCinema : Command, IDisposable
+    public class CmdSCinema : Command
     {
 
 
@@ -119,7 +119,7 @@ namespace MCForge.Commands
                     for (ushort zz = Math.Min(cpos.z, z); zz <= Math.Max(cpos.z, z); ++zz)
                     {
                         b = p.level.GetTile(xx, yy, zz);
-                        BufferAdd((ushort)(xx - cpos.x), (ushort)(yy - cpos.y), (ushort)(zz - cpos.z), b, CBuffer);
+                        BufferAdd(p, (ushort)(xx - cpos.x), (ushort)(yy - cpos.y), (ushort)(zz - cpos.z), b, CBuffer);
                     }
                 }
             }
@@ -180,7 +180,7 @@ namespace MCForge.Commands
             Player.SendMessage(p, "/sCinema [name] - Saves a given Frame to the File. Can be Played by pCinema");
         }
 
-        void BufferAdd(ushort x, ushort y, ushort z, byte type, List<Player.CopyPos> Buf)
+        void BufferAdd(Player p, ushort x, ushort y, ushort z, byte type, List<Player.CopyPos> Buf)
         {
             Player.CopyPos pos;
             pos.x = x;
@@ -193,42 +193,6 @@ namespace MCForge.Commands
         struct CatchPos { public ushort x, y, z; }
 
 
-
-        #region IDisposable Implementation
-
-        protected bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            lock (this)
-            {
-                // Do nothing if the object has already been disposed of.
-                if (disposed)
-                    return;
-
-                if (disposing)
-                {
-                    // Release diposable objects used by this instance here.
-
-                    if (cin != null)
-                        cin.Dispose();
-                }
-
-                // Release unmanaged resources here. Don't access reference type fields.
-
-                // Remember that the object has been disposed of.
-                disposed = true;
-            }
-        }
-
-        public virtual void Dispose()
-        {
-            Dispose(true);
-            // Unregister object for finalization.
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
     }
 }
 

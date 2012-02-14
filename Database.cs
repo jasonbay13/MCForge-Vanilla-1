@@ -27,7 +27,7 @@ using System.Data;
 
 namespace MCForge {
     namespace SQL {
-        internal static class Database {
+        class Database {
             public static void CopyDatabase(StreamWriter sql) {
                 //We technically know all tables in the DB...  But since this is MySQL, we can also get them all with a MySQL command
                 //So we show the tables, and store the result.
@@ -214,7 +214,7 @@ namespace MCForge {
                             goto retry;
                         }
                     } else {
-                        throw; 
+                        throw e;
                     }
                 }
             }
@@ -255,7 +255,7 @@ namespace MCForge {
                 //Make new
                 string script = new StreamReader(stream).ReadToEnd();
                 string[] cmds = script.Split(';');
-//                StringBuilder sb = new StringBuilder() // Unused method, wasting mah .exe spaces;
+                StringBuilder sb = new StringBuilder();
 
                 using (DatabaseTransactionHelper helper = DatabaseTransactionHelper.Create()) {
 

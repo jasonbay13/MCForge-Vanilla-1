@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
-using MCForge;
+
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -32,13 +32,14 @@ using System.Threading;
 using System.Text.RegularExpressions;
 using System.Net;
 using System.Reflection;
-
+using MCForge;
 
 namespace MCForge_.Gui
 {
     public static class Program
     {
-        public static bool usingConsole/* = false*/;
+        public static DateTime startTime;
+        public static bool usingConsole = false;
         public static string parent = Path.GetFileName(Assembly.GetEntryAssembly().Location);
         public static string parentfullpath = Assembly.GetEntryAssembly().Location;
         public static string parentfullpathdir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
@@ -50,10 +51,10 @@ namespace MCForge_.Gui
         //private static string HeartbeatAnnounce = "http://www.mcforge.net/hbannounce.php";
 
         [DllImport("kernel32")]
-        private static extern IntPtr GetConsoleWindow();
+        public static extern IntPtr GetConsoleWindow();
         [DllImport("user32.dll")]
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-        private static void GlobalExHandler(object sender, UnhandledExceptionEventArgs e)
+        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        public static void GlobalExHandler(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = (Exception)e.ExceptionObject;
             Server.ErrorLog(ex);
@@ -63,7 +64,7 @@ namespace MCForge_.Gui
                 ExitProgram(true);
         }
 
-        private static void ThreadExHandler(object sender, ThreadExceptionEventArgs e)
+        public static void ThreadExHandler(object sender, ThreadExceptionEventArgs e)
         {
             Exception ex = e.Exception;
             Server.ErrorLog(ex);
@@ -75,6 +76,7 @@ namespace MCForge_.Gui
 
         public static void Main(string[] args)
         {
+            startTime = DateTime.Now;
             if (Process.GetProcessesByName("MCForge").Length != 1)
             {
                 foreach (Process pr in Process.GetProcessesByName("MCForge"))
@@ -85,8 +87,8 @@ namespace MCForge_.Gui
                 }
             }
             PidgeonLogger.Init();
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Program.GlobalExHandler);
-            Application.ThreadException += new ThreadExceptionEventHandler(Program.ThreadExHandler);
+            AppDomain.CurrentDomain.UnhandledException += GlobalExHandler;
+            Application.ThreadException += ThreadExHandler;
             bool skip = false;
         remake:
             try
@@ -113,15 +115,16 @@ namespace MCForge_.Gui
                 if (foundView[4].Split(' ')[2].ToLower() == "true")
                 {
                     Server s = new Server();
-                    s.OnLog += Console.WriteLine;
-                    s.OnCommand += Console.WriteLine;
-                    s.OnSystem += Console.WriteLine;
+                    s.OnLog += WriteToConsole;
+                    s.OnCommand += WriteToConsole;
+                    s.OnSystem += WriteToConsole;
                     s.Start();
 
                     Console.Title = Server.name + " - MCForge " + Server.Version;
                     usingConsole = true;
                     handleComm();
 
+                    
                     //Application.Run();
                 }
                 else
@@ -142,8 +145,59 @@ namespace MCForge_.Gui
                     updateTimer.Elapsed += delegate { UpdateCheck(); }; updateTimer.Start();
                     Application.Run(new MCForge.Gui.Window());
                 }
+                WriteToConsole("Completed in " + (DateTime.Now - startTime).Milliseconds + "ms");
             }
-            catch (Exception e) { Server.ErrorLog(e); return; }
+            catch (Exception e) { Server.ErrorLog(e); }
+        }
+
+        //U WANT TO SEE HOW WE DO IT MCSTORM?
+        //I WOULD EXPLAIN, BUT ITS BETTER TO JUST COPY AND PASTE, AMIRITE?
+        private static void WriteToConsole(string message)
+        {
+            if (!message.Contains("&") && !message.Contains("%"))
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(message);
+                return;
+            }
+            string[] splitted = message.Split('&', '%');
+            for (int i = 0; i < splitted.Length; i++)
+            {
+                string elString = splitted[i];
+                if (String.IsNullOrEmpty(elString))
+                    continue;
+                Console.ForegroundColor = GetColor(elString[0]);
+                Console.Write(elString.Substring(1));
+                if (i != splitted.Length - 1)
+                    continue;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write('\n');
+            }
+        }
+
+        private static ConsoleColor GetColor(char c)
+        {
+            switch (c)
+            {
+                case 'e': return ConsoleColor.Yellow;
+                case '0': return ConsoleColor.Black;
+                case '1': return ConsoleColor.DarkBlue;
+                case '2': return ConsoleColor.DarkGreen;
+                case '3': return ConsoleColor.DarkCyan;
+                case '4': return ConsoleColor.DarkMagenta;
+                    //No love for purples
+                case '7': return ConsoleColor.Gray;
+                case '6': return ConsoleColor.DarkYellow;
+                case '8': return ConsoleColor.DarkGray;
+                case '9': return ConsoleColor.Blue;
+                case 'a': return ConsoleColor.Green;
+                case 'b': return ConsoleColor.Cyan;
+                case 'c': return ConsoleColor.Red;
+                case 'd': return ConsoleColor.Magenta;
+                //Dont need f, it will default to white.
+                default:
+                    return ConsoleColor.White;
+            }
         }
 
         public static void handleComm()
@@ -221,7 +275,7 @@ namespace MCForge_.Gui
                         Player.GlobalMessage(msg);
                         Server.IRC.Say(msg);
                     }
-                    Console.WriteLine(msg);
+                    WriteToConsole(msg);
                 }
                 catch (Exception ex)
                 {
@@ -296,8 +350,8 @@ namespace MCForge_.Gui
 
         } */
 
-        public static bool CurrentUpdate/* = false*/;
-        static bool msgOpen/* = false*/;
+        public static bool CurrentUpdate = false;
+        static bool msgOpen = false;
         public static System.Timers.Timer updateTimer = new System.Timers.Timer(120 * 60 * 1000);
 
         public static void UpdateCheck(bool wait = false, Player p = null)
@@ -370,7 +424,6 @@ namespace MCForge_.Gui
                                     }
                                     msgOpen = false;
                                 }
-                                else { }
                             }
                             else
                             {
@@ -387,7 +440,8 @@ namespace MCForge_.Gui
                     {
                         Player.SendMessage(p, "No update found!");
                     }
-                } catch { try { Server.s.Log("No web server found to update on."); } catch { } }
+                }
+                catch { try { Server.s.Log("No web server found to update on."); } catch { } }
                 Client.Dispose();
                 CurrentUpdate = false;
             })); updateThread.Start();
@@ -494,16 +548,16 @@ namespace MCForge_.Gui
                 //if (!Server.mono) fileName = "Update.bat";
                 //else fileName = "Update.sh";
 
-                try
-                {
-                    if (MCForge.Gui.Window.thisWindow.notifyIcon1 != null)
-                    {
-                        MCForge.Gui.Window.thisWindow.notifyIcon1.Icon = null;
-                        MCForge.Gui.Window.thisWindow.notifyIcon1.Visible = false;
-                    }
-                }
-                catch { }
-
+                /* try
+                 {
+                     if (MCForge.Gui.Window.thisWindow.notifyIcon1 != null)
+                     {
+                         MCForge.Gui.Window.thisWindow.notifyIcon1.Icon = null;
+                         MCForge.Gui.Window.thisWindow.notifyIcon1.Visible = false;
+                     }
+                 }
+                 catch { }
+                 */
                 File.WriteAllBytes("Updater.exe", MCForge.Properties.Resources.Updater);
                 if (!usingConsole)
                     Process.Start("Updater.exe", "securitycheck10934579068013978427893755755270374" + parent);
@@ -516,16 +570,16 @@ namespace MCForge_.Gui
             catch (Exception e) { Server.ErrorLog(e); }
         }
 
-        static public void ExitProgram(Boolean AutoRestart)
+        static public void ExitProgram(bool AutoRestart)
         {
             Server.restarting = AutoRestart;
             Server.shuttingDown = true;
-            Thread exitThread;
+
             Server.Exit(AutoRestart);
 
-            exitThread = new Thread(new ThreadStart(delegate
+            new Thread(new ThreadStart(delegate
             {
-                try
+                /*try
                 {
                     if (MCForge.Gui.Window.thisWindow.notifyIcon1 != null)
                     {
@@ -535,8 +589,8 @@ namespace MCForge_.Gui
                     }
                 }
                 catch { }
-
-                if (AutoRestart == true)
+                */
+                if (AutoRestart)
                 {
                     saveAll(true);
 
@@ -563,7 +617,7 @@ namespace MCForge_.Gui
                     }
                     Environment.Exit(0);
                 }
-            })); exitThread.Start();
+            })).Start();
         }
 
         static public void saveAll(bool restarting)

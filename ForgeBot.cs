@@ -26,18 +26,24 @@ namespace MCForge
 {
     public class ForgeBot
     {
-        public const string ColorSignal = "\x03";
-        public const string ResetSignal = "\x0F";
+        public static readonly string ColorSignal = "\x03";
+        public static readonly string ResetSignal = "\x0F";
         private Connection connection;
         private List<string> banCmd;
         private string channel, opchannel;
         private string nick;
         private string server;
-        private bool reset/* = false*/;
-        private byte retries/* = 0*/;
+        private bool reset = false;
+        private byte retries = 0;
         public string usedCmd = "";
         public ForgeBot(string channel, string opchannel, string nick, string server)
         {
+            if (!File.Exists("Sharkbite.Thresher.dll"))
+            {
+                Server.irc = false;
+                Server.s.Log("[IRC] The IRC dll was not found!");
+                return;
+            }
             this.channel = channel.Trim(); this.opchannel = opchannel.Trim(); this.nick = nick.Replace(" ", ""); this.server = server;
             ConnectionArgs con = new ConnectionArgs(nick, server);
             con.Port = Server.ircPort;
@@ -83,26 +89,24 @@ namespace MCForge
         }
         public void Say(string message, bool opchat = false, bool color = true)
         {
-            if (Server.irc && IsConnected())
-            {
-                StringBuilder sb = new StringBuilder(message);
+            if (!Server.irc || !IsConnected()) return;
+            StringBuilder sb = new StringBuilder(message);
 
-                if (color)
+            if (color)
+            {
+                for (int i = 0; i < 10; i++)
                 {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        sb.Replace("%" + i, ColorSignal + c.MCtoIRC("&" + i));
-                        sb.Replace("&" + i, ColorSignal + c.MCtoIRC("&" + i));
-                    }
-                    for (char ch = 'a'; ch <= 'f'; ch++)
-                    {
-                        sb.Replace("%" + ch, ColorSignal + c.MCtoIRC("&" + ch));
-                        sb.Replace("&" + ch, ColorSignal + c.MCtoIRC("&" + ch));
-                    }
+                    sb.Replace("%" + i, ColorSignal + c.MCtoIRC("&" + i));
+                    sb.Replace("&" + i, ColorSignal + c.MCtoIRC("&" + i));
                 }
-                
-                connection.Sender.PublicMessage(opchat ? opchannel : channel, sb.ToString());
+                for (char ch = 'a'; ch <= 'f'; ch++)
+                {
+                    sb.Replace("%" + ch, ColorSignal + c.MCtoIRC("&" + ch));
+                    sb.Replace("&" + ch, ColorSignal + c.MCtoIRC("&" + ch));
+                }
             }
+                
+            connection.Sender.PublicMessage(opchat ? opchannel : channel, sb.ToString());
         }
         public void Pm(string user, string message)
         {

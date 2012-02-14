@@ -7,12 +7,12 @@ namespace MCForge
     /// </summary>
     public partial class Player
     {
-        internal bool cancelcommand/* = false*/;
-        internal bool cancelchat/* = false*/;
-        internal bool cancelmove/* = false*/;
-        internal bool cancelBlock/* = false*/;
-        internal bool cancelmysql/* = false*/;
-        internal bool cancelmessage/* = false*/;
+        internal bool cancelcommand = false;
+        internal bool cancelchat = false;
+        internal bool cancelmove = false;
+        internal bool cancelBlock = false;
+        internal bool cancelmysql = false;
+        internal bool cancelmessage = false;
         //Should people be able to cancel this event?
         /// <summary>
         /// This delegate is called when the MOTD is sent to the player

@@ -32,7 +32,7 @@ namespace MCForge
 
     public class MapGenerator
     {
-        static bool Inuse/* = false*/;
+        static bool Inuse = false;
         static float[] terrain;
         static float[] overlay;
         static float[] overlay2;
@@ -76,12 +76,12 @@ namespace MCForge
                 //CREATE OVERLAY
                 //GenerateFault(overlay, Lvl, "overlay", rand);
                 Server.s.Log("Creating overlay");
-                GeneratePerlinNoise(overlay, Lvl, rand);
+                GeneratePerlinNoise(overlay, Lvl, "", rand);
 
                 if (!type.Equals("ocean") && type != "desert")
                 {
                     Server.s.Log("Planning trees");
-                    GeneratePerlinNoise(overlay2, Lvl, rand);
+                    GeneratePerlinNoise(overlay2, Lvl, "", rand);
                 }
 
                 Server.s.Log("Converting height map");
@@ -439,7 +439,7 @@ namespace MCForge
 
         //hur hur, more copy pasted code :/
         #region ==PerlinGen==
-        void GeneratePerlinNoise(float[] array, Level Lvl, Random rand)
+        void GeneratePerlinNoise(float[] array, Level Lvl, string type, Random rand)
         {
             GenerateNormalized(array, 0.7f, 8, Lvl.width, Lvl.height, rand.Next(), 64);
         }
@@ -806,18 +806,17 @@ namespace MCForge
         }
 
         //Averages over 5 points
-//  Unused method, wasting mah .exe spaces
-//        float GetAverage5(ushort x, ushort y, Level Lvl)
-//        {
-//            divide = 0.0f;
-//            float temp = GetPixel(x, y, Lvl);
-//            temp += GetPixel((ushort)(x + 1), y, Lvl);
-//            temp += GetPixel((ushort)(x - 1), y, Lvl);
-//            temp += GetPixel(x, (ushort)(y + 1), Lvl);
-//            temp += GetPixel(x, (ushort)(y - 1), Lvl);
-//
-//            return temp / divide;
-//        }
+        float GetAverage5(ushort x, ushort y, Level Lvl)
+        {
+            divide = 0.0f;
+            float temp = GetPixel(x, y, Lvl);
+            temp += GetPixel((ushort)(x + 1), y, Lvl);
+            temp += GetPixel((ushort)(x - 1), y, Lvl);
+            temp += GetPixel(x, (ushort)(y + 1), Lvl);
+            temp += GetPixel(x, (ushort)(y - 1), Lvl);
+
+            return temp / divide;
+        }
         //Averages over 9 points
         float GetAverage9(ushort x, ushort y, Level Lvl)
         {

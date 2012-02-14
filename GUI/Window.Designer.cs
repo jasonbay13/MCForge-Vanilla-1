@@ -36,10 +36,6 @@ namespace MCForge.Gui
             if (disposing && (components != null))
             {
                 components.Dispose();
-                if (prpertiesofplyer != null) prpertiesofplyer.Dispose();
-                if (prpertiesoflvl != null) prpertiesoflvl.Dispose();
-
-
             }
             base.Dispose(disposing);
         }
@@ -269,17 +265,6 @@ namespace MCForge.Gui
             this.label33 = new System.Windows.Forms.Label();
             this.txtOpInput = new System.Windows.Forms.TextBox();
             this.txtOpLog = new MCForge.Gui.AutoScrollTextBox();
-            this.tabPage8 = new System.Windows.Forms.TabPage();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.onlinep = new System.Windows.Forms.Button();
-            this.promote = new System.Windows.Forms.Button();
-            this.demote = new System.Windows.Forms.Button();
-            this.offlinep = new System.Windows.Forms.Button();
-            this.label42 = new System.Windows.Forms.Label();
-            this.label41 = new System.Windows.Forms.Label();
-            this.Players = new System.Windows.Forms.ListBox();
-            this.Ranks = new System.Windows.Forms.ListBox();
             this.mapsStrip.SuspendLayout();
             this.playerStrip.SuspendLayout();
             this.iconContext.SuspendLayout();
@@ -307,7 +292,6 @@ namespace MCForge.Gui
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.tabPage8.SuspendLayout();
             this.SuspendLayout();
             // 
             // mapsStrip
@@ -675,9 +659,9 @@ namespace MCForge.Gui
             // 
             this.btnProperties.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnProperties.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnProperties.Location = new System.Drawing.Point(452, 5);
+            this.btnProperties.Location = new System.Drawing.Point(441, 5);
             this.btnProperties.Name = "btnProperties";
-            this.btnProperties.Size = new System.Drawing.Size(69, 23);
+            this.btnProperties.Size = new System.Drawing.Size(80, 23);
             this.btnProperties.TabIndex = 34;
             this.btnProperties.Text = "Properties";
             this.btnProperties.UseVisualStyleBackColor = true;
@@ -1019,7 +1003,6 @@ namespace MCForge.Gui
             this.tabControl1.Controls.Add(this.tabPage6);
             this.tabControl1.Controls.Add(this.tabPage7);
             this.tabControl1.Controls.Add(this.Chat);
-            this.tabControl1.Controls.Add(this.tabPage8);
             this.tabControl1.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabControl1.Font = new System.Drawing.Font("Calibri", 8.25F);
             this.tabControl1.Location = new System.Drawing.Point(1, 12);
@@ -2379,137 +2362,14 @@ namespace MCForge.Gui
             this.txtOpLog.Size = new System.Drawing.Size(664, 96);
             this.txtOpLog.TabIndex = 29;
             // 
-            // tabPage8
-            // 
-            this.tabPage8.BackColor = System.Drawing.Color.Transparent;
-            this.tabPage8.Controls.Add(this.button2);
-            this.tabPage8.Controls.Add(this.button1);
-            this.tabPage8.Controls.Add(this.onlinep);
-            this.tabPage8.Controls.Add(this.promote);
-            this.tabPage8.Controls.Add(this.demote);
-            this.tabPage8.Controls.Add(this.offlinep);
-            this.tabPage8.Controls.Add(this.label42);
-            this.tabPage8.Controls.Add(this.label41);
-            this.tabPage8.Controls.Add(this.Players);
-            this.tabPage8.Controls.Add(this.Ranks);
-            this.tabPage8.Location = new System.Drawing.Point(4, 22);
-            this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(698, 488);
-            this.tabPage8.TabIndex = 9;
-            this.tabPage8.Text = "Ranks";
-            this.tabPage8.Click += new System.EventHandler(this.tabPage8_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(307, 274);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(83, 23);
-            this.button2.TabIndex = 9;
-            this.button2.Text = "Remove";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(307, 213);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(83, 23);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Add";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_2);
-            // 
-            // onlinep
-            // 
-            this.onlinep.Location = new System.Drawing.Point(307, 335);
-            this.onlinep.Name = "onlinep";
-            this.onlinep.Size = new System.Drawing.Size(83, 36);
-            this.onlinep.TabIndex = 7;
-            this.onlinep.Text = "Show online players";
-            this.onlinep.UseVisualStyleBackColor = true;
-            this.onlinep.Click += new System.EventHandler(this.onlinep_Click);
-            // 
-            // promote
-            // 
-            this.promote.Location = new System.Drawing.Point(307, 90);
-            this.promote.Name = "promote";
-            this.promote.Size = new System.Drawing.Size(83, 23);
-            this.promote.TabIndex = 6;
-            this.promote.Text = "Promote";
-            this.promote.UseVisualStyleBackColor = true;
-            this.promote.Click += new System.EventHandler(this.promote_Click);
-            // 
-            // demote
-            // 
-            this.demote.Location = new System.Drawing.Point(307, 150);
-            this.demote.Name = "demote";
-            this.demote.Size = new System.Drawing.Size(83, 23);
-            this.demote.TabIndex = 5;
-            this.demote.TabStop = false;
-            this.demote.Text = "Demote";
-            this.demote.UseVisualStyleBackColor = true;
-            this.demote.Click += new System.EventHandler(this.demote_Click);
-            // 
-            // offlinep
-            // 
-            this.offlinep.Enabled = false;
-            this.offlinep.Location = new System.Drawing.Point(307, 403);
-            this.offlinep.Name = "offlinep";
-            this.offlinep.Size = new System.Drawing.Size(83, 37);
-            this.offlinep.TabIndex = 4;
-            this.offlinep.Text = "Show offline players";
-            this.offlinep.UseVisualStyleBackColor = true;
-            this.offlinep.Click += new System.EventHandler(this.button1_Click_1);
-            // 
-            // label42
-            // 
-            this.label42.AutoSize = true;
-            this.label42.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label42.Location = new System.Drawing.Point(7, 38);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(48, 19);
-            this.label42.TabIndex = 3;
-            this.label42.Text = "Ranks";
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label41.Location = new System.Drawing.Point(392, 38);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(148, 19);
-            this.label41.TabIndex = 2;
-            this.label41.Text = "Please select a group";
-            // 
-            // Players
-            // 
-            this.Players.FormattingEnabled = true;
-            this.Players.Items.AddRange(new object[] {
-            "Waiting...."});
-            this.Players.Location = new System.Drawing.Point(396, 60);
-            this.Players.Name = "Players";
-            this.Players.Size = new System.Drawing.Size(294, 407);
-            this.Players.TabIndex = 1;
-            // 
-            // Ranks
-            // 
-            this.Ranks.FormattingEnabled = true;
-            this.Ranks.Items.AddRange(new object[] {
-            "Loading..."});
-            this.Ranks.Location = new System.Drawing.Point(7, 60);
-            this.Ranks.Name = "Ranks";
-            this.Ranks.Size = new System.Drawing.Size(294, 407);
-            this.Ranks.TabIndex = 0;
-            this.Ranks.SelectedIndexChanged += new System.EventHandler(this.Ranks_SelectedIndexChanged);
-            // 
             // Window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(707, 523);
-            this.Controls.Add(this.btnProperties);
             this.Controls.Add(this.Restart);
             this.Controls.Add(this.btnClose);
+            this.Controls.Add(this.btnProperties);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -2559,8 +2419,6 @@ namespace MCForge.Gui
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.tabPage8.ResumeLayout(false);
-            this.tabPage8.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2769,16 +2627,5 @@ namespace MCForge.Gui
         private AutoScrollTextBox txtGlobalLog;
         private TextBox txtGlobalInput;
         private Button WoM;
-        private TabPage tabPage8;
-        private Button onlinep;
-        private Button promote;
-        private Button demote;
-        private Button offlinep;
-        private Label label42;
-        private Label label41;
-        private ListBox Players;
-        private ListBox Ranks;
-        private Button button2;
-        private Button button1;
     }
 }

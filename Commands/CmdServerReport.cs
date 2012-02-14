@@ -22,7 +22,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Threading;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdServerReport : Command
@@ -51,7 +51,7 @@ namespace MCForge.Commands
                 Server.ProcessCounter.NextValue();
             }
 
-//            TimeSpan tp = Process.GetCurrentProcess().TotalProcessorTime // Unused method, wasting mah .exe spaces;
+            TimeSpan tp = Process.GetCurrentProcess().TotalProcessorTime;
             TimeSpan up = (DateTime.Now - Process.GetCurrentProcess().StartTime);
 
             //To get actual CPU% is OS dependant

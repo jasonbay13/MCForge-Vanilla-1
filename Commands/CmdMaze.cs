@@ -21,7 +21,7 @@ using System.Threading;
 using System.Collections;
 using System.Security.Cryptography;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdMaze : Command
@@ -31,7 +31,7 @@ namespace MCForge.Commands
         public override string type { get { return "build"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.AdvBuilder; } }
-        public static int randomizer/* = 0*/;
+        public static int randomizer = 0;
         public static bool[,] wall;
         public override void Use(Player p, string message)
         {
@@ -165,8 +165,8 @@ namespace MCForge.Commands
 
         private class GridNode
         {
-            public static int maxX/* = 0*/;
-            public static int maxY/* = 0*/;
+            public static int maxX = 0;
+            public static int maxY = 0;
             public ushort X;
             public ushort Y;
             private Random rand2 = new Random(Environment.TickCount);
@@ -184,7 +184,7 @@ namespace MCForge.Commands
                         r[0] = (byte)rand2.Next(4);
                         break;
                     default:
-//                        Random rand3 = new Random(Environment.TickCount) // Unused method, wasting mah .exe spaces;
+                        Random rand3 = new Random(Environment.TickCount);
                         r[0] = (byte)rand2.Next(4);
                         break;
                 }

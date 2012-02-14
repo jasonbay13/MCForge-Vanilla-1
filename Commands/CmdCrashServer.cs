@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdCrashServer : Command
@@ -35,14 +35,8 @@ namespace MCForge.Commands
         public override void Use(Player p, string message)
         {
             if (message != "") { Help(p); return; }
-            if (p == null)
-            {
-            	Player.SendMessage(p, "You cannot use /crashserver in the console");
-            	return;
-            }
-            Player.GlobalMessageOps(p.color + p.name + Server.DefaultColor + " used &b/crashserver");
+            Player.GlobalMessageOps(p.color + Server.DefaultColor + " used &b/crashserver");
             p.Kick("Server crash! Error code 0x" + Convert.ToString(p.random.Next(int.MinValue, int.MaxValue), 16).ToUpper());
-            
         }
         public override void Help(Player p)
         {

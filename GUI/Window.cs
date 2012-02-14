@@ -20,9 +20,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Threading;
-
+using MCForge;
 using System.Net;
 
 namespace MCForge.Gui
@@ -38,9 +39,8 @@ namespace MCForge.Gui
         delegate void PlayerListCallback(List<Player> players);
         delegate void ReportCallback(Report r);
         delegate void VoidDelegate();
-        delegate void ShitOnAStick();
-        public static bool fileexists/* = false*/;
-        bool mapgen/* = false*/;
+        public static bool fileexists = false;
+        bool mapgen = false;
 
         PlayerCollection pc = new PlayerCollection(new PlayerListView());
         LevelCollection lc = new LevelCollection(new LevelListView());
@@ -62,12 +62,12 @@ namespace MCForge.Gui
             InitializeComponent();
         }
 
-        public static Window thisWindow;
+        //public static Window thisWindow;
 
         private void Window_Load(object sender, EventArgs e)
         {
             btnProperties.Enabled = false;
-            thisWindow = this;
+            //thisWindow = this;
             MaximizeBox = false;
             this.Text = "Starting MCForge...";
             //this.Icon = new Icon(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("MCLawl.Lawl.ico"));
@@ -75,35 +75,37 @@ namespace MCForge.Gui
             this.Show();
             this.BringToFront();
             WindowState = FormWindowState.Normal;
-            new Thread(() => { 
-            s = new Server();
-            s.OnLog += WriteLine;
-            s.OnCommand += newCommand;
-            s.OnError += newError;
-            s.OnSystem += newSystem;
-            s.OnAdmin += WriteAdmin;
-            s.OnOp += WriteOp;
-
-            /*foreach (TabPage tP in tabControl1.TabPages)
-                tabControl1.SelectTab(tP);
-            tabControl1.SelectTab(tabControl1.TabPages[0]);*/
-
-            s.HeartBeatFail += HeartBeatFail;
-            s.OnURLChange += UpdateUrl;
-            s.OnPlayerListChange += UpdateClientList;
-            s.OnSettingsUpdate += SettingsUpdate;
-            s.Start();
-            //btnProperties.Enabled = true;
-            if (btnProperties.InvokeRequired)
+            new Thread(() =>
             {
-                VoidDelegate d = btnPropertiesenable;
-                Invoke(d);
-            }
-            else
-            {
-                btnProperties.Enabled = true;
-            }
+                s = new Server();
+                s.OnLog += WriteLine;
+                s.OnCommand += newCommand;
+                s.OnError += newError;
+                s.OnSystem += newSystem;
+                s.OnAdmin += WriteAdmin;
+                s.OnOp += WriteOp;
+
+
+                s.HeartBeatFail += HeartBeatFail;
+                s.OnURLChange += UpdateUrl;
+                s.OnPlayerListChange += UpdateClientList;
+                s.OnSettingsUpdate += SettingsUpdate;
+                s.Start();
+
+                Player.PlayerConnect += new Player.OnPlayerConnect(Player_PlayerConnect);
+                Player.PlayerDisconnect += new Player.OnPlayerDisconnect(Player_PlayerDisconnect);
+
+                Level.LevelLoaded += new Level.OnLevelLoaded(Level_LevelLoaded);
+                Level.LevelUnload += new Level.OnLevelUnload(Level_LevelUnload);
+
+                GlobalChatBot.OnNewRecieveGlobalMessage += new GlobalChatBot.RecieveChat(GlobalChatRecieve);
+                GlobalChatBot.OnNewSayGlobalMessage += new GlobalChatBot.SendChat(GlobalChatSay);
+
+                RunOnUiThread(delegate { btnProperties.Enabled = true; });
+
             }).Start();
+
+
             notifyIcon1.Text = ("MCForge Server: " + Server.name).Truncate(64);
 
             this.notifyIcon1.ContextMenuStrip = this.iconContext;
@@ -111,8 +113,6 @@ namespace MCForge.Gui
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseClick);
 
-            //if (File.Exists(Logger.ErrorLogPath))
-            //txtErrors.Lines = File.ReadAllLines(Logger.ErrorLogPath);
             if (File.Exists("Changelog.txt"))
             {
                 txtChangelog.Text = "Changelog for " + Server.Version + ":";
@@ -132,52 +132,70 @@ namespace MCForge.Gui
             dgvMapsTab.DataSource = new LevelCollection(new LevelListViewForTab());
             dgvMapsTab.Font = new Font("Calibri", 8.25f);
 
-			/*using (System.Timers.Timer UpdateListTimer = new System.Timers.Timer(10000))
-			{
-				UpdateListTimer.Elapsed += delegate
-				{
-					UpdateClientList(Player.players);
-					UpdateMapList("'");
-                    Server.s.Log("Lists updated!");
-				}; UpdateListTimer.Start();
-			}*/
-
-            UpdateListTimer.Elapsed += delegate
-			{
-                try {
+            /*using (System.Timers.Timer UpdateListTimer = new System.Timers.Timer(10000))
+            {
+                UpdateListTimer.Elapsed += delegate
+                {
                     UpdateClientList(Player.players);
                     UpdateMapList("'");
-                    UpdateRanks();
-                    UpdateRankPlayers();
-                } catch {} // needed for slower computers
+                    Server.s.Log("Lists updated!");
+                }; UpdateListTimer.Start();
+            }*/
+
+            UpdateListTimer.Elapsed += delegate
+            {
+                try
+                {
+                    UpdateClientList(Player.players);
+                    UpdateMapList();
+                }
+                catch { } // needed for slower computers
                 //Server.s.Log("Lists updated!");
-			}; UpdateListTimer.Start();
+            }; UpdateListTimer.Start();
+
+
         }
 
-        void btnPropertiesenable() { btnProperties.Enabled = true; }
-        void UpdateRanks()
+        public void RunOnUiThread(Action act)
         {
-            if (this.InvokeRequired)
-            {
-                ShitOnAStick s = new ShitOnAStick(UpdateRanks);
-                this.Invoke(s);
-            }
-            else
-            {
-                Ranks.Items.Clear();
-                Group.GroupList.ForEach(delegate(Group g)
-                {
-                    Ranks.Items.Add(g.name);
-                });
-            }
+            VoidDelegate d = new VoidDelegate(delegate { Invoke(new VoidDelegate(act)); });  //SOME ADVANCED STUFF RIGHT HERR
+            d.Invoke();
         }
+        void Player_PlayerConnect(Player p)
+        {
+            UpdatePlyersListBox();
+        }
+        void Player_PlayerDisconnect(Player p, string reason)
+        {
+            UpdatePlyersListBox();
+        }
+        void GlobalChatRecieve(string nick, string message)
+        {
+            this.LogGlobalChat("> " + nick + ": " + message);
+        }
+        void GlobalChatSay(string player, string message)
+        {
+            this.LogGlobalChat("< " + player + ": " + message);
+        }
+        void Level_LevelUnload(Level l)
+        {
+            UpdateMapList();
+            UpdatePlayerMapCombo();
+            UnloadedlistUpdate();
+        }
+        void Level_LevelLoaded(Level l)
+        {
+            UpdateMapList();
+            UpdatePlayerMapCombo();
+            UnloadedlistUpdate();
+        }
+
         void SettingsUpdate()
         {
             if (Server.shuttingDown) return;
             if (txtLog.InvokeRequired)
             {
-                VoidDelegate d = new VoidDelegate(SettingsUpdate);
-                this.Invoke(d);
+                this.Invoke(new VoidDelegate(SettingsUpdate));
             }
             else
             {
@@ -197,8 +215,7 @@ namespace MCForge.Gui
             {
                 if (txtErrors.InvokeRequired)
                 {
-                    LogDelegate d = new LogDelegate(newError);
-                    this.Invoke(d, new object[] { message });
+                    this.Invoke(new LogDelegate(newError), new object[] { message });
                 }
                 else
                 {
@@ -213,8 +230,7 @@ namespace MCForge.Gui
             {
                 if (txtSystem.InvokeRequired)
                 {
-                    LogDelegate d = new LogDelegate(newSystem);
-                    this.Invoke(d, new object[] { message });
+                    this.Invoke(new LogDelegate(newSystem), new object[] { message });
                 }
                 else
                 {
@@ -235,23 +251,23 @@ namespace MCForge.Gui
             if (Server.shuttingDown) return;
             if (this.InvokeRequired)
             {
-                LogDelegate d = new LogDelegate(WriteLine);
-                this.Invoke(d, new object[] { s });
+                this.Invoke(new LogDelegate(WriteLine), new object[] { s });
             }
             else
             {
-                //txtLog.AppendText(Environment.NewLine + s);
+
                 txtLog.AppendTextAndScroll(s);
+                // ColorBoxes(txtLog);
             }
         }
+
 
         public void WriteOp(string s)
         {
             if (Server.shuttingDown) return;
             if (this.InvokeRequired)
             {
-                LogDelegate d = new LogDelegate(WriteOp);
-                this.Invoke(d, new object[] { s });
+                this.Invoke(new LogDelegate(WriteOp), new object[] { s });
             }
             else
             {
@@ -265,8 +281,7 @@ namespace MCForge.Gui
             if (Server.shuttingDown) return;
             if (this.InvokeRequired)
             {
-                LogDelegate d = new LogDelegate(WriteAdmin);
-                this.Invoke(d, new object[] { s });
+                this.Invoke(new LogDelegate(WriteAdmin), new object[] { s });
             }
             else
             {
@@ -282,10 +297,9 @@ namespace MCForge.Gui
         public void UpdateClientList(List<Player> players)
         {
 
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                PlayerListCallback d = UpdateClientList;
-                Invoke(d, new List<Player>[] { players });
+                Invoke(new PlayerListCallback(UpdateClientList), players);
             }
             else
             {
@@ -323,26 +337,17 @@ namespace MCForge.Gui
 
         }
 
-        public void UpdateMapList(string unused)
+        public void PopupNotify(string message, ToolTipIcon icon = ToolTipIcon.Info)
         {
-            /*
-            if (this.InvokeRequired) {
-                LogDelegate d = new LogDelegate(UpdateMapList);
-                this.Invoke(d, new object[] { blah });
-            } else {
-                LevelCollection lc = new LevelCollection(new LevelListView());
-                Server.levels.ForEach(delegate(Level l) { lc.Add(l); });
-                dgvMaps.SuspendLayout();
-                dgvMaps.DataSource = lc;
-                //dgvMaps.Invalidate();
-                dgvMaps.ResumeLayout();
-            }
-            */
+            notifyIcon1.ShowBalloonTip(3000, Server.name, message, icon);
+        }
+
+        public delegate void UpdateList();
+
+        public void UpdateMapList()
+        {
             if (InvokeRequired)
-            {
-                LogDelegate d = new LogDelegate(UpdateMapList);
-                Invoke(d, new Object[] {" "});
-            }
+                Invoke(new UpdateList(UpdateMapList));
             else
             {
 
@@ -360,7 +365,7 @@ namespace MCForge.Gui
                 //dgvPlayers.SuspendLayout();
                 lc.Clear();
                 //lc = new LevelCollection(new LevelListView());
-                Server.levels.ForEach(delegate(Level l) { lc.Add(l); });
+                Server.levels.ForEach(l => lc.Add(l));
 
                 //dgvPlayers.Invalidate();
                 dgvMaps.DataSource = null;
@@ -368,7 +373,7 @@ namespace MCForge.Gui
                 // Reselect map
                 if (selected != null)
                 {
-                    foreach (DataGridViewRow row in Server.levels.SelectMany(l => dgvMaps.Rows.Cast<DataGridViewRow>().Where(row => (string) row.Cells[0].Value == selected)))
+                    foreach (DataGridViewRow row in Server.levels.SelectMany(l => dgvMaps.Rows.Cast<DataGridViewRow>().Where(row => (string)row.Cells[0].Value == selected)))
                         row.Selected = true;
                 }
 
@@ -389,7 +394,7 @@ namespace MCForge.Gui
                 //dgvPlayers.SuspendLayout();
                 lcTAB.Clear();
                 //lcTAB = new LevelCollection(new LevelListViewForTab());
-                Server.levels.ForEach(delegate(Level l) { lcTAB.Add(l); });
+                Server.levels.ForEach(l => lcTAB.Add(l));
 
                 //dgvPlayers.Invalidate();
                 dgvMapsTab.DataSource = null;
@@ -397,10 +402,8 @@ namespace MCForge.Gui
                 // Reselect map
                 if (selected2 != null)
                 {
-                    foreach (Level l in Server.levels)
-                        foreach (DataGridViewRow row in dgvMapsTab.Rows)
-                            if (String.Equals(row.Cells[0].Value, selected2))
-                                row.Selected = true;
+                    foreach (DataGridViewRow row in from l in Server.levels from DataGridViewRow row in dgvMapsTab.Rows where Equals(row.Cells[0].Value, selected2) select row)
+                        row.Selected = true;
                 }
 
                 dgvMapsTab.Refresh();
@@ -444,7 +447,7 @@ namespace MCForge.Gui
             if (e.KeyCode == Keys.Enter)
             {
                 string text = txtInput.Text.Trim();
-                if (String.IsNullOrEmpty(text)) return; 
+                if (String.IsNullOrEmpty(text)) return;
                 switch (text[0])
                 {
                     case '#':
@@ -499,7 +502,8 @@ namespace MCForge.Gui
                     return;
                 }
 
-                new Thread(() =>{
+                new Thread(() =>
+                {
                     try
                     {
                         Command commandcmd = Command.all.Find(sentCmd);
@@ -510,23 +514,7 @@ namespace MCForge.Gui
                         }
                         commandcmd.Use(null, sentMsg);
                         newCommand("CONSOLE: USED /" + sentCmd + " " + sentMsg);
-                        if (Player.sendcommanddata)
-                        {
-                            new Thread(() =>
-                            {
-                                using (WebClient wc = new WebClient())
-                                {
-                                    try
-                                    {
-                                        wc.DownloadString("http://mcforge.bemacizedgaming.com/cmdusage.php?cmd=" + commandcmd.name);
-                                    }
-                                    catch
-                                    {
-                                        Server.s.Log("The command data sending failed! If this happens often you should turn it off.");
-                                    }
-                                }
-                            }).Start();
-                        }
+
                     }
                     catch (Exception ex)
                     {
@@ -563,7 +551,7 @@ namespace MCForge.Gui
             PropertyForm.Show();
         }
 
-        public static bool prevLoaded/* = false*/;
+        public static bool prevLoaded = false;
         Form PropertyForm;
 
         private void Window_Resize(object sender, EventArgs e)
@@ -580,10 +568,6 @@ namespace MCForge.Gui
 
         private void openConsole_Click(object sender, EventArgs e)
         {
-            // Yes, it's a hacky fix.  Don't ask :v
-            this.Show();
-            this.BringToFront();
-            WindowState = FormWindowState.Normal;
             this.Show();
             this.BringToFront();
             WindowState = FormWindowState.Normal;
@@ -730,17 +714,9 @@ namespace MCForge.Gui
                 }
             }
             catch { }
-            foreach (TabPage tP in tabControl1.TabPages)
+            foreach (TextBox txtBox in (from TabPage tP in tabControl1.TabPages from Control ctrl in tP.Controls select ctrl).OfType<TextBox>())
             {
-                foreach (Control ctrl in tP.Controls)
-                {
-                    if (ctrl is TextBox)
-                    {
-                        TextBox txtBox = (TextBox)ctrl;
-                        txtBox.Update();
-
-                    }
-                }
+                txtBox.Update();
             }
             tabControl1.Update();
         }
@@ -819,14 +795,7 @@ namespace MCForge.Gui
                 edgewaterchk.Checked = l.edgeWater;
                 if (Server.UseTextures)
                     WoM.Enabled = true;
-                if (l.ai == true)
-                {
-                    Aicombo.SelectedItem = "Hunt";
-                }
-                else
-                {
-                    Aicombo.SelectedItem = "Flee";
-                }
+                Aicombo.SelectedItem = l.ai ? "Hunt" : "Flee";
                 Gunschk.Checked = l.guns;
                 Fallnumeric.Value = l.fall;
                 drownNumeric.Value = l.drown;
@@ -853,8 +822,7 @@ namespace MCForge.Gui
             }
             else
                 WoM.Enabled = false;
-            UpdateMapList("'");
-            return;
+            UpdateMapList();
         }
 
         private void SaveMap_Click(object sender, EventArgs e)
@@ -873,13 +841,14 @@ namespace MCForge.Gui
             l.Death = SurvivalStyleDeathchk.Checked;
             l.finite = finitechk.Checked;
             l.edgeWater = edgewaterchk.Checked;
-            if (Aicombo.SelectedItem.ToString() == "Hunt")
+            switch (Aicombo.SelectedItem.ToString())
             {
-                l.ai = true;
-            }
-            else if (Aicombo.SelectedItem.ToString() == "Flee")
-            {
-                l.ai = false;
+                case "Hunt":
+                    l.ai = true;
+                    break;
+                case "Flee":
+                    l.ai = false;
+                    break;
             }
             l.guns = Gunschk.Checked;
             l.fall = (int)Fallnumeric.Value;
@@ -907,7 +876,7 @@ namespace MCForge.Gui
                         }
                         oldlines.Add(line);
                     }
-                    if (AutoLoadChk.Checked == true && done == false)
+                    if (AutoLoadChk.Checked && !done)
                     {
                         oldlines.Add(l.name + "=" + l.physics);
                     }
@@ -915,17 +884,13 @@ namespace MCForge.Gui
                 File.Delete("text/autoload.txt");
                 using (StreamWriter SW = new StreamWriter("text/autoload.txt"))
                 {
-                    foreach (string line in oldlines)
+                    foreach (string line in oldlines.Where(line => line.Trim() != ""))
                     {
-                        if (line.Trim() != "")
-                        {
-                            SW.WriteLine(line);
-                        }
+                        SW.WriteLine(line);
                     }
                 }
             }
-            UpdateMapList("'");
-            return;
+            UpdateMapList();
         }
 
         private void CreateNewMap_Click(object sender, EventArgs e)
@@ -939,16 +904,22 @@ namespace MCForge.Gui
             string type;
             string seed;
 
-            try { name = nametxtbox.Text.ToLower(); } catch { name = ""; }
-            try { x = xtxtbox.SelectedItem.ToString(); } catch { x = ""; }
-            try { y = ytxtbox.SelectedItem.ToString(); } catch { y = ""; }
-            try { z = ztxtbox.SelectedItem.ToString(); } catch { z = ""; }
-            try { type = maptypecombo.SelectedItem.ToString().ToLower(); } catch { type = ""; }
-            try { seed = seedtxtbox.Text; } catch { seed = ""; }
+            try { name = nametxtbox.Text.ToLower(); }
+            catch { name = ""; }
+            try { x = xtxtbox.SelectedItem.ToString(); }
+            catch { x = ""; }
+            try { y = ytxtbox.SelectedItem.ToString(); }
+            catch { y = ""; }
+            try { z = ztxtbox.SelectedItem.ToString(); }
+            catch { z = ""; }
+            try { type = maptypecombo.SelectedItem.ToString().ToLower(); }
+            catch { type = ""; }
+            try { seed = seedtxtbox.Text; }
+            catch { seed = ""; }
 
             if (String.IsNullOrEmpty(name) || String.IsNullOrEmpty(x) || String.IsNullOrEmpty(y) || String.IsNullOrEmpty(z) || String.IsNullOrEmpty(type))
             {
-                MessageBox.Show("You left a box blank!"); 
+                MessageBox.Show("You left a box blank!");
                 return;
             }
 
@@ -970,7 +941,7 @@ namespace MCForge.Gui
                     try
                     {
                         UnloadedlistUpdate();
-                        UpdateMapList("'");
+                        UpdateMapList();
                     }
                     catch { }
                 }
@@ -1653,11 +1624,11 @@ namespace MCForge.Gui
             {
                 File.WriteAllText("text/rules.txt", "No rules entered yet!");
             }
-			using (StreamReader r = File.OpenText("text/rules.txt"))
-			{
-				while (!r.EndOfStream)
-					rules.Add(r.ReadLine());
-			}
+            using (StreamReader r = File.OpenText("text/rules.txt"))
+            {
+                while (!r.EndOfStream)
+                    rules.Add(r.ReadLine());
+            }
             Player who = prpertiesofplyer;
             who.SendMessage("Server Rules:");
             foreach (string s in rules)
@@ -1689,11 +1660,17 @@ namespace MCForge.Gui
 
         public void UpdatePlyersListBox()
         {
-            PlyersListBox.Items.Clear();
-            foreach (Player p in Player.players)
-            {
-                PlyersListBox.Items.Add(p.name);
-            }
+            RunOnUiThread(
+                delegate
+                {
+
+                    PlyersListBox.Items.Clear();
+                    foreach (Player p in Player.players)
+                    {
+                        PlyersListBox.Items.Add(p.name);
+                    }
+                });
+
         }
 
         private void PlyersListBox_Click(object sender, EventArgs e)
@@ -1807,14 +1784,14 @@ namespace MCForge.Gui
         private void killphysics_button_Click(object sender, EventArgs e)
         {
             Command.all.Find("killphysics").Use(null, "");
-            try { UpdateMapList("'"); }
+            try { UpdateMapList(); }
             catch { }
         }
 
         private void Unloadempty_button_Click(object sender, EventArgs e)
         {
             Command.all.Find("unload").Use(null, "empty");
-            try { UpdateMapList("'"); }
+            try { UpdateMapList(); }
             catch { }
         }
 
@@ -1928,18 +1905,10 @@ namespace MCForge.Gui
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (Server.gcacceptconsole)
-                {
-                    if (txtGlobalInput.Text == null || txtGlobalInput.Text.Trim() == "") { return; }
-                    try { Command.all.Find("global").Use(null, txtGlobalInput.Text.Trim()); }
-                    catch (Exception ex) { Server.ErrorLog(ex); }
-                    txtGlobalInput.Clear();
-                }
-                else
-                {
-                    MessageBox.Show("By using the Global Chat you agree to the following rules:" + Environment.NewLine + "1. No Spamming" + Environment.NewLine + "2. No Advertising (Trying to get people to come to your server)" + Environment.NewLine + "3. No links" + Environment.NewLine + "4. No excessive Cursing (You are allowed to curse, but not pointed at anybody)" + Environment.NewLine + "5. No use of $ variables." + Environment.NewLine + "6. English only. No exceptions" + Environment.NewLine + "7. Be respectful" + Environment.NewLine + "8. Do not ask for ranks" + Environment.NewLine + "9. Do not ask for a server's name" + Environment.NewLine + "10. use common sense" + Environment.NewLine + "11. Don't say your server name.");
-                    Server.gcacceptconsole = true;
-                }
+                if (txtGlobalInput.Text == null || txtGlobalInput.Text.Trim() == "") { return; }
+                try { Command.all.Find("global").Use(null, txtGlobalInput.Text.Trim()); }
+                catch (Exception ex) { Server.ErrorLog(ex); }
+                txtGlobalInput.Clear();
             }
         }
 
@@ -1947,10 +1916,7 @@ namespace MCForge.Gui
         {
             if (this.InvokeRequired)
             {
-                this.Invoke(new MethodInvoker(delegate
-                {
-                    txtGlobalLog.AppendTextAndScroll(message);
-                }));
+                this.Invoke(new MethodInvoker(() => txtGlobalLog.AppendTextAndScroll(message)));
                 return;
             }
             txtGlobalLog.AppendTextAndScroll(message);
@@ -1958,19 +1924,16 @@ namespace MCForge.Gui
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (GetSelectedLevelTab() != null)
-            {
-                GUI.Textures textures = new GUI.Textures();
-                textures.l = GetSelectedLevelTab();
-                Server.s.Log(textures.l.name);
-                textures.Show();
-                textures.FormClosing += delegate
-                {
-                    textures.l = null;
-                    textures.Hide();
-                    textures.Dispose();
-                };
-            }
+            if (GetSelectedLevelTab() == null) return;
+            var textures = new GUI.Textures { l = GetSelectedLevelTab() };
+            Server.s.Log(textures.l.name);
+            textures.Show();
+            textures.FormClosing += delegate
+                                        {
+                                            textures.l = null;
+                                            textures.Hide();
+                                            textures.Dispose();
+                                        };
         }
 
         private void panel2_Paint(object sender, PaintEventArgs e)
@@ -1984,94 +1947,6 @@ namespace MCForge.Gui
         }
 
         private void UnloadedList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            onlinep.Enabled = true;
-            offlinep.Enabled = false;
-            UpdateRankPlayers();
-        }
-        void UpdateRankPlayers()
-        {
-            if (this.InvokeRequired)
-            {
-                ShitOnAStick s = new ShitOnAStick(UpdateRankPlayers);
-                this.Invoke(s);
-            }
-            else
-            {
-                try
-                {
-                    Group g = Group.Find(Ranks.Items[Ranks.SelectedIndex].ToString());
-                    if (g == null)
-                        return;
-                    Players.Items.Clear();
-                    label41.Text = "Players in " + g.name + " Group:";
-                    g.playerList.All().ForEach(delegate(string name)
-                    {
-                        if (Player.Find(name) != null || onlinep.Enabled)
-                            Players.Items.Add(name);
-                    });
-                }
-                catch { }
-            }
-        }
-        private void Ranks_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                UpdateRankPlayers();
-            }
-            catch { }
-        }
-
-        private void tabPage8_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void onlinep_Click(object sender, EventArgs e)
-        {
-            onlinep.Enabled = false;
-            offlinep.Enabled = true;
-            UpdateRankPlayers();
-        }
-
-        private void promote_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Command.all.Find("promote").Use(null, Players.Items[Players.SelectedIndex].ToString());
-                UpdateRankPlayers();
-            }
-            catch { }
-        }
-
-        private void demote_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Command.all.Find("demote").Use(null, Players.Items[Players.SelectedIndex].ToString());
-                UpdateRankPlayers();
-            }
-            catch { }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Group found = Group.findPlayerGroup(Players.Items[Players.SelectedIndex].ToString());
-                found.playerList.Remove(Players.Items[Players.SelectedIndex].ToString());
-                UpdateRankPlayers();
-            }
-            catch { }
-        }
-
-        private void button1_Click_2(object sender, EventArgs e)
         {
 
         }

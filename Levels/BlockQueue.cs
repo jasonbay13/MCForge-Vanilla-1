@@ -10,7 +10,7 @@ namespace MCForge
         public static int blockupdates = 200;
         static block b = new block();
         static System.Timers.Timer blocktimer = new System.Timers.Timer(100);
-        static byte started/* = 0*/;
+        static byte started = 0;
 
         public static void Start()
         {

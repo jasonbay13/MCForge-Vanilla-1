@@ -52,11 +52,11 @@ namespace MCForge
     {
         //TODO: Implement report back feature
 
-        static Boolean NeedRestart/* = false*/;
+        static Boolean NeedRestart = false;
         static System.Timers.Timer RestartTimer = new System.Timers.Timer(30000);
 
         static bool _disposed;
-        static bool _reportBack/* = false*/;
+        static bool _reportBack = false;
         static string _messagePath = "logs/" + DateTime.Now.ToString("yyyy-MM-dd").Replace("/", "-") + ".txt";
         static string _errorPath = "logs/errors/" + DateTime.Now.ToString("yyyy-MM-dd").Replace("/", "-") + "error.log";
 
@@ -93,7 +93,7 @@ namespace MCForge
         {
             try
             {
-                if (message != null && message.Length > 0)
+                if (!string.IsNullOrEmpty(message))
                     lock (_lockObject)
                     {
                         _messageCache.Enqueue(message);
@@ -133,10 +133,11 @@ namespace MCForge
 
 
 
-                if (NeedRestart == true)
+                if (NeedRestart)
                 {
                     Server.listen.Close();
                     Server.Setup();
+                    //http://alltheragefaces.com/img/faces/large/misc-jackie-chan-l.png
 
                     NeedRestart = false;
                 }

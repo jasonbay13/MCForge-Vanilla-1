@@ -1,9 +1,9 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     class CmdGlobal : Command
@@ -22,36 +22,31 @@ namespace MCForge.Commands
             if (p != null && p.muted) { Player.SendMessage(p, "You are muted."); return; }
             if (p != null && p.muteGlobal) { Player.SendMessage(p, "You cannot use Global Chat while you have it muted."); return; }
             if (p != null && !Server.gcaccepted.Contains(p.name.ToLower())) { RulesMethod(p); return; }
-            bool cansend = true;
             foreach (string line in Server.gcnamebans)
             {
-                if (line.Split('|')[0].ToLower() == p.name.ToLower())
+                if (line.Split('|')[0] == p.name)
                 {
-                    p.SendMessage("You have been banned from the global chat by " + line.Split('|')[2] + " because " + line.Split('|')[1] + ". You can apply a ban appeal at the forums on www.mcforge.net.");
-                    cansend = false;
+                    Player.SendMessage(p, "You have been banned from the global chat by " + line.Split('|')[2] + " because of the following reason: " + line.Split('|')[1] + ". You can apply a ban appeal at www.mcforge.net. Keep yourself to the rules.");
+                    return;
                 }
-
             }
             foreach (string line in Server.gcipbans)
             {
                 if (line.Split('|')[0] == p.ip)
                 {
-                    p.SendMessage("You have been banned from the global chat by " + line.Split('|')[2] + " because " + line.Split('|')[1] + ". You can apply a ban appeal at the forums on www.mcforge.net.");
-                    cansend = false;
+                    Player.SendMessage(p, "You have been banned from the global chat by " + line.Split('|')[2] + " because of the following reason: " + line.Split('|')[1] + ". You can apply a ban appeal at www.mcforge.net. Keep yourself to the rules.");
+                    return;
                 }
-
             }
-            if (!cansend) { return; }
-            Server.GlobalChat.Say((p != null ? p.name + ": " : "Console: ") + message);
+            Server.GlobalChat.Say((p != null ? p.name + ": " : "Console: ") + message, p);
             Player.GlobalMessage(Server.GlobalChatColor + "<[Global] " + (p != null ? p.name + ": " : "Console: ") + "&f" + (Server.profanityFilter ? ProfanityFilter.Parse(message) : message), true);
-            try { Gui.Window.thisWindow.LogGlobalChat("< " + (p != null ? p.name + ": " : "Console: ") + message); }
-            catch { Server.s.Log("<[Global] " + (p != null ? p.name + ": " : "Console: ") + message); }
+
         }
         public void RulesMethod(Player p)
         {
             Player.SendMessage(p, "&cBy using the Global Chat you agree to the following rules:");
             Player.SendMessage(p, "1. No Spamming");
-            Player.SendMessage(p, "2. No Advertising (Trying to get people to come to your server)");
+            Player.SendMessage(p, "2. No Advertising (Trying to get people to your server)");
             Player.SendMessage(p, "3. No links");
             Player.SendMessage(p, "4. No Excessive Cursing (You are allowed to curse, but not pointed at anybody)");
             Player.SendMessage(p, "5. No use of $ Variables.");

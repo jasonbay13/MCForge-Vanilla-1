@@ -11,10 +11,10 @@ namespace MCForge
     {
         public static class Settings
         {
-            public static bool Enabled/* = false*/;
+            public static bool Enabled = false;
 
             //Maps
-            public static bool Levels/* = false*/;
+            public static bool Levels = false;
             public static List<Level> LevelsList = new List<Level>();
             public class Level
             {
@@ -27,15 +27,15 @@ namespace MCForge
             }
 
             //Titles
-            public static bool Titles/* = false*/;
+            public static bool Titles = false;
             public static int TitlePrice = 100;
 
             //Colors
-            public static bool Colors/* = false*/;
+            public static bool Colors = false;
             public static int ColorPrice = 100;
 
             //Ranks
-            public static bool Ranks/* = false*/;
+            public static bool Ranks = false;
             public static LevelPermission MaxRank = LevelPermission.AdvBuilder;
             public static List<Rank> RanksList = new List<Rank>();
             public class Rank

@@ -56,8 +56,6 @@
             // 
             // txtImageFile
             // 
-            this.txtImageFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtImageFile.Location = new System.Drawing.Point(80, 61);
             this.txtImageFile.Name = "txtImageFile";
             this.txtImageFile.Size = new System.Drawing.Size(117, 20);
@@ -84,8 +82,6 @@
             // 
             // cmbMap
             // 
-            this.cmbMap.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.cmbMap.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbMap.FormattingEnabled = true;
             this.cmbMap.Location = new System.Drawing.Point(49, 12);
@@ -96,8 +92,6 @@
             // 
             // txtLevelName
             // 
-            this.txtLevelName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtLevelName.Location = new System.Drawing.Point(80, 91);
             this.txtLevelName.Name = "txtLevelName";
             this.txtLevelName.Size = new System.Drawing.Size(117, 20);
@@ -115,9 +109,6 @@
             // 
             // txtMapDesc
             // 
-            this.txtMapDesc.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtMapDesc.Location = new System.Drawing.Point(12, 134);
             this.txtMapDesc.Multiline = true;
             this.txtMapDesc.Name = "txtMapDesc";
@@ -136,7 +127,6 @@
             // 
             // button1
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button1.Location = new System.Drawing.Point(12, 221);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(78, 23);
@@ -147,10 +137,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(96, 221);
-            this.progressBar1.Maximum = 1000;
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(101, 23);
             this.progressBar1.TabIndex = 17;
@@ -173,6 +160,7 @@
             this.Controls.Add(this.button3);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "LavaMapSubmit";
             this.Text = "Lava Survival Map Submission";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LavaMapSubmit_FormClosing);

@@ -22,7 +22,7 @@ using MCForge.SQL;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdMessageBlock : Command

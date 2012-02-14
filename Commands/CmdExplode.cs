@@ -105,7 +105,7 @@ namespace MCForge.Commands
                     }
                     catch { Player.SendMessage(p, "Invalid parameters"); return; }
 
-//                    Level level = p.level // Unused method, wasting mah .exe spaces;
+                    Level level = p.level;
 
                     if (y >= p.level.depth) y = (ushort)(p.level.depth - 1);
 

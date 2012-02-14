@@ -19,8 +19,8 @@ namespace MCForge
         /// Load a simple plugin
         /// </summary>
         /// <param name="pluginname">The filepath to load</param>
-        /// <param name="startup">Weather the server is starting up or not</param>
-        /// <returns>Weather the plugin loaded or not</returns>
+        /// <param name="startup">Whether the server is starting up or not</param>
+        /// <returns>Whether the plugin loaded or not</returns>
         public static bool Load(string pluginname, bool startup)
         {
             String creator = "";

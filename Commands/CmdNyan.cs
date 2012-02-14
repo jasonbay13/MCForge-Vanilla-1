@@ -21,7 +21,7 @@ using System;
 using System.IO;
 using System.Net;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdNyan : Command

@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdJoker : Command

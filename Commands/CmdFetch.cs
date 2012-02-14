@@ -20,7 +20,7 @@
 using System;
 using System.Threading;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     /// <summary>

@@ -19,7 +19,7 @@ using System;
 using System.IO;
 using System.Threading;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdRide : Command

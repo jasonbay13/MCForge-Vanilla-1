@@ -27,7 +27,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdPass : Command
@@ -39,7 +39,7 @@ namespace MCForge.Commands
         public override LevelPermission defaultRank { get { return LevelPermission.Banned; } }
         public CmdPass() { }
         public static string password = "";
-        public static bool gotpass/* = false*/;
+        public static bool gotpass = false;
 
         public override void Use(Player p, string message)
         {
@@ -139,7 +139,7 @@ namespace MCForge.Commands
             Player.SendMessage(p, "If you have &cforgotten your password, " + Server.DefaultColor + "contact " + Owner + " and they can reset it! &cIncorrect " + Server.DefaultColor + "Tries: &b" + p.passtries);
             return;
         }
-        public static class Crypto
+        public class Crypto
         {
             // This is the base encryption salt! DO NOT CHANGE IT!!!
             private static byte[] _salt = Encoding.ASCII.GetBytes("o6806642kbM7c5");

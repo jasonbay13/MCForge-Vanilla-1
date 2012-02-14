@@ -22,7 +22,7 @@ using MCForge.SQL;
 //using MySql.Data.MySqlClient;
 //using SData.Types;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdWhowas : Command

@@ -66,9 +66,11 @@ namespace MCForge
         /// <param name="method">This is the delegate that will get called when this event occurs</param>
         /// <param name="priority">The priority (imporantce) of this call</param>
         /// <param name="plugin">The plugin object that is registering the event</param>
-        public static void Register(Level.OnPhysicsUpdate method, Priority priority, Plugin plugin)
+        /// <param name="bypass">Register more than one of the same event</param>
+        public static void Register(Level.OnPhysicsUpdate method, Priority priority, Plugin plugin, bool bypass = false)
         {
             if (Find(plugin) != null)
+                if (!bypass)
                 throw new Exception("The user tried to register 2 of the same event!");
             events.Add(new OnPhysicsUpdateEvent(method, priority, plugin));
             Organize();

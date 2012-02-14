@@ -20,14 +20,14 @@
 */
 using System;
 using System.Collections.Generic;
-
-
+using System.Linq;
+using MCForge;
 namespace MCForge.Commands
 {
     class CmdPatrol : Command
     {
         public override string name { get { return "patrol"; } }
-        public override string shortcut { get { return "pa"; } }
+        public override string shortcut { get { return ""; } }
         public override string type { get { return "mod"; } }
         public override bool museumUsable { get { return false; } }
         public override LevelPermission defaultRank { get { return LevelPermission.Builder; } }
@@ -49,14 +49,7 @@ namespace MCForge.Commands
                 Player.SendMessage(p, "Are you stupid? =S You can't use this in the console!");
                 return;
             }
-            List<string> getpatrol = new List<string>();
-            foreach (Player pl in Player.players)
-            {
-                if ((int)pl.group.Permission <= CommandOtherPerms.GetPerm(this))
-                {
-                    getpatrol.Add(pl.name);
-                }
-            }
+            List<string> getpatrol = (from pl in Player.players where (int) pl.@group.Permission <= CommandOtherPerms.GetPerm(this) select pl.name).ToList();
             if (getpatrol.Count <= 0)
             {
                 Player.SendMessage(p, "There must be at least one guest online to use this command!");

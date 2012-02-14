@@ -9,15 +9,15 @@ using System.Text.RegularExpressions;
 
 namespace MCForge.Levels.Textures
 {
-    public class LevelTextures : IDisposable
+    public class LevelTextures
     {
         #region ==VARS==
         string cachecfg = "";
         public Group LowestRank { get { return lowest; } }
         Group lowest;
-        bool update/* = false*/;
+        bool update = false;
         public bool autou = true;
-        public bool enabled/* = false*/;
+        public bool enabled = false;
         public string terrainid = "";
         private string edgeid = "";
         public string side = "";
@@ -41,8 +41,6 @@ namespace MCForge.Levels.Textures
             if (!Directory.Exists("extra/cfg/internal")) Directory.CreateDirectory("extra/cfg/internal");
             if (File.Exists("extra/cfg/" + l.name + ".internal"))
                 LoadSettings();
-            if (!Server.UseTextures)
-                enabled = false;
         }
         #endregion
 
@@ -50,8 +48,6 @@ namespace MCForge.Levels.Textures
         #region ==SERVER-TO-WOM==
         public void SendDetail(Player p, string text = "")
         {
-            if (!enabled)
-                return;
             byte[] buffer = new byte[65];
             if (p.level == l && p.UsingWom)
             {
@@ -73,22 +69,11 @@ namespace MCForge.Levels.Textures
             }
             buffer = null;
         }
-        public void LevelSendDetail(string text)
+        public void GlobalSendDetail(string text = "")
         {
-            if (!enabled)
-                return;
             Player.players.ForEach(delegate(Player p)
             {
-                if (p.level == l)
-                    SendDetail(p, text);
-            });
-        }
-        public static void GlobalSendDetail(string text = "")
-        {
-
-            Player.players.ForEach(delegate(Player p)
-            {
-                p.level.textures.SendDetail(p, text);
+                SendDetail(p, text);
             });
         }
         #endregion
@@ -144,11 +129,10 @@ namespace MCForge.Levels.Textures
         {
             return int.Parse((text[0] == '#') ? text.Substring(1) : text, System.Globalization.NumberStyles.HexNumber);
         }
-//  Unused method, wasting mah .exe spaces
-//        static string ParseDecColor(int dec)
-//        {
-//            return dec.ToString("X");
-//        }
+        static string ParseDecColor(int dec)
+        {
+            return dec.ToString("X");
+        }
         public static byte GetBlock(string texture)
         {
             switch (texture)
@@ -378,7 +362,7 @@ namespace MCForge.Levels.Textures
                     if (match.Success)
                     {
                         string worldName = match.Groups[1].Value;
-//                        bool firstTime = match.Groups[2].Success // Unused method, wasting mah .exe spaces;
+                        bool firstTime = match.Groups[2].Success;
                         Level l = Level.Find(worldName);
                         if (l != null)
                         {
@@ -419,42 +403,6 @@ namespace MCForge.Levels.Textures
             p.disconnected = true;
         }
         #endregion
-        #endregion
-
-        #region IDisposable Implementation
-
-        protected bool disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            lock (this)
-            {
-                // Do nothing if the object has already been disposed of.
-                if (disposed)
-                    return;
-
-                if (disposing)
-                {
-                    // Release diposable objects used by this instance here.
-
-                    if (l != null)
-                        l.Dispose();
-                }
-
-                // Release unmanaged resources here. Don't access reference type fields.
-
-                // Remember that the object has been disposed of.
-                disposed = true;
-            }
-        }
-
-        public virtual void Dispose()
-        {
-            Dispose(true);
-            // Unregister object for finalization.
-            GC.SuppressFinalize(this);
-        }
-
         #endregion
     }
 }

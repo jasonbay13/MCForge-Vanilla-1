@@ -24,7 +24,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdMuseum : Command

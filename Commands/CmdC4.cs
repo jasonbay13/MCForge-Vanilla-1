@@ -17,7 +17,7 @@
 */
 using System;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdC4 : Command
@@ -71,7 +71,7 @@ namespace MCForge.Commands
         public void Blockchange2(Player p, ushort x, ushort y, ushort z, byte type)
         {
             p.ClearBlockchange();
-//            byte b = p.level.GetTile(x, y, z) // Unused method, wasting mah .exe spaces;
+            byte b = p.level.GetTile(x, y, z);
             p.level.Blockchange(p, x, y, z, Block.c4det);
             Player.SendMessage(p, "Placed detonator block!");
         }

@@ -19,7 +19,7 @@ using System.Text;
 using System.IO;
 
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     class CmdDelTempRank : Command

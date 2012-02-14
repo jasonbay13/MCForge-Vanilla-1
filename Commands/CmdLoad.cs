@@ -20,7 +20,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdLoad : Command
@@ -141,15 +141,15 @@ namespace MCForge.Commands
                     Server.addLevel(level);
                 }
                 Player.GlobalMessage("Level \"" + level.name + "\" loaded.");
-                try
+                /*try
                 {
                     Gui.Window.thisWindow.UpdatePlayerMapCombo();
                     Gui.Window.thisWindow.UnloadedlistUpdate();
                     Gui.Window.thisWindow.UpdateMapList("'");
-                   ;
+                   
                     
                 }
-                catch { }
+                catch { }*/
                 try
                 {
                     int temp = int.Parse(phys);

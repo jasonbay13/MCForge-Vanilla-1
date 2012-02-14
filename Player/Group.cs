@@ -36,11 +36,7 @@ namespace MCForge
         public delegate void GroupLoad();
         [Obsolete("Please use OnGroupLoadEvent.Register()")]
         public static event GroupLoad OnGroupLoad;
-
-        public delegate void GroupLoaded(Group g);
-        [Obsolete("Please use OnGroupLoadedEvent.Register()")]
-        public static event GroupLoaded OnGroupLoaded;
-        public static bool cancelrank/* = false*/;
+        public static bool cancelrank = false;
         //Move along...nothing to see here...
         internal static void because(Player p, Group newrank) { if (OnPlayerRankSet != null) { OnPlayerRankSet(p, newrank); } OnPlayerRankSetEvent.Call(p, newrank); }
         public string name;
@@ -85,8 +81,6 @@ namespace MCForge
                 playerList = PlayerList.Load(fileName, this);
             else
                 playerList = new PlayerList();
-            if (OnGroupLoaded != null)
-                OnGroupLoaded(this);
         }
         /// <summary>
         /// Fill the commands that this group can use
@@ -473,7 +467,7 @@ namespace MCForge
         }
     }
 
-    public static class GrpCommands
+    public class GrpCommands
     {
         public class rankAllowance { 
             public string commandName; 

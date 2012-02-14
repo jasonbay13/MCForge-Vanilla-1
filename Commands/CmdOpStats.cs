@@ -21,7 +21,7 @@ using System;
 using System.Data;
 using MCForge.SQL;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdOpStats : Command

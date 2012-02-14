@@ -49,6 +49,12 @@ namespace MCForge
         Nobody = 120,
         Null = 150
     }
+    public enum PhysicsState
+    {
+        Stopped, 
+        Warning,
+        Other
+    }
 
     public class Level : IDisposable
     {
@@ -64,8 +70,11 @@ namespace MCForge
 
         public delegate void OnPhysicsUpdate(ushort x, ushort y, ushort z, byte time, string extraInfo, Level l);
 
+        public delegate void OnPhysicsStateChanged(object sender, PhysicsState state);
+
         #endregion
 
+        public static event OnPhysicsStateChanged PhysicsStateChanged;
         public static bool cancelload;
         public static bool cancelsave;
         public static bool cancelphysics;
@@ -77,7 +86,7 @@ namespace MCForge
 
         private readonly Dictionary<int, bool[]> liquids = new Dictionary<int, bool[]>();
                                                  // Holds random flow data for liqiud physics
-        bool physicssate/* = false*/;
+        bool physicssate = false;
         public bool Death;
         public ExtrasCollection Extras = new ExtrasCollection();
         public bool GrassDestroy = true;
@@ -266,8 +275,8 @@ namespace MCForge
             spawnx = (ushort) (width/2);
             spawny = (ushort) (depth*0.75f);
             spawnz = (ushort) (height/2);
-            /*rotx = 0*/;
-            /*roty = 0*/;
+            rotx = 0;
+            roty = 0;
             textures = new LevelTextures(this);
             //season = new SeasonsCore(this);
         }
@@ -356,7 +365,7 @@ namespace MCForge
             Player.players.ForEach(
                 delegate(Player pl) { if (pl.level == this) Command.all.Find("goto").Use(pl, Server.mainLevel.name); });
 
-            if (changed)
+            if (changed && (!Server.ZombieModeOn || !Server.noLevelSaving))
             {
                 if ((!Server.lava.active || !Server.lava.HasMap(name)) && save) Save();
                 saveChanges();
@@ -372,8 +381,12 @@ namespace MCForge
                     TntWarsGame.SetTitlesAndColor(pl, true);
                 }
                 Server.s.Log("TNT Wars: Game deleted on " + name);
-                TntWarsGame.GameList.Remove(TntWarsGame.Find(this));
+                TntWarsGame.GameList.Remove(TntWarsGame.Find(this)); 
+                
             }
+            
+            Server.levels.Remove(this);
+            
             try
             {
                 //physChecker.Stop();
@@ -385,13 +398,7 @@ namespace MCForge
             catch
             {
             }
-            Server.levels.Remove(this);
-            try
-            {
-                Window.thisWindow.UpdateMapList("'");
-                //Bad idea, have window check it, not level call for window to check
-            }
-            catch { }
+           
             finally
             {
                 Dispose();
@@ -484,12 +491,8 @@ namespace MCForge
             return Server.levels.Find(lvl => levelName.ToLower() == lvl.name.ToLower());
         }
 
-        public void Blockchange(Player p, ushort x, ushort y, ushort z, byte type)
-        {
-            Blockchange(p, x, y, z, type, true);
-        }
 
-        public void Blockchange(Player p, ushort x, ushort y, ushort z, byte type, bool addaction)
+        public void Blockchange(Player p, ushort x, ushort y, ushort z, byte type, bool addaction = true)
         {
             string errorLocation = "start";
             retry:
@@ -1197,7 +1200,7 @@ namespace MCForge
                     level.blocks = blocks;
                     gs.Close();
                     gs.Dispose();
-                    level.textures = new LevelTextures(level);
+                    //level.textures = new LevelTextures(level);
                     level.backedup = true;
 
                     using (DataTable ZoneDB = Database.fillData("SELECT * FROM `Zone" + givenName + "`"))
@@ -1530,7 +1533,8 @@ namespace MCForge
 
                             Player.GlobalMessage("Physics shutdown on &b" + Cause.name);
                             Server.s.Log("Physics shutdown on " + name);
-                            Server.PopupNotify("Physics shutdown on " + name, ToolTipIcon.Error);
+                            if (PhysicsStateChanged != null)
+                                PhysicsStateChanged(this, PhysicsState.Stopped);
 
                             wait = speedPhysics;
                         }
@@ -1541,7 +1545,9 @@ namespace MCForge
                                 Player.SendMessage(p, "Physics warning!");
                             }
                             Server.s.Log("Physics warning on " + name);
-                            Server.PopupNotify("Physics warning on " + name, ToolTipIcon.Warning);
+
+                            if (PhysicsStateChanged != null)
+                                PhysicsStateChanged(this, PhysicsState.Warning);
                         }
                     }
                 }
@@ -5842,48 +5848,46 @@ namespace MCForge
         }
 
         //================================================================================================================
-//  Unused method, wasting mah .exe spaces
-//        private void PhysFall(byte newBlock, ushort x, ushort y, ushort z, bool random)
-//        {
-//            var randNum = new Random();
-//            byte b;
-//            if (!random)
-//            {
-//                b = GetTile((ushort) (x + 1), y, z);
-//                if (b == Block.air || b == Block.waterstill) Blockchange((ushort) (x + 1), y, z, newBlock);
-//                b = GetTile((ushort) (x - 1), y, z);
-//                if (b == Block.air || b == Block.waterstill) Blockchange((ushort) (x - 1), y, z, newBlock);
-//                b = GetTile(x, y, (ushort) (z + 1));
-//                if (b == Block.air || b == Block.waterstill) Blockchange(x, y, (ushort) (z + 1), newBlock);
-//                b = GetTile(x, y, (ushort) (z - 1));
-//                if (b == Block.air || b == Block.waterstill) Blockchange(x, y, (ushort) (z - 1), newBlock);
-//            }
-//            else
-//            {
-//                if (GetTile((ushort) (x + 1), y, z) == Block.air && randNum.Next(1, 10) < 3)
-//                    Blockchange((ushort) (x + 1), y, z, newBlock);
-//                if (GetTile((ushort) (x - 1), y, z) == Block.air && randNum.Next(1, 10) < 3)
-//                    Blockchange((ushort) (x - 1), y, z, newBlock);
-//                if (GetTile(x, y, (ushort) (z + 1)) == Block.air && randNum.Next(1, 10) < 3)
-//                    Blockchange(x, y, (ushort) (z + 1), newBlock);
-//                if (GetTile(x, y, (ushort) (z - 1)) == Block.air && randNum.Next(1, 10) < 3)
-//                    Blockchange(x, y, (ushort) (z - 1), newBlock);
-//            }
-//        }
+        private void PhysFall(byte newBlock, ushort x, ushort y, ushort z, bool random)
+        {
+            var randNum = new Random();
+            byte b;
+            if (!random)
+            {
+                b = GetTile((ushort) (x + 1), y, z);
+                if (b == Block.air || b == Block.waterstill) Blockchange((ushort) (x + 1), y, z, newBlock);
+                b = GetTile((ushort) (x - 1), y, z);
+                if (b == Block.air || b == Block.waterstill) Blockchange((ushort) (x - 1), y, z, newBlock);
+                b = GetTile(x, y, (ushort) (z + 1));
+                if (b == Block.air || b == Block.waterstill) Blockchange(x, y, (ushort) (z + 1), newBlock);
+                b = GetTile(x, y, (ushort) (z - 1));
+                if (b == Block.air || b == Block.waterstill) Blockchange(x, y, (ushort) (z - 1), newBlock);
+            }
+            else
+            {
+                if (GetTile((ushort) (x + 1), y, z) == Block.air && randNum.Next(1, 10) < 3)
+                    Blockchange((ushort) (x + 1), y, z, newBlock);
+                if (GetTile((ushort) (x - 1), y, z) == Block.air && randNum.Next(1, 10) < 3)
+                    Blockchange((ushort) (x - 1), y, z, newBlock);
+                if (GetTile(x, y, (ushort) (z + 1)) == Block.air && randNum.Next(1, 10) < 3)
+                    Blockchange(x, y, (ushort) (z + 1), newBlock);
+                if (GetTile(x, y, (ushort) (z - 1)) == Block.air && randNum.Next(1, 10) < 3)
+                    Blockchange(x, y, (ushort) (z - 1), newBlock);
+            }
+        }
 
         //================================================================================================================
-//  Unused method, wasting mah .exe spaces
-//        private void PhysReplace(int b, byte typeA, byte typeB) //replace any typeA with typeB
-//        {
-//            if (b == -1)
-//            {
-//                return;
-//            }
-//            if (blocks[b] == typeA)
-//            {
-//                AddUpdate(b, typeB);
-//            }
-//        }
+        private void PhysReplace(int b, byte typeA, byte typeB) //replace any typeA with typeB
+        {
+            if (b == -1)
+            {
+                return;
+            }
+            if (blocks[b] == typeA)
+            {
+                AddUpdate(b, typeB);
+            }
+        }
 
         //================================================================================================================
         private bool PhysLeaf(int b)
@@ -5985,22 +5989,21 @@ namespace MCForge
         }
 
         //================================================================================================================
-//  Unused method, wasting mah .exe spaces
-//        private byte PhysFlowDirections(int b, bool down = true, bool up = false)
-//        {
-//            byte dir = 0;
-//            ushort x, y, z;
-//            IntToPos(b, out x, out y, out z);
-//
-//            if (GetTile((ushort) (x + 1), y, z) == Block.air) dir++;
-//            if (GetTile((ushort) (x - 1), y, z) == Block.air) dir++;
-//            if (up && GetTile(x, (ushort) (y + 1), z) == Block.air) dir++;
-//            if (down && GetTile(x, (ushort) (y - 1), z) == Block.air) dir++;
-//            if (GetTile(x, y, (ushort) (z + 1)) == Block.air) dir++;
-//            if (GetTile(x, y, (ushort) (z - 1)) == Block.air) dir++;
-//
-//            return dir;
-//        }
+        private byte PhysFlowDirections(int b, bool down = true, bool up = false)
+        {
+            byte dir = 0;
+            ushort x, y, z;
+            IntToPos(b, out x, out y, out z);
+
+            if (GetTile((ushort) (x + 1), y, z) == Block.air) dir++;
+            if (GetTile((ushort) (x - 1), y, z) == Block.air) dir++;
+            if (up && GetTile(x, (ushort) (y + 1), z) == Block.air) dir++;
+            if (down && GetTile(x, (ushort) (y - 1), z) == Block.air) dir++;
+            if (GetTile(x, y, (ushort) (z + 1)) == Block.air) dir++;
+            if (GetTile(x, y, (ushort) (z - 1)) == Block.air) dir++;
+
+            return dir;
+        }
 
         //================================================================================================================
 
@@ -6503,7 +6506,7 @@ namespace MCForge
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
-public class Check : IDisposable
+public class Check
 {
     public int b;
     public string extraInfo = "";
@@ -6513,46 +6516,10 @@ public class Check : IDisposable
     public Check(int b, string extraInfo = "", MCForge.Player placer = null)
     {
         this.b = b;
-        /*time = 0*/;
+        time = 0;
         this.extraInfo = extraInfo;
         p = placer;
     }
-
-    #region IDisposable Implementation
-
-    protected bool disposed = false;
-
-    protected virtual void Dispose(bool disposing)
-    {
-        lock (this)
-        {
-            // Do nothing if the object has already been disposed of.
-            if (disposed)
-                return;
-
-            if (disposing)
-            {
-                // Release diposable objects used by this instance here.
-
-                if (p != null)
-                    p.Dispose();
-            }
-
-            // Release unmanaged resources here. Don't access reference type fields.
-
-            // Remember that the object has been disposed of.
-            disposed = true;
-        }
-    }
-
-    public virtual void Dispose()
-    {
-        Dispose(true);
-        // Unregister object for finalization.
-        GC.SuppressFinalize(this);
-    }
-
-    #endregion
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------

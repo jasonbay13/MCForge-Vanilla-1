@@ -23,7 +23,7 @@ using System.Text;
 using System.Data;
 using MCForge.SQL;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     class CmdClones : Command

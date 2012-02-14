@@ -25,7 +25,7 @@ using System.Text;
 using System.Threading;
 using System.IO;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdKillPhysics : Command

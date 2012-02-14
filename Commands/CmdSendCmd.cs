@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.IO;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     public class CmdSendCmd : Command
@@ -45,7 +45,6 @@ namespace MCForge.Commands
                 else { if (player.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot use this on someone of equal or greater rank."); return; } }
                 string command;
                 string command2;
-		if (message.Split(' ')[1].ToLower() == "global" || message.Split(' ')[1].ToLower() == "gc" ) {Player.SendMessage(p, "Cannot use this to impersonate someone on global chat!"); return; }
                 try
                 {
                     command = message.Split(' ')[1];

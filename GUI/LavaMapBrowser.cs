@@ -32,7 +32,7 @@ namespace MCForge.Gui
     public partial class LavaMapBrowser : Form
     {
         Form mapSubmit;
-        private bool listing/* = false*/, loadingDet/* = false*/;
+        private bool listing = false, loadingDet = false;
         private string downloadUrl = "http://www.mcforge.net/lavamaps/dl.php";
         private string listUrl = "http://www.mcforge.net/lavamaps/listdata.php";
         private string imgUrl = "http://www.mcforge.net/lavamaps/thumb.php";

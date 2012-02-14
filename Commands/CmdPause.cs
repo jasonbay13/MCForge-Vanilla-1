@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-
+using MCForge;
 namespace MCForge.Commands
 {
     class CmdPause : Command

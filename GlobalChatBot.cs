@@ -27,28 +27,32 @@ namespace MCForge
 {
     public class GlobalChatBot
     {
-        public delegate void LogHandler(string nick, string message);
-        public event LogHandler OnNewGlobalMessage;
+        public delegate void RecieveChat(string nick, string message);
+        public static event RecieveChat OnNewRecieveGlobalMessage;
+
+        public delegate void SendChat(string player, string message);
+        public static event SendChat OnNewSayGlobalMessage;
 
         public delegate void KickHandler(string reason);
         public event KickHandler OnGlobalKicked;
 
         private Connection connection;
         private string server, channel, nick;
-        private bool reset/* = false*/;
-        private byte retries/* = 0*/;
+        private bool reset = false;
+        private byte retries = 0;
         public GlobalChatBot(string nick)
         {
+            if (!File.Exists("Sharkbite.Thresher.dll"))
+            {
+                Server.UseGlobalChat = false;
+                Server.s.Log("[GlobalChat] The IRC dll was not found!");
+                return;
+            }
             server = "irc.geekshed.net"; channel = "#MCForge"; this.nick = nick.Replace(" ", "");
-            connection = new Connection(new ConnectionArgs(nick, server), true, false);
-            connection.CtcpResponder = new CtcpResponder(connection);
-            connection.CtcpResponder.VersionResponse = "MCForge " + Server.Version; // cant set Null.VersonResponse, tis why i added the line above.
+            connection = new Connection(new ConnectionArgs(nick, server), false, false);
             if (Server.UseGlobalChat)
             {
-                // Register events for server
-                Server.s.OnURLChange += new Server.MessageEventHandler(Server_URLChange);
-
-                // Register events for incoming
+                // Regster events for incoming
                 connection.Listener.OnNickError += new NickErrorEventHandler(Listener_OnNickError);
                 connection.Listener.OnRegistered += new RegisteredEventHandler(Listener_OnRegistered);
                 connection.Listener.OnPublic += new PublicMessageEventHandler(Listener_OnPublic);
@@ -58,8 +62,15 @@ namespace MCForge
                 connection.Listener.OnDisconnected += new DisconnectedEventHandler(Listener_OnDisconnected);
             }
         }
-        public void Say(string message)
+        public void Say(string message, Player p = null)
         {
+            if (p != null && p.muted)
+            {
+                Player.SendMessage(p, "*Tears* You aren't allowed to talk to the nice people of global chat");
+                return;
+            }
+            if (OnNewSayGlobalMessage != null)
+                OnNewSayGlobalMessage(p == null ? "Console" : p.name, message);
             if (Server.UseGlobalChat && IsConnected())
                 connection.Sender.PublicMessage(channel, message);
         }
@@ -92,24 +103,37 @@ namespace MCForge
         {
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             //string msg = message;
-            if (message == "#updatebanlist") { Server.UpdateGlobalBanlist(); return; }
-            if (message.Contains("#ipget ")) {
-                Player who = Player.Find(message.Split(' ')[1]);
-                if (who == null) { return; }
-                Server.GlobalChat.Say("#IP " + who.name + ": " + who.ip);
+            if (message.Contains("^UPDATEGLOBALBANLIST"))
+            {
+                Server.UpdateGlobalBanlist();
                 return;
             }
-            if (message.Contains("#IP ")) { return; }
+            if (message.Contains("^IPGET "))
+            {
+                foreach (Player p in Player.players)
+                {
+                    if (p.name == message.Split(' ')[1])
+                    {
+                        if (Server.UseGlobalChat && IsConnected())
+                        {
+                            connection.Sender.PublicMessage(channel, "^IP " + p.name + ": " + p.ip);
+                        }                        
+                    }
+                }
+            }
+            if (message.StartsWith("^")) { return; }
             message = message.MCCharFilter();
             if (Player.MessageHasBadColorCodes(null, message))
                 return;
-            if (OnNewGlobalMessage != null)
+            if (OnNewRecieveGlobalMessage != null)
             {
-                OnNewGlobalMessage(user.Nick, message);
+                OnNewRecieveGlobalMessage(user.Nick, message);
             }
             if (Server.devs.Contains(message.Split(':')[0]) && message.StartsWith("[Dev]") == false && message.StartsWith("[Developer]") == false) { message = "[Dev]" + message; }
-            try { Gui.Window.thisWindow.LogGlobalChat("> " + user.Nick + ": " + message); }
-            catch { Server.s.Log(">[Global] " + user.Nick + ": " + message); }
+            /*try { 
+                if(GUI.GuiEvent != null)
+                GUI.GuiEvents.GlobalChatEvent(this, "> " + user.Nick + ": " + message); }
+            catch { Server.s.Log(">[Global] " + user.Nick + ": " + message); }*/
             Player.GlobalMessage(String.Format("{0}>[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message), true);
         }
 
@@ -140,11 +164,6 @@ namespace MCForge
                 connection.Sender.Join(channel);
             }
 
-        }
-
-        void Server_URLChange(string url)
-        {
-            connection.CtcpResponder.VersionResponse = "MCForge " + Server.Version + " - " + url;
         }
 
         public void Connect()
