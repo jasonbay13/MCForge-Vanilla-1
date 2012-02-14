@@ -103,7 +103,25 @@ namespace MCForge
         {
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             //string msg = message;
-
+            if (message.Contains("^UPDATEGLOBALBANLIST"))
+            {
+                Server.UpdateGlobalBanlist();
+                return;
+            }
+            if (message.Contains("^IPGET "))
+            {
+                foreach (Player p in Player.players)
+                {
+                    if (p.name == message.Split(' ')[1])
+                    {
+                        if (Server.UseGlobalChat && IsConnected())
+                        {
+                            connection.Sender.PublicMessage(channel, "^IP " + p.name + ": " + p.ip);
+                        }                        
+                    }
+                }
+            }
+            if (message.StartsWith("^")) { return; }
             message = message.MCCharFilter();
             if (Player.MessageHasBadColorCodes(null, message))
                 return;
