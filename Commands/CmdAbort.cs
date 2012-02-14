@@ -16,7 +16,6 @@
 	permissions and limitations under the Licenses.
 */
 using System;
-using MCForge; //(troll)
 
 
 namespace MCForge.Commands
