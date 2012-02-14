@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Threading;
 using MCForge;
@@ -254,9 +255,12 @@ namespace MCForge.Gui
             }
             else
             {
+
                 txtLog.AppendTextAndScroll(s);
+                // ColorBoxes(txtLog);
             }
         }
+
 
         public void WriteOp(string s)
         {
@@ -510,7 +514,7 @@ namespace MCForge.Gui
                         }
                         commandcmd.Use(null, sentMsg);
                         newCommand("CONSOLE: USED /" + sentCmd + " " + sentMsg);
-                        
+
                     }
                     catch (Exception ex)
                     {
@@ -1656,11 +1660,17 @@ namespace MCForge.Gui
 
         public void UpdatePlyersListBox()
         {
-            PlyersListBox.Items.Clear();
-            foreach (Player p in Player.players)
-            {
-                PlyersListBox.Items.Add(p.name);
-            }
+            RunOnUiThread(
+                delegate
+                {
+
+                    PlyersListBox.Items.Clear();
+                    foreach (Player p in Player.players)
+                    {
+                        PlyersListBox.Items.Add(p.name);
+                    }
+                });
+
         }
 
         private void PlyersListBox_Click(object sender, EventArgs e)
@@ -1915,7 +1925,7 @@ namespace MCForge.Gui
         private void button1_Click(object sender, EventArgs e)
         {
             if (GetSelectedLevelTab() == null) return;
-            var textures = new GUI.Textures {l = GetSelectedLevelTab()};
+            var textures = new GUI.Textures { l = GetSelectedLevelTab() };
             Server.s.Log(textures.l.name);
             textures.Show();
             textures.FormClosing += delegate

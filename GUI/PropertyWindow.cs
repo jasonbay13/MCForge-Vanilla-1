@@ -64,10 +64,8 @@ namespace MCForge.Gui
             cmbGlobalChatColor.Items.AddRange(colors);
             button3.Enabled = Server.WomDirect;
 
-            if (Server.irc) grpIRC.BackColor = Color.White;
-            else grpIRC.BackColor = Color.LightGray;
-            if (Server.useMySQL) grpSQL.BackColor = Color.White;
-            else grpSQL.BackColor = Color.LightGray;
+            grpIRC.BackColor = Server.irc ? Color.White : Color.LightGray;
+            grpSQL.BackColor = Server.useMySQL ? Color.White : Color.LightGray;
 
             string opchatperm = String.Empty;
             string adminchatperm = String.Empty;
@@ -170,13 +168,12 @@ namespace MCForge.Gui
 
             try
             {
-                lavaUpdateTimer = new System.Timers.Timer(10000);
-                lavaUpdateTimer.AutoReset = true;
-                lavaUpdateTimer.Elapsed += new System.Timers.ElapsedEventHandler(delegate
-                {
-                    UpdateLavaControls();
-                    UpdateLavaMapList(false);
-                });
+                lavaUpdateTimer = new System.Timers.Timer(10000) {AutoReset = true};
+                lavaUpdateTimer.Elapsed += delegate
+                                               {
+                                                   UpdateLavaControls();
+                                                   UpdateLavaMapList(false);
+                                               };
                 lavaUpdateTimer.Start();
             }
             catch
@@ -274,477 +271,475 @@ namespace MCForge.Gui
         public void LoadProp(string givenPath)
         {
             //int count = 0;
-            if (File.Exists(givenPath))
+            if (!File.Exists(givenPath)) return;
+            string[] lines = File.ReadAllLines(givenPath);
+
+            foreach (string line in lines)
             {
-                string[] lines = File.ReadAllLines(givenPath);
-
-                foreach (string line in lines)
+                if (line != "" && line[0] != '#')
                 {
-                    if (line != "" && line[0] != '#')
+                    //int index = line.IndexOf('=') + 1; // not needed if we use Split('=')
+                    string key = line.Split('=')[0].Trim();
+                    string value = "";
+                    if (line.IndexOf('=') >= 0)
+                        value = line.Substring(line.IndexOf('=') + 1).Trim(); // allowing = in the values
+                    string color = "";
+
+                    switch (key.ToLower())
                     {
-                        //int index = line.IndexOf('=') + 1; // not needed if we use Split('=')
-                        string key = line.Split('=')[0].Trim();
-                        string value = "";
-                        if (line.IndexOf('=') >= 0)
-                            value = line.Substring(line.IndexOf('=') + 1).Trim(); // allowing = in the values
-                        string color = "";
-
-                        switch (key.ToLower())
-                        {
-                            case "server-name":
-                                if (ValidString(value, "![]:.,{}~-+()?_/\\' ")) txtName.Text = value;
-                                else txtName.Text = "[MCForge] Minecraft server";
-                                break;
-                            case "motd":
-                                if (ValidString(value, "=![]&:.,{}~-+()?_/\\' ")) txtMOTD.Text = value; // allow = in the motd
-                                else txtMOTD.Text = "Welcome to my server!";
-                                break;
-                            case "port":
-                                try { txtPort.Text = Convert.ToInt32(value).ToString(); }
-                                catch { txtPort.Text = "25565"; }
-                                break;
-                            case "verify-names":
-                                chkVerify.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "public":
-                                chkPublic.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "world-chat":
-                                chkWorld.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "max-players":
-                                try
+                        case "server-name":
+                            if (ValidString(value, "![]:.,{}~-+()?_/\\' ")) txtName.Text = value;
+                            else txtName.Text = "[MCForge] Minecraft server";
+                            break;
+                        case "motd":
+                            if (ValidString(value, "=![]&:.,{}~-+()?_/\\' ")) txtMOTD.Text = value; // allow = in the motd
+                            else txtMOTD.Text = "Welcome to my server!";
+                            break;
+                        case "port":
+                            try { txtPort.Text = Convert.ToInt32(value).ToString(); }
+                            catch { txtPort.Text = "25565"; }
+                            break;
+                        case "verify-names":
+                            chkVerify.Checked = (value.ToLower() == "true");
+                            break;
+                        case "public":
+                            chkPublic.Checked = (value.ToLower() == "true");
+                            break;
+                        case "world-chat":
+                            chkWorld.Checked = (value.ToLower() == "true");
+                            break;
+                        case "max-players":
+                            try
+                            {
+                                if (Convert.ToByte(value) > 128)
                                 {
-                                    if (Convert.ToByte(value) > 128)
-                                    {
-                                        value = "128";
-                                    }
-                                    else if (Convert.ToByte(value) < 1)
-                                    {
-                                        value = "1";
-                                    }
-                                    numPlayers.Value = Convert.ToInt16(value);
+                                    value = "128";
                                 }
-                                catch
+                                else if (Convert.ToByte(value) < 1)
                                 {
-                                    Server.s.Log("max-players invalid! setting to default.");
-                                    numPlayers.Value = 12;
+                                    value = "1";
                                 }
+                                numPlayers.Value = Convert.ToInt16(value);
+                            }
+                            catch
+                            {
+                                Server.s.Log("max-players invalid! setting to default.");
+                                numPlayers.Value = 12;
+                            }
+                            numGuests.Maximum = numPlayers.Value;
+                            break;
+                        case "max-guests":
+                            try
+                            {
+                                if (Convert.ToByte(value) > numPlayers.Value)
+                                {
+                                    value = numPlayers.Value.ToString();
+                                }
+                                else if (Convert.ToByte(value) < 0)
+                                {
+                                    value = "0";
+                                }
+                                numGuests.Minimum = 0;
                                 numGuests.Maximum = numPlayers.Value;
-                                break;
-                            case "max-guests":
-                                try
+                                numGuests.Value = Convert.ToInt16(value);
+                            }
+                            catch
+                            {
+                                Server.s.Log("max-guests invalid! setting to default.");
+                                numGuests.Value = 10;
+                            }
+                            break;
+                        case "max-maps":
+                            try
+                            {
+                                if (Convert.ToByte(value) > 100)
                                 {
-                                    if (Convert.ToByte(value) > numPlayers.Value)
-                                    {
-                                        value = numPlayers.Value.ToString();
-                                    }
-                                    else if (Convert.ToByte(value) < 0)
-                                    {
-                                        value = "0";
-                                    }
-                                    numGuests.Minimum = 0;
-                                    numGuests.Maximum = numPlayers.Value;
-                                    numGuests.Value = Convert.ToInt16(value);
+                                    value = "100";
                                 }
-                                catch
+                                else if (Convert.ToByte(value) < 1)
                                 {
-                                    Server.s.Log("max-guests invalid! setting to default.");
-                                    numGuests.Value = 10;
+                                    value = "1";
                                 }
-                                break;
-                            case "max-maps":
-                                try
-                                {
-                                    if (Convert.ToByte(value) > 100)
-                                    {
-                                        value = "100";
-                                    }
-                                    else if (Convert.ToByte(value) < 1)
-                                    {
-                                        value = "1";
-                                    }
-                                    txtMaps.Text = value;
-                                }
-                                catch
-                                {
-                                    Server.s.Log("max-maps invalid! setting to default.");
-                                    txtMaps.Text = "5";
-                                }
-                                break;
-                            case "irc":
-                                chkIRC.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "irc-server":
-                                txtIRCServer.Text = value;
-                                break;
-                            case "irc-port":
-                                txtIRCPort.Text = value;
-                                break;
-                            case "irc-nick":
-                                txtNick.Text = value;
-                                break;
-                            case "irc-channel":
-                                txtChannel.Text = value;
-                                break;
-                            case "irc-opchannel":
-                                txtOpChannel.Text = value;
-                                break;
-                            case "irc-identify":
-                                chkIrcId.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "irc-password":
-                                txtIrcId.Text = value;
-                                break;
-                            case "anti-tunnels":
-                                ChkTunnels.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "max-depth":
-                                txtDepth.Text = value;
-                                break;
+                                txtMaps.Text = value;
+                            }
+                            catch
+                            {
+                                Server.s.Log("max-maps invalid! setting to default.");
+                                txtMaps.Text = "5";
+                            }
+                            break;
+                        case "irc":
+                            chkIRC.Checked = (value.ToLower() == "true");
+                            break;
+                        case "irc-server":
+                            txtIRCServer.Text = value;
+                            break;
+                        case "irc-port":
+                            txtIRCPort.Text = value;
+                            break;
+                        case "irc-nick":
+                            txtNick.Text = value;
+                            break;
+                        case "irc-channel":
+                            txtChannel.Text = value;
+                            break;
+                        case "irc-opchannel":
+                            txtOpChannel.Text = value;
+                            break;
+                        case "irc-identify":
+                            chkIrcId.Checked = (value.ToLower() == "true");
+                            break;
+                        case "irc-password":
+                            txtIrcId.Text = value;
+                            break;
+                        case "anti-tunnels":
+                            ChkTunnels.Checked = (value.ToLower() == "true");
+                            break;
+                        case "max-depth":
+                            txtDepth.Text = value;
+                            break;
 
-                            case "rplimit":
-                                try { txtRP.Text = value; }
-                                catch { txtRP.Text = "500"; }
-                                break;
-                            case "rplimit-norm":
-                                try { txtNormRp.Text = value; }
-                                catch { txtNormRp.Text = "10000"; }
-                                break;
+                        case "rplimit":
+                            try { txtRP.Text = value; }
+                            catch { txtRP.Text = "500"; }
+                            break;
+                        case "rplimit-norm":
+                            try { txtNormRp.Text = value; }
+                            catch { txtNormRp.Text = "10000"; }
+                            break;
 
-                            case "log-heartbeat":
-                                chkLogBeat.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                        case "log-heartbeat":
+                            chkLogBeat.Checked = (value.ToLower() == "true");
+                            break;
 
-                            case "force-cuboid":
-                                chkForceCuboid.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                        case "force-cuboid":
+                            chkForceCuboid.Checked = (value.ToLower() == "true");
+                            break;
 
-                            case "profanity-filter":
-                                chkProfanityFilter.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                        case "profanity-filter":
+                            chkProfanityFilter.Checked = (value.ToLower() == "true");
+                            break;
 
-                            case "notify-on-join-leave":
-                                chkNotifyOnJoinLeave.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                        case "notify-on-join-leave":
+                            chkNotifyOnJoinLeave.Checked = (value.ToLower() == "true");
+                            break;
 
-                            case "backup-time":
-                                if (Convert.ToInt32(value) > 1) txtBackup.Text = value; else txtBackup.Text = "300";
-                                break;
+                        case "backup-time":
+                            txtBackup.Text = Convert.ToInt32(value) > 1 ? value : "300";
+                            break;
 
-                            case "backup-location":
-                                if (!value.Contains("System.Windows.Forms.TextBox, Text:"))
-                                    txtBackupLocation.Text = value;
-                                break;
+                        case "backup-location":
+                            if (!value.Contains("System.Windows.Forms.TextBox, Text:"))
+                                txtBackupLocation.Text = value;
+                            break;
 
-                            case "physicsrestart":
-                                chkPhysicsRest.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "deathcount":
-                                chkDeath.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                        case "physicsrestart":
+                            chkPhysicsRest.Checked = (value.ToLower() == "true");
+                            break;
+                        case "deathcount":
+                            chkDeath.Checked = (value.ToLower() == "true");
+                            break;
 
-                            case "defaultcolor":
-                                color = c.Parse(value);
+                        case "defaultcolor":
+                            color = c.Parse(value);
 
-                                if (color == "")
-                                {
-                                    color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
-                                }
-                                cmbDefaultColour.SelectedIndex = cmbDefaultColour.Items.IndexOf(c.Name(color)); break;
+                            if (color == "")
+                            {
+                                color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
+                            }
+                            cmbDefaultColour.SelectedIndex = cmbDefaultColour.Items.IndexOf(c.Name(color)); break;
 
-                            case "irc-color":
-                                color = c.Parse(value);
-                                if (color == "")
-                                {
-                                    color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
-                                }
-                                cmbIRCColour.SelectedIndex = cmbIRCColour.Items.IndexOf(c.Name(color)); break;
-                            case "default-rank":
-                                try
-                                {
-                                    if (cmbDefaultRank.Items.IndexOf(value.ToLower()) != -1)
-                                        cmbDefaultRank.SelectedIndex = cmbDefaultRank.Items.IndexOf(value.ToLower());
-                                }
-                                catch { cmbDefaultRank.SelectedIndex = 1; }
-                                break;
+                        case "irc-color":
+                            color = c.Parse(value);
+                            if (color == "")
+                            {
+                                color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
+                            }
+                            cmbIRCColour.SelectedIndex = cmbIRCColour.Items.IndexOf(c.Name(color)); break;
+                        case "default-rank":
+                            try
+                            {
+                                if (cmbDefaultRank.Items.IndexOf(value.ToLower()) != -1)
+                                    cmbDefaultRank.SelectedIndex = cmbDefaultRank.Items.IndexOf(value.ToLower());
+                            }
+                            catch { cmbDefaultRank.SelectedIndex = 1; }
+                            break;
 
-                            case "cheapmessage":
-                                chkCheap.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "cheap-message-given":
-                                txtCheap.Text = value;
-                                break;
+                        case "cheapmessage":
+                            chkCheap.Checked = (value.ToLower() == "true");
+                            break;
+                        case "cheap-message-given":
+                            txtCheap.Text = value;
+                            break;
 
-                            case "rank-super":
-                                chkrankSuper.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                        case "rank-super":
+                            chkrankSuper.Checked = (value.ToLower() == "true");
+                            break;
 
-                            case "custom-ban":
-                                chkBanMessage.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                        case "custom-ban":
+                            chkBanMessage.Checked = (value.ToLower() == "true");
+                            break;
 
-                            case "custom-ban-message":
-                                txtBanMessage.Text = value;
-                                break;
+                        case "custom-ban-message":
+                            txtBanMessage.Text = value;
+                            break;
 
-                            case "custom-shutdown":
-                                chkShutdown.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                        case "custom-shutdown":
+                            chkShutdown.Checked = (value.ToLower() == "true");
+                            break;
 
-                            case "custom-shutdown-message":
-                                txtShutdown.Text = value;
-                                break;
+                        case "custom-shutdown-message":
+                            txtShutdown.Text = value;
+                            break;
 
-                            case "custom-griefer-stone":
-                                chkGrieferStone.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                        case "custom-griefer-stone":
+                            chkGrieferStone.Checked = (value.ToLower() == "true");
+                            break;
 
-                            case "custom-griefer-stone-message":
-                                txtGrieferStone.Text = value;
-                                break;
+                        case "custom-griefer-stone-message":
+                            txtGrieferStone.Text = value;
+                            break;
 
-                            case "auto-restart":
-                                chkRestartTime.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "restarttime":
-                                txtRestartTime.Text = value;
-                                break;
-                            case "afk-minutes":
-                                try { txtafk.Text = Convert.ToInt16(value).ToString(); }
-                                catch { txtafk.Text = "10"; }
-                                break;
-                            case "afk-kick":
-                                try { txtAFKKick.Text = Convert.ToInt16(value).ToString(); }
-                                catch { txtAFKKick.Text = "45"; }
-                                break;
-                            case "check-updates":
-                                chkUpdates.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "auto-update":
-                                autoUpdate.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "in-game-update-notify":
-                                notifyInGameUpdate.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "update-countdown":
-                                try { updateTimeNumeric.Value = Convert.ToDecimal(value); }
-                                catch { updateTimeNumeric.Value = 10; }
-                                break;
-                            case "autoload":
-                                chkAutoload.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "parse-emotes":
-                                chkSmile.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "allow-tp-to-higher-ranks":
-                                chkTpToHigherRanks.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "agree-to-rules-on-entry":
-                                chkAgreeToRules.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "admins-join-silent":
-                                chkAdminsJoinSilent.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "main-name":
-                                txtMain.Text = value;
-                                break;
-                            case "dollar-before-dollar":
-                                chk17Dollar.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "money-name":
-                                txtMoneys.Text = value;
-                                break;
+                        case "auto-restart":
+                            chkRestartTime.Checked = (value.ToLower() == "true");
+                            break;
+                        case "restarttime":
+                            txtRestartTime.Text = value;
+                            break;
+                        case "afk-minutes":
+                            try { txtafk.Text = Convert.ToInt16(value).ToString(); }
+                            catch { txtafk.Text = "10"; }
+                            break;
+                        case "afk-kick":
+                            try { txtAFKKick.Text = Convert.ToInt16(value).ToString(); }
+                            catch { txtAFKKick.Text = "45"; }
+                            break;
+                        case "check-updates":
+                            chkUpdates.Checked = (value.ToLower() == "true");
+                            break;
+                        case "auto-update":
+                            autoUpdate.Checked = (value.ToLower() == "true");
+                            break;
+                        case "in-game-update-notify":
+                            notifyInGameUpdate.Checked = (value.ToLower() == "true");
+                            break;
+                        case "update-countdown":
+                            try { updateTimeNumeric.Value = Convert.ToDecimal(value); }
+                            catch { updateTimeNumeric.Value = 10; }
+                            break;
+                        case "autoload":
+                            chkAutoload.Checked = (value.ToLower() == "true");
+                            break;
+                        case "parse-emotes":
+                            chkSmile.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "allow-tp-to-higher-ranks":
+                            chkTpToHigherRanks.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "agree-to-rules-on-entry":
+                            chkAgreeToRules.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "admins-join-silent":
+                            chkAdminsJoinSilent.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "main-name":
+                            txtMain.Text = value;
+                            break;
+                        case "dollar-before-dollar":
+                            chk17Dollar.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "money-name":
+                            txtMoneys.Text = value;
+                            break;
                             /*case "mono":
                                 chkMono.Checked = (value.ToLower() == "true") ? true : false;
                                 break;*/
-                            case "restart-on-error":
-                                chkRestart.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "repeat-messages":
-                                chkRepeatMessages.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "host-state":
-                                if (value != "") txtHost.Text = value;
-                                break;
-                            case "kick-on-hackrank":
-                                hackrank_kick.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "hackrank-kick-time":
-                                hackrank_kick_time.Text = value;
-                                break;
-                            case "server-owner":
-                                txtServerOwner.Text = value;
-                                break;
-                            case "zombie-on-server-start":
-                                chkZombieOnServerStart.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "no-respawning-during-zombie":
-                                chkNoRespawnDuringZombie.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "no-level-saving-during-zombie":
-                                chkNoLevelSavingDuringZombie.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "no-pillaring-during-zombie":
-                                chkNoPillaringDuringZombie.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "zombie-name-while-infected":
-                                ZombieName.Text = value;
-                                break;
-                            case "enable-changing-levels":
-                                chkEnableChangingLevels.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "zombie-survival-only-server":
-                                chkZombieOnlyServer.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "use-level-list":
-                                chkUseLevelList.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "zombie-level-list":
-                                if (value != "")
-                                {
-                                    string input = value.Replace(" ", "").ToString();
-                                    int itndex = input.IndexOf("#");
-                                    if (itndex > 0)
-                                        input = input.Substring(0, itndex);
-                                    levelList.Text = input;
-                                }
-                                break;
-                            case "guest-limit-notify":
-                                chkGuestLimitNotify.Checked = (value.ToLower() == "true");
-                                break;
-                            case "ignore-ops":
-                                chkIgnoreGlobal.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "admin-verification":
-                                chkEnableVerification.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "usemysql":
-                                chkUseSQL.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "username":
-                                if (value != "") txtSQLUsername.Text = value;
-                                break;
-                            case "password":
-                                if (value != "") txtSQLPassword.Text = value;
-                                break;
-                            case "databasename":
-                                if (value != "") txtSQLDatabase.Text = value;
-                                break;
-                            case "host":
-                                try
-                                {
-                                    IPAddress.Parse(value);
-                                    txtSQLHost.Text = value;
-                                }
-                                catch
-                                {
-                                    txtSQLHost.Text = "127.0.0.1";
-                                }
-                                break;
-                            case "sqlport":
-                                try
-                                {
-                                    int.Parse(value);
-                                    txtSQLPort.Text = value;
-                                }
-                                catch
-                                {
-                                    txtSQLPort.Text = "3306";
-                                }
-                                break;
-                            case "mute-on-spam":
-                                chkSpamControl.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "spam-messages":
-                                try
-                                {
-                                    numSpamMessages.Value = Convert.ToInt16(value);
-                                }
-                                catch
-                                {
-                                    numSpamMessages.Value = 8;
-                                }
-                                break;
-                            case "spam-mute-time":
-                                try
-                                {
-                                    numSpamMute.Value = Convert.ToInt16(value);
-                                }
-                                catch
-                                {
-                                    numSpamMute.Value = 60;
-                                }
-                                break;
-                            case "show-empty-ranks":
-                                chkShowEmptyRanks.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                        case "restart-on-error":
+                            chkRestart.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "repeat-messages":
+                            chkRepeatMessages.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "host-state":
+                            if (value != "") txtHost.Text = value;
+                            break;
+                        case "kick-on-hackrank":
+                            hackrank_kick.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "hackrank-kick-time":
+                            hackrank_kick_time.Text = value;
+                            break;
+                        case "server-owner":
+                            txtServerOwner.Text = value;
+                            break;
+                        case "zombie-on-server-start":
+                            chkZombieOnServerStart.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "no-respawning-during-zombie":
+                            chkNoRespawnDuringZombie.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "no-level-saving-during-zombie":
+                            chkNoLevelSavingDuringZombie.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "no-pillaring-during-zombie":
+                            chkNoPillaringDuringZombie.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "zombie-name-while-infected":
+                            ZombieName.Text = value;
+                            break;
+                        case "enable-changing-levels":
+                            chkEnableChangingLevels.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "zombie-survival-only-server":
+                            chkZombieOnlyServer.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "use-level-list":
+                            chkUseLevelList.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "zombie-level-list":
+                            if (value != "")
+                            {
+                                string input = value.Replace(" ", "").ToString();
+                                int itndex = input.IndexOf("#");
+                                if (itndex > 0)
+                                    input = input.Substring(0, itndex);
+                                levelList.Text = input;
+                            }
+                            break;
+                        case "guest-limit-notify":
+                            chkGuestLimitNotify.Checked = (value.ToLower() == "true");
+                            break;
+                        case "ignore-ops":
+                            chkIgnoreGlobal.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "admin-verification":
+                            chkEnableVerification.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "usemysql":
+                            chkUseSQL.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "username":
+                            if (value != "") txtSQLUsername.Text = value;
+                            break;
+                        case "password":
+                            if (value != "") txtSQLPassword.Text = value;
+                            break;
+                        case "databasename":
+                            if (value != "") txtSQLDatabase.Text = value;
+                            break;
+                        case "host":
+                            try
+                            {
+                                IPAddress.Parse(value);
+                                txtSQLHost.Text = value;
+                            }
+                            catch
+                            {
+                                txtSQLHost.Text = "127.0.0.1";
+                            }
+                            break;
+                        case "sqlport":
+                            try
+                            {
+                                int.Parse(value);
+                                txtSQLPort.Text = value;
+                            }
+                            catch
+                            {
+                                txtSQLPort.Text = "3306";
+                            }
+                            break;
+                        case "mute-on-spam":
+                            chkSpamControl.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "spam-messages":
+                            try
+                            {
+                                numSpamMessages.Value = Convert.ToInt16(value);
+                            }
+                            catch
+                            {
+                                numSpamMessages.Value = 8;
+                            }
+                            break;
+                        case "spam-mute-time":
+                            try
+                            {
+                                numSpamMute.Value = Convert.ToInt16(value);
+                            }
+                            catch
+                            {
+                                numSpamMute.Value = 60;
+                            }
+                            break;
+                        case "show-empty-ranks":
+                            chkShowEmptyRanks.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
 
-                            case "global-chat-enabled":
-                                chkGlobalChat.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                        case "global-chat-enabled":
+                            chkGlobalChat.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
 
-                            case "global-chat-nick":
-                                if (value != "") txtGlobalChatNick.Text = value;
-                                break;
+                        case "global-chat-nick":
+                            if (value != "") txtGlobalChatNick.Text = value;
+                            break;
 
-                            case "global-chat-color":
-                                color = c.Parse(value);
-                                if (color == "")
-                                {
-                                    color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
-                                }
-                                cmbGlobalChatColor.SelectedIndex = cmbGlobalChatColor.Items.IndexOf(c.Name(color)); break;
+                        case "global-chat-color":
+                            color = c.Parse(value);
+                            if (color == "")
+                            {
+                                color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
+                            }
+                            cmbGlobalChatColor.SelectedIndex = cmbGlobalChatColor.Items.IndexOf(c.Name(color)); break;
 
-                            case "griefer-stone-tempban":
-                                chkGrieferStoneBan.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
+                        case "griefer-stone-tempban":
+                            chkGrieferStoneBan.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
 
-                            case "griefer-stone-type":
-                                try { cmbGrieferStoneType.SelectedIndex = cmbGrieferStoneType.Items.IndexOf(value); }
-                                catch
-                                {
-                                    try { cmbGrieferStoneType.SelectedIndex = cmbGrieferStoneType.Items.IndexOf(Block.Name(Convert.ToByte(value))); }
-                                    catch { Server.s.Log("Could not find " + value); }
-                                }
-                                break;
-                            case "wom-direct":
-                                chkWomDirect.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "premium-only":
-                                chkPrmOnly.Checked = (value.ToLower() == "true") ? true : false;
-                                break;
-                            case "view":
-                                Server.reviewview = Level.PermissionFromName(value.ToLower());
-                                break;
-                            case "enter":
-                                Server.reviewenter = Level.PermissionFromName(value.ToLower());
-                                break;
-                            case "leave":
-                                Server.reviewleave = Level.PermissionFromName(value.ToLower());
-                                break;
-                            case "cooldown":
-                                try
-                                {
-                                    Server.reviewcooldown = Convert.ToInt32(value.ToLower()) < 600 ? Convert.ToInt32(value.ToLower()) : 600;
-                                }
-                                catch
-                                {
-                                    Server.reviewcooldown = 60;
-                                    Server.s.Log("An error occurred reading the review cooldown value");
-                                }
-                                break;
-                            case "clear":
-                                Server.reviewclear = Level.PermissionFromName(value.ToLower());
-                                break;
-                            case "next":
-                                Server.reviewnext = Level.PermissionFromName(value.ToLower());
-                                break;
-                        }
+                        case "griefer-stone-type":
+                            try { cmbGrieferStoneType.SelectedIndex = cmbGrieferStoneType.Items.IndexOf(value); }
+                            catch
+                            {
+                                try { cmbGrieferStoneType.SelectedIndex = cmbGrieferStoneType.Items.IndexOf(Block.Name(Convert.ToByte(value))); }
+                                catch { Server.s.Log("Could not find " + value); }
+                            }
+                            break;
+                        case "wom-direct":
+                            chkWomDirect.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "premium-only":
+                            chkPrmOnly.Checked = (value.ToLower() == "true") ? true : false;
+                            break;
+                        case "view":
+                            Server.reviewview = Level.PermissionFromName(value.ToLower());
+                            break;
+                        case "enter":
+                            Server.reviewenter = Level.PermissionFromName(value.ToLower());
+                            break;
+                        case "leave":
+                            Server.reviewleave = Level.PermissionFromName(value.ToLower());
+                            break;
+                        case "cooldown":
+                            try
+                            {
+                                Server.reviewcooldown = Convert.ToInt32(value.ToLower()) < 600 ? Convert.ToInt32(value.ToLower()) : 600;
+                            }
+                            catch
+                            {
+                                Server.reviewcooldown = 60;
+                                Server.s.Log("An error occurred reading the review cooldown value");
+                            }
+                            break;
+                        case "clear":
+                            Server.reviewclear = Level.PermissionFromName(value.ToLower());
+                            break;
+                        case "next":
+                            Server.reviewnext = Level.PermissionFromName(value.ToLower());
+                            break;
                     }
                 }
-                //Save(givenPath);
             }
+            //Save(givenPath);
             //else Save(givenPath);
         }
         public bool ValidString(string str, string allowed)

@@ -3465,26 +3465,31 @@ changed |= 4;*/
 
         public static string EscapeColours(string message)
         {
-            int index = 1;
-            StringBuilder sb = new StringBuilder();
-            Regex r = new Regex("^[0-9a-fA-F]$");
-            foreach (char c in message)
+            try
             {
-                if (c == '%')
+                int index = 1;
+                StringBuilder sb = new StringBuilder();
+                Regex r = new Regex("^[0-9a-fA-F]$");
+                foreach (char c in message)
                 {
-                    if (message.Length >= index)
-                        if (r.IsMatch(message[index].ToString()))
-                            sb.Append('&');
+                    if (c == '%')
+                    {
+                        if (message.Length >= index)
+                            sb.Append(r.IsMatch(message[index].ToString()) ? '&' : '%');
                         else
                             sb.Append('%');
+                    }
                     else
-                        sb.Append('%');
+                        sb.Append(c);
+                    index++;
                 }
-                else
-                    sb.Append(c);
-                index++;
+                return sb.ToString();
             }
-            return sb.ToString();
+            catch
+            {
+                return message;
+            }
+            
         }
 
         public static void GlobalChatWorld(Player from, string message, bool showname)

@@ -161,7 +161,6 @@ namespace MCForge_.Gui
                 return;
             }
             string[] splitted = message.Split('&', '%');
-            StringBuilder bui = new StringBuilder();
             for (int i = 0; i < splitted.Length; i++)
             {
                 string elString = splitted[i];
@@ -186,12 +185,14 @@ namespace MCForge_.Gui
                 case '2': return ConsoleColor.DarkGreen;
                 case '3': return ConsoleColor.DarkCyan;
                 case '4': return ConsoleColor.DarkMagenta;
+                    //No love for purples
                 case '7': return ConsoleColor.Gray;
                 case '6': return ConsoleColor.DarkYellow;
                 case '8': return ConsoleColor.DarkGray;
                 case '9': return ConsoleColor.Blue;
                 case 'a': return ConsoleColor.Green;
                 case 'b': return ConsoleColor.Cyan;
+                case 'c': return ConsoleColor.Red;
                 case 'd': return ConsoleColor.Magenta;
                 //Dont need f, it will default to white.
                 default:

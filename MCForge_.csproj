@@ -121,6 +121,12 @@
     <Compile Include="GUI\Textures.Designer.cs">
       <DependentUpon>Textures.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\Windows 7\ColoredTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI\Windows 7\ColoredTextBox.Designer.cs">
+      <DependentUpon>ColoredTextBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\Windows 7\New_Window.cs">
       <SubType>Form</SubType>
     </Compile>
