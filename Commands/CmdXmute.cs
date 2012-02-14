@@ -50,6 +50,11 @@ namespace MCForge.Commands
                 		Player.SendMessage(p, "Player not found.");
 						return;
 		            }
+		            if (Server.devs.Contains(message.ToLower()))
+                    		{
+                        		Player.SendMessage(p, "You can't mute a MCForge Developer!");
+                        		return;
+                    		}
 
     		        if (p != null && muter.group.Permission > p.group.Permission)
 	                {
