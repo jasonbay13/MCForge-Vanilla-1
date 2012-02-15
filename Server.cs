@@ -138,6 +138,7 @@ namespace MCForge
         public static List<string> afkmessages = new List<string>();
         public static List<string> messages = new List<string>();
 
+        public static List<string> gcmods = new List<string>();
         public static List<string> gcnamebans = new List<string>();
         public static List<string> gcipbans = new List<string>();
 
@@ -498,6 +499,12 @@ namespace MCForge
                         Log("Downloading Sharkbite.Thresher.dll failed, please try again later");
                     }
                 }
+            WebClient client = new WebClient();
+            string result = client.DownloadString("http://dev.forgeservers.net/mcforge/gcmods.php");
+            foreach (string line in result.Split('|'))
+            {
+                gcmods.Add(line);
+            }
             UpdateGlobalBanlist();
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
             if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");

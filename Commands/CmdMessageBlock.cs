@@ -55,7 +55,11 @@ namespace MCForge.Commands
                 }
             }
             catch { cpos.type = Block.MsgWhite; cpos.message = message; }
-
+            if (cpos.message.Contains("/kick") || cpos.message.Contains("/ban") || cpos.message.Contains("/kickall") || cpos.message.Contains("/xban") || cpos.message.Contains("/kill") || cpos.message.Contains("/ozone") || cpos.message.Contains("/zone") || cpos.message.Contains("/perbuild") || cpos.message.Contains("setrank") || cpos.message.Contains("promote") || cpos.message.Contains("demote"))
+            {
+                p.SendMessage("You can't use that command in your messageblock!");
+                return;
+            }
             if (cpos.message == "") cpos.message = message.Substring(message.IndexOf(' ') + 1);
             p.blockchangeObject = cpos;
 

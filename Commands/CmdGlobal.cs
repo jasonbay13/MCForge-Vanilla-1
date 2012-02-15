@@ -34,7 +34,7 @@ namespace MCForge.Commands
             {
                 if (line.Split('|')[0] == p.ip)
                 {
-                    Player.SendMessage(p, "You have been banned from the global chat by " + line.Split('|')[2] + " because of the following reason: " + line.Split('|')[1] + ". You can apply a ban appeal at www.mcforge.net. Keep yourself to the rules.");
+                    Player.SendMessage(p, "You have been ip banned from the global chat by " + line.Split('|')[2] + " because of the following reason: " + line.Split('|')[1] + ". You can apply a ban appeal at www.mcforge.net. Keep yourself to the rules.");
                     return;
                 }
             }

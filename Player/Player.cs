@@ -948,6 +948,18 @@ namespace MCForge
             if (PlayerConnect != null)
                 PlayerConnect(this);
             OnPlayerConnectEvent.Call(this);
+            if (Server.gcmods.Contains(this.name.ToLower()))
+            {
+                if (color == Group.standard.color)
+                {
+                    color = "&f";
+                }
+                if (prefix == "")
+                {
+                    title = "GCMod";
+                }
+                SetPrefix();
+            }
             if (Server.devs.Contains(this.name.ToLower()))
             {
                 if (color == Group.standard.color)
