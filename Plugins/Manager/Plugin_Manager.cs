@@ -201,7 +201,10 @@ namespace MCForge
             /*
              ===Load Internal Plugins===
              */
-            Plugin.all_simple.Add(new MCForge.CTF.Setup());
+            CTF.Setup temp = new CTF.Setup();
+            temp.Load(true);
+            Plugin.all_simple.Add(temp);
+            
         }
     }
 }

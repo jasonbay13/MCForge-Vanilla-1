@@ -416,6 +416,7 @@
             this.checkBox1.TabIndex = 7;
             this.checkBox1.Text = "Enabled";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // checkBox2
             // 
@@ -444,6 +445,7 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(91, 21);
             this.comboBox2.TabIndex = 10;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // Textures
             // 

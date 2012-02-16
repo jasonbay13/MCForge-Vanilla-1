@@ -202,5 +202,25 @@ namespace MCForge.GUI
         {
 
         }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (l == Server.mainLevel)
+            {
+                MessageBox.Show("Rank Level must be the lowest for the main level!", "Oh no you dont!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                comboBox2.SelectedIndex = comboBox2.Items.IndexOf(Group.standard.name);
+                return;
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (l == Server.mainLevel)
+            {
+                MessageBox.Show("Textures must be enabled for the main level!", "Oh no you dont!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                checkBox1.Checked = true;
+                return;
+            }
+        }
     }
 }

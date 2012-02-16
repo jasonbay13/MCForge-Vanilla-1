@@ -124,6 +124,8 @@ namespace MCForge.Levels.Textures
             SaveSettings();
         }
         #endregion
+
+
         #region ==GET==
         static int ParseHexColor(string text)
         {
@@ -287,6 +289,8 @@ namespace MCForge.Levels.Textures
             }
         }
         #endregion
+        
+        
         #region ==CFG==
         public string[] GetCFGLines()
         {
@@ -330,7 +334,7 @@ namespace MCForge.Levels.Textures
             temp.Clear();
             Server.s.Log("CFG File created for " + l.name);
             update = true;
-            if (autou)
+            if (autou && enabled)
             {
                 Player.players.ForEach(delegate(Player p1)
                 {
