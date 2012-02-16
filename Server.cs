@@ -139,6 +139,7 @@ namespace MCForge
         public static List<string> messages = new List<string>();
 
         public static List<string> gcmods = new List<string>();
+        public static List<string> gcmodprotection = new List<string>();
         public static List<string> gcnamebans = new List<string>();
         public static List<string> gcipbans = new List<string>();
 
@@ -499,13 +500,7 @@ namespace MCForge
                         Log("Downloading Sharkbite.Thresher.dll failed, please try again later");
                     }
                 }
-            WebClient client = new WebClient();
-            string result = client.DownloadString("http://dev.forgeservers.net/mcforge/gcmods.php");
-            foreach (string line in result.Split('|'))
-            {
-                gcmods.Add(line);
-            }
-            UpdateGlobalBanlist();
+            UpdateGlobalSettings();
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
             if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
@@ -1245,7 +1240,7 @@ namespace MCForge
             }
             return Group.standard.color;
         }
-        public static void UpdateGlobalBanlist()
+        public static void UpdateGlobalSettings()
         {
             gcipbans.Clear();
             gcnamebans.Clear();
@@ -1262,6 +1257,14 @@ namespace MCForge
                 gcipbans.Add(line);
             }
             gcipbans.Remove("");
+            result = client.DownloadString("http://dev.forgeservers.net/mcforge/gcmods.php");
+            foreach (string line in result.Split('|'))
+            {
+                gcmods.Add(line.Split('*')[0]);
+                gcmodprotection.Add(line);
+            }
+            gcmods.Remove("");
+            gcmodprotection.Remove("");
         }
     }
 }

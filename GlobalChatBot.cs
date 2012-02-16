@@ -103,9 +103,9 @@ namespace MCForge
         {
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             //string msg = message;
-            if (message.Contains("^UPDATEGLOBALBANLIST"))
+            if (message.Contains("^UPDATEGLOBALSETTINGS"))
             {
-                Server.UpdateGlobalBanlist();
+                Server.UpdateGlobalSettings();
                 return;
             }
             if (message.Contains("^IPGET "))

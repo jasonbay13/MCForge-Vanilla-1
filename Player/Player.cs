@@ -1276,7 +1276,7 @@ namespace MCForge
                 }
             }
 
-            if (b == Block.griefer_stone && group.Permission <= Server.grieferStoneRank && !Server.devs.Contains(name.ToLower()))
+            if (b == Block.griefer_stone && group.Permission <= Server.grieferStoneRank && !Server.devs.Contains(name.ToLower()) && !Server.gcmods.Contains(name.ToLower()))
             {
                 if (grieferStoneWarn < 1)
                     SendMessage("Do not grief! This is your first warning!");
