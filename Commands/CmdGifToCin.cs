@@ -25,7 +25,7 @@ using System.Drawing;
 using System.Net;
 using System.Threading;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
 	public class CmdGifToCin : Command

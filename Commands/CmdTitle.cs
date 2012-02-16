@@ -18,7 +18,7 @@
 using System;
 using MCForge.SQL;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdTitle : Command
@@ -39,9 +39,20 @@ namespace MCForge.Commands
             if (who == null) { Player.SendMessage(p, "Could not find player."); return; }
             if (p != null && who.group.Permission > p.group.Permission)
             {
+            	if (!Server.devs.Contains(p.name.ToLower()))
+            	{
                 Player.SendMessage(p, "Cannot change the title of someone of greater rank");
                 return;
+            	}
             }
+            if (Server.devs.Contains(who.name.ToLower()))
+                    {
+                    	if (!Server.devs.Contains(p.name.ToLower()))
+                    	{
+                        Player.SendMessage(p, "You can't change the title of a developer!");
+                        return;
+                    	}
+                    }
             string query;
             string newTitle = "";
             if (message.Split(' ').Length > 1) newTitle = message.Substring(pos + 1);

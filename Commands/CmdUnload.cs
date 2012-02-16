@@ -19,7 +19,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdUnload : Command
@@ -35,52 +35,19 @@ namespace MCForge.Commands
         {
             if (message.ToLower() == "empty")
             {
-                Boolean Empty = true, AnyEmpty = false;
-
-                unload_loop:
-                    try
-                    {
-                        foreach (Level l in Server.levels)
-                        {
-                            Empty = true;
-                            foreach (Player pl in Player.players)
-                            {
-                                if (Server.mainLevel == l || pl.level == l)
-                                {
-                                    Empty = false;
-                                    break;
-                                }
-                            }
-
-                            if (Empty == true && l.unload)
-                            {
-                                AnyEmpty = true;
-                                l.Unload();
-                                goto unload_loop;
-                            }
-                        }
-                    }
-                    catch { goto unload_loop; }
-                
-                if(!AnyEmpty) Player.SendMessage(p, "No levels were empty.");
+                for (int i = 0; i < Server.levels.Count; i++)
+                {
+                    Level l = Server.levels[i];
+                    if (l.players.Count <= 0 && l != Server.mainLevel)
+                        l.Unload(true, true);
+                }
                 return;
             }
 
             Level level = Level.Find(message);
 
-            if (level != null)
-            {
-                if (!level.Unload()) Player.SendMessage(p, "You cannot unload the main level.");
-                try
-                {
-                    Gui.Window.thisWindow.UpdatePlayerMapCombo();
-                    Gui.Window.thisWindow.UnloadedlistUpdate();
-                    Gui.Window.thisWindow.UpdateMapList("'");
-                    
-                }
-                catch { }
-                return;
-            }
+                if (level != null && !level.Unload()) Player.SendMessage(p, "You cannot unload the main level.");
+               
 
             Player.SendMessage(p, "There is no level \"" + message + "\" loaded.");
         }

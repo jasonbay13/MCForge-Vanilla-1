@@ -93,7 +93,7 @@ namespace MCForge
         {
             try
             {
-                if (message != null && message.Length > 0)
+                if (!string.IsNullOrEmpty(message))
                     lock (_lockObject)
                     {
                         _messageCache.Enqueue(message);
@@ -133,10 +133,11 @@ namespace MCForge
 
 
 
-                if (NeedRestart == true)
+                if (NeedRestart)
                 {
                     Server.listen.Close();
                     Server.Setup();
+                    //http://alltheragefaces.com/img/faces/large/misc-jackie-chan-l.png
 
                     NeedRestart = false;
                 }

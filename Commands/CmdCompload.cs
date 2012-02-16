@@ -17,7 +17,7 @@
 */
 ﻿using System;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     using System;

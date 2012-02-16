@@ -37,7 +37,8 @@ namespace MCForge.Commands
         }
         public override void Help(Player p)
         {
-            Player.SendMessage(p, "/global [message] - Send a message to Global Chat.");
+            Player.SendMessage(p, "/gcrules - Shows global chat rules");
+            Player.SendMessage(p, "To chat in global chat, use /global");
         }
     }
 }

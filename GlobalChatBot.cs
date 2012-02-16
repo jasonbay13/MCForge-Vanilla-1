@@ -27,8 +27,11 @@ namespace MCForge
 {
     public class GlobalChatBot
     {
-        public delegate void LogHandler(string nick, string message);
-        public event LogHandler OnNewGlobalMessage;
+        public delegate void RecieveChat(string nick, string message);
+        public static event RecieveChat OnNewRecieveGlobalMessage;
+
+        public delegate void SendChat(string player, string message);
+        public static event SendChat OnNewSayGlobalMessage;
 
         public delegate void KickHandler(string reason);
         public event KickHandler OnGlobalKicked;
@@ -59,8 +62,15 @@ namespace MCForge
                 connection.Listener.OnDisconnected += new DisconnectedEventHandler(Listener_OnDisconnected);
             }
         }
-        public void Say(string message)
+        public void Say(string message, Player p = null)
         {
+            if (p != null && p.muted)
+            {
+                Player.SendMessage(p, "*Tears* You aren't allowed to talk to the nice people of global chat");
+                return;
+            }
+            if (OnNewSayGlobalMessage != null)
+                OnNewSayGlobalMessage(p == null ? "Console" : p.name, message);
             if (Server.UseGlobalChat && IsConnected())
                 connection.Sender.PublicMessage(channel, message);
         }
@@ -93,17 +103,37 @@ namespace MCForge
         {
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             //string msg = message;
-
+            if (message.Contains("^UPDATEGLOBALBANLIST"))
+            {
+                Server.UpdateGlobalBanlist();
+                return;
+            }
+            if (message.Contains("^IPGET "))
+            {
+                foreach (Player p in Player.players)
+                {
+                    if (p.name == message.Split(' ')[1])
+                    {
+                        if (Server.UseGlobalChat && IsConnected())
+                        {
+                            connection.Sender.PublicMessage(channel, "^IP " + p.name + ": " + p.ip);
+                        }                        
+                    }
+                }
+            }
+            if (message.StartsWith("^")) { return; }
             message = message.MCCharFilter();
             if (Player.MessageHasBadColorCodes(null, message))
                 return;
-            if (OnNewGlobalMessage != null)
+            if (OnNewRecieveGlobalMessage != null)
             {
-                OnNewGlobalMessage(user.Nick, message);
+                OnNewRecieveGlobalMessage(user.Nick, message);
             }
             if (Server.devs.Contains(message.Split(':')[0]) && message.StartsWith("[Dev]") == false && message.StartsWith("[Developer]") == false) { message = "[Dev]" + message; }
-            try { Gui.Window.thisWindow.LogGlobalChat("> " + user.Nick + ": " + message); }
-            catch { Server.s.Log(">[Global] " + user.Nick + ": " + message); }
+            /*try { 
+                if(GUI.GuiEvent != null)
+                GUI.GuiEvents.GlobalChatEvent(this, "> " + user.Nick + ": " + message); }
+            catch { Server.s.Log(">[Global] " + user.Nick + ": " + message); }*/
             Player.GlobalMessage(String.Format("{0}>[Global] {1}: &f{2}", Server.GlobalChatColor, user.Nick, Server.profanityFilter ? ProfanityFilter.Parse(message) : message), true);
         }
 

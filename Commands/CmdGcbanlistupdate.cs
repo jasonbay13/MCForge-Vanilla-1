@@ -30,7 +30,7 @@ namespace MCForge.Commands
         public override void Use(Player p, string message)
         {
             Server.UpdateGlobalBanlist();
-            
+            Player.GlobalMessage("the Global Banlist has been updated.");
         }
         public override void Help(Player p)
         {

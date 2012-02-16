@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     class CmdGlobal : Command
@@ -21,11 +21,26 @@ namespace MCForge.Commands
             if (!Server.UseGlobalChat) { Player.SendMessage(p, "Global Chat is disabled."); return; }
             if (p != null && p.muted) { Player.SendMessage(p, "You are muted."); return; }
             if (p != null && p.muteGlobal) { Player.SendMessage(p, "You cannot use Global Chat while you have it muted."); return; }
-            if (p != null && !Server.gcaccepted.Contains(p.name.ToLower())) { RulesMethod(p); return; }    
-            Server.GlobalChat.Say((p != null ? p.name + ": " : "Console: ") + message);
+            if (p != null && !Server.gcaccepted.Contains(p.name.ToLower())) { RulesMethod(p); return; }
+            foreach (string line in Server.gcnamebans)
+            {
+                if (line.Split('|')[0] == p.name)
+                {
+                    Player.SendMessage(p, "You have been banned from the global chat by " + line.Split('|')[2] + " because of the following reason: " + line.Split('|')[1] + ". You can apply a ban appeal at www.mcforge.net. Keep yourself to the rules.");
+                    return;
+                }
+            }
+            foreach (string line in Server.gcipbans)
+            {
+                if (line.Split('|')[0] == p.ip)
+                {
+                    Player.SendMessage(p, "You have been ip banned from the global chat by " + line.Split('|')[2] + " because of the following reason: " + line.Split('|')[1] + ". You can apply a ban appeal at www.mcforge.net. Keep yourself to the rules.");
+                    return;
+                }
+            }
+            Server.GlobalChat.Say((p != null ? p.name + ": " : "Console: ") + message, p);
             Player.GlobalMessage(Server.GlobalChatColor + "<[Global] " + (p != null ? p.name + ": " : "Console: ") + "&f" + (Server.profanityFilter ? ProfanityFilter.Parse(message) : message), true);
-            try { Gui.Window.thisWindow.LogGlobalChat("< " + (p != null ? p.name + ": " : "Console: ") + message); }
-            catch { Server.s.Log("<[Global] " + (p != null ? p.name + ": " : "Console: ") + message); }
+
         }
         public void RulesMethod(Player p)
         {

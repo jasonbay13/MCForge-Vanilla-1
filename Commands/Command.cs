@@ -117,6 +117,8 @@ namespace MCForge
 			all.Add(new CmdFreeze());
 			all.Add(new CmdGarbage());
             all.Add(new CmdGcaccept());
+            all.Add(new CmdGcrules());
+            all.Add(new CmdGcbanlistupdate());
 			all.Add(new CmdGifToCin());
 			all.Add(new CmdGive());
 			all.Add(new CmdGlobal());
@@ -221,7 +223,6 @@ namespace MCForge
 			all.Add(new CmdRedo());
 			all.Add(new CmdReload());
 			all.Add(new CmdReferee());
-			all.Add(new CmdRemote());
 			all.Add(new CmdRenameLvl());
 			all.Add(new CmdRepeat());
 			all.Add(new CmdReplace());

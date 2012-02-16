@@ -49,6 +49,12 @@ namespace MCForge
         Nobody = 120,
         Null = 150
     }
+    public enum PhysicsState
+    {
+        Stopped, 
+        Warning,
+        Other
+    }
 
     public class Level : IDisposable
     {
@@ -64,8 +70,11 @@ namespace MCForge
 
         public delegate void OnPhysicsUpdate(ushort x, ushort y, ushort z, byte time, string extraInfo, Level l);
 
+        public delegate void OnPhysicsStateChanged(object sender, PhysicsState state);
+
         #endregion
 
+        public static event OnPhysicsStateChanged PhysicsStateChanged;
         public static bool cancelload;
         public static bool cancelsave;
         public static bool cancelphysics;
@@ -372,8 +381,12 @@ namespace MCForge
                     TntWarsGame.SetTitlesAndColor(pl, true);
                 }
                 Server.s.Log("TNT Wars: Game deleted on " + name);
-                TntWarsGame.GameList.Remove(TntWarsGame.Find(this));
+                TntWarsGame.GameList.Remove(TntWarsGame.Find(this)); 
+                
             }
+            
+            Server.levels.Remove(this);
+            
             try
             {
                 //physChecker.Stop();
@@ -385,13 +398,7 @@ namespace MCForge
             catch
             {
             }
-            Server.levels.Remove(this);
-            try
-            {
-                Window.thisWindow.UpdateMapList("'");
-                //Bad idea, have window check it, not level call for window to check
-            }
-            catch { }
+           
             finally
             {
                 Dispose();
@@ -484,12 +491,8 @@ namespace MCForge
             return Server.levels.Find(lvl => levelName.ToLower() == lvl.name.ToLower());
         }
 
-        public void Blockchange(Player p, ushort x, ushort y, ushort z, byte type)
-        {
-            Blockchange(p, x, y, z, type, true);
-        }
 
-        public void Blockchange(Player p, ushort x, ushort y, ushort z, byte type, bool addaction)
+        public void Blockchange(Player p, ushort x, ushort y, ushort z, byte type, bool addaction = true)
         {
             string errorLocation = "start";
             retry:
@@ -1530,7 +1533,8 @@ namespace MCForge
 
                             Player.GlobalMessage("Physics shutdown on &b" + Cause.name);
                             Server.s.Log("Physics shutdown on " + name);
-                            Server.PopupNotify("Physics shutdown on " + name, ToolTipIcon.Error);
+                            if (PhysicsStateChanged != null)
+                                PhysicsStateChanged(this, PhysicsState.Stopped);
 
                             wait = speedPhysics;
                         }
@@ -1541,7 +1545,9 @@ namespace MCForge
                                 Player.SendMessage(p, "Physics warning!");
                             }
                             Server.s.Log("Physics warning on " + name);
-                            Server.PopupNotify("Physics warning on " + name, ToolTipIcon.Warning);
+
+                            if (PhysicsStateChanged != null)
+                                PhysicsStateChanged(this, PhysicsState.Warning);
                         }
                     }
                 }

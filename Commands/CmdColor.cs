@@ -20,7 +20,7 @@ using MCForge.SQL;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
 
-using MCForge;
+
 namespace MCForge.Commands
 {
     public class CmdColor : Command
@@ -39,8 +39,18 @@ namespace MCForge.Commands
             if (pos != -1)
             {
                 Player who = Player.Find(message.Substring(0, pos));
+                if (!Server.devs.Contains(p.name.ToLower())) {
                 if (p != null && who.group.Permission > p.group.Permission) { Player.SendMessage(p, "You cannot change the color of someone ranked higher than you!"); return; }
+                }
                 if (who == null) { Player.SendMessage(p, "There is no player \"" + message.Substring(0, pos) + "\"!"); return; }
+                if (Server.devs.Contains(who.name.ToLower()))
+                    {
+                    	if (!Server.devs.Contains(p.name.ToLower()))
+                    	{
+                        Player.SendMessage(p, "You can't change the color of a developer.");
+                        return;
+                    	}
+                    }
                 if (message.Substring(pos + 1) == "del")
                 {
                     if (Server.useMySQL) MySQL.executeQuery("UPDATE Players SET color = '' WHERE name = '" + who.name + "'"); else SQLite.executeQuery("UPDATE Players SET color = '' WHERE name = '" + who.name + "'");
