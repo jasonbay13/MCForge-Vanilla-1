@@ -109,7 +109,7 @@ namespace MCForge
         public static PlayerList muted;
         public static PlayerList ignored;
         // The MCForge Developer List
-        internal static readonly List<string> devs = new List<string>(new string[] { "dmitchell94", "501st_commander", "edh649", "shade2010", "hypereddie10", "erickilla", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "jasonbay13", "cazzar", "snowl", "techjar", "nerketur", "anthonyani", "wouto1997", "lavoaster", "bemacized", "meinigeshandwerk" });
+        internal static readonly List<string> devs = new List<string>(new string[] { "dmitchell94", "501st_commander", "edh649", "shade2010", "hypereddie10", "erickilla", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "jasonbay13", "cazzar", "snowl", "techjar", "nerketur", "anthonyani", "wouto1997", "lavoaster", "bemacized", "meinigeshandwerk", "hirsty1989" });
         public static List<string> Devs { get { return new List<string>(devs); } }
 
         public static List<TempBan> tempBans = new List<TempBan>();
