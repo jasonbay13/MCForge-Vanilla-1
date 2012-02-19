@@ -1205,27 +1205,29 @@ namespace MCForge
         {
             gcipbans.Clear();
             gcnamebans.Clear();
-            WebClient client = new WebClient();
-            string result = client.DownloadString("http://dev.forgeservers.net/mcforge/namebans.php");
-            foreach (string line in result.Split('*'))
+            using (var client = new WebClient())
             {
-                gcnamebans.Add(line);
+                string result = client.DownloadString("http://dev.forgeservers.net/mcforge/namebans.php");
+                foreach (string line in result.Split('*'))
+                {
+                    gcnamebans.Add(line);
+                }
+                gcnamebans.Remove("");
+                result = client.DownloadString("http://dev.forgeservers.net/mcforge/ipbans.php");
+                foreach (string line in result.Split('*'))
+                {
+                    gcipbans.Add(line);
+                }
+                gcipbans.Remove("");
+                result = client.DownloadString("http://dev.forgeservers.net/mcforge/gcmods.php");
+                foreach (string line in result.Split('|'))
+                {
+                    gcmods.Add(line.Split('*')[0]);
+                    gcmodprotection.Add(line);
+                }
+                gcmods.Remove("");
+                gcmodprotection.Remove("");
             }
-            gcnamebans.Remove("");
-            result = client.DownloadString("http://dev.forgeservers.net/mcforge/ipbans.php");
-            foreach (string line in result.Split('*'))
-            {
-                gcipbans.Add(line);
-            }
-            gcipbans.Remove("");
-            result = client.DownloadString("http://dev.forgeservers.net/mcforge/gcmods.php");
-            foreach (string line in result.Split('|'))
-            {
-                gcmods.Add(line.Split('*')[0]);
-                gcmodprotection.Add(line);
-            }
-            gcmods.Remove("");
-            gcmodprotection.Remove("");
         }
     }
 }
