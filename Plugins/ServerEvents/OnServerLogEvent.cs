@@ -12,15 +12,15 @@ namespace MCForge
         Server.OnServerLog method;
         Priority priority;
         internal OnServerLogEvent(Server.OnServerLog method, Priority priority, Plugin plugin) { this.plugin = plugin; this.priority = priority; this.method = method; }
-        public static void Call(string message, LogType type)
+        public static void Call(string message)
         {
             events.ForEach(delegate(OnServerLogEvent p1)
             {
                 try
                 {
-                    p1.method(message, type);
+                    p1.method(message);
                 }
-                catch (Exception e) { Server.s.Log("The plugin " + p1.plugin.name + " errored when calling the LevelUnload Event!"); Server.ErrorLog(e); }
+                catch (Exception e) { Server.s.Log("The plugin " + p1.plugin.name + " errored when calling the Server Log Event!"); Server.ErrorLog(e); }
             });
         }
         static void Organize()
@@ -53,13 +53,9 @@ namespace MCForge
         /// <returns>The event</returns>
         public static OnServerLogEvent Find(Plugin plugin)
         {
-            foreach (OnServerLogEvent p in events.ToArray())
-            {
-                if (p.plugin == plugin)
-                    return p;
-            }
-            return null;
+            return events.ToArray().FirstOrDefault(p => p.plugin == plugin);
         }
+
         /// <summary>
         /// Register this event
         /// </summary>
@@ -83,8 +79,7 @@ namespace MCForge
         {
             if (Find(plugin) == null)
                 throw new Exception("This plugin doesnt have this event registered!");
-            else
-                events.Remove(Find(plugin));
+            events.Remove(Find(plugin));
         }
     }
 }

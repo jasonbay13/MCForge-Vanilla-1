@@ -477,8 +477,8 @@ namespace MCForge
 
             foreach (Level level in Server.levels)
             {
-                if (level.name.ToLower() == levelName) return level;
-                if (level.name.ToLower().IndexOf(levelName.ToLower()) == -1) continue;
+                if (level.name.ToLower() == levelNamef) return level;
+                if (level.name.ToLower().IndexOf(levelName.ToLower(), System.StringComparison.Ordinal) == -1) continue;
                 if (tempLevel == null) tempLevel = level;
                 else returnNull = true;
             }
@@ -1383,6 +1383,7 @@ namespace MCForge
                     Server.s.Log(string.Format("Level \"{0}\" loaded.", level.name));
                     if (LevelLoaded != null)
                         LevelLoaded(level);
+                    OnLevelLoadedEvent.Call(level);
                     return level;
                 }
                 catch (Exception ex)

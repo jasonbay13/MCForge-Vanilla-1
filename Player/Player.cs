@@ -924,14 +924,7 @@ namespace MCForge
                 {
                     titlecolor = "";
                 }
-                if (playerDb.Rows[0]["color"].ToString().Trim() != "")
-                {
-                    color = c.Parse(playerDb.Rows[0]["color"].ToString().Trim());
-                }
-                else
-                {
-                    color = group.color;
-                }
+                color = playerDb.Rows[0]["color"].ToString().Trim() != "" ? c.Parse(playerDb.Rows[0]["color"].ToString().Trim()) : @group.color;
                 SetPrefix();
                 overallDeath = int.Parse(playerDb.Rows[0]["TotalDeaths"].ToString());
                 overallBlocks = long.Parse(playerDb.Rows[0]["totalBlocks"].ToString().Trim());

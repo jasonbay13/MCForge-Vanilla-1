@@ -53,13 +53,9 @@ namespace MCForge
         /// <returns>The event</returns>
         public static OnGroupLoadedEvent Find(Plugin plugin)
         {
-            foreach (OnGroupLoadedEvent p in events.ToArray())
-            {
-                if (p.plugin == plugin)
-                    return p;
-            }
-            return null;
+            return events.ToArray().FirstOrDefault(p => p.plugin == plugin);
         }
+
         /// <summary>
         /// Register this event
         /// </summary>

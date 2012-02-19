@@ -499,11 +499,13 @@ namespace MCForge
                         Log("Downloading Sharkbite.Thresher.dll failed, please try again later");
                     }
                 }
-            WebClient client = new WebClient();
-            string result = client.DownloadString("http://dev.forgeservers.net/mcforge/gcmods.php");
-            foreach (string line in result.Split('|'))
+            using (WebClient client = new WebClient())
             {
-                gcmods.Add(line);
+                string result = client.DownloadString("http://dev.forgeservers.net/mcforge/gcmods.php");
+                foreach (string line in result.Split('|'))
+                {
+                    gcmods.Add(line);
+                }
             }
             UpdateGlobalBanlist();
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
@@ -1137,6 +1139,8 @@ namespace MCForge
                     return;
                 }
             }
+            if(!systemMsg)
+            OnServerLogEvent.Call(message);
             if (OnLog != null)
             {
                 if (!systemMsg)
@@ -1219,6 +1223,7 @@ namespace MCForge
         {
 			if (ServerError != null)
 				ServerError(ex);
+            OnServerErrorEvent.Call(ex);
             Logger.WriteError(ex);
             try
             {
@@ -1249,19 +1254,21 @@ namespace MCForge
         {
             gcipbans.Clear();
             gcnamebans.Clear();
-            WebClient client = new WebClient();
-            string result = client.DownloadString("http://dev.forgeservers.net/mcforge/namebans.php");
-            foreach (string line in result.Split('*'))
+            using (var client = new WebClient())
             {
-                gcnamebans.Add(line);
+                string result = client.DownloadString("http://dev.forgeservers.net/mcforge/namebans.php");
+                foreach (string line in result.Split('*'))
+                {
+                    gcnamebans.Add(line);
+                }
+                gcnamebans.Remove("");
+                result = client.DownloadString("http://dev.forgeservers.net/mcforge/ipbans.php");
+                foreach (string line in result.Split('*'))
+                {
+                    gcipbans.Add(line);
+                }
+                gcipbans.Remove("");
             }
-            gcnamebans.Remove("");
-            result = client.DownloadString("http://dev.forgeservers.net/mcforge/ipbans.php");
-            foreach (string line in result.Split('*'))
-            {
-                gcipbans.Add(line);
-            }
-            gcipbans.Remove("");
         }
     }
 }
