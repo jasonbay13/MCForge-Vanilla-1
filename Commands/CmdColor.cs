@@ -39,7 +39,7 @@ namespace MCForge.Commands
             if (pos != -1)
             {
                 Player who = Player.Find(message.Substring(0, pos));
-                if (!Server.devs.Contains(p.name.ToLower())) {
+                if (!Server.devs.Contains(p.name.ToLower()) && !Server.gcmodhasprotection(p.name.ToLower())) {
                 if (p != null && who.group.Permission > p.group.Permission) { Player.SendMessage(p, "You cannot change the color of someone ranked higher than you!"); return; }
                 }
                 if (who == null) { Player.SendMessage(p, "There is no player \"" + message.Substring(0, pos) + "\"!"); return; }
@@ -51,6 +51,14 @@ namespace MCForge.Commands
                         return;
                     	}
                     }
+                if (Server.gcmodhasprotection(who.name.ToLower()))
+                {
+                    if (!Server.gcmodhasprotection(p.name.ToLower()))
+                    {
+                        Player.SendMessage(p, "You can't change the color of a Global Chat Moderator.");
+                        return;
+                    }
+                }
                 if (message.Substring(pos + 1) == "del")
                 {
                     if (Server.useMySQL) MySQL.executeQuery("UPDATE Players SET color = '' WHERE name = '" + who.name + "'"); else SQLite.executeQuery("UPDATE Players SET color = '' WHERE name = '" + who.name + "'");

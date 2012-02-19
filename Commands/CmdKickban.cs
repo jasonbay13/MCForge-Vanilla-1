@@ -47,6 +47,19 @@ namespace MCForge.Commands
                 }
                 return;
             }
+            if (Server.gcmodhasprotection(who.ToLower()))
+            {
+                Player.SendMessage(p, "You can't ban a Global Chat Moderator!");
+                if (p != null)
+                {
+                    Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a Global Chat Moderator!");
+                }
+                else
+                {
+                    Player.GlobalMessage(Server.DefaultColor + "The Console attempted to ban a Global Chat Moderator!");
+                }
+                return;
+            }
             Command.all.Find("ban").Use(p, message.Split(' ')[0]);
             Command.all.Find("kick").Use(p, message);
         }
