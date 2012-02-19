@@ -1924,6 +1924,12 @@ namespace MCForge.Gui
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //Prevent derpy from getting in here..
+            if (!Server.UseTextures)
+            {
+                WoM.Enabled = false;
+                return;
+            }
             if (GetSelectedLevelTab() == null) return;
             var textures = new GUI.Textures { l = GetSelectedLevelTab() };
             Server.s.Log(textures.l.name);

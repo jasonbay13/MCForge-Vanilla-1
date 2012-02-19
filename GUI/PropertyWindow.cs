@@ -144,6 +144,7 @@ namespace MCForge.Gui
             //Load server stuff
             LoadProp("properties/server.properties");
             LoadRanks();
+            txechx.Checked = Server.UseTextures;
             try
             {
                 LoadCommands();
@@ -2877,6 +2878,11 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                 accountSetup.Focus();
             }
             catch (Exception ex) { Server.ErrorLog(ex); }
+        }
+
+        private void txechx_CheckedChanged(object sender, EventArgs e)
+        {
+            Server.UseTextures = txechx.Checked;
         }
     }
 }
