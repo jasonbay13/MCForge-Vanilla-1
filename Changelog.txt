@@ -1,3 +1,15 @@
+v5.5.0.0
+-Added a Global Chat Control Panel for Global Chat Moderators and MCForge Developers.
+	-Allows for muting of individual players on a server. 
+	-Provides the ability to prevent a single user from ever using Global Chat. 
+-Added support for  WoM Textures. Once you enable WoM Textures, it will open up an option on the Maps tab in console. You can also configure it in extra/cfg/<mapname>.cfg. 
+-Fixed an issue where a player's title and color would not be reset properly upon leaving a game of TNTWars.
+-Fixed an issue with the reference .dll file where the .dll was being falsely registered as a Trojan by most Anti-Virus softwares. 
+-Fixed an exploit in commands blocks where people would put in commands like /ban or /setrank and convinced an op/admin to walk through them. You can no longer use sensitive admin commands (like setrank, ban, kick, etc...) in Message Blocks.
+-Fixed numerous small memory leaks and bugs. 
+-Made it so you cannot use /sendcmd to impersonate a person on Global Chat. 
+-Server should now Auto-Restart upon encountering an "Out Of Memory" Error. 
+
 v5.4.0.4
 -Fixed physics error
 -Fixed physics not starting automaticly
