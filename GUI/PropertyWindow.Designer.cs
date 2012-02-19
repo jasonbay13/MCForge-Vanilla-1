@@ -147,7 +147,6 @@ namespace MCForge.Gui
             this.lsNudLives = new System.Windows.Forms.NumericUpDown();
             this.cmbAFKKickPerm = new System.Windows.Forms.ComboBox();
             this.chkGuestLimitNotify = new System.Windows.Forms.CheckBox();
-            this.button5 = new System.Windows.Forms.Button();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.btnBlHelp = new System.Windows.Forms.Button();
             this.txtBlRanks = new System.Windows.Forms.TextBox();
@@ -1666,17 +1665,6 @@ namespace MCForge.Gui
             this.toolTip.SetToolTip(this.chkGuestLimitNotify, "Notify in-game if a guest can\'t join due to the guest limit being reached.");
             this.chkGuestLimitNotify.UseVisualStyleBackColor = true;
             // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(18, 56);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(116, 23);
-            this.button5.TabIndex = 47;
-            this.button5.Text = "MCForge.net Account";
-            this.toolTip.SetToolTip(this.button5, "This is needed for certain thing like Lava Survival Map Submission.");
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
             // tabPage5
             // 
             this.tabPage5.BackColor = System.Drawing.Color.Transparent;
@@ -2057,7 +2045,6 @@ namespace MCForge.Gui
             // 
             // groupBox13
             // 
-            this.groupBox13.Controls.Add(this.button5);
             this.groupBox13.Controls.Add(this.chkGuestLimitNotify);
             this.groupBox13.Controls.Add(this.cmbGrieferStoneRank);
             this.groupBox13.Controls.Add(this.label48);
@@ -2105,7 +2092,7 @@ namespace MCForge.Gui
             // 
             this.chkShowEmptyRanks.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkShowEmptyRanks.AutoSize = true;
-            this.chkShowEmptyRanks.Location = new System.Drawing.Point(220, 56);
+            this.chkShowEmptyRanks.Location = new System.Drawing.Point(103, 56);
             this.chkShowEmptyRanks.Name = "chkShowEmptyRanks";
             this.chkShowEmptyRanks.Size = new System.Drawing.Size(126, 23);
             this.chkShowEmptyRanks.TabIndex = 41;
@@ -2115,7 +2102,7 @@ namespace MCForge.Gui
             // chkIgnoreGlobal
             // 
             this.chkIgnoreGlobal.AutoSize = true;
-            this.chkIgnoreGlobal.Location = new System.Drawing.Point(194, 168);
+            this.chkIgnoreGlobal.Location = new System.Drawing.Point(194, 166);
             this.chkIgnoreGlobal.Name = "chkIgnoreGlobal";
             this.chkIgnoreGlobal.Size = new System.Drawing.Size(112, 17);
             this.chkIgnoreGlobal.TabIndex = 36;
@@ -2185,7 +2172,7 @@ namespace MCForge.Gui
             // 
             this.chkSmile.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkSmile.AutoSize = true;
-            this.chkSmile.Location = new System.Drawing.Point(136, 56);
+            this.chkSmile.Location = new System.Drawing.Point(15, 56);
             this.chkSmile.Name = "chkSmile";
             this.chkSmile.Size = new System.Drawing.Size(82, 23);
             this.chkSmile.TabIndex = 19;
@@ -5084,6 +5071,5 @@ namespace MCForge.Gui
         private System.Windows.Forms.ListBox TntWrsMpsList;
         private System.Windows.Forms.Button TntWrsDiffSlctBt;
         private System.Windows.Forms.CheckBox TntWrsStreaksChck;
-        private System.Windows.Forms.Button button5;
     }
 }
