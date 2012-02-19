@@ -62,9 +62,6 @@
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Sharkbite.Thresher">
-      <HintPath>.\Sharkbite.Thresher.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.76.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
@@ -161,6 +158,34 @@
     <Compile Include="Plugins\PlayerEvents\OnPlayerDeathEvent.cs" />
     <Compile Include="Plugins\PlayerEvents\PlayerMoveEvent.cs" />
     <Compile Include="Plugins\Utils\Priority.cs" />
+    <Compile Include="Sharkbite.Thresher\ChannelModeInfo.cs" />
+    <Compile Include="Sharkbite.Thresher\CommandBuilder.cs" />
+    <Compile Include="Sharkbite.Thresher\Connection.cs" />
+    <Compile Include="Sharkbite.Thresher\ConnectionArgs.cs" />
+    <Compile Include="Sharkbite.Thresher\Ctcp\CtcpListener.cs" />
+    <Compile Include="Sharkbite.Thresher\Ctcp\CtcpResponder.cs" />
+    <Compile Include="Sharkbite.Thresher\Ctcp\CtcpSender.cs" />
+    <Compile Include="Sharkbite.Thresher\Ctcp\CtcpUtil.cs" />
+    <Compile Include="Sharkbite.Thresher\Dcc\DccChatSession.cs" />
+    <Compile Include="Sharkbite.Thresher\Dcc\DccFileInfo.cs" />
+    <Compile Include="Sharkbite.Thresher\Dcc\DccFileSession.cs" />
+    <Compile Include="Sharkbite.Thresher\Dcc\DccFileSessionManager.cs" />
+    <Compile Include="Sharkbite.Thresher\Dcc\DccListener.cs" />
+    <Compile Include="Sharkbite.Thresher\Dcc\DccUserInfo.cs" />
+    <Compile Include="Sharkbite.Thresher\Dcc\DccUtil.cs" />
+    <Compile Include="Sharkbite.Thresher\Delegates.cs" />
+    <Compile Include="Sharkbite.Thresher\Enums.cs" />
+    <Compile Include="Sharkbite.Thresher\Identd.cs" />
+    <Compile Include="Sharkbite.Thresher\IParser.cs" />
+    <Compile Include="Sharkbite.Thresher\Listener.cs" />
+    <Compile Include="Sharkbite.Thresher\NameGenerator.cs" />
+    <Compile Include="Sharkbite.Thresher\ReplyCode.cs" />
+    <Compile Include="Sharkbite.Thresher\Rfc2812Util.cs" />
+    <Compile Include="Sharkbite.Thresher\Sender.cs" />
+    <Compile Include="Sharkbite.Thresher\ServerProperties.cs" />
+    <Compile Include="Sharkbite.Thresher\TextColor.cs" />
+    <Compile Include="Sharkbite.Thresher\UserInfo.cs" />
+    <Compile Include="Sharkbite.Thresher\WhoisInfo.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="Commands\CmdAscend.cs" />
     <Compile Include="Commands\CmdBanEdit.cs" />

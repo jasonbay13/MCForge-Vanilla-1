@@ -459,47 +459,8 @@ namespace MCForge
                         Log("Downloading sqlite3.dll failed, please try again later");
                     }
                 }
-                if (!File.Exists("Sharkbite.Thresher.dll"))
-                {
-                    Log("Sharkbite.Thresher.dll doesn't exist, Downloading");
-                    try
-                    {
-                        using (WebClient WEB = new WebClient())
-                        {
-                            //WEB.DownloadFile("http://www.mediafire.com/?4rkpqvcji3va8rp", "Sharkbite.Thresher.dll");
-                            WEB.DownloadFile("http://mcforge.net/uploads/Sharkbite.Thresher.dll", "Sharkbite.Thresher.dll");
-                        }
-                        if (File.Exists("Sharkbite.Thresher.dll"))
-                        {
-                            Log("Sharkbite.Thresher.dll download succesful!");
-                        }
-                    }
-                    catch
-                    {
-                        Log("Downloading Sharkbite.Thresher.dll failed, please try again later");
-                    }
-                }
+                
             }
-            if (!File.Exists("Sharkbite.Thresher.dll"))
-                {
-                    Log("Sharkbite.Thresher.dll doesn't exist, Downloading");
-                    try
-                    {
-                        using (WebClient WEB = new WebClient())
-                        {
-                            //WEB.DownloadFile("http://www.mediafire.com/?4rkpqvcji3va8rp", "Sharkbite.Thresher.dll");
-                            WEB.DownloadFile("http://mcforge.net/uploads/Sharkbite.Thresher.dll", "Sharkbite.Thresher.dll");
-                        }
-                        if (File.Exists("Sharkbite.Thresher.dll"))
-                        {
-                            Log("Sharkbite.Thresher.dll download succesful!");
-                        }
-                    }
-                    catch
-                    {
-                        Log("Downloading Sharkbite.Thresher.dll failed, please try again later");
-                    }
-                }
             UpdateGlobalSettings();
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
             if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
