@@ -58,7 +58,11 @@ namespace MCForge.Commands
                     Player.GlobalChat(p, p.color + p.name + Server.DefaultColor + " tried to kick " + who.color + who.name + Server.DefaultColor + " but failed, because " + who.color + who.name + Server.DefaultColor + " is a developer", false);
                     return;
 	            }
-                if (!Server.gcmodhasprotection(p.name.ToLower()))
+                
+            }
+            if (Server.gcmodhasprotection(who.name.ToLower()))
+            {
+                if (!Server.devs.Contains(p.name.ToLower()))
                 {
                     Player.SendMessage(p, "You can't kick a Global Chat Moderator!");
                     Player.GlobalChat(p, p.color + p.name + Server.DefaultColor + " tried to kick " + who.color + who.name + Server.DefaultColor + " but failed, because " + who.color + who.name + Server.DefaultColor + " is a Global Chat Moderator", false);

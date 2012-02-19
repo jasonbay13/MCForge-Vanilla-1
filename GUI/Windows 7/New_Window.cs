@@ -199,6 +199,7 @@ namespace MCForge.GUI
         }
         void Player_PlayerConnect(Player p)
         {
+            
             UpdateClientList(Player.players);
         }
 

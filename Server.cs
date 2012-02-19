@@ -1203,31 +1203,51 @@ namespace MCForge
         }
         public static void UpdateGlobalSettings()
         {
-            gcipbans.Clear();
-            gcnamebans.Clear();
-            using (var client = new WebClient())
+            try
             {
-                string result = client.DownloadString("http://dev.forgeservers.net/mcforge/namebans.php");
-                foreach (string line in result.Split('*'))
+                gcipbans.Clear();
+                gcnamebans.Clear();
+                using (var client = new WebClient())
                 {
-                    gcnamebans.Add(line);
+                    string result = client.DownloadString("http://dev.forgeservers.net/mcforge/namebans.php");
+                    foreach (string line in result.Split('*'))
+                    {
+                        gcnamebans.Add(line);
+                    }
+                    gcnamebans.Remove("");
+                    result = client.DownloadString("http://dev.forgeservers.net/mcforge/ipbans.php");
+                    foreach (string line in result.Split('*'))
+                    {
+                        gcipbans.Add(line);
+                    }
+                    gcipbans.Remove("");
+                    result = client.DownloadString("http://dev.forgeservers.net/mcforge/gcmods.php");
+                    foreach (string line in result.Split('|'))
+                    {
+                        gcmods.Add(line.Split('*')[0]);
+                        gcmodprotection.Add(line);
+                    }
+                    gcmods.Remove("");
+                    gcmodprotection.Remove("");
                 }
-                gcnamebans.Remove("");
-                result = client.DownloadString("http://dev.forgeservers.net/mcforge/ipbans.php");
-                foreach (string line in result.Split('*'))
-                {
-                    gcipbans.Add(line);
-                }
-                gcipbans.Remove("");
-                result = client.DownloadString("http://dev.forgeservers.net/mcforge/gcmods.php");
-                foreach (string line in result.Split('|'))
-                {
-                    gcmods.Add(line.Split('*')[0]);
-                    gcmodprotection.Add(line);
-                }
-                gcmods.Remove("");
-                gcmodprotection.Remove("");
             }
+            catch {
+                Server.s.Log("Could not connect to the DevPanel Server!");
+            }
+        }
+        public static bool gcmodhasprotection(string name)
+        {
+            if (gcmods.Contains(name))
+            {
+                foreach (string line in gcmodprotection)
+                {
+                    if (line.Contains(name))
+                    {
+                        if (line.Split('*')[1] == "1") { return true; }
+                    }
+                }
+            }
+            return false;
         }
     }
 }

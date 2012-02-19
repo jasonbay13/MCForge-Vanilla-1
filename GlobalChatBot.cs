@@ -105,6 +105,7 @@ namespace MCForge
             //string msg = message;
             if (message.Contains("^UPDATEGLOBALSETTINGS"))
             {
+                Server.s.Log("Global settings updated!");
                 Server.UpdateGlobalSettings();
                 return;
             }

@@ -51,9 +51,9 @@ namespace MCForge.Commands
                         return;
                     	}
                     }
-                if (Server.gcmodhasprotection(who.name.ToLower()))
+                if (Server.gcmods.Contains(who.name.ToLower()))
                 {
-                    if (!Server.gcmodhasprotection(p.name.ToLower()))
+                    if (!Server.devs.Contains(p.name.ToLower()))
                     {
                         Player.SendMessage(p, "You can't change the color of a Global Chat Moderator.");
                         return;

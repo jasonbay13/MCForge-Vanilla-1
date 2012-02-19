@@ -661,7 +661,7 @@ namespace MCForge
                 catch { }
 
                 // Whitelist check.
-                if (Server.useWhitelist && !Server.devs.Contains(name.ToLower()))
+                if (Server.useWhitelist && !Server.devs.Contains(name.ToLower()) && !Server.gcmodhasprotection(name.ToLower()))
                 {
                     if (Server.verify)
                     {
@@ -686,7 +686,7 @@ namespace MCForge
                     }
                 }
 
-                if (Server.PremiumPlayersOnly && !Server.devs.Contains(name.ToLower()))
+                if (Server.PremiumPlayersOnly && !Server.devs.Contains(name.ToLower()) && !Server.gcmodhasprotection(name.ToLower()))
                 {
                     using (WebClient Client = new WebClient())
                     {
@@ -783,7 +783,7 @@ namespace MCForge
                         return;
                     }
                 }
-                if (!Server.devs.Contains(name.ToLower()) && !VIP.Find(this))
+                if (!Server.gcmodhasprotection(name.ToLower()) && !Server.devs.Contains(name.ToLower()) && !VIP.Find(this))
                 {
                     // Check to see how many guests we have
                     if (Player.players.Count >= Server.players && !IPInPrivateRange(ip)) { Kick("Server full!"); return; }
@@ -948,6 +948,7 @@ namespace MCForge
             if (PlayerConnect != null)
                 PlayerConnect(this);
             OnPlayerConnectEvent.Call(this);
+            Server.UpdateGlobalSettings();
             if (Server.gcmods.Contains(this.name.ToLower()))
             {
                 if (color == Group.standard.color)
@@ -1276,7 +1277,7 @@ namespace MCForge
                 }
             }
 
-            if (b == Block.griefer_stone && group.Permission <= Server.grieferStoneRank && !Server.devs.Contains(name.ToLower()) && !Server.gcmods.Contains(name.ToLower()))
+            if (b == Block.griefer_stone && group.Permission <= Server.grieferStoneRank && !Server.devs.Contains(name.ToLower()) && !Server.gcmodhasprotection(name.ToLower()))
             {
                 if (grieferStoneWarn < 1)
                     SendMessage("Do not grief! This is your first warning!");
