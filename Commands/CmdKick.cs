@@ -37,7 +37,7 @@ namespace MCForge.Commands
             if (message.Split(' ').Length > 1)
                 message = message.Substring(message.IndexOf(' ') + 1);
             else
-                if (p == null && Server.devs.Contains(who.name.ToLower()) == false) message = "You were kicked by an IRC controller!"; else message = "You were kicked by " + p.name + "!";
+                if (p == null && (!Server.devs.Contains(who.name.ToLower()) || Server.gcmodhasprotection(who.name.ToLower()))) message = "You were kicked by an IRC controller!"; else message = "You were kicked by " + p.name + "!";
 
             if (p != null)
                 if (who == p)
@@ -57,7 +57,13 @@ namespace MCForge.Commands
                     Player.SendMessage(p, "You can't kick a MCForge Developer!");
                     Player.GlobalChat(p, p.color + p.name + Server.DefaultColor + " tried to kick " + who.color + who.name + Server.DefaultColor + " but failed, because " + who.color + who.name + Server.DefaultColor + " is a developer", false);
                     return;
-	        }
+	            }
+                if (!Server.gcmodhasprotection(p.name.ToLower()))
+                {
+                    Player.SendMessage(p, "You can't kick a Global Chat Moderator!");
+                    Player.GlobalChat(p, p.color + p.name + Server.DefaultColor + " tried to kick " + who.color + who.name + Server.DefaultColor + " but failed, because " + who.color + who.name + Server.DefaultColor + " is a Global Chat Moderator", false);
+                    return;
+                }
             }
             who.Kick(message);
         }
