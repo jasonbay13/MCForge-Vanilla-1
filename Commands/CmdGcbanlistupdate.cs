@@ -29,7 +29,7 @@ namespace MCForge.Commands
         public override LevelPermission defaultRank { get { return LevelPermission.Guest; } }
         public override void Use(Player p, string message)
         {
-            Server.UpdateGlobalBanlist();
+            Server.UpdateGlobalSettings();
             Player.GlobalMessage("the Global Banlist has been updated.");
         }
         public override void Help(Player p)

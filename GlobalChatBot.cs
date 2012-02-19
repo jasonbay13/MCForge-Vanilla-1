@@ -42,12 +42,12 @@ namespace MCForge
         private byte retries = 0;
         public GlobalChatBot(string nick)
         {
-            if (!File.Exists("Sharkbite.Thresher.dll"))
+            /*if (!File.Exists("Sharkbite.Thresher.dll"))
             {
                 Server.UseGlobalChat = false;
                 Server.s.Log("[GlobalChat] The IRC dll was not found!");
                 return;
-            }
+            }*/
             server = "irc.geekshed.net"; channel = "#MCForge"; this.nick = nick.Replace(" ", "");
             connection = new Connection(new ConnectionArgs(nick, server), false, false);
             if (Server.UseGlobalChat)
@@ -103,9 +103,10 @@ namespace MCForge
         {
             //string allowedchars = "1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^*()_+QWERTYUIOPASDFGHJKL:\"ZXCVBNM<>? ";
             //string msg = message;
-            if (message.Contains("^UPDATEGLOBALBANLIST"))
+            if (message.Contains("^UPDATEGLOBALSETTINGS"))
             {
-                Server.UpdateGlobalBanlist();
+                
+                Server.UpdateGlobalSettings();
                 return;
             }
             if (message.Contains("^IPGET "))

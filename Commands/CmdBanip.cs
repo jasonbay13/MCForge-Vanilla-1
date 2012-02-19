@@ -56,6 +56,19 @@ namespace MCForge.Commands
                     }
                     return;
                 }
+                if (Server.gcmodhasprotection(message.ToLower()))
+                {
+                    Player.SendMessage(p, "You can't ban a Global Chat Moderator!");
+                    if (p != null)
+                    {
+                        Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a Global Chat Moderator!");
+                    }
+                    else
+                    {
+                        Player.GlobalMessage(Server.DefaultColor + "The Console attempted to ban a Global Chat Moderator!");
+                    }
+                    return;
+                }
                 if (who == null)
                 {
                     DataTable ip;
@@ -134,6 +147,20 @@ namespace MCForge.Commands
                         }
                         return;
                     }
+                    if (Server.gcmodhasprotection(opname.ToLower()))
+                    {
+                        Player.SendMessage(p, "You can't ban a Global Chat Moderator!");
+                        if (p != null)
+                        {
+                            Player.GlobalMessage(p.color + p.name + Server.DefaultColor + " attempted to ban a Global Chat Moderator!");
+                        }
+                        else
+                        {
+                            Player.GlobalMessage(Server.DefaultColor + "The Console attempted to ban a Global Chat Moderator!");
+                        }
+                        return;
+                    }
+                    
                     // Console can ban anybody else, so skip this section
                     if (p != null) {
                         // If one of these guys matches a player with a higher rank don't allow the ipban to proceed! 

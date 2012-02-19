@@ -42,6 +42,11 @@ namespace MCForge.Commands
                 Player.SendMessage(p, "You can't freeze a MCForge Developer!");
                 return;
             }
+            if (Server.gcmodhasprotection(who.name.ToLower()))
+            {
+                Player.SendMessage(p, "You can't freeze a Global Chat Moderator!");
+                return;
+            }
             if (!who.frozen)
             {
                 who.frozen = true;

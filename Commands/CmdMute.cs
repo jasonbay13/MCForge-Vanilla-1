@@ -35,9 +35,9 @@ namespace MCForge.Commands
             Player who = Player.Find(message);
             if (who == null)
             {
-                if (Server.devs.Contains(who.name.ToLower()))
+                if (Server.devs.Contains(who.name.ToLower()) || Server.gcmodhasprotection(who.name.ToLower()))
                 {
-                    Player.SendMessage(p, "The player entered is not online, or is a developer.");
+                    Player.SendMessage(p, "The player entered is not online, is a developer or is a global chat moderator.");
                     return;
                 }
                 if (Server.muted.Contains(message))
@@ -79,6 +79,11 @@ namespace MCForge.Commands
                 if (Server.devs.Contains(who.name.ToLower()))
                 {
                     Player.SendMessage(p, "You can't mute a MCForge Developer!");
+                    return;
+                }
+                if (Server.gcmodhasprotection(who.name.ToLower()))
+                {
+                    Player.SendMessage(p, "You can't mute a Global Chat Moderator!");
                     return;
                 }
                 who.muted = true;

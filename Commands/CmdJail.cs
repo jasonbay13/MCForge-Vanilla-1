@@ -44,7 +44,10 @@ namespace MCForge
                 {
                     if (!who.jailed)
                     {
-                        if (p != null) if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot jail someone of equal or greater rank."); return; }else{ if (Server.devs.Contains(who.name.ToLower()) == true) p.SendMessage("You can't kick a MCForge Developer!"); return; }
+                        if (p != null) if (who.group.Permission >= p.group.Permission) { Player.SendMessage(p, "Cannot jail someone of equal or greater rank."); return; }else{
+                            if (Server.devs.Contains(who.name.ToLower()) == true) p.SendMessage("You can't kick a MCForge Developer!"); return;
+                            if (Server.gcmodhasprotection(who.name.ToLower()) == true) p.SendMessage("You can't kick a Global Chat Moderator!"); return; 
+                        }
                         Player.GlobalDie(who, false);
                         if (p != null) { Player.GlobalSpawn(who, p.level.jailx, p.level.jaily, p.level.jailz, p.level.jailrotx, p.level.jailroty, true); }
                         else { Player.GlobalSpawn(who, who.level.jailx, who.level.jaily, who.level.jailz, who.level.jailrotx, who.level.jailroty, true); }
@@ -52,6 +55,10 @@ namespace MCForge
                         if (p == null)
                         {
                             if (Server.devs.Contains(who.name.ToLower()))
+                            {
+                                return;
+                            }
+                            if (Server.gcmodhasprotection(who.name.ToLower()))
                             {
                                 return;
                             }
@@ -64,6 +71,10 @@ namespace MCForge
                         if (p == null)
                         {
                             if (Server.devs.Contains(who.name.ToLower()))
+                            {
+                                return;
+                            }
+                            if (Server.gcmodhasprotection(who.name.ToLower()))
                             {
                                 return;
                             }

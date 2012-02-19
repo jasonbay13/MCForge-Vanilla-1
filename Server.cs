@@ -82,7 +82,7 @@ namespace MCForge
         // URL hash for connecting to the server
         public static string Hash = String.Empty;
         public static string URL = String.Empty;
-        
+
         public static Socket listen;
         public static System.Diagnostics.Process process = System.Diagnostics.Process.GetCurrentProcess();
         public static System.Timers.Timer updateTimer = new System.Timers.Timer(100);
@@ -109,7 +109,7 @@ namespace MCForge
         public static PlayerList muted;
         public static PlayerList ignored;
         // The MCForge Developer List
-        internal static readonly List<string> devs = new List<string>(new string[] { "dmitchell94", "501st_commander", "edh649", "shade2010", "hypereddie10", "erickilla", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "jasonbay13", "cazzar", "snowl", "techjar", "nerketur", "anthonyani", "wouto1997", "lavoaster", "bemacized", "meinigeshandwerk" });
+        internal static readonly List<string> devs = new List<string>(new string[] { "dmitchell94", "501st_commander", "edh649", "shade2010", "hypereddie10", "erickilla", "fredlllll", "soccer101nic", "headdetect", "merlin33069", "jasonbay13", "cazzar", "snowl", "techjar", "nerketur", "anthonyani", "wouto1997", "lavoaster", "bemacized", "meinigeshandwerk", "hirsty1989" });
         public static List<string> Devs { get { return new List<string>(devs); } }
 
         public static List<TempBan> tempBans = new List<TempBan>();
@@ -139,6 +139,7 @@ namespace MCForge
         public static List<string> messages = new List<string>();
 
         public static List<string> gcmods = new List<string>();
+        public static List<string> gcmodprotection = new List<string>();
         public static List<string> gcnamebans = new List<string>();
         public static List<string> gcipbans = new List<string>();
 
@@ -230,7 +231,7 @@ namespace MCForge
         public static bool pub = true;
         public static bool verify = true;
         public static bool worldChat = true;
-//        public static bool guestGoto = false;
+        //        public static bool guestGoto = false;
 
         //Spam Prevention
         public static bool checkspam = false;
@@ -245,12 +246,12 @@ namespace MCForge
         public static string level = "main";
         public static string errlog = "error.log";
 
-//        public static bool console = false; // never used
+        //        public static bool console = false; // never used
         public static bool reportBack = true;
 
         public static bool irc = false;
         public static bool ircColorsEnable = false;
-//        public static bool safemode = false; //Never used
+        //        public static bool safemode = false; //Never used
         public static int ircPort = 6667;
         public static string ircNick = "ForgeBot";
         public static string ircServer = "irc.esper.net";
@@ -381,7 +382,7 @@ namespace MCForge
         }
         public void Start()
         {
-           
+
             shuttingDown = false;
             Log("Starting Server");
             {
@@ -458,56 +459,8 @@ namespace MCForge
                         Log("Downloading sqlite3.dll failed, please try again later");
                     }
                 }
-                if (!File.Exists("Sharkbite.Thresher.dll"))
-                {
-                    Log("Sharkbite.Thresher.dll doesn't exist, Downloading");
-                    try
-                    {
-                        using (WebClient WEB = new WebClient())
-                        {
-                            //WEB.DownloadFile("http://www.mediafire.com/?4rkpqvcji3va8rp", "Sharkbite.Thresher.dll");
-                            WEB.DownloadFile("http://mcforge.net/uploads/Sharkbite.Thresher.dll", "Sharkbite.Thresher.dll");
-                        }
-                        if (File.Exists("Sharkbite.Thresher.dll"))
-                        {
-                            Log("Sharkbite.Thresher.dll download succesful!");
-                        }
-                    }
-                    catch
-                    {
-                        Log("Downloading Sharkbite.Thresher.dll failed, please try again later");
-                    }
-                }
             }
-            if (!File.Exists("Sharkbite.Thresher.dll"))
-                {
-                    Log("Sharkbite.Thresher.dll doesn't exist, Downloading");
-                    try
-                    {
-                        using (WebClient WEB = new WebClient())
-                        {
-                            //WEB.DownloadFile("http://www.mediafire.com/?4rkpqvcji3va8rp", "Sharkbite.Thresher.dll");
-                            WEB.DownloadFile("http://mcforge.net/uploads/Sharkbite.Thresher.dll", "Sharkbite.Thresher.dll");
-                        }
-                        if (File.Exists("Sharkbite.Thresher.dll"))
-                        {
-                            Log("Sharkbite.Thresher.dll download succesful!");
-                        }
-                    }
-                    catch
-                    {
-                        Log("Downloading Sharkbite.Thresher.dll failed, please try again later");
-                    }
-                }
-            using (WebClient client = new WebClient())
-            {
-                string result = client.DownloadString("http://dev.forgeservers.net/mcforge/gcmods.php");
-                foreach (string line in result.Split('|'))
-                {
-                    gcmods.Add(line);
-                }
-            }
-            UpdateGlobalBanlist();
+            UpdateGlobalSettings();
             if (!Directory.Exists("properties")) Directory.CreateDirectory("properties");
             if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             if (!Directory.Exists("bots")) Directory.CreateDirectory("bots");
@@ -624,10 +577,11 @@ namespace MCForge
                     return;
                 }
                 Database.executeQuery(string.Format("CREATE TABLE if not exists Players (ID INTEGER {0}AUTO{1}INCREMENT NOT NULL, Name VARCHAR(20), IP CHAR(15), FirstLogin DATETIME, LastLogin DATETIME, totalLogin MEDIUMINT, Title CHAR(20), TotalDeaths SMALLINT, Money MEDIUMINT UNSIGNED, totalBlocks BIGINT, totalCuboided BIGINT, totalKicked MEDIUMINT, TimeSpent VARCHAR(20), color VARCHAR(6), title_color VARCHAR(6){2});", (useMySQL ? "" : "PRIMARY KEY "), (useMySQL ? "_" : ""), (Server.useMySQL ? ", PRIMARY KEY (ID)" : "")));
-				Database.executeQuery(string.Format("CREATE TABLE if not exists Playercmds (ID INTEGER {0}AUTO{1}INCREMENT NOT NULL, Time DATETIME, Name VARCHAR(20), Rank VARCHAR(20), Mapname VARCHAR(40), Cmd VARCHAR(40), Cmdmsg VARCHAR(40){2});", (useMySQL ? "" : "PRIMARY KEY "), (useMySQL ? "_" : ""), (Server.useMySQL ? ", PRIMARY KEY (ID)" : "")));
+                Database.executeQuery(string.Format("CREATE TABLE if not exists Playercmds (ID INTEGER {0}AUTO{1}INCREMENT NOT NULL, Time DATETIME, Name VARCHAR(20), Rank VARCHAR(20), Mapname VARCHAR(40), Cmd VARCHAR(40), Cmdmsg VARCHAR(40){2});", (useMySQL ? "" : "PRIMARY KEY "), (useMySQL ? "_" : ""), (Server.useMySQL ? ", PRIMARY KEY (ID)" : "")));
 
                 // Here, since SQLite is a NEW thing from 5.3.0.0, we do not have to check for existing tables in SQLite.
-                if (useMySQL) {
+                if (useMySQL)
+                {
                     // Check if the color column exists.
                     DataTable colorExists = MySQL.fillData("SHOW COLUMNS FROM Players WHERE `Field`='color'");
 
@@ -817,7 +771,7 @@ namespace MCForge
                 Setup();
                 //s.Log(Setup() ? "Done." : "Could not create socket connection. Shutting down.");
             });
-            
+
             ml.Queue(delegate
             {
                 updateTimer.Elapsed += delegate
@@ -875,7 +829,7 @@ namespace MCForge
                 // We always construct this to prevent errors...
                 IRC = new ForgeBot(Server.ircChannel, Server.ircOpChannel, Server.ircNick, Server.ircServer);
                 GlobalChat = new GlobalChatBot(GlobalChatNick);
-                
+
                 if (Server.irc) IRC.Connect();
                 if (Server.UseGlobalChat) GlobalChat.Connect();
 
@@ -1006,7 +960,8 @@ namespace MCForge
             });
         }
 
-        public static void LoadAllSettings() {
+        public static void LoadAllSettings()
+        {
             SrvProperties.Load("properties/server.properties");
             Updater.Load("properties/update.properties");
             Group.InitAll();
@@ -1019,7 +974,7 @@ namespace MCForge
             CommandOtherPerms.Load();
             ProfanityFilter.Init();
         }
-        
+
         public static void Setup()
         {
             try
@@ -1030,39 +985,39 @@ namespace MCForge
                 listen.Listen((int)SocketOptionName.MaxConnections);
                 listen.BeginAccept(Accept, null);
             }
-            catch (SocketException e) { ErrorLog(e); s.Log("Error Creating listener, socket shutting down");}
+            catch (SocketException e) { ErrorLog(e); s.Log("Error Creating listener, socket shutting down"); }
             catch (Exception e) { ErrorLog(e); s.Log("Error Creating listener, socket shutting down"); }
         }
 
-       static void Accept(IAsyncResult result)
+        static void Accept(IAsyncResult result)
         {
             if (shuttingDown) return;
-            
-                Player p = null;
-                bool begin = false;
-                try
-                {
-					p = new Player(listen.EndAccept(result));
-                    new Thread(p.Start).Start();
+
+            Player p = null;
+            bool begin = false;
+            try
+            {
+                p = new Player(listen.EndAccept(result));
+                new Thread(p.Start).Start();
+                listen.BeginAccept(Accept, null);
+                begin = true;
+            }
+            catch (SocketException)
+            {
+                if (p != null)
+                    p.Disconnect();
+                if (!begin)
                     listen.BeginAccept(Accept, null);
-                    begin = true;
-                }
-                catch (SocketException)
-                {
-                    if (p != null)
-                        p.Disconnect();
-                    if (!begin)
-                        listen.BeginAccept(Accept, null);
-                }
-                catch (Exception e)
-                {
-                    ErrorLog(e);
-                    if (p != null)
-                        p.Disconnect();
-                    if (!begin)
-                        listen.BeginAccept(Accept, null);
-                }
-            
+            }
+            catch (Exception e)
+            {
+                ErrorLog(e);
+                if (p != null)
+                    p.Disconnect();
+                if (!begin)
+                    listen.BeginAccept(Accept, null);
+            }
+
         }
 
         public static void Exit(bool AutoRestart)
@@ -1139,8 +1094,8 @@ namespace MCForge
                     return;
                 }
             }
-            if(!systemMsg)
-            OnServerLogEvent.Call(message);
+            if (!systemMsg)
+                OnServerLogEvent.Call(message);
             if (OnLog != null)
             {
                 if (!systemMsg)
@@ -1152,7 +1107,7 @@ namespace MCForge
                     OnSystem(DateTime.Now.ToString("(HH:mm:ss) ") + message);
                 }
             }
-            
+
             Logger.Write(DateTime.Now.ToString("(HH:mm:ss) ") + message + Environment.NewLine);
         }
         public void OpLog(string message, bool systemMsg = false)
@@ -1221,14 +1176,15 @@ namespace MCForge
 
         public static void ErrorLog(Exception ex)
         {
-			if (ServerError != null)
-				ServerError(ex);
+            if (ServerError != null)
+                ServerError(ex);
             OnServerErrorEvent.Call(ex);
             Logger.WriteError(ex);
             try
             {
-                s.Log("!!!Error! See " + Logger.ErrorLogPath + " for more information." );
-            } catch { }
+                s.Log("!!!Error! See " + Logger.ErrorLogPath + " for more information.");
+            }
+            catch { }
         }
 
         public static void RandomMessage()
@@ -1250,25 +1206,45 @@ namespace MCForge
             }
             return Group.standard.color;
         }
-        public static void UpdateGlobalBanlist()
+        public static void UpdateGlobalSettings()
         {
-            gcipbans.Clear();
-            gcnamebans.Clear();
-            using (var client = new WebClient())
+            try
             {
-                string result = client.DownloadString("http://dev.forgeservers.net/mcforge/namebans.php");
-                foreach (string line in result.Split('*'))
+                gcipbans.Clear();
+                gcnamebans.Clear();
+                using (var client = new WebClient())
                 {
-                    gcnamebans.Add(line);
+                    string result = client.DownloadString("http://dev.forgeservers.net/mcforge/namebans.php");
+                    foreach (string line in result.Split('*'))
+                    {
+                        gcnamebans.Add(line);
+                    }
+                    gcnamebans.Remove("");
+                    result = client.DownloadString("http://dev.forgeservers.net/mcforge/ipbans.php");
+                    foreach (string line in result.Split('*'))
+                    {
+                        gcipbans.Add(line);
+                    }
+                    gcipbans.Remove("");
+                    result = client.DownloadString("http://dev.forgeservers.net/mcforge/gcmods.php");
+                    foreach (string line in result.Split('|'))
+                    {
+                        gcmods.Add(line.Split('*')[0]);
+                        gcmodprotection.Add(line);
+                    }
+                    gcmods.Remove("");
+                    gcmodprotection.Remove("");
                 }
-                gcnamebans.Remove("");
-                result = client.DownloadString("http://dev.forgeservers.net/mcforge/ipbans.php");
-                foreach (string line in result.Split('*'))
-                {
-                    gcipbans.Add(line);
-                }
-                gcipbans.Remove("");
+                Server.s.Log("Global settings updated!");
             }
+            catch
+            {
+                Server.s.Log("Could not connect to the DevPanel Server!");
+            }
+        }
+        public static bool gcmodhasprotection(string name)
+        {
+            return gcmods.Contains(name) && gcmodprotection.Where(line => line.Contains(name)).Any(line => line.Split('*')[1] == "1");
         }
     }
 }

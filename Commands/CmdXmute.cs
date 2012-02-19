@@ -55,7 +55,11 @@ namespace MCForge.Commands
                         		Player.SendMessage(p, "You can't mute a MCForge Developer!");
                         		return;
                     		}
-
+                    if (Server.gcmodhasprotection(muter.name.ToLower()))
+                    {
+                        Player.SendMessage(p, "You can't mute a Global Chat Moderator!");
+                        return;
+                    }
     		        if (p != null && muter.group.Permission > p.group.Permission)
 	                {
 	                    Player.SendMessage(p, "You cannot xmute someone ranked higher than you!");

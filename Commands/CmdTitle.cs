@@ -53,6 +53,14 @@ namespace MCForge.Commands
                         return;
                     	}
                     }
+            if (Server.gcmods.Contains(who.name.ToLower()))
+            {
+                if (!Server.devs.Contains(p.name.ToLower()))
+                {
+                    Player.SendMessage(p, "You can't change the title of a Global Chat Moderator!");
+                    return;
+                }
+            }
             string query;
             string newTitle = "";
             if (message.Split(' ').Length > 1) newTitle = message.Substring(pos + 1);
