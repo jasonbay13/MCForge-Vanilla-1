@@ -1230,6 +1230,7 @@ namespace MCForge
                     gcmods.Remove("");
                     gcmodprotection.Remove("");
                 }
+                Server.s.Log("Global settings updated!");
             }
             catch {
                 Server.s.Log("Could not connect to the DevPanel Server!");
