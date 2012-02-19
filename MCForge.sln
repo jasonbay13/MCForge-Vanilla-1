@@ -4,11 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starter", "Starter.csproj", "{63DCBB31-92CD-4464-A86C-A7E51A5FE9FE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCForge_", "MCForge_.csproj", "{12597DB0-7C34-4DE1-88EA-9250FF3372EB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1C317052-9B87-471C-A8AF-5AB2D779C174} = {1C317052-9B87-471C-A8AF-5AB2D779C174}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.csproj", "{1C317052-9B87-471C-A8AF-5AB2D779C174}"
-	ProjectSection(ProjectDependencies) = postProject
-		{12597DB0-7C34-4DE1-88EA-9250FF3372EB} = {12597DB0-7C34-4DE1-88EA-9250FF3372EB}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

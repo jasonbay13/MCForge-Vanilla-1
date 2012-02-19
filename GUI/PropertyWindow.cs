@@ -1319,8 +1319,12 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
             new Thread(new ThreadStart(delegate
             {
-                int nPort = 0;
-                nPort = Int32.Parse(txtPort.Text);
+                if(String.IsNullOrEmpty(txtPort.Text))
+                {
+                    setTextColorAndBack("Format Error", Color.Yellow);
+                    return;
+                }
+                int nPort=Int32.Parse(txtPort.Text);
                 try
                 {
 
@@ -1340,12 +1344,10 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
                     }
                     setTextColorAndBack("An Error has occured", Color.Yellow);
-                    return;
                 }
                 catch
                 {
                     setTextColorAndBack("An Error has occured", Color.Yellow);
-                    return;
                 }
 
             })).Start();
@@ -1355,7 +1357,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
         {
             if (this.ChkPortResult.InvokeRequired)
             {
-                SetTextColorCallback d = new SetTextColorCallback(setTextColorAndBack);
+                SetTextColorCallback d = setTextColorAndBack;
                 this.Invoke(d, new object[] { text, color });
             }
             else
