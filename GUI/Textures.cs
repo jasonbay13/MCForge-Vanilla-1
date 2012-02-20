@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 using MCForge.Levels.Textures;
 
 namespace MCForge.GUI
@@ -119,6 +120,8 @@ namespace MCForge.GUI
         }
         private void Textures_Load(object sender, EventArgs e)
         {
+            if (!File.Exists("extra/cfg/" + l.name + ".cfg"))
+                l.textures.CreateCFG();
             string[] lines = l.textures.GetCFGLines();
             foreach (string s in lines)
             {
