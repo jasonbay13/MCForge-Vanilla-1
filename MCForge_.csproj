@@ -108,12 +108,6 @@
     <Compile Include="GUI\LavaMapSubmit.Designer.cs">
       <DependentUpon>LavaMapSubmit.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\MCForgeAccountSetup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\MCForgeAccountSetup.Designer.cs">
-      <DependentUpon>MCForgeAccountSetup.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\Textures.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -587,9 +581,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\LavaMapSubmit.resx">
       <DependentUpon>LavaMapSubmit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\MCForgeAccountSetup.resx">
-      <DependentUpon>MCForgeAccountSetup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\Textures.resx">
       <DependentUpon>Textures.cs</DependentUpon>

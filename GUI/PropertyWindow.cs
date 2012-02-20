@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -32,7 +33,7 @@ namespace MCForge.Gui
 {
     public partial class PropertyWindow : Form
     {
-        Form lavaMapBrowser, accountSetup;
+        Form lavaMapBrowser;
         System.Timers.Timer lavaUpdateTimer;
         string lsLoadedMap = "";
 
@@ -47,7 +48,6 @@ namespace MCForge.Gui
         private void PropertyWindow_Load(object sender, EventArgs e)
         {
             lavaMapBrowser = new LavaMapBrowser();
-            accountSetup = new MCForgeAccountSetup();
 
             Object[] colors = new Object[16];
             colors[0] = ("black"); colors[1] = ("navy");
@@ -193,7 +193,6 @@ namespace MCForge.Gui
         {
             lavaUpdateTimer.Dispose();
             lavaMapBrowser.Dispose();
-            accountSetup.Dispose();
             Window.prevLoaded = false;
             TntWarsGame.GuiLoaded = null;
         }
@@ -2324,7 +2323,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                 if (TntWarsGame.GuiLoaded.GameStatus == TntWarsGame.TntWarsGameStatus.GracePeriod) SlctdTntWrdStatus.Text = "Started";
                 if (TntWarsGame.GuiLoaded.GameStatus == TntWarsGame.TntWarsGameStatus.InProgress) SlctdTntWrdStatus.Text = "In Progress";
                 if (TntWarsGame.GuiLoaded.GameStatus == TntWarsGame.TntWarsGameStatus.Finished) SlctdTntWrdStatus.Text = "Finished";
-                SlctdTntWrsPlyrs.Text = TntWarsGame.GuiLoaded.PlayingPlayers().ToString();
+                SlctdTntWrsPlyrs.Text = TntWarsGame.GuiLoaded.PlayingPlayers().ToString(CultureInfo.InvariantCulture);
                 //Difficulty
                 if (TntWarsGame.GuiLoaded.GameStatus == TntWarsGame.TntWarsGameStatus.WaitingForPlayers)
                 {
@@ -2477,14 +2476,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private bool TntWarsEditable(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded.GameStatus == TntWarsGame.TntWarsGameStatus.WaitingForPlayers)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return TntWarsGame.GuiLoaded.GameStatus == TntWarsGame.TntWarsGameStatus.WaitingForPlayers;
         }
 
         private void tabControl2_Click(object sender, EventArgs e)
@@ -2511,8 +2503,7 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private void TntWrsMpsList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (TntWrsMpsList.SelectedIndex >= 0) TntWrsCrtNwTntWrsBt.Enabled = true;
-            else TntWrsCrtNwTntWrsBt.Enabled = false;
+            TntWrsCrtNwTntWrsBt.Enabled = TntWrsMpsList.SelectedIndex >= 0;
         }
 
         private void TntWrsCrtNwTntWrsBt_Click(object sender, EventArgs e)
@@ -2523,148 +2514,128 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
                 it = new TntWarsGame(Level.Find(TntWrsMpsList.Items[TntWrsMpsList.SelectedIndex].ToString()));
             }
             catch { }
-            if (it != null)
-            {
-                TntWarsGame.GameList.Add(it);
-                TntWarsGame.GuiLoaded = it;
-                LoadTNTWarsTab(sender, e);
-            }
+            if (it == null) return;
+            TntWarsGame.GameList.Add(it);
+            TntWarsGame.GuiLoaded = it;
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsDiffSlctBt_Click(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
-            { 
-                switch (TntWrsDiffCombo.Items[TntWrsDiffCombo.SelectedIndex].ToString())
-                {
-                    case "Easy":
-                        TntWarsGame.GuiLoaded.GameDifficulty = TntWarsGame.TntWarsDifficulty.Easy;
-                        TntWarsGame.GuiLoaded.SendAllPlayersMessage("TNT Wars: Changed difficulty to easy!");
-                        if (TntWarsGame.GuiLoaded.TeamKills == true)
-                        {
-                            TntWarsGame.GuiLoaded.TeamKills = false;
-                        }
-                        break;
+            if (TntWarsGame.GuiLoaded == null) return;
+            switch (TntWrsDiffCombo.Items[TntWrsDiffCombo.SelectedIndex].ToString())
+            {
+                case "Easy":
+                    TntWarsGame.GuiLoaded.GameDifficulty = TntWarsGame.TntWarsDifficulty.Easy;
+                    TntWarsGame.GuiLoaded.SendAllPlayersMessage("TNT Wars: Changed difficulty to easy!");
+                    if (TntWarsGame.GuiLoaded.TeamKills == true)
+                    {
+                        TntWarsGame.GuiLoaded.TeamKills = false;
+                    }
+                    break;
                     
-                    case "Normal":
-                        TntWarsGame.GuiLoaded.GameDifficulty = TntWarsGame.TntWarsDifficulty.Normal;
-                        TntWarsGame.GuiLoaded.SendAllPlayersMessage("TNT Wars: Changed difficulty to normal!");
-                        if (TntWarsGame.GuiLoaded.TeamKills == true)
-                        {
-                            TntWarsGame.GuiLoaded.TeamKills = false;
-                        }
-                        break;
+                case "Normal":
+                    TntWarsGame.GuiLoaded.GameDifficulty = TntWarsGame.TntWarsDifficulty.Normal;
+                    TntWarsGame.GuiLoaded.SendAllPlayersMessage("TNT Wars: Changed difficulty to normal!");
+                    if (TntWarsGame.GuiLoaded.TeamKills == true)
+                    {
+                        TntWarsGame.GuiLoaded.TeamKills = false;
+                    }
+                    break;
 
-                    case "Hard":
-                        TntWarsGame.GuiLoaded.GameDifficulty = TntWarsGame.TntWarsDifficulty.Hard;
-                        TntWarsGame.GuiLoaded.SendAllPlayersMessage("TNT Wars: Changed difficulty to hard!");
-                        if (TntWarsGame.GuiLoaded.TeamKills == false)
-                        {
-                            TntWarsGame.GuiLoaded.TeamKills = true;
-                        }
-                        break;
+                case "Hard":
+                    TntWarsGame.GuiLoaded.GameDifficulty = TntWarsGame.TntWarsDifficulty.Hard;
+                    TntWarsGame.GuiLoaded.SendAllPlayersMessage("TNT Wars: Changed difficulty to hard!");
+                    if (TntWarsGame.GuiLoaded.TeamKills == false)
+                    {
+                        TntWarsGame.GuiLoaded.TeamKills = true;
+                    }
+                    break;
 
-                    case "Extreme":
-                        TntWarsGame.GuiLoaded.GameDifficulty = TntWarsGame.TntWarsDifficulty.Extreme;
-                        TntWarsGame.GuiLoaded.SendAllPlayersMessage("TNT Wars: Changed difficulty to extreme!");
-                        if (TntWarsGame.GuiLoaded.TeamKills == false)
-                        {
-                            TntWarsGame.GuiLoaded.TeamKills = true;
-                        }
-                        break;
-                }
-                LoadTNTWarsTab(sender, e);
+                case "Extreme":
+                    TntWarsGame.GuiLoaded.GameDifficulty = TntWarsGame.TntWarsDifficulty.Extreme;
+                    TntWarsGame.GuiLoaded.SendAllPlayersMessage("TNT Wars: Changed difficulty to extreme!");
+                    if (TntWarsGame.GuiLoaded.TeamKills == false)
+                    {
+                        TntWarsGame.GuiLoaded.TeamKills = true;
+                    }
+                    break;
             }
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsScrLmtUpDwn_ValueChanged(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
-            {
-                TntWarsGame.GuiLoaded.ScoreLimit = (int)TntWrsScrLmtUpDwn.Value;
-                LoadTNTWarsTab(sender, e);
-            }
+            if (TntWarsGame.GuiLoaded == null) return;
+            TntWarsGame.GuiLoaded.ScoreLimit = (int)TntWrsScrLmtUpDwn.Value;
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsScrPrKlUpDwn_ValueChanged(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
-            {
-                TntWarsGame.GuiLoaded.ScorePerKill = (int)TntWrsScrPrKlUpDwn.Value;
-                LoadTNTWarsTab(sender, e);
-            }
+            if (TntWarsGame.GuiLoaded == null) return;
+            TntWarsGame.GuiLoaded.ScorePerKill = (int)TntWrsScrPrKlUpDwn.Value;
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsAsstChck_CheckedChanged(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
+            if (TntWarsGame.GuiLoaded == null) return;
+            if (TntWrsAsstChck.Checked == false)
             {
-                if (TntWrsAsstChck.Checked == false)
-                {
-                    TntWarsGame.GuiLoaded.ScorePerAssist = 0;
-                    TntWrsAstsScrUpDwn.Enabled = false;
-                }
-                else
-                {
-                    TntWarsGame.GuiLoaded.ScorePerAssist = (int)TntWrsAstsScrUpDwn.Value;
-                    TntWrsAstsScrUpDwn.Enabled = true;
-                }
-                LoadTNTWarsTab(sender, e);
+                TntWarsGame.GuiLoaded.ScorePerAssist = 0;
+                TntWrsAstsScrUpDwn.Enabled = false;
             }
+            else
+            {
+                TntWarsGame.GuiLoaded.ScorePerAssist = (int)TntWrsAstsScrUpDwn.Value;
+                TntWrsAstsScrUpDwn.Enabled = true;
+            }
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsAstsScrUpDwn_ValueChanged(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
-            {
-                TntWarsGame.GuiLoaded.ScorePerAssist = (int)TntWrsAstsScrUpDwn.Value;
-                LoadTNTWarsTab(sender, e);
-            }
+            if (TntWarsGame.GuiLoaded == null) return;
+            TntWarsGame.GuiLoaded.ScorePerAssist = (int)TntWrsAstsScrUpDwn.Value;
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsMltiKlChck_CheckedChanged(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
+            if (TntWarsGame.GuiLoaded == null) return;
+            if (TntWrsMltiKlChck.Checked == false)
             {
-                if (TntWrsMltiKlChck.Checked == false)
-                {
-                    TntWarsGame.GuiLoaded.MultiKillBonus = 0;
-                    TntWrsMltiKlScPrUpDown.Enabled = false;
-                }
-                else
-                {
-                    TntWarsGame.GuiLoaded.MultiKillBonus = (int)TntWrsMltiKlScPrUpDown.Value;
-                    TntWrsMltiKlScPrUpDown.Enabled = true;
-                }
-                LoadTNTWarsTab(sender, e);
+                TntWarsGame.GuiLoaded.MultiKillBonus = 0;
+                TntWrsMltiKlScPrUpDown.Enabled = false;
             }
+            else
+            {
+                TntWarsGame.GuiLoaded.MultiKillBonus = (int)TntWrsMltiKlScPrUpDown.Value;
+                TntWrsMltiKlScPrUpDown.Enabled = true;
+            }
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsMltiKlScPrUpDown_ValueChanged(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
-            {
-                TntWarsGame.GuiLoaded.MultiKillBonus = (int)TntWrsMltiKlScPrUpDown.Value;
-                LoadTNTWarsTab(sender, e);
-            }
+            if (TntWarsGame.GuiLoaded == null) return;
+            TntWarsGame.GuiLoaded.MultiKillBonus = (int)TntWrsMltiKlScPrUpDown.Value;
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsGracePrdChck_CheckedChanged(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
-            {
-                TntWarsGame.GuiLoaded.GracePeriod = TntWrsGracePrdChck.Checked;
-                LoadTNTWarsTab(sender, e);
-            }
+            if (TntWarsGame.GuiLoaded == null) return;
+            TntWarsGame.GuiLoaded.GracePeriod = TntWrsGracePrdChck.Checked;
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsGraceTimeChck_ValueChanged(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
-            {
-                TntWarsGame.GuiLoaded.GracePeriodSecs = (int)TntWrsGraceTimeChck.Value;
-                LoadTNTWarsTab(sender, e);
-            }
+            if (TntWarsGame.GuiLoaded == null) return;
+            TntWarsGame.GuiLoaded.GracePeriodSecs = (int)TntWrsGraceTimeChck.Value;
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsTmsChck_CheckedChanged(object sender, EventArgs e)
@@ -2747,107 +2718,92 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
 
         private void TntWrsBlnceTeamsChck_CheckedChanged(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
-            {
-                TntWarsGame.GuiLoaded.BalanceTeams = TntWrsBlnceTeamsChck.Checked;
-                LoadTNTWarsTab(sender, e);
-            }
+            if (TntWarsGame.GuiLoaded == null) return;
+            TntWarsGame.GuiLoaded.BalanceTeams = TntWrsBlnceTeamsChck.Checked;
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsTKchck_CheckedChanged(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
-            {
-                TntWarsGame.GuiLoaded.TeamKills = TntWrsTKchck.Checked;
-                LoadTNTWarsTab(sender, e);
-            }
+            if (TntWarsGame.GuiLoaded == null) return;
+            TntWarsGame.GuiLoaded.TeamKills = TntWrsTKchck.Checked;
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsStreaksChck_CheckedChanged(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
-            {
-                TntWarsGame.GuiLoaded.Streaks = TntWrsStreaksChck.Checked;
-                LoadTNTWarsTab(sender, e);
-            }
+            if (TntWarsGame.GuiLoaded == null) return;
+            TntWarsGame.GuiLoaded.Streaks = TntWrsStreaksChck.Checked;
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsStrtGame_Click(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
+            if (TntWarsGame.GuiLoaded == null) return;
+            if (TntWarsGame.GuiLoaded.PlayingPlayers() >= 2)
             {
-                if (TntWarsGame.GuiLoaded.PlayingPlayers() >= 2)
-                {
-                    Thread t = new Thread(TntWarsGame.GuiLoaded.Start);
-                    t.Start();
-                }
-                else
-                {
-                    MessageBox.Show("Not enough players (2 or more needed!)", "More players needed!");
-                }
-                LoadTNTWarsTab(sender, e);
+                new Thread(TntWarsGame.GuiLoaded.Start).Start();
             }
+            else
+            {
+                MessageBox.Show("Not enough players (2 or more needed!)", "More players needed!");
+            }
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsEndGame_Click(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
+            if (TntWarsGame.GuiLoaded == null) return;
+            foreach (TntWarsGame.player pl in TntWarsGame.GuiLoaded.Players)
             {
-                foreach (TntWarsGame.player pl in TntWarsGame.GuiLoaded.Players)
-                {
-                    pl.p.canBuild = true;
-                    pl.p.PlayingTntWars = false;
-                    pl.p.CurrentAmountOfTnt = 0;
-                }
-                TntWarsGame.GuiLoaded.GameStatus = TntWarsGame.TntWarsGameStatus.Finished;
-                TntWarsGame.GuiLoaded.SendAllPlayersMessage("TNT wars: Game has been stopped!");
-                LoadTNTWarsTab(sender, e);
+                pl.p.canBuild = true;
+                pl.p.PlayingTntWars = false;
+                pl.p.CurrentAmountOfTnt = 0;
             }
+            TntWarsGame.GuiLoaded.GameStatus = TntWarsGame.TntWarsGameStatus.Finished;
+            TntWarsGame.GuiLoaded.SendAllPlayersMessage("TNT wars: Game has been stopped!");
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsRstGame_Click(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
+            if (TntWarsGame.GuiLoaded == null) return;
+            TntWarsGame.GuiLoaded.GameStatus = TntWarsGame.TntWarsGameStatus.WaitingForPlayers;
+            Command.all.Find("restore").Use(null, TntWarsGame.GuiLoaded.BackupNumber + TntWarsGame.GuiLoaded.lvl.name);
+            TntWarsGame.GuiLoaded.RedScore = 0;
+            TntWarsGame.GuiLoaded.BlueScore = 0;
+            foreach (TntWarsGame.player pl in TntWarsGame.GuiLoaded.Players)
             {
-                TntWarsGame.GuiLoaded.GameStatus = TntWarsGame.TntWarsGameStatus.WaitingForPlayers;
-                Command.all.Find("restore").Use(null, TntWarsGame.GuiLoaded.BackupNumber + TntWarsGame.GuiLoaded.lvl.name);
-                TntWarsGame.GuiLoaded.RedScore = 0;
-                TntWarsGame.GuiLoaded.BlueScore = 0;
-                foreach (TntWarsGame.player pl in TntWarsGame.GuiLoaded.Players)
-                {
-                    pl.Score = 0;
-                    pl.spec = false;
-                    pl.p.TntWarsKillStreak = 0;
-                    pl.p.TNTWarsLastKillStreakAnnounced = 0;
-                    pl.p.CurrentAmountOfTnt = 0;
-                    pl.p.CurrentTntGameNumber = TntWarsGame.GuiLoaded.GameNumber;
-                    pl.p.PlayingTntWars = false;
-                    pl.p.canBuild = true;
-                    pl.p.TntWarsHealth = 2;
-                    pl.p.TntWarsScoreMultiplier = 1f;
-                    pl.p.inTNTwarsMap = true;
-                    pl.p.HarmedBy = null;
-                }
-                LoadTNTWarsTab(sender, e);
+                pl.Score = 0;
+                pl.spec = false;
+                pl.p.TntWarsKillStreak = 0;
+                pl.p.TNTWarsLastKillStreakAnnounced = 0;
+                pl.p.CurrentAmountOfTnt = 0;
+                pl.p.CurrentTntGameNumber = TntWarsGame.GuiLoaded.GameNumber;
+                pl.p.PlayingTntWars = false;
+                pl.p.canBuild = true;
+                pl.p.TntWarsHealth = 2;
+                pl.p.TntWarsScoreMultiplier = 1f;
+                pl.p.inTNTwarsMap = true;
+                pl.p.HarmedBy = null;
             }
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsDltGame_Click(object sender, EventArgs e)
         {
-            if (TntWarsGame.GuiLoaded != null)
+            if (TntWarsGame.GuiLoaded == null) return;
+            foreach (TntWarsGame.player pl in TntWarsGame.GuiLoaded.Players)
             {
-                foreach (TntWarsGame.player pl in TntWarsGame.GuiLoaded.Players)
-                {
-                    pl.p.CurrentTntGameNumber = -1;
-                    Player.SendMessage(pl.p, "TNT Wars: The TNT Wars game you are currently playing has been deleted!");
-                    pl.p.PlayingTntWars = false;
-                    pl.p.canBuild = true;
-                    TntWarsGame.SetTitlesAndColor(pl, true);
-                }
-                TntWarsGame.GameList.Remove(TntWarsGame.GuiLoaded);
-                TntWarsGame.GuiLoaded = null;
-                LoadTNTWarsTab(sender, e);
+                pl.p.CurrentTntGameNumber = -1;
+                Player.SendMessage(pl.p, "TNT Wars: The TNT Wars game you are currently playing has been deleted!");
+                pl.p.PlayingTntWars = false;
+                pl.p.canBuild = true;
+                TntWarsGame.SetTitlesAndColor(pl, true);
             }
+            TntWarsGame.GameList.Remove(TntWarsGame.GuiLoaded);
+            TntWarsGame.GuiLoaded = null;
+            LoadTNTWarsTab(sender, e);
         }
 
         private void TntWrsDiffAboutBt_Click(object sender, EventArgs e)
@@ -2863,23 +2819,6 @@ txtBackupLocation.Text = folderDialog.SelectedPath;
             msg += "Extreme (1 Hit to die, TNT has short delay, big explosion and team kills are on)";
             MessageBox.Show(msg, "Difficulty");
         }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                accountSetup.Show();
-                accountSetup.Focus();
-            }
-            catch (ObjectDisposedException)
-            {
-                accountSetup = new MCForgeAccountSetup();
-                accountSetup.Show();
-                accountSetup.Focus();
-            }
-            catch (Exception ex) { Server.ErrorLog(ex); }
-        }
-
         private void txechx_CheckedChanged(object sender, EventArgs e)
         {
             Server.UseTextures = txechx.Checked;
