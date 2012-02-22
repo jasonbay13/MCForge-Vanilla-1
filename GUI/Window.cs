@@ -185,7 +185,7 @@ namespace MCForge.Gui
         }
         void Level_LevelLoaded(Level l)
         {
-            UpdateMapList();
+            //UpdateMapList(); // Causes crash with -1 index value
             UpdatePlayerMapCombo();
             UnloadedlistUpdate();
         }
