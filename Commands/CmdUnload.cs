@@ -35,19 +35,20 @@ namespace MCForge.Commands
         {
             if (message.ToLower() == "empty")
             {
-                for (int i = 0; i < Server.levels.Count; i++)
+                Server.levels.ForEach(l =>
                 {
-                    Level l = Server.levels[i];
                     if (l.players.Count <= 0 && l != Server.mainLevel)
                         l.Unload(true, true);
-                }
+                });
                 return;
             }
 
             Level level = Level.Find(message);
-
-                if (level != null && !level.Unload()) Player.SendMessage(p, "You cannot unload the main level.");
-               
+            if (level != null)
+            {
+                if (!level.Unload()) Player.SendMessage(p, "You cannot unload the main level.");
+                return;
+            }       
 
             Player.SendMessage(p, "There is no level \"" + message + "\" loaded.");
         }
