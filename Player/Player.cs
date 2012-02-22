@@ -2586,7 +2586,7 @@ if (tries > 2)
 Disconnect();
 else goto retry;
 }*/
-            catch (SocketException)
+            catch (SocketException e)
             {
                 buffer = null;
                 Disconnect();
@@ -3714,7 +3714,7 @@ changed |= 4;*/
                 Server.s.Log("Socket was shutdown for " + this.name ?? this.ip);
 #endif
             }
-            catch (Exception)
+            catch (Exception e)
             {
 #if DEBUG
                     Exception ex = new Exception("Failed to shutdown socket for " + this.name ?? this.ip, e);
@@ -3729,7 +3729,7 @@ changed |= 4;*/
                 Server.s.Log("Socket was closed for " + this.name ?? this.ip);
 #endif
             }
-            catch (Exception)
+            catch (Exception e)
             {
 #if DEBUG
                     Exception ex = new Exception("Failed to close socket for " + this.name ?? this.ip, e);
