@@ -998,7 +998,7 @@ namespace MCForge
             try
             {
                 p = new Player(listen.EndAccept(result));
-                new Thread(p.Start).Start();
+                //new Thread(p.Start).Start();
                 listen.BeginAccept(Accept, null);
                 begin = true;
             }
