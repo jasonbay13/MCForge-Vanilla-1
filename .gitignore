@@ -1,0 +1,6 @@
+/McForge 2.0/bin/
+/McForge 2.0/obj/
+/Commands/bin/
+/Commands/obj/
+*.suo
+*.user
