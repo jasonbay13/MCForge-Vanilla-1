@@ -26,15 +26,25 @@ namespace McForge
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
-		[STAThread]
-		static void Main()
-		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
+        [STAThread]
+        static void Main()
+        {
+            new Thread(new ThreadStart(Server.Init)).Start();
 
-			new Thread(new ThreadStart(Server.Init)).Start();
-
-			Application.Run(new Main());
-		}
+            if (ServerSettings.EnableGUI)
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Main());
+            }
+            else
+            {
+                while (true)
+                {
+                    string input = Console.ReadLine();
+                    if (input.ToLower() == "/stop") break;
+                }
+            }
+        }
 	}
 }

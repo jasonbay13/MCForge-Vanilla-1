@@ -25,7 +25,6 @@ namespace McForge
 {
 	public static class Server
 	{
-		public static int port = 25565;
 
 		public static bool shuttingDown;
 		public static bool Started = false;
@@ -39,7 +38,7 @@ namespace McForge
 
 		public static void Init()
 		{
-			StartListening();
+            StartListening();
 
 			Mainlevel = Level.CreateLevel(new Point3(256, 256, 64), Level.LevelTypes.Flat);
 
@@ -64,17 +63,21 @@ namespace McForge
 		public static void StartListening()
 		{
 			startretry:
-			try
-			{
-				listener = new TcpListener(System.Net.IPAddress.Any, 25565);
-				listener.Start();
-				IAsyncResult ar = listener.BeginAcceptTcpClient(new AsyncCallback(AcceptCallback), listener);
-			}
-			catch (Exception E)
-			{
-				Server.Log(E);
-				goto startretry;
-			}
+            try
+            {
+                listener = new TcpListener(System.Net.IPAddress.Any, ServerSettings.port);
+                listener.Start();
+                IAsyncResult ar = listener.BeginAcceptTcpClient(new AsyncCallback(AcceptCallback), listener);
+            }
+            catch (SocketException E)
+            {
+                Server.Log(E);
+            }
+            catch (Exception E)
+            {
+                Server.Log(E);
+                goto startretry;
+            }
 		}
 		public static void AcceptCallback(IAsyncResult ar)
 		{
