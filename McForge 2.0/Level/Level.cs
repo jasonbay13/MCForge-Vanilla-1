@@ -20,16 +20,32 @@ using System.Text;
 
 namespace McForge
 {
+	/// <summary>
+	/// This class is used for loading/saving/handling/manipulation of server levels.
+	/// </summary>
 	public class Level
 	{
 		//As a note, the coordinates are right, it is xzy, its based on the users view, not the map itself.
 		//WIDTH = X, LENGTH = Z, DEPTH = Y
 		//NEST ORDER IS XZY
 
-		public delegate void ForEachBlockDelegateXYZ(int x, int z, int y);
+		/// <summary>
+		/// This delegate is used for looping through the blocks in a level in an automated fashion, and each cycle returns the position in xzy format
+		/// </summary>
+		/// <param name="x">the loops current block location (x)</param>
+		/// <param name="z">the loops current block location (z)</param>
+		/// <param name="y">the loops current block location (y)</param>
+		public delegate void ForEachBlockDelegateXZY(int x, int z, int y);
+		/// <summary>
+		/// This delegate is used for looping through the blocks in a level in an automated fashion, and each cycle returns the position in POS format
+		/// </summary>
+		/// <param name="pos">the loops current block position (pos)</param>
 		public delegate void ForEachBlockDelegate(int pos);
 
 		int _TotalBlocks;
+		/// <summary>
+		/// Get the total blocks in the level
+		/// </summary>
 		public int TotalBlocks
 		{
 			get
@@ -38,11 +54,22 @@ namespace McForge
 				return _TotalBlocks;
 			}
 		}
+		/// <summary>
+		/// This is the size of the level
+		/// </summary>
 		public Point3 Size;
+		/// <summary>
+		/// Levels current Spawn position
+		/// </summary>
 		public Point3 SpawnPos;
+		/// <summary>
+		/// Levels current Spawn ROT
+		/// </summary>
 		public byte[] SpawnRot;
 
-		//public byte[,,] data; //Three dimensional array :D
+		/// <summary>
+		/// This holds the map data for the entire map
+		/// </summary>
 		public byte[] data;
 
 		private Level(Point3 size)
@@ -52,6 +79,12 @@ namespace McForge
 			data = new byte[TotalBlocks];
 		}
 
+		/// <summary>
+		/// Create a level with a specified type and a specified size
+		/// </summary>
+		/// <param name="size">The size to create the level.</param>
+		/// <param name="type">The type of the level you want to create</param>
+		/// <returns>returns the level that was created</returns>
 		public static Level CreateLevel(Point3 size, LevelTypes type)
 		{
 			Level newlevel = new Level(size);
@@ -66,10 +99,10 @@ namespace McForge
 			return newlevel;
 		}
 
-		public void CreateFlatLevel()
+		private void CreateFlatLevel()
 		{
 			int middle = Size.y / 2;
-			ForEachBlockXYZ(delegate(int x, int z, int y)
+			ForEachBlockXZY(delegate(int x, int z, int y)
 			{
 				if (y < middle)
 				{
@@ -88,13 +121,21 @@ namespace McForge
 			SpawnRot = new byte[2]{0, 0};
 		}
 
+		/// <summary>
+		/// Load a level (todo)
+		/// </summary>
+		/// <returns>the loaded level</returns>
 		public Level LoadLevel()
 		{
 			//TODO
 			return null;
 		}
 
-		public void ForEachBlockXYZ(ForEachBlockDelegateXYZ FEBD)
+		/// <summary>
+		/// loop through all the blocks in xzy running a delegated method for each block, the delegated method will be bassed coordinated in xzy format
+		/// </summary>
+		/// <param name="FEBD">the delegate to call on each cycle</param>
+		public void ForEachBlockXZY(ForEachBlockDelegateXZY FEBD)
 		{
 			for (int x = 0; x < Size.x; x++)
 			{
@@ -107,6 +148,10 @@ namespace McForge
 				}
 			}
 		}
+		/// <summary>
+		/// loop through all the blocks in xzy running a delegated method for each block, the delegated method will be passed coordinated in int format
+		/// </summary>
+		/// <param name="FEBD">the delegate to call on each cycle</param>
 		public void ForEachBlock(ForEachBlockDelegate FEBD)
 		{
 			for (int i = 0; i < data.Length; ++i)
@@ -173,24 +218,55 @@ namespace McForge
 		}
 		#endregion
 		#region GetBlock and Overloads
+		/// <summary>
+		/// get the block (byte) at an xzy pos
+		/// </summary>
+		/// <param name="pos">the pos to check and return</param>
+		/// <returns>a byte that represents the blocktype at the given location</returns>
 		public byte GetBlock(Point3 pos)
 		{
 			return GetBlock(pos.x, pos.z, pos.y);
 		}
+		/// <summary>
+		/// get the block at a given xzy pos
+		/// </summary>
+		/// <param name="x">x pos to get</param>
+		/// <param name="z">z pos to get</param>
+		/// <param name="y">y pos to get</param>
+		/// <returns>a byte that represents the blocktype at the given location</returns>
 		public byte GetBlock(int x, int z, int y)
 		{
 			return GetBlock(PosToInt((ushort)x, (ushort)z, (ushort)y));
 		}
+		/// <summary>
+		/// get the block at a given xzy position
+		/// </summary>
+		/// <param name="x">x pos to get</param>
+		/// <param name="z">z pos to get</param>
+		/// <param name="y">y pos to get</param>
+		/// <returns>a byte that represents the blocktype at the given location</returns>
 		public byte GetBlock(ushort x, ushort z, ushort y)
 		{
 			return GetBlock(PosToInt(x, z, y));
 		}
+		/// <summary>
+		/// Get the block at a given pos in the data array
+		/// </summary>
+		/// <param name="pos">the pos to get the block from</param>
+		/// <returns>a byte that represents the blocktype at the given location</returns>
 		public byte GetBlock(int pos)
 		{
 			return data[pos];
 		}
 		#endregion
 
+		/// <summary>
+		/// Convert a pos (xzy) into a single INT pos
+		/// </summary>
+		/// <param name="x">X position to convert</param>
+		/// <param name="z">Z position to convert</param>
+		/// <param name="y">Y position to convert</param>
+		/// <returns>an integer representing the given block position in the DATA array above.</returns>
 		public int PosToInt(ushort x, ushort z, ushort y)
 		{
 			if (x < 0) { return -1; }
@@ -201,6 +277,11 @@ namespace McForge
 			if (z >= Size.z) { return -1; }
 			return x + z * Size.x + y * Size.x * Size.z;
 		}
+		/// <summary>
+		/// Convert an int POS to an xzy pos
+		/// </summary>
+		/// <param name="pos">The int pos to convert</param>
+		/// <returns>a 3 dimensional representation of the block position</returns>
 		public Point3 IntToPos(int pos)
 		{
 			short y = (short)(pos / Size.x / Size.z); pos -= y * Size.x * Size.z;
@@ -209,11 +290,22 @@ namespace McForge
 
 			return new Point3(x, z, y);
 		}
+		/// <summary>
+		/// Return the position (int) relative to a given block position (int) given an offset of xzy
+		/// </summary>
+		/// <param name="pos">the integral pos to start at</param>
+		/// <param name="x">the offset along the x axis</param>
+		/// <param name="z">the offset along the z axis</param>
+		/// <param name="y">the offset along the y axis</param>
+		/// <returns>returns an int representing the offset block location in the data array</returns>
 		public int IntOffset(int pos, int x, int z, int y)
 		{
 			return pos + x + z * Size.x + y * Size.x * Size.z;
 		}
 
+		/// <summary>
+		/// An enumeration of all the types of levels
+		/// </summary>
 		public enum LevelTypes
 		{
 			Flat,

@@ -20,10 +20,18 @@ using System.Text;
 
 namespace McForge
 {
+	/// <summary>
+	/// The command class, used to store commands for players to use
+	/// </summary>
 	public class Command
 	{
 		internal static Dictionary<string, ICommand> Commands = new Dictionary<string, ICommand>();
 
+		/// <summary>
+		/// Add an array of referances to your command here
+		/// </summary>
+		/// <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
+		/// <param name="reference">the array of strings you want players to type to use your command</param>
 		public static void AddReference(ICommand command, string[] reference)
 		{
 			foreach (string s in reference)
@@ -31,6 +39,11 @@ namespace McForge
 				AddReference(command, s.ToLower());
 			}
 		}
+		/// <summary>
+		/// Add a referance to your command here
+		/// </summary>
+		/// <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
+		/// <param name="reference">the string you want player to type to use your command, you can use this method more than once :)</param>
 		public static void AddReference(ICommand command, string reference)
 		{
 			if (Commands.ContainsKey(reference))

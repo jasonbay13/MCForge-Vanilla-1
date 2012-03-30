@@ -25,18 +25,33 @@ namespace McForge
 {
 	public static class Server
 	{
-
+		/// <summary>
+		/// Get whether the server is currently shutting down
+		/// </summary>
 		public static bool shuttingDown;
+		/// <summary>
+		/// get whether the server is currently fully started or not
+		/// </summary>
 		public static bool Started = false;
-		public static System.Timers.Timer UpdateTimer;
 
-		public static List<Player> Connections = new List<Player>();
+		private static System.Timers.Timer UpdateTimer;
+
+		internal static List<Player> Connections = new List<Player>();
+		/// <summary>
+		/// get the current list of online players, note that if your doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
+		/// </summary>
 		public static List<Player> Players = new List<Player>();
+		/// <summary>
+		/// get the current list of banned ip addresses, note that if your doing a foreach on this (or any other public list) you should always add .ToArray() to the end so that you avoid errors!
+		/// </summary>
 		public static List<string> BannedIP = new List<string>();
 
+		/// <summary>
+		/// The main level of the server, where players spawn when they first join
+		/// </summary>
 		public static Level Mainlevel;
 
-		public static void Init()
+		internal static void Init()
 		{
             StartListening();
 
@@ -62,8 +77,8 @@ namespace McForge
 		}
 
 		#region Socket Stuff
-		public static TcpListener listener;
-		public static void StartListening()
+		private static TcpListener listener;
+		private static void StartListening()
 		{
 			startretry:
             try
@@ -82,7 +97,7 @@ namespace McForge
                 goto startretry;
             }
 		}
-		public static void AcceptCallback(IAsyncResult ar)
+		private static void AcceptCallback(IAsyncResult ar)
 		{
 			TcpListener listener2 = (TcpListener)ar.AsyncState;
 			try
