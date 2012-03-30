@@ -21,7 +21,8 @@ using System.Text;
 namespace McForge
 {
 	class ServerSettings
-	{
+    {
+        public static int port = 25565;
 		public static string configPath = "config/";
 
 		public static string[] WelcomeText = new string[1] { "Welcome to my Server." };
@@ -34,5 +35,17 @@ namespace McForge
 
 		public static string MOTD = "Testing 1.. 2..";
 		public static string NAME = "Test Server... +hax";
-	}
+
+        public static bool EnableGUI = true;
+
+        public void Load()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save()
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
