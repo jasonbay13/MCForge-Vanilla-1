@@ -31,8 +31,8 @@ namespace McForge
 		#region Variables
 		internal static System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
 		internal static MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-		protected static packet pingPacket = new packet(new byte[1] { 1 });
-		protected static packet mapSendStartPacket = new packet(new byte[1] { 2 });
+		protected static packet pingPacket = new packet(new byte[1] { (byte)packet.types.SendPing });
+		protected static packet mapSendStartPacket = new packet(new byte[1] { (byte)packet.types.MapStart });
 		private static byte ForceTpCounter = 0;
 
 		protected static packet MOTD_NonAdmin = new packet();
@@ -41,7 +41,7 @@ namespace McForge
 		{
 			if (MOTD_NonAdmin.bytes == null)
 			{
-				MOTD_NonAdmin.Add((byte)0);
+				MOTD_NonAdmin.Add(packet.types.MOTD);
 				MOTD_NonAdmin.Add(ServerSettings.version);
 				MOTD_NonAdmin.Add(ServerSettings.NAME, 64);
 				MOTD_NonAdmin.Add(ServerSettings.MOTD, 64);
@@ -53,7 +53,7 @@ namespace McForge
 
 		protected Socket socket;
 
-		protected byte lastPacket = 0;
+		protected packet.types lastPacket = packet.types.SendPing;
 
 		/// <summary>
 		/// The players real username
@@ -312,7 +312,7 @@ namespace McForge
 
 				id = FreeId();
 				UpgradeConnectionToPlayer();
-				
+
 				//Do we want the same-ip-new-account code?
 
 				//ushort x = (ushort)((0.5 + level.SpawnPos.x) * 32);
@@ -479,7 +479,7 @@ namespace McForge
 		{
 			try
 			{
-				lastPacket = pa.bytes[0];
+				lastPacket = (packet.types)pa.bytes[0];
 			}
 			catch (Exception e) { Server.Log(e); }
 			for (int i = 0; i < 3; i++)
@@ -521,7 +521,7 @@ namespace McForge
 				message = message.Replace("&" + ch + " &", "&");
 			}
 
-			pa.Add((byte)13);
+			pa.Add(packet.types.Message);
 			pa.Add(PlayerID);
 
 			try
@@ -584,13 +584,13 @@ namespace McForge
 					send[1026] = (byte)(i * 100 / number);
 
 					packet Send = new packet(send);
-					Send.AddStart(new byte[1] { 3 });
+					Send.AddStart(new byte[1] { (byte)packet.types.MapData });
 
 					SendPacket(Send);
 				}
 
 				pa = new packet();
-				pa.Add((byte)4);
+				pa.Add(packet.types.MapEnd);
 				pa.Add((short)level.Size.x);
 				pa.Add((short)level.Size.y);
 				pa.Add((short)level.Size.z);
@@ -610,7 +610,7 @@ namespace McForge
 				ID = p.id;
 
 			packet pa = new packet();
-			pa.Add((byte)7);
+			pa.Add(packet.types.SendSpawn);
 			pa.Add((byte)ID);
 			pa.Add(p.USERNAME, 64);
 			pa.Add(p.Pos.x);
@@ -619,16 +619,12 @@ namespace McForge
 			pa.Add(p.Rot);
 			SendPacket(pa);
 		}
-		//protected void SendDie(byte id)
-		//{
-		//    packet pa = new packet(new byte[2] { 12, id });
-		//}
 		protected void SendBlockChange(ushort x, ushort z, ushort y, byte type)
 		{
 			if (x < 0 || y < 0 || z < 0 || x >= level.Size.x || y >= level.Size.y || z >= level.Size.z) return;
 
 			packet pa = new packet();
-			pa.Add((byte)6);
+			pa.Add(packet.types.SendBlockchange);
 			pa.Add(x);
 			pa.Add(y);
 			pa.Add(z);
@@ -641,7 +637,7 @@ namespace McForge
 		protected void SendKick(string message)
 		{
 			packet pa = new packet();
-			pa.Add((byte)14);
+			pa.Add(packet.types.SendKick);
 			pa.Add(message, 64);
 			SendPacket(pa);
 		}
@@ -744,19 +740,19 @@ namespace McForge
 			switch (changed)
 			{
 				case 1: //Pos Change
-					pa.Add((byte)10);
+					pa.Add(packet.types.SendPosChange);
 					pa.Add(id);
 					pa.Add((sbyte)(diffX));
 					pa.Add((sbyte)(diffY));
 					pa.Add((sbyte)(diffZ));
 					break;
 				case 2: //Rot Change
-					pa.Add((byte)11);
+					pa.Add(packet.types.SendRotChange);
 					pa.Add(id);
 					pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
 					break;
 				case 3: //Pos AND Rot Change
-					pa.Add((byte)9);
+					pa.Add(packet.types.SendPosANDRotChange);
 					pa.Add(id);
 					pa.Add(diffX);
 					pa.Add(diffY);
@@ -764,7 +760,7 @@ namespace McForge
 					pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
 					break;
 				case 4: //Teleport Required
-					pa.Add((byte)8);
+					pa.Add(packet.types.SendTeleport);
 					pa.Add(id);
 					pa.Add(tempPos.x);
 					pa.Add(tempPos.y);
@@ -840,7 +836,7 @@ namespace McForge
 		/// </summary>
 		public void GlobalDie()
 		{
-			packet pa = new packet(new byte[2] { 12, id });
+			packet pa = new packet(new byte[2] { (byte)packet.types.SendDie, id });
 			foreach (Player p in Server.Players.ToArray())
 			{
 				if (p != this)
@@ -1098,6 +1094,10 @@ namespace McForge
 		public void Add(byte a)
 		{
 			Add(new byte[1] { a });
+		}
+		public void Add(types a)
+		{
+			Add((byte)a);
 		}
 		public void Add(short a)
 		{
