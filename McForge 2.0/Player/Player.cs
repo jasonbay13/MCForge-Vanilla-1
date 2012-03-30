@@ -375,14 +375,14 @@ namespace McForge
 				SendBlockChange(x, z, y, currentType);
 				bool placing = false;
 				if (action == 1) placing = true;
-				ThreadPool.QueueUserWorkItem(delegate
-				{
-					blockChange.Invoke(this, x, z, y, newType, placing, PassBackData);
-					blockChange = null;
-					PassBackData = null;
-				});
 
+				BlockChangeDelegate tempBlockChange = blockChange;
+				object tempPassBack = PassBackData;
 
+				blockChange = null;
+				PassBackData = null;
+
+				ThreadPool.QueueUserWorkItem(delegate { tempBlockChange.Invoke(this, x, z, y, newType, placing, tempPassBack); });
 				return;
 			}
 
@@ -462,10 +462,14 @@ namespace McForge
 
 			if (nextChat != null)
 			{
-				ThreadPool.QueueUserWorkItem(delegate { nextChat.Invoke(this, incomingText, PassBackData); });
+				NextChatDelegate tempNextChat = nextChat;
+				object tempPassBack = PassBackData;
+
 				nextChat = null;
 				PassBackData = null;
 
+				ThreadPool.QueueUserWorkItem(delegate { tempNextChat.Invoke(this, incomingText, tempPassBack); });
+				
 				return;
 			}
 
