@@ -103,7 +103,7 @@ namespace McForge
 		/// <summary>
 		/// The players MC Id, this changes each time the player logs in
 		/// </summary>
-		public byte id;
+		public byte id = 255;
 		/// <summary>
 		/// The players current position
 		/// </summary>
@@ -176,7 +176,7 @@ namespace McForge
 
 				loginTimer.Elapsed += delegate { HandleConnect(); };
 				loginTimer.Start();
-				
+
 				pingTimer.Elapsed += delegate { SendPing(); };
 				pingTimer.Start();
 
@@ -272,8 +272,8 @@ namespace McForge
 						buffer = HandlePacket(buffer);
 					else
 						return new byte[0];
-					
-					
+
+
 				}
 			}
 			catch (Exception e)
@@ -311,9 +311,8 @@ namespace McForge
 				isLoggedIn = true;
 
 				id = FreeId();
-
 				UpgradeConnectionToPlayer();
-
+				
 				//Do we want the same-ip-new-account code?
 
 				//ushort x = (ushort)((0.5 + level.SpawnPos.x) * 32);
@@ -327,7 +326,7 @@ namespace McForge
 				//x = (ushort)Math.Abs(x);
 				//y = (ushort)Math.Abs(y);
 				//z = (ushort)Math.Abs(z);
-				
+
 				Pos = new Point3(x, z, y);
 				Rot = level.SpawnRot;
 				oldPos = Pos;
@@ -361,7 +360,7 @@ namespace McForge
 				//TODO Send message to op's for adminium hack
 				return;
 			}
-			
+
 			byte currentType = level.GetBlock(x, z, y);
 			if (currentType == (byte)Blocks.Types.zero)
 			{
@@ -376,12 +375,13 @@ namespace McForge
 				SendBlockChange(x, z, y, currentType);
 				bool placing = false;
 				if (action == 1) placing = true;
-				ThreadPool.QueueUserWorkItem(delegate {
+				ThreadPool.QueueUserWorkItem(delegate
+				{
 					blockChange.Invoke(this, x, z, y, newType, placing, PassBackData);
 					blockChange = null;
 					PassBackData = null;
 				});
-				
+
 
 				return;
 			}
@@ -699,11 +699,18 @@ namespace McForge
 		{
 			byte changed = 0;   //Denotes what has changed (x,y,z, rotation-x, rotation-y)
 
-			int diffX = Pos.x - oldPos.x;
-			int diffZ = Pos.z - oldPos.z;
-			int diffY = Pos.y - oldPos.y;
-			int diffR0 = Rot[0] - oldRot[0];
-			int diffR1 = Rot[1] - oldRot[1];
+			Point3 tempOldPos = oldPos;
+			Point3 tempPos = Pos;
+			byte[] tempRot = Rot;
+			byte[] tempOldRot = oldRot;
+
+			oldPos = Pos; oldRot = Rot;
+
+			int diffX = tempPos.x - tempOldPos.x;
+			int diffZ = tempPos.z - tempOldPos.z;
+			int diffY = tempPos.y - tempOldPos.y;
+			int diffR0 = tempRot[0] - tempRot[0];
+			int diffR1 = tempRot[1] - tempRot[1];
 
 			if (ForceTp) changed = 4;
 			else
@@ -732,7 +739,6 @@ namespace McForge
 				}
 			}
 
-			oldPos = Pos; oldRot = Rot;
 			packet pa = new packet();
 
 			switch (changed)
@@ -747,30 +753,27 @@ namespace McForge
 				case 2: //Rot Change
 					pa.Add((byte)11);
 					pa.Add(id);
-					//pa.Add(new byte[2] { 128, 128 });
-					pa.Add(Rot);
+					pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
 					break;
 				case 3: //Pos AND Rot Change
 					pa.Add((byte)9);
 					pa.Add(id);
-					pa.Add((sbyte)(Pos.x - oldPos.x));
-					pa.Add((sbyte)(Pos.y - oldPos.y));
-					pa.Add((sbyte)(Pos.z - oldPos.z));
-					//pa.Add(new byte[2] { 128, 128 });
-					pa.Add(Rot);
+					pa.Add(diffX);
+					pa.Add(diffY);
+					pa.Add(diffZ);
+					pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
 					break;
 				case 4: //Teleport Required
 					pa.Add((byte)8);
 					pa.Add(id);
-					pa.Add(Pos.x);
-					pa.Add(Pos.y);
-					pa.Add(Pos.z);
-					//pa.Add(new byte[2] { 128, 128 });
+					pa.Add(tempPos.x);
+					pa.Add(tempPos.y);
+					pa.Add(tempPos.z);
 					pa.Add(Rot);
 					break;
 			}
 
-			
+
 			foreach (Player p in Server.Players.ToArray())
 			{
 				if (p != this && p.level == level && p.isLoggedIn && !p.isLoading)
@@ -788,7 +791,10 @@ namespace McForge
 			if (args.Length > 1)
 			{
 				sendArgs = new string[args.Length - 1];
-				args.CopyTo(sendArgs, 1);
+				for (int i = 1; i < args.Length; i++)
+				{
+					sendArgs[i - 1] = args[i];
+				}
 			}
 
 			string name = args[0].ToLower().Trim();
@@ -818,7 +824,7 @@ namespace McForge
 			{
 				if (ForceTpCounter == 100) { if (!p.isHidden) p.UpdatePosition(true); }
 				else { if (!p.isHidden) p.UpdatePosition(false); }
-					
+
 			}
 		}
 		internal static void GlobalBlockchange(Level l, ushort x, ushort z, ushort y, byte block)
@@ -952,19 +958,27 @@ namespace McForge
 
 			Server.Players.Remove(this);
 			Server.Connections.Remove(this);
-			
+
 			socket.Close();
 		}
 
 		protected byte FreeId()
 		{
-			if (Server.Players.Count == 0) return 0;
+			List<byte> usedIds = new List<byte>();
+
+			foreach (Player p in Server.Players.ToArray())
+			{
+				usedIds.Add(p.id);
+			}
+
 			for (byte i = 0; i < ServerSettings.MaxPlayers; ++i)
-				foreach (Player p in Server.Players)
-					if (p.id == i) continue;
-					else return i;
-			
-			unchecked { return (byte)-1; }
+			{
+				if (usedIds.Contains(i)) continue;
+				return i;
+			}
+
+			Server.Log("Too many players O_O", ConsoleColor.Red, ConsoleColor.Black);
+			return 254;
 		}
 		protected void UpgradeConnectionToPlayer()
 		{
@@ -1033,7 +1047,7 @@ namespace McForge
 			foreach (char ch in name) { if (allowedchars.IndexOf(ch) == -1) { return false; } } return true;
 		}
 		#endregion
-		
+
 	}
 
 	public struct packet
@@ -1124,13 +1138,13 @@ namespace McForge
 		public void GZip()
 		{
 			System.IO.MemoryStream ms = new System.IO.MemoryStream();
-			
+
 			GZipStream gs = new GZipStream(ms, CompressionMode.Compress, true);
 			gs.Write(bytes, 0, bytes.Length);
-			gs.Close(); 
+			gs.Close();
 			gs.Dispose();
-			
-			ms.Position = 0; 
+
+			ms.Position = 0;
 			bytes = new byte[ms.Length];
 			ms.Read(bytes, 0, (int)ms.Length);
 			ms.Close();

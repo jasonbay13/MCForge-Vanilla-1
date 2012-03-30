@@ -20,13 +20,8 @@ using System.Text;
 
 namespace McForge
 {
-	public class CmdIds : ICommand
+	public class CmdReloadCmds : ICommand
 	{
-		public static void init()
-		{
-			new CmdIds();
-		}
-
 		string _Name = "Reload Commands";
 		public string Name { get { return _Name; } }
 

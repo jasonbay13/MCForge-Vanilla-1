@@ -52,6 +52,9 @@ namespace McForge
 
 			Log("[Important]: Server Started.", ConsoleColor.Black, ConsoleColor.White);
 			Started = true;
+
+			CmdReloadCmds reload = new CmdReloadCmds();
+			reload.Initialize();
 		}
 
 		static void Update()
