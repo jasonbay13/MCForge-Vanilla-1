@@ -19,7 +19,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Threading;
 
-namespace McForge
+namespace MCForge
 {
 	static class Program
 	{

@@ -21,7 +21,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Timers;
 
-namespace McForge
+namespace MCForge
 {
 	public static class Server
 	{

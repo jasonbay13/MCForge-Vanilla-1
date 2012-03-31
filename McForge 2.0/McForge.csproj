@@ -8,8 +8,8 @@
     <ProjectGuid>{EDC9892F-BBA2-4043-9FD9-94C0BA7D9552}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>McForge</RootNamespace>
-    <AssemblyName>McForge</AssemblyName>
+    <RootNamespace>MCForge</RootNamespace>
+    <AssemblyName>MCForge</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject>MCForge.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

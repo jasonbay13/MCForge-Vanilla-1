@@ -1,4 +1,4 @@
-﻿namespace McForge
+﻿namespace MCForge
 {
 	partial class Main
 	{

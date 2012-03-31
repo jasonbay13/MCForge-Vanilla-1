@@ -24,7 +24,7 @@ using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 
-namespace McForge
+namespace MCForge
 {
 	public class Player
 	{
