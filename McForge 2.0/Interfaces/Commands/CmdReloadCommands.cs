@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace McForge
+namespace MCForge
 {
 	public class CmdReloadCmds : ICommand
 	{

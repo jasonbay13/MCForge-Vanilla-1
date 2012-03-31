@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace McForge
+namespace MCForge
 {
 	/// <summary>
 	/// This class is used for loading/saving/handling/manipulation of server levels.

@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace McForge
+namespace MCForge
 {
 	/// <summary>
 	/// The command class, used to store commands for players to use

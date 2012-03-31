@@ -20,7 +20,7 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 
-namespace McForge
+namespace MCForge
 {
 	static class LoadAllDlls
 	{

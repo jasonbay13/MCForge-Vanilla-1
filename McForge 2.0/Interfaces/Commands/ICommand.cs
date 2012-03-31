@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace McForge
+namespace MCForge
 {
 	public interface ICommand
 	{
@@ -39,7 +39,7 @@ namespace McForge
 		/// </summary>
 		int Version { get; }
 		/// <summary>
-		/// Unique identifier for this plugin, will be used later to link to McForge databases
+		/// Unique identifier for this plugin, will be used later to link to MCForge databases
 		/// </summary>
 		string CUD { get; }
 

@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace McForge
+namespace MCForge
 {
-	public partial class Main : Form
+	public partial class frmMain : Form
 	{
-		public Main()
+		public frmMain()
 		{
 			InitializeComponent();
 		}
