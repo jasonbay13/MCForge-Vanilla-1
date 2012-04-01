@@ -21,11 +21,11 @@ using System.Threading;
 
 namespace MCForge
 {
-	static class Program
-	{
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
+    static class Program
+    {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
         [STAThread]
         static void Main()
         {
@@ -50,5 +50,5 @@ namespace MCForge
                 }
             }
         }
-	}
+    }
 }

@@ -97,7 +97,7 @@ namespace CommandDll
                             }
                             result = num1 / num2;
                             goto _Meep;
-                      case "^":
+                        case "^":
                             result = Math.Pow(num1, num2);
                             goto _Meep;
                         default:
@@ -115,7 +115,8 @@ namespace CommandDll
             //Invalid arguments
             catch (IndexOutOfRangeException)
             {
-                Help(p);
+                //Help(p);
+                p.SendMessage("Invalid Arguments!");
                 return;
             }
         }
