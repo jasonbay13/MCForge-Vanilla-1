@@ -53,6 +53,15 @@ namespace MCForge
 		/// </summary>
 		public static Level Mainlevel;
 
+        //Voting
+        public static bool voting;
+        public static bool kickvote; //Determines if it's a kickvote
+        public static int YesVotes;
+        public static int NoVotes;
+        public static Player kicker; //The player who's getting, if it's /votekick
+
+        public static string DefaultColor = "&e";
+
 		internal static void Init()
 		{
             StartListening();

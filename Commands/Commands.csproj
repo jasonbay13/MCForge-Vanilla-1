@@ -50,7 +50,9 @@
     <Compile Include="Information\CmdCalculate.cs" />
     <Compile Include="Information\CmdOpRules.cs" />
     <Compile Include="Information\CmdRules.cs" />
+    <Compile Include="Misc\CmdVote.cs" />
     <Compile Include="Moderation\CmdSay.cs" />
+    <Compile Include="Moderation\CmdVoteKick.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +61,7 @@
       <Name>MCForge</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

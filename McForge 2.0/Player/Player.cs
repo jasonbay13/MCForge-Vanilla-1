@@ -62,6 +62,7 @@ namespace MCForge
 		protected string _username; //Lowercase Username
 
         public string lastcmd; //Last command the player used
+        public bool voted; //Did he vote ?
 		/// <summary>
 		/// This is the players LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
 		/// </summary>
@@ -475,6 +476,15 @@ namespace MCForge
 				
 				return;
 			}
+            if (Server.voting)
+            {
+                if (Server.kickvote && Server.kicker == this) { SendMessage("You're not allowed to vote!"); return; }
+                if (voted) { SendMessage("You have already voted..."); return; }
+                string vote = incomingText.ToLower();
+                if (vote == "yes" || vote == "y") { Server.YesVotes++; voted = true; SendMessage("Thanks for voting!"); return; }
+                else if (vote == "no" || vote == "n") { Server.NoVotes++; voted = true; SendMessage("Thanks for voting!"); return; }
+                else { SendMessage("Use either %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + " to vote!"); }
+            }
 
 			Server.Log("<" + USERNAME + "> " + incomingText);
 
@@ -1061,7 +1071,7 @@ namespace MCForge
             List<Player> players = new List<Player>();
             foreach (Player p in Server.Players.ToArray())
             {
-                if (p.USERNAME.StartsWith(name))
+                if (p.username.StartsWith(name.ToLower()))
                     players.Add(p);
             }
             if (players.Count == 1)
