@@ -1055,7 +1055,7 @@ namespace MCForge
         public static Player Find(string name)
         {
             List<Player> players = new List<Player>();
-            foreach (Player p in Server.Players)
+            foreach (Player p in Server.Players.ToArray())
             {
                 if (p.USERNAME.StartsWith(name))
                     players.Add(p);
