@@ -60,11 +60,19 @@ namespace MCForge
 		/// </summary>
 		public string USERNAME;
 		protected string _username; //Lowercase Username
+        /// <summary>
+        /// Last command the player used.
+        /// </summary>
+        public string lastcmd;
+        /// <summary>
+        /// Has the player voted?
+        /// </summary>
+        public bool voted;
 
-        public string lastcmd; //Last command the player used
-        public bool voted; //Did he vote ?
-
-        public bool readrules = false; //read the rules
+        /// <summary>
+        /// Has the player read the rules?
+        /// </summary>
+        public bool readrules = false;
 		/// <summary>
 		/// This is the players LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
 		/// </summary>
@@ -125,6 +133,10 @@ namespace MCForge
 		/// The players last known rotation
 		/// </summary>
 		public byte[] oldRot;
+        /// <summary>
+        /// The players last known click
+        /// </summary>
+        public Point3 lastClick;
 		/// <summary>
 		/// The players COLOR
 		/// </summary>
@@ -359,6 +371,8 @@ namespace MCForge
 			ushort z = packet.NTHO(message, 4);
 			byte action = message[6];
 			byte newType = message[7];
+
+            lastClick = new Point3(x, z, y);
 
 			if (newType > 49 || (newType == 7 && !isAdmin))
 			{
@@ -900,6 +914,21 @@ namespace MCForge
 			blockChange = null;
 			nextChat = chat;
 		}
+        public void click(ushort x, ushort z, ushort y, byte type)
+        {
+            if (blockChange != null)
+            {
+                bool placing = true;
+                BlockChangeDelegate tempBlockChange = blockChange;
+                object tempPassBack = PassBackData;
+
+                blockChange = null;
+                PassBackData = null;
+
+                ThreadPool.QueueUserWorkItem(delegate { tempBlockChange.Invoke(this, x, z, y, type, placing, tempPassBack); });
+                return;
+            }
+        }
 		#endregion
 
 		protected static List<string> LineWrapping(string message)

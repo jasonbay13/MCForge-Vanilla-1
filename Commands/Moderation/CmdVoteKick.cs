@@ -43,7 +43,7 @@ namespace CommandDll
             Player.UniversalChat("The votes are in! %aYes: " + Server.YesVotes + " %cNo: " + Server.NoVotes + Server.DefaultColor + "!");
             if (Server.YesVotes > Server.NoVotes) { who.Kick("Votekick'd"); return; }
             else if (Server.NoVotes > Server.YesVotes || Server.YesVotes == Server.NoVotes) { Player.UniversalChat("Looks like " + who.USERNAME + " is staying!"); return; }
-            foreach (Player pl in Server.Players) { pl.voted = false; }
+            foreach (Player pl in Server.Players.ToArray()) { pl.voted = false; }
             Server.voting = false;
         }
 

@@ -65,7 +65,7 @@ namespace CommandDll
                             return;
                     }
                 Meep:
-                    p.SendMessage((operation == "pi") ? ("The answer:&a " + num1 + " x PI " + Colors.yellow + " = " + Colors.red + result) : ("The answer: &aThe " + operation + " of " + num1 + Colors.yellow + " = " + Colors.red + result));
+                    p.SendMessage((operation == "pi") ? ("The answer:&a " + num1 + " x PI " + Server.DefaultColor + " = " + Colors.red + result) : ("The answer: &aThe " + operation + " of " + num1 + Colors.yellow + " = " + Colors.red + result));
                     return;
                 }
                 else if (args.Length == 3)
@@ -105,7 +105,7 @@ namespace CommandDll
                             return;
                     }
                 _Meep:
-                    p.SendMessage("The answer:&a " + num1 + " " + operation + " " + num2 + Colors.yellow + " = " + Colors.red + result);
+                    p.SendMessage("The answer:&a " + num1 + " " + operation + " " + num2 + Server.DefaultColor + " = " + Colors.red + result);
                     return;
                 }
                 else
