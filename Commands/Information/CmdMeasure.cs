@@ -20,32 +20,32 @@ using System.Threading;
 using MCForge;
 using System.IO;
 
-    namespace CommandDll
+namespace CommandDll
+{
+    public class CmdMeasure : ICommand
+    {
+        public string Name { get { return "Measure"; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
+        public string Author { get { return "Gamemakergm"; } }
+        public int Version { get { return 1; } }
+        public string CUD { get { return ""; } }
+        public void Use(Player p, string[] args)
         {
-        public class CmdMeasure : ICommand
-            {
-            public string Name { get { return "Measure"; } }
-            public CommandTypes Type { get { return CommandTypes.information; } }
-            public string Author { get { return "Gamemakergm"; } }
-            public int Version { get { return 1; } }
-            public string CUD { get { return ""; } }
-            public void Use(Player p, string[] args)
-            {
             CatchPos cpos = new CatchPos();
             if (args.Length == 1)
-                {
+            {
                 cpos.ignore = Blocks.NameToByte(args[0]);
                 if (cpos.ignore == (byte)(Blocks.Types.zero))
                 {
                     p.SendMessage("Could not find block specified.");
                 }
-                    p.SendMessage("Ignoring " + args[0]);
-                }
+                p.SendMessage("Ignoring " + args[0]);
+            }
             else
-            cpos.ignore = (byte)(Blocks.Types.zero); //So it doesn't ignore air.
+                cpos.ignore = (byte)(Blocks.Types.zero); //So it doesn't ignore air.
             p.SendMessage("Place two blocks to determine the edges.");
             p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
-    }
+        }
         public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
         {
             CatchPos cpos = (CatchPos)DataPass;
@@ -53,7 +53,7 @@ using System.IO;
             p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock2), (object)cpos);
         }
         public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
-            {
+        {
             CatchPos cpos = (CatchPos)DataPass;
             Point3 FirstBlock = cpos.FirstBlock;
             ushort xx, zz, yy;
@@ -61,12 +61,12 @@ using System.IO;
             for (xx = Math.Min((ushort)(FirstBlock.x), x); xx <= Math.Max((ushort)(FirstBlock.x), x); ++xx)
                 for (zz = Math.Min((ushort)(FirstBlock.z), z); zz <= Math.Max((ushort)(FirstBlock.z), z); ++zz)
                     for (yy = Math.Min((ushort)(FirstBlock.y), y); yy <= Math.Max((ushort)(FirstBlock.y), y); ++yy)
-                        {
+                    {
                         if (p.level.GetBlock(xx, zz, yy) != cpos.ignore)
                         {
-                        count++;
+                            count++;
+                        }
                     }
-                }
             p.SendMessage(count + " blocks are between (" + FirstBlock.x + ", " + FirstBlock.z + ", " + FirstBlock.y + ") and (" + x + ", " + z + ", " + y + ")");
         }
 

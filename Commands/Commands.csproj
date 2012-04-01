@@ -41,9 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CmdDatapassExample.cs" />
-    <Compile Include="CmdIds.cs" />
+    <Compile Include="Information\CmdIds.cs" />
     <Compile Include="CmdTest.cs" />
-    <Compile Include="CmdMeasure.cs" />
+    <Compile Include="Information\CmdMeasure.cs" />
+    <Compile Include="Information\CmdCalculate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

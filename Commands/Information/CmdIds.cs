@@ -11,7 +11,7 @@ namespace CommandDll
 		string _Name = "PlayerIds";
 		public string Name { get { return _Name; } }
 
-		CommandTypes _Type = CommandTypes.misc;
+		CommandTypes _Type = CommandTypes.information;
 		public CommandTypes Type { get { return _Type; } }
 
 		string _Author = "Merlin33069";
