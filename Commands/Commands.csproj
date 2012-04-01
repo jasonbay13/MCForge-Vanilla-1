@@ -46,6 +46,7 @@
     <Compile Include="CmdTest.cs" />
     <Compile Include="Information\CmdMeasure.cs" />
     <Compile Include="Information\CmdCalculate.cs" />
+    <Compile Include="Information\CmdRules.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading;
 using System.Collections.Generic;
 using System.Timers;
+using System.IO;
 
 namespace MCForge
 {
@@ -69,6 +70,9 @@ namespace MCForge
 
 			CmdReloadCmds reload = new CmdReloadCmds();
 			reload.Initialize();
+
+            //Create the directories we need...
+            if (!Directory.Exists("text")) { Directory.CreateDirectory("text"); Log("Created text directory...", ConsoleColor.White, ConsoleColor.Black); }
 		}
 
 		static void Update()
