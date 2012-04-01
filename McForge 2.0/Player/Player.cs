@@ -1046,6 +1046,24 @@ namespace MCForge
 			string allowedchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890._";
 			foreach (char ch in name) { if (allowedchars.IndexOf(ch) == -1) { return false; } } return true;
 		}
+
+        /// <summary>
+        /// Attempts to find the player in the list of online players
+        /// </summary>
+        /// <param name="name">The player name to find</param>
+        /// <remarks>Can be a partial name</remarks>
+        public static Player Find(string name)
+        {
+            List<Player> players = new List<Player>();
+            foreach (Player p in Server.Players)
+            {
+                if (p.USERNAME.StartsWith(name))
+                    players.Add(p);
+            }
+            if (players.Count == 1)
+                return players[0];
+            return null;
+        }
 		#endregion
 
 	}
