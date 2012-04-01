@@ -63,6 +63,8 @@ namespace MCForge
 
         public string lastcmd; //Last command the player used
         public bool voted; //Did he vote ?
+
+        public bool readrules = false; //read the rules
 		/// <summary>
 		/// This is the players LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
 		/// </summary>
@@ -816,7 +818,16 @@ namespace MCForge
 				ThreadPool.QueueUserWorkItem(delegate
 				{
 					ICommand cmd = Command.Commands[name];
-					cmd.Use(this, sendArgs);
+                    if (!Server.agreed.Contains(USERNAME) && name != "rules" && name != "agree" && name != "disagree") 
+                    { 
+                        SendMessage("You need to /agree to the /rules before you can use commands!"); return; 
+                    }
+                    try { cmd.Use(this, sendArgs); } //Just so it doesn't crash the server if custom command makers release broken commands!
+                    catch (Exception ex)
+                    { 
+                        Server.Log("[Error] An error occured when " + USERNAME + " tried to use " + name + "!", ConsoleColor.Red, ConsoleColor.Black);
+                        Server.Log(ex);
+                    }
                     lastcmd = name;
 				});
 			}

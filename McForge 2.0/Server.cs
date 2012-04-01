@@ -47,7 +47,10 @@ namespace MCForge
 		/// </summary>
 		public static List<string> BannedIP = new List<string>();
         public static List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "Gamemakergm", "cazzar", "hirsty", "Givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "TheMusiKid" });
-
+        /// <summary>
+        /// List of players that agreed to the rules
+        /// </summary>
+        public static List<string> agreed = new List<string>();
 		/// <summary>
 		/// The main level of the server, where players spawn when they first join
 		/// </summary>
@@ -83,6 +86,14 @@ namespace MCForge
 
             //Create the directories we need...
             if (!Directory.Exists("text")) { Directory.CreateDirectory("text"); Log("Created text directory...", ConsoleColor.White, ConsoleColor.Black); }
+            if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); Log("Created agreed.txt", ConsoleColor.White, ConsoleColor.Black); }
+
+            try
+            {
+                string[] lines = File.ReadAllLines("text/agreed.txt");
+                foreach (string pl in lines) { agreed.Add(pl); }
+            }
+            catch { Log("[Error] Error reading agreed players!", ConsoleColor.Red, ConsoleColor.Black); }
 		}
 
 		static void Update()

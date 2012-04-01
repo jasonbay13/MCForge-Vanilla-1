@@ -50,6 +50,9 @@
     <Compile Include="Information\CmdCalculate.cs" />
     <Compile Include="Information\CmdOpRules.cs" />
     <Compile Include="Information\CmdRules.cs" />
+    <Compile Include="Misc\CmdAgree.cs" />
+    <Compile Include="Misc\CmdDisagree.cs" />
+    <Compile Include="Misc\CmdMe.cs" />
     <Compile Include="Misc\CmdVote.cs" />
     <Compile Include="Moderation\CmdSay.cs" />
     <Compile Include="Moderation\CmdVoteKick.cs" />
