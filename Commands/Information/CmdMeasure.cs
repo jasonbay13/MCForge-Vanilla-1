@@ -34,10 +34,14 @@ namespace CommandDll
             CatchPos cpos = new CatchPos();
             if (args.Length == 1)
             {
-                cpos.ignore = Blocks.NameToByte(args[0]);
-                if (cpos.ignore == (byte)(Blocks.Types.zero))
+                try
                 {
-                    p.SendMessage("Could not find block specified.");
+                    cpos.ignore = Blocks.NameToByte(args[0]);
+                }
+                catch
+                {
+                    p.SendMessage("Could not find block specified");
+                    return;
                 }
                 p.SendMessage("Ignoring " + args[0]);
             }

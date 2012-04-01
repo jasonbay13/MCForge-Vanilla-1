@@ -108,7 +108,10 @@ namespace MCForge
 		/// True if the player has completed the login process
 		/// </summary>
 		public bool isLoggedIn = false;
-
+        /// <summary>
+        /// True if player is using static commands
+        /// </summary>
+        public bool staticCommands = false;
 		/// <summary>
 		/// This players current level
 		/// </summary>
@@ -1007,6 +1010,7 @@ namespace MCForge
 			GlobalDie();
 
 			Server.Log("[System]: " + USERNAME + " Has DC'ed (" + lastPacket + ")", ConsoleColor.Gray, ConsoleColor.Black);
+            //UniversalChat(color + USERNAME + " has disconnected.");
 
 			pingTimer.Stop();
 

@@ -41,6 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building\CmdClick.cs" />
+    <Compile Include="Building\CmdReplace.cs" />
+    <Compile Include="Building\CmdReplaceNot.cs" />
+    <Compile Include="Building\CmdReplaceAll.cs" />
     <Compile Include="CmdDatapassExample.cs" />
     <Compile Include="Building\CmdPlace.cs" />
     <Compile Include="Information\CmdDevs.cs" />
