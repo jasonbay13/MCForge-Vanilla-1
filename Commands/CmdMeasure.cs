@@ -26,9 +26,9 @@ namespace CommandDll
         public string Name { get { return "Measure"; } }
 		public CommandTypes Type { get { return CommandTypes.information; } }
 		public string Author { get { return "Gamemakergm"; } }
-		public int Version { get { return 1; } }
+	    public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
-		public void Use(Player p, string[] args)
+        public void Use(Player p, string[] args)
 		{
             CatchPos cpos = new CatchPos();
             if (args.Length == 1)
@@ -43,15 +43,15 @@ namespace CommandDll
             else
             cpos.ignore = (byte)(Blocks.Types.zero); //So it doesn't ignore air.
             p.SendMessage("Place two blocks to determine the edges.");
-			p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
+            p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
 		}
-		public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
+        public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
 		{
             CatchPos cpos = (CatchPos)DataPass;
-			cpos.FirstBlock = new Point3(x, z, y);
-			p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock2), (object)cpos);
+            cpos.FirstBlock = new Point3(x, z, y);
+            p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock2), (object)cpos);
 		}
-		public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
+        public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
 		{
             CatchPos cpos = (CatchPos)DataPass;
             Point3 FirstBlock = cpos.FirstBlock;
@@ -66,14 +66,14 @@ namespace CommandDll
                             count++;
                         }
                     }
-            p.SendMessage(count + " blocks are between (" + FirstBlock.x + ", " + FirstBlock.z + ", " + FirstBlock.y + ") and (" + x + ", " + z + ", " + y + ")");
-        }
-       
+        p.SendMessage(count + " blocks are between (" + FirstBlock.x + ", " + FirstBlock.z + ", " + FirstBlock.y + ") and (" + x + ", " + z + ", " + y + ")");
+    }
+
         public void Help(Player p)
-		{
+        {
             p.SendMessage("/measure [ignore] - Measures all the blocks between two points.");
             p.SendMessage("[ignore] - Enter a block to ignore them");
-		}
+        }
 
         public struct CatchPos
         {
@@ -82,9 +82,9 @@ namespace CommandDll
             public int count;
         }
 
-		public void Initialize()
-		{
-			Command.AddReference(this, new string[2] { "measure", "ms" });
-		}
-	}
+        public void Initialize()
+        {
+            Command.AddReference(this, new string[2] { "measure", "ms" });
+        }
+    }
 }
