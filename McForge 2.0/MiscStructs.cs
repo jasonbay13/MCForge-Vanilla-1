@@ -123,6 +123,6 @@ namespace MCForge
 		building,
 		mod,
 		misc,
-
+        information,
 	}
 }

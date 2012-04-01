@@ -23,7 +23,7 @@ namespace MCForge
 	/// <summary>
 	/// A class that contains blocks / custom blocks and methods to work with them.
 	/// </summary>
-	class Blocks
+	public class Blocks
 	{
 		/// <summary>
 		/// An enumeration of all the default Minecraft blocks
@@ -91,6 +91,15 @@ namespace MCForge
 		{
 			return "";
 		}
+        /// <summary>
+        /// This function takes in a block name and gives out its byte.
+        /// </summary>
+        /// <param name="name"></param> Name of the block.
+        /// <returns></returns>
+        public static byte NameToByte(string name)
+        {
+            return (byte)((Blocks.Types)Enum.Parse(typeof(Blocks.Types), name));
+        }
 
 		/// <summary>
 		/// A DYNAMIC dictionary of all the CustomBlocks in the server.
