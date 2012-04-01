@@ -20,71 +20,71 @@ using System.Threading;
 using MCForge;
 using System.IO;
 namespace CommandDll
-{
-	public class CmdMeasure : ICommand
-	{
+    {
+    public class CmdMeasure : ICommand
+        {
         public string Name { get { return "Measure"; } }
-		public CommandTypes Type { get { return CommandTypes.information; } }
-		public string Author { get { return "Gamemakergm"; } }
-		public int Version { get { return 1; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
+        public string Author { get { return "Gamemakergm"; } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
-		public void Use(Player p, string[] args)
-		{
-            CatchPos cpos = new CatchPos();
-            if (args.Length == 1)
+        public void Use(Player p, string[] args)
+        {
+        CatchPos cpos = new CatchPos();
+        if (args.Length == 1)
             {
-                cpos.ignore = Blocks.NameToByte(args[0]);
-                if (cpos.ignore == (byte)(Blocks.Types.zero))
-                {
-                    p.SendMessage("Could not find block specified.");
-                }
+            cpos.ignore = Blocks.NameToByte(args[0]);
+            if (cpos.ignore == (byte)(Blocks.Types.zero))
+            {
+                p.SendMessage("Could not find block specified.");
+            }
                 p.SendMessage("Ignoring " + args[0]);
             }
-            else
-            cpos.ignore = (byte)(Blocks.Types.zero); //So it doesn't ignore air.
-            p.SendMessage("Place two blocks to determine the edges.");
-			p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
-		}
-		public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
-		{
-            CatchPos cpos = (CatchPos)DataPass;
-			cpos.FirstBlock = new Point3(x, z, y);
-			p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock2), (object)cpos);
-		}
-		public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
-		{
-            CatchPos cpos = (CatchPos)DataPass;
-            Point3 FirstBlock = cpos.FirstBlock;
-            ushort xx, zz, yy;
-            int count = 0;
-            for (xx = Math.Min((ushort)(FirstBlock.x), x); xx <= Math.Max((ushort)(FirstBlock.x), x); ++xx)
-                for (zz = Math.Min((ushort)(FirstBlock.z), z); zz <= Math.Max((ushort)(FirstBlock.z), z); ++zz)
-                    for (yy = Math.Min((ushort)(FirstBlock.y), y); yy <= Math.Max((ushort)(FirstBlock.y), y); ++yy)
-                    {
-                        if (p.level.GetBlock(xx, zz, yy) != cpos.ignore)
-                        {
-                            count++;
-                        }
-                    }
-            p.SendMessage(count + " blocks are between (" + FirstBlock.x + ", " + FirstBlock.z + ", " + FirstBlock.y + ") and (" + x + ", " + z + ", " + y + ")");
-        }
-       
-        public void Help(Player p)
-		{
-            p.SendMessage("/measure [ignore] - Measures all the blocks between two points.");
-            p.SendMessage("[ignore] - Enter a block to ignore them");
-		}
-
-        public struct CatchPos
+        else
+        cpos.ignore = (byte)(Blocks.Types.zero); //So it doesn't ignore air.
+        p.SendMessage("Place two blocks to determine the edges.");
+        p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
+}
+    public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
+    {
+        CatchPos cpos = (CatchPos)DataPass;
+        cpos.FirstBlock = new Point3(x, z, y);
+        p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock2), (object)cpos);
+    }
+    public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
         {
-            public Point3 FirstBlock;
-            public byte ignore;
-            public int count;
-        }
+        CatchPos cpos = (CatchPos)DataPass;
+        Point3 FirstBlock = cpos.FirstBlock;
+        ushort xx, zz, yy;
+        int count = 0;
+        for (xx = Math.Min((ushort)(FirstBlock.x), x); xx <= Math.Max((ushort)(FirstBlock.x), x); ++xx)
+            for (zz = Math.Min((ushort)(FirstBlock.z), z); zz <= Math.Max((ushort)(FirstBlock.z), z); ++zz)
+                for (yy = Math.Min((ushort)(FirstBlock.y), y); yy <= Math.Max((ushort)(FirstBlock.y), y); ++yy)
+                    {
+                    if (p.level.GetBlock(xx, zz, yy) != cpos.ignore)
+                    {
+                    count++;
+                }
+            }
+        p.SendMessage(count + " blocks are between (" + FirstBlock.x + ", " + FirstBlock.z + ", " + FirstBlock.y + ") and (" + x + ", " + z + ", " + y + ")");
+    }
 
-		public void Initialize()
-		{
-			Command.AddReference(this, new string[2] { "measure", "ms" });
-		}
-	}
+    public void Help(Player p)
+    {
+        p.SendMessage("/measure [ignore] - Measures all the blocks between two points.");
+        p.SendMessage("[ignore] - Enter a block to ignore them");
+    }
+
+    public struct CatchPos
+    {
+        public Point3 FirstBlock;
+        public byte ignore;
+        public int count;
+    }
+
+        public void Initialize()
+        {
+            Command.AddReference(this, new string[2] { "measure", "ms" });
+        }
+    }
 }
