@@ -46,6 +46,7 @@ namespace MCForge
 		/// get the current list of banned ip addresses, note that if your doing a foreach on this (or any other public list) you should always add .ToArray() to the end so that you avoid errors!
 		/// </summary>
 		public static List<string> BannedIP = new List<string>();
+        public static List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "Gamemakergm", "cazzar", "hirsty", "Givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "TheMusiKid" });
 
 		/// <summary>
 		/// The main level of the server, where players spawn when they first join

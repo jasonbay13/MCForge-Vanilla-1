@@ -60,6 +60,8 @@ namespace MCForge
 		/// </summary>
 		public string USERNAME;
 		protected string _username; //Lowercase Username
+
+        public string lastcmd; //Last command the player used
 		/// <summary>
 		/// This is the players LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
 		/// </summary>
@@ -300,6 +302,7 @@ namespace MCForge
 				//TODO Database Stuff
 
 				Server.Log("[System]: " + ip + " logging in as " + USERNAME + ".", ConsoleColor.Green, ConsoleColor.Black);
+                UniversalChat(USERNAME + " joined the game!");
 
 				CheckDuplicatePlayers(USERNAME);
 
@@ -804,6 +807,7 @@ namespace MCForge
 				{
 					ICommand cmd = Command.Commands[name];
 					cmd.Use(this, sendArgs);
+                    lastcmd = name;
 				});
 			}
 
