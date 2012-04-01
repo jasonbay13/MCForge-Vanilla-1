@@ -24,18 +24,10 @@ namespace CommandDll
 	public class CmdMeasure : ICommand
 	{
         public string Name { get { return "Measure"; } }
-
-		CommandTypes _Type = CommandTypes.information;
-		public CommandTypes Type { get { return _Type; } }
-
-		string _Author = "Gamemakergm";
-		public string Author { get { return _Author; } }
-
-		int _Version = 1;
-		public int Version { get { return _Version; } }
-
-		string _CUD = "";
-        public string CUD { get { return _CUD; } }
+		public CommandTypes Type { get { return CommandTypes.information; } }
+		public string Author { get { return "Gamemakergm"; } }
+		public int Version { get { return 1; } }
+        public string CUD { get { return ""; } }
 		public void Use(Player p, string[] args)
 		{
             CatchPos cpos = new CatchPos();
