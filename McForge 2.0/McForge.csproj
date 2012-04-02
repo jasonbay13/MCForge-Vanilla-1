@@ -49,7 +49,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Cancelable.cs" />
+    <Compile Include="API\EventHelper.cs" />
+    <Compile Include="API\Player\OnPlayerConnect.cs" />
+    <Compile Include="API\Player\PlayerEvent.cs" />
+    <Compile Include="API\Priority.cs" />
+    <Compile Include="API\System\SystemEvent.cs" />
+    <Compile Include="API\World\WorldEvent.cs" />
     <Compile Include="Blocks.cs" />
+    <Compile Include="API\Event.cs" />
     <Compile Include="Gui\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -23,6 +23,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Windows.Forms;
+using MCForge.API.PlayerEvent;
 
 namespace MCForge
 {
@@ -316,6 +317,9 @@ namespace MCForge
 				byte type = message[129];
 				if (!VerifyAccount(USERNAME, verify)) return;
 				if (version != ServerSettings.version) { SKick("Wrong Version!."); return; }
+
+                OnPlayerConnect e = new OnPlayerConnect(this);
+                e.Call();
 
 				//TODO Database Stuff
 
