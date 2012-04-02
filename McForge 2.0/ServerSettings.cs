@@ -20,23 +20,28 @@ using System.Text;
 
 namespace MCForge
 {
-	class ServerSettings
+    class ServerSettings
     {
         public static int port = 25565;
-		public static string configPath = "config/";
+        public static string configPath = "config/";
 
-		public static string[] WelcomeText = new string[1] { "Welcome to my Server." };
+        public static string[] WelcomeText = new string[1] { "Welcome to my Server." };
 
-		public static bool VerifyAccounts = false;
-		public static string salt = "";
-		public static string password = "Ta33fa30do";
-		public static byte MaxPlayers = 10;
-		public static byte version = 7;
+        public static bool VerifyAccounts = false;
+        public static string salt = "";
+        public static string password = "Ta33fa30do";
+        public static byte MaxPlayers = 10;
+        public static byte version = 7;
 
-		public static string MOTD = "Testing 1.. 2..";
-		public static string NAME = "Test Server... +hax";
+        public static string MOTD = "Testing 1.. 2..";
+        public static string NAME = "Test Server... +hax";
 
         public static bool EnableGUI = false;
+
+        /// <summary>
+        /// Is message appending enabled?
+        /// </summary>
+        public static bool Appending = true;
 
         public void Load()
         {
