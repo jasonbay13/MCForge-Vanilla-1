@@ -1,0 +1,8 @@
+C:\Users\Eddie\Desktop\MCForge-Vanilla\Plugins\bin\Release\Plugins.dll
+C:\Users\Eddie\Desktop\MCForge-Vanilla\Plugins\bin\Release\Plugins.pdb
+C:\Users\Eddie\Desktop\MCForge-Vanilla\Plugins\bin\Release\MCForge.exe
+C:\Users\Eddie\Desktop\MCForge-Vanilla\Plugins\bin\Release\MCForge.pdb
+C:\Users\Eddie\Desktop\MCForge-Vanilla\Plugins\bin\Release\MCForge.xml
+C:\Users\Eddie\Desktop\MCForge-Vanilla\Plugins\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Eddie\Desktop\MCForge-Vanilla\Plugins\obj\Release\Plugins.dll
+C:\Users\Eddie\Desktop\MCForge-Vanilla\Plugins\obj\Release\Plugins.pdb
