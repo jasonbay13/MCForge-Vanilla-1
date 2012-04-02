@@ -45,7 +45,7 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/oprules - Shows the server's operator rules");
+            p.SendMessage("/oprules [player] - Shows the server's operator rules");
             p.SendMessage("Use a player's name to send the oprules to that player!");
         }
 
