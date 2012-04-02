@@ -268,10 +268,12 @@ namespace MCForge.Entity
             try
             {
                 int length = p.socket.EndReceive(result);
-                if (length == 0) { 
+                if (length == 0)
+                {
                     p.CloseConnection();
                     UniversalChat(p.color + p.USERNAME + " has disconnected.");
-                    return; }
+                    return;
+                }
                 byte[] b = new byte[p.buffer.Length + length];
                 Buffer.BlockCopy(p.buffer, 0, b, 0, p.buffer.Length);
                 Buffer.BlockCopy(p.tempBuffer, 0, b, p.buffer.Length, length);
@@ -1408,5 +1410,5 @@ namespace MCForge.Entity
             SendTeleport = 8,
 
         }
-	}
+    }
 }
