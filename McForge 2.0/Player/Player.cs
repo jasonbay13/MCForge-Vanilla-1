@@ -30,6 +30,9 @@ using MCForge.Interface.Command;
 
 namespace MCForge.Entity
 {
+    /// <summary>
+    /// The player class, this contains all player information.
+    /// </summary>
     public class Player
     {
         #region Variables
@@ -63,7 +66,6 @@ namespace MCForge.Entity
         /// The player's real username
         /// </summary>
         public string USERNAME;
-        protected string _username; //Lowercase Username
         /// <summary>
         /// Last command the player used.
         /// </summary>
@@ -94,6 +96,10 @@ namespace MCForge.Entity
         /// </summary>
         public string voicestring = "";
         /// <summary>
+        /// Used for player's LOWERCASE username.
+        /// </summary>
+        protected string _username; //Lowercase Username
+        /// <summary>
         /// This is the player's LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
         /// </summary>       
         public string username //Lowercase Username feild
@@ -114,6 +120,9 @@ namespace MCForge.Entity
         public string storedMessage = "";
 
         protected System.Timers.Timer loginTimer = new System.Timers.Timer(30000);
+        /// <summary>
+        /// This sends the ping packet to the player. This is how we know when a player disconnects.
+        /// </summary>
         protected System.Timers.Timer pingTimer = new System.Timers.Timer(1000);
         protected byte[] buffer = new byte[0];
         protected byte[] tempBuffer = new byte[0xFF];
@@ -259,7 +268,10 @@ namespace MCForge.Entity
             try
             {
                 int length = p.socket.EndReceive(result);
-                if (length == 0) { p.CloseConnection(); return; }
+                if (length == 0) { 
+                    p.CloseConnection();
+                    UniversalChat(p.color + p.USERNAME + " has disconnected.");
+                    return; }
                 byte[] b = new byte[p.buffer.Length + length];
                 Buffer.BlockCopy(p.buffer, 0, b, 0, p.buffer.Length);
                 Buffer.BlockCopy(p.tempBuffer, 0, b, p.buffer.Length, length);
@@ -810,7 +822,7 @@ namespace MCForge.Entity
         /// <summary>
         /// Sends the specified player to the specified coordinates.
         /// </summary>
-        /// <param name="coord"></param>Point3 coordinate to send to.
+        /// <param name="_pos"></param>Point3 coordinate to send to.
         /// <param name="_rot"></param>Rot to send to.
         public void SendToPos(Point3 _pos, byte[] _rot)
         {
@@ -1014,19 +1026,36 @@ namespace MCForge.Entity
         #endregion
 
         #region PluginStuff
+        /// <summary>
+        /// This void catches the new blockchange a player does.
+        /// </summary>
+        /// <param name="change">The BlockChangeDelegate that will be executed on blockchange.</param>
+        /// <param name="data">A passback object that can be used for a command to send data back to itself for use</param>        
         public void CatchNextBlockchange(BlockChangeDelegate change, object data)
         {
             PassBackData = data;
             nextChat = null;
             blockChange = change;
         }
+        /// <summary>
+        /// This delegate is used for when a command wants to be activated the next time the player sends a message.
+        /// </summary>
+        /// <param name="chat">The NextChatDelegate that will be executed on the next chat.</param>
+        /// <param name="data">A passback object that can be used for a command to send data back to itself for use</param>
         public void CatchNextChat(NextChatDelegate chat, object data)
         {
             PassBackData = data;
             blockChange = null;
             nextChat = chat;
         }
-        public void click(ushort x, ushort z, ushort y, byte type)
+        /// <summary>
+        /// Fakes a click by invoking a blockchange event.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="z"></param>
+        /// <param name="y"></param>
+        /// <param name="type"></param>
+        public void Click(ushort x, ushort z, ushort y, byte type)
         {
             if (blockChange != null)
             {
@@ -1093,7 +1122,9 @@ namespace MCForge.Entity
                 }
             } return lines;
         }
-
+        /// <summary>
+        /// Spawns this player to all other players in the server.
+        /// </summary>
         protected void SpawnThisPlayerToOtherPlayers()
         {
             foreach (Player p in Server.Players.ToArray())
@@ -1102,6 +1133,9 @@ namespace MCForge.Entity
                 p.SendSpawn(this);
             }
         }
+        /// <summary>
+        /// Spawns all other players of the server to this player.
+        /// </summary>
         protected void SpawnOtherPlayersForThisPlayer()
         {
             foreach (Player p in Server.Players)

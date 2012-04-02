@@ -28,10 +28,9 @@ namespace MCForge.Interface.Plugin
         }
 
         /// <summary>
-        /// Add an array of referances to your command here
+        /// Add an array of references to your command here
         /// </summary>
-        /// <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
-        /// <param name="reference">the array of strings you want players to type to use your command</param>
+        /// <param name="plugin">The plugin d that this reference... references, you should most likely use 'this'</param>    
         public static void AddReference(IPlugin plugin)
         {
             if (plugin.GetType().GetInterface("ICommand", false) != null) //lolwut

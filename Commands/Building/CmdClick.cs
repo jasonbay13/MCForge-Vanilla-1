@@ -95,7 +95,7 @@ namespace CommandDll
                 return;
             }
 
-            p.click((ushort)click.x, (ushort)click.z, (ushort)click.y, (byte)(Blocks.Types.stone));
+            p.Click((ushort)click.x, (ushort)click.z, (ushort)click.y, (byte)(Blocks.Types.stone));
             p.SendMessage("Click &b(" + click.x + ", " + click.z + ", " + click.y + ").");
         }
 
