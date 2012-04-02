@@ -83,6 +83,10 @@ namespace MCForge
         /// </summary>
         public bool voiced = false;
         /// <summary>
+        /// Derermines if the player is jokered
+        /// </summary>
+        public bool jokered = false;
+        /// <summary>
         /// Appears in front of player's name if he is voiced
         /// </summary>
         public string voicestring = "";
@@ -516,7 +520,13 @@ namespace MCForge
             //Meep is used above for //Command
             Meep:
             if (muted) { SendMessage("You are muted!"); return; }
-            if (Server.moderation && !voiced) { SendMessage("You can't talk during chat moderation!"); return; }
+            if (Server.moderation && !voiced && !Server.devs.Contains(USERNAME)) { SendMessage("You can't talk during chat moderation!"); return; }
+            if (jokered) 
+            {
+                Random r = new Random(); 
+                int a = r.Next(0, Server.jokermessages.Count);
+                incomingText = Server.jokermessages[a];
+            }
             //Message appending stuff.
             if (ServerSettings.Appending == true)
             {
@@ -565,7 +575,7 @@ namespace MCForge
 
             Server.Log("<" + USERNAME + "> " + incomingText);
 
-            UniversalChat(USERNAME + ": &f" + incomingText);
+            UniversalChat(voicestring + USERNAME + ": &f" + incomingText);
         }
         #endregion
         #region Outgoing Packets

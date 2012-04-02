@@ -56,6 +56,8 @@ namespace MCForge
         /// List of players that agreed to the rules
         /// </summary>
         public static List<string> agreed = new List<string>();
+
+        public static List<string> jokermessages = new List<string>();
         /// <summary>
         /// The main level of the server, where players spawn when they first join
         /// </summary>
@@ -122,8 +124,15 @@ namespace MCForge
 
             //Create the directories we need...
             if (!Directory.Exists("text")) { Directory.CreateDirectory("text"); Log("Created text directory...", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); Log("Created agreed.txt", ConsoleColor.White, ConsoleColor.Black); }
-
+            if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); Log("[File] Created agreed.txt", ConsoleColor.White, ConsoleColor.Black); }
+            if (!File.Exists("text/jokermessages.txt")) 
+            { 
+                File.Create("text/jokermessages.txt").Close();
+                Log("[File] Created jokermessages.txt", ConsoleColor.White, ConsoleColor.Black);
+                string text = "I am a pony" + Environment.NewLine + "Rainbow Dash <3" + Environment.NewLine + "I like trains!";
+                File.WriteAllText("text/jokermessages.txt", text);
+                Log("[File] Added default messages to jokermessages.txt", ConsoleColor.White, ConsoleColor.Black);
+            }
             try
             {
                 string[] lines = File.ReadAllLines("text/agreed.txt");

@@ -57,6 +57,7 @@
     <Compile Include="Information\CmdRules.cs" />
     <Compile Include="Misc\CmdAgree.cs" />
     <Compile Include="Misc\CmdDisagree.cs" />
+    <Compile Include="Misc\CmdJoker.cs" />
     <Compile Include="Misc\CmdMe.cs" />
     <Compile Include="Misc\CmdVote.cs" />
     <Compile Include="Moderation\CmdKick.cs" />

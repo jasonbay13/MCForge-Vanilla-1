@@ -33,7 +33,7 @@ namespace CommandDll
             if (args.Length == 0) { who = null; }
             else { who = Player.Find(args[0]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
-            if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("Cannot votekick a MCForge Developer!"); return; }
+            if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("You can't votekick a MCForge Developer!"); return; }
             Server.kicker = who;
             ResetVotes();
             Server.voting = true;
