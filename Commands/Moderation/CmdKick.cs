@@ -16,32 +16,34 @@ using MCForge;
 
 namespace CommandDll
 {
-    public class CmdMe : ICommand
+    public class CmdKick : ICommand
     {
-        public string Name { get { return "Me"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public string Name { get { return "Kick"; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
 
         public void Use(Player p, string[] args)
         {
-            if (Server.voting) { p.SendMessage("Cannot use /me while voting is in progress!"); return; }
-            if (p.muted) { p.SendMessage("Cannot use /me while muted!"); return; }
-            if (args.Length == 0) { p.SendMessage("You!"); return; }
+            if (args.Length == 0) { Help(p); return; }
+            Player who = Player.Find(args[0]); args[0] = "";
             string message = null;
-            foreach (string s in args) { message += s + " "; }
-            Player.UniversalChat("*" + p.USERNAME + " " + message);
+            if (args.Length == 1) { message = "Kicked by " + p.USERNAME; }
+            else { foreach (string a in args) { message += a + " "; } }
+            if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("You can't kick a MCForge Developer!"); return; }
+            who.Kick(message);
+            Player.UniversalChat(who.USERNAME + " was kicked by " + p.USERNAME);
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/me - You");
+            p.SendMessage("/kick <player> [message] - kicks a player with an optional message!");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "me" });
+            Command.AddReference(this, new string[2] { "kick", "k" });
         }
     }
 }

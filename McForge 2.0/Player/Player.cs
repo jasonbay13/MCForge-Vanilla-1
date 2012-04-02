@@ -75,8 +75,20 @@ namespace MCForge
         /// </summary>
         public bool readrules = false;
         /// <summary>
-        /// This is the player's LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
+        /// Is the player muted
         /// </summary>
+        public bool muted = false;
+        /// <summary>
+        /// Does the player have voice status
+        /// </summary>
+        public bool voiced = false;
+        /// <summary>
+        /// Appears in front of player's name if he is voiced
+        /// </summary>
+        public string voicestring = "";
+        /// <summary>
+        /// This is the player's LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
+        /// </summary>       
         public string username //Lowercase Username feild
         {
             get
@@ -503,7 +515,8 @@ namespace MCForge
             }
             //Meep is used above for //Command
             Meep:
-
+            if (muted) { SendMessage("You are muted!"); return; }
+            if (Server.moderation && !voiced) { SendMessage("You can't talk during chat moderation!"); return; }
             //Message appending stuff.
             if (ServerSettings.Appending == true)
             {

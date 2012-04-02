@@ -12,37 +12,46 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
 using MCForge;
+using System.IO;
 
 namespace CommandDll
 {
-    public class CmdMe : ICommand
+    public class CmdModerate : ICommand
     {
-        public string Name { get { return "Me"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public string Name { get { return "Moderate"; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
 
         public void Use(Player p, string[] args)
         {
-            if (Server.voting) { p.SendMessage("Cannot use /me while voting is in progress!"); return; }
-            if (p.muted) { p.SendMessage("Cannot use /me while muted!"); return; }
-            if (args.Length == 0) { p.SendMessage("You!"); return; }
-            string message = null;
-            foreach (string s in args) { message += s + " "; }
-            Player.UniversalChat("*" + p.USERNAME + " " + message);
+            if (Server.moderation)
+            {
+                Server.moderation = false;
+                Player.UniversalChat("Chat moderation has been disabled!"); return;
+            }
+            else
+            {
+                Server.moderation = true;
+                Player.UniversalChat("Chat moderation has been enabled!"); return;
+            }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/me - You");
+            p.SendMessage("/moderate - Moderates the chat. Only voiced players will be able to speak!");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "me" });
+            Command.AddReference(this, new string[1] { "moderate" });
         }
     }
 }
-
