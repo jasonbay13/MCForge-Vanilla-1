@@ -480,6 +480,13 @@ namespace MCForge
             while (incomingText.Contains("  "))
                 incomingText.Replace("  ", " ");
 
+            //This allows people to use //Command and have it appear as /Command in the chat.
+            if (incomingText[0] == '/' && incomingText[1] == '/')
+            {
+                incomingText = incomingText.Remove(0, 1);
+                goto Meep;
+            }
+
             if (incomingText[0] == '/')
             {
                 incomingText = incomingText.Remove(0, 1);
@@ -490,6 +497,10 @@ namespace MCForge
 
                 return;
             }
+            //Meep is used above for //Command
+            Meep:
+
+            //Message appending stuff.
             if (ServerSettings.Appending == true)
             {
                 if (storedMessage != "")
@@ -513,7 +524,6 @@ namespace MCForge
                     return;
                 }
             }
-
             if (nextChat != null)
             {
                 NextChatDelegate tempNextChat = nextChat;
