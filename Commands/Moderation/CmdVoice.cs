@@ -19,35 +19,37 @@ using System.Text;
 using System.Threading;
 using MCForge;
 using System.IO;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
 
 namespace CommandDll
 {
-    public class CmdDevs : ICommand
+    public class CmdVoice : ICommand
     {
-        public string Name { get { return "Developers"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public string Name { get { return "Voice"; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
 
         public void Use(Player p, string[] args)
         {
-            string send = Colors.blue + "MCForge Development Team: ";
-            foreach (string dev in Server.devs) { send += Colors.maroon + dev + Colors.lime + ", "; }
-            p.SendMessage(send.Trim().TrimEnd(','));
+            Player who = null;
+            if (args.Length == 0) { who = p; }
+            else { who = Player.Find(args[0]); }
+            if (who == null) { p.SendMessage("Cannot find that player!"); return; }
+            if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("Cannot change MCForge Developer's voice status!"); return; }
+            if (who.voiced) { who.voiced = false; who.voicestring = ""; Player.UniversalChat(who.USERNAME + " is no longer voiced!"); return; }
+            else { who.voiced = true; who.voicestring = "+ "; Player.UniversalChat(who.USERNAME + " is now voiced!"); return; }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/devs - Shows the MCForge Development Team");
+            p.SendMessage("/voice <player> - Voice a player");
+            p.SendMessage("Voiced players will be able to speak during chat moderation!");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "developers", "devs" });
+            Command.AddReference(this, new string[1] { "voice" });
         }
     }
 }

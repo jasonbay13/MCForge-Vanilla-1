@@ -12,42 +12,39 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using MCForge;
-using System.IO;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
 
 namespace CommandDll
 {
-    public class CmdDevs : ICommand
+    public class CmdKick : ICommand
     {
-        public string Name { get { return "Developers"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public string Name { get { return "Kick"; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
 
         public void Use(Player p, string[] args)
         {
-            string send = Colors.blue + "MCForge Development Team: ";
-            foreach (string dev in Server.devs) { send += Colors.maroon + dev + Colors.lime + ", "; }
-            p.SendMessage(send.Trim().TrimEnd(','));
+            if (args.Length == 0) { Help(p); return; }
+            Player who = Player.Find(args[0]); args[0] = "";
+            string message = null;
+            if (args.Length == 1) { message = "Kicked by " + p.USERNAME; }
+            else { foreach (string a in args) { message += a + " "; } }
+            if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("You can't kick a MCForge Developer!"); return; }
+            who.Kick(message);
+            Player.UniversalChat(who.USERNAME + " was kicked by " + p.USERNAME);
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/devs - Shows the MCForge Development Team");
+            p.SendMessage("/kick <player> [message] - kicks a player with an optional message!");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "developers", "devs" });
+            Command.AddReference(this, new string[2] { "kick", "k" });
         }
     }
 }
+

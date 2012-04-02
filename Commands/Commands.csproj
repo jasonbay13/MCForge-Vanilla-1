@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\McForge 2.0\bin\Debug\</OutputPath>
+    <OutputPath>..\MCForge 2.0\bin\Debug\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -44,6 +44,9 @@
     <Compile Include="Building\CmdReplace.cs" />
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Building\CmdReplaceAll.cs" />
+    <Compile Include="Misc\CmdSummon.cs" />
+    <Compile Include="Moderation\CmdSetSpawn.cs" />
+    <Compile Include="Misc\CmdFly.cs" />
     <Compile Include="CmdDatapassExample.cs" />
     <Compile Include="Building\CmdPlace.cs" />
     <Compile Include="Information\CmdDevs.cs" />
@@ -57,14 +60,21 @@
     <Compile Include="Information\CmdRules.cs" />
     <Compile Include="Misc\CmdAgree.cs" />
     <Compile Include="Misc\CmdDisagree.cs" />
+    <Compile Include="Misc\CmdJoker.cs" />
     <Compile Include="Misc\CmdMe.cs" />
     <Compile Include="Misc\CmdVote.cs" />
+    <Compile Include="Moderation\CmdKick.cs" />
+    <Compile Include="Moderation\CmdModerate.cs" />
+    <Compile Include="Moderation\CmdMute.cs" />
     <Compile Include="Moderation\CmdSay.cs" />
+    <Compile Include="Moderation\CmdVoice.cs" />
     <Compile Include="Moderation\CmdVoteKick.cs" />
+    <Compile Include="Misc\CmdSpawn.cs" />
+    <Compile Include="Misc\CmdTeleport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\McForge 2.0\MCForge.csproj">
+    <ProjectReference Include="..\MCForge 2.0\MCForge.csproj">
       <Project>{EDC9892F-BBA2-4043-9FD9-94C0BA7D9552}</Project>
       <Name>MCForge</Name>
     </ProjectReference>

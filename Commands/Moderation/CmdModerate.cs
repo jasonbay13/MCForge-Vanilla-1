@@ -19,35 +19,39 @@ using System.Text;
 using System.Threading;
 using MCForge;
 using System.IO;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
 
 namespace CommandDll
 {
-    public class CmdDevs : ICommand
+    public class CmdModerate : ICommand
     {
-        public string Name { get { return "Developers"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public string Name { get { return "Moderate"; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
 
         public void Use(Player p, string[] args)
         {
-            string send = Colors.blue + "MCForge Development Team: ";
-            foreach (string dev in Server.devs) { send += Colors.maroon + dev + Colors.lime + ", "; }
-            p.SendMessage(send.Trim().TrimEnd(','));
+            if (Server.moderation)
+            {
+                Server.moderation = false;
+                Player.UniversalChat("Chat moderation has been disabled!"); return;
+            }
+            else
+            {
+                Server.moderation = true;
+                Player.UniversalChat("Chat moderation has been enabled!"); return;
+            }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/devs - Shows the MCForge Development Team");
+            p.SendMessage("/moderate - Moderates the chat. Only voiced players will be able to speak!");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "developers", "devs" });
+            Command.AddReference(this, new string[1] { "moderate" });
         }
     }
 }

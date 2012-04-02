@@ -12,29 +12,41 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MCForge.API
+namespace MCForge
 {
-    public class EventHelper
-    {
-        internal static List<EventHelper> cache = new List<EventHelper>();
-        public object Delegate;
-        public Priority priority;
-        public Event type;
-        public EventHelper(object Delegate, Priority pri, Event type) { this.Delegate = Delegate; this.priority = pri; this.type = type; }
-        public static void Organize()
-        {
-            //TODO
-            //Organize them, Low being called first and System_Level being called last
-        }
-        public static void Push(EventHelper c)
-        {
-            cache.Add(c);
-            Organize();
-        }
-    }
+	public class PDB : IComparable<PDB>
+	{
+		public static List<PDB> DB = new List<PDB>();
+
+		string username;
+
+		/// <summary>
+		/// This allows a PDB to be compared to another PDB by looking at the username, and subsequently, it can then be sorted.
+		/// </summary>
+		/// <param name="pdb">The comparing PDB</param>
+		/// <returns>returns a comparison of the usernames</returns>
+		public int CompareTo(PDB pdb)
+		{
+			return username.CompareTo(pdb.username);
+		}
+	}
+
+	public class GDB : IComparable<GDB>
+	{
+		public static List<GDB> DB = new List<GDB>();
+
+		byte id;
+
+		public int CompareTo(GDB gdb)
+		{
+			return id.CompareTo(gdb.id);
+		}
+	}
+	
 }

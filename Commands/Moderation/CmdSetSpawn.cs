@@ -18,36 +18,38 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using MCForge;
-using System.IO;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
 
 namespace CommandDll
 {
-    public class CmdDevs : ICommand
+    public class CmdSetSpawn : ICommand
     {
-        public string Name { get { return "Developers"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
-        public string Author { get { return "Arrem"; } }
+        public string Name { get { return "SetSpawn"; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
 
         public void Use(Player p, string[] args)
         {
-            string send = Colors.blue + "MCForge Development Team: ";
-            foreach (string dev in Server.devs) { send += Colors.maroon + dev + Colors.lime + ", "; }
-            p.SendMessage(send.Trim().TrimEnd(','));
+            if (args.Count() != 0)
+            {
+                Help(p);
+                return;
+            }
+            Point3 meep = new Point3((short)(p.Pos.x / 32), (short)(p.Pos.z / 32), (short)(p.Pos.y / 32));
+            p.level.SpawnPos = meep;
+            p.level.SpawnRot = p.Rot;
+            p.SendMessage("Spawn location changed.");
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/devs - Shows the MCForge Development Team");
+            p.SendMessage("/setspawn - Sets the default spawn location");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "developers", "devs" });
+            Command.AddReference(this, "setspawn");
         }
     }
 }

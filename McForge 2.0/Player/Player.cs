@@ -478,7 +478,13 @@ namespace MCForge.Entity
 			//Get rid of whitespace
 			while (incomingText.Contains("  "))
 				incomingText.Replace("  ", " ");
-
+			
+			//This allows people to use //Command and have it appear as /Command in the chat.
+            if (incomingText[0] == '/' && incomingText[1] == '/')
+            {
+                incomingText = incomingText.Remove(0, 1);
+                goto Meep;
+            }
 			if (incomingText[0] == '/')
 			{
 				incomingText = incomingText.Remove(0, 1);
@@ -487,8 +493,43 @@ namespace MCForge.Entity
 
 				HandleCommand(args);
 
-				return;
-			}
+                return;
+            }
+
+            //Meep is used above for //Command
+        Meep:
+            if (muted) { SendMessage("You are muted!"); return; }
+            if (Server.moderation && !voiced && !Server.devs.Contains(USERNAME)) { SendMessage("You can't talk during chat moderation!"); return; }
+            if (jokered)
+            {
+                Random r = new Random();
+                int a = r.Next(0, Server.jokermessages.Count);
+                incomingText = Server.jokermessages[a];
+            }
+            //Message appending stuff.
+            if (ServerSettings.Appending == true)
+            {
+                if (storedMessage != "")
+                {
+                    if (!incomingText.EndsWith(">") && !incomingText.EndsWith("<"))
+                    {
+                        incomingText = storedMessage.Replace("|>|", " ").Replace("|<|", "") + incomingText;
+                        storedMessage = "";
+                    }
+                }
+                if (incomingText.EndsWith(">"))
+                {
+                    storedMessage += incomingText.Replace(">", "|>|");
+                    SendMessage("Message appended!");
+                    return;
+                }
+                else if (incomingText.EndsWith("<"))
+                {
+                    storedMessage += incomingText.Replace("<", "|<|");
+                    SendMessage("Message appended!");
+                    return;
+                }
+            }
 
 			if (nextChat != null)
 			{
@@ -513,6 +554,7 @@ namespace MCForge.Entity
             }
 
 			Server.Log("<" + USERNAME + "> " + incomingText);
+			UniversalChat(voicestring + USERNAME + ": &f" + incomingText);
 
 			UniversalChat(USERNAME + ": &f" + incomingText);
 		}
@@ -733,6 +775,30 @@ namespace MCForge.Entity
 			SendKick(message);
 			//CloseConnection();
 		}
+		        /// <summary>
+        /// Sends the specified player to the specified coordinates.
+        /// </summary>
+        /// <param name="coord"></param>Point3 coordinate to send to.
+        /// <param name="_rot"></param>Rot to send to.
+        public void SendToPos(Point3 _pos, byte[] _rot)
+        {
+            oldPos = Pos; oldRot = Rot;
+
+            packet pa = new packet();
+            pa.Add(packet.types.SendTeleport);
+            pa.Add(unchecked((byte)-1)); //If the ID is not greater than one it doesn't work :c
+            pa.Add(_pos.x);
+            pa.Add(_pos.y);
+            pa.Add(_pos.z);
+            pa.Add(Rot);
+            foreach (Player p in Server.Players.ToArray())
+            {
+                if (p.level == level && p.isLoggedIn && !p.isLoading)
+                {
+                    p.SendPacket(pa);
+                }
+            }
+        }
 
 		protected void UpdatePosition(bool ForceTp)
 		{
