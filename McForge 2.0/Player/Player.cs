@@ -495,7 +495,12 @@ namespace MCForge
             }
             if (incomingText.Length == 0)
                 return;
-
+            //Fixes crash
+            if (incomingText[0] == '/' && incomingText.Length == 1)
+            {
+                SendMessage("You didn't specify a command!");
+                return;
+            }
             //Get rid of whitespace
             while (incomingText.Contains("  "))
                 incomingText.Replace("  ", " ");
@@ -506,17 +511,15 @@ namespace MCForge
                 incomingText = incomingText.Remove(0, 1);
                 goto Meep;
             }
-
             if (incomingText[0] == '/')
             {
                 incomingText = incomingText.Remove(0, 1);
 
                 string[] args = incomingText.Split(' ');
-
                 HandleCommand(args);
-
                 return;
             }
+
             //Meep is used above for //Command
             Meep:
             if (muted) { SendMessage("You are muted!"); return; }
@@ -551,6 +554,7 @@ namespace MCForge
                     return;
                 }
             }
+
             if (nextChat != null)
             {
                 NextChatDelegate tempNextChat = nextChat;
@@ -572,11 +576,10 @@ namespace MCForge
                 else if (vote == "no" || vote == "n") { Server.NoVotes++; voted = true; SendMessage("Thanks for voting!"); return; }
                 else { SendMessage("Use either %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + " to vote!"); }
             }
-
             Server.Log("<" + USERNAME + "> " + incomingText);
-
             UniversalChat(voicestring + USERNAME + ": &f" + incomingText);
         }
+
         #endregion
         #region Outgoing Packets
         protected void SendPacket(packet pa)
@@ -800,6 +803,30 @@ namespace MCForge
             Server.Log("[Info]: Kicked: *" + USERNAME + "* " + message, ConsoleColor.Yellow, ConsoleColor.Black);
             SendKick(message);
             //CloseConnection();
+        }
+        /// <summary>
+        /// Sends the specified player to the specified coordinates.
+        /// </summary>
+        /// <param name="coord"></param>Point3 coordinate to send to.
+        /// <param name="_rot"></param>Rot to send to.
+        public void SendToPos(Point3 _pos, byte[] _rot)
+        {
+            oldPos = Pos; oldRot = Rot;
+
+            packet pa = new packet();
+            pa.Add(packet.types.SendTeleport);
+            pa.Add(unchecked((byte)-1)); //If the ID is not greater than one it doesn't work :c
+            pa.Add(_pos.x);
+            pa.Add(_pos.y);
+            pa.Add(_pos.z);
+            pa.Add(Rot);
+            foreach (Player p in Server.Players.ToArray())
+            {
+                if (p.level == level && p.isLoggedIn && !p.isLoading)
+                {
+                    p.SendPacket(pa);
+                }
+            }
         }
 
         protected void UpdatePosition(bool ForceTp)
@@ -1087,9 +1114,7 @@ namespace MCForge
             isOnline = false;
 
             GlobalDie();
-
             Server.Log("[System]: " + USERNAME + " Has DC'ed (" + lastPacket + ")", ConsoleColor.Gray, ConsoleColor.Black);
-            UniversalChat(color + USERNAME + " has disconnected.");
 
             pingTimer.Stop();
 

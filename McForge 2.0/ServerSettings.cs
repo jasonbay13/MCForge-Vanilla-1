@@ -20,7 +20,7 @@ using System.Text;
 
 namespace MCForge
 {
-    class ServerSettings
+    public class ServerSettings
     {
         public static int port = 25565;
         public static string configPath = "config/";
@@ -43,6 +43,10 @@ namespace MCForge
         /// Is message appending enabled?
         /// </summary>
         public static bool Appending = true;
+        /// <summary>
+        /// Allow people teleport to higher ranks?
+        /// </summary>
+        public static bool higherranktp = false;
 
         public void Load()
         {
