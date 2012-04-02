@@ -38,56 +38,56 @@ namespace CommandDll
             }
             else
             {
-                if(args[0].ToLower() == "all")
+                if (args[0].ToLower() == "all")
                 {
-                        foreach(Player pl in Server.Players.ToArray())
+                    foreach (Player pl in Server.Players.ToArray())
+                    {
+                        if (pl.level == p.level && pl != p) //Missing permissions
                         {
-                            if (pl.level == p.level && pl != p) //Missing permissions
-                            {
-                                pl.SendToPos(p.Pos, p.Rot);
-                                pl.SendMessage("You were summoned by " + p.color + p.USERNAME + Server.DefaultColor + ".");
-                            }
+                            pl.SendToPos(p.Pos, p.Rot);
+                            pl.SendMessage("You were summoned by " + p.color + p.USERNAME + Server.DefaultColor + ".");
                         }
+                    }
                     Player.UniversalChat(p.color + p.USERNAME + Server.DefaultColor + " summoned everyone!");
                     return;
                 }
                 else
                 {
-                Player who = Player.Find(args[0]);
-                if (who == null || who.isHidden) //Permissions needed
-                {
-                    p.SendMessage("Player: " + args[0] + " not found!");
-                    return;
-                }
-                else if (who == p)
-                {
-                    p.SendMessage("Why are you trying to summon yourself?");
-                    return;
-                }
-                /*else if (p.permission < who.permission)
-                {
-                    //Permissions to check ranks.
-                    p.SendMessage("You cannot summon someone ranked higher thank you!");
-                    return;
-                }*/
-                else
-                {
-                    if (p.level != who.level)
+                    Player who = Player.Find(args[0]);
+                    if (who == null || who.isHidden) //Permissions needed
                     {
-                        p.SendMessage(who.USERNAME + " is in a different level. Forcefetching has started!");
-                        Level where = p.level;
-                        //Need to use goto here
-                        Thread.Sleep(1000); //Let them load;   
-                            while (who.isLoading) 
-                            { 
-                                Thread.Sleep(250); 
+                        p.SendMessage("Player: " + args[0] + " not found!");
+                        return;
+                    }
+                    else if (who == p)
+                    {
+                        p.SendMessage("Why are you trying to summon yourself?");
+                        return;
+                    }
+                    /*else if (p.permission < who.permission)
+                    {
+                        //Permissions to check ranks.
+                        p.SendMessage("You cannot summon someone ranked higher thank you!");
+                        return;
+                    }*/
+                    else
+                    {
+                        if (p.level != who.level)
+                        {
+                            p.SendMessage(who.USERNAME + " is in a different level. Forcefetching has started!");
+                            Level where = p.level;
+                            //Need to use goto here
+                            Thread.Sleep(1000); //Let them load;   
+                            while (who.isLoading)
+                            {
+                                Thread.Sleep(250);
                             }
                         }
                     }
                     who.SendToPos(p.Pos, p.Rot);
                 }
                 return;
-        }
+            }
         }
 
         public void Help(Player p)

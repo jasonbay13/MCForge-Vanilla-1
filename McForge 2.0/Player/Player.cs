@@ -521,12 +521,12 @@ namespace MCForge
             }
 
             //Meep is used above for //Command
-            Meep:
+        Meep:
             if (muted) { SendMessage("You are muted!"); return; }
             if (Server.moderation && !voiced && !Server.devs.Contains(USERNAME)) { SendMessage("You can't talk during chat moderation!"); return; }
-            if (jokered) 
+            if (jokered)
             {
-                Random r = new Random(); 
+                Random r = new Random();
                 int a = r.Next(0, Server.jokermessages.Count);
                 incomingText = Server.jokermessages[a];
             }
