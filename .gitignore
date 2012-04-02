@@ -2,5 +2,7 @@
 /McForge 2.0/obj/
 /Commands/bin/
 /Commands/obj/
+/Plugins/bin/
+/Plugins/obj/
 *.suo
 *.user
