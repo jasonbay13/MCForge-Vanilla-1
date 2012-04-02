@@ -32,7 +32,7 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            string send = Colors.blue + "MCForge Dev Team: ";
+            string send = Colors.blue + "MCForge Development Team: ";
             foreach (string dev in Server.devs) { send += Colors.maroon + dev + Colors.lime + ", "; }
             p.SendMessage(send.Trim().TrimEnd(','));
         }
