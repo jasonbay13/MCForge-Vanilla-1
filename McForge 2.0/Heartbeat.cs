@@ -21,13 +21,13 @@ namespace MCForge.Core
         static string minecraftHeartbeat(int port, string serverName, bool Public, string salt, int onlineUsers, byte maxUsers, byte verson)
         {
             string URL = "";
-            string requestURL = 
+            string requestURL =
                 "http://www.minecraft.net/heartbeat.jsp?port=" + port +
-                "&max=" + maxUsers + 
-                "&name=" + System.Web.HttpUtility.HtmlEncode(serverName) + 
+                "&max=" + maxUsers +
+                "&name=" + System.Net.WebUtility.HtmlEncode(serverName) +
                 "&public=" + Public +
-                "&version=" + verson + 
-                "&salt=" + System.Web.HttpUtility.HtmlEncode(salt) + 
+                "&version=" + verson +
+                "&salt=" + System.Net.WebUtility.HtmlEncode(salt) +
                 "&users=" + onlineUsers;
 
             WebRequest Heartbeat = WebRequest.Create(requestURL);
