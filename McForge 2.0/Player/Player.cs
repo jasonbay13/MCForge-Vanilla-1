@@ -106,7 +106,7 @@ namespace MCForge
         /// </summary>
         public bool isLoading = true;
         /// <summary>
-        /// True if the player is Online (false if the player has disconnected
+        /// True if the player is Online (false if the player has disconnected)
         /// </summary>
         public bool isOnline = true;
         /// <summary>
@@ -117,6 +117,10 @@ namespace MCForge
         /// True if player is using static commands
         /// </summary>
         public bool staticCommands = false;
+        /// <summary>
+        /// True is the player is flying
+        /// </summary>
+        public bool isFlying = false;
         /// <summary>
         /// This players current level
         /// </summary>
@@ -696,7 +700,14 @@ namespace MCForge
             pa.Add(p.Rot);
             SendPacket(pa);
         }
-        protected void SendBlockChange(ushort x, ushort z, ushort y, byte type)
+        /// <summary>
+        /// This send a blockchange to the player only. (Not other players)
+        /// </summary>
+        /// <param name="x"></param> The position the block will be placed in (x)
+        /// <param name="z"></param> The position the block will be placed in (z)
+        /// <param name="y"></param> The position the block will be placed in (y)
+        /// <param name="type"></param> The type of block that will be placed.
+        public void SendBlockChange(ushort x, ushort z, ushort y, byte type)
         {
             if (x < 0 || y < 0 || z < 0 || x >= level.Size.x || y >= level.Size.y || z >= level.Size.z) return;
 
