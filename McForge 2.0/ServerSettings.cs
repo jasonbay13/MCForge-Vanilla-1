@@ -36,7 +36,7 @@ namespace MCForge
 		public static string MOTD = "Testing 1.. 2..";
 		public static string NAME = "Test Server... +hax";
 
-        public static bool EnableGUI = true;
+        public static bool EnableGUI = false;
 
         public void Load()
         {

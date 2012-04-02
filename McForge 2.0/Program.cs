@@ -44,9 +44,11 @@ namespace MCForge
                     string input = Console.ReadLine();
                     if (input.ToLower() == "/stop") break;
                     //You can use this to talk to the players, someone is probably going to improve this.
-                    /*else 
+                    /*else
+                    {
                         Player.UniversalChat(Colors.lime + "[Console] " + Colors.yellow + input);
-                        Server.Log("[Console] " + input, ConsoleColor.Black, ConsoleColor.White);*/
+                        Server.Log("[Console] " + input);
+                    }*/
                 }
             }
         }
