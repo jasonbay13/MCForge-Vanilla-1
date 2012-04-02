@@ -36,6 +36,8 @@ namespace MCForge
         public static bool Started = false;
 
         private static System.Timers.Timer UpdateTimer;
+        private static System.Timers.Timer HeartbeatTimer;
+        
 
         internal static List<Player> Connections = new List<Player>();
         /// <summary>
@@ -85,6 +87,11 @@ namespace MCForge
         /// </summary>
         public static string DefaultColor = "&e";
 
+        /// <summary>
+        /// The minecraft.net URL of the server
+        /// </summary>
+        public static string URL = "";
+
         internal static void Init()
         {
             StartListening();
@@ -95,6 +102,10 @@ namespace MCForge
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
             UpdateTimer.Start();
+
+            HeartbeatTimer = new System.Timers.Timer(30000); //every 30 seconds
+            HeartbeatTimer.Elapsed += delegate { Heartbeat.sendHeartbeat(); };
+            HeartbeatTimer.Start();
 
             LoadAllDlls.Init();
 
