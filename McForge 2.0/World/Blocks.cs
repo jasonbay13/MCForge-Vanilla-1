@@ -17,8 +17,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MCForge.Interface.Command;
+using MCForge.Entity;
+using MCForge.Core;
 
-namespace MCForge
+namespace MCForge.World
 {
     /// <summary>
     /// A class that contains blocks / custom blocks and methods to work with them.

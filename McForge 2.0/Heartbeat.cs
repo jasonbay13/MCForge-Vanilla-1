@@ -5,7 +5,7 @@ using System.Text;
 using System.Net;
 using System.IO;
 
-namespace MCForge
+namespace MCForge.Core
 {
     class Heartbeat
     {

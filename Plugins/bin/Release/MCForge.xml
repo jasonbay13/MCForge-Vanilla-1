@@ -4,6 +4,102 @@
         <name>MCForge</name>
     </assembly>
     <members>
+        <member name="F:MCForge.Core.Server.shuttingDown">
+            <summary>
+            Get whether the server is currently shutting down
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.Started">
+            <summary>
+            Get whether the server is currently fully started or not
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.Players">
+            <summary>
+            Get the current list of online players, note that if your doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.BannedIP">
+            <summary>
+            Get the current list of banned ip addresses, note that if your doing a foreach on this (or any other public list) you should always add .ToArray() to the end so that you avoid errors!
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.devs">
+            <summary>
+            The list of MCForge developers.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.agreed">
+            <summary>
+            List of players that agreed to the rules
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.Mainlevel">
+            <summary>
+            The main level of the server, where players spawn when they first join
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.moderation">
+            <summary>
+            Determines if the chat moderation is enabled
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.voting">
+            <summary>
+            Is the server in voting mode?
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.kickvote">
+            <summary>
+            Is it a kickvote?
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.YesVotes">
+            <summary>
+            Amount of yes votes.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.NoVotes">
+            <summary>
+            Amount of no votes.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.kicker">
+            <summary>
+            The player who's getting, if it's /votekick
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.DefaultColor">
+            <summary>
+            The server's default color.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.URL">
+            <summary>
+            The minecraft.net URL of the server
+            </summary>
+            
+        </member>
+        <member name="M:MCForge.Core.Server.Log(System.String)">
+            <summary>
+            Write A message to the Console and the GuiLog using default (white on black) colors.
+            </summary>
+            <param name="message">The message to show</param>
+        </member>
+        <member name="M:MCForge.Core.Server.Log(System.Exception)">
+            <summary>
+            Write an error to the Console and the GuiLog using Red on black colors
+            </summary>
+            <param name="E">The error exception to write.</param>
+        </member>
+        <member name="M:MCForge.Core.Server.Log(System.String,System.ConsoleColor,System.ConsoleColor)">
+            <summary>
+            Write a message to the console and GuiLog using a specified TextColor and BackGround Color
+            </summary>
+            <param name="message">The Message to show</param>
+            <param name="TextColor">The color of the text to show</param>
+            <param name="BackgroundColor">The color behind the text.</param>
+        </member>
         <member name="F:MCForge.frmMain.components">
             <summary>
             Required designer variable.
@@ -80,9 +176,14 @@
             Unique identifier for this plugin, will be used later to link to MCForge databases
             </summary>
         </member>
+        <member name="M:MCForge.Core.Program.Main">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
         <member name="F:MCForge.Entity.Player.USERNAME">
             <summary>
-            The players real username
+            The player's real username
             </summary>
         </member>
         <member name="F:MCForge.Entity.Player.lastcmd">
@@ -100,9 +201,34 @@
             Has the player read the rules?
             </summary>
         </member>
+        <member name="F:MCForge.Entity.Player.muted">
+            <summary>
+            Is the player muted
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.voiced">
+            <summary>
+            Does the player have voice status
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.jokered">
+            <summary>
+            Derermines if the player is jokered
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.voicestring">
+            <summary>
+            Appears in front of player's name if he is voiced
+            </summary>
+        </member>
         <member name="F:MCForge.Entity.Player.ip">
             <summary>
-            This is the players IP Address
+            This is the player's IP Address
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.storedMessage">
+            <summary>
+            The player's stored message (For appending)
             </summary>
         </member>
         <member name="F:MCForge.Entity.Player.isLoading">
@@ -112,7 +238,7 @@
         </member>
         <member name="F:MCForge.Entity.Player.isOnline">
             <summary>
-            True if the player is Online (false if the player has disconnected
+            True if the player is Online (false if the player has disconnected)
             </summary>
         </member>
         <member name="F:MCForge.Entity.Player.isLoggedIn">
@@ -123,6 +249,11 @@
         <member name="F:MCForge.Entity.Player.staticCommands">
             <summary>
             True if player is using static commands
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.isFlying">
+            <summary>
+            True is the player is flying
             </summary>
         </member>
         <member name="F:MCForge.Entity.Player.level">
@@ -175,6 +306,15 @@
             True if this player is an admin
             </summary>
         </member>
+        <member name="M:MCForge.Entity.Player.SendBlockChange(System.UInt16,System.UInt16,System.UInt16,System.Byte)">
+            <summary>
+            This send a blockchange to the player only. (Not other players)
+            </summary>
+            <param name="x"></param> The position the block will be placed in (x)
+            <param name="z"></param> The position the block will be placed in (z)
+            <param name="y"></param> The position the block will be placed in (y)
+            <param name="type"></param> The type of block that will be placed.
+        </member>
         <member name="M:MCForge.Entity.Player.SendMessage(System.String)">
             <summary>
             Send this player a message
@@ -197,6 +337,13 @@
             Kick this player with a specified message, this message will only get sent to op's
             </summary>
             <param name="message">The message to send</param>
+        </member>
+        <member name="M:MCForge.Entity.Player.SendToPos(MCForge.Core.Point3,System.Byte[])">
+            <summary>
+            Sends the specified player to the specified coordinates.
+            </summary>
+            <param name="coord"></param>Point3 coordinate to send to.
+            <param name="_rot"></param>Rot to send to.
         </member>
         <member name="M:MCForge.Entity.Player.GlobalDie">
             <summary>
@@ -225,8 +372,8 @@
         </member>
         <member name="P:MCForge.Entity.Player.username">
             <summary>
-            This is the players LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
-            </summary>
+            This is the player's LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
+            </summary>       
         </member>
         <member name="T:MCForge.Entity.Player.BlockChangeDelegate">
             <summary>
@@ -248,30 +395,29 @@
             <param name="message">The string the player sent</param>
             <param name="PassBack">A passback object that can be used for a command to send data back to itself for use</param>
         </member>
-        <member name="T:MCForge.Interface.Command.Command">
+        <member name="M:MCForge.Core.Heartbeat.minecraftHeartbeat(System.Int32,System.String,System.Boolean,System.String,System.Int32,System.Byte,System.Byte)">
             <summary>
-            The command class, used to store commands for players to use
+            Sends a heartbeat to minecraft.net.
             </summary>
+            <param name="port">The port.</param>
+            <param name="serverName">Name of the server.</param>
+            <param name="Public">if set to <c>true</c> [public].</param>
+            <param name="salt">The salt.</param>
+            <param name="onlineUsers">The online users.</param>
+            <param name="maxUsers">The max users.</param>
         </member>
-        <member name="M:MCForge.Interface.Command.Command.AddReference(MCForge.Interface.Command.ICommand,System.String[])">
+        <member name="M:MCForge.Core.Heartbeat.sendHeartbeat">
             <summary>
-            Add an array of referances to your command here
+            Sends all the heartbeats.
             </summary>
-            <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
-            <param name="reference">the array of strings you want players to type to use your command</param>
-        </member>
-        <member name="M:MCForge.Interface.Command.Command.AddReference(MCForge.Interface.Command.ICommand,System.String)">
-            <summary>
-            Add a referance to your command here
-            </summary>
-            <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
-            <param name="reference">the string you want player to type to use your command, you can use this method more than once :)</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.#ctor(MCForge.Entity.Player)">
-            <summary>
-            Create a new Event to call
-            </summary>
-            <param name="p">The player connected to the event</param>
+            <param name="port">The port the server is running on.</param>
+            <param name="serverName">Name of the server.</param>
+            <param name="Public">If the server is public or not.</param>
+            <param name="salt">The server salt salt.</param>
+            <param name="onlineUsers">The number of online users.</param>
+            <param name="maxUsers">The maximum amount of users.</param>
+            <returns></returns>
+            <remarks></remarks>
         </member>
         <member name="M:MCForge.Interface.Plugin.IPlugin.Initialize">
             <summary>
@@ -297,6 +443,25 @@
             <summary>
             Unique identifier for this plugin, will be used later to link to McForge databases
             </summary>
+        </member>
+        <member name="T:MCForge.Interface.Plugin.PluginManager">
+            <summary>
+            The command class, used to store commands for players to use
+            </summary>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.PluginManager.getByInterface(System.String)">
+            <summary>
+            Gets a plugin by interface.
+            </summary>
+            <param name="name">The name of the interface</param>
+            <returns></returns>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.PluginManager.AddReference(MCForge.Interface.Plugin.IPlugin)">
+            <summary>
+            Add an array of referances to your command here
+            </summary>
+            <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
+            <param name="reference">the array of strings you want players to type to use your command</param>
         </member>
         <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowMessage(MCForge.Entity.Player,System.String)">
             <summary>
@@ -349,24 +514,47 @@
             </summary>
             <param name="p">The player to stop showing the message to.</param>
         </member>
-        <member name="T:MCForge.Interface.Plugin.PluginManager">
+        <member name="M:MCForge.Core.PDB.CompareTo(MCForge.Core.PDB)">
+            <summary>
+            This allows a PDB to be compared to another PDB by looking at the username, and subsequently, it can then be sorted.
+            </summary>
+            <param name="pdb">The comparing PDB</param>
+            <returns>returns a comparison of the usernames</returns>
+        </member>
+        <member name="T:MCForge.Interface.Command.Command">
             <summary>
             The command class, used to store commands for players to use
             </summary>
         </member>
-        <member name="M:MCForge.Interface.Plugin.PluginManager.getByInterface(System.String)">
-            <summary>
-            Gets a plugin by interface.
-            </summary>
-            <param name="name">The name of the interface</param>
-            <returns></returns>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.PluginManager.AddReference(MCForge.Interface.Plugin.IPlugin)">
+        <member name="M:MCForge.Interface.Command.Command.AddReference(MCForge.Interface.Command.ICommand,System.String[])">
             <summary>
             Add an array of referances to your command here
             </summary>
             <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
             <param name="reference">the array of strings you want players to type to use your command</param>
+        </member>
+        <member name="M:MCForge.Interface.Command.Command.AddReference(MCForge.Interface.Command.ICommand,System.String)">
+            <summary>
+            Add a referance to your command here
+            </summary>
+            <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
+            <param name="reference">the string you want player to type to use your command, you can use this method more than once :)</param>
+        </member>
+        <member name="F:MCForge.Core.ServerSettings.Appending">
+            <summary>
+            Is message appending enabled?
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.ServerSettings.higherranktp">
+            <summary>
+            Allow people teleport to higher ranks?
+            </summary>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.#ctor(MCForge.Entity.Player)">
+            <summary>
+            Create a new Event to call
+            </summary>
+            <param name="p">The player connected to the event</param>
         </member>
         <member name="T:MCForge.World.Level">
             <summary>
@@ -529,103 +717,6 @@
             <summary>
             An enumeration of all the default Minecraft blocks
             </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.shuttingDown">
-            <summary>
-            Get whether the server is currently shutting down
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.Started">
-            <summary>
-            Get whether the server is currently fully started or not
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.Players">
-            <summary>
-            Get the current list of online players, note that if your doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.BannedIP">
-            <summary>
-            Get the current list of banned ip addresses, note that if your doing a foreach on this (or any other public list) you should always add .ToArray() to the end so that you avoid errors!
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.devs">
-            <summary>
-            The list of MCForge developers.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.agreed">
-            <summary>
-            List of players that agreed to the rules
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.Mainlevel">
-            <summary>
-            The main level of the server, where players spawn when they first join
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.voting">
-            <summary>
-            Is the server in voting mode?
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.kickvote">
-            <summary>
-            Is it a kickvote?
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.YesVotes">
-            <summary>
-            Amount of yes votes.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.NoVotes">
-            <summary>
-            Amount of no votes.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.kicker">
-            <summary>
-            The player who's getting, if it's /votekick
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.DefaultColor">
-            <summary>
-            The server's default color.
-            </summary>
-        </member>
-        <member name="M:MCForge.Core.Server.Log(System.String)">
-            <summary>
-            Write A message to the Console and the GuiLog using default (white on black) colors.
-            </summary>
-            <param name="message">The message to show</param>
-        </member>
-        <member name="M:MCForge.Core.Server.Log(System.Exception)">
-            <summary>
-            Write an error to the Console and the GuiLog using Red on black colors
-            </summary>
-            <param name="E">The error exception to write.</param>
-        </member>
-        <member name="M:MCForge.Core.Server.Log(System.String,System.ConsoleColor,System.ConsoleColor)">
-            <summary>
-            Write a message to the console and GuiLog using a specified TextColor and BackGround Color
-            </summary>
-            <param name="message">The Message to show</param>
-            <param name="TextColor">The color of the text to show</param>
-            <param name="BackgroundColor">The color behind the text.</param>
-        </member>
-        <member name="M:MCForge.Core.Program.Main">
-            <summary>
-            The main entry point for the application.
-            </summary>
-        </member>
-        <member name="M:MCForge.Core.PDB.CompareTo(MCForge.Core.PDB)">
-            <summary>
-            This allows a PDB to be compared to another PDB by looking at the username, and subsequently, it can then be sorted.
-            </summary>
-            <param name="pdb">The comparing PDB</param>
-            <returns>returns a comparison of the usernames</returns>
         </member>
     </members>
 </doc>

@@ -40,6 +40,8 @@ namespace MCForge.Core
         public static bool Started = false;
 
         private static System.Timers.Timer UpdateTimer;
+        private static System.Timers.Timer HeartbeatTimer;
+
 
         internal static List<Player> Connections = new List<Player>();
         /// <summary>
@@ -53,16 +55,21 @@ namespace MCForge.Core
         /// <summary>
         /// The list of MCForge developers.
         /// </summary>
-        public static List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "Gamemakergm", "cazzar", "hirsty", "Givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "TheMusiKid" });
+        public static List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "Gamemakergm", "cazzar", "hirsty", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "TheMusiKid" });
         /// <summary>
         /// List of players that agreed to the rules
         /// </summary>
         public static List<string> agreed = new List<string>();
+
+        public static List<string> jokermessages = new List<string>();
         /// <summary>
         /// The main level of the server, where players spawn when they first join
         /// </summary>
         public static Level Mainlevel;
-
+        /// <summary>
+        /// Determines if the chat moderation is enabled
+        /// </summary>
+        public static bool moderation;
         //Voting
         /// <summary>
         /// Is the server in voting mode?
@@ -84,10 +91,17 @@ namespace MCForge.Core
         /// The player who's getting, if it's /votekick
         /// </summary>
         public static Player kicker;
+
         /// <summary>
         /// The server's default color.
         /// </summary>
         public static string DefaultColor = "&e";
+
+        /// <summary>
+        /// The minecraft.net URL of the server
+        /// </summary>
+        /// 
+        public static string URL = "";
 
         internal static void Init()
         {
@@ -100,6 +114,10 @@ namespace MCForge.Core
             UpdateTimer.Elapsed += delegate { Update(); };
             UpdateTimer.Start();
 
+            HeartbeatTimer = new System.Timers.Timer(30000); //every 30 seconds
+            HeartbeatTimer.Elapsed += delegate { Heartbeat.sendHeartbeat(); };
+            HeartbeatTimer.Start();
+
             LoadAllDlls.Init();
 
             Log("[Important]: Server Started.", ConsoleColor.Black, ConsoleColor.White);
@@ -110,8 +128,15 @@ namespace MCForge.Core
 
             //Create the directories we need...
             if (!Directory.Exists("text")) { Directory.CreateDirectory("text"); Log("Created text directory...", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); Log("Created agreed.txt", ConsoleColor.White, ConsoleColor.Black); }
-
+            if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); Log("[File] Created agreed.txt", ConsoleColor.White, ConsoleColor.Black); }
+            if (!File.Exists("text/jokermessages.txt"))
+            {
+                File.Create("text/jokermessages.txt").Close();
+                Log("[File] Created jokermessages.txt", ConsoleColor.White, ConsoleColor.Black);
+                string text = "I am a pony" + Environment.NewLine + "Rainbow Dash <3" + Environment.NewLine + "I like trains!";
+                File.WriteAllText("text/jokermessages.txt", text);
+                Log("[File] Added default messages to jokermessages.txt", ConsoleColor.White, ConsoleColor.Black);
+            }
             try
             {
                 string[] lines = File.ReadAllLines("text/agreed.txt");

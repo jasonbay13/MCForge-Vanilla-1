@@ -16,6 +16,9 @@ using MCForge;
 using System.Threading;
 using System;
 using System.IO;
+using MCForge.Interface.Command;
+using MCForge.Entity;
+using MCForge.Core;
 
 namespace CommandDll
 {
