@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCForge", "McForge 2.0\MCForge.csproj", "{EDC9892F-BBA2-4043-9FD9-94C0BA7D9552}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commands", "Commands\Commands.csproj", "{28D68717-95A5-4ACF-B232-EB2FDE8B8AD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugins", "Plugins\Plugins.csproj", "{48C20652-75A0-487A-926D-53696D1F7DB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,16 @@ Global
 		{28D68717-95A5-4ACF-B232-EB2FDE8B8AD5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{28D68717-95A5-4ACF-B232-EB2FDE8B8AD5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{28D68717-95A5-4ACF-B232-EB2FDE8B8AD5}.Release|x86.ActiveCfg = Release|Any CPU
+		{48C20652-75A0-487A-926D-53696D1F7DB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48C20652-75A0-487A-926D-53696D1F7DB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48C20652-75A0-487A-926D-53696D1F7DB4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{48C20652-75A0-487A-926D-53696D1F7DB4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{48C20652-75A0-487A-926D-53696D1F7DB4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{48C20652-75A0-487A-926D-53696D1F7DB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48C20652-75A0-487A-926D-53696D1F7DB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48C20652-75A0-487A-926D-53696D1F7DB4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{48C20652-75A0-487A-926D-53696D1F7DB4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{48C20652-75A0-487A-926D-53696D1F7DB4}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

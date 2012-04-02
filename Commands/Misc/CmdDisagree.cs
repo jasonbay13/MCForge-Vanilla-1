@@ -13,7 +13,9 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using MCForge;
-
+using MCForge.Interface.Command;
+using MCForge.Entity;
+using MCForge.Core;
 namespace CommandDll
 {
     public class CmdDisagree : ICommand

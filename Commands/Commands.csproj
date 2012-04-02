@@ -52,6 +52,7 @@
     <Compile Include="Information\CmdLastCmd.cs" />
     <Compile Include="Information\CmdMeasure.cs" />
     <Compile Include="Information\CmdCalculate.cs" />
+    <Compile Include="Information\CmdMessageHandler.cs" />
     <Compile Include="Information\CmdOpRules.cs" />
     <Compile Include="Information\CmdRules.cs" />
     <Compile Include="Misc\CmdAgree.cs" />
@@ -66,6 +67,10 @@
     <ProjectReference Include="..\McForge 2.0\MCForge.csproj">
       <Project>{EDC9892F-BBA2-4043-9FD9-94C0BA7D9552}</Project>
       <Name>MCForge</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\Plugins.csproj">
+      <Project>{48C20652-75A0-487A-926D-53696D1F7DB4}</Project>
+      <Name>Plugins</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MCForge.API
 {
-    enum Priority : byte
+    public enum Priority : byte
     {
         Low = 3,
         Normal = 2,

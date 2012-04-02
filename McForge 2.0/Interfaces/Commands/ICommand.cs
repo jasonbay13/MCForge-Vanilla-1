@@ -17,8 +17,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MCForge.Entity;
 
-namespace MCForge
+namespace MCForge.Interface.Command
 {
 	public interface ICommand
 	{

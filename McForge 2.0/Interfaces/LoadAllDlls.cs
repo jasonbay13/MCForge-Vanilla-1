@@ -19,8 +19,11 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Reflection;
+using MCForge.Interface.Plugin;
+using MCForge.Interface.Command;
+using MCForge.Core;
 
-namespace MCForge
+namespace MCForge.Interface
 {
 	static class LoadAllDlls
 	{
@@ -30,31 +33,67 @@ namespace MCForge
 			InitCommands();
 			
 		}
+        internal static Assembly LoadFile(string file)
+        {
+            try
+            {
+                Assembly lib = null;
+                using (FileStream fs = File.Open(file, FileMode.Open))
+                {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        byte[] buffer = new byte[1024];
+                        int read = 0;
+                        while ((read = fs.Read(buffer, 0, 1024)) > 0)
+                            ms.Write(buffer, 0, read);
+                        lib = Assembly.Load(ms.ToArray());
+                        ms.Close();
+                        ms.Dispose();
+                    }
+                    fs.Close();
+                    fs.Dispose();
+                }
+                try
+                {
+                    return lib;
+                }
+                catch { return null; }
+            }
+            catch { return null; }
+        }
 		internal static void InitCommands()
 		{
 			string path = Directory.GetCurrentDirectory();
-			string[] CommandFiles = Directory.GetFiles(path, "*.DLL");
+			string[] DLLFiles = Directory.GetFiles(path, "*.DLL");
 
-			foreach (string s in CommandFiles)
+			foreach (string s in DLLFiles)
 			{
-				FileInfo commandInfo = new FileInfo(s);
-
-				Assembly commandAssembly = Assembly.LoadFrom(s);
-
-				foreach (Type commandType in commandAssembly.GetTypes())
+                Assembly DLLAssembly = LoadFile(s); //Prevents the dll from being in use inside windows
+				foreach (Type ClassType in DLLAssembly.GetTypes())
 				{
-					if (commandType.IsPublic)
+					if (ClassType.IsPublic)
 					{
-						if (!commandType.IsAbstract)
+						if (!ClassType.IsAbstract)
 						{
-							Type typeInterface = commandType.GetInterface("ICommand", true);
+							Type typeInterface = ClassType.GetInterface("ICommand", true);
 
-							if (typeInterface != null)
-							{
-								ICommand instance = (ICommand)Activator.CreateInstance(commandAssembly.GetType(commandType.ToString()));
-								instance.Initialize();
-								Server.Log("[Command]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
-							}			
+                            if (typeInterface != null)
+                            {
+                                ICommand instance = (ICommand)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
+                                instance.Initialize();
+                                Server.Log("[Command]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
+                            }
+                            else
+                            {
+                                typeInterface = ClassType.GetInterface("IPlugin", true);
+                                if (typeInterface != null)
+                                {
+                                    IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
+                                    instance.Initialize();
+                                    PluginManager.AddReference(instance);
+                                    Server.Log("[Plugin]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
+                                }
+                            }
 						}
 					}
 				}

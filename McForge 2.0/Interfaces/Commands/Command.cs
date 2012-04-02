@@ -17,8 +17,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MCForge.Core;
 
-namespace MCForge
+namespace MCForge.Interface.Command
 {
 	/// <summary>
 	/// The command class, used to store commands for players to use
@@ -54,4 +55,11 @@ namespace MCForge
 			Commands.Add(reference.ToLower(), command);
 		}
 	}
+    public enum CommandTypes
+    {
+        building,
+        mod,
+        misc,
+        information,
+    }
 }

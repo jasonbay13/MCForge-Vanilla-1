@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge;
+using MCForge.Interface.Command;
+using MCForge.Entity;
+using MCForge.Core;
 
 namespace CommandDll
 {

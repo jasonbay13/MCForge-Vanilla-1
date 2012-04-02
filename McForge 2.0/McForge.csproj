@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>MCForge.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -32,9 +33,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>MCForge.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>MCForge.Program</StartupObject>
+    <StartupObject>MCForge.Core.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -56,7 +58,7 @@
     <Compile Include="API\Priority.cs" />
     <Compile Include="API\System\SystemEvent.cs" />
     <Compile Include="API\World\WorldEvent.cs" />
-    <Compile Include="Blocks.cs" />
+    <Compile Include="World\Blocks.cs" />
     <Compile Include="API\Event.cs" />
     <Compile Include="Gui\frmMain.cs">
       <SubType>Form</SubType>
@@ -68,14 +70,17 @@
     <Compile Include="Interfaces\Commands\ICommand.cs" />
     <Compile Include="Interfaces\Commands\Command.cs" />
     <Compile Include="Interfaces\LoadAllDlls.cs" />
+    <Compile Include="Interfaces\Plugin\IPlugin.cs" />
+    <Compile Include="Interfaces\Plugin\IPluginMessageViewer.cs" />
+    <Compile Include="Interfaces\Plugin\Plugin.cs" />
     <Compile Include="Player\Player.cs" />
-    <Compile Include="Level\Level.cs" />
-    <Compile Include="LoadedData.cs" />
-    <Compile Include="MiscStructs.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="World\Level.cs" />
+    <Compile Include="System\LoadedData.cs" />
+    <Compile Include="System\MiscStructs.cs" />
+    <Compile Include="System\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Server.cs" />
-    <Compile Include="ServerSettings.cs" />
+    <Compile Include="System\Server.cs" />
+    <Compile Include="System\ServerSettings.cs" />
     <EmbeddedResource Include="Gui\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>

@@ -24,8 +24,11 @@ using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 using MCForge.API.PlayerEvent;
+using MCForge.Core;
+using MCForge.World;
+using MCForge.Interface.Command;
 
-namespace MCForge
+namespace MCForge.Entity
 {
 	public class Player
 	{

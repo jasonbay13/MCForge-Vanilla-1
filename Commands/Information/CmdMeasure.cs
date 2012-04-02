@@ -19,6 +19,10 @@ using System.Text;
 using System.Threading;
 using MCForge;
 using System.IO;
+using MCForge.Interface.Command;
+using MCForge.Core;
+using MCForge.Entity;
+using MCForge.World;
 
 namespace CommandDll
 {
