@@ -47,7 +47,7 @@ namespace MCForge.API.PlayerEvent
         /// Change the message the player sent
         /// </summary>
         /// <param name="message">The new message</param>
-        public void ChangeMessage(string message)
+        public void SetMessage(string message)
         {
             this.message = message;
         }

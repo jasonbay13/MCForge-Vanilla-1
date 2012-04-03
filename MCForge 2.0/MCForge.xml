@@ -844,7 +844,7 @@
             </summary>
             <returns>The message</returns>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.ChangeMessage(System.String)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.SetMessage(System.String)">
             <summary>
             Change the message the player sent
             </summary>
