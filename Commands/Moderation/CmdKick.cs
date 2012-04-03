@@ -42,6 +42,9 @@ namespace CommandDll.Moderation {
 
 		string[] CommandStrings = new string[1] { "kick" };
 
+        byte _Permission = 80;
+        public byte Permission { get { return _Permission; } }
+
 		public void Use(Player p, string[] args) {
 			if (args.Length == 0) {
 				//Kick the user

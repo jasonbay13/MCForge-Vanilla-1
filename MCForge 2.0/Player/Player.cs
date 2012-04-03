@@ -74,7 +74,10 @@ namespace MCForge.Entity
         /// Has the player voted?
         /// </summary>
         public bool voted;
-
+        /// <summary>
+        /// Is the player being kicked ?
+        /// </summary>
+        public bool beingkicked;
         /// <summary>
         /// Has the player read the rules?
         /// </summary>
@@ -213,6 +216,8 @@ namespace MCForge.Entity
         protected BlockChangeDelegate blockChange;
         protected NextChatDelegate nextChat;
 
+        public MCForge.Groups.Group group = ServerSettings.DefaultGroup;
+
         #endregion
 
         internal Player(TcpClient TcpClient)
@@ -262,8 +267,7 @@ namespace MCForge.Entity
 
             Player p = (Player)result.AsyncState;
 
-            if (!p.isOnline)
-                return;
+            if (!p.isOnline)                return;
 
             try
             {
@@ -271,7 +275,10 @@ namespace MCForge.Entity
                 if (length == 0)
                 {
                     p.CloseConnection();
-                    UniversalChat(p.color + p.USERNAME + " has disconnected.");
+                    if (!p.beingkicked)
+                    {
+                        UniversalChat(p.color + p.USERNAME + " has disconnected.");
+                    }
                     return;
                 }
                 byte[] b = new byte[p.buffer.Length + length];
@@ -361,6 +368,8 @@ namespace MCForge.Entity
 
                 OnPlayerConnect e = new OnPlayerConnect(this);
                 e.Call();
+                if (e.IsCanceled)
+                    return;
 
                 //TODO Database Stuff
 
@@ -572,7 +581,7 @@ namespace MCForge.Entity
                 }
             }
 
-            if (nextChat != null)
+            /*if (nextChat != null) AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
             {
                 NextChatDelegate tempNextChat = nextChat;
                 object tempPassBack = PassBackData;
@@ -583,7 +592,14 @@ namespace MCForge.Entity
                 ThreadPool.QueueUserWorkItem(delegate { tempNextChat.Invoke(this, incomingText, tempPassBack); });
 
                 return;
-            }
+            }*/
+
+            OnPlayerChat e = new OnPlayerChat(this, incomingText);
+            e.Call();
+            if (e.IsCanceled)
+                return;
+            incomingText = e.GetMessage();
+
             if (Server.voting)
             {
                 if (Server.kickvote && Server.kicker == this) { SendMessage("You're not allowed to vote!"); return; }
@@ -594,7 +610,7 @@ namespace MCForge.Entity
                 else { SendMessage("Use either %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + " to vote!"); }
             }
             Server.Log("<" + USERNAME + "> " + incomingText);
-            UniversalChat(voicestring + USERNAME + ": &f" + incomingText);
+            UniversalChat(voicestring + group.colour + USERNAME + ": &f" + incomingText);
         }
 
         #endregion
@@ -809,6 +825,7 @@ namespace MCForge.Entity
         public void Kick(string message)
         {
             //GlobalMessage(message);
+			beingkicked = true;
             SKick(message);
         }
         /// <summary>
@@ -958,6 +975,11 @@ namespace MCForge.Entity
                     {
                         SendMessage("You need to /agree to the /rules before you can use commands!"); return;
                     }
+                    if (!group.CanExecute(cmd))
+                    {
+                        SendMessage(Colors.red + "You cannot use /" + name + "!");
+                        return;
+                    }
                     try { cmd.Use(this, sendArgs); } //Just so it doesn't crash the server if custom command makers release broken commands!
                     catch (Exception ex)
                     {
@@ -1044,12 +1066,12 @@ namespace MCForge.Entity
         /// </summary>
         /// <param name="chat">The NextChatDelegate that will be executed on the next chat.</param>
         /// <param name="data">A passback object that can be used for a command to send data back to itself for use</param>
-        public void CatchNextChat(NextChatDelegate chat, object data)
+        /*public void CatchNextChat(NextChatDelegate chat, object data)
         {
             PassBackData = data;
             blockChange = null;
             nextChat = chat;
-        }
+        }*/
         /// <summary>
         /// Fakes a click by invoking a blockchange event.
         /// </summary>

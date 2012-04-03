@@ -32,6 +32,7 @@ namespace CommandDll
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
+        public byte Permission { get { return 30; } }
 
         public void Use(Player p, string[] args)
         {

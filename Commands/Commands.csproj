@@ -45,7 +45,10 @@
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Building\CmdReplaceAll.cs" />
     <Compile Include="Information\CmdHelp.cs" />
+    <Compile Include="Information\CmdImpersonate.cs" />
     <Compile Include="Misc\CmdSummon.cs" />
+    <Compile Include="Misc\CmdCrashserver.cs" />
+    <Compile Include="Misc\CmdHacks.cs" />
     <Compile Include="Moderation\CmdSetSpawn.cs" />
     <Compile Include="Misc\CmdFly.cs" />
     <Compile Include="CmdDatapassExample.cs" />
@@ -53,6 +56,7 @@
     <Compile Include="Information\CmdDevs.cs" />
     <Compile Include="Information\CmdIds.cs" />
     <Compile Include="CmdTest.cs" />
+    <Compile Include="Information\CmdNews.cs" />
     <Compile Include="Information\CmdLastCmd.cs" />
     <Compile Include="Information\CmdMeasure.cs" />
     <Compile Include="Information\CmdCalculate.cs" />
@@ -76,7 +80,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\McForge 2.0\MCForge.csproj">
+    <ProjectReference Include="..\MCForge 2.0\MCForge.csproj">
       <Project>{EDC9892F-BBA2-4043-9FD9-94C0BA7D9552}</Project>
       <Name>MCForge</Name>
     </ProjectReference>

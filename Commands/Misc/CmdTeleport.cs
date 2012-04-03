@@ -31,6 +31,8 @@ namespace CommandDll
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
+        public byte Permission { get { return 80; } }
+
 
         public void Use(Player p, string[] args)
         {
@@ -47,7 +49,7 @@ namespace CommandDll
             else if (args.Length == 1)
             {
                 Player who = Player.Find(args[0]);
-                if (who == null || who.isHidden) //Permissions needed
+                if (who == null || who.isHidden)
                 {
                     p.SendMessage("Player: " + args[0] + " not found!");
                     return;
@@ -57,12 +59,11 @@ namespace CommandDll
                     p.SendMessage("Why are you trying to teleport yourself to yourself?");
                     return;
                 }
-                /*else if (!ServerSettings.higherranktp)
+                else if (!ServerSettings.higherranktp && p.group.permission < who.group.permission)
                 {
-                    //Permissions to check ranks.
                     p.SendMessage("You cannot teleport to a player of higher rank!");
                     return;
-                }*/
+                }
                 else
                 {
                     if (p.level != who.level)
@@ -98,11 +99,10 @@ namespace CommandDll
                     p.SendMessage("Why not just use /summon " + args[0] + "?");
                     return;
                 }
-                /*else if (p.permission < one.permission)
+                else if (p.group.permission < one.group.permission)
                 {
-                //Permissions to check ranks.
-                p.SendMessage("You cannot force a player of higher rank to tp to another player!");
-                }*/
+                    p.SendMessage("You cannot force a player of higher rank to tp to another player!");
+                }
                 else
                 {
                     if (one.level != two.level)

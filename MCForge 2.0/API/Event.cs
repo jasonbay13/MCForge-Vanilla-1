@@ -21,6 +21,9 @@ namespace MCForge.API
 {
     public abstract class Event
     {
+        /// <summary>
+        /// Call the event
+        /// </summary>
         public abstract void Call();
     }
 }

@@ -43,6 +43,7 @@ namespace MCForge.World
 		/// <param name="pos">the loops current block position (pos)</param>
 		public delegate void ForEachBlockDelegate(int pos);
 
+		string _name = "main";
 		public string name { get; set; }
 
 		int _TotalBlocks;
@@ -93,6 +94,7 @@ namespace MCForge.World
 			Level newlevel = new Level(size);
 			newlevel.name = name;
 
+			newlevel.name = name;
 			switch(type)
 			{
 				case LevelTypes.Flat:
