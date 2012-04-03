@@ -13,36 +13,38 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using MCForge;
+using System;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
+using System.IO;
+
 namespace CommandDll
 {
-    public class CmdDisagree : ICommand
+    public class CmdCrashserver : ICommand
     {
-        public string Name { get { return "Disagree"; } }
+        public string Name { get { return "Crashserver"; } }
         public CommandTypes Type { get { return CommandTypes.misc; } }
-        public string Author { get { return "Arrem"; } }
+        public string Author { get { return "Givo"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
         public void Use(Player p, string[] args)
         {
-            if (Server.agreed.Contains(p.USERNAME)) { p.SendMessage("You have already agreed to the rules!"); return; }
-            if (!p.readrules) { p.SendMessage("You need to read the /rules before you can disagree!"); return; }
-            p.Kick("Kicked for disagreeing to the rules!");
+            if (args.Length > 0) { Help(p); }
+            string random = Path.GetRandomFileName();
+            random = random.Replace(".", "");
+            p.Kick("SERVER CRASH ERROR CODE x8" + random.ToUpper());
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/disagree - disagree to the rules");
+            p.SendMessage("/crashserver - Crash the server, they'll never know its you"); 
         }
-
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "disagree" });
+            Command.AddReference(this, new string[1] { "Crashserver" });
         }
     }
 }
-

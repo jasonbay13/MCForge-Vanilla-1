@@ -32,6 +32,7 @@ namespace CommandDll
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
+        public byte Permission { get { return 80; } }
 
         public void Use(Player p, string[] args)
         {
@@ -46,7 +47,7 @@ namespace CommandDll
                 {
                     foreach (Player pl in Server.Players.ToArray())
                     {
-                        if (pl.level == p.level && pl != p) //Missing permissions
+                        if (pl.level == p.level && pl != p && p.group.permission > pl.group.permission) //Missing permissions
                         {
                             pl.SendToPos(p.Pos, p.Rot);
                             pl.SendMessage("You were summoned by " + p.color + p.USERNAME + Server.DefaultColor + ".");
@@ -58,7 +59,7 @@ namespace CommandDll
                 else
                 {
                     Player who = Player.Find(args[0]);
-                    if (who == null || who.isHidden) //Permissions needed
+                    if (who == null || who.isHidden && p.group.permission < who.group.permission)
                     {
                         p.SendMessage("Player: " + args[0] + " not found!");
                         return;
@@ -68,12 +69,11 @@ namespace CommandDll
                         p.SendMessage("Why are you trying to summon yourself?");
                         return;
                     }
-                    /*else if (p.permission < who.permission)
+                    else if (p.group.permission < who.group.permission)
                     {
-                        //Permissions to check ranks.
                         p.SendMessage("You cannot summon someone ranked higher thank you!");
                         return;
-                    }*/
+                    }
                     else
                     {
                         if (p.level != who.level)

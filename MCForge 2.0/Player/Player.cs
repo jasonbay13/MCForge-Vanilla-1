@@ -216,6 +216,8 @@ namespace MCForge.Entity
         protected BlockChangeDelegate blockChange;
         protected NextChatDelegate nextChat;
 
+        public MCForge.Groups.Group group = ServerSettings.DefaultGroup;
+
         #endregion
 
         internal Player(TcpClient TcpClient)
@@ -608,7 +610,7 @@ namespace MCForge.Entity
                 else { SendMessage("Use either %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + " to vote!"); }
             }
             Server.Log("<" + USERNAME + "> " + incomingText);
-            UniversalChat(voicestring + USERNAME + ": &f" + incomingText);
+            UniversalChat(voicestring + group.colour + USERNAME + ": &f" + incomingText);
         }
 
         #endregion
@@ -972,6 +974,11 @@ namespace MCForge.Entity
                     if (!Server.agreed.Contains(USERNAME) && name != "rules" && name != "agree" && name != "disagree")
                     {
                         SendMessage("You need to /agree to the /rules before you can use commands!"); return;
+                    }
+                    if (!group.CanExecute(cmd))
+                    {
+                        SendMessage(Colors.red + "You cannot use /" + name + "!");
+                        return;
                     }
                     try { cmd.Use(this, sendArgs); } //Just so it doesn't crash the server if custom command makers release broken commands!
                     catch (Exception ex)

@@ -44,7 +44,10 @@
     <Compile Include="Building\CmdReplace.cs" />
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Building\CmdReplaceAll.cs" />
+    <Compile Include="Information\CmdImpersonate.cs" />
     <Compile Include="Misc\CmdSummon.cs" />
+    <Compile Include="Misc\CmdCrashserver.cs" />
+    <Compile Include="Misc\CmdHacks.cs" />
     <Compile Include="Moderation\CmdSetSpawn.cs" />
     <Compile Include="Misc\CmdFly.cs" />
     <Compile Include="CmdDatapassExample.cs" />
@@ -52,6 +55,7 @@
     <Compile Include="Information\CmdDevs.cs" />
     <Compile Include="Information\CmdIds.cs" />
     <Compile Include="CmdTest.cs" />
+    <Compile Include="Information\CmdNews.cs" />
     <Compile Include="Information\CmdLastCmd.cs" />
     <Compile Include="Information\CmdMeasure.cs" />
     <Compile Include="Information\CmdCalculate.cs" />
