@@ -57,7 +57,7 @@ namespace MCForge.Interface.Command
 		void Help(Player p);
 
 		/// <summary>
-		/// The initialization of the command, you need to add command referances here.
+		/// The initialization of the command, you need to add command references here.
 		/// </summary>
 		void Initialize();
 	}
