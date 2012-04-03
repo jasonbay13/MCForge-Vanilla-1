@@ -79,7 +79,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\McForge 2.0\MCForge.csproj">
+    <ProjectReference Include="..\MCForge 2.0\MCForge.csproj">
       <Project>{EDC9892F-BBA2-4043-9FD9-94C0BA7D9552}</Project>
       <Name>MCForge</Name>
     </ProjectReference>
