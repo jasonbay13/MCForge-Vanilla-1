@@ -293,7 +293,23 @@
             The command class, used to store commands for players to use
             </summary>
         </member>
+<<<<<<< Updated upstream
         <member name="M:MCForge.Interface.Command.Command.AddReference(MCForge.Interface.Command.ICommand,System.String[])">
+=======
+        <member name="F:MCForge.Core.ServerSettings.DefaultRank">
+            <summary>
+            The default Permission value for new players
+            </summary>
+        </member>
+        <member name="P:MCForge.Core.ServerSettings.DefaultGroup">
+            <summary>
+            Gets or sets the default group.
+            </summary>
+            <value>The default group.</value>
+            <remarks></remarks>
+        </member>
+        <member name="T:MCForge.API.Priority">
+>>>>>>> Stashed changes
             <summary>
             Add an array of referances to your command here
             </summary>
@@ -895,12 +911,66 @@
             <param name="TextColor">The color of the text to show</param>
             <param name="BackgroundColor">The color behind the text.</param>
         </member>
+        <member name="P:MCForge.Interface.Command.ICommand.Permission">
+            <summary>
+            The default permission value for the command
+            </summary>
+            <remarks></remarks>
+        </member>
         <member name="M:MCForge.Core.Program.Main">
             <summary>
             The main entry point for the application.
             </summary>
         </member>
+<<<<<<< Updated upstream
         <member name="T:MCForge.API.Priority">
+=======
+        <member name="T:MCForge.Groups.Permission">
+            <summary>
+            All the default permission values
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.Group.#ctor(System.Byte,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MCForge.Groups.Group"/> class.
+            </summary>
+            <param name="perm">The permission level of the group.</param>
+            <param name="name">The name of the group.</param>
+            <param name="colour">The colour of the group.</param>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.Group.SendMessage(System.String)">
+            <summary>
+            Sends the message to the group.
+            </summary>
+            <param name="message">The message.</param>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.Group.CanExecute(MCForge.Interface.Command.ICommand)">
+            <summary>
+            Determines whether this instance can execute the specified command.
+            </summary>
+            <param name="command">The command.</param>
+            <returns><c>true</c> if this instance can execute the specified command; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="P:MCForge.Groups.Group.name">
+            <summary>
+            The name of the group
+            </summary>
+        </member>
+        <member name="P:MCForge.Groups.Group.permission">
+            <summary>
+            The permission level of the group.
+            </summary>
+        </member>
+        <member name="P:MCForge.Groups.Group.colour">
+            <summary>
+            The colour of the group.
+            </summary>
+        </member>
+        <member name="T:MCForge.Properties.Resources">
+>>>>>>> Stashed changes
             <summary>
             The priority of the call
             Low will be called first so it can make the first changes
