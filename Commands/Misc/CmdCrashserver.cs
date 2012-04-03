@@ -35,12 +35,12 @@ namespace CommandDll
             if (args.Length > 0) { Help(p); }
             string random = Path.GetRandomFileName();
             random = random.Replace(".", "");
-            p.Kick("SERVER CRASH ERROR CODE x0" + random.ToUpper());
+            p.Kick("SERVER CRASH ERROR CODE x8" + random.ToUpper());
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("83 4 1337 |-|4><0|^ ?"); 
+            p.SendMessage("/crashserver - Crash the server, they'll never know its you"); 
         }
         public void Initialize()
         {

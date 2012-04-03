@@ -47,6 +47,7 @@
     <Compile Include="Information\CmdImpersonate.cs" />
     <Compile Include="Misc\CmdSummon.cs" />
     <Compile Include="Misc\CmdCrashserver.cs" />
+    <Compile Include="Misc\CmdHacks.cs" />
     <Compile Include="Moderation\CmdSetSpawn.cs" />
     <Compile Include="Misc\CmdFly.cs" />
     <Compile Include="CmdDatapassExample.cs" />
