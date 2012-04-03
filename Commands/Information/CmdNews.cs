@@ -32,6 +32,8 @@ namespace CommandDll
         public string Author { get { return "Givo"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
+        byte _Permission = 0;
+        public byte Permission { get { return _Permission; } }
 
         public void Use(Player p, string[] args)
         {
