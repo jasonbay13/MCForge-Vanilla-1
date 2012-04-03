@@ -355,7 +355,7 @@
             This holds the map data for the entire map
             </summary>
         </member>
-        <member name="M:MCForge.World.Level.CreateLevel(MCForge.Core.Point3,MCForge.World.Level.LevelTypes)">
+        <member name="M:MCForge.World.Level.CreateLevel(MCForge.Core.Point3,MCForge.World.Level.LevelTypes,System.String)">
             <summary>
             Create a level with a specified type and a specified size
             </summary>

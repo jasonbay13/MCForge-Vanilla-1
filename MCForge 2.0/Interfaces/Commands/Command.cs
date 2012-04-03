@@ -26,7 +26,7 @@ namespace MCForge.Interface.Command
 	/// </summary>
 	public class Command
 	{
-		internal static Dictionary<string, ICommand> Commands = new Dictionary<string, ICommand>();
+		public static Dictionary<string, ICommand> Commands = new Dictionary<string, ICommand>();
 
 		/// <summary>
 		/// Add an array of referances to your command here
