@@ -47,6 +47,13 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         public Group(byte perm, string name, string colour)
         {
+            foreach (Group g in groups.ToArray())
+            {
+                if (name.ToLower() == g.name.ToLower())
+                {
+                    throw new ArgumentException("Cannot have 2 groups of the same name");
+                }
+            }
             permission = perm;
             this.name = name;
             this.colour = colour;

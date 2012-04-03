@@ -610,7 +610,7 @@ namespace MCForge.Entity
                 else { SendMessage("Use either %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + " to vote!"); }
             }
             Server.Log("<" + USERNAME + "> " + incomingText);
-            UniversalChat(voicestring + USERNAME + ": &f" + incomingText);
+            UniversalChat(voicestring + group.colour + USERNAME + ": &f" + incomingText);
         }
 
         #endregion

@@ -66,7 +66,7 @@ namespace MCForge.Core
                     if (group.permission == DefaultRank)
                         return group;
                 }
-                return new Group(0, "Guest", 'f');
+                return new Group((byte)Groups.Permission.Guest, "Guest", Colors.white);
             }
             set
             {
