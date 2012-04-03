@@ -35,6 +35,7 @@ namespace CommandDll
             if (args.Length == 1) { message = "Kicked by " + p.USERNAME; }
             else { foreach (string a in args) { message += a + " "; } }
             if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("You can't kick a MCForge Developer!"); return; }
+            who.beingkicked = true;
             who.Kick(message);
             Player.UniversalChat(who.USERNAME + " was kicked by " + p.USERNAME);
         }

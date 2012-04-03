@@ -74,7 +74,10 @@ namespace MCForge.Entity
         /// Has the player voted?
         /// </summary>
         public bool voted;
-
+        /// <summary>
+        /// Is the player being kicked ?
+        /// </summary>
+        public bool beingkicked;
         /// <summary>
         /// Has the player read the rules?
         /// </summary>
@@ -262,8 +265,7 @@ namespace MCForge.Entity
 
             Player p = (Player)result.AsyncState;
 
-            if (!p.isOnline)
-                return;
+            if (!p.isOnline)                return;
 
             try
             {
@@ -271,7 +273,10 @@ namespace MCForge.Entity
                 if (length == 0)
                 {
                     p.CloseConnection();
-                    UniversalChat(p.color + p.USERNAME + " has disconnected.");
+                    if (!p.beingkicked)
+                    {
+                        UniversalChat(p.color + p.USERNAME + " has disconnected.");
+                    }
                     return;
                 }
                 byte[] b = new byte[p.buffer.Length + length];
