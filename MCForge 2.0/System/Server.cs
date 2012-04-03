@@ -121,6 +121,7 @@ namespace MCForge.Core
 
             Log("[Important]: Server Started.", ConsoleColor.Black, ConsoleColor.White);
             Started = true;
+            Heartbeat.sendHeartbeat();
 
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
