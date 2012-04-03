@@ -313,6 +313,11 @@
             <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
             <param name="reference">the string you want player to type to use your command, you can use this method more than once :)</param>
         </member>
+        <member name="P:MCForge.Interface.Command.Command.all">
+            <summary>
+            Returns the dictionary of all commands.
+            </summary>
+        </member>
         <member name="F:MCForge.frmMain.components">
             <summary>
             Required designer variable.

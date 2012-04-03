@@ -113,8 +113,21 @@ namespace MCForge.Core
             UpdateTimer.Elapsed += delegate { Update(); };
             UpdateTimer.Start();
 
-            HeartbeatTimer = new System.Timers.Timer(30000); //every 30 seconds
-            HeartbeatTimer.Elapsed += delegate { Heartbeat.sendHeartbeat(); };
+			long interval = 30000;
+            HeartbeatTimer = new System.Timers.Timer(interval); //every 30 seconds
+			HeartbeatTimer.Elapsed += delegate {
+				try {
+					Heartbeat.sendHeartbeat();
+				} catch (WebException we) {
+					if (we.Status == WebExceptionStatus.Timeout) {
+						//Display a message to the console, and keep trying.
+						Log("Heartbeat timed out.  Retrying in " + interval / 1000 + " seconds...");
+					} else {
+						Log("Unknown Web error:");
+						Log(we);
+					}
+				};
+			};
             HeartbeatTimer.Start();
 
             LoadAllDlls.Init();

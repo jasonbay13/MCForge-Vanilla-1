@@ -90,9 +90,11 @@ namespace CommandDll.Information {
 						return;
 					default:
 						try {
-							if (CommandStrings.Contains(args[0])) {
-								//TODO: Find command
-								p.SendMessage("Find command");
+							p.SendMessage("Trying to find command...");
+							ICommand cmd = Command.Find(args[0]);
+							if (cmd != null) {
+								cmd.Help(p);
+								p.SendMessage("Displayed help for /" + args[0]);
 							} else if (Blocks.NameToByte(args[0]) != (byte)Blocks.Types.zero) {
 								//TODO: Find Block
 								p.SendMessage("Find block");
@@ -107,7 +109,7 @@ namespace CommandDll.Information {
 				p.SendMessage(cmdTypeName + " commands you may use:");
 				StringBuilder sb = new StringBuilder();
 				int count = 0;
-				foreach (KeyValuePair<string, ICommand> c in Command.Commands) {
+				foreach (KeyValuePair<string, ICommand> c in Command.all) {
 					if (c.Value.Type == cmdType) {
 						//TODO: Check rank
 						sb.Append(", ").Append(c.Value.Name.ToLower());
