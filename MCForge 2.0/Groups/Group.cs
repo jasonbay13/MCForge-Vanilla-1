@@ -45,11 +45,11 @@ namespace MCForge.Groups
         /// <param name="name">The name of the group.</param>
         /// <param name="colour">The colour of the group.</param>
         /// <remarks></remarks>
-        public Group(byte perm, string name, char colour)
+        public Group(byte perm, string name, string colour)
         {
             permission = perm;
             this.name = name;
-            this.colour = "&" + colour;
+            this.colour = colour;
 
             groups.Add(this);
         }
@@ -80,10 +80,14 @@ namespace MCForge.Groups
             return false;
         }
 
-        public static void Init()
+        public static void InitDefaultGroups()
         {
-            new Group(0, "Guest", 'f');
-            new Group(30, "Builder", 'a');
+            new Group((byte)Permission.Guest, "Guest", Colors.white);
+            new Group((byte)Permission.Builder, "Builder", Colors.green);
+            new Group((byte)Permission.AdvBuilder, "AdvBuilder", Colors.lime);
+            new Group((byte)Permission.Operator, "Operator", Colors.purple);
+            new Group((byte)Permission.SuperOP, "SuperOp", Colors.maroon);
+            new Group((byte)Permission.Owner, "Owner", Colors.blue);
         }
     }
 }
