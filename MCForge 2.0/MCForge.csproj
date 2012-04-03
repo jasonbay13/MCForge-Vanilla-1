@@ -70,7 +70,7 @@
     <Compile Include="Gui\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Heartbeat.cs" />
+    <Compile Include="System\Heartbeat.cs" />
     <Compile Include="Interfaces\Commands\CmdReloadCommands.cs" />
     <Compile Include="Interfaces\Commands\ICommand.cs" />
     <Compile Include="Interfaces\Commands\Command.cs" />
