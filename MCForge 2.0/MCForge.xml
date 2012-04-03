@@ -4,6 +4,470 @@
         <name>MCForge</name>
     </assembly>
     <members>
+        <member name="M:MCForge.Core.PDB.CompareTo(MCForge.Core.PDB)">
+            <summary>
+            This allows a PDB to be compared to another PDB by looking at the username, and subsequently, it can then be sorted.
+            </summary>
+            <param name="pdb">The comparing PDB</param>
+            <returns>returns a comparison of the usernames</returns>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPlugin.Initialize">
+            <summary>
+            The initialization of the plugin.
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Plugin.IPlugin.Name">
+            <summary>
+            The name of the plugin
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Plugin.IPlugin.Author">
+            <summary>
+            The author of the plugin (to add multiple authors just make the string like "Merlin33069, someone else"
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Plugin.IPlugin.Version">
+            <summary>
+            The command version
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Plugin.IPlugin.CUD">
+            <summary>
+            Unique identifier for this plugin, will be used later to link to McForge databases
+            </summary>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowMessage(MCForge.Entity.Player,System.String)">
+            <summary>
+            Starts showing a message.
+            </summary>
+            <param name="p">The player to show the message to.</param>
+            <param name="message">The message to show.</param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.AppendText(MCForge.Entity.Player,System.String)">
+            <summary>
+            Appends text at the end of the message.
+            </summary>
+            <param name="p">The player to append the message to</param>
+            <param name="text">The message to append.</param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowNextPage(MCForge.Entity.Player)">
+            <summary>
+            Shows the next page if possible.
+            </summary>
+            <param name="p">The player to show the next page to. </param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowPage(MCForge.Entity.Player,System.Int32)">
+            <summary>
+            Shows a selected page if possible.
+            </summary>
+            <param name="p">The player to show the page to.</param>
+            <param name="page">The page to show.</param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowNextLine(MCForge.Entity.Player)">
+            <summary>
+            Shows next line if possible.
+            </summary>
+            <param name="p">The player to show the line to.</param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowPreviousPage(MCForge.Entity.Player)">
+            <summary>
+            Shows previous page if possible.
+            </summary>
+            <param name="p">The player to show the page to.</param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowPreviousLine(MCForge.Entity.Player)">
+            <summary>
+            Shows previous line if possible.
+            </summary>
+            <param name="p">The player to show the line to.</param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.Stop(MCForge.Entity.Player)">
+            <summary>
+            Stops showing the message.
+            </summary>
+            <param name="p">The player to stop showing the message to.</param>
+        </member>
+        <member name="T:MCForge.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:MCForge.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:MCForge.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="M:MCForge.Core.Heartbeat.minecraftHeartbeat(System.Int32,System.String,System.Boolean,System.String,System.Int32,System.Byte,System.Byte)">
+            <summary>
+            Sends a heartbeat to minecraft.net.
+            </summary>
+            <param name="port">The port.</param>
+            <param name="serverName">Name of the server.</param>
+            <param name="Public">If set to <c>true</c> [public].</param>
+            <param name="salt">The salt.</param>
+            <param name="onlineUsers">The online users.</param>
+            <param name="maxUsers">The max users.</param>
+        </member>
+        <member name="M:MCForge.Core.Heartbeat.sendHeartbeat">
+            <summary>
+            Sends all the heartbeats.
+            </summary>
+            <param name="port">The port the server is running on.</param>
+            <param name="serverName">Name of the server.</param>
+            <param name="Public">If the server is public or not.</param>
+            <param name="salt">The server salt salt.</param>
+            <param name="onlineUsers">The number of online users.</param>
+            <param name="maxUsers">The maximum amount of users.</param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Interface.Command.ICommand.Use(MCForge.Entity.Player,System.String[])">
+            <summary>
+            The method that will be called when a player uses this command
+            </summary>
+            <param name="p">a Player class</param>
+            <param name="args">the args of the command the player sent</param>
+        </member>
+        <member name="M:MCForge.Interface.Command.ICommand.Help(MCForge.Entity.Player)">
+            <summary>
+            The method to run when a player uses the /help command
+            </summary>
+            <param name="p">a Player instance</param>
+        </member>
+        <member name="M:MCForge.Interface.Command.ICommand.Initialize">
+            <summary>
+            The initialization of the command, you need to add command referances here.
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Command.ICommand.Name">
+            <summary>
+            The name of the command
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Command.ICommand.Type">
+            <summary>
+            The type of command this is
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Command.ICommand.Author">
+            <summary>
+            The author of the command (to add multiple authors just make the string like "Merlin33069, someone else"
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Command.ICommand.Version">
+            <summary>
+            The command version
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Command.ICommand.CUD">
+            <summary>
+            Unique identifier for this plugin, will be used later to link to MCForge databases
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.shuttingDown">
+            <summary>
+            Get whether the server is currently shutting down
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.Started">
+            <summary>
+            Get whether the server is currently fully started or not
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.Players">
+            <summary>
+            Get the current list of online players, note that if your doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.BannedIP">
+            <summary>
+            Get the current list of banned ip addresses, note that if your doing a foreach on this (or any other public list) you should always add .ToArray() to the end so that you avoid errors!
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.devs">
+            <summary>
+            The list of MCForge developers.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.agreed">
+            <summary>
+            List of players that agreed to the rules
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.Mainlevel">
+            <summary>
+            The main level of the server, where players spawn when they first join
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.moderation">
+            <summary>
+            Determines if the chat moderation is enabled
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.voting">
+            <summary>
+            Is the server in voting mode?
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.kickvote">
+            <summary>
+            Is it a kickvote?
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.YesVotes">
+            <summary>
+            Amount of yes votes.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.NoVotes">
+            <summary>
+            Amount of no votes.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.kicker">
+            <summary>
+            The player who's getting, if it's /votekick
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.DefaultColor">
+            <summary>
+            The server's default color.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.URL">
+            <summary>
+            The minecraft.net URL of the server
+            </summary>
+            
+        </member>
+        <member name="M:MCForge.Core.Server.Log(System.String)">
+            <summary>
+            Write A message to the Console and the GuiLog using default (white on black) colors.
+            </summary>
+            <param name="message">The message to show</param>
+        </member>
+        <member name="M:MCForge.Core.Server.Log(System.Exception)">
+            <summary>
+            Write an error to the Console and the GuiLog using Red on black colors
+            </summary>
+            <param name="E">The error exception to write.</param>
+        </member>
+        <member name="M:MCForge.Core.Server.Log(System.String,System.ConsoleColor,System.ConsoleColor)">
+            <summary>
+            Write a message to the console and GuiLog using a specified TextColor and BackGround Color
+            </summary>
+            <param name="message">The Message to show</param>
+            <param name="TextColor">The color of the text to show</param>
+            <param name="BackgroundColor">The color behind the text.</param>
+        </member>
+        <member name="F:MCForge.Core.ServerSettings.Appending">
+            <summary>
+            Is message appending enabled?
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.ServerSettings.higherranktp">
+            <summary>
+            Allow people teleport to higher ranks?
+            </summary>
+        </member>
+        <member name="T:MCForge.Interface.Plugin.PluginManager">
+            <summary>
+            The command class, used to store commands for players to use
+            </summary>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.PluginManager.getByInterface(System.String)">
+            <summary>
+            Gets a plugin by interface.
+            </summary>
+            <param name="name">The name of the interface</param>
+            <returns></returns>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.PluginManager.AddReference(MCForge.Interface.Plugin.IPlugin)">
+            <summary>
+            Add an array of references to your command here
+            </summary>
+            <param name="plugin">The plugin d that this reference... references, you should most likely use 'this'</param>    
+        </member>
+        <member name="T:MCForge.Interface.Command.Command">
+            <summary>
+            The command class, used to store commands for players to use
+            </summary>
+        </member>
+        <member name="M:MCForge.Interface.Command.Command.AddReference(MCForge.Interface.Command.ICommand,System.String[])">
+            <summary>
+            Add an array of referances to your command here
+            </summary>
+            <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
+            <param name="reference">the array of strings you want players to type to use your command</param>
+        </member>
+        <member name="M:MCForge.Interface.Command.Command.AddReference(MCForge.Interface.Command.ICommand,System.String)">
+            <summary>
+            Add a referance to your command here
+            </summary>
+            <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
+            <param name="reference">the string you want player to type to use your command, you can use this method more than once :)</param>
+        </member>
+        <member name="F:MCForge.frmMain.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:MCForge.frmMain.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:MCForge.frmMain.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:MCForge.World.Level">
+            <summary>
+            This class is used for loading/saving/handling/manipulation of server levels.
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Level.Size">
+            <summary>
+            This is the size of the level
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Level.SpawnPos">
+            <summary>
+            Levels current Spawn position
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Level.SpawnRot">
+            <summary>
+            Levels current Spawn ROT
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Level.data">
+            <summary>
+            This holds the map data for the entire map
+            </summary>
+        </member>
+        <member name="M:MCForge.World.Level.CreateLevel(MCForge.Core.Point3,MCForge.World.Level.LevelTypes)">
+            <summary>
+            Create a level with a specified type and a specified size
+            </summary>
+            <param name="size">The size to create the level.</param>
+            <param name="type">The type of the level you want to create</param>
+            <returns>returns the level that was created</returns>
+        </member>
+        <member name="M:MCForge.World.Level.LoadLevel">
+            <summary>
+            Load a level (todo)
+            </summary>
+            <returns>the loaded level</returns>
+        </member>
+        <member name="M:MCForge.World.Level.ForEachBlockXZY(MCForge.World.Level.ForEachBlockDelegateXZY)">
+            <summary>
+            loop through all the blocks in xzy running a delegated method for each block, the delegated method will be bassed coordinated in xzy format
+            </summary>
+            <param name="FEBD">the delegate to call on each cycle</param>
+        </member>
+        <member name="M:MCForge.World.Level.ForEachBlock(MCForge.World.Level.ForEachBlockDelegate)">
+            <summary>
+            loop through all the blocks in xzy running a delegated method for each block, the delegated method will be passed coordinated in int format
+            </summary>
+            <param name="FEBD">the delegate to call on each cycle</param>
+        </member>
+        <member name="M:MCForge.World.Level.GetBlock(MCForge.Core.Point3)">
+            <summary>
+            get the block (byte) at an xzy pos
+            </summary>
+            <param name="pos">the pos to check and return</param>
+            <returns>a byte that represents the blocktype at the given location</returns>
+        </member>
+        <member name="M:MCForge.World.Level.GetBlock(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            get the block at a given xzy pos
+            </summary>
+            <param name="x">x pos to get</param>
+            <param name="z">z pos to get</param>
+            <param name="y">y pos to get</param>
+            <returns>a byte that represents the blocktype at the given location</returns>
+        </member>
+        <member name="M:MCForge.World.Level.GetBlock(System.UInt16,System.UInt16,System.UInt16)">
+            <summary>
+            get the block at a given xzy position
+            </summary>
+            <param name="x">x pos to get</param>
+            <param name="z">z pos to get</param>
+            <param name="y">y pos to get</param>
+            <returns>a byte that represents the blocktype at the given location</returns>
+        </member>
+        <member name="M:MCForge.World.Level.GetBlock(System.Int32)">
+            <summary>
+            Get the block at a given pos in the data array
+            </summary>
+            <param name="pos">the pos to get the block from</param>
+            <returns>a byte that represents the blocktype at the given location</returns>
+        </member>
+        <member name="M:MCForge.World.Level.PosToInt(System.UInt16,System.UInt16,System.UInt16)">
+            <summary>
+            Convert a pos (xzy) into a single INT pos
+            </summary>
+            <param name="x">X position to convert</param>
+            <param name="z">Z position to convert</param>
+            <param name="y">Y position to convert</param>
+            <returns>an integer representing the given block position in the DATA array above.</returns>
+        </member>
+        <member name="M:MCForge.World.Level.IntToPos(System.Int32)">
+            <summary>
+            Convert an int POS to an xzy pos
+            </summary>
+            <param name="pos">The int pos to convert</param>
+            <returns>a 3 dimensional representation of the block position</returns>
+        </member>
+        <member name="M:MCForge.World.Level.IntOffset(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Return the position (int) relative to a given block position (int) given an offset of xzy
+            </summary>
+            <param name="pos">the integral pos to start at</param>
+            <param name="x">the offset along the x axis</param>
+            <param name="z">the offset along the z axis</param>
+            <param name="y">the offset along the y axis</param>
+            <returns>returns an int representing the offset block location in the data array</returns>
+        </member>
+        <member name="P:MCForge.World.Level.TotalBlocks">
+            <summary>
+            Get the total blocks in the level
+            </summary>
+        </member>
+        <member name="T:MCForge.World.Level.ForEachBlockDelegateXZY">
+            <summary>
+            This delegate is used for looping through the blocks in a level in an automated fashion, and each cycle returns the position in xzy format
+            </summary>
+            <param name="x">the loops current block location (x)</param>
+            <param name="z">the loops current block location (z)</param>
+            <param name="y">the loops current block location (y)</param>
+        </member>
+        <member name="T:MCForge.World.Level.ForEachBlockDelegate">
+            <summary>
+            This delegate is used for looping through the blocks in a level in an automated fashion, and each cycle returns the position in POS format
+            </summary>
+            <param name="pos">the loops current block position (pos)</param>
+        </member>
+        <member name="T:MCForge.World.Level.LevelTypes">
+            <summary>
+            An enumeration of all the types of levels
+            </summary>
+        </member>
+        <member name="M:MCForge.Core.Program.Main">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
         <member name="T:MCForge.Entity.Player">
             <summary>
             The player class, this contains all player information.
@@ -266,476 +730,6 @@
             <param name="message">The string the player sent</param>
             <param name="PassBack">A passback object that can be used for a command to send data back to itself for use</param>
         </member>
-        <member name="T:MCForge.Interface.Command.Command">
-            <summary>
-            The command class, used to store commands for players to use
-            </summary>
-        </member>
-        <member name="M:MCForge.Interface.Command.Command.AddReference(MCForge.Interface.Command.ICommand,System.String[])">
-            <summary>
-            Add an array of referances to your command here
-            </summary>
-            <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
-            <param name="reference">the array of strings you want players to type to use your command</param>
-        </member>
-        <member name="M:MCForge.Interface.Command.Command.AddReference(MCForge.Interface.Command.ICommand,System.String)">
-            <summary>
-            Add a referance to your command here
-            </summary>
-            <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
-            <param name="reference">the string you want player to type to use your command, you can use this method more than once :)</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.#ctor(MCForge.Entity.Player)">
-            <summary>
-            Create a new Event to call
-            </summary>
-            <param name="p">The player connected to the event</param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPlugin.Initialize">
-            <summary>
-            The initialization of the plugin.
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Plugin.IPlugin.Name">
-            <summary>
-            The name of the plugin
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Plugin.IPlugin.Author">
-            <summary>
-            The author of the plugin (to add multiple authors just make the string like "Merlin33069, someone else"
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Plugin.IPlugin.Version">
-            <summary>
-            The command version
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Plugin.IPlugin.CUD">
-            <summary>
-            Unique identifier for this plugin, will be used later to link to McForge databases
-            </summary>
-        </member>
-        <member name="M:MCForge.Core.Heartbeat.minecraftHeartbeat(System.Int32,System.String,System.Boolean,System.String,System.Int32,System.Byte,System.Byte)">
-            <summary>
-            Sends a heartbeat to minecraft.net.
-            </summary>
-            <param name="port">The port.</param>
-            <param name="serverName">Name of the server.</param>
-            <param name="Public">If set to <c>true</c> [public].</param>
-            <param name="salt">The salt.</param>
-            <param name="onlineUsers">The online users.</param>
-            <param name="maxUsers">The max users.</param>
-        </member>
-        <member name="M:MCForge.Core.Heartbeat.sendHeartbeat">
-            <summary>
-            Sends all the heartbeats.
-            </summary>
-            <param name="port">The port the server is running on.</param>
-            <param name="serverName">Name of the server.</param>
-            <param name="Public">If the server is public or not.</param>
-            <param name="salt">The server salt salt.</param>
-            <param name="onlineUsers">The number of online users.</param>
-            <param name="maxUsers">The maximum amount of users.</param>
-            <returns></returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.Core.PDB.CompareTo(MCForge.Core.PDB)">
-            <summary>
-            This allows a PDB to be compared to another PDB by looking at the username, and subsequently, it can then be sorted.
-            </summary>
-            <param name="pdb">The comparing PDB</param>
-            <returns>returns a comparison of the usernames</returns>
-        </member>
-        <member name="M:MCForge.Interface.Command.ICommand.Use(MCForge.Entity.Player,System.String[])">
-            <summary>
-            The method that will be called when a player uses this command
-            </summary>
-            <param name="p">a Player class</param>
-            <param name="args">the args of the command the player sent</param>
-        </member>
-        <member name="M:MCForge.Interface.Command.ICommand.Help(MCForge.Entity.Player)">
-            <summary>
-            The method to run when a player uses the /help command
-            </summary>
-            <param name="p">a Player instance</param>
-        </member>
-        <member name="M:MCForge.Interface.Command.ICommand.Initialize">
-            <summary>
-            The initialization of the command, you need to add command referances here.
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Command.ICommand.Name">
-            <summary>
-            The name of the command
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Command.ICommand.Type">
-            <summary>
-            The type of command this is
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Command.ICommand.Author">
-            <summary>
-            The author of the command (to add multiple authors just make the string like "Merlin33069, someone else"
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Command.ICommand.Version">
-            <summary>
-            The command version
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Command.ICommand.CUD">
-            <summary>
-            Unique identifier for this plugin, will be used later to link to MCForge databases
-            </summary>
-        </member>
-        <member name="F:MCForge.frmMain.components">
-            <summary>
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:MCForge.frmMain.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:MCForge.frmMain.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
-        <member name="T:MCForge.World.Level">
-            <summary>
-            This class is used for loading/saving/handling/manipulation of server levels.
-            </summary>
-        </member>
-        <member name="F:MCForge.World.Level.Size">
-            <summary>
-            This is the size of the level
-            </summary>
-        </member>
-        <member name="F:MCForge.World.Level.SpawnPos">
-            <summary>
-            Levels current Spawn position
-            </summary>
-        </member>
-        <member name="F:MCForge.World.Level.SpawnRot">
-            <summary>
-            Levels current Spawn ROT
-            </summary>
-        </member>
-        <member name="F:MCForge.World.Level.data">
-            <summary>
-            This holds the map data for the entire map
-            </summary>
-        </member>
-        <member name="M:MCForge.World.Level.CreateLevel(MCForge.Core.Point3,MCForge.World.Level.LevelTypes)">
-            <summary>
-            Create a level with a specified type and a specified size
-            </summary>
-            <param name="size">The size to create the level.</param>
-            <param name="type">The type of the level you want to create</param>
-            <returns>returns the level that was created</returns>
-        </member>
-        <member name="M:MCForge.World.Level.LoadLevel">
-            <summary>
-            Load a level (todo)
-            </summary>
-            <returns>the loaded level</returns>
-        </member>
-        <member name="M:MCForge.World.Level.ForEachBlockXZY(MCForge.World.Level.ForEachBlockDelegateXZY)">
-            <summary>
-            loop through all the blocks in xzy running a delegated method for each block, the delegated method will be bassed coordinated in xzy format
-            </summary>
-            <param name="FEBD">the delegate to call on each cycle</param>
-        </member>
-        <member name="M:MCForge.World.Level.ForEachBlock(MCForge.World.Level.ForEachBlockDelegate)">
-            <summary>
-            loop through all the blocks in xzy running a delegated method for each block, the delegated method will be passed coordinated in int format
-            </summary>
-            <param name="FEBD">the delegate to call on each cycle</param>
-        </member>
-        <member name="M:MCForge.World.Level.GetBlock(MCForge.Core.Point3)">
-            <summary>
-            get the block (byte) at an xzy pos
-            </summary>
-            <param name="pos">the pos to check and return</param>
-            <returns>a byte that represents the blocktype at the given location</returns>
-        </member>
-        <member name="M:MCForge.World.Level.GetBlock(System.Int32,System.Int32,System.Int32)">
-            <summary>
-            get the block at a given xzy pos
-            </summary>
-            <param name="x">x pos to get</param>
-            <param name="z">z pos to get</param>
-            <param name="y">y pos to get</param>
-            <returns>a byte that represents the blocktype at the given location</returns>
-        </member>
-        <member name="M:MCForge.World.Level.GetBlock(System.UInt16,System.UInt16,System.UInt16)">
-            <summary>
-            get the block at a given xzy position
-            </summary>
-            <param name="x">x pos to get</param>
-            <param name="z">z pos to get</param>
-            <param name="y">y pos to get</param>
-            <returns>a byte that represents the blocktype at the given location</returns>
-        </member>
-        <member name="M:MCForge.World.Level.GetBlock(System.Int32)">
-            <summary>
-            Get the block at a given pos in the data array
-            </summary>
-            <param name="pos">the pos to get the block from</param>
-            <returns>a byte that represents the blocktype at the given location</returns>
-        </member>
-        <member name="M:MCForge.World.Level.PosToInt(System.UInt16,System.UInt16,System.UInt16)">
-            <summary>
-            Convert a pos (xzy) into a single INT pos
-            </summary>
-            <param name="x">X position to convert</param>
-            <param name="z">Z position to convert</param>
-            <param name="y">Y position to convert</param>
-            <returns>an integer representing the given block position in the DATA array above.</returns>
-        </member>
-        <member name="M:MCForge.World.Level.IntToPos(System.Int32)">
-            <summary>
-            Convert an int POS to an xzy pos
-            </summary>
-            <param name="pos">The int pos to convert</param>
-            <returns>a 3 dimensional representation of the block position</returns>
-        </member>
-        <member name="M:MCForge.World.Level.IntOffset(System.Int32,System.Int32,System.Int32,System.Int32)">
-            <summary>
-            Return the position (int) relative to a given block position (int) given an offset of xzy
-            </summary>
-            <param name="pos">the integral pos to start at</param>
-            <param name="x">the offset along the x axis</param>
-            <param name="z">the offset along the z axis</param>
-            <param name="y">the offset along the y axis</param>
-            <returns>returns an int representing the offset block location in the data array</returns>
-        </member>
-        <member name="P:MCForge.World.Level.TotalBlocks">
-            <summary>
-            Get the total blocks in the level
-            </summary>
-        </member>
-        <member name="T:MCForge.World.Level.ForEachBlockDelegateXZY">
-            <summary>
-            This delegate is used for looping through the blocks in a level in an automated fashion, and each cycle returns the position in xzy format
-            </summary>
-            <param name="x">the loops current block location (x)</param>
-            <param name="z">the loops current block location (z)</param>
-            <param name="y">the loops current block location (y)</param>
-        </member>
-        <member name="T:MCForge.World.Level.ForEachBlockDelegate">
-            <summary>
-            This delegate is used for looping through the blocks in a level in an automated fashion, and each cycle returns the position in POS format
-            </summary>
-            <param name="pos">the loops current block position (pos)</param>
-        </member>
-        <member name="T:MCForge.World.Level.LevelTypes">
-            <summary>
-            An enumeration of all the types of levels
-            </summary>
-        </member>
-        <member name="T:MCForge.Interface.Plugin.PluginManager">
-            <summary>
-            The command class, used to store commands for players to use
-            </summary>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.PluginManager.getByInterface(System.String)">
-            <summary>
-            Gets a plugin by interface.
-            </summary>
-            <param name="name">The name of the interface</param>
-            <returns></returns>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.PluginManager.AddReference(MCForge.Interface.Plugin.IPlugin)">
-            <summary>
-            Add an array of references to your command here
-            </summary>
-            <param name="plugin">The plugin d that this reference... references, you should most likely use 'this'</param>    
-        </member>
-        <member name="T:MCForge.Properties.Resources">
-            <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-        </member>
-        <member name="P:MCForge.Properties.Resources.ResourceManager">
-            <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:MCForge.Properties.Resources.Culture">
-            <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.ServerSettings.Appending">
-            <summary>
-            Is message appending enabled?
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.ServerSettings.higherranktp">
-            <summary>
-            Allow people teleport to higher ranks?
-            </summary>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowMessage(MCForge.Entity.Player,System.String)">
-            <summary>
-            Starts showing a message.
-            </summary>
-            <param name="p">The player to show the message to.</param>
-            <param name="message">The message to show.</param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.AppendText(MCForge.Entity.Player,System.String)">
-            <summary>
-            Appends text at the end of the message.
-            </summary>
-            <param name="p">The player to append the message to</param>
-            <param name="text">The message to append.</param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowNextPage(MCForge.Entity.Player)">
-            <summary>
-            Shows the next page if possible.
-            </summary>
-            <param name="p">The player to show the next page to. </param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowPage(MCForge.Entity.Player,System.Int32)">
-            <summary>
-            Shows a selected page if possible.
-            </summary>
-            <param name="p">The player to show the page to.</param>
-            <param name="page">The page to show.</param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowNextLine(MCForge.Entity.Player)">
-            <summary>
-            Shows next line if possible.
-            </summary>
-            <param name="p">The player to show the line to.</param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowPreviousPage(MCForge.Entity.Player)">
-            <summary>
-            Shows previous page if possible.
-            </summary>
-            <param name="p">The player to show the page to.</param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowPreviousLine(MCForge.Entity.Player)">
-            <summary>
-            Shows previous line if possible.
-            </summary>
-            <param name="p">The player to show the line to.</param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.Stop(MCForge.Entity.Player)">
-            <summary>
-            Stops showing the message.
-            </summary>
-            <param name="p">The player to stop showing the message to.</param>
-        </member>
-        <member name="F:MCForge.Core.Server.shuttingDown">
-            <summary>
-            Get whether the server is currently shutting down
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.Started">
-            <summary>
-            Get whether the server is currently fully started or not
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.Players">
-            <summary>
-            Get the current list of online players, note that if your doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.BannedIP">
-            <summary>
-            Get the current list of banned ip addresses, note that if your doing a foreach on this (or any other public list) you should always add .ToArray() to the end so that you avoid errors!
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.devs">
-            <summary>
-            The list of MCForge developers.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.agreed">
-            <summary>
-            List of players that agreed to the rules
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.Mainlevel">
-            <summary>
-            The main level of the server, where players spawn when they first join
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.moderation">
-            <summary>
-            Determines if the chat moderation is enabled
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.voting">
-            <summary>
-            Is the server in voting mode?
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.kickvote">
-            <summary>
-            Is it a kickvote?
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.YesVotes">
-            <summary>
-            Amount of yes votes.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.NoVotes">
-            <summary>
-            Amount of no votes.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.kicker">
-            <summary>
-            The player who's getting, if it's /votekick
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.DefaultColor">
-            <summary>
-            The server's default color.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.URL">
-            <summary>
-            The minecraft.net URL of the server
-            </summary>
-            
-        </member>
-        <member name="M:MCForge.Core.Server.Log(System.String)">
-            <summary>
-            Write A message to the Console and the GuiLog using default (white on black) colors.
-            </summary>
-            <param name="message">The message to show</param>
-        </member>
-        <member name="M:MCForge.Core.Server.Log(System.Exception)">
-            <summary>
-            Write an error to the Console and the GuiLog using Red on black colors
-            </summary>
-            <param name="E">The error exception to write.</param>
-        </member>
-        <member name="M:MCForge.Core.Server.Log(System.String,System.ConsoleColor,System.ConsoleColor)">
-            <summary>
-            Write a message to the console and GuiLog using a specified TextColor and BackGround Color
-            </summary>
-            <param name="message">The Message to show</param>
-            <param name="TextColor">The color of the text to show</param>
-            <param name="BackgroundColor">The color behind the text.</param>
-        </member>
-        <member name="M:MCForge.Core.Program.Main">
-            <summary>
-            The main entry point for the application.
-            </summary>
-        </member>
         <member name="T:MCForge.World.Blocks">
             <summary>
             A class that contains blocks / custom blocks and methods to work with them.
@@ -764,6 +758,12 @@
             <summary>
             An enumeration of all the default Minecraft blocks
             </summary>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.#ctor(MCForge.Entity.Player)">
+            <summary>
+            Create a new Event to call
+            </summary>
+            <param name="p">The player connected to the event</param>
         </member>
     </members>
 </doc>
