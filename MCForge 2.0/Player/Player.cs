@@ -823,6 +823,7 @@ namespace MCForge.Entity
         public void Kick(string message)
         {
             //GlobalMessage(message);
+			beingkicked = true;
             SKick(message);
         }
         /// <summary>
