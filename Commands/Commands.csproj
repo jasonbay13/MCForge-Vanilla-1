@@ -52,6 +52,7 @@
     <Compile Include="Information\CmdDevs.cs" />
     <Compile Include="Information\CmdIds.cs" />
     <Compile Include="CmdTest.cs" />
+    <Compile Include="Information\CmdNews.cs" />
     <Compile Include="Information\CmdLastCmd.cs" />
     <Compile Include="Information\CmdMeasure.cs" />
     <Compile Include="Information\CmdCalculate.cs" />
