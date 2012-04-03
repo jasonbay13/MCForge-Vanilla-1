@@ -71,6 +71,7 @@
     <Compile Include="Moderation\CmdVoteKick.cs" />
     <Compile Include="Misc\CmdSpawn.cs" />
     <Compile Include="Misc\CmdTeleport.cs" />
+    <Compile Include="Moderation\CmdWho.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
