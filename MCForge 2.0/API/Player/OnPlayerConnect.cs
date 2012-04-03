@@ -20,11 +20,17 @@ using MCForge.Entity;
 
 namespace MCForge.API.PlayerEvent
 {
+    /// <summary>
+    /// The OnPlayerConnect event is executed everytime a player connects to the server
+    /// This event can be canceled
+    /// </summary>
     public class OnPlayerConnect: Event, Cancelable, PlayerEvent
     {
-        protected bool _canceled = false;
+        bool _canceled = false;
+        
         public delegate void OnCall(OnPlayerConnect eventargs);
-        protected Player p;
+        
+        Player p;
 
         /// <summary>
         /// Create a new Event to call
@@ -34,18 +40,32 @@ namespace MCForge.API.PlayerEvent
 
         internal OnPlayerConnect() { }
 
+        /// <summary>
+        /// Cancel the event
+        /// </summary>
+        /// <param name="value">True will cancel the event, false will un-cancel the event</param>
         public void Cancel(bool value)
         {
             _canceled = value;
         }
 
+        /// <summary>
+        /// Get the player connected to the event
+        /// </summary>
+        /// <returns>The player</returns>
         public Player GetPlayer()
         {
             return p;
         }
 
+        /// <summary>
+        /// Is the event canceled
+        /// </summary>
         public bool IsCanceled { get { return _canceled; } }
 
+        /// <summary>
+        /// Call the event
+        /// </summary>
         public override void Call()
         {
             EventHelper.cache.ForEach(e =>
@@ -56,6 +76,12 @@ namespace MCForge.API.PlayerEvent
             if (IsCanceled && p.isOnline)
                 p.Kick("");
         }
+
+        /// <summary>
+        /// Register this event
+        /// </summary>
+        /// <param name="method">The method to call when this event gets excuted</param>
+        /// <param name="priority">The importance of the call</param>
         public static void Register(OnCall method, Priority priority)
         {
             EventHelper temp = new EventHelper(method, priority, new OnPlayerConnect());

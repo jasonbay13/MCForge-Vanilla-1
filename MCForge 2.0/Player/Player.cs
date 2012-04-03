@@ -366,6 +366,8 @@ namespace MCForge.Entity
 
                 OnPlayerConnect e = new OnPlayerConnect(this);
                 e.Call();
+                if (e.IsCanceled)
+                    return;
 
                 //TODO Database Stuff
 
@@ -577,7 +579,7 @@ namespace MCForge.Entity
                 }
             }
 
-            if (nextChat != null)
+            /*if (nextChat != null) AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
             {
                 NextChatDelegate tempNextChat = nextChat;
                 object tempPassBack = PassBackData;
@@ -588,7 +590,14 @@ namespace MCForge.Entity
                 ThreadPool.QueueUserWorkItem(delegate { tempNextChat.Invoke(this, incomingText, tempPassBack); });
 
                 return;
-            }
+            }*/
+
+            OnPlayerChat e = new OnPlayerChat(this, incomingText);
+            e.Call();
+            if (e.IsCanceled)
+                return;
+            incomingText = e.GetMessage();
+
             if (Server.voting)
             {
                 if (Server.kickvote && Server.kicker == this) { SendMessage("You're not allowed to vote!"); return; }
@@ -1049,12 +1058,12 @@ namespace MCForge.Entity
         /// </summary>
         /// <param name="chat">The NextChatDelegate that will be executed on the next chat.</param>
         /// <param name="data">A passback object that can be used for a command to send data back to itself for use</param>
-        public void CatchNextChat(NextChatDelegate chat, object data)
+        /*public void CatchNextChat(NextChatDelegate chat, object data)
         {
             PassBackData = data;
             blockChange = null;
             nextChat = chat;
-        }
+        }*/
         /// <summary>
         /// Fakes a click by invoking a blockchange event.
         /// </summary>

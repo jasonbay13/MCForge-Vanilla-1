@@ -23,6 +23,10 @@ namespace MCForge.API.PlayerEvent
 {
     public interface PlayerEvent
     {
+        /// <summary>
+        /// Get the player connected to the event
+        /// </summary>
+        /// <returns>The player</returns>
         Player GetPlayer();
     }
 }

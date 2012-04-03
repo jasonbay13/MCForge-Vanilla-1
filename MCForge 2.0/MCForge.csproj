@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="API\Cancelable.cs" />
     <Compile Include="API\EventHelper.cs" />
+    <Compile Include="API\Player\OnPlayerChat.cs" />
     <Compile Include="API\Player\OnPlayerConnect.cs" />
     <Compile Include="API\Player\PlayerEvent.cs" />
     <Compile Include="API\Priority.cs" />

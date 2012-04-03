@@ -19,6 +19,11 @@ using System.Text;
 
 namespace MCForge.API
 {
+    /// <summary>
+    /// The priority of the call
+    /// Low will be called first so it can make the first changes
+    /// High will be called last so it gets the last say
+    /// </summary>
     public enum Priority : byte
     {
         Low = 3,
