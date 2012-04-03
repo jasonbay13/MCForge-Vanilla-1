@@ -62,6 +62,7 @@
     <Compile Include="API\Priority.cs" />
     <Compile Include="API\System\SystemEvent.cs" />
     <Compile Include="API\World\WorldEvent.cs" />
+    <Compile Include="Groups\Group.cs" />
     <Compile Include="World\Blocks.cs" />
     <Compile Include="API\Event.cs" />
     <Compile Include="Gui\frmMain.cs">

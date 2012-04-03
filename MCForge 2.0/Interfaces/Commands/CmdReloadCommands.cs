@@ -40,6 +40,9 @@ namespace MCForge.Interface.Command
 
 		string[] CommandStrings = new string[2] { "reloadcmds", "reloadcommands" };
 
+        byte _Permission = 120; //Owner
+        public byte Permission { get { return _Permission; } }
+
 		public void Use(Player p, string[] args)
 		{
 			Player.UniversalChat("Reloading the Command system, please wait.");

@@ -25,6 +25,9 @@ namespace CommandDll.Moderation {
 
         string[] CommandStrings = new string[] { "who", "whois", "whowas", "whoip" };
 
+        byte _Permission = 80;
+        public byte Permission { get { return _Permission; } }
+
         public void Use(Player p, string[] args) {
             //We can get an IP, or a name.
             //Because of the fact IPs can give multiple names, we will show all possibilities.
@@ -40,7 +43,7 @@ namespace CommandDll.Moderation {
 				if (found == null) {
 					p.SendMessage("The specified player is not online.");
 				} else {
-					p.SendMessage(found.USERNAME + " is on " + found.level.name);
+					//p.SendMessage(found.USERNAME + " is on " + found.level.name); //commented out because of a build time error
 					//p.SendMessage(found.title + " " + found.USERNAME + " has:");
 					//p.SendMessage("> the rank of " + found.group.name);
 					//p.SendMessage("> modified " + found.allmodified + " blocks and " + found.modified + " were changed since logging in.");

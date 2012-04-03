@@ -43,6 +43,11 @@ namespace MCForge.Interface.Command
 		/// Unique identifier for this plugin, will be used later to link to MCForge databases
 		/// </summary>
 		string CUD { get; }
+        /// <summary>
+        /// The default permission value for the command
+        /// </summary>
+        /// <remarks></remarks>
+        byte Permission { get; }
 
 		/// <summary>
 		/// The method that will be called when a player uses this command

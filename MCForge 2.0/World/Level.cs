@@ -43,8 +43,9 @@ namespace MCForge.World
 		/// <param name="pos">the loops current block position (pos)</param>
 		public delegate void ForEachBlockDelegate(int pos);
 
-		String _name = "main";
-		public string name { get; set; }
+        string _name = "main";
+        public string name { get; set; }
+
 		int _TotalBlocks;
 		/// <summary>
 		/// Get the total blocks in the level
