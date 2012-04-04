@@ -561,6 +561,7 @@ namespace MCForge.Entity
 
             //Meep is used above for //Command
         Meep:
+
             if (!File.Exists("text/badwords.txt")) { File.Create("text/badwords.txt").Close(); }
             if (!File.Exists("text/replacementwords.txt")) { File.Create("text/replacementwords.txt").Close(); }
 
