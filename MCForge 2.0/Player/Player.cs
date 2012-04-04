@@ -803,7 +803,7 @@ namespace MCForge.Entity
         /// <param name="message">The message to send</param>
         public void SendMessage(string message)
         {
-            SendMessage(0xFF, message);
+            SendMessage(id, message); // 0xFF is NOT a valid player ID
         }
         /// <summary>
         /// Exactly what the function name is, it might be useful to change this players pos first ;)
