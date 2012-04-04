@@ -239,7 +239,9 @@ namespace MCForge.Groups
         /// <param name="name">The name of the group.</param>
         public static PlayerGroup Find(string name)
         {
-            if (name == "op" && !Exists(name)) name = "operator";
+            if (name == "adv" && !Exists(name)) name = "advbuilder";
+            else if (name == "op" && !Exists(name)) name = "operator";
+            else if (name == "admin" && !Exists(name)) name = "superop";
 
             foreach (PlayerGroup g in PlayerGroup.groups)
             {

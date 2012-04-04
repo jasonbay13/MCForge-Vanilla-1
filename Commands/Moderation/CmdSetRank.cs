@@ -36,7 +36,21 @@ namespace CommandDll
             PlayerGroup group = null;
             group = PlayerGroup.Find(args[1]);
 
-            group.AddPlayer(p);
+            if (group == null)
+            {
+                p.SendMessage("Rank not found");
+                return;
+            }
+
+            if (group.permission >= p.group.permission)
+            { 
+            }
+            if (who.group == group)
+            {
+                p.SendMessage(group.colour + who.USERNAME + Server.DefaultColor + "is already that rank");
+                return;
+            }
+            group.AddPlayer(who);
             Player.UniversalChat(group.colour + who.USERNAME + Server.DefaultColor + " had their rank set to " + group.colour + group.name);
 
         }
