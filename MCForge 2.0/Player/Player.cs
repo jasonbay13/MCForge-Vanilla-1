@@ -194,6 +194,10 @@ namespace MCForge.Entity
         /// True if this player is an admin
         /// </summary>
         public bool isAdmin = true;
+        /// <summary>
+        /// Holds replacement messages for profan filter
+        /// </summary>
+        public static List<string> replacement = new List<string>();
 
         object PassBackData;
         /// <summary>
@@ -221,6 +225,7 @@ namespace MCForge.Entity
         /// The current Group of the player
         /// </summary>
         public PlayerGroup group = ServerSettings.DefaultGroup;
+
 
         #endregion
 
@@ -556,6 +561,27 @@ namespace MCForge.Entity
 
             //Meep is used above for //Command
         Meep:
+
+            if (!File.Exists("text/badwords.txt")) { File.Create("text/badwords.txt").Close(); }
+            if (!File.Exists("text/replacementwords.txt")) { File.Create("text/replacementwords.txt").Close(); }
+
+            string textz = File.ReadAllText("text/replacementwords.txt");
+            if (textz == "") { File.WriteAllText("text/replacementwords.txt", "Pepper"); }
+            StreamReader w = File.OpenText("text/replacementwords.txt");
+            while (!w.EndOfStream) replacement.Add(w.ReadLine());
+            w.Dispose();
+
+        string[] badwords = File.ReadAllLines("text/badwords.txt");
+        string[] replacementwords = File.ReadAllLines("text/replacementwords.txt");
+
+        foreach (string word in badwords)
+        {
+            string text = incomingText;
+            if (text.Contains(word))
+            {
+                incomingText = Regex.Replace(text, word, replacement[new Random().Next(0, replacement.Count)]);
+            }
+        }
             if (muted) { SendMessage("You are muted!"); return; }
             if (Server.moderation && !voiced && !Server.devs.Contains(USERNAME)) { SendMessage("You can't talk during chat moderation!"); return; }
             if (jokered)

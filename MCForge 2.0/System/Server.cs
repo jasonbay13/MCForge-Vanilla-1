@@ -39,9 +39,10 @@ namespace MCForge.Core
         public static bool Started = false;
 
         private static System.Timers.Timer UpdateTimer;
-        private static System.Timers.Timer HeartbeatTimer;
-        private static System.Timers.Timer GroupSaveTimer;
-
+		private static int HeartbeatInterval = 300;
+		private static int HeartbeatIntervalCurrent = 0;
+		private static int GroupsaveInterval = 3000;
+		private static int GroupsaveIntervalCurrent = 0;
 
         internal static List<Player> Connections = new List<Player>();
         /// <summary>
@@ -103,78 +104,97 @@ namespace MCForge.Core
         /// 
         public static string URL = "";
 
+		/// <summary>
+		/// This delegate is used when a command or plugin needs to call a method after a certain amount of time
+		/// </summary>
+		/// <param name="dataPass">This delegate passes the object that was passed to it back to the method that is to be invoked</param>
+		/// <returns>this delegate returns an updated object for the datapass</returns>
+		public delegate object TimedMethodDelegate(object dataPass);
+		static List<TimedMethod> TimedMethodList = new List<TimedMethod>();
+
         internal static void Init()
         {
-            StartListening();
-
+			//TODO load the level if it exists
             Mainlevel = Level.CreateLevel(new Point3(256, 256, 64), Level.LevelTypes.Flat);
-
 
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
             UpdateTimer.Start();
 
-			long interval = 30000;
-            HeartbeatTimer = new System.Timers.Timer(interval); //every 30 seconds
-			HeartbeatTimer.Elapsed += delegate {
-				try {
-					Heartbeat.sendHeartbeat();
-				} catch (WebException we) {
-					if (we.Status == WebExceptionStatus.Timeout) {
-						//Display a message to the console, and keep trying.
-						Log("Heartbeat timed out.  Retrying in " + interval / 1000 + " seconds...");
-					} else {
-						Log("Unknown Web error:");
-						Log(we);
-					}
-				};
-			};
-            HeartbeatTimer.Start();
-
-            GroupSaveTimer = new System.Timers.Timer(300000); //every 300 seconds or 5 min
-            GroupSaveTimer.Elapsed += delegate {
-                foreach (Groups.PlayerGroup g in Groups.PlayerGroup.groups)
-                {
-                    g.SaveGroup();
-                }
-            };
-            GroupSaveTimer.Start();
-
-            LoadAllDlls.Init();
             Groups.PlayerGroup.InitDefaultGroups();
 
-            Log("[Important]: Server Started.", ConsoleColor.Black, ConsoleColor.White);
-            Started = true;
+			LoadAllDlls.Init();
+
             Heartbeat.sendHeartbeat();
 
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
 
-            //Create the directories we need...
-            if (!Directory.Exists("text")) { Directory.CreateDirectory("text"); Log("Created text directory...", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); Log("[File] Created agreed.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/hacksmessages.txt")) { File.Create("text/hacksmessages.txt").Close(); Log("[File] Created hacksmessages.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/news.txt")) { File.Create("text/news.txt").Close(); Log("[File] Created news.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/jokermessages.txt"))
-            {
-                File.Create("text/jokermessages.txt").Close();
-                Log("[File] Created jokermessages.txt", ConsoleColor.White, ConsoleColor.Black);
-                string text = "I am a pony" + Environment.NewLine + "Rainbow Dash <3" + Environment.NewLine + "I like trains!";
-                File.WriteAllText("text/jokermessages.txt", text);
-                Log("[File] Added default messages to jokermessages.txt", ConsoleColor.White, ConsoleColor.Black);
-            }
-            try
-            {
-                string[] lines = File.ReadAllLines("text/agreed.txt");
-                foreach (string pl in lines) { agreed.Add(pl); }
-            }
-            catch { Log("[Error] Error reading agreed players!", ConsoleColor.Red, ConsoleColor.Black); }
+			CreateDirectories();
+
+			StartListening();
+			Started = true;
+			Log("[Important]: Server Started.", ConsoleColor.Black, ConsoleColor.White);
         }
 
         static void Update()
         {
+			HeartbeatIntervalCurrent++;
+			GroupsaveIntervalCurrent++;
+
             Player.GlobalUpdate();
+
+			if (HeartbeatIntervalCurrent >= HeartbeatInterval) { Heartbeat.sendHeartbeat(); HeartbeatIntervalCurrent = 0; }
+			if (GroupsaveIntervalCurrent >= GroupsaveInterval) { foreach (Groups.PlayerGroup g in Groups.PlayerGroup.groups) { g.SaveGroup(); } GroupsaveIntervalCurrent = 0; }
+
+			foreach (TimedMethod TM in TimedMethodList.ToArray())
+			{
+				TM.time--;
+				if (TM.time <= 0)
+				{
+					TM.PassBack = TM.MethodToInvoke.Invoke(TM.PassBack);
+					if (TM.repeat == 0) TimedMethodList.Remove(TM);
+					TM.repeat--;
+				}
+			}
         }
+
+		static void CreateDirectories()
+		{
+			if (!Directory.Exists("text")) { Directory.CreateDirectory("text"); Log("Created text directory...", ConsoleColor.White, ConsoleColor.Black); }
+			if (!File.Exists("text/badwords.txt")) { File.Create("text/badwords.txt").Close(); Log("[File] Created badwords.txt", ConsoleColor.White, ConsoleColor.Black); }
+			if (!File.Exists("text/replacementwords.txt")) { File.Create("text/replacementwords.txt").Close(); Log("[File] Created replacementwords.txt", ConsoleColor.White, ConsoleColor.Black); }
+			if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); Log("[File] Created agreed.txt", ConsoleColor.White, ConsoleColor.Black); }
+			if (!File.Exists("text/hacksmessages.txt")) { File.Create("text/hacksmessages.txt").Close(); Log("[File] Created hacksmessages.txt", ConsoleColor.White, ConsoleColor.Black); }
+			if (!File.Exists("text/news.txt")) { File.Create("text/news.txt").Close(); Log("[File] Created news.txt", ConsoleColor.White, ConsoleColor.Black); }
+			if (!File.Exists("text/jokermessages.txt"))
+			{
+				File.Create("text/jokermessages.txt").Close();
+				Log("[File] Created jokermessages.txt", ConsoleColor.White, ConsoleColor.Black);
+				string text = "I am a pony" + Environment.NewLine + "Rainbow Dash <3" + Environment.NewLine + "I like trains!";
+				File.WriteAllText("text/jokermessages.txt", text);
+				Log("[File] Added default messages to jokermessages.txt", ConsoleColor.White, ConsoleColor.Black);
+			}
+			try
+			{
+				string[] lines = File.ReadAllLines("text/agreed.txt");
+				foreach (string pl in lines) { agreed.Add(pl); }
+			}
+			catch { Log("[Error] Error reading agreed players!", ConsoleColor.Red, ConsoleColor.Black); }
+		}
+
+		/// <summary>
+		/// Add a method to be called in a specified time for a specified number of repetitions
+		/// </summary>
+		/// <param name="d">The delegate representing the method to be called</param>
+		/// <param name="time">The amount of milliseconds you want to wait to call this method, and to wait inbetween each calling if it repeats (note that this is rounded to 10ths of a second)</param>
+		/// <param name="repeat">the number of times to repeat this call</param>
+		/// <param name="PassBack">the object to pass back to the method that is called.</param>
+		public static void AddTimedMethod(TimedMethodDelegate d, int time, int repeat, object PassBack)
+		{
+			TimedMethod TMS = new TimedMethod(d, time, repeat, PassBack);
+			TimedMethodList.Add(TMS);
+		}
 
         #region Socket Stuff
         private static TcpListener listener;
@@ -245,5 +265,21 @@ namespace MCForge.Core
             Console.ResetColor();
         }
         #endregion
+
+		class TimedMethod
+		{
+			public TimedMethodDelegate MethodToInvoke;
+			public int time;
+			public int repeat;
+			public object PassBack;
+
+			public TimedMethod(TimedMethodDelegate a, int b, int c, object d)
+			{
+				MethodToInvoke = a;
+				time = b / 100;
+				repeat = c;
+				PassBack = d;
+			}
+		}
     }
 }

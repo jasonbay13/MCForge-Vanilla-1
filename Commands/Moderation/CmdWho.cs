@@ -40,9 +40,9 @@ namespace CommandDll.Moderation {
 				if (found == null) {
 					p.SendMessage("The specified player is not online.");
 				} else {
-					//p.SendMessage(found.USERNAME + " is on " + found.level.name); //commented out because of a build time error
+					p.SendMessage(found.USERNAME + " is on " + found.level.name);
 					p.SendMessage(/*found.title + " " + */found.USERNAME + " has:");
-					p.SendMessage("> the rank of " + found.group.name);
+					p.SendMessage("> the rank of " + found.group.color + found.group.name);
 					//p.SendMessage("> modified " + found.allmodified + " blocks and " + found.modified + " were changed since logging in.");
 					//p.SendMessage("> time spent on server: " + found.totalTimeOnline);
 					//p.SendMessage("> been logged in for " + found.timeLoggedOn);
