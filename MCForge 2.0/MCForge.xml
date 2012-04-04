@@ -234,6 +234,16 @@
             True if this player is an admin
             </summary>
         </member>
+        <member name="F:MCForge.Entity.Player.replacement">
+            <summary>
+            Holds replacement messages for profan filter
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.group">
+            <summary>
+            The current Group of the player
+            </summary>
+        </member>
         <member name="M:MCForge.Entity.Player.SendBlockChange(System.UInt16,System.UInt16,System.UInt16,System.Byte)">
             <summary>
             This send a blockchange to the player only. (Not other players)
@@ -517,42 +527,84 @@
             </summary>
             <remarks></remarks>
         </member>
-        <member name="M:MCForge.Groups.Group.#ctor(System.Byte,System.String,System.String)">
+        <member name="T:MCForge.Groups.PlayerGroup">
             <summary>
-            Initializes a new instance of the <see cref="T:MCForge.Groups.Group"/> class.
+            The main permission system for MCForge
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MCForge.Groups.PlayerGroup.groups">
+            <summary>
+            A list of all the available groups 
+            </summary>
+        </member>
+        <member name="F:MCForge.Groups.PlayerGroup.players">
+            <summary>
+            A list of all the players in the group (includes offline players)
+            </summary>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.#ctor(System.Byte,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MCForge.Groups.PlayerGroup"/> class.
             </summary>
             <param name="perm">The permission level of the group.</param>
             <param name="name">The name of the group.</param>
-            <param name="colour">The colour of the group.</param>
+            <param name="colour">The colour of the group.</param>1
+            <param name="file">The filename to save the group player list in</param>
             <remarks></remarks>
         </member>
-        <member name="M:MCForge.Groups.Group.SendMessage(System.String)">
+        <member name="M:MCForge.Groups.PlayerGroup.SendMessage(System.String)">
             <summary>
             Sends the message to the group.
             </summary>
             <param name="message">The message.</param>
             <remarks></remarks>
         </member>
-        <member name="M:MCForge.Groups.Group.CanExecute(MCForge.Interface.Command.ICommand)">
+        <member name="M:MCForge.Groups.PlayerGroup.CanExecute(MCForge.Interface.Command.ICommand)">
             <summary>
             Determines whether this instance can execute the specified command.
             </summary>
             <param name="command">The command.</param>
             <returns><c>true</c> if this instance can execute the specified command; otherwise, <c>false</c>.</returns>
         </member>
-        <member name="P:MCForge.Groups.Group.name">
+        <member name="M:MCForge.Groups.PlayerGroup.SaveGroup">
+            <summary>
+            Saves the group to disk.
+            </summary>
+            <returns><c>true</c> if no errors saving</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.LoadGroup">
+            <summary>
+            Loads the group from disk.
+            </summary>
+            <returns><c>true</c> if no errors when loading</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.InitDefaultGroups">
+            <summary>
+            Initializes the default groups.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:MCForge.Groups.PlayerGroup.name">
             <summary>
             The name of the group
             </summary>
         </member>
-        <member name="P:MCForge.Groups.Group.permission">
+        <member name="P:MCForge.Groups.PlayerGroup.permission">
             <summary>
             The permission level of the group.
             </summary>
         </member>
-        <member name="P:MCForge.Groups.Group.colour">
+        <member name="P:MCForge.Groups.PlayerGroup.colour">
             <summary>
             The colour of the group.
+            </summary>
+        </member>
+        <member name="P:MCForge.Groups.PlayerGroup.file">
+            <summary>
+            The filename to save the group list into
             </summary>
         </member>
         <member name="M:MCForge.Core.Heartbeat.minecraftHeartbeat(System.Int32,System.String,System.Boolean,System.String,System.Int32,System.Byte,System.Byte)">
