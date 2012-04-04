@@ -49,7 +49,11 @@ namespace MCForge.Groups
         /// <summary>
         /// The colour of the group.
         /// </summary>
-        public string colour { get; set; }
+		public string colour { get { return color; } set { color = value;} }
+		/// <summary>
+		/// The color of the group.
+		/// </summary>
+		public string color { get; set; }
 
         string _file;
         /// <summary>
@@ -90,7 +94,7 @@ namespace MCForge.Groups
                 Directory.CreateDirectory(Path.GetDirectoryName(file1));
             if (!File.Exists(file1))
             {
-                File.Create(file1);
+                File.Create(file1).Close();
                 Server.Log("[Groups] " + file + " was created", ConsoleColor.DarkGreen, ConsoleColor.Black);
             }
             permission = perm;
@@ -194,5 +198,5 @@ namespace MCForge.Groups
             new PlayerGroup((byte)Permission.SuperOP, "SuperOp", Colors.maroon, "superops.txt");
             new PlayerGroup((byte)Permission.Owner, "Owner", Colors.blue, "owners.txt");
         }
-    }
+	}
 }

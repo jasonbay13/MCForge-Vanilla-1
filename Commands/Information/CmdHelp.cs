@@ -94,7 +94,7 @@ namespace CommandDll.Information {
 						p.SendMessage("7 - &7Silver " + Server.DefaultColor + "| f - &fWhite");
 						return;
 					case "ranks": 
-						foreach (Group grp in Group.groups) {
+						foreach (PlayerGroup grp in PlayerGroup.groups) {
 							if (grp.name != "nobody") // Note that -1 means max undo.  Undo anything and everything.
 								//p.SendMessage(grp.color + grp.name + " - &bCmd: " + grp..maxBlocks + " - &2Undo: " + ((grp.maxUndo != -1) ? grp.maxUndo.ToString() : "max") + " - &cPerm: " + (int)grp.Permission);
 								p.SendMessage(grp.color + grp.name + " - &cPerm: " + (int)grp.permission);
@@ -107,7 +107,7 @@ namespace CommandDll.Information {
 								cmd.Help(p);
 								//string foundRank = Level.PermissionToName(GrpCommands.allowedCommands.Find(grpComm => grpComm.commandName == cmd.name).lowestRank);
 								//Player.SendMessage(p, "Rank needed: " + getColor(cmd.name) + foundRank);
-								Group cmdGroup = Group.groups.Find(grp => grp.permission == cmd.Permission);
+								PlayerGroup cmdGroup = PlayerGroup.groups.Find(grp => grp.permission == cmd.Permission);
 								string foundRank = cmdGroup.name;
 								p.SendMessage("Rank needed: " + cmdGroup.color + foundRank);
 								return;
@@ -126,7 +126,7 @@ namespace CommandDll.Information {
 				StringBuilder sb = new StringBuilder();
 				int count = 0;
 				foreach (KeyValuePair<string, ICommand> c in Command.all.ToList().FindAll(match => (match.Value.Permission <= p.group.permission) && (match.Value.Type == cmdType))) {
-					sb.Append(", ").Append(Group.groups.Find(grp => grp.permission == p.group.permission).color).Append(c.Value.Name.ToLower());
+					sb.Append(", ").Append(PlayerGroup.groups.Find(grp => grp.permission == p.group.permission).color).Append(c.Value.Name.ToLower());
 					count = (count + 1) % 5; // 5 commands per line.
 					if (count == 0) {
 						p.SendMessage(sb.Remove(0, 2).ToString());
