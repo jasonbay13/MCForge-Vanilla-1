@@ -11,38 +11,6 @@ using MCForge.API;
 
 namespace CommandDll
 {
-    public class Example
-    {
-        public void Load()
-        {
-            OnPlayerBlockChange.Register(block, Priority.Normal);
-            OnPlayerChat.Register(chat, Priority.High); //High gets called last, this is so it gets the last say
-            OnPlayerCommand.Register(command, Priority.Low); //Low gets called first, so any changes made first can be made
-        }
-        public void block(OnPlayerBlockChange args)
-        {
-            if (args.IsCanceled)
-                return;
-            ushort x = args.GetX();
-            ushort y = args.GetY();
-            ushort z = args.GetZ();
-            Player p = args.GetPlayer();
-        }
-        public void chat(OnPlayerChat args)
-        {
-            string message = args.GetMessage();
-            Player p = args.GetPlayer();
-            args.SetMessage("This is a test!");
-        }
-        public void command(OnPlayerCommand args)
-        {
-            if (args.GetCmd() == "test")
-            {
-                args.GetPlayer().SendMessage("Hi!");
-                args.Cancel(true);
-            }
-        }
-    }
 	public class CmdDataPassExample : ICommand
 	{
 		string _Name = "DataPassExample";
