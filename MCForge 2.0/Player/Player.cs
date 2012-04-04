@@ -659,6 +659,7 @@ namespace MCForge.Entity
                 message = message.Replace("%" + ch, "&" + ch);
                 message = message.Replace("&" + ch + " &", "&");
             }
+			message = Server.DefaultColor + message;
 
             pa.Add(packet.types.Message);
             pa.Add(PlayerID);

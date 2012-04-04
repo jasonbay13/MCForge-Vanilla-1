@@ -72,7 +72,7 @@ namespace CommandDll.Information {
 						cmdTypeName = "Moderation";
 						cmdType = CommandTypes.mod;
 						break;
-					case "info":
+					case "information":
 						cmdTypeName = "Informative";
 						cmdType = CommandTypes.information;
 						break;
@@ -103,34 +103,44 @@ namespace CommandDll.Information {
 					default:
 						try {
 							ICommand cmd = Command.Find(args[0]);
-							if (cmd != null) {
-								cmd.Help(p);
-								//string foundRank = Level.PermissionToName(GrpCommands.allowedCommands.Find(grpComm => grpComm.commandName == cmd.name).lowestRank);
-								//Player.SendMessage(p, "Rank needed: " + getColor(cmd.name) + foundRank);
-								PlayerGroup cmdGroup = PlayerGroup.groups.Find(grp => grp.permission == cmd.Permission);
-								string foundRank = cmdGroup.name;
-								p.SendMessage("Rank needed: " + cmdGroup.color + foundRank);
-								return;
-							} else if (Blocks.NameToByte(args[0]) != (byte)Blocks.Types.zero) {
-								//TODO: Find Block
-								p.SendMessage("Find block");
-							} else {
-								p.SendMessage("Could not find command or block specified");
-							}
-						} catch (Exception) {
-							p.SendMessage("Could not find command or block specified");
-						}
+							cmd.Help(p);
+							//string foundRank = Level.PermissionToName(GrpCommands.allowedCommands.Find(grpComm => grpComm.commandName == cmd.name).lowestRank);
+							//Player.SendMessage(p, "Rank needed: " + getColor(cmd.name) + foundRank);
+							PlayerGroup cmdGroup = PlayerGroup.groups.Find(grp => grp.permission == cmd.Permission);
+							string foundRank = cmdGroup.name;
+							p.SendMessage("Rank needed: " + cmdGroup.color + foundRank);
+							return;
+						} catch (Exception) { }
+						
+						try {
+							byte b = Blocks.NameToByte(args[0]);
+							p.SendMessage("Block \"" + args[0] + "\" appears as &b" + Blocks.ByteToName(Blocks.CustomBlocks.ToList().Find(want => want.Key == b).Value.VisibleType));
+							//PlayerGroup foundRank = PlayerGroup.findPerm(Blocks.Types.BlockList.Find(bs => bs.type == b).lowestRank);
+							//Player.SendMessage(p, "Rank needed: " + foundRank.color + foundRank.name);
+							return;
+							//p.SendMessage("Find block");
+						} catch (Exception) { }
+						p.SendMessage("Could not find command or block specified");
 						return;
 				}
 				p.SendMessage(cmdTypeName + " commands you may use:");
+				//First get them all, just names, in a list.
+				List<string> cmdList = new List<string>();
+				foreach (KeyValuePair<string, ICommand> c in Command.all.ToList().FindAll(match => (match.Value.Permission <= p.group.permission) && (match.Value.Type == cmdType))) {
+					cmdList.Add(c.Key);
+				}
 				StringBuilder sb = new StringBuilder();
 				int count = 0;
-				foreach (KeyValuePair<string, ICommand> c in Command.all.ToList().FindAll(match => (match.Value.Permission <= p.group.permission) && (match.Value.Type == cmdType))) {
-					sb.Append(", ").Append(PlayerGroup.groups.Find(grp => grp.permission == p.group.permission).color).Append(c.Value.Name.ToLower());
+				if (cmdList.Count == 0) {
+					p.SendMessage("You cannot use any " + cmdTypeName + " commands");
+					return;
+				}
+				foreach (string c in cmdList) {
+					sb.Append(", ").Append(PlayerGroup.groups.Find(grp => grp.permission == Command.Find(c).Permission).color).Append(c);
 					count = (count + 1) % 5; // 5 commands per line.
 					if (count == 0) {
 						p.SendMessage(sb.Remove(0, 2).ToString());
-						sb = new StringBuilder();
+						sb.Clear();
 					}
 				}
 			}

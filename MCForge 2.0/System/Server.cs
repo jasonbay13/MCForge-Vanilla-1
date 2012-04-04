@@ -55,7 +55,7 @@ namespace MCForge.Core
         /// <summary>
         /// The list of MCForge developers.
         /// </summary>
-        public static readonly List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "Gamemakergm", "cazzar", "hirsty", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "TheMusiKid" });
+        public static readonly List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "Gamemakergm", "cazzar", "hirsty", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "TheMusiKid", "Nerketur" });
         /// <summary>
         /// List of players that agreed to the rules
         /// </summary>
@@ -95,7 +95,7 @@ namespace MCForge.Core
         /// <summary>
         /// The server's default color.
         /// </summary>
-        public static string DefaultColor = "&e";
+        public static string DefaultColor = Colors.yellow;
 
         /// <summary>
         /// The minecraft.net URL of the server
