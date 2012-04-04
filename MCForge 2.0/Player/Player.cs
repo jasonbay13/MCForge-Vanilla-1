@@ -27,6 +27,7 @@ using MCForge.API.PlayerEvent;
 using MCForge.Core;
 using MCForge.World;
 using MCForge.Interface.Command;
+using MCForge.Groups;
 
 namespace MCForge.Entity
 {
@@ -216,7 +217,10 @@ namespace MCForge.Entity
         protected BlockChangeDelegate blockChange;
         protected NextChatDelegate nextChat;
 
-        public MCForge.Groups.Group group = ServerSettings.DefaultGroup;
+        /// <summary>
+        /// The current Group of the player
+        /// </summary>
+        public PlayerGroup group = ServerSettings.DefaultGroup;
 
         #endregion
 
@@ -377,6 +381,10 @@ namespace MCForge.Entity
                 UniversalChat(USERNAME + " joined the game!");
 
                 CheckDuplicatePlayers(USERNAME);
+
+                foreach (PlayerGroup g in PlayerGroup.groups)
+                    if (g.players.Contains(USERNAME.ToLower()))
+                        group = g;
 
                 SendMotd();
 
