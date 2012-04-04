@@ -26,6 +26,10 @@ namespace CommandDll
 		string _CUD = "";
 		public string CUD { get { return _CUD; } }
 
+        byte _Permission = 120;
+        public byte Permission { get { return _Permission; } }
+
+
 		string[] CommandStrings = new string[1] { "example" };
 
 		public void Use(Player p, string[] args)

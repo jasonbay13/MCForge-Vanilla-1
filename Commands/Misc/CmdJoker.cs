@@ -29,6 +29,7 @@ namespace CommandDll
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
+        public byte Permission { get { return 80; } }
 
         public void Use(Player p, string[] args)
         {

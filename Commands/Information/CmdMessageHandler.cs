@@ -44,6 +44,9 @@ namespace CommandDll.Information
             get { throw new NotImplementedException(); }
         }
 
+        byte _Permission = 0;
+        public byte Permission { get { return _Permission; } }
+
         public void Use(Player p, string[] args)
         {
             if (viewer == null)

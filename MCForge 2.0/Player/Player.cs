@@ -27,6 +27,7 @@ using MCForge.API.PlayerEvent;
 using MCForge.Core;
 using MCForge.World;
 using MCForge.Interface.Command;
+using MCForge.Groups;
 
 namespace MCForge.Entity
 {
@@ -193,6 +194,10 @@ namespace MCForge.Entity
         /// True if this player is an admin
         /// </summary>
         public bool isAdmin = true;
+        /// <summary>
+        /// Holds replacement messages for profan filter
+        /// </summary>
+        public static List<string> replacement = new List<string>();
 
         object PassBackData;
         /// <summary>
@@ -215,6 +220,12 @@ namespace MCForge.Entity
         public delegate void NextChatDelegate(Player p, string message, object PassBack);
         protected BlockChangeDelegate blockChange;
         protected NextChatDelegate nextChat;
+
+        /// <summary>
+        /// The current Group of the player
+        /// </summary>
+        public PlayerGroup group = ServerSettings.DefaultGroup;
+
 
         #endregion
 
@@ -375,6 +386,10 @@ namespace MCForge.Entity
                 UniversalChat(USERNAME + " joined the game!");
 
                 CheckDuplicatePlayers(USERNAME);
+
+                foreach (PlayerGroup g in PlayerGroup.groups)
+                    if (g.players.Contains(USERNAME.ToLower()))
+                        group = g;
 
                 SendMotd();
 
@@ -549,6 +564,27 @@ namespace MCForge.Entity
 
             //Meep is used above for //Command
         Meep:
+
+            if (!File.Exists("text/badwords.txt")) { File.Create("text/badwords.txt").Close(); }
+            if (!File.Exists("text/replacementwords.txt")) { File.Create("text/replacementwords.txt").Close(); }
+
+            string textz = File.ReadAllText("text/replacementwords.txt");
+            if (textz == "") { File.WriteAllText("text/replacementwords.txt", "Pepper"); }
+            StreamReader w = File.OpenText("text/replacementwords.txt");
+            while (!w.EndOfStream) replacement.Add(w.ReadLine());
+            w.Dispose();
+
+        string[] badwords = File.ReadAllLines("text/badwords.txt");
+        string[] replacementwords = File.ReadAllLines("text/replacementwords.txt");
+
+        foreach (string word in badwords)
+        {
+            string text = incomingText;
+            if (text.Contains(word))
+            {
+                incomingText = Regex.Replace(text, word, replacement[new Random().Next(0, replacement.Count)]);
+            }
+        }
             if (muted) { SendMessage("You are muted!"); return; }
             if (Server.moderation && !voiced && !Server.devs.Contains(USERNAME)) { SendMessage("You can't talk during chat moderation!"); return; }
             if (jokered)
@@ -611,7 +647,7 @@ namespace MCForge.Entity
                 else { SendMessage("Use either %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + " to vote!"); }
             }
             Server.Log("<" + USERNAME + "> " + incomingText);
-            UniversalChat(voicestring + USERNAME + ": &f" + incomingText);
+            UniversalChat(voicestring + group.colour + USERNAME + ": &f" + incomingText);
         }
 
         #endregion
@@ -804,7 +840,7 @@ namespace MCForge.Entity
         /// <param name="message">The message to send</param>
         public void SendMessage(string message)
         {
-            SendMessage(0xFF, message);
+            SendMessage(id, message); // 0xFF is NOT a valid player ID
         }
         /// <summary>
         /// Exactly what the function name is, it might be useful to change this players pos first ;)
@@ -826,6 +862,7 @@ namespace MCForge.Entity
         public void Kick(string message)
         {
             //GlobalMessage(message);
+			beingkicked = true;
             SKick(message);
         }
         /// <summary>
@@ -974,6 +1011,11 @@ namespace MCForge.Entity
                     if (!Server.agreed.Contains(USERNAME) && name != "rules" && name != "agree" && name != "disagree")
                     {
                         SendMessage("You need to /agree to the /rules before you can use commands!"); return;
+                    }
+                    if (!group.CanExecute(cmd))
+                    {
+                        SendMessage(Colors.red + "You cannot use /" + name + "!");
+                        return;
                     }
                     try { cmd.Use(this, sendArgs); } //Just so it doesn't crash the server if custom command makers release broken commands!
                     catch (Exception ex)

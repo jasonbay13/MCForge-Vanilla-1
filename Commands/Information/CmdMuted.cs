@@ -12,36 +12,54 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
+using System;
 using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
+using System.Collections.Generic;
+
 namespace CommandDll
 {
-    public class CmdDisagree : ICommand
+    public class CmdMuted : ICommand
     {
-        public string Name { get { return "Disagree"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
-        public string Author { get { return "Arrem"; } }
+        public string Name { get { return "Muted"; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
+        public string Author { get { return "Givo"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
+        public static List<string> mutedlist = new List<string>();
+
         public void Use(Player p, string[] args)
         {
-            if (Server.agreed.Contains(p.USERNAME)) { p.SendMessage("You have already agreed to the rules!"); return; }
-            if (!p.readrules) { p.SendMessage("You need to read the /rules before you can disagree!"); return; }
-            p.Kick("Kicked for disagreeing to the rules!");
+            mutedlist.Clear();
+
+            if (args.Length > 0) { Help(p); }
+
+            foreach (Player pl in Server.Players.ToArray())
+            {
+                if (pl.muted)
+                {
+                    mutedlist.Add(pl.USERNAME);
+                }
+            }
+            p.SendMessage("Muted: ");
+            foreach (string muted in mutedlist)
+            {
+                p.SendMessage(muted);
+            }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/disagree - disagree to the rules");
+            p.SendMessage("/mute - Displays muted players");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "disagree" });
+            Command.AddReference(this, new string[1] { "Muted" });
         }
     }
 }

@@ -57,7 +57,7 @@ namespace MCForge.Core
                     URL = line;
             }
             responseStream.Close(); responseStreamReader.Close();
-            return URL;
+            return URL; 
         }
 
         //add another function for another heartbeat
@@ -77,14 +77,20 @@ namespace MCForge.Core
         public static string[] sendHeartbeat()
         {
             string[] output = new string[1]; int i = 0;
-            output[i] = minecraftHeartbeat(ServerSettings.port, 
-                ServerSettings.NAME, 
-                ServerSettings.Public,
-                ServerSettings.salt,
-                Server.Players.Count,
-                ServerSettings.MaxPlayers,
-                ServerSettings.version);
-
+            try
+            {
+                output[i] = minecraftHeartbeat(ServerSettings.port,
+                    ServerSettings.NAME,
+                    ServerSettings.Public,
+                    ServerSettings.salt,
+                    Server.Players.Count,
+                    ServerSettings.MaxPlayers,
+                    ServerSettings.version);
+            }
+            catch
+            {
+                output[i] = "Error when sending heartbeat";
+            }
             if (Server.URL != output[i]) Server.Log("URL Found/Updated: " + output[i], ConsoleColor.Green, ConsoleColor.Black);
             Server.URL = output[i];
             writeURL(output[i], "text/heartbeaturl.txt"); 
@@ -101,6 +107,7 @@ namespace MCForge.Core
 
             TextWriter o = new StreamWriter(file);
             o.WriteLine(URL);
+            o.Flush();
             o.Close();
         }
     }

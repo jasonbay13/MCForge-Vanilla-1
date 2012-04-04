@@ -64,6 +64,8 @@
     <Compile Include="API\Priority.cs" />
     <Compile Include="API\System\SystemEvent.cs" />
     <Compile Include="API\World\WorldEvent.cs" />
+    <Compile Include="Groups\PlayerGroupProperties.cs" />
+    <Compile Include="Groups\PlayerGroup.cs" />
     <Compile Include="World\Blocks.cs" />
     <Compile Include="API\Event.cs" />
     <Compile Include="Gui\frmMain.cs">
@@ -72,7 +74,7 @@
     <Compile Include="Gui\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Heartbeat.cs" />
+    <Compile Include="System\Heartbeat.cs" />
     <Compile Include="Interfaces\Commands\CmdReloadCommands.cs" />
     <Compile Include="Interfaces\Commands\ICommand.cs" />
     <Compile Include="Interfaces\Commands\Command.cs" />

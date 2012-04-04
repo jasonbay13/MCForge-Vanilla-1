@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MCForge.Groups;
 
 namespace MCForge.Core
 {
@@ -46,6 +47,33 @@ namespace MCForge.Core
         /// Allow people teleport to higher ranks?
         /// </summary>
         public static bool higherranktp = false;
+
+        /// <summary>
+        /// The default Permission value for new players
+        /// </summary>
+        public static byte DefaultRank = (byte)Groups.Permission.Guest;
+        /// <summary>
+        /// Gets or sets the default group.
+        /// </summary>
+        /// <value>The default group.</value>
+        /// <remarks></remarks>
+        public static PlayerGroup DefaultGroup
+        {
+            get
+            {
+                foreach (PlayerGroup group in PlayerGroup.groups.ToArray())
+                {
+                    Server.Log(DefaultRank + "." + group.permission);
+                    if (group.permission == DefaultRank)
+                        return group;
+                }
+                return new PlayerGroup((byte)Permission.Guest, "Guest", Colors.white, "guests.txt");
+            }
+            set
+            {
+                DefaultRank = value.permission;
+            }
+        }
 
         public void Load()
         {
