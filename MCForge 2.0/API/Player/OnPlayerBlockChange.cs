@@ -55,7 +55,7 @@ namespace MCForge.API.PlayerEvent
         }
         public override void Call()
         {
-            EventHelper.cache.ForEach(e =>
+            Muffins.cache.ForEach(e =>
             {
                 if (e.GetType() == GetType())
                     ((OnCall)e.Delegate)(this);
@@ -71,8 +71,8 @@ namespace MCForge.API.PlayerEvent
         /// <param name="priority">The importance of the call</param>
         public static void Register(OnCall method, Priority priority)
         {
-            EventHelper temp = new EventHelper(method, priority, new OnPlayerBlockChange());
-            EventHelper.Push(temp);
+            Muffins temp = new Muffins(method, priority, new OnPlayerBlockChange());
+            Muffins.GiveDerpyMuffins(temp);
         }
 
     }
