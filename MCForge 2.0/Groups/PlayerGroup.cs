@@ -197,6 +197,13 @@ namespace MCForge.Groups
             return true;
         }
 
+        public void AddPlayer(Player p)
+        {
+            p.group = this;
+            players.Add(p.USERNAME.ToLower());
+            SaveGroup();
+        }
+
         /// <summary>
         /// Initializes the default groups.
         /// </summary>
