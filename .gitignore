@@ -8,3 +8,5 @@
 *.suo
 *.user
 MCForge 2.0/MCForge.xml
+
+/MCForge 2.0/MCForge.xml
