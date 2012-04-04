@@ -47,7 +47,6 @@ namespace CommandDll
                     break;
                 case 5: p.Kick("IP juaj është backtraced & raportuar të FBI Cyber ​​Njësisë për Krime.");
                     break;
-
             }
         }
 
@@ -68,7 +67,7 @@ namespace CommandDll
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "Hacks" });
+            Command.AddReference(this, new string[3] { "Hacks", "hax", "haxor" });
         }
     }
 }
