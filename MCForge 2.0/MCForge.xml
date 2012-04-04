@@ -43,6 +43,11 @@
             The permission level of the group.
             </summary>
         </member>
+        <member name="P:MCForge.Groups.Group.color">
+            <summary>
+            The color of the group.
+            </summary>
+        </member>
         <member name="P:MCForge.Groups.Group.colour">
             <summary>
             The colour of the group.

@@ -33,10 +33,15 @@ namespace MCForge.Groups
         /// The permission level of the group.
         /// </summary>
         public byte permission { get; set; }
-        /// <summary>
-        /// The colour of the group.
-        /// </summary>
-        public string colour { get; set; }
+
+		/// <summary>
+		/// The color of the group.
+		/// </summary>
+		public string color { get; set; }
+		/// <summary>
+		/// The colour of the group.
+		/// </summary>
+		public string colour { get { return color; } set { this.color = value;} }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Group"/> class.
@@ -96,5 +101,6 @@ namespace MCForge.Groups
             new Group((byte)Permission.SuperOP, "SuperOp", Colors.maroon);
             new Group((byte)Permission.Owner, "Owner", Colors.blue);
         }
-    }
+
+	}
 }

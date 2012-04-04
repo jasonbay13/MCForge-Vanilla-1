@@ -640,16 +640,7 @@ namespace MCForge.Entity
         {
             packet pa = new packet();
 
-            for (int i = 0; i < 10; i++)
-            {
-                message = message.Replace("%" + i, "&" + i);
-                message = message.Replace("&" + i + " &", "&");
-            }
-            for (char ch = 'a'; ch <= 'f'; ch++)
-            {
-                message = message.Replace("%" + ch, "&" + ch);
-                message = message.Replace("&" + ch + " &", "&");
-            }
+
             for (int i = 0; i < 10; i++)
             {
                 message = message.Replace("%" + i, "&" + i);
@@ -803,7 +794,7 @@ namespace MCForge.Entity
         /// <param name="message">The message to send</param>
         public void SendMessage(string message)
         {
-            SendMessage(0xFF, message);
+            SendMessage(id, message);
         }
         /// <summary>
         /// Exactly what the function name is, it might be useful to change this players pos first ;)

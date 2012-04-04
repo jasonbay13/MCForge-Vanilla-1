@@ -21,6 +21,7 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.World;
 using MCForge.Core;
+using MCForge.Groups;
 
 namespace CommandDll.Information {
 	public class CmdHelp : ICommand {
@@ -41,6 +42,10 @@ namespace CommandDll.Information {
 
 		string[] CommandStrings = new string[1] { "help" };
 
+		byte perm = 0;
+		public byte Permission {
+			get { return perm; }
+		}
 		public void Use(Player p, string[] args) {
 			if (args.Length == 0) {
 				p.SendMessage("Use &b/help ranks" + Server.DefaultColor + " for a list of ranks.");
@@ -88,13 +93,24 @@ namespace CommandDll.Information {
 						p.SendMessage("6 - &6Gold " + Server.DefaultColor + "| e - &eYellow");
 						p.SendMessage("7 - &7Silver " + Server.DefaultColor + "| f - &fWhite");
 						return;
+					case "ranks": 
+						foreach (Group grp in Group.groups) {
+							if (grp.name != "nobody") // Note that -1 means max undo.  Undo anything and everything.
+								//p.SendMessage(grp.color + grp.name + " - &bCmd: " + grp..maxBlocks + " - &2Undo: " + ((grp.maxUndo != -1) ? grp.maxUndo.ToString() : "max") + " - &cPerm: " + (int)grp.Permission);
+								p.SendMessage(grp.color + grp.name + " - &cPerm: " + (int)grp.permission);
+						}
+						return;
 					default:
 						try {
-							p.SendMessage("Trying to find command...");
 							ICommand cmd = Command.Find(args[0]);
 							if (cmd != null) {
 								cmd.Help(p);
-								p.SendMessage("Displayed help for /" + args[0]);
+								//string foundRank = Level.PermissionToName(GrpCommands.allowedCommands.Find(grpComm => grpComm.commandName == cmd.name).lowestRank);
+								//Player.SendMessage(p, "Rank needed: " + getColor(cmd.name) + foundRank);
+								Group cmdGroup = Group.groups.Find(grp => grp.permission == cmd.Permission);
+								string foundRank = cmdGroup.name;
+								p.SendMessage("Rank needed: " + cmdGroup.color + foundRank);
+								return;
 							} else if (Blocks.NameToByte(args[0]) != (byte)Blocks.Types.zero) {
 								//TODO: Find Block
 								p.SendMessage("Find block");
@@ -109,15 +125,12 @@ namespace CommandDll.Information {
 				p.SendMessage(cmdTypeName + " commands you may use:");
 				StringBuilder sb = new StringBuilder();
 				int count = 0;
-				foreach (KeyValuePair<string, ICommand> c in Command.all) {
-					if (c.Value.Type == cmdType) {
-						//TODO: Check rank
-						sb.Append(", ").Append(c.Value.Name.ToLower());
-						count = (count + 1) % 5; // 5 commands per line.
-						if (count == 0) {
-							p.SendMessage(sb.Remove(0, 2).ToString());
-							sb = new StringBuilder();
-						}
+				foreach (KeyValuePair<string, ICommand> c in Command.all.ToList().FindAll(match => (match.Value.Permission <= p.group.permission) && (match.Value.Type == cmdType))) {
+					sb.Append(", ").Append(Group.groups.Find(grp => grp.permission == p.group.permission).color).Append(c.Value.Name.ToLower());
+					count = (count + 1) % 5; // 5 commands per line.
+					if (count == 0) {
+						p.SendMessage(sb.Remove(0, 2).ToString());
+						sb = new StringBuilder();
 					}
 				}
 			}
