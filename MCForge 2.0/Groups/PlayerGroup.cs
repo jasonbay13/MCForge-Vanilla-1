@@ -217,13 +217,29 @@ namespace MCForge.Groups
         /// <param name="name">The name.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-        public static PlayerGroup Exists(string name)
+        public static bool Exists(string name)
         {
+            foreach (PlayerGroup g in PlayerGroup.groups)
+            {
+                if (g.name.ToLower() == name.ToLower())
+                    return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// Finds the specified group.
+        /// </summary>
+        /// <param name="name">The name of the group.</param>
+        public static PlayerGroup Find(string name)
+        {
+            if (name == "op" && !Exists(name)) name = "operator";
+
             foreach (PlayerGroup g in PlayerGroup.groups)
             {
                 if (g.name.ToLower() == name.ToLower())
                     return g;
             }
+
             return null;
         }
     }
