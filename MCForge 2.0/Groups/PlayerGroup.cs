@@ -150,8 +150,8 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         public bool SaveGroup()
         {
-            //try
-            //{
+            try
+            {
                 if (!Directory.Exists(Path.GetDirectoryName(file)))
                     Directory.CreateDirectory(Path.GetDirectoryName(file));
 
@@ -161,11 +161,11 @@ namespace MCForge.Groups
                 o.Flush();
                 o.Close();
                 return true;
-            //}
-            //catch
-            //{
-            //    return false;
-            //}
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -216,6 +216,7 @@ namespace MCForge.Groups
             new PlayerGroup((byte)Permission.Operator, "Operator", Colors.purple, "ops.txt");
             new PlayerGroup((byte)Permission.SuperOP, "SuperOp", Colors.maroon, "superops.txt");
             new PlayerGroup((byte)Permission.Owner, "Owner", Colors.blue, "owners.txt");
+            PlayerGroupProperties.Save();
         }
 
         /// <summary>
