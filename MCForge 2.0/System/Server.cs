@@ -40,6 +40,7 @@ namespace MCForge.Core
 
         private static System.Timers.Timer UpdateTimer;
         private static System.Timers.Timer HeartbeatTimer;
+        private static System.Timers.Timer GroupSaveTimer;
 
 
         internal static List<Player> Connections = new List<Player>();
@@ -130,7 +131,17 @@ namespace MCForge.Core
 			};
             HeartbeatTimer.Start();
 
+            GroupSaveTimer = new System.Timers.Timer(300000); //every 300 seconds or 5 min
+            GroupSaveTimer.Elapsed += delegate {
+                foreach (Groups.PlayerGroup g in Groups.PlayerGroup.groups)
+                {
+                    g.SaveGroup();
+                }
+            };
+            GroupSaveTimer.Start();
+
             LoadAllDlls.Init();
+            Groups.PlayerGroup.InitDefaultGroups();
 
             Log("[Important]: Server Started.", ConsoleColor.Black, ConsoleColor.White);
             Started = true;
@@ -138,8 +149,6 @@ namespace MCForge.Core
 
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
-
-            Groups.Group.InitDefaultGroups();
 
             //Create the directories we need...
             if (!Directory.Exists("text")) { Directory.CreateDirectory("text"); Log("Created text directory...", ConsoleColor.White, ConsoleColor.Black); }
