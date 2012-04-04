@@ -82,7 +82,7 @@ namespace MCForge.API.PlayerEvent
         /// <param name="priority">The importance of the call</param>
         public static void Register(OnCall method, Priority priority)
         {
-            EventHelper temp = new EventHelper(method, priority, new OnPlayerConnect());
+            EventHelper temp = new EventHelper(method, priority, new OnPlayerChat());
             EventHelper.Push(temp);
         }
     }

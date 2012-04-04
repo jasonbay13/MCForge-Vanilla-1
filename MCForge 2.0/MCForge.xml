@@ -181,6 +181,51 @@
             The main entry point for the application.
             </summary>
         </member>
+        <member name="M:MCForge.API.Event.Call">
+            <summary>
+            Call the event
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Cancelable.Cancel(System.Boolean)">
+            <summary>
+            Cancel the event
+            </summary>
+            <param name="value">True will cancel the event, false will un-cancel the event</param>
+        </member>
+        <member name="P:MCForge.API.Cancelable.IsCanceled">
+            <summary>
+            Is the event canceled
+            </summary>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.GetPlayer">
+            <summary>
+            Get the player connected to the event
+            </summary>
+            <returns>The player</returns>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerCommand.Cancel(System.Boolean)">
+            <summary>
+            Cancel the event
+            </summary>
+            <param name="value">True will cancel the event, false will un-cancel the event</param>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerCommand.Call">
+            <summary>
+            Call the event
+            </summary>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerCommand.Register(MCForge.API.PlayerEvent.OnPlayerCommand.OnCall,MCForge.API.Priority)">
+            <summary>
+            Register this event
+            </summary>
+            <param name="method">The method to call when this event gets excuted</param>
+            <param name="priority">The importance of the call</param>
+        </member>
+        <member name="P:MCForge.API.PlayerEvent.OnPlayerCommand.IsCanceled">
+            <summary>
+            Is the event canceled
+            </summary>
+        </member>
         <member name="T:MCForge.Entity.Player">
             <summary>
             The player class, this contains all player information.
@@ -381,7 +426,7 @@
             This void catches the new blockchange a player does.
             </summary>
             <param name="change">The BlockChangeDelegate that will be executed on blockchange.</param>
-            <param name="data">A passback object that can be used for a command to send data back to itself for use</param>        
+            <param name="data">A passback object that can be used for a command to send data back to itself for use</param>
         </member>
         <member name="M:MCForge.Entity.Player.Click(System.UInt16,System.UInt16,System.UInt16,System.Byte)">
             <summary>
@@ -440,6 +485,53 @@
             <param name="p">The player object</param>
             <param name="message">The string the player sent</param>
             <param name="PassBack">A passback object that can be used for a command to send data back to itself for use</param>
+        </member>
+        <member name="T:MCForge.API.PlayerEvent.OnPlayerChat">
+            <summary>
+            The OnPlayerChat event is excuted everytime a player chats on the server
+            This event can be canceled
+            </summary>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Call">
+            <summary>
+            Call the event
+            </summary>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.GetMessage">
+            <summary>
+            Get the message the player sent
+            </summary>
+            <returns>The message</returns>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.SetMessage(System.String)">
+            <summary>
+            Change the message the player sent
+            </summary>
+            <param name="message">The new message</param>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Cancel(System.Boolean)">
+            <summary>
+            Cancel the event
+            </summary>
+            <param name="value">True will cancel the event, false will un-cancel the event</param>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.GetPlayer">
+            <summary>
+            Get the player connected to the event
+            </summary>
+            <returns>The player</returns>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Register(MCForge.API.PlayerEvent.OnPlayerChat.OnCall,MCForge.API.Priority)">
+            <summary>
+            Register this event
+            </summary>
+            <param name="method">The method to call when this event gets excuted</param>
+            <param name="priority">The importance of the call</param>
+        </member>
+        <member name="P:MCForge.API.PlayerEvent.OnPlayerChat.IsCanceled">
+            <summary>
+            Is the event canceled
+            </summary>
         </member>
         <member name="M:MCForge.Core.Heartbeat.minecraftHeartbeat(System.Int32,System.String,System.Boolean,System.String,System.Int32,System.Byte,System.Byte)">
             <summary>
@@ -559,28 +651,11 @@
             </summary>
             <param name="p">The player to stop showing the message to.</param>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.GetPlayer">
-            <summary>
-            Get the player connected to the event
-            </summary>
-            <returns>The player</returns>
-        </member>
         <member name="T:MCForge.API.Priority">
             <summary>
             The priority of the call
             Low will be called first so it can make the first changes
             High will be called last so it gets the last say
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Cancelable.Cancel(System.Boolean)">
-            <summary>
-            Cancel the event
-            </summary>
-            <param name="value">True will cancel the event, false will un-cancel the event</param>
-        </member>
-        <member name="P:MCForge.API.Cancelable.IsCanceled">
-            <summary>
-            Is the event canceled
             </summary>
         </member>
         <member name="M:MCForge.Core.PDB.CompareTo(MCForge.Core.PDB)">
@@ -623,11 +698,6 @@
             <summary>
             The OnPlayerConnect event is executed everytime a player connects to the server
             This event can be canceled
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Event.Call">
-            <summary>
-            Call the event
             </summary>
         </member>
         <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.#ctor(MCForge.Entity.Player)">
@@ -827,52 +897,12 @@
             An enumeration of all the default Minecraft blocks
             </summary>
         </member>
-        <member name="T:MCForge.API.PlayerEvent.OnPlayerChat">
-            <summary>
-            The OnPlayerChat event is excuted everytime a player chats on the server
-            This event can be canceled
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Call">
-            <summary>
-            Call the event
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.GetMessage">
-            <summary>
-            Get the message the player sent
-            </summary>
-            <returns>The message</returns>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.SetMessage(System.String)">
-            <summary>
-            Change the message the player sent
-            </summary>
-            <param name="message">The new message</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Cancel(System.Boolean)">
-            <summary>
-            Cancel the event
-            </summary>
-            <param name="value">True will cancel the event, false will un-cancel the event</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.GetPlayer">
-            <summary>
-            Get the player connected to the event
-            </summary>
-            <returns>The player</returns>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Register(MCForge.API.PlayerEvent.OnPlayerChat.OnCall,MCForge.API.Priority)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerBlockChange.Register(MCForge.API.PlayerEvent.OnPlayerBlockChange.OnCall,MCForge.API.Priority)">
             <summary>
             Register this event
             </summary>
             <param name="method">The method to call when this event gets excuted</param>
             <param name="priority">The importance of the call</param>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.OnPlayerChat.IsCanceled">
-            <summary>
-            Is the event canceled
-            </summary>
         </member>
     </members>
 </doc>
