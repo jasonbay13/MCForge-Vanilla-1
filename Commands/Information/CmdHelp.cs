@@ -52,11 +52,8 @@ namespace CommandDll.Information {
 				p.SendMessage("Use &b/help build" + Server.DefaultColor + " for a list of building commands.");
 				p.SendMessage("Use &b/help mod" + Server.DefaultColor + " for a list of moderation commands.");
 				p.SendMessage("Use &b/help information" + Server.DefaultColor + " for a list of information commands.");
-				//p.SendMessage("Use &b/help games" + Server.DefaultColor + " for a list of game commands.");
 				p.SendMessage("Use &b/help other" + Server.DefaultColor + " for a list of other commands.");
 				p.SendMessage("Use &b/help colors" + Server.DefaultColor + " to view the color codes.");
-				//p.SendMessage("Use &b/help short" + Server.DefaultColor + " for a list of shortcuts.");
-				//p.SendMessage("Use &b/help old" + Server.DefaultColor + " to view the Old help menu.");
 				p.SendMessage("Use &b/help [command] or /help [block] " + Server.DefaultColor + "to view more info.");
 			} else if (args.Length == 1) {
 				//Help about a particular command
@@ -76,6 +73,7 @@ namespace CommandDll.Information {
 						cmdTypeName = "Informative";
 						cmdType = CommandTypes.information;
 						break;
+					case "misc":
 					case "other":
 						cmdTypeName = "Miscellaneous";
 						cmdType = CommandTypes.misc;
@@ -114,11 +112,16 @@ namespace CommandDll.Information {
 						
 						try {
 							byte b = Blocks.NameToByte(args[0]);
-							p.SendMessage("Block \"" + args[0] + "\" appears as &b" + Blocks.ByteToName(Blocks.CustomBlocks.ToList().Find(want => want.Key == b).Value.VisibleType));
+							KeyValuePair<byte, Blocks.CustomBlock> customBlock = Blocks.CustomBlocks.ToList().Find(want => want.Key == b);
+							string custom;
+							if (customBlock.Value.Name == null) // only happens when there is no such block.
+								custom = args[0];
+							else
+								custom = Blocks.ByteToName(customBlock.Value.VisibleType); // Custom block is this.
+							p.SendMessage("Block \"" + args[0] + "\" appears as &b" + custom);
 							//PlayerGroup foundRank = PlayerGroup.findPerm(Blocks.Types.BlockList.Find(bs => bs.type == b).lowestRank);
 							//Player.SendMessage(p, "Rank needed: " + foundRank.color + foundRank.name);
 							return;
-							//p.SendMessage("Find block");
 						} catch (Exception) { }
 						p.SendMessage("Could not find command or block specified");
 						return;
