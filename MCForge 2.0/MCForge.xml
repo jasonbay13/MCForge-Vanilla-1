@@ -55,7 +55,19 @@
             A list of all the players in the group (includes offline players)
             </summary>
         </member>
-        <member name="M:MCForge.Groups.PlayerGroup.#ctor(System.Byte,System.String,System.String,System.String)">
+        <member name="M:MCForge.Groups.PlayerGroup.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MCForge.Groups.PlayerGroup"/> class. without adding it to the group list
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.add">
+            <summary>
+            Adds this instance to the list of groups ONLY use it when you initalised with PlayerGroup().
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.#ctor(System.Int32,System.String,System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:MCForge.Groups.PlayerGroup"/> class.
             </summary>
@@ -133,9 +145,14 @@
             The color of the group.
             </summary>
         </member>
+        <member name="P:MCForge.Groups.PlayerGroup.maxBlockChange">
+            <summary>
+            The maximum amount of blocks this group can change.
+            </summary>
+        </member>
         <member name="P:MCForge.Groups.PlayerGroup.file">
             <summary>
-            The filename to save the group list into
+            The filename to save the group list into. when setting it des not contain the "ranks/" part
             </summary>
         </member>
         <member name="M:MCForge.Core.PDB.CompareTo(MCForge.Core.PDB)">
