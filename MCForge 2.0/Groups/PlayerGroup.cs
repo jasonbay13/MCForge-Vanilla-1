@@ -65,10 +65,15 @@ namespace MCForge.Groups
         /// The colour of the group.
         /// </summary>
         public string colour { get; set; }
+        int _maxblockchange = 100;
+        /// <summary>
+        /// The maximum amount of blocks this group can change.
+        /// </summary>
+        public int maxBlockChange { get { return _maxblockchange; } set { maxBlockChange = value; } }
 
         string _file;
         /// <summary>
-        /// The filename to save the group list into
+        /// The filename to save the group list into. when setting it des not contain the "ranks/" part
         /// </summary>
         public string file
         {

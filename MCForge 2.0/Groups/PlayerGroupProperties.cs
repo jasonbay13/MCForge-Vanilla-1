@@ -76,6 +76,11 @@ namespace MCForge.Groups
                                 group.file = reader.ReadString();
                                 Server.Log("[Group] File: " + group.file);
                                 break;
+                            case "maxblockchanges":
+                                try { group.maxBlockChange = int.Parse(reader.ReadString()); }
+                                catch { }
+                                Server.Log("[Group] Max Block Changes: " + group.maxBlockChange);
+                                break;
                         }
                     }
                     else
