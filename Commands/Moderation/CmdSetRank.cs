@@ -42,8 +42,15 @@ namespace CommandDll
                 return;
             }
 
+            if (who.group.permission >= p.group.permission)
+            {
+                p.SendMessage("You cannot change the rank of someone of an equal or greater rank!");
+                return;
+            }
             if (group.permission >= p.group.permission)
-            { 
+            {
+                p.SendMessage("You cannot promote someone to an equal or greater rank!");
+                return;
             }
             if (who.group == group)
             {

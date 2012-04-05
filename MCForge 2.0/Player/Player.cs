@@ -459,12 +459,15 @@ namespace MCForge.Entity
             }
 
             //TODO Check for permissions to build and distance > max
-
+            bool placing = false;
+            if (action == 1) placing = true;
+            OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, (placing ? ActionType.Place : ActionType.Delete), this, newType);
+            b.Call();
+            if (b.IsCanceled)
+                return;
             if (blockChange != null)
             {
                 SendBlockChange(x, z, y, currentType);
-                bool placing = false;
-                if (action == 1) placing = true;
 
                 BlockChangeDelegate tempBlockChange = blockChange;
                 object tempPassBack = PassBackData;
@@ -1080,7 +1083,8 @@ namespace MCForge.Entity
         /// This void catches the new blockchange a player does.
         /// </summary>
         /// <param name="change">The BlockChangeDelegate that will be executed on blockchange.</param>
-        /// <param name="data">A passback object that can be used for a command to send data back to itself for use</param>        
+        /// <param name="data">A passback object that can be used for a command to send data back to itself for use</param>
+        [Obsolete("Please use OnPlayerBlockChange event (will be removed before release)")]
         public void CatchNextBlockchange(BlockChangeDelegate change, object data)
         {
             PassBackData = data;
@@ -1107,6 +1111,8 @@ namespace MCForge.Entity
         /// <param name="type"></param>
         public void Click(ushort x, ushort z, ushort y, byte type)
         {
+            OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, ActionType.Place, this, type);
+            b.Call();
             if (blockChange != null)
             {
                 bool placing = true;

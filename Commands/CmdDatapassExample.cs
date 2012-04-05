@@ -6,6 +6,8 @@ using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Core;
 using MCForge.Entity;
+using MCForge.API.PlayerEvent;
+using MCForge.API;
 
 namespace CommandDll
 {
