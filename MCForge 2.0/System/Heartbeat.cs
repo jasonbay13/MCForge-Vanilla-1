@@ -111,7 +111,8 @@ namespace MCForge.Core
 				o.Flush();
 			} catch (Exception) { // we DON'T CARE if it isn't updated every single time.
 			} finally {
-				o.Close();
+				if (o != null)
+					o.Close();
 			}
         }
     }

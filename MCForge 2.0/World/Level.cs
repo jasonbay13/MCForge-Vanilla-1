@@ -262,7 +262,12 @@ namespace MCForge.World
 		/// <returns>a byte that represents the blocktype at the given location</returns>
 		public byte GetBlock(int pos)
 		{
-			return data[pos];
+			try {
+				return data[pos];
+			} catch (Exception e) {
+				Server.Log(e);
+				return (byte)Blocks.Types.unknown;
+			}
 		}
 		#endregion
 
