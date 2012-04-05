@@ -27,6 +27,7 @@ using MCForge.API.PlayerEvent;
 using MCForge.Core;
 using MCForge.World;
 using MCForge.Interface.Command;
+using MCForge.Groups;
 
 namespace MCForge.Entity
 {
@@ -193,6 +194,10 @@ namespace MCForge.Entity
         /// True if this player is an admin
         /// </summary>
         public bool isAdmin = true;
+        /// <summary>
+        /// Holds replacement messages for profan filter
+        /// </summary>
+        public static List<string> replacement = new List<string>();
 
         object PassBackData;
         /// <summary>
@@ -216,7 +221,11 @@ namespace MCForge.Entity
         protected BlockChangeDelegate blockChange;
         protected NextChatDelegate nextChat;
 
-        public MCForge.Groups.Group group = ServerSettings.DefaultGroup;
+        /// <summary>
+        /// The current Group of the player
+        /// </summary>
+        public PlayerGroup group = ServerSettings.DefaultGroup;
+
 
         #endregion
 
@@ -378,6 +387,10 @@ namespace MCForge.Entity
 
                 CheckDuplicatePlayers(USERNAME);
 
+                foreach (PlayerGroup g in PlayerGroup.groups)
+                    if (g.players.Contains(USERNAME.ToLower()))
+                        group = g;
+
                 SendMotd();
 
                 isLoading = true;
@@ -446,12 +459,15 @@ namespace MCForge.Entity
             }
 
             //TODO Check for permissions to build and distance > max
-
+            bool placing = false;
+            if (action == 1) placing = true;
+            OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, (placing ? ActionType.Place : ActionType.Delete), this, newType);
+            b.Call();
+            if (b.IsCanceled)
+                return;
             if (blockChange != null)
             {
                 SendBlockChange(x, z, y, currentType);
-                bool placing = false;
-                if (action == 1) placing = true;
 
                 BlockChangeDelegate tempBlockChange = blockChange;
                 object tempPassBack = PassBackData;
@@ -548,6 +564,27 @@ namespace MCForge.Entity
 
             //Meep is used above for //Command
         Meep:
+
+            if (!File.Exists("text/badwords.txt")) { File.Create("text/badwords.txt").Close(); }
+            if (!File.Exists("text/replacementwords.txt")) { File.Create("text/replacementwords.txt").Close(); }
+
+            string textz = File.ReadAllText("text/replacementwords.txt");
+            if (textz == "") { File.WriteAllText("text/replacementwords.txt", "Pepper"); }
+            StreamReader w = File.OpenText("text/replacementwords.txt");
+            while (!w.EndOfStream) replacement.Add(w.ReadLine());
+            w.Dispose();
+
+        string[] badwords = File.ReadAllLines("text/badwords.txt");
+        string[] replacementwords = File.ReadAllLines("text/replacementwords.txt");
+
+        foreach (string word in badwords)
+        {
+            string text = incomingText;
+            if (text.Contains(word))
+            {
+                incomingText = Regex.Replace(text, word, replacement[new Random().Next(0, replacement.Count)]);
+            }
+        }
             if (muted) { SendMessage("You are muted!"); return; }
             if (Server.moderation && !voiced && !Server.devs.Contains(USERNAME)) { SendMessage("You can't talk during chat moderation!"); return; }
             if (jokered)
@@ -803,7 +840,7 @@ namespace MCForge.Entity
         /// <param name="message">The message to send</param>
         public void SendMessage(string message)
         {
-            SendMessage(0xFF, message);
+            SendMessage(id, message); // 0xFF is NOT a valid player ID
         }
         /// <summary>
         /// Exactly what the function name is, it might be useful to change this players pos first ;)
@@ -1054,7 +1091,8 @@ namespace MCForge.Entity
         /// This void catches the new blockchange a player does.
         /// </summary>
         /// <param name="change">The BlockChangeDelegate that will be executed on blockchange.</param>
-        /// <param name="data">A passback object that can be used for a command to send data back to itself for use</param>        
+        /// <param name="data">A passback object that can be used for a command to send data back to itself for use</param>
+        [Obsolete("Please use OnPlayerBlockChange event (will be removed before release)")]
         public void CatchNextBlockchange(BlockChangeDelegate change, object data)
         {
             PassBackData = data;
@@ -1081,6 +1119,8 @@ namespace MCForge.Entity
         /// <param name="type"></param>
         public void Click(ushort x, ushort z, ushort y, byte type)
         {
+            OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, ActionType.Place, this, type);
+            b.Call();
             if (blockChange != null)
             {
                 bool placing = true;

@@ -19,19 +19,19 @@ using System.Text;
 
 namespace MCForge.API
 {
-    public class EventHelper
+    public class Muffins
     {
-        internal static List<EventHelper> cache = new List<EventHelper>();
+        internal static List<Muffins> cache = new List<Muffins>();
         public object Delegate;
         public Priority priority;
         public Event type;
-        public EventHelper(object Delegate, Priority pri, Event type) { this.Delegate = Delegate; this.priority = pri; this.type = type; }
+        public Muffins(object Delegate, Priority pri, Event type) { this.Delegate = Delegate; this.priority = pri; this.type = type; }
         public static void Organize()
         {
             //TODO
             //Organize them, Low being called first and System_Level being called last
         }
-        public static void Push(EventHelper c)
+        public static void GiveDerpyMuffins(Muffins c)
         {
             cache.Add(c);
             Organize();

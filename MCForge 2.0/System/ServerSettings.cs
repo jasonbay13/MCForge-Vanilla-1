@@ -51,22 +51,23 @@ namespace MCForge.Core
         /// <summary>
         /// The default Permission value for new players
         /// </summary>
-        public static byte DefaultRank = 0;
+        public static byte DefaultRank = (byte)Groups.Permission.Guest;
         /// <summary>
         /// Gets or sets the default group.
         /// </summary>
         /// <value>The default group.</value>
         /// <remarks></remarks>
-        public static Group DefaultGroup
+        public static PlayerGroup DefaultGroup
         {
             get
             {
-                foreach (Group group in Group.groups.ToArray())
+                foreach (PlayerGroup group in PlayerGroup.groups.ToArray())
                 {
+                    Server.Log(DefaultRank + "." + group.permission);
                     if (group.permission == DefaultRank)
                         return group;
                 }
-                return new Group((byte)Groups.Permission.Guest, "Guest", Colors.white);
+                return new PlayerGroup((byte)Permission.Guest, "Guest", Colors.white, "guests.txt");
             }
             set
             {

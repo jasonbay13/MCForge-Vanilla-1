@@ -1,5 +1,6 @@
-/McForge 2.0/bin/
-/McForge 2.0/obj/
+/MCForge 2.0/bin/
+/MCForge 2.0/obj/
+/MCForge 2.0/MCForge.xml
 /Commands/bin/
 /Commands/obj/
 /Plugins/bin/
@@ -7,3 +8,5 @@
 *.suo
 *.user
 MCForge 2.0/MCForge.xml
+
+/MCForge 2.0/MCForge.xml
