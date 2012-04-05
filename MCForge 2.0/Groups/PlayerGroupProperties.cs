@@ -13,61 +13,76 @@ namespace MCForge.Groups
         public static void Save()
         {
             if (!Directory.Exists(ServerSettings.configPath)) Directory.CreateDirectory(ServerSettings.configPath);
-            using (XmlWriter writer = XmlWriter.Create(ServerSettings.configPath + "groups.xml"))
+
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.Indent = true;
+            settings.CloseOutput = true;
+            settings.NewLineOnAttributes = true;
+
+            using (XmlWriter writer = XmlWriter.Create(ServerSettings.configPath + "groups.xml", settings))
             {
                 writer.WriteStartDocument();
-                //writer.WriteString("\r\n");
                 writer.WriteStartElement("Groups");
 
                 foreach (PlayerGroup group in PlayerGroup.groups.ToArray())
                 {
-                    writer.WriteString("\r\n\t");
                     writer.WriteStartElement("Group");
-
-                    writer.WriteString("\r\n\t\t");
                     writer.WriteElementString("name", group.name);
-
-                    writer.WriteString("\r\n\t\t");
                     writer.WriteElementString("permission", group.permission.ToString());
-
-                    writer.WriteString("\r\n\t\t");
                     writer.WriteElementString("color", group.colour.ToString().Remove(0, 1));
 
-                    writer.WriteString("\r\n\t");
+                    writer.WriteElementString("file", group.file);
+                    //{
+                    //    writer.WriteStartElement("players");
+                    //    foreach (string s in group.players)
+                    //    {
+                    //        writer.WriteElementString("player", s);
+                    //    }
+                    //    writer.WriteEndElement();
+                    //}
                     writer.WriteEndElement();
                 }
-
-                writer.WriteString("\r\n");
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
             }
         }
 
-        public void Load()
+        public static void Load()
         {
             using (XmlReader reader = XmlReader.Create(ServerSettings.configPath + "groups.xml"))
             {
-                string name; byte permission; string color;
-                if (reader.IsStartElement())
+                PlayerGroup group = new PlayerGroup();
+
+                while (reader.Read())
                 {
-                    switch (reader.Name)
+                    if (reader.IsStartElement())
                     {
-                        case "name":
-                            name = reader.ReadContentAsString();
-                            break;
-                        case "permission":
-                            try
-                            {
-                                permission = byte.Parse(reader.ReadContentAsString());
-                            }
-                            catch
-                            {
-                                Server.Log("[Group Error] Group has a malformed permission, skipping", ConsoleColor.Red, ConsoleColor.White);
-                            }
-                            break;
-                        case "color":
-                            color = reader.ReadContentAsString();
-                            break;
+                        switch (reader.Name.ToLower())
+                        {                         
+                            case "name":
+                                group.name = reader.ReadString();
+                                Server.Log("[Group] Name: " + group.name);
+                                break;
+                            case "permission":
+                                try { group.permission = byte.Parse(reader.ReadString()); }
+                                catch { }
+                                Server.Log("[Group] Permission: " + group.permission);
+                                break;
+                            case "color":
+                                group.colour = '&' + reader.ReadString();
+                                Server.Log("[Group] Color: " + group.colour);
+                                break;
+                            case "file":
+                                group.file = reader.ReadString();
+                                Server.Log("[Group] File: " + group.file);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        try { group.add(); group = new PlayerGroup(); }
+                        catch { }
+                        break;
                     }
                 }
             }

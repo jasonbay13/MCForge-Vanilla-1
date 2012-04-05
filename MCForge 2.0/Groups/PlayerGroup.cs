@@ -83,6 +83,39 @@ namespace MCForge.Groups
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="PlayerGroup"/> class. without adding it to the group list
+        /// </summary>
+        /// <remarks></remarks>
+        internal PlayerGroup()
+        {
+            name = colour = null;
+        }
+        /// <summary>
+        /// Adds this instance to the list of groups ONLY use it when you initalised with PlayerGroup().
+        /// </summary>
+        /// <remarks></remarks>
+        internal void add()
+        {
+            if (name != null && colour != null)
+            {
+                foreach (PlayerGroup g in groups.ToArray())
+                {
+                    if (name.ToLower() == g.name.ToLower())
+                    {
+                        throw new ArgumentException("Cannot have 2 groups of the same name");
+                    }
+                }
+
+                LoadGroup();
+                groups.Add(this);
+            }
+            else
+            {
+                throw new Exception("Incomplete group, skipping add");
+            }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PlayerGroup"/> class.
         /// </summary>
         /// <param name="perm">The permission level of the group.</param>
@@ -90,7 +123,7 @@ namespace MCForge.Groups
         /// <param name="colour">The colour of the group.</param>1
         /// <param name="file">The filename to save the group player list in</param>
         /// <remarks></remarks>
-        public PlayerGroup(byte perm, string name, string colour, string file)
+        public PlayerGroup(int perm, string name, string colour, string file)
         {
             foreach (PlayerGroup g in groups.ToArray())
             {
@@ -108,7 +141,14 @@ namespace MCForge.Groups
                 File.Create(file1).Close();
                 Server.Log("[Groups] " + file + " was created", ConsoleColor.DarkGreen, ConsoleColor.Black);
             }
-            permission = perm;
+            try
+            {
+                permission = byte.Parse(perm.ToString());
+            }
+            catch
+            {
+                throw new ArgumentException("Permission has to be above 0 and below 255");
+            }
             this.name = name;
             this.colour = colour;
             this.file = file;
@@ -199,6 +239,7 @@ namespace MCForge.Groups
 
         public void AddPlayer(Player p)
         {
+            p.group.players.Remove(p.USERNAME.ToLower());
             p.group = this;
             players.Add(p.USERNAME.ToLower());
             SaveGroup();
@@ -210,6 +251,11 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         public static void InitDefaultGroups()
         {
+            //PlayerGroupProperties.Load();
+            //foreach (PlayerGroup g in PlayerGroup.groups)
+            //{
+            //    Server.Log("[Group] " + g.name + "Initialized");
+            //}
             new PlayerGroup((byte)Permission.Guest, "Guest", Colors.white, "guests.txt");
             new PlayerGroup((byte)Permission.Builder, "Builder", Colors.green, "builders.txt");
             new PlayerGroup((byte)Permission.AdvBuilder, "AdvBuilder", Colors.lime, "advbuilders.txt");
