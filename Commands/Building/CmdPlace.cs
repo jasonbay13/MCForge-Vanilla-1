@@ -38,7 +38,7 @@ namespace CommandDll
         {
             byte b = (byte)(Blocks.Types.zero);
             ushort x, z, y;
-            Point3 pos = p.Pos;
+            Vector3 pos = p.Pos;
             try
             {
                 switch (args.Length)

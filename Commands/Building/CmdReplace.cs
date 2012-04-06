@@ -68,7 +68,7 @@ namespace CommandDll
         public void CatchBlock(OnPlayerBlockChange args)
         {
             CatchPos cpos = (CatchPos)args.GetData();
-            cpos.pos = new Point3(args.GetX(), args.GetZ(), args.GetZ());
+            cpos.pos = new Vector3(args.GetX(), args.GetZ(), args.GetZ());
             args.Unregister(true);
             args.GetPlayer().CatchNextBlockchange(CatchBlock2, (object)cpos);
         }
@@ -90,7 +90,7 @@ namespace CommandDll
                 {
                     for (ushort yy = Math.Min((ushort)(FirstBlock.pos.y), y); yy <= Math.Max((ushort)(FirstBlock.pos.y), y); ++yy)
                     {
-                        Point3 loop = new Point3(xx, zz, yy);
+                        Vector3 loop = new Vector3(xx, zz, yy);
                         if (p.level.GetBlock(loop) == NewType)
                         {
                             BufferAdd(buffer, loop);
@@ -118,7 +118,7 @@ namespace CommandDll
             string[] CommandStrings = new string[2] { "replace", "r" };
             Command.AddReference(this, CommandStrings);
         }
-        void BufferAdd(List<Pos> list, Point3 type)
+        void BufferAdd(List<Pos> list, Vector3 type)
         {
             Pos pos;
             pos.pos = type;
@@ -128,11 +128,11 @@ namespace CommandDll
         {
             public byte type;
             public byte type2;
-            public Point3 pos;
+            public Vector3 pos;
         }
         struct Pos
         {
-            public Point3 pos;
+            public Vector3 pos;
         }
     }
 }

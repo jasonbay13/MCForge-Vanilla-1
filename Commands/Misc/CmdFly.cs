@@ -45,17 +45,17 @@ namespace CommandDll
 
             Thread fly = new Thread(new ThreadStart(delegate
                 {
-                Point3 pos;
-                Point3 oldpos = new Point3();
-                List<Point3> buffer = new List<Point3>();
+                Vector3 pos;
+                Vector3 oldpos = new Vector3();
+                List<Vector3> buffer = new List<Vector3>();
                 while (p.isFlying)
                 {
                     Thread.Sleep(20);
                     if (p.Pos.x == oldpos.x && p.Pos.z == oldpos.z && p.Pos.y == oldpos.y) continue;
                     try
                     {
-                        List<Point3> tempBuffer = new List<Point3>();
-                        List<Point3> toRemove = new List<Point3>();
+                        List<Vector3> tempBuffer = new List<Vector3>();
+                        List<Vector3> toRemove = new List<Vector3>();
                         ushort x = (ushort)((p.Pos.x) / 32);
                         ushort z = (ushort)((p.Pos.z) / 32);
                         ushort y = (ushort)((p.Pos.y - 60) / 32);
@@ -75,7 +75,7 @@ namespace CommandDll
                                     }
                                 }
                             }
-                            foreach (Point3 cP in tempBuffer)
+                            foreach (Vector3 cP in tempBuffer)
                             {
                                 if (!buffer.Contains(cP))
                                 {
@@ -83,7 +83,7 @@ namespace CommandDll
                                     p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, (byte)Blocks.Types.glass);
                                 }
                             }
-                            foreach (Point3 cP in buffer)
+                            foreach (Vector3 cP in buffer)
                             {
                                 if (!tempBuffer.Contains(cP))
                                 {
@@ -91,7 +91,7 @@ namespace CommandDll
                                     toRemove.Add(cP);
                                 }
                             }
-                            foreach (Point3 cP in toRemove)
+                            foreach (Vector3 cP in toRemove)
                             {
                                 buffer.Remove(cP);
                             }
@@ -105,7 +105,7 @@ namespace CommandDll
                     //p.Pos.CopyTo(oldpos, 0);
                 }
 
-                foreach (Point3 cP in buffer)
+                foreach (Vector3 cP in buffer)
                 {
                     p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, (byte)Blocks.Types.air);
                 }

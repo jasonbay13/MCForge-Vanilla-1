@@ -61,11 +61,11 @@ namespace MCForge.World
 		/// <summary>
 		/// This is the size of the level
 		/// </summary>
-		public Point3 Size;
+		public Vector3 Size;
 		/// <summary>
 		/// Levels current Spawn position
 		/// </summary>
-		public Point3 SpawnPos;
+		public Vector3 SpawnPos;
 		/// <summary>
 		/// Levels current Spawn ROT
 		/// </summary>
@@ -76,7 +76,7 @@ namespace MCForge.World
 		/// </summary>
 		public byte[] data;
 
-		private Level(Point3 size)
+		private Level(Vector3 size)
 		{
 			Size = size;
 			//data = new byte[Size.x, Size.z, Size.y];
@@ -89,7 +89,7 @@ namespace MCForge.World
 		/// <param name="size">The size to create the level.</param>
 		/// <param name="type">The type of the level you want to create</param>
 		/// <returns>returns the level that was created</returns>
-		public static Level CreateLevel(Point3 size, LevelTypes type, String name = "main")
+		public static Level CreateLevel(Vector3 size, LevelTypes type, String name = "main")
 		{
 			Level newlevel = new Level(size);
 			newlevel.name = name;
@@ -123,7 +123,7 @@ namespace MCForge.World
 
 			});
 
-			SpawnPos = new Point3((short)(Size.x / 2), (short)(Size.z / 2), (short)(Size.y));
+			SpawnPos = new Vector3((short)(Size.x / 2), (short)(Size.z / 2), (short)(Size.y));
 			SpawnRot = new byte[2]{0, 0};
 		}
 
@@ -189,7 +189,7 @@ namespace MCForge.World
 		}
 
 		#region SetBlock And Overloads
-		void SetBlock(Point3 pos, Blocks.Types block)
+		void SetBlock(Vector3 pos, Blocks.Types block)
 		{
 			SetBlock(pos.x, pos.z, pos.y, (byte)block);
 		}
@@ -205,7 +205,7 @@ namespace MCForge.World
 		{
 			SetBlock(pos, (byte)block);
 		}
-		void SetBlock(Point3 pos, byte block)
+		void SetBlock(Vector3 pos, byte block)
 		{
 			SetBlock(pos.x, pos.z, pos.y, block);
 		}
@@ -229,7 +229,7 @@ namespace MCForge.World
 		/// </summary>
 		/// <param name="pos">the pos to check and return</param>
 		/// <returns>a byte that represents the blocktype at the given location</returns>
-		public byte GetBlock(Point3 pos)
+		public byte GetBlock(Vector3 pos)
 		{
 			return GetBlock(pos.x, pos.z, pos.y);
 		}
@@ -293,13 +293,13 @@ namespace MCForge.World
 		/// </summary>
 		/// <param name="pos">The int pos to convert</param>
 		/// <returns>a 3 dimensional representation of the block position</returns>
-		public Point3 IntToPos(int pos)
+		public Vector3 IntToPos(int pos)
 		{
 			short y = (short)(pos / Size.x / Size.z); pos -= y * Size.x * Size.z;
 			short z = (short)(pos / Size.x); pos -= z * Size.x;
 			short x = (short)pos;
 
-			return new Point3(x, z, y);
+			return new Vector3(x, z, y);
 		}
 		/// <summary>
 		/// Return the position (int) relative to a given block position (int) given an offset of xzy

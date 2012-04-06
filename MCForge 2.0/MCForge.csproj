@@ -68,6 +68,11 @@
     <Compile Include="API\World\WorldEvent.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
+    <Compile Include="Player\PlayerNetworking.cs" />
+    <Compile Include="System\FileUtils.cs" />
+    <Compile Include="System\Settings\ExtraSettings.cs" />
+    <Compile Include="System\Settings\GroupSettings.cs" />
+    <Compile Include="System\Settings\LevelSettings.cs" />
     <Compile Include="World\Blocks.cs" />
     <Compile Include="API\Event.cs" />
     <Compile Include="Gui\frmMain.cs">
@@ -91,10 +96,10 @@
     <Compile Include="System\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System\Server.cs" />
-    <Compile Include="System\ServerSettings.cs" />
     <Compile Include="World\LevelSettings.cs" />
     <Compile Include="World\Physics\LavaExample.cs" />
     <Compile Include="World\Physics\PhysicsBlock.cs" />
+    <Compile Include="System\Settings\ServerSettings.cs" />
     <EmbeddedResource Include="Gui\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>

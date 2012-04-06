@@ -45,14 +45,14 @@ namespace CommandDll
             {
                 if (args[0].ToLower() == "all")
                 {
-                    foreach (Player pl in Server.Players.ToArray())
-                    {
-                        if (pl.level == p.level && pl != p && p.group.permission > pl.group.permission) //Missing permissions
-                        {
-                            pl.SendToPos(p.Pos, p.Rot);
-                            pl.SendMessage("You were summoned by " + p.color + p.USERNAME + Server.DefaultColor + ".");
-                        }
-                    }
+					Server.ForeachPlayer(delegate(Player pl)
+					{
+						if (pl.level == p.level && pl != p && p.group.permission > pl.group.permission) //Missing permissions
+						{
+							pl.SendToPos(p.Pos, p.Rot);
+							pl.SendMessage("You were summoned by " + p.color + p.USERNAME + Server.DefaultColor + ".");
+						}
+					});
                     Player.UniversalChat(p.color + p.USERNAME + Server.DefaultColor + " summoned everyone!");
                     return;
                 }

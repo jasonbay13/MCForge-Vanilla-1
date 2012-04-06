@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\MCForge 2.0\bin\Debug\</OutputPath>
+    <OutputPath>..\MCForge 2.0\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -44,6 +44,10 @@
     <Compile Include="Building\CmdReplace.cs" />
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Building\CmdReplaceAll.cs" />
+    <Compile Include="Misc\CmdPass.cs" />
+    <Compile Include="Misc\CmdResetPass.cs" />
+    <Compile Include="Misc\CmdSetPass.cs" />
+    <Compile Include="Moderation\CmdSettings.cs" />
     <Compile Include="Information\CmdHelp.cs" />
     <Compile Include="Information\CmdImpersonate.cs" />
     <Compile Include="Misc\CmdSummon.cs" />

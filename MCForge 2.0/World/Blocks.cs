@@ -88,7 +88,7 @@ namespace MCForge.World
             zero = 0xff,
         }
 
-        public static string GetName(Point3 pos) { return GetName(pos.x, pos.z, pos.y); }
+        public static string GetName(Vector3 pos) { return GetName(pos.x, pos.z, pos.y); }
         public static string GetName(short x, short z, short y)
         {
             return "";

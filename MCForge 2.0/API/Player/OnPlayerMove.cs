@@ -9,14 +9,14 @@ namespace MCForge.API.PlayerEvent
 {
     public class OnPlayerMove : Event, Cancelable, PlayerEvent
     {
-        Point3 oldpos;
-        Point3 currentpos;
+        Vector3 oldpos;
+        Vector3 currentpos;
         Player p;
         bool _unregister;
         object datapass;
         public delegate void OnCall(OnPlayerMove args);
         bool _canceled;
-        public OnPlayerMove(Player p, Point3 oldpos, Point3 currentpos) { this.oldpos = oldpos; this.currentpos = currentpos; this.p = p; }
+        public OnPlayerMove(Player p, Vector3 oldpos, Vector3 currentpos) { this.oldpos = oldpos; this.currentpos = currentpos; this.p = p; }
         internal OnPlayerMove() { }
         public bool IsCanceled { get { return _canceled; } }
         public void Cancel(bool value)
@@ -31,11 +31,11 @@ namespace MCForge.API.PlayerEvent
         {
             return p;
         }
-        public Point3 GetPos()
+        public Vector3 GetPos()
         {
             return currentpos;
         }
-        public Point3 GetOldPos()
+        public Vector3 GetOldPos()
         {
             return oldpos;
         }
