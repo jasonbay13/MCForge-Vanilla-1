@@ -425,8 +425,13 @@ namespace MCForge.Entity
                 return;
             }
 			Server.Log("<" + USERNAME + "> " + incomingText);
-			UniversalChat(voicestring + group.colour + USERNAME + ": &f" + incomingText);
-		}
+            UniversalChat(voicestring + color + prefix + USERNAME + ": &f" + incomingText);
+        }
+
+        public void SetPrefix()
+        {
+            prefix = title == "" ? "" : "[" + titleColor + title + color + "]";
+        }
 
 		#endregion
 		#region Outgoing Packets
@@ -550,7 +555,7 @@ namespace MCForge.Entity
 				Server.Log(e);
 			}
 		}
-		protected void SendSpawn(Player p)
+		public void SendSpawn(Player p)
 		{
 			byte ID = 0xFF;
 			if (p != this)

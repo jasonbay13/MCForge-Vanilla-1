@@ -190,6 +190,18 @@ namespace MCForge.Entity {
         /// </summary>
         public string color = Colors.navy;
         /// <summary>
+        /// The players TITLE
+        /// </summary>
+        public string title = "";
+        /// <summary>
+        /// The players TITLE COLOR
+        /// </summary>
+        public string titleColor = "";
+        /// <summary>
+        /// The players PREFIX
+        /// </summary>
+        public string prefix = "";
+        /// <summary>
         /// True if this player is hidden
         /// </summary>
         public bool isHidden = false;
