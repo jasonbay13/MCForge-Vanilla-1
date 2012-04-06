@@ -34,10 +34,10 @@ namespace CommandDll
 
 		public void Use(Player p, string[] args)
 		{
-			foreach (Player pl in Server.Players.ToArray())
+			Server.ForeachPlayer(delegate(Player pl)
 			{
 				p.SendMessage(pl.USERNAME + " " + pl.id);
-			}
+			});
 		}
 
 		public void Help(Player p)

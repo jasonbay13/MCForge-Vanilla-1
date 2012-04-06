@@ -67,6 +67,7 @@
     <Compile Include="API\World\WorldEvent.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
+    <Compile Include="Player\PlayerNetworking.cs" />
     <Compile Include="System\FileUtils.cs" />
     <Compile Include="System\Settings\ExtraSettings.cs" />
     <Compile Include="System\Settings\GroupSettings.cs" />

@@ -174,11 +174,11 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         public void SendMessage(string message)
         {
-            foreach (Player p in Server.Players.ToArray())
-            {
-                if (p.group == this)
-                    p.SendMessage(message);
-            }
+			Server.ForeachPlayer(delegate(Player p)
+			{
+				if (p.group == this)
+					p.SendMessage(message);
+			});
         }
 
         /// <summary>

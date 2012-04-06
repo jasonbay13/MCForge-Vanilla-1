@@ -84,7 +84,7 @@ namespace MCForge.Core
                     ServerSettings.GetSetting("servername"),
                     ServerSettings.GetSettingBoolean("public"),
                     ServerSettings.Salt,
-                    Server.Players.Count,
+                    Server.PlayerCount,
                     (byte)ServerSettings.GetSettingInt("maxplayers"),
                     ServerSettings.Version);
             }

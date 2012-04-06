@@ -17,6 +17,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MCForge.Entity;
+using System.Net;
+using System.IO.Compression;
 
 namespace MCForge.Core {
     public struct Point2 {
@@ -129,4 +132,145 @@ namespace MCForge.Core {
             }
         }
     }
+
+	public struct packet
+	{
+		public byte[] bytes;
+
+		#region Constructors
+		public packet(byte[] data)
+		{
+			bytes = data;
+		}
+		public packet(packet p)
+		{
+			bytes = p.bytes;
+		}
+		#endregion
+		#region Adds
+		public void AddStart(byte[] data)
+		{
+			byte[] temp = bytes;
+
+			bytes = new byte[temp.Length + data.Length];
+
+			data.CopyTo(bytes, 0);
+			temp.CopyTo(bytes, data.Length);
+		}
+
+		public void Add(byte[] data)
+		{
+			if (bytes == null)
+			{
+				bytes = data;
+			}
+			else
+			{
+				byte[] temp = bytes;
+
+				bytes = new byte[temp.Length + data.Length];
+
+				temp.CopyTo(bytes, 0);
+				data.CopyTo(bytes, temp.Length);
+			}
+		}
+		public void Add(sbyte a)
+		{
+			Add(new byte[1] { (byte)a });
+		}
+		public void Add(byte a)
+		{
+			Add(new byte[1] { a });
+		}
+		public void Add(types a)
+		{
+			Add((byte)a);
+		}
+		public void Add(short a)
+		{
+			Add(HTNO(a));
+		}
+		public void Add(ushort a)
+		{
+			Add(HTNO(a));
+		}
+		public void Add(int a)
+		{
+			Add(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(a)));
+		}
+		public void Add(string a)
+		{
+			Add(a, a.Length);
+		}
+		public void Add(string a, int size)
+		{
+			Add(Player.enc.GetBytes(a.PadRight(size).Substring(0, size)));
+		}
+		#endregion
+		#region Sets
+		public void Set(int offset, short a)
+		{
+			HTNO(a).CopyTo(bytes, offset);
+		}
+		public void Set(int offset, ushort a)
+		{
+			HTNO(a).CopyTo(bytes, offset);
+		}
+		public void Set(int offset, string a, int length)
+		{
+			Player.enc.GetBytes(a.PadRight(length).Substring(0, length)).CopyTo(bytes, offset);
+		}
+		#endregion
+
+		public void GZip()
+		{
+			using (var ms = new System.IO.MemoryStream())
+			{
+
+				using (var gs = new GZipStream(ms, CompressionMode.Compress, true))
+					gs.Write(bytes, 0, bytes.Length);
+
+				ms.Position = 0;
+				bytes = new byte[ms.Length];
+				ms.Read(bytes, 0, (int)ms.Length);
+			}
+		}
+
+		#region == Host <> Network ==
+		public static byte[] HTNO(ushort x)
+		{
+			byte[] y = BitConverter.GetBytes(x); Array.Reverse(y); return y;
+		}
+		public static ushort NTHO(byte[] x, int offset)
+		{
+			byte[] y = new byte[2];
+			Buffer.BlockCopy(x, offset, y, 0, 2); Array.Reverse(y);
+			return BitConverter.ToUInt16(y, 0);
+		}
+		public static byte[] HTNO(short x)
+		{
+			byte[] y = BitConverter.GetBytes(x); Array.Reverse(y); return y;
+		}
+		#endregion
+
+		public enum types
+		{
+			Message = 13,
+			MOTD = 0,
+			MapStart = 2,
+			MapData = 3,
+			MapEnd = 4,
+			SendSpawn = 7,
+			SendDie = 12,
+			SendBlockchange = 6,
+			SendKick = 14,
+			SendPing = 1,
+
+			SendPosChange = 10,
+			SendRotChange = 11,
+			SendPosANDRotChange = 9,
+			SendTeleport = 8,
+
+		}
+	}
 }
