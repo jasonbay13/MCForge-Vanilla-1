@@ -29,6 +29,11 @@ namespace MCForge.Interface.Command
 		internal static Dictionary<string, ICommand> Commands = new Dictionary<string, ICommand>();
 
 		/// <summary>
+		/// Returns the dictionary of all commands.
+		/// </summary>
+		public static Dictionary<string, ICommand> all { get { return Commands; } }
+
+		/// <summary>
 		/// Add an array of referances to your command here
 		/// </summary>
 		/// <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
@@ -53,6 +58,11 @@ namespace MCForge.Interface.Command
 				return;
 			}
 			Commands.Add(reference.ToLower(), command);
+		}
+
+		public static ICommand Find(string p) {
+			KeyValuePair<string, ICommand> firstCmd = Commands.First<KeyValuePair<string, ICommand>>((entry) => entry.Key == p);
+			return firstCmd.Value;
 		}
 	}
     public enum CommandTypes

@@ -57,7 +57,7 @@ namespace MCForge.Core
         /// <summary>
         /// The list of MCForge developers.
         /// </summary>
-        public static readonly List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "Gamemakergm", "cazzar", "hirsty", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "TheMusiKid" });
+        public static readonly List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "Gamemakergm", "cazzar", "hirsty", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "TheMusiKid", "Nerketur" });
         /// <summary>
         /// List of players that agreed to the rules
         /// </summary>
@@ -97,7 +97,7 @@ namespace MCForge.Core
         /// <summary>
         /// The server's default color.
         /// </summary>
-        public static string DefaultColor = "&e";
+        public static string DefaultColor = Colors.yellow;
 
         /// <summary>
         /// The minecraft.net URL of the server
@@ -161,6 +161,7 @@ namespace MCForge.Core
 					TM.PassBack = TM.MethodToInvoke.Invoke(TM.PassBack);
 					if (TM.repeat == 0) TimedMethodList.Remove(TM);
 					TM.repeat--;
+					TM.time = TM.consistentTime;
 				}
 			}
         }
@@ -275,6 +276,7 @@ namespace MCForge.Core
 		class TimedMethod
 		{
 			public TimedMethodDelegate MethodToInvoke;
+			public int consistentTime;
 			public int time;
 			public int repeat;
 			public object PassBack;
@@ -282,6 +284,7 @@ namespace MCForge.Core
 			public TimedMethod(TimedMethodDelegate a, int b, int c, object d)
 			{
 				MethodToInvoke = a;
+				consistentTime = b / 100;
 				time = b / 100;
 				repeat = c;
 				PassBack = d;

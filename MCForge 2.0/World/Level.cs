@@ -43,8 +43,8 @@ namespace MCForge.World
 		/// <param name="pos">the loops current block position (pos)</param>
 		public delegate void ForEachBlockDelegate(int pos);
 
-        string _name = "main";
-        public string name { get; set; }
+		string _name = "main";
+		public string name { get; set; }
 
 		int _TotalBlocks;
 		/// <summary>
@@ -92,6 +92,7 @@ namespace MCForge.World
 		public static Level CreateLevel(Point3 size, LevelTypes type, String name = "main")
 		{
 			Level newlevel = new Level(size);
+			newlevel.name = name;
 
 			newlevel.name = name;
 			switch(type)
@@ -261,7 +262,12 @@ namespace MCForge.World
 		/// <returns>a byte that represents the blocktype at the given location</returns>
 		public byte GetBlock(int pos)
 		{
-			return data[pos];
+			try {
+				return data[pos];
+			} catch (Exception e) {
+				Server.Log(e);
+				return (byte)Blocks.Types.unknown;
+			}
 		}
 		#endregion
 

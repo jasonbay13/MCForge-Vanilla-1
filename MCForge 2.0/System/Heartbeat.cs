@@ -104,11 +104,16 @@ namespace MCForge.Core
         {
             if (!Directory.Exists(Path.GetDirectoryName(file)))
                 Directory.CreateDirectory(Path.GetDirectoryName(file));
-
-            TextWriter o = new StreamWriter(file);
-            o.WriteLine(URL);
-            o.Flush();
-            o.Close();
+			TextWriter o = null;
+			try {
+				o = new StreamWriter(file);
+				o.WriteLine(URL);
+				o.Flush();
+			} catch (Exception) { // we DON'T CARE if it isn't updated every single time.
+			} finally {
+				if (o != null)
+					o.Close();
+			}
         }
     }
 }

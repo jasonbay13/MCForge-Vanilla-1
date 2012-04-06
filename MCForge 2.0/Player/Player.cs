@@ -677,6 +677,7 @@ namespace MCForge.Entity
         {
             packet pa = new packet();
 
+
             for (int i = 0; i < 10; i++)
             {
                 message = message.Replace("%" + i, "&" + i);
@@ -687,16 +688,7 @@ namespace MCForge.Entity
                 message = message.Replace("%" + ch, "&" + ch);
                 message = message.Replace("&" + ch + " &", "&");
             }
-            for (int i = 0; i < 10; i++)
-            {
-                message = message.Replace("%" + i, "&" + i);
-                message = message.Replace("&" + i + " &", "&");
-            }
-            for (char ch = 'a'; ch <= 'f'; ch++)
-            {
-                message = message.Replace("%" + ch, "&" + ch);
-                message = message.Replace("&" + ch + " &", "&");
-            }
+			message = Server.DefaultColor + message;
 
             pa.Add(packet.types.Message);
             pa.Add(PlayerID);
