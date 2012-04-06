@@ -44,6 +44,8 @@
     <Compile Include="Building\CmdReplace.cs" />
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Building\CmdReplaceAll.cs" />
+    <Compile Include="Information\CmdPlayers.cs" />
+    <Compile Include="Information\CmdViewranks.cs" />
     <Compile Include="Misc\CmdPass.cs" />
     <Compile Include="Misc\CmdResetPass.cs" />
     <Compile Include="Misc\CmdSetPass.cs" />
