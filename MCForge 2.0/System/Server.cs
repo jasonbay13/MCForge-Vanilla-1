@@ -113,16 +113,10 @@ namespace MCForge.Core
 		public delegate object TimedMethodDelegate(object dataPass);
 		static List<TimedMethod> TimedMethodList = new List<TimedMethod>();
 
-        public static void method(OnPlayerConnect args)
-        {
-            Log("Hi!");
-            args.Cancel(true);
-        }
         internal static void Init()
         {
 			//TODO load the level if it exists
             Mainlevel = Level.CreateLevel(new Point3(256, 256, 64), Level.LevelTypes.Flat);
-            OnPlayerConnect.Register(method, API.Priority.Normal);
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
             UpdateTimer.Start();
