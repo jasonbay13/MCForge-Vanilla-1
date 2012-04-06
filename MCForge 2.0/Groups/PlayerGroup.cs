@@ -232,7 +232,7 @@ namespace MCForge.Groups
 
                 while ((line = file.ReadLine()) != null)
                 {
-                    Server.Log(this.file + ":" + line);
+                    //Server.Log(this.file + ":" + line);
                     if (!string.IsNullOrEmpty(line))
                         if (!players.Contains(line.ToLower()))
                             players.Add(line.ToLower());
@@ -256,16 +256,26 @@ namespace MCForge.Groups
         }
 
         /// <summary>
+        /// Initializes the loading of the groups and if there are no groups there it initalises the default groups.
+        /// </summary>
+        /// <remarks></remarks>
+        public static void Init()
+        {
+            PlayerGroupProperties.Load();
+            foreach (PlayerGroup g in PlayerGroup.groups)
+            {
+                Server.Log("[Group] " + g.name + "Initialized");
+            }
+            if (groups.Count < 1)
+                InitDefaultGroups();
+        }
+
+        /// <summary>
         /// Initializes the default groups.
         /// </summary>
         /// <remarks></remarks>
         public static void InitDefaultGroups()
         {
-            //PlayerGroupProperties.Load();
-            //foreach (PlayerGroup g in PlayerGroup.groups)
-            //{
-            //    Server.Log("[Group] " + g.name + "Initialized");
-            //}
             new PlayerGroup((byte)Permission.Guest, "Guest", Colors.white, "guests.txt");
             new PlayerGroup((byte)Permission.Builder, "Builder", Colors.green, "builders.txt");
             new PlayerGroup((byte)Permission.AdvBuilder, "AdvBuilder", Colors.lime, "advbuilders.txt");

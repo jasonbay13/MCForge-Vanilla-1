@@ -162,7 +162,7 @@ namespace MCForge.Core {
             UpdateTimer.Elapsed += delegate { Update(); };
             UpdateTimer.Start();
             
-            Groups.PlayerGroup.InitDefaultGroups();
+            Groups.PlayerGroup.Init();
 
             LoadAllDlls.Init();
 

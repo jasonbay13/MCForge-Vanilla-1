@@ -67,11 +67,11 @@ namespace MCForge.Groups
                             case "permission":
                                 try { group.permission = byte.Parse(reader.ReadString()); }
                                 catch { }
-                                Server.Log("[Group] Permission: " + group.permission);
+                                //Server.Log("[Group] Permission: " + group.permission);
                                 break;
                             case "color":
                                 group.colour = '&' + reader.ReadString();
-                                Server.Log("[Group] Color: " + group.colour);
+                                //Server.Log("[Group] Color: " + group.colour);
                                 break;
                             case "file":
                                 group.file = reader.ReadString();
@@ -80,7 +80,7 @@ namespace MCForge.Groups
                             case "maxblockchanges":
                                 try { group.maxBlockChange = int.Parse(reader.ReadString()); }
                                 catch { }
-                                Server.Log("[Group] Max Block Changes: " + group.maxBlockChange);
+                                //Server.Log("[Group] Max Block Changes: " + group.maxBlockChange);
                                 break;
                         }
                     }
