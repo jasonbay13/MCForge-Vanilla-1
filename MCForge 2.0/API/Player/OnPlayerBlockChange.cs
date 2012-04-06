@@ -12,27 +12,22 @@ namespace MCForge.API.PlayerEvent
         Delete,
         Place
     }
-    public class OnPlayerBlockChange : Event, PlayerEvent, Cancelable
+    public class OnPlayerBlockChange : PlayerEvent, Cancelable
     {
         public delegate void OnCall(OnPlayerBlockChange eventargs);
         ushort x;
-        object datapass;
         byte holding;
         ushort y;
         ushort z;
         ActionType action;
-        bool _canceled;
-        bool _unregister;
-        Player p;
-        public OnPlayerBlockChange(ushort x, ushort y, ushort z, ActionType action, Player p, byte b) { this.x = x; this.y = y; this.z = z; this.action = action; this.p = p; this.holding = b; }
+        public OnPlayerBlockChange(ushort x, ushort y, ushort z, ActionType action, Player p, byte b) : base(p)
+        { 
+            this.x = x; this.y = y; this.z = z; this.action = action; this.holding = b; 
+        }
         internal OnPlayerBlockChange() { }
         public ushort GetX()
         {
             return x;
-        }
-        public void Unregister(bool value)
-        {
-            _unregister = value;
         }
         public ushort GetY()
         {
@@ -50,18 +45,9 @@ namespace MCForge.API.PlayerEvent
         {
             return action;
         }
-        public Player GetPlayer()
+        public override bool IsCancelable
         {
-            return p;
-        }
-        public bool IsCanceled { get { return _canceled; } }
-        public void Cancel(bool value)
-        {
-            _canceled = value;
-        }
-        public object GetData()
-        {
-            return datapass;
+            get { return true; }
         }
         public override void Call()
         {

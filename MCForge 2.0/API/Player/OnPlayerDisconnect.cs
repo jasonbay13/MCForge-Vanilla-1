@@ -6,31 +6,19 @@ using MCForge.Entity;
 
 namespace MCForge.API.PlayerEvent
 {
-    public class OnPlayerDisconnect : Event, PlayerEvent
+    public class OnPlayerDisconnect : PlayerEvent
     {
-        Player p;
         public delegate void OnCall(OnPlayerDisconnect args);
-        object datapass;
         string reason;
-        bool _unregister;
-        bool _canceled;
-        public OnPlayerDisconnect(Player p, string reason) { this.reason = reason; this.p = p; }
+        public OnPlayerDisconnect(Player p, string reason) : base(p) { this.reason = reason; }
         internal OnPlayerDisconnect() { }
-        public Player GetPlayer()
-        {
-            return p;
-        }
-        public void Unregister(bool value)
-        {
-            _unregister = value;
-        }
         public string GetReason()
         {
             return reason;
         }
-        public object GetData()
+        public override bool IsCancelable
         {
-            return datapass;
+            get { return false; }
         }
         public override void Call()
         {

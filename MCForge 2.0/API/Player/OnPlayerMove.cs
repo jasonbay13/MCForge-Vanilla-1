@@ -7,29 +7,18 @@ using MCForge.Core;
 
 namespace MCForge.API.PlayerEvent
 {
-    public class OnPlayerMove : Event, Cancelable, PlayerEvent
+    public class OnPlayerMove : PlayerEvent
     {
         Vector3 oldpos;
         Vector3 currentpos;
-        Player p;
-        bool _unregister;
-        object datapass;
         public delegate void OnCall(OnPlayerMove args);
-        bool _canceled;
-        public OnPlayerMove(Player p, Vector3 oldpos, Vector3 currentpos) { this.oldpos = oldpos; this.currentpos = currentpos; this.p = p; }
+        public OnPlayerMove(Player p, Vector3 oldpos, Vector3 currentpos) : base(p) { 
+            this.oldpos = oldpos; this.currentpos = currentpos;
+        }
         internal OnPlayerMove() { }
-        public bool IsCanceled { get { return _canceled; } }
-        public void Cancel(bool value)
+        public override bool IsCancelable
         {
-            _canceled = value;
-        }
-        public object GetData()
-        {
-            return datapass;
-        }
-        public Player GetPlayer()
-        {
-            return p;
+            get { return true; }
         }
         public Vector3 GetPos()
         {
@@ -55,11 +44,7 @@ namespace MCForge.API.PlayerEvent
                 }
             });
             if (IsCanceled)
-                p.SendToPos(oldpos, p.Rot);
-        }
-        public void Unregister(bool value)
-        {
-            _unregister = value;
+                GetPlayer().SendToPos(oldpos, GetPlayer().Rot);
         }
         /// <summary>
         /// Register this event

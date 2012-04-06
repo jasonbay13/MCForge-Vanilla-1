@@ -21,12 +21,40 @@ using MCForge.Entity;
 
 namespace MCForge.API.PlayerEvent
 {
-    public interface PlayerEvent
+    public abstract class PlayerEvent : Event, Cancelable //We can assume we can cancel most player events..because we can
     {
+        internal Player p;
+        internal object datapass;
+        bool _canceled;
+        internal bool _unregister;
         /// <summary>
         /// Get the player connected to the event
         /// </summary>
         /// <returns>The player</returns>
-        Player GetPlayer();
+        public virtual Player GetPlayer()
+        {
+            return p;
+        }
+        public virtual void Unregister(bool value)
+        {
+            _unregister = value;
+        }
+        public abstract bool IsCancelable { get; }
+        public virtual bool IsCanceled { get { return _canceled; } }
+        public virtual void Cancel(bool value)
+        {
+            if (IsCancelable)
+                _canceled = value;
+        }
+        public virtual object GetData()
+        {
+            return datapass;
+        }
+        public PlayerEvent(Player p)
+        {
+            this.p = p;
+        }
+        internal PlayerEvent() { }
+        public abstract void Call();
     }
 }
