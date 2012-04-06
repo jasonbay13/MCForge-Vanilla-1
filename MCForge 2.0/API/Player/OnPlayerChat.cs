@@ -14,6 +14,7 @@ namespace MCForge.API.PlayerEvent
     {
 
         Player p;
+        object datapass;
         public delegate void OnCall(OnPlayerChat eventargs);
         string message;
         bool _canceled = false;
@@ -22,6 +23,10 @@ namespace MCForge.API.PlayerEvent
 
         internal OnPlayerChat() { }
 
+        public object GetData()
+        {
+            return datapass;
+        }
          /// <summary>
         /// Call the event
         /// </summary>
@@ -29,8 +34,11 @@ namespace MCForge.API.PlayerEvent
         {
             Muffins.cache.ForEach(e =>
             {
-                if (e.GetType() == GetType())
+                if (e.type.GetType() == GetType() && ((Player)(e.target) == p || e.target == null))
+                {
+                    datapass = e.datapass;
                     ((OnCall)e.Delegate)(this);
+                }
             });
         }
 
@@ -80,9 +88,9 @@ namespace MCForge.API.PlayerEvent
         /// </summary>
         /// <param name="method">The method to call when this event gets excuted</param>
         /// <param name="priority">The importance of the call</param>
-        public static void Register(OnCall method, Priority priority)
+        public static void Register(OnCall method, Priority priority, object passdata = null, Player target = null)
         {
-            Muffins temp = new Muffins(method, priority, new OnPlayerChat());
+            Muffins temp = new Muffins(method, priority, new OnPlayerChat(), passdata, target);
             Muffins.GiveDerpyMuffins(temp);
         }
     }
