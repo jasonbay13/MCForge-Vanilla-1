@@ -61,6 +61,19 @@ namespace MCForge.Entity {
         protected packet.types lastPacket = packet.types.SendPing;
 
         /// <summary>
+        /// Checks if the player is the server owner.
+        /// </summary>
+        public bool isOwner { get { if (USERNAME == Server.owner) { return true; } else { return false; } } }
+        /// <summary>
+        /// The number of times the player has tried to use /pass.
+        /// </summary>
+        public int passtries = 0;
+        bool _verified = false;
+        /// <summary>
+        /// Has the player used password verification?
+        /// </summary>
+        public bool verified { get { if (!Server.Verifying) { return true; } else { return _verified; }; } set { _verified = value; } }
+        /// <summary>
         /// The player's real username
         /// </summary>
         public string USERNAME;

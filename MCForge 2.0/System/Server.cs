@@ -30,6 +30,18 @@ using MCForge.Utilities.Settings;
 namespace MCForge.Core {
     public static class Server {
         /// <summary>
+        /// The miniumum rank that needs to verify.
+        /// </summary>
+        public static Groups.PlayerGroup VerifyGroup;
+        /// <summary>
+        /// Do people need to use /pass?
+        /// </summary>
+        public static bool Verifying = false;
+        /// <summary>
+        /// The server owner.
+        /// </summary>
+        public static string owner;
+        /// <summary>
         /// Get whether the server is currently shutting down
         /// </summary>
         public static bool shuttingDown;
