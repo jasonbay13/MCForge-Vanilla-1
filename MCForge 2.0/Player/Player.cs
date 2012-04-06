@@ -28,6 +28,7 @@ using MCForge.Core;
 using MCForge.World;
 using MCForge.Interface.Command;
 using MCForge.Groups;
+using MCForge.Utilities.Settings;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -46,9 +47,9 @@ namespace MCForge.Entity {
         protected void CheckMotdPackets() {
             if (MOTD_NonAdmin.bytes == null) {
                 MOTD_NonAdmin.Add(packet.types.MOTD);
-                MOTD_NonAdmin.Add(ServerSettings.version);
-                MOTD_NonAdmin.Add(ServerSettings.NAME, 64);
-                MOTD_NonAdmin.Add(ServerSettings.MOTD, 64);
+                MOTD_NonAdmin.Add(ServerSettings.Version);
+                MOTD_NonAdmin.Add(ServerSettings.GetSetting("ServerName"), 64);
+                MOTD_NonAdmin.Add(ServerSettings.GetSetting("motd"), 64);
                 MOTD_NonAdmin.Add((byte)0);
                 MOTD_Admin = MOTD_NonAdmin;
                 MOTD_Admin.bytes[130] = 100;
@@ -219,7 +220,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// The current Group of the player
         /// </summary>
-        public PlayerGroup group = ServerSettings.DefaultGroup;
+        public PlayerGroup group = PlayerGroup.Find(ServerSettings.GetSetting("defaultgroup"));
 
 
         #endregion
@@ -256,7 +257,8 @@ namespace MCForge.Entity {
         protected void HandleConnect() {
             if (!isLoading) {
                 loginTimer.Stop();
-                foreach (string w in ServerSettings.WelcomeText) SendMessage(w);
+                foreach (string w in ServerSettings.GetSetting("welcomemessage").Split(new string[] { "<br>" }, StringSplitOptions.RemoveEmptyEntries)) 
+                    SendMessage(w);
             }
         }
         protected static void Incoming(IAsyncResult result) {
@@ -348,7 +350,7 @@ namespace MCForge.Entity {
                 string verify = enc.GetString(message, 65, 32).Trim();
                 byte type = message[129];
                 if (!VerifyAccount(USERNAME, verify)) return;
-                if (version != ServerSettings.version) { SKick("Wrong Version!."); return; }
+                if (version != ServerSettings.Version) { SKick("Wrong Version!."); return; }
 
                 OnPlayerConnect e = new OnPlayerConnect(this);
                 e.Call();
@@ -556,7 +558,7 @@ namespace MCForge.Entity {
                 incomingText = Server.jokermessages[a];
             }
             //Message appending stuff.
-            if (ServerSettings.Appending == true) {
+            if (ServerSettings.GetSettingBoolean("messageappending")) {
                 if (storedMessage != "") {
                     if (!incomingText.EndsWith(">") && !incomingText.EndsWith("<")) {
                         incomingText = storedMessage.Replace("|>|", " ").Replace("|<|", "") + incomingText;
@@ -1104,7 +1106,7 @@ namespace MCForge.Entity {
                 usedIds.Add(p.id);
             }
 
-            for (byte i = 0; i < ServerSettings.MaxPlayers; ++i) {
+            for (byte i = 0; i < ServerSettings.GetSettingInt("maxplayers"); ++i) {
                 if (usedIds.Contains(i)) continue;
                 return i;
             }
@@ -1143,10 +1145,10 @@ namespace MCForge.Entity {
             return false;
         }
         protected bool VerifyAccount(string name, string verify) {
-            if (ServerSettings.VerifyAccounts && ip != "127.0.0.1") {
-                if (Server.Players.Count >= ServerSettings.MaxPlayers) { SKick("Server is full, please try again later!"); return false; }
+            if (!ServerSettings.GetSettingBoolean("offline") && ip != "127.0.0.1") {
+                if (Server.Players.Count >= ServerSettings.GetSettingInt("maxplayers")) { SKick("Server is full, please try again later!"); return false; }
 
-                if (verify == null || verify == "" || verify == "--" || (verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.salt + name))).Replace("-", "").ToLower().TrimStart('0') && verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.password + name))).Replace("-", "").ToLower().TrimStart('0'))) {
+                if (verify == null || verify == "" || verify == "--" || (verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0') && verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0'))) {
                     SKick("Account could not be verified, try again.");
                     //Server.Log("'" + verify + "' != '" + BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.salt + name))).Replace("-", "").ToLower().TrimStart('0') + "'");
                     return false;
@@ -1256,18 +1258,15 @@ namespace MCForge.Entity {
         #endregion
 
         public void GZip() {
-            System.IO.MemoryStream ms = new System.IO.MemoryStream();
+            using (var ms = new System.IO.MemoryStream()) {
 
-            GZipStream gs = new GZipStream(ms, CompressionMode.Compress, true);
-            gs.Write(bytes, 0, bytes.Length);
-            gs.Close();
-            gs.Dispose();
+                using (var gs = new GZipStream(ms, CompressionMode.Compress, true))
+                    gs.Write(bytes, 0, bytes.Length);
 
-            ms.Position = 0;
-            bytes = new byte[ms.Length];
-            ms.Read(bytes, 0, (int)ms.Length);
-            ms.Close();
-            ms.Dispose();
+                ms.Position = 0;
+                bytes = new byte[ms.Length];
+                ms.Read(bytes, 0, (int)ms.Length);
+            }
         }
 
         #region == Host <> Network ==

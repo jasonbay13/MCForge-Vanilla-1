@@ -67,24 +67,10 @@
     <Compile Include="API\World\WorldEvent.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
-    <Compile Include="Network\Client.cs" />
-    <Compile Include="Network\Packet.cs" />
-    <Compile Include="Network\PacketID.cs" />
-    <Compile Include="Network\PacketReader.cs" />
-    <Compile Include="Network\Packets\PacketChat.cs" />
-    <Compile Include="Network\Packets\PacketDespawn.cs" />
-    <Compile Include="Network\Packets\PacketDisconnect.cs" />
-    <Compile Include="Network\Packets\PacketInvalid.cs" />
-    <Compile Include="Network\Packets\PacketLogin.cs" />
-    <Compile Include="Network\Packets\PacketPing.cs" />
-    <Compile Include="Network\Packets\PacketPlayerSetBlock.cs" />
-    <Compile Include="Network\Packets\PacketServerSetBlock.cs" />
-    <Compile Include="Network\Packets\PacketSetPosition.cs" />
-    <Compile Include="Network\Packets\PacketSpawn.cs" />
-    <Compile Include="Network\Packets\PacketWorldChuck.cs" />
-    <Compile Include="Network\Packets\PacketWorldStart.cs" />
-    <Compile Include="Network\Packets\PacketWorldStop.cs" />
-    <Compile Include="Network\PacketWriter.cs" />
+    <Compile Include="System\FileUtils.cs" />
+    <Compile Include="System\Settings\ExtraSettings.cs" />
+    <Compile Include="System\Settings\GroupSettings.cs" />
+    <Compile Include="System\Settings\LevelSettings.cs" />
     <Compile Include="World\Blocks.cs" />
     <Compile Include="API\Event.cs" />
     <Compile Include="Gui\frmMain.cs">
@@ -108,7 +94,7 @@
     <Compile Include="System\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System\Server.cs" />
-    <Compile Include="System\ServerSettings.cs" />
+    <Compile Include="System\Settings\ServerSettings.cs" />
     <EmbeddedResource Include="Gui\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>

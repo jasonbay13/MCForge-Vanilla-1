@@ -25,6 +25,7 @@ using MCForge.World;
 using MCForge.Interface;
 using MCForge.Interface.Command;
 using MCForge.API.PlayerEvent;
+using MCForge.Utilities.Settings;
 
 namespace MCForge.Core {
     public static class Server {
@@ -190,18 +191,21 @@ namespace MCForge.Core {
         #region Socket Stuff
         private static TcpListener listener;
         private static void StartListening() {
-        startretry:
-            try {
-                listener = new TcpListener(System.Net.IPAddress.Any, ServerSettings.port);
-                listener.Start();
-                IAsyncResult ar = listener.BeginAcceptTcpClient(new AsyncCallback(AcceptCallback), listener);
-            }
-            catch (SocketException E) {
-                Server.Log(E);
-            }
-            catch (Exception E) {
-                Server.Log(E);
-                goto startretry;
+            while (true) {
+                try {
+                    listener = new TcpListener(System.Net.IPAddress.Any, ServerSettings.GetSettingInt("port"));
+                    listener.Start();
+                    IAsyncResult ar = listener.BeginAcceptTcpClient(new AsyncCallback(AcceptCallback), listener);
+                    break;
+                }
+                catch (SocketException E) {
+                    Server.Log(E);
+                    break;
+                }
+                catch (Exception E) {
+                    Server.Log(E);
+                    continue;
+                }
             }
         }
         private static void AcceptCallback(IAsyncResult ar) {

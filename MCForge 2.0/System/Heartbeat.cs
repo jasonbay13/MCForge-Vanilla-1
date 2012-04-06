@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
+using MCForge.Utilities.Settings;
 
 namespace MCForge.Core
 {
@@ -79,13 +80,13 @@ namespace MCForge.Core
             string[] output = new string[1]; int i = 0;
             try
             {
-                output[i] = minecraftHeartbeat(ServerSettings.port,
-                    ServerSettings.NAME,
-                    ServerSettings.Public,
-                    ServerSettings.salt,
+                output[i] = minecraftHeartbeat(ServerSettings.GetSettingInt("port"),
+                    ServerSettings.GetSetting("servername"),
+                    ServerSettings.GetSettingBoolean("public"),
+                    ServerSettings.Salt,
                     Server.Players.Count,
-                    ServerSettings.MaxPlayers,
-                    ServerSettings.version);
+                    (byte)ServerSettings.GetSettingInt("maxplayers"),
+                    ServerSettings.Version);
             }
             catch
             {

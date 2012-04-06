@@ -21,6 +21,7 @@ using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Utilities.Settings;
 
 namespace CommandDll
 {
@@ -59,7 +60,7 @@ namespace CommandDll
                     p.SendMessage("Why are you trying to teleport yourself to yourself?");
                     return;
                 }
-                else if (!ServerSettings.higherranktp && p.group.permission < who.group.permission)
+                else if (!ServerSettings.GetSettingBoolean("AllowHigherRankTp") && p.group.permission < who.group.permission)
                 {
                     p.SendMessage("You cannot teleport to a player of higher rank!");
                     return;

@@ -145,11 +145,6 @@
             <param name="pdb">The comparing PDB</param>
             <returns>returns a comparison of the usernames</returns>
         </member>
-        <member name="F:MCForge.Network.Packet.Packets">
-            <summary>
-            A full list of packets.
-            </summary>
-        </member>
         <member name="T:MCForge.Properties.Resources">
             <summary>
               A strongly-typed resource class, for looking up localized strings, etc.
@@ -301,28 +296,6 @@
             </summary>
             <param name="dataPass">This delegate passes the object that was passed to it back to the method that is to be invoked</param>
             <returns>this delegate returns an updated object for the datapass</returns>
-        </member>
-        <member name="F:MCForge.Core.ServerSettings.Appending">
-            <summary>
-            Is message appending enabled?
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.ServerSettings.higherranktp">
-            <summary>
-            Allow people teleport to higher ranks?
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.ServerSettings.DefaultRank">
-            <summary>
-            The default Permission value for new players
-            </summary>
-        </member>
-        <member name="P:MCForge.Core.ServerSettings.DefaultGroup">
-            <summary>
-            Gets or sets the default group.
-            </summary>
-            <value>The default group.</value>
-            <remarks></remarks>
         </member>
         <member name="T:MCForge.Interface.Command.Command">
             <summary>
@@ -1057,86 +1030,6 @@
             the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="F:MCForge.Network.PacketID.Login">
-            <summary>
-            Sent when the client logs into the server.
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.Ping">
-            <summary>
-            Sent to client to make sure they have disconnected.
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.LevelStart">
-            <summary>
-            Sent to client to initate a level transfer.
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.LevelChunk">
-            <summary>
-            Sent to client with the level data and data sent percentage.
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.LevelStop">
-            <summary>
-            Sent to signify the level has been transferred.
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.ClientSetBlock">
-            <summary>
-            Sent to the client to change block client-side
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.ServerSetBlock">
-            <summary>
-            Sent to the server to change block server-side
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.SpawnPlayer">
-            <summary>
-            Sent to client to spawn specified player.
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.PositionAndOrientation">
-            <summary>
-            Teleports/Changes Position and Orientation of player.
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.PositionAndOrientationUpdate">
-            <summary>
-            Teleports/Changes Position and Orientation of player.
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.PositionUpdate">
-            <summary>
-            Changes Position of player.
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.OrientationUpdate">
-            <summary>
-            Changes Orientation of player.
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.DespawnPlayer">
-            <summary>
-            Sent to client to despawn specified player.
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.Message">
-            <summary>
-            Sent to client/server to show/handle message.
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.DisconnectPlayer">
-            <summary>
-            Sent to client to disconnect player.
-            </summary>
-        </member>
-        <member name="F:MCForge.Network.PacketID.UpdateUserType">
-            <summary>
-            Sent to player to enable/disable bedrock placing.
-            </summary>
-        </member>
         <member name="T:MCForge.API.Priority">
             <summary>
             The priority of the call
@@ -1165,6 +1058,135 @@
         <member name="P:MCForge.API.PlayerEvent.OnPlayerCommand.IsCanceled">
             <summary>
             Is the event canceled
+            </summary>
+        </member>
+        <member name="T:MCForge.Utilities.Settings.ServerSettings">
+            <summary>
+            Settings Utility
+            </summary>
+        </member>
+        <member name="F:MCForge.Utilities.Settings.ServerSettings.OnSettingChanged">
+            <summary>
+            This event is triggered when a setting node is changed in anyway
+            </summary>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ServerSettings.Init">
+            <summary>
+            Starts the Settings Object
+            </summary>
+            <remarks>Must be called before any methods are invoked</remarks>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ServerSettings.GetSettingArray(System.String)">
+            <summary>
+            Gets a setting
+            </summary>
+            <param name="key">The key</param>
+            <returns>The setting values, use [0] at end if it only has 1 value</returns>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ServerSettings.GetSetting(System.String)">
+            <summary>
+            Gets a setting
+            </summary>
+            <param name="key">The key</param>
+            <returns>The setting value</returns>
+            <remarks>Returns the first value if multiple values are present</remarks>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ServerSettings.GetSettingInt(System.String)">
+            <summary>
+            Gets a setting
+            </summary>
+            <param name="key">The key</param>
+            <returns>The setting value specified by the key, or -1 if the setting is not found or could not be parsed</returns>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ServerSettings.GetSettingBoolean(System.String)">
+            <summary>
+            Gets a setting
+            </summary>
+            <param name="key">The key</param>
+            <returns>The setting value specified by the key, or false if the setting is not found</returns>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ServerSettings.SetSetting(System.String,System.String,System.String[])">
+            <summary>
+            Set the setting
+            </summary>
+            <param name="key">key to save value to</param>
+            <param name="description">Write a description (optional)</param>
+            <param name="values">for each string in values, it will be seperated by a comma ','</param>
+            <remarks>If the setting does not exist, it will create a new one</remarks>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ServerSettings.SetSetting(System.String,System.Int32,System.String)">
+            <summary>
+            Set the setting
+            </summary>
+            <param name="key">key to save value to</param>
+            <param name="value">value (or multiple values sperated by a comma ',') to set setting to</param>
+            <param name="description">Write a description (optional)</param>
+            <remarks>If the setting does not exist, it will create a new one</remarks>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ServerSettings.SetSetting(System.String,System.Boolean,System.String)">
+            <summary>
+            Set the setting
+            </summary>
+            <param name="key">key to save value to</param>
+            <param name="value">value to set setting to</param>
+            <param name="description">Write a description (optional)</param>
+            <remarks>If the setting does not exist, it will create a new one</remarks>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ServerSettings.Save">
+            <summary>
+            Saves the settings
+            </summary>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ServerSettings.LoadSettings">
+            <summary>
+            Loads all the settings into the memory, if no properties file is found nothing will happen
+            </summary>
+        </member>
+        <member name="T:MCForge.Utilities.Settings.SettingsChangedEventArgs">
+            <summary>
+            Called When a setting node is changed
+            </summary>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.SettingsChangedEventArgs.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Create a new Settings Changed Event Class
+            </summary>
+            <param name="key">Name of key in lowercase</param>
+            <param name="oldValue">Old value</param>
+            <param name="newValue">value to change</param>
+        </member>
+        <member name="P:MCForge.Utilities.Settings.SettingsChangedEventArgs.Key">
+            <summary>
+            The key of the setting
+            </summary>
+        </member>
+        <member name="P:MCForge.Utilities.Settings.SettingsChangedEventArgs.OldValue">
+            <summary>
+            The value before it was changed
+            </summary>
+        </member>
+        <member name="P:MCForge.Utilities.Settings.SettingsChangedEventArgs.NewValue">
+            <summary>
+            The new value of the setting
+            </summary>
+        </member>
+        <member name="M:MCForge.Utilities.FileUtils.CreateFileFromWeb(System.String,System.String)">
+            <summary>
+            Downloads  a file from the specifed website
+            </summary>
+            <param name="url">File address</param>
+            <param name="saveLocation">Location to save the file</param>
+        </member>
+        <member name="M:MCForge.Utilities.FileUtils.CreateFileFromBytes(System.Byte[],System.String)">
+            <summary>
+            
+            </summary>
+            <param name="bytes"></param>
+            <param name="saveLocation"></param>
+        </member>
+        <member name="M:MCForge.Utilities.FileUtils.Init">
+            <summary>
+            Creates all of the core directories and files
             </summary>
         </member>
     </members>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MCForge.Network {
-    class PacketReader {
+namespace MCForge.Utilities.Settings {
+    class GroupSettings {
     }
 }
