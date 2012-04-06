@@ -60,6 +60,7 @@
     <Compile Include="API\Player\OnPlayerChat.cs" />
     <Compile Include="API\Player\OnPlayerCommand.cs" />
     <Compile Include="API\Player\OnPlayerConnect.cs" />
+    <Compile Include="API\Player\OnPlayerMove.cs" />
     <Compile Include="API\Player\PlayerEvent.cs" />
     <Compile Include="API\Priority.cs" />
     <Compile Include="API\System\SystemEvent.cs" />

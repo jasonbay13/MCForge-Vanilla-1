@@ -102,7 +102,7 @@
             Is the event canceled
             </summary>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerBlockChange.Register(MCForge.API.PlayerEvent.OnPlayerBlockChange.OnCall,MCForge.API.Priority)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerBlockChange.Register(MCForge.API.PlayerEvent.OnPlayerBlockChange.OnCall,MCForge.API.Priority,System.Object,MCForge.Entity.Player)">
             <summary>
             Register this event
             </summary>
@@ -383,7 +383,7 @@
             </summary>
             <returns>The player</returns>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Register(MCForge.API.PlayerEvent.OnPlayerChat.OnCall,MCForge.API.Priority)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Register(MCForge.API.PlayerEvent.OnPlayerChat.OnCall,MCForge.API.Priority,System.Object,MCForge.Entity.Player)">
             <summary>
             Register this event
             </summary>
@@ -449,6 +449,13 @@
             </summary>
             <remarks></remarks>
         </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerMove.Register(MCForge.API.PlayerEvent.OnPlayerMove.OnCall,MCForge.API.Priority,System.Object,MCForge.Entity.Player)">
+            <summary>
+            Register this event
+            </summary>
+            <param name="method">The method to call when this event gets excuted</param>
+            <param name="priority">The importance of the call</param>
+        </member>
         <member name="T:MCForge.API.PlayerEvent.OnPlayerConnect">
             <summary>
             The OnPlayerConnect event is executed everytime a player connects to the server
@@ -478,7 +485,7 @@
             Call the event
             </summary>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Register(MCForge.API.PlayerEvent.OnPlayerConnect.OnCall,MCForge.API.Priority)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Register(MCForge.API.PlayerEvent.OnPlayerConnect.OnCall,MCForge.API.Priority,System.Object)">
             <summary>
             Register this event
             </summary>
@@ -1148,7 +1155,7 @@
             Call the event
             </summary>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerCommand.Register(MCForge.API.PlayerEvent.OnPlayerCommand.OnCall,MCForge.API.Priority)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerCommand.Register(MCForge.API.PlayerEvent.OnPlayerCommand.OnCall,MCForge.API.Priority,System.Object,MCForge.Entity.Player)">
             <summary>
             Register this event
             </summary>
