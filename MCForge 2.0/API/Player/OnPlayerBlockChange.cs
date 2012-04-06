@@ -22,12 +22,17 @@ namespace MCForge.API.PlayerEvent
         ushort z;
         ActionType action;
         bool _canceled;
+        bool _unregister;
         Player p;
         public OnPlayerBlockChange(ushort x, ushort y, ushort z, ActionType action, Player p, byte b) { this.x = x; this.y = y; this.z = z; this.action = action; this.p = p; this.holding = b; }
         internal OnPlayerBlockChange() { }
         public ushort GetX()
         {
             return x;
+        }
+        public void Unregister(bool value)
+        {
+            _unregister = value;
         }
         public ushort GetY()
         {
@@ -66,6 +71,11 @@ namespace MCForge.API.PlayerEvent
                 {
                     datapass = e.datapass;
                     ((OnCall)e.Delegate)(this);
+                    if (_unregister)
+                    {
+                        _unregister = false;
+                        Muffins.cache.Remove(e);
+                    }
                 }
             });
             if (IsCanceled)

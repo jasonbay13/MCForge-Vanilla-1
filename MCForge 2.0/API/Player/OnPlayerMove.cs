@@ -12,14 +12,13 @@ namespace MCForge.API.PlayerEvent
         Point3 oldpos;
         Point3 currentpos;
         Player p;
+        bool _unregister;
         object datapass;
         public delegate void OnCall(OnPlayerMove args);
         bool _canceled;
         public OnPlayerMove(Player p, Point3 oldpos, Point3 currentpos) { this.oldpos = oldpos; this.currentpos = currentpos; this.p = p; }
         internal OnPlayerMove() { }
-
         public bool IsCanceled { get { return _canceled; } }
-
         public void Cancel(bool value)
         {
             _canceled = value;
@@ -45,12 +44,20 @@ namespace MCForge.API.PlayerEvent
                 {
                     datapass = e.datapass;
                     ((OnCall)e.Delegate)(this);
+                    if (_unregister)
+                    {
+                        _unregister = false;
+                        Muffins.cache.Remove(e);
+                    }
                 }
             });
             if (IsCanceled)
                 p.SendToPos(oldpos, p.Rot);
         }
-
+        public void Unregister(bool value)
+        {
+            _unregister = value;
+        }
         /// <summary>
         /// Register this event
         /// </summary>

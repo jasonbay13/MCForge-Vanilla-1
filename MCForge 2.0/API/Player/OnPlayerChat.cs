@@ -18,7 +18,7 @@ namespace MCForge.API.PlayerEvent
         public delegate void OnCall(OnPlayerChat eventargs);
         string message;
         bool _canceled = false;
-        
+        bool _unregister;
         public OnPlayerChat(Player p, string message) { this.p = p; this.message = message; }
 
         internal OnPlayerChat() { }
@@ -38,6 +38,11 @@ namespace MCForge.API.PlayerEvent
                 {
                     datapass = e.datapass;
                     ((OnCall)e.Delegate)(this);
+                    if (_unregister)
+                    {
+                        _unregister = false;
+                        Muffins.cache.Remove(e);
+                    }
                 }
             });
         }
@@ -58,6 +63,11 @@ namespace MCForge.API.PlayerEvent
         public void SetMessage(string message)
         {
             this.message = message;
+        }
+
+        public void Unregister(bool value)
+        {
+            _unregister = value;
         }
 
         /// <summary>

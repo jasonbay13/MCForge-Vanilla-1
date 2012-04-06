@@ -28,6 +28,7 @@ namespace MCForge.API.PlayerEvent
     {
         bool _canceled = false;
         object datapass;
+        bool _unregister;
         public delegate void OnCall(OnPlayerConnect eventargs);
         
         Player p;
@@ -77,12 +78,21 @@ namespace MCForge.API.PlayerEvent
                     {
                         datapass = e.datapass;
                         ((OnCall)e.Delegate)(this);
+                        if (_unregister)
+                        {
+                            _unregister = false;
+                            Muffins.cache.Remove(e);
+                        }
                     }
                 });
             if (IsCanceled && p.isOnline)
                 p.Kick("");
         }
 
+        public void Unregister(bool value)
+        {
+            _unregister = value;
+        }
         /// <summary>
         /// Register this event
         /// </summary>
