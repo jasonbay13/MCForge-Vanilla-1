@@ -26,7 +26,7 @@ namespace MCForge.Core
         public static string configPath = "config/";
 
         public static string[] WelcomeText = new string[1] { "Welcome to my Server." };
-
+        public static int PhysicsTick;
         public static bool VerifyAccounts = false;
         public static bool Public = true;
         public static string salt = "";

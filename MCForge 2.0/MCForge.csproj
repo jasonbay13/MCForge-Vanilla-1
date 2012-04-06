@@ -60,6 +60,7 @@
     <Compile Include="API\Player\OnPlayerChat.cs" />
     <Compile Include="API\Player\OnPlayerCommand.cs" />
     <Compile Include="API\Player\OnPlayerConnect.cs" />
+    <Compile Include="API\Player\OnPlayerDisconnect.cs" />
     <Compile Include="API\Player\OnPlayerMove.cs" />
     <Compile Include="API\Player\PlayerEvent.cs" />
     <Compile Include="API\Priority.cs" />
@@ -91,6 +92,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System\Server.cs" />
     <Compile Include="System\ServerSettings.cs" />
+    <Compile Include="World\LevelSettings.cs" />
+    <Compile Include="World\Physics\LavaExample.cs" />
+    <Compile Include="World\Physics\PhysicsBlock.cs" />
     <EmbeddedResource Include="Gui\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>

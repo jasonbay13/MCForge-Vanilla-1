@@ -999,6 +999,10 @@ namespace MCForge.Entity
             }
 
             string name = args[0].ToLower().Trim();
+            OnPlayerCommand c = new OnPlayerCommand(this, name, args);
+            c.Call();
+            if (c.IsCanceled)
+                return;
             if (Command.Commands.ContainsKey(name))
             {
                 ThreadPool.QueueUserWorkItem(delegate
