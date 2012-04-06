@@ -507,6 +507,10 @@ namespace MCForge.Entity
             ushort z = packet.NTHO(message, 5);
             byte rotx = message[7];
             byte roty = message[8];
+            OnPlayerMove m = new OnPlayerMove(this, Pos, new Point3(x, y, z));
+            m.Call();
+            if (m.IsCanceled)
+                return;
             Pos.x = (short)x;
             Pos.y = (short)y;
             Pos.z = (short)z;

@@ -28,15 +28,19 @@ namespace MCForge.API
         public Priority priority;
         public Event type;
         public Muffins(object Delegate, Priority pri, Event type, object passdata, object target) { this.Delegate = Delegate; this.priority = pri; this.type = type; this.target = target; this.datapass = passdata; }
-        public static void Organize()
-        {
-            //TODO
-            //Organize them, Low being called first and System_Level being called last
-        }
         public static void GiveDerpyMuffins(Muffins c)
         {
-            cache.Add(c);
-            Organize();
+            int i = cache.FindIndex(c1 => { return c1.type.GetType() == c.type.GetType(); });//finds first element with same type
+            if (i >= 0)
+            {
+                i = cache.FindIndex(i, cache.Count - i, c1 =>
+                {
+                    return (c1.priority >= c.priority && c1.type.GetType() == c.type.GetType()) //if c has less priority and same event type (lower value == higher priority)
+                        || c1.type != c.type;                                 //or c has another type
+                });
+                if (i >= 0) cache.Insert(i, c);                                          //this takes place in front of c
+            }
+            if (i < 0) cache.Add(c);
         }
     }
 }

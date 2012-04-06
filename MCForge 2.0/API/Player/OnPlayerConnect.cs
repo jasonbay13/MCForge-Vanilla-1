@@ -73,7 +73,7 @@ namespace MCForge.API.PlayerEvent
         {
             Muffins.cache.ForEach(e =>
                 {
-                    if (e.type.GetType() == GetType() && ((Player)(e.target) == p || e.target == null))
+                    if (e.type.GetType() == GetType())
                     {
                         datapass = e.datapass;
                         ((OnCall)e.Delegate)(this);
@@ -88,9 +88,9 @@ namespace MCForge.API.PlayerEvent
         /// </summary>
         /// <param name="method">The method to call when this event gets excuted</param>
         /// <param name="priority">The importance of the call</param>
-        public static void Register(OnCall method, Priority priority, object passdata = null, Player target = null)
+        public static void Register(OnCall method, Priority priority, object passdata = null)
         {
-            Muffins temp = new Muffins(method, priority, new OnPlayerConnect(), passdata, target);
+            Muffins temp = new Muffins(method, priority, new OnPlayerConnect(), passdata, null);
             Muffins.GiveDerpyMuffins(temp);
         }
     }

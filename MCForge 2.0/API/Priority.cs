@@ -26,9 +26,9 @@ namespace MCForge.API
     /// </summary>
     public enum Priority : byte
     {
-        Low = 3,
-        Normal = 2,
-        High = 1,
-        System_Level = 0
+        Low = 0,
+        Normal = 1,
+        High = 2,
+        System_Level = 3
     }
 }
