@@ -44,9 +44,13 @@
     <Compile Include="Building\CmdReplace.cs" />
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Building\CmdReplaceAll.cs" />
+    <Compile Include="Information\CmdPlayers.cs" />
+    <Compile Include="Information\CmdViewranks.cs" />
     <Compile Include="Misc\CmdPass.cs" />
     <Compile Include="Misc\CmdResetPass.cs" />
     <Compile Include="Misc\CmdSetPass.cs" />
+    <Compile Include="Moderation\CmdColor.cs" />
+    <Compile Include="Moderation\CmdRTitle.cs" />
     <Compile Include="Moderation\CmdSettings.cs" />
     <Compile Include="Information\CmdHelp.cs" />
     <Compile Include="Information\CmdImpersonate.cs" />
@@ -77,6 +81,8 @@
     <Compile Include="Moderation\CmdModerate.cs" />
     <Compile Include="Moderation\CmdMute.cs" />
     <Compile Include="Moderation\CmdSay.cs" />
+    <Compile Include="Moderation\CmdTColor.cs" />
+    <Compile Include="Moderation\CmdTitle.cs" />
     <Compile Include="Moderation\CmdVoice.cs" />
     <Compile Include="Moderation\CmdVoteKick.cs" />
     <Compile Include="Misc\CmdSpawn.cs" />
