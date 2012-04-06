@@ -61,7 +61,7 @@ namespace CommandDll
             {
                 if (b == type)
                 {
-                    Point3 meep = p.level.IntToPos(currentBlock);
+                    Vector3 meep = p.level.IntToPos(currentBlock);
                     pos.pos = meep;
                     stored.Add(pos);
                 }
@@ -90,7 +90,7 @@ namespace CommandDll
         }
         struct Pos
         {
-            public Point3 pos;
+            public Vector3 pos;
         }
     }
 }

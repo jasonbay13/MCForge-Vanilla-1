@@ -41,14 +41,14 @@ namespace CommandDll
 		}
 		public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
 		{
-			Point3 FirstBlock = new Point3(x, z, y);
+			Vector3 FirstBlock = new Vector3(x, z, y);
 			p.SendMessage("Please place another block...");
 			p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock2), (object)FirstBlock);
 		}
 		public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
 		{
-			Point3 FirstBlock = (Point3)DataPass;
-			Point3 SecondBlock = new Point3(x, z, y);
+			Vector3 FirstBlock = (Vector3)DataPass;
+			Vector3 SecondBlock = new Vector3(x, z, y);
 			p.SendMessage("This is where we would initiate a Cuboid!");
 		}
 

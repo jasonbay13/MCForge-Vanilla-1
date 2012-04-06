@@ -17,104 +17,260 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MCForge.Entity;
+using System.Net;
+using System.IO.Compression;
 
-namespace MCForge.Core
-{
-	public struct Point2
+namespace MCForge.Core {
+    public struct Point2 {
+        public ushort x;
+        public ushort y;
+
+        public Point2(ushort X, ushort Y) {
+            x = X;
+            y = Y;
+        }
+
+    }
+    public struct Vector3 {
+        public short x;
+        public short y;
+        public short z;
+
+        public Vector3(short X, short Z, short Y) {
+            x = X;
+            y = Y;
+            z = Z;
+        }
+        public Vector3(ushort X, ushort Z, ushort Y) {
+            x = (short)X;
+            y = (short)Y;
+            z = (short)Z;
+        }
+
+        public static Vector3 operator -(Vector3 a, Vector3 b) {
+            return new Vector3((short)(a.x - b.x), (short)(a.z - b.z), (short)(a.y - b.y));
+        }
+        public static Vector3 operator +(Vector3 a, Vector3 b) {
+            return new Vector3((short)(a.x + b.x), (short)(a.z + b.z), (short)(a.y + b.y));
+        }
+        public static Vector3 operator *(Vector3 a, Vector3 b) {
+            return new Vector3((short)(a.x * b.x), (short)(a.z * b.z), (short)(a.y * b.y));
+        }
+        public static Vector3 operator /(Vector3 a, Vector3 b) {
+            return new Vector3((short)(a.x / b.x), (short)(a.z / b.z), (short)(a.y / b.y));
+        }
+        public static bool operator ==(Vector3 a, Vector3 b) {
+            return (a.x == b.x && a.y == b.y && a.z == b.z);
+        }
+        public static bool operator !=(Vector3 a, Vector3 b) {
+            return !(a.x == b.x && a.y == b.y && a.z == b.z);
+        }
+        public bool Equals(Vector3 obj) {
+            return this == obj;
+        }
+    }
+
+    public static class Colors {
+        public const string black = "&0";
+        public const string navy = "&1";
+        public const string green = "&2";
+        public const string teal = "&3";
+        public const string maroon = "&4";
+        public const string purple = "&5";
+        public const string gold = "&6";
+        public const string silver = "&7";
+        public const string gray = "&8";
+        public const string blue = "&9";
+        public const string lime = "&a";
+        public const string aqua = "&b";
+        public const string red = "&c";
+        public const string pink = "&d";
+        public const string yellow = "&e";
+        public const string white = "&f";
+
+        public static string Parse(string str) {
+            switch (str.ToLower()) {
+                case "black": return black;
+                case "navy": return navy;
+                case "green": return green;
+                case "teal": return teal;
+                case "maroon": return maroon;
+                case "purple": return purple;
+                case "gold": return gold;
+                case "silver": return silver;
+                case "gray": return gray;
+                case "blue": return blue;
+                case "lime": return lime;
+                case "aqua": return aqua;
+                case "red": return red;
+                case "pink": return pink;
+                case "yellow": return yellow;
+                case "white": return white;
+                default: return "";
+            }
+        }
+        public static string Name(string str) {
+            switch (str) {
+                case black: return "black";
+                case navy: return "navy";
+                case green: return "green";
+                case teal: return "teal";
+                case maroon: return "maroon";
+                case purple: return "purple";
+                case gold: return "gold";
+                case silver: return "silver";
+                case gray: return "gray";
+                case blue: return "blue";
+                case lime: return "lime";
+                case aqua: return "aqua";
+                case red: return "red";
+                case pink: return "pink";
+                case yellow: return "yellow";
+                case white: return "white";
+                default: return "";
+            }
+        }
+    }
+
+	public struct packet
 	{
-		public ushort x;
-		public ushort y;
+		public byte[] bytes;
 
-		public Point2(ushort X, ushort Y)
+		#region Constructors
+		public packet(byte[] data)
 		{
-			x = X;
-			y = Y;
+			bytes = data;
 		}
-	}
-	public struct Point3
-	{
-		public short x;
-		public short y;
-		public short z;
-
-		public Point3(short X, short Z, short Y)
+		public packet(packet p)
 		{
-			x = X;
-			y = Y;
-			z = Z;
+			bytes = p.bytes;
 		}
-		public Point3(ushort X, ushort Z, ushort Y)
+		#endregion
+		#region Adds
+		public void AddStart(byte[] data)
 		{
-			x = (short)X;
-			y = (short)Y;
-			z = (short)Z;
+			byte[] temp = bytes;
+
+			bytes = new byte[temp.Length + data.Length];
+
+			data.CopyTo(bytes, 0);
+			temp.CopyTo(bytes, data.Length);
 		}
-	}
 
-	public static class Colors
-	{
-		public const string black = "&0";
-		public const string navy = "&1";
-		public const string green = "&2";
-		public const string teal = "&3";
-		public const string maroon = "&4";
-		public const string purple = "&5";
-		public const string gold = "&6";
-		public const string silver = "&7";
-		public const string gray = "&8";
-		public const string blue = "&9";
-		public const string lime = "&a";
-		public const string aqua = "&b";
-		public const string red = "&c";
-		public const string pink = "&d";
-		public const string yellow = "&e";
-		public const string white = "&f";
-
-		public static string Parse(string str)
+		public void Add(byte[] data)
 		{
-			switch (str.ToLower())
+			if (bytes == null)
 			{
-				case "black": return black;
-				case "navy": return navy;
-				case "green": return green;
-				case "teal": return teal;
-				case "maroon": return maroon;
-				case "purple": return purple;
-				case "gold": return gold;
-				case "silver": return silver;
-				case "gray": return gray;
-				case "blue": return blue;
-				case "lime": return lime;
-				case "aqua": return aqua;
-				case "red": return red;
-				case "pink": return pink;
-				case "yellow": return yellow;
-				case "white": return white;
-				default: return "";
+				bytes = data;
+			}
+			else
+			{
+				byte[] temp = bytes;
+
+				bytes = new byte[temp.Length + data.Length];
+
+				temp.CopyTo(bytes, 0);
+				data.CopyTo(bytes, temp.Length);
 			}
 		}
-		public static string Name(string str)
+		public void Add(sbyte a)
 		{
-			switch (str)
+			Add(new byte[1] { (byte)a });
+		}
+		public void Add(byte a)
+		{
+			Add(new byte[1] { a });
+		}
+		public void Add(types a)
+		{
+			Add((byte)a);
+		}
+		public void Add(short a)
+		{
+			Add(HTNO(a));
+		}
+		public void Add(ushort a)
+		{
+			Add(HTNO(a));
+		}
+		public void Add(int a)
+		{
+			Add(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(a)));
+		}
+		public void Add(string a)
+		{
+			Add(a, a.Length);
+		}
+		public void Add(string a, int size)
+		{
+			Add(Player.enc.GetBytes(a.PadRight(size).Substring(0, size)));
+		}
+		#endregion
+		#region Sets
+		public void Set(int offset, short a)
+		{
+			HTNO(a).CopyTo(bytes, offset);
+		}
+		public void Set(int offset, ushort a)
+		{
+			HTNO(a).CopyTo(bytes, offset);
+		}
+		public void Set(int offset, string a, int length)
+		{
+			Player.enc.GetBytes(a.PadRight(length).Substring(0, length)).CopyTo(bytes, offset);
+		}
+		#endregion
+
+		public void GZip()
+		{
+			using (var ms = new System.IO.MemoryStream())
 			{
-				case black: return "black";
-				case navy: return "navy";
-				case green: return "green";
-				case teal: return "teal";
-				case maroon: return "maroon";
-				case purple: return "purple";
-				case gold: return "gold";
-				case silver: return "silver";
-				case gray: return "gray";
-				case blue: return "blue";
-				case lime: return "lime";
-				case aqua: return "aqua";
-				case red: return "red";
-				case pink: return "pink";
-				case yellow: return "yellow";
-				case white: return "white";
-				default: return "";
+
+				using (var gs = new GZipStream(ms, CompressionMode.Compress, true))
+					gs.Write(bytes, 0, bytes.Length);
+
+				ms.Position = 0;
+				bytes = new byte[ms.Length];
+				ms.Read(bytes, 0, (int)ms.Length);
 			}
+		}
+
+		#region == Host <> Network ==
+		public static byte[] HTNO(ushort x)
+		{
+			byte[] y = BitConverter.GetBytes(x); Array.Reverse(y); return y;
+		}
+		public static ushort NTHO(byte[] x, int offset)
+		{
+			byte[] y = new byte[2];
+			Buffer.BlockCopy(x, offset, y, 0, 2); Array.Reverse(y);
+			return BitConverter.ToUInt16(y, 0);
+		}
+		public static byte[] HTNO(short x)
+		{
+			byte[] y = BitConverter.GetBytes(x); Array.Reverse(y); return y;
+		}
+		#endregion
+
+		public enum types
+		{
+			Message = 13,
+			MOTD = 0,
+			MapStart = 2,
+			MapData = 3,
+			MapEnd = 4,
+			SendSpawn = 7,
+			SendDie = 12,
+			SendBlockchange = 6,
+			SendKick = 14,
+			SendPing = 1,
+
+			SendPosChange = 10,
+			SendRotChange = 11,
+			SendPosANDRotChange = 9,
+			SendTeleport = 8,
+
 		}
 	}
 }

@@ -21,6 +21,8 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
 using MCForge.World;
+using MCForge.API;
+using MCForge.API.PlayerEvent;
 
 namespace CommandDll
 {
@@ -60,13 +62,15 @@ namespace CommandDll
             cpos.type2 = type2;
 
             p.SendMessage("Place two blocks to determine the edges.");
-            p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
+            OnPlayerBlockChange.Register(CatchBlock, Priority.Normal, cpos, p);
+            //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
         }
-        public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
+        public void CatchBlock(OnPlayerBlockChange args)
         {
-            CatchPos cpos = (CatchPos)DataPass;
-            cpos.pos = new Point3(x, z, y);
-            p.CatchNextBlockchange(CatchBlock2, (object)cpos);
+            CatchPos cpos = (CatchPos)args.GetData();
+            cpos.pos = new Vector3(args.GetX(), args.GetZ(), args.GetZ());
+            args.Unregister(true);
+            args.GetPlayer().CatchNextBlockchange(CatchBlock2, (object)cpos);
         }
         public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
         {
@@ -86,7 +90,7 @@ namespace CommandDll
                 {
                     for (ushort yy = Math.Min((ushort)(FirstBlock.pos.y), y); yy <= Math.Max((ushort)(FirstBlock.pos.y), y); ++yy)
                     {
-                        Point3 loop = new Point3(xx, zz, yy);
+                        Vector3 loop = new Vector3(xx, zz, yy);
                         if (p.level.GetBlock(loop) == NewType)
                         {
                             BufferAdd(buffer, loop);
@@ -114,7 +118,7 @@ namespace CommandDll
             string[] CommandStrings = new string[2] { "replace", "r" };
             Command.AddReference(this, CommandStrings);
         }
-        void BufferAdd(List<Pos> list, Point3 type)
+        void BufferAdd(List<Pos> list, Vector3 type)
         {
             Pos pos;
             pos.pos = type;
@@ -124,11 +128,11 @@ namespace CommandDll
         {
             public byte type;
             public byte type2;
-            public Point3 pos;
+            public Vector3 pos;
         }
         struct Pos
         {
-            public Point3 pos;
+            public Vector3 pos;
         }
     }
 }

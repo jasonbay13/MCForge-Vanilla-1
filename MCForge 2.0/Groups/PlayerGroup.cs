@@ -64,7 +64,12 @@ namespace MCForge.Groups
         /// <summary>
         /// The colour of the group.
         /// </summary>
-        public string colour { get; set; }
+		public string colour { get { return color; } set { color = value;} }
+		/// <summary>
+		/// The color of the group.
+		/// </summary>
+		public string color { get; set; }
+
         int _maxblockchange = 100;
         /// <summary>
         /// The maximum amount of blocks this group can change.
@@ -169,11 +174,11 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         public void SendMessage(string message)
         {
-            foreach (Player p in Server.Players.ToArray())
-            {
-                if (p.group == this)
-                    p.SendMessage(message);
-            }
+			Server.ForeachPlayer(delegate(Player p)
+			{
+				if (p.group == this)
+					p.SendMessage(message);
+			});
         }
 
         /// <summary>

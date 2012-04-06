@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using MCForge.Core;
 using System.Xml;
+using MCForge.Utilities.Settings;
 
 namespace MCForge.Groups
 {
@@ -12,14 +13,14 @@ namespace MCForge.Groups
     {
         public static void Save()
         {
-            if (!Directory.Exists(ServerSettings.configPath)) Directory.CreateDirectory(ServerSettings.configPath);
+            if (!Directory.Exists(ServerSettings.GetSetting("configpath"))) Directory.CreateDirectory(ServerSettings.GetSetting("configpath"));
 
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.CloseOutput = true;
             settings.NewLineOnAttributes = true;
 
-            using (XmlWriter writer = XmlWriter.Create(ServerSettings.configPath + "groups.xml", settings))
+            using (XmlWriter writer = XmlWriter.Create(ServerSettings.GetSetting("configpath") + "groups.xml", settings))
             {
                 writer.WriteStartDocument();
                 writer.WriteStartElement("Groups");
@@ -49,7 +50,7 @@ namespace MCForge.Groups
 
         public static void Load()
         {
-            using (XmlReader reader = XmlReader.Create(ServerSettings.configPath + "groups.xml"))
+            using (XmlReader reader = XmlReader.Create(ServerSettings.GetSetting("configpath") + "groups.xml"))
             {
                 PlayerGroup group = new PlayerGroup();
 

@@ -59,13 +59,13 @@ namespace CommandDll
         public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
         {
             CatchPos cpos = (CatchPos)DataPass;
-            cpos.FirstBlock = new Point3(x, z, y);
+            cpos.FirstBlock = new Vector3(x, z, y);
             p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock2), (object)cpos);
         }
         public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
         {
             CatchPos cpos = (CatchPos)DataPass;
-            Point3 FirstBlock = cpos.FirstBlock;
+            Vector3 FirstBlock = cpos.FirstBlock;
             ushort xx, zz, yy;
             int count = 0;
             for (xx = Math.Min((ushort)(FirstBlock.x), x); xx <= Math.Max((ushort)(FirstBlock.x), x); ++xx)
@@ -88,7 +88,7 @@ namespace CommandDll
 
         public struct CatchPos
         {
-            public Point3 FirstBlock;
+            public Vector3 FirstBlock;
             public byte ignore;
             public int count;
         }

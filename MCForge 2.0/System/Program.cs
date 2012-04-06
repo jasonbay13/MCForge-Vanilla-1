@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Threading;
+using MCForge.Utilities.Settings;
 
 namespace MCForge.Core
 {
@@ -27,10 +28,12 @@ namespace MCForge.Core
         /// </summary>
         [STAThread]
         static void Main()
-        {
+        {  
+            ServerSettings.Init();
             new Thread(new ThreadStart(Server.Init)).Start();
+          
 
-            if (ServerSettings.EnableGUI)
+            if (!ServerSettings.GetSettingBoolean("UsingConsole"))
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -38,7 +41,7 @@ namespace MCForge.Core
             }
             else
             {
-                Console.Title = ServerSettings.NAME + " - MCForge 2.0"; //Don't know what MCForge version we are using yet.
+                Console.Title = ServerSettings.GetSetting("ServerName") + " - MCForge 2.0"; //Don't know what MCForge version we are using yet.
                 while (true)
                 {
                     string input = Console.ReadLine();

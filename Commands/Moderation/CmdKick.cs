@@ -22,7 +22,7 @@ using MCForge.Core;
 
 namespace CommandDll.Moderation {
 	/// <summary>
-	/// Cpommand for kicking someone!
+	/// Command for kicking someone!
 	/// </summary>
 	public class CmdKick : ICommand {
 		string _Name = "Kick";
@@ -53,26 +53,18 @@ namespace CommandDll.Moderation {
 				List<Player> kickeeList = new List<Player>();
 
 				//Is it an IP or a name?
-				foreach (Player plr in Server.Players.ToArray()) {
+				Server.ForeachPlayer(delegate(Player plr)
+				{
 					if (plr.ip == args[0] || plr.username.StartsWith(args[0].ToLower()))
 						kickeeList.Add(plr); //When kicking someone, we don't care for case.
-				}
+				});
 				if (kickeeList.Count == 0) {
 					p.SendMessage("Sorry, but the specified player/IP is not online!");
 					return;
 				}
-				String reason;
-				StringBuilder sb = new StringBuilder();
-				foreach (String s in args.Skip(1)) {
-					sb.Append(s);
-					if (s != args[1]) {
-						sb.Append(" ");
-					}
-				}
-				if (sb.Length == 0)
+				string reason = string.Join(" ", args, 1).Trim();
+				if (reason.Length == 0)
 					reason = "You were kicked by " + p.USERNAME;
-				else
-					reason = sb.ToString();
 				bool kickPlayer = false;
 				foreach (Player kickee in kickeeList) {
 					if (Server.devs.Contains(kickee.USERNAME)) {

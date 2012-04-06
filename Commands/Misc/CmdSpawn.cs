@@ -40,7 +40,7 @@ namespace CommandDll
                 Help(p);
                 return;
             }
-            Point3 meep = new Point3((short)(p.level.SpawnPos.x * 32), (short)(p.level.SpawnPos.z * 32 + 51), (short)(p.level.SpawnPos.y * 32));
+            Vector3 meep = new Vector3((short)(p.level.SpawnPos.x * 32), (short)(p.level.SpawnPos.z * 32 + 51), (short)(p.level.SpawnPos.y * 32));
             p.SendToPos(meep, p.level.SpawnRot);
         }
 

@@ -21,6 +21,7 @@ using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Utilities.Settings;
 
 namespace CommandDll
 {
@@ -43,7 +44,7 @@ namespace CommandDll
             }
             else if (args.Length == 0)
             {
-                Point3 meep = new Point3((short)(0.5 + p.level.SpawnPos.x * 32), (short)(0.5 + p.level.SpawnPos.z * 32), (short)(1 + p.level.SpawnPos.y * 32));
+                Vector3 meep = new Vector3((short)(0.5 + p.level.SpawnPos.x * 32), (short)(0.5 + p.level.SpawnPos.z * 32), (short)(1 + p.level.SpawnPos.y * 32));
                 p.SendToPos(meep, p.level.SpawnRot);
             }
             else if (args.Length == 1)
@@ -59,7 +60,7 @@ namespace CommandDll
                     p.SendMessage("Why are you trying to teleport yourself to yourself?");
                     return;
                 }
-                else if (!ServerSettings.higherranktp && p.group.permission < who.group.permission)
+                else if (!ServerSettings.GetSettingBoolean("AllowHigherRankTp") && p.group.permission < who.group.permission)
                 {
                     p.SendMessage("You cannot teleport to a player of higher rank!");
                     return;

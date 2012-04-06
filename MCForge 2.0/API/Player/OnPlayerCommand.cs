@@ -10,6 +10,8 @@ namespace MCForge.API.PlayerEvent
     {
         protected Player p;
         public delegate void OnCall(OnPlayerCommand eventargs);
+        object datapass;
+        bool _unregister;
         protected bool _canceled;
         protected string _cmd;
         protected string[] args;
@@ -32,6 +34,12 @@ namespace MCForge.API.PlayerEvent
         {
             return args[index];
         }
+
+        public void Unregister(bool value)
+        {
+            _unregister = value;
+        }
+
         /// <summary>
         /// Is the event canceled
         /// </summary>
@@ -46,6 +54,10 @@ namespace MCForge.API.PlayerEvent
             _canceled = value;
         }
 
+        public object GetData()
+        {
+            return datapass;
+        }
         /// <summary>
         /// Call the event
         /// </summary>
@@ -53,8 +65,16 @@ namespace MCForge.API.PlayerEvent
         {
             Muffins.cache.ForEach(e =>
             {
-                if (e.GetType() == GetType())
+                if (e.type.GetType() == GetType() && ((Player)(e.target) == p || e.target == null))
+                {
+                    datapass = e.datapass;
                     ((OnCall)e.Delegate)(this);
+                    if (_unregister)
+                    {
+                        _unregister = false;
+                        Muffins.cache.Remove(e);
+                    }
+                }
             });
         }
 
@@ -63,9 +83,9 @@ namespace MCForge.API.PlayerEvent
         /// </summary>
         /// <param name="method">The method to call when this event gets excuted</param>
         /// <param name="priority">The importance of the call</param>
-        public static void Register(OnCall method, Priority priority)
+        public static void Register(OnCall method, Priority priority, object datapass = null, Player target = null)
         {
-            Muffins temp = new Muffins(method, priority, new OnPlayerCommand());
+            Muffins temp = new Muffins(method, priority, new OnPlayerCommand(), datapass, target);
             Muffins.GiveDerpyMuffins(temp);
         }
 

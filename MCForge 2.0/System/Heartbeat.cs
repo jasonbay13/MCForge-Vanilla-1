@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
+using MCForge.Utilities.Settings;
 
 namespace MCForge.Core
 {
@@ -79,13 +80,13 @@ namespace MCForge.Core
             string[] output = new string[1]; int i = 0;
             try
             {
-                output[i] = minecraftHeartbeat(ServerSettings.port,
-                    ServerSettings.NAME,
-                    ServerSettings.Public,
-                    ServerSettings.salt,
-                    Server.Players.Count,
-                    ServerSettings.MaxPlayers,
-                    ServerSettings.version);
+                output[i] = minecraftHeartbeat(ServerSettings.GetSettingInt("port"),
+                    ServerSettings.GetSetting("servername"),
+                    ServerSettings.GetSettingBoolean("public"),
+                    ServerSettings.Salt,
+                    Server.PlayerCount,
+                    (byte)ServerSettings.GetSettingInt("maxplayers"),
+                    ServerSettings.Version);
             }
             catch
             {
@@ -104,11 +105,16 @@ namespace MCForge.Core
         {
             if (!Directory.Exists(Path.GetDirectoryName(file)))
                 Directory.CreateDirectory(Path.GetDirectoryName(file));
-
-            TextWriter o = new StreamWriter(file);
-            o.WriteLine(URL);
-            o.Flush();
-            o.Close();
+			TextWriter o = null;
+			try {
+				o = new StreamWriter(file);
+				o.WriteLine(URL);
+				o.Flush();
+			} catch (Exception) { // we DON'T CARE if it isn't updated every single time.
+			} finally {
+				if (o != null)
+					o.Close();
+			}
         }
     }
 }

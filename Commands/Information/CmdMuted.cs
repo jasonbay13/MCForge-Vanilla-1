@@ -38,13 +38,13 @@ namespace CommandDll
 
             if (args.Length > 0) { Help(p); }
 
-            foreach (Player pl in Server.Players.ToArray())
-            {
-                if (pl.muted)
-                {
-                    mutedlist.Add(pl.USERNAME);
-                }
-            }
+			Server.ForeachPlayer(delegate(Player pl)
+			{
+				if (pl.muted)
+				{
+					mutedlist.Add(pl.USERNAME);
+				}
+			});
             p.SendMessage("Muted: ");
             foreach (string muted in mutedlist)
             {

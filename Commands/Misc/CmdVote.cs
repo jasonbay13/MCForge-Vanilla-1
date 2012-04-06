@@ -41,7 +41,10 @@ namespace CommandDll
             Player.UniversalChat("Use: %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + "to vote!");
             Thread.Sleep(15000);
             Player.UniversalChat("The votes are in! %aYes: " + Server.YesVotes + " %cNo: " + Server.NoVotes + Server.DefaultColor + "!");
-            foreach (Player pl in Server.Players.ToArray()) { pl.voted = false; }
+			Server.ForeachPlayer(delegate(Player pl)
+			{
+				pl.voted = false;
+			});
             Server.voting = false;
         }
 

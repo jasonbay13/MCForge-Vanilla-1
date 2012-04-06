@@ -44,6 +44,8 @@
     <Compile Include="Building\CmdReplace.cs" />
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Building\CmdReplaceAll.cs" />
+    <Compile Include="Moderation\CmdSettings.cs" />
+    <Compile Include="Information\CmdHelp.cs" />
     <Compile Include="Information\CmdImpersonate.cs" />
     <Compile Include="Misc\CmdSummon.cs" />
     <Compile Include="Misc\CmdCrashserver.cs" />
