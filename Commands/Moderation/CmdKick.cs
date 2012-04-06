@@ -22,7 +22,7 @@ using MCForge.Core;
 
 namespace CommandDll.Moderation {
 	/// <summary>
-	/// Cpommand for kicking someone!
+	/// Command for kicking someone!
 	/// </summary>
 	public class CmdKick : ICommand {
 		string _Name = "Kick";

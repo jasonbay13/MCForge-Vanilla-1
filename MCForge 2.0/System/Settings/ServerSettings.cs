@@ -348,6 +348,13 @@ namespace MCForge.Utilities.Settings {
             var desCrypto = (DESCryptoServiceProvider)DES.Create();
             return Encoding.ASCII.GetString(desCrypto.Key);
         }
+
+        public static bool HasKey(string key) {
+            return GetPair(key) != null;
+        }
+        public static string GetDescription(string key) {
+            return GetPair(key).Description;
+        }
     }
 
     /// <summary>

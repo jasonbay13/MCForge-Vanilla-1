@@ -31,7 +31,7 @@ namespace MCForge.Interface.Command
 		/// <summary>
 		/// Returns the dictionary of all commands.
 		/// </summary>
-		public static Dictionary<string, ICommand> all { get { return Commands; } }
+        public static Dictionary<string, ICommand> all { get { return Commands; }  }
 
 		/// <summary>
 		/// Add an array of referances to your command here
