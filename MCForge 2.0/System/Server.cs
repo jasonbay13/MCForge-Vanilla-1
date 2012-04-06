@@ -43,6 +43,8 @@ namespace MCForge.Core {
         private static int HeartbeatIntervalCurrent = 0;
         private static int GroupsaveInterval = 3000;
         private static int GroupsaveIntervalCurrent = 0;
+		private static int PingInterval = 10;
+		private static int PintIntervalCurrent = 0;
 
         internal static List<Player> Connections = new List<Player>();
         /// <summary>
@@ -141,11 +143,13 @@ namespace MCForge.Core {
         static void Update() {
             HeartbeatIntervalCurrent++;
             GroupsaveIntervalCurrent++;
+			PintIntervalCurrent++;
 
             Player.GlobalUpdate();
 
             if (HeartbeatIntervalCurrent >= HeartbeatInterval) { Heartbeat.sendHeartbeat(); HeartbeatIntervalCurrent = 0; }
             if (GroupsaveIntervalCurrent >= GroupsaveInterval) { foreach (Groups.PlayerGroup g in Groups.PlayerGroup.groups) { g.SaveGroup(); } GroupsaveIntervalCurrent = 0; }
+			if (PintIntervalCurrent >= PingInterval) { Player.GlobalPing(); }
 
             foreach (TimedMethod TM in TimedMethodList.ToArray()) {
                 TM.time--;

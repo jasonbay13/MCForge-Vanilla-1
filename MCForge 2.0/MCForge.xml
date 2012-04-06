@@ -422,11 +422,6 @@
             The player's stored message (For appending)
             </summary>
         </member>
-        <member name="F:MCForge.Entity.Player.pingTimer">
-            <summary>
-            This sends the ping packet to the player. This is how we know when a player disconnects.
-            </summary>
-        </member>
         <member name="F:MCForge.Entity.Player.isLoading">
             <summary>
             True if the player is currently loading a map
