@@ -807,12 +807,18 @@ namespace MCForge.Entity
 			GlobalDie();
 			Server.Log("[System]: " + USERNAME + " Has DC'ed (" + lastPacket + ")", ConsoleColor.Gray, ConsoleColor.Black);
 
-			pingTimer.Stop();
-
 			Server.RemovePlayer(this);
 			Server.Connections.Remove(this);
 
 			socket.Close();
+		}
+
+		internal static void GlobalPing()
+		{
+			Server.ForeachPlayer(delegate(Player p)
+			{
+				p.SendPing();
+			});
 		}
 
 	}

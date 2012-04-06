@@ -119,10 +119,6 @@ namespace MCForge.Entity {
         /// </summary>
         public string storedMessage = "";
 
-        /// <summary>
-        /// This sends the ping packet to the player. This is how we know when a player disconnects.
-        /// </summary>
-        protected System.Timers.Timer pingTimer = new System.Timers.Timer(1000);
         protected byte[] buffer = new byte[0];
         protected byte[] tempBuffer = new byte[0xFF];
         protected string tempString = null;
@@ -237,9 +233,6 @@ namespace MCForge.Entity {
                 if (CheckIfBanned()) return;
 
                 socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
-
-                pingTimer.Elapsed += delegate { SendPing(); };
-                pingTimer.Start();
 
                 Server.Connections.Add(this);
             }
