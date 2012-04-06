@@ -18,103 +18,115 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MCForge.Core
-{
-	public struct Point2
-	{
-		public ushort x;
-		public ushort y;
+namespace MCForge.Core {
+    public struct Point2 {
+        public ushort x;
+        public ushort y;
 
-		public Point2(ushort X, ushort Y)
-		{
-			x = X;
-			y = Y;
-		}
-	}
-	public struct Point3
-	{
-		public short x;
-		public short y;
-		public short z;
+        public Point2(ushort X, ushort Y) {
+            x = X;
+            y = Y;
+        }
 
-		public Point3(short X, short Z, short Y)
-		{
-			x = X;
-			y = Y;
-			z = Z;
-		}
-		public Point3(ushort X, ushort Z, ushort Y)
-		{
-			x = (short)X;
-			y = (short)Y;
-			z = (short)Z;
-		}
-	}
+    }
+    public struct Vector3 {
+        public short x;
+        public short y;
+        public short z;
 
-	public static class Colors
-	{
-		public const string black = "&0";
-		public const string navy = "&1";
-		public const string green = "&2";
-		public const string teal = "&3";
-		public const string maroon = "&4";
-		public const string purple = "&5";
-		public const string gold = "&6";
-		public const string silver = "&7";
-		public const string gray = "&8";
-		public const string blue = "&9";
-		public const string lime = "&a";
-		public const string aqua = "&b";
-		public const string red = "&c";
-		public const string pink = "&d";
-		public const string yellow = "&e";
-		public const string white = "&f";
+        public Vector3(short X, short Z, short Y) {
+            x = X;
+            y = Y;
+            z = Z;
+        }
+        public Vector3(ushort X, ushort Z, ushort Y) {
+            x = (short)X;
+            y = (short)Y;
+            z = (short)Z;
+        }
 
-		public static string Parse(string str)
-		{
-			switch (str.ToLower())
-			{
-				case "black": return black;
-				case "navy": return navy;
-				case "green": return green;
-				case "teal": return teal;
-				case "maroon": return maroon;
-				case "purple": return purple;
-				case "gold": return gold;
-				case "silver": return silver;
-				case "gray": return gray;
-				case "blue": return blue;
-				case "lime": return lime;
-				case "aqua": return aqua;
-				case "red": return red;
-				case "pink": return pink;
-				case "yellow": return yellow;
-				case "white": return white;
-				default: return "";
-			}
-		}
-		public static string Name(string str)
-		{
-			switch (str)
-			{
-				case black: return "black";
-				case navy: return "navy";
-				case green: return "green";
-				case teal: return "teal";
-				case maroon: return "maroon";
-				case purple: return "purple";
-				case gold: return "gold";
-				case silver: return "silver";
-				case gray: return "gray";
-				case blue: return "blue";
-				case lime: return "lime";
-				case aqua: return "aqua";
-				case red: return "red";
-				case pink: return "pink";
-				case yellow: return "yellow";
-				case white: return "white";
-				default: return "";
-			}
-		}
-	}
+        public static Vector3 operator -(Vector3 a, Vector3 b) {
+            return new Vector3((short)(a.x - b.x), (short)(a.z - b.z), (short)(a.y - b.y));
+        }
+        public static Vector3 operator +(Vector3 a, Vector3 b) {
+            return new Vector3((short)(a.x + b.x), (short)(a.z + b.z), (short)(a.y + b.y));
+        }
+        public static Vector3 operator *(Vector3 a, Vector3 b) {
+            return new Vector3((short)(a.x * b.x), (short)(a.z * b.z), (short)(a.y * b.y));
+        }
+        public static Vector3 operator /(Vector3 a, Vector3 b) {
+            return new Vector3((short)(a.x / b.x), (short)(a.z / b.z), (short)(a.y / b.y));
+        }
+        public static bool operator ==(Vector3 a, Vector3 b) {
+            return (a.x == b.x && a.y == b.y && a.z == b.z);
+        }
+        public static bool operator !=(Vector3 a, Vector3 b) {
+            return !(a.x == b.x && a.y == b.y && a.z == b.z);
+        }
+        public bool Equals(Vector3 obj) {
+            return this == obj;
+        }
+    }
+
+    public static class Colors {
+        public const string black = "&0";
+        public const string navy = "&1";
+        public const string green = "&2";
+        public const string teal = "&3";
+        public const string maroon = "&4";
+        public const string purple = "&5";
+        public const string gold = "&6";
+        public const string silver = "&7";
+        public const string gray = "&8";
+        public const string blue = "&9";
+        public const string lime = "&a";
+        public const string aqua = "&b";
+        public const string red = "&c";
+        public const string pink = "&d";
+        public const string yellow = "&e";
+        public const string white = "&f";
+
+        public static string Parse(string str) {
+            switch (str.ToLower()) {
+                case "black": return black;
+                case "navy": return navy;
+                case "green": return green;
+                case "teal": return teal;
+                case "maroon": return maroon;
+                case "purple": return purple;
+                case "gold": return gold;
+                case "silver": return silver;
+                case "gray": return gray;
+                case "blue": return blue;
+                case "lime": return lime;
+                case "aqua": return aqua;
+                case "red": return red;
+                case "pink": return pink;
+                case "yellow": return yellow;
+                case "white": return white;
+                default: return "";
+            }
+        }
+        public static string Name(string str) {
+            switch (str) {
+                case black: return "black";
+                case navy: return "navy";
+                case green: return "green";
+                case teal: return "teal";
+                case maroon: return "maroon";
+                case purple: return "purple";
+                case gold: return "gold";
+                case silver: return "silver";
+                case gray: return "gray";
+                case blue: return "blue";
+                case lime: return "lime";
+                case aqua: return "aqua";
+                case red: return "red";
+                case pink: return "pink";
+                case yellow: return "yellow";
+                case white: return "white";
+                default: return "";
+            }
+        }
+    }
 }
