@@ -88,9 +88,10 @@ namespace MCForge.Core
                     (byte)ServerSettings.GetSettingInt("maxplayers"),
                     ServerSettings.Version);
             }
-            catch
+            catch (Exception e)
             {
                 output[i] = "Error when sending heartbeat";
+				Server.Log(e);
             }
             if (Server.URL != output[i]) Server.Log("URL Found/Updated: " + output[i], ConsoleColor.Green, ConsoleColor.Black);
             Server.URL = output[i];
