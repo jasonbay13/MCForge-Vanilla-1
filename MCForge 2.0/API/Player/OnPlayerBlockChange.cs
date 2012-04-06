@@ -12,7 +12,7 @@ namespace MCForge.API.PlayerEvent
         Delete,
         Place
     }
-    public class OnPlayerBlockChange : PlayerEvent, Cancelable
+    public class OnPlayerBlockChange : PlayerEvent
     {
         public delegate void OnCall(OnPlayerBlockChange eventargs);
         ushort x;

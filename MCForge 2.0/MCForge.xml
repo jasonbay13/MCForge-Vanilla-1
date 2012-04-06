@@ -347,6 +347,11 @@
             The main entry point for the application.
             </summary>
         </member>
+        <member name="T:MCForge.API.PlayerEvent.PlayerEvent">
+            <summary>
+            An event that is connected to a player
+            </summary>
+        </member>
         <member name="M:MCForge.API.Event.Call">
             <summary>
             Call the event
@@ -368,6 +373,45 @@
             Get the player connected to the event
             </summary>
             <returns>The player</returns>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.Unregister(System.Boolean)">
+            <summary>
+            Unregister the event
+            </summary>
+            <param name="value">True will unregister the event, false wont</param>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.Cancel(System.Boolean)">
+            <summary>
+            Cancel the event (Make sure the event is Cancelable <seealso cref="P:MCForge.API.PlayerEvent.PlayerEvent.IsCancelable"/>
+            </summary>
+            <param name="value">True will cancel the event, false will un-cancel it</param>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.GetData">
+            <summary>
+            Get the data you passed when registering the event
+            </summary>
+            <returns>The object in the form of a object type</returns>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.#ctor(MCForge.Entity.Player)">
+            <summary>
+            Create a new instance of the event
+            </summary>
+            <param name="p">The player connected to the event</param>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.Call">
+            <summary>
+            Call the event
+            </summary>
+        </member>
+        <member name="P:MCForge.API.PlayerEvent.PlayerEvent.IsCancelable">
+            <summary>
+            Check to see if you can cancel the event
+            </summary>
+        </member>
+        <member name="P:MCForge.API.PlayerEvent.PlayerEvent.IsCanceled">
+            <summary>
+            Check to see if the event is canceled
+            </summary>
         </member>
         <member name="M:MCForge.API.PlayerEvent.OnPlayerCommand.Call">
             <summary>
@@ -445,6 +489,19 @@
             Send a message to everyone, on every world
             </summary>
             <param name="text">The message to send.</param>
+        </member>
+        <member name="M:MCForge.Entity.Player.UniversalChatOps(System.String)">
+            <summary>
+            Sends a message to all operators+
+            </summary>
+            <param name="message">The message to send</param>
+        </member>
+        <member name="M:MCForge.Entity.Player.RankChat(MCForge.Entity.Player,System.String)">
+            <summary>
+            Sends a message to all of the players with the same rank
+            </summary>
+            <param name="from">The player sending the message</param>
+            <param name="message">The message to send</param>
         </member>
         <member name="F:MCForge.Entity.Player.passtries">
             <summary>
@@ -574,6 +631,21 @@
         <member name="F:MCForge.Entity.Player.color">
             <summary>
             The players COLOR
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.title">
+            <summary>
+            The players TITLE
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.titleColor">
+            <summary>
+            The players TITLE COLOR
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.prefix">
+            <summary>
+            The players PREFIX
             </summary>
         </member>
         <member name="F:MCForge.Entity.Player.isHidden">
