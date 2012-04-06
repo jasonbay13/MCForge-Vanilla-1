@@ -96,7 +96,6 @@
     <Compile Include="System\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System\Server.cs" />
-    <Compile Include="World\LevelSettings.cs" />
     <Compile Include="World\Physics\LavaExample.cs" />
     <Compile Include="World\Physics\PhysicsBlock.cs" />
     <Compile Include="System\Settings\ServerSettings.cs" />

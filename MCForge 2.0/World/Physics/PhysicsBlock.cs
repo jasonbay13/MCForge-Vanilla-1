@@ -27,7 +27,7 @@ namespace MCForge.World.Physics
                         Level.levels.ForEach(l =>
                         {
                             blocks.ForEach(p => { p.Tick(l); });
-                            Thread.Sleep(ServerSettings.PhysicsTick);
+                            Thread.Sleep(l.PhysicsTick);
                         });
                     }
                 }));
