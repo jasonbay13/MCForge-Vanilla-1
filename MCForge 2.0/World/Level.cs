@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using MCForge.Entity;
 using MCForge.Core;
+using MCForge.World.Blocks;
 
 namespace MCForge.World
 {
@@ -120,12 +121,12 @@ namespace MCForge.World
 			{
 				if (y < middle)
 				{
-					SetBlock((ushort)x, (ushort)z, (ushort)y, Block.NameToByte("dirt"));
+					SetBlock((ushort)x, (ushort)z, (ushort)y, new Dirt().VisibleBlock);
 					return;
 				}
 				if(y==middle)
 				{
-                    SetBlock((ushort)x, (ushort)z, (ushort)y, Block.NameToByte("grass"));
+                    SetBlock((ushort)x, (ushort)z, (ushort)y, new Grass().VisibleBlock);
 					return;
 				}
 
