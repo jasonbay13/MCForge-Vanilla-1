@@ -145,7 +145,7 @@ namespace MCForge.Entity
 				e.Call();
 				if (e.IsCanceled)
 					return;
-
+            
 				//TODO Database Stuff
 
 				Server.Log("[System]: " + ip + " logging in as " + USERNAME + ".", ConsoleColor.Green, ConsoleColor.Black);
@@ -284,7 +284,7 @@ namespace MCForge.Entity
 			byte incomingID = message[0];
 			if (incomingID != 0xFF && incomingID != id && incomingID != 0)
 			{
-				//TODO Player.GlobalMessageOps("Player sent a malformed packet!");
+				Player.UniversalChatOps("Player " + USERNAME + ", sent a malformed packet!");
 				Kick("Hacked Client!");
 				return;
 			}
@@ -409,19 +409,36 @@ namespace MCForge.Entity
 				else if (vote == "no" || vote == "n") { Server.NoVotes++; voted = true; SendMessage("Thanks for voting!"); return; }
 				else { SendMessage("Use either %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + " to vote!"); }
 			}
-            if (incomingText[0] == '#') //Opchat ouo
+            if (incomingText[0] == '#' || opchat) //Opchat ouo
             {
-                UniversalChatOps("&a<&fTo Ops&a> " + group.color + USERNAME + ": &f" + incomingText.Trim().TrimStart('#'));
-                if (group.permission < 80) { SendMessage("&a<&fTo Ops&a> " + group.color + USERNAME + ": &f" + incomingText.Trim().TrimStart('#')); } //So players who aren't op see their messages
-                Server.Log("<OpChat> <" + USERNAME + "> " + incomingText.Trim().TrimStart('#'));
+                incomingText = incomingText.Trim().TrimStart('#');
+                UniversalChatOps("&a<&fTo Ops&a> " + group.color + USERNAME + ": &f" + incomingText);
+                if (group.permission < Server.opchatperm) { SendMessage("&a<&fTo Ops&a> " + group.color + USERNAME + ": &f" + incomingText); } //So players who aren't op see their messages
+                Server.Log("<OpChat> <" + USERNAME + "> " + incomingText);
                 return;
             }
             if (incomingText[0] == '*') //Rank chat
             {
                 string groupname = group.name;
+                incomingText = incomingText.Trim().TrimStart('*');
                 if (!groupname.EndsWith("ed") && !groupname.EndsWith("s")) { groupname += "s"; } //Plural
-                RankChat(this, "&a<&fTo " + groupname + "&a> " + group.color + USERNAME + ": &f" + incomingText.Trim().TrimStart('*'));
-                Server.Log("<" + groupname + " Chat> <" + USERNAME + "> " + incomingText.Trim().TrimStart('*'));
+                RankChat(this, "&a<&fTo " + groupname + "&a> " + group.color + USERNAME + ": &f" + incomingText);
+                Server.Log("<" + groupname + " Chat> <" + USERNAME + "> " + incomingText);
+                return;
+            }
+            if (incomingText[0] == '!') //Level chat
+            {
+                incomingText = incomingText.Trim().TrimStart('!');
+                LevelChat(this, "&a<&f" + level.name + "&a> " + USERNAME + ":&f " + incomingText);
+                Server.Log("<" + level.name + " Chat> " + USERNAME + ": " + incomingText);
+                return;
+            }
+            if (incomingText[0] == '+' || adminchat) //Admin chat
+            {
+                incomingText = incomingText.TrimStart().TrimStart('+');
+                UniversalChatAdmins("&a<&fTo Admins&a> " + group.color + USERNAME + ": &f" + incomingText);
+                if (group.permission < Server.adminchatperm) { SendMessage("&a<&fTo Admins&a> " + group.color + USERNAME + ": &f" + incomingText); }
+                Server.Log("<AdminChat> <" + USERNAME + "> " + incomingText);
                 return;
             }
 			Server.Log("<" + USERNAME + "> " + incomingText);
@@ -829,7 +846,18 @@ namespace MCForge.Entity
         {
             Server.ForeachPlayer(delegate(Player p)
             {
-                if (p.group.permission >= 80) { p.SendMessage(message); }
+                if (p.group.permission >= Server.opchatperm) { p.SendMessage(message); }
+            });
+        }
+        /// <summary>
+        /// Sends a message to all admins+
+        /// </summary>
+        /// <param name="message">The message to be sent</param>
+        public static void UniversalChatAdmins(string message)
+        {
+            Server.ForeachPlayer(delegate(Player p)
+            {
+                if (p.group.permission >= Server.adminchatperm) { p.SendMessage(message); }
             });
         }
         /// <summary>
@@ -842,6 +870,18 @@ namespace MCForge.Entity
             Server.ForeachPlayer(delegate(Player p)
             {
                 if (p.group.permission == from.group.permission) { p.SendMessage(message); }
+            });
+        }
+        /// <summary>
+        /// Sends a message to all of the players on the specified level
+        /// </summary>
+        /// <param name="from">The player sending the message</param>
+        /// <param name="message">The message to be sent</param>
+        public static void LevelChat(Player from, string message)
+        {
+            Server.ForeachPlayer(delegate(Player p)
+            {
+                if (p.level == from.level) { p.SendMessage(message); }
             });
         }
 		protected void CloseConnection()
