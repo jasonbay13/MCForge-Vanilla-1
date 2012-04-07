@@ -44,7 +44,7 @@ namespace CommandDll
                 who = Player.Find(args[0]);
                 if (who == null) { p.SendMessage("Could not find player."); return; }
                 if (p.group.permission <= who.group.permission) { p.SendMessage("You can't change the color of someone of equal or higher rank!"); return; }
-                if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("You can't change a dev's color!"); return; }
+                if (Server.devs.Contains(who.USERNAME) && !Server.devs.Contains(p.USERNAME)) { p.SendMessage("You can't change a dev's color!"); return; }
                 color = args[1] == "del" ? who.group.color : Colors.Parse(args[1]);
                 if (who.color == color) { p.SendMessage("They are already that color!"); return; }
             }

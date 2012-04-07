@@ -1075,6 +1075,11 @@
             The list of MCForge developers.
             </summary>
         </member>
+        <member name="F:MCForge.Core.Server.reviewlist">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="F:MCForge.Core.Server.agreed">
             <summary>
             List of players that agreed to the rules
@@ -1128,6 +1133,11 @@
         <member name="F:MCForge.Core.Server.adminchatperm">
             <summary>
             Server's admin chat permission
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.reviewnextperm">
+            <summary>
+            Group permission that can use /review next
             </summary>
         </member>
         <member name="F:MCForge.Core.Server.URL">
