@@ -44,7 +44,8 @@ namespace CommandDll
                 who = Player.Find(args[0]);
                 if (who == null) { p.SendMessage("Could not find player."); return; }
                 if (p.group.permission <= who.group.permission) { p.SendMessage("You can't change the title color of someone of equal or higher rank!"); return; }
-                if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("You can't change a dev's title color!"); return; }
+                //devs should be able to change their own color
+                if (Server.devs.Contains(who.USERNAME) && !Server.devs.Contains(p.USERNAME)) { p.SendMessage("You can't change a dev's title color!"); return; }
                 titleColor = args[1] == "del" ? "del" : Colors.Parse(args[1]);
                 if (who.titleColor == titleColor) { p.SendMessage("Their title is already that color!"); return; }
             }
