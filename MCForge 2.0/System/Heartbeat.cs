@@ -92,9 +92,19 @@ namespace MCForge.Core
             {
                 output[i] = "Error when sending heartbeat";
             }
-            if (Server.URL != output[i]) Server.Log("URL Found/Updated: " + output[i], ConsoleColor.Green, ConsoleColor.Black);
-            Server.URL = output[i];
-            writeURL(output[i], "text/heartbeaturl.txt"); 
+            if (output[i] == "bad heartbeat! (salt is too long)")
+            {
+                //saltlength is not limited by salt.Length
+                //an approxitmately maximum is UrlEncode(salt).Length==60 (sometimes 66 is accepted and next time 62 is too long)
+                ServerSettings.Salt = ServerSettings.GenerateSalt();
+                output = sendHeartbeat(); //loops till output[i] claims not about salt is too long anymore
+            }
+            else
+            {
+                if (Server.URL != output[i]) Server.Log("URL Found/Updated: " + output[i], ConsoleColor.Green, ConsoleColor.Black);
+                Server.URL = output[i];
+                writeURL(output[i], "text/heartbeaturl.txt");
+            }
 
             //i++;
 
