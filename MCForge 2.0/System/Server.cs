@@ -78,6 +78,10 @@ namespace MCForge.Core {
         /// </summary>
         public static readonly List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "Gamemakergm", "cazzar", "hirsty", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "TheMusiKid", "Nerketur" });
         /// <summary>
+        /// 
+        /// </summary>
+        public static List<Player> reviewlist = new List<Player>();
+        /// <summary>
         /// List of players that agreed to the rules
         /// </summary>
         public static List<string> agreed = new List<string>();
@@ -126,6 +130,10 @@ namespace MCForge.Core {
         /// Server's admin chat permission
         /// </summary>
         public static byte adminchatperm = 100;
+        /// <summary>
+        /// Group permission that can use /review next
+        /// </summary>
+        public static byte reviewnextperm = 80;
         /// <summary>
         /// The minecraft.net URL of the server
         /// </summary>
