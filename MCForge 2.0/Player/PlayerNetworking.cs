@@ -158,9 +158,9 @@ namespace MCForge.Entity
 						group = g;
 
 				SendMotd();
-
-				isLoading = true;
-				SendMap();
+                isLoading = true;
+                Level = Server.Mainlevel; 
+				//SendMap(); changing the level value will send the map
 				if (!isOnline) return;
 				isLoggedIn = true;
 
@@ -553,6 +553,8 @@ namespace MCForge.Entity
 					//Here we loop through the whole map and check/convert the blocks as necesary
 					//We then add them to our blocks array so we can send them to the player
 					block = level.data[pos];
+                    //TODO ADD CHECKING
+                    blocks[pos] = block;
 				});
 
 				pa.Add(blocks); //add the blocks to the packet
