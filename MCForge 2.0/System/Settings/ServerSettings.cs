@@ -14,7 +14,7 @@ namespace MCForge.Utilities.Settings {
     public class ServerSettings {
 
         internal const byte Version = 7;
-        internal static string Salt { get; private set; }
+        internal static string Salt { get; set; }
 
         private static bool _initCalled;
         private static List<SettingDescriptionPair> _values;
@@ -254,9 +254,15 @@ namespace MCForge.Utilities.Settings {
 
         }
 
-        internal static string GenerateSalt() {
-            var desCrypto = (DESCryptoServiceProvider)DES.Create();
-            return Encoding.ASCII.GetString(desCrypto.Key);
+        internal static string GenerateSalt()
+        {
+            Random r = new Random();
+            byte[] b = new byte[24];//sometimes is too long for salt, longer salt is more secure
+            for (int i = 0; i < b.Length; i++)
+            {
+                b[i] = (byte)r.Next(128);
+            }
+            return Encoding.ASCII.GetString(b);//supports only 0-127, every thing above gets (char)63=='?', using full byte range will produce 50% same characters
         }
 
         public static bool HasKey(string key) {
