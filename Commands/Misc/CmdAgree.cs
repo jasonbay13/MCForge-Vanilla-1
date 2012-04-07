@@ -14,7 +14,6 @@ permissions and limitations under the Licenses.
 */
 using System.IO;
 using System;
-using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
@@ -32,11 +31,11 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            if (Server.agreed.Contains(p.USERNAME)) { p.SendMessage("You have already agreed to the rules!"); return; }
+            if (Server.agreed.Contains(p.Username)) { p.SendMessage("You have already agreed to the rules!"); return; }
             if (!p.readrules) { p.SendMessage("You need to read the /rules before you can agree!"); return; }
-            Server.agreed.Add(p.USERNAME);
+            Server.agreed.Add(p.Username);
             if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); }
-            File.AppendAllText("text/agreed.txt", p.USERNAME + Environment.NewLine); 
+            File.AppendAllText("text/agreed.txt", p.Username + Environment.NewLine); 
             p.SendMessage("Congratulations! You have agreed to the rules. You're now able to use commands!");
         }
 

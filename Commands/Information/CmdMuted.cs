@@ -42,7 +42,7 @@ namespace CommandDll
 			{
 				if (pl.muted)
 				{
-					mutedlist.Add(pl.USERNAME);
+					mutedlist.Add(pl.Username);
 				}
 			});
             p.SendMessage("Muted: ");

@@ -28,7 +28,7 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            if (Server.agreed.Contains(p.USERNAME)) { p.SendMessage("You have already agreed to the rules!"); return; }
+            if (Server.agreed.Contains(p.Username)) { p.SendMessage("You have already agreed to the rules!"); return; }
             if (!p.readrules) { p.SendMessage("You need to read the /rules before you can disagree!"); return; }
             p.Kick("Kicked for disagreeing to the rules!");
         }

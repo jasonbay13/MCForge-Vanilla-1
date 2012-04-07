@@ -72,7 +72,7 @@ namespace CommandDll
                 for (zz = Math.Min((ushort)(FirstBlock.z), z); zz <= Math.Max((ushort)(FirstBlock.z), z); ++zz)
                     for (yy = Math.Min((ushort)(FirstBlock.y), y); yy <= Math.Max((ushort)(FirstBlock.y), y); ++yy)
                     {
-                        if (p.level.GetBlock(xx, zz, yy) != cpos.ignore)
+                        if (p.Level.GetBlock(xx, zz, yy) != cpos.ignore)
                         {
                             count++;
                         }

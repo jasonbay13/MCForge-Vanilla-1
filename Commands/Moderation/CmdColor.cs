@@ -44,7 +44,7 @@ namespace CommandDll
                 who = Player.Find(args[0]);
                 if (who == null) { p.SendMessage("Could not find player."); return; }
                 if (p.group.permission <= who.group.permission) { p.SendMessage("You can't change the color of someone of equal or higher rank!"); return; }
-                if (Server.devs.Contains(who.USERNAME) && !Server.devs.Contains(p.USERNAME)) { p.SendMessage("You can't change a dev's color!"); return; }
+                if (Server.devs.Contains(who.Username) && !Server.devs.Contains(p.Username)) { p.SendMessage("You can't change a dev's color!"); return; }
                 color = args[1] == "del" ? who.group.color : Colors.Parse(args[1]);
                 if (who.color == color) { p.SendMessage("They are already that color!"); return; }
             }
@@ -55,7 +55,7 @@ namespace CommandDll
                 message = "their groups default.";
             else
                 message = color + Colors.Name(color) + who.color + ".";
-            Player.UniversalChat(who.color + "*" + who.USERNAME + (who.USERNAME.EndsWith("s") || who.USERNAME.EndsWith("x") ? "'" : "'s") + " color was changed to " + message);
+            Player.UniversalChat(who.color + "*" + who.Username + (who.Username.EndsWith("s") || who.Username.EndsWith("x") ? "'" : "'s") + " color was changed to " + message);
             who.color = color;
 
             who.GlobalDie();

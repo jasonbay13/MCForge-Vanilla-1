@@ -35,23 +35,23 @@ namespace CommandDll
             if (args.Length == 0) { Help(p); return; }
             Player who = Player.Find(args[0]);
             int time = 0;
-            if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("Cannot mute a MCForge Developer!"); return; }
+            if (Server.devs.Contains(who.Username)) { p.SendMessage("Cannot mute a MCForge Developer!"); return; }
             if (args.Length == 2) //XMute
             {
-                if (who.muted) { who.muted = false; Player.UniversalChat(who.USERNAME + " has been unmuted!"); return; }
+                if (who.muted) { who.muted = false; Player.UniversalChat(who.Username + " has been unmuted!"); return; }
                 try { time = Int32.Parse(args[1]) * 1000; }
                 catch { p.SendMessage("Please use a valid number!"); return; }
                 if (time > 600000) { p.SendMessage("Cannot mute for more than 10 minutes"); return; }
                 who.muted = true;
-                Player.UniversalChat(who.USERNAME + " %chas been muted for " + time / 1000 + " seconds!");
+                Player.UniversalChat(who.Username + " %chas been muted for " + time / 1000 + " seconds!");
                 Thread.Sleep(time);
                 who.muted = false;
-                Player.UniversalChat(who.USERNAME + " has been unmuted!");
+                Player.UniversalChat(who.Username + " has been unmuted!");
             }
             else //Regular mute
             {
-                if (who.muted) { who.muted = false; Player.UniversalChat(who.USERNAME + " has been unmuted!"); return; }
-                else { who.muted = true; Player.UniversalChat(who.USERNAME + " has been muted!"); return; }
+                if (who.muted) { who.muted = false; Player.UniversalChat(who.Username + " has been unmuted!"); return; }
+                else { who.muted = true; Player.UniversalChat(who.Username + " has been muted!"); return; }
             }
             
         }

@@ -51,9 +51,9 @@ namespace CommandDll
                 }
             }
             if (title.Length > 17) { p.SendMessage("Title must be under 17 letters."); return; }
-            if (!Server.devs.Contains(p.USERNAME))
+            if (!Server.devs.Contains(p.Username))
             {
-                if (Server.devs.Contains(who.USERNAME) || title.ToLower() == "dev") { p.SendMessage("Can't let you do that, starfox."); return; }
+                if (Server.devs.Contains(who.Username) || title.ToLower() == "dev") { p.SendMessage("Can't let you do that, starfox."); return; }
             }
             string message = "";
             if (title == "del")
@@ -67,7 +67,7 @@ namespace CommandDll
                 message = "set to &b[" + title + "]";
             }
             who.SetPrefix();
-            Player.UniversalChat(who.color +  who.USERNAME + Server.DefaultColor + " had their title " + message);
+            Player.UniversalChat(who.color +  who.Username + Server.DefaultColor + " had their title " + message);
             //TODO Save to database.
         }
 

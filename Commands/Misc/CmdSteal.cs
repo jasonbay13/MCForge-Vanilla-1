@@ -29,19 +29,19 @@ namespace CommandDll.Misc
         public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
         {
-            if (args.Length != 2) Help(p); return;
+            if (args.Length != 2) { Help(p); return; }
             Player who = Player.Find(args[0]);
-            if (who == null) p.SendMessage("Could not find \"" + args[0] + "\"!"); return;
-            if (who == p) p.SendMessage("You cannot steal from yourself!"); return;
+            if (who == null) { p.SendMessage("Could not find \"" + args[0] + "\"!"); return; }
+            if (who == p) { p.SendMessage("You cannot steal from yourself!"); return; }
             int amt;
             try { amt = int.Parse(args[1]); }
             catch { p.SendMessage("Invalid amount!"); return; }
-            if (p.money + amt > 16777215) p.SendMessage("If you steal that much, you'll be so rich your wallet will burst! You cannot have over 16777215 " + Server.moneys + "."); return;
-            if (who.money - amt < 0) p.SendMessage("You cannot steal money that " + who.USERNAME + " does not have!"); return;
-            if (amt < 0) p.SendMessage("Cannot take negative amounts of " + Server.moneys + "."); return;
+            if (p.money + amt > 16777215) { p.SendMessage("If you steal that much, you'll be so rich your wallet will burst! You cannot have over 16777215 " + Server.moneys + "."); return; }
+            if (who.money - amt < 0) { p.SendMessage("You cannot steal money that " + who.Username + " does not have!"); return; }
+            if (amt < 0) { p.SendMessage("Cannot take negative amounts of " + Server.moneys + "."); return; }
             who.money -= amt;
             p.money += amt;
-            Player.UniversalChat(p.color + p.USERNAME + Server.DefaultColor + " took &3" + amt + Server.DefaultColor + " " + Server.moneys + " from " + who.color + who.USERNAME + Server.DefaultColor + ".");
+            Player.UniversalChat(p.color + p.Username + Server.DefaultColor + " took &3" + amt + Server.DefaultColor + " " + Server.moneys + " from " + who.color + who.Username + Server.DefaultColor + ".");
             //TODO: DB save
         }
         public void Help(Player p)

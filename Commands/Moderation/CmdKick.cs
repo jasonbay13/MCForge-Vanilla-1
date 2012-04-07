@@ -64,18 +64,18 @@ namespace CommandDll.Moderation {
 				}
 				string reason = string.Join(" ", args, 1).Trim();
 				if (reason.Length == 0)
-					reason = "You were kicked by " + p.USERNAME;
+					reason = "You were kicked by " + p.Username;
 				bool kickPlayer = false;
 				foreach (Player kickee in kickeeList) {
-					if (Server.devs.Contains(kickee.USERNAME)) {
+					if (Server.devs.Contains(kickee.Username)) {
 						kickPlayer = true;
-						p.SendMessage("You can't kick the developer " + kickee.USERNAME + "!");
+						p.SendMessage("You can't kick the developer " + kickee.Username + "!");
 					} else
 						kickee.Kick(reason);
 				}
 				if (kickPlayer) {
 					String msg = "You tried to kick a developer!  Shame on you!";
-					if (Server.devs.Contains(p.USERNAME))
+					if (Server.devs.Contains(p.Username))
 						p.SendMessage(msg);
 					else
 						p.Kick(msg);

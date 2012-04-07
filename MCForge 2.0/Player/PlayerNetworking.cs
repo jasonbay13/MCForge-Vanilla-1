@@ -52,7 +52,7 @@ namespace MCForge.Entity
 					p.CloseConnection();
 					if (!p.beingkicked)
 					{
-						UniversalChat(p.color + p.USERNAME + " has disconnected.");
+						UniversalChat(p.color + p.Username + " has disconnected.");
 					}
 					return;
 				}
@@ -135,10 +135,10 @@ namespace MCForge.Entity
 			{
 				if (isLoggedIn) return;
 				byte version = message[0];
-				USERNAME = enc.GetString(message, 1, 64).Trim();
+				Username = enc.GetString(message, 1, 64).Trim();
 				string verify = enc.GetString(message, 65, 32).Trim();
 				byte type = message[129];
-				if (!VerifyAccount(USERNAME, verify)) return;
+				if (!VerifyAccount(Username, verify)) return;
 				if (version != ServerSettings.Version) { SKick("Wrong Version!."); return; }
 
 				OnPlayerConnect e = new OnPlayerConnect(this);
@@ -148,13 +148,13 @@ namespace MCForge.Entity
             
 				//TODO Database Stuff
 
-				Server.Log("[System]: " + ip + " logging in as " + USERNAME + ".", ConsoleColor.Green, ConsoleColor.Black);
-				UniversalChat(USERNAME + " joined the game!");
+				Server.Log("[System]: " + ip + " logging in as " + Username + ".", ConsoleColor.Green, ConsoleColor.Black);
+				UniversalChat(Username + " joined the game!");
 
-				CheckDuplicatePlayers(USERNAME);
+				CheckDuplicatePlayers(Username);
 
 				foreach (PlayerGroup g in PlayerGroup.groups)
-					if (g.players.Contains(USERNAME.ToLower()))
+					if (g.players.Contains(Username.ToLower()))
 						group = g;
 
 				SendMotd();
@@ -284,7 +284,7 @@ namespace MCForge.Entity
 			byte incomingID = message[0];
 			if (incomingID != 0xFF && incomingID != id && incomingID != 0)
 			{
-				Player.UniversalChatOps("Player " + USERNAME + ", sent a malformed packet!");
+				Player.UniversalChatOps("Player " + Username + ", sent a malformed packet!");
 				Kick("Hacked Client!");
 				return;
 			}
@@ -349,7 +349,7 @@ namespace MCForge.Entity
 				}
 			}
 			if (muted) { SendMessage("You are muted!"); return; }
-			if (Server.moderation && !voiced && !Server.devs.Contains(USERNAME)) { SendMessage("You can't talk during chat moderation!"); return; }
+			if (Server.moderation && !voiced && !Server.devs.Contains(Username)) { SendMessage("You can't talk during chat moderation!"); return; }
 			if (jokered)
 			{
 				Random r = new Random();
@@ -412,9 +412,9 @@ namespace MCForge.Entity
             if (incomingText[0] == '#' || opchat) //Opchat ouo
             {
                 incomingText = incomingText.Trim().TrimStart('#');
-                UniversalChatOps("&a<&fTo Ops&a> " + group.color + USERNAME + ": &f" + incomingText);
-                if (group.permission < Server.opchatperm) { SendMessage("&a<&fTo Ops&a> " + group.color + USERNAME + ": &f" + incomingText); } //So players who aren't op see their messages
-                Server.Log("<OpChat> <" + USERNAME + "> " + incomingText);
+                UniversalChatOps("&a<&fTo Ops&a> " + group.color + Username + ": &f" + incomingText);
+                if (group.permission < Server.opchatperm) { SendMessage("&a<&fTo Ops&a> " + group.color + Username + ": &f" + incomingText); } //So players who aren't op see their messages
+                Server.Log("<OpChat> <" + Username + "> " + incomingText);
                 return;
             }
             if (incomingText[0] == '*') //Rank chat
@@ -422,23 +422,23 @@ namespace MCForge.Entity
                 string groupname = group.name;
                 incomingText = incomingText.Trim().TrimStart('*');
                 if (!groupname.EndsWith("ed") && !groupname.EndsWith("s")) { groupname += "s"; } //Plural
-                RankChat(this, "&a<&fTo " + groupname + "&a> " + group.color + USERNAME + ": &f" + incomingText);
-                Server.Log("<" + groupname + " Chat> <" + USERNAME + "> " + incomingText);
+                RankChat(this, "&a<&fTo " + groupname + "&a> " + group.color + Username + ": &f" + incomingText);
+                Server.Log("<" + groupname + " Chat> <" + Username + "> " + incomingText);
                 return;
             }
             if (incomingText[0] == '!') //Level chat
             {
                 incomingText = incomingText.Trim().TrimStart('!');
-                LevelChat(this, "&a<&f" + level.name + "&a> " + USERNAME + ":&f " + incomingText);
-                Server.Log("<" + level.name + " Chat> " + USERNAME + ": " + incomingText);
+                LevelChat(this, "&a<&f" + level.name + "&a> " + Username + ":&f " + incomingText);
+                Server.Log("<" + level.name + " Chat> " + Username + ": " + incomingText);
                 return;
             }
             if (incomingText[0] == '+' || adminchat) //Admin chat
             {
                 incomingText = incomingText.TrimStart().TrimStart('+');
-                UniversalChatAdmins("&a<&fTo Admins&a> " + group.color + USERNAME + ": &f" + incomingText);
-                if (group.permission < Server.adminchatperm) { SendMessage("&a<&fTo Admins&a> " + group.color + USERNAME + ": &f" + incomingText); }
-                Server.Log("<AdminChat> <" + USERNAME + "> " + incomingText);
+                UniversalChatAdmins("&a<&fTo Admins&a> " + group.color + Username + ": &f" + incomingText);
+                if (group.permission < Server.adminchatperm) { SendMessage("&a<&fTo Admins&a> " + group.color + Username + ": &f" + incomingText); }
+                Server.Log("<AdminChat> <" + Username + "> " + incomingText);
                 return;
             }
             if (whispering) // /whisper command
@@ -446,8 +446,8 @@ namespace MCForge.Entity
                 Player to = whisperto;
                 if (to == null) { SendMessage("Player not found!"); return; }
                 if (to == this) { SendMessage("Trying to talk to yourself huh?"); return; }
-                SendMessage("[>] <" + to.USERNAME + ">&f " + incomingText);
-                to.SendMessage("[<] " + USERNAME + ":&f " + incomingText);
+                SendMessage("[>] <" + to.Username + ">&f " + incomingText);
+                to.SendMessage("[<] " + Username + ":&f " + incomingText);
                 return;
             }
             if (incomingText[0] == '@') //Whisper whisper woosh woosh
@@ -456,14 +456,14 @@ namespace MCForge.Entity
                 if (incomingText[1] == ' ') { incomingText = incomingText.Remove(1, 1); } //Get rid of whitespace (@ alem_zupa)
                 incomingText = incomingText.Remove(0, 1);
                 Player to = Player.Find(incomingText.Split(' ')[0]);
-                incomingText = incomingText.Remove(0, to.USERNAME.Length);
+                incomingText = incomingText.Remove(0, to.Username.Length);
                 if (to == null) { SendMessage("Player not found!"); return; }
-                SendMessage("[>] <" + to.USERNAME + ">&f " + incomingText.Trim());
-                to.SendMessage("[<] " + USERNAME + ":&f " + incomingText.Trim());
+                SendMessage("[>] <" + to.Username + ">&f " + incomingText.Trim());
+                to.SendMessage("[<] " + Username + ":&f " + incomingText.Trim());
                 return;
             }
-			Server.Log("<" + USERNAME + "> " + incomingText);
-            UniversalChat(voicestring + color + prefix + USERNAME + ": &f" + incomingText);
+			Server.Log("<" + Username + "> " + incomingText);
+            UniversalChat(voicestring + color + prefix + Username + ": &f" + incomingText);
         }
 
         public void SetPrefix()
@@ -600,7 +600,7 @@ namespace MCForge.Entity
 			packet pa = new packet();
 			pa.Add(packet.types.SendSpawn);
 			pa.Add((byte)ID);
-			pa.Add(p.USERNAME, 64);
+			pa.Add(p.Username, 64);
 			pa.Add(p.Pos.x);
 			pa.Add(p.Pos.y);
 			pa.Add(p.Pos.z);
@@ -682,7 +682,7 @@ namespace MCForge.Entity
 		/// <param name="message">The message to send</param>
 		public void SKick(string message)
 		{
-			Server.Log("[Info]: Kicked: *" + USERNAME + "* " + message, ConsoleColor.Yellow, ConsoleColor.Black);
+			Server.Log("[Info]: Kicked: *" + Username + "* " + message, ConsoleColor.Yellow, ConsoleColor.Black);
 			SendKick(message);
 			//CloseConnection();
 		}
@@ -909,7 +909,7 @@ namespace MCForge.Entity
 			isOnline = false;
 
 			GlobalDie();
-			Server.Log("[System]: " + USERNAME + " Has DC'ed (" + lastPacket + ")", ConsoleColor.Gray, ConsoleColor.Black);
+			Server.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", ConsoleColor.Gray, ConsoleColor.Black);
 
 			Server.RemovePlayer(this);
 			Server.Connections.Remove(this);

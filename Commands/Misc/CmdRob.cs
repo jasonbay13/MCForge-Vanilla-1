@@ -29,24 +29,24 @@ namespace CommandDll.Misc
         public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
         {
-            if (args.Length != 2) Help(p); return;
+            if (args.Length != 2) { Help(p); return; }
             Player who = Player.Find(args[0]);
-            if (p.group.permission < who.group.permission) p.SendMessage("You cannot rob your superiors!"); return;
-            if (who == null) p.SendMessage("Could not find \"" + args[0] + "\"!"); return;
-            if (who == p) p.SendMessage("You cannot rob yourself!"); return;
+            if (p.group.permission < who.group.permission) { p.SendMessage("You cannot rob your superiors!"); return; }
+            if (who == null) { p.SendMessage("Could not find \"" + args[0] + "\"!"); return; }
+            if (who == p) { p.SendMessage("You cannot rob yourself!"); return; }
             int amt;
             try { amt = int.Parse(args[1]); }
             catch { p.SendMessage("Invalid amount!"); return; }
-            if (p.money + amt > 16777215) p.SendMessage("If you steal that much, you'll be so rich your wallet will burst! You cannot have over 16777215 " + Server.moneys + "."); return;
-            if (who.money - amt < 0) p.SendMessage("You cannot steal money that " + who.USERNAME + " does not have!"); return;
-            if (amt < 0) p.SendMessage("Cannot take negative amounts of " + Server.moneys + "."); return;
+            if (p.money + amt > 16777215) { p.SendMessage("If you steal that much, you'll be so rich your wallet will burst! You cannot have over 16777215 " + Server.moneys + "."); return; }
+            if (who.money - amt < 0) { p.SendMessage("You cannot steal money that " + who.Username + " does not have!"); return; }
+            if (amt < 0) { p.SendMessage("Cannot take negative amounts of " + Server.moneys + "."); return; }
             Random rand = new Random();
             int x = rand.Next(1, 101);
-            if (InBetween(1, x, 3)) Rob(p, who, amt);
-            if (InBetween(4, x, 6)) amt -= amt / 5; Rob(p, who, amt);
-            if (InBetween(7, x, 15)) amt = amt / 5; Rob(p, who, amt);
-            if (InBetween(16, x, 25)) amt = amt / 10; Rob(p, who, amt);
-            if (InBetween(26, x, 100)) Player.UniversalChat(p.color + p.USERNAME + Server.DefaultColor + " tried to rob " + who.color + who.USERNAME + Server.DefaultColor + " but failed!"); p.Kick("Thief!");
+            if (InBetween(1, x, 3)) { Rob(p, who, amt); }
+            if (InBetween(4, x, 6)) { amt -= amt / 5; Rob(p, who, amt); }
+            if (InBetween(7, x, 15)) { amt = amt / 5; Rob(p, who, amt); }
+            if (InBetween(16, x, 25)) { amt = amt / 10; Rob(p, who, amt); }
+            if (InBetween(26, x, 100)) { Player.UniversalChat(p.color + p.Username + Server.DefaultColor + " tried to rob " + who.color + who.Username + Server.DefaultColor + " but failed!"); p.Kick("Thief!"); }
         }
         public void Help(Player p)
         {
@@ -65,7 +65,7 @@ namespace CommandDll.Misc
         {
             who.money -= amount;
             p.money += amount;
-            Player.UniversalChat(p.color + p.USERNAME + Server.DefaultColor + " robbed " + who.color + who.USERNAME + Server.DefaultColor + " of &3" + amount + Server.DefaultColor + " " + Server.moneys + ".");
+            Player.UniversalChat(p.color + p.Username + Server.DefaultColor + " robbed " + who.color + who.Username + Server.DefaultColor + " of &3" + amount + Server.DefaultColor + " " + Server.moneys + ".");
         }
     }
 }

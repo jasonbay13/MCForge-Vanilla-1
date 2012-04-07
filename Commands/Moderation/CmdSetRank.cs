@@ -54,11 +54,11 @@ namespace CommandDll
             }
             if (who.group == group)
             {
-                p.SendMessage(group.colour + who.USERNAME + Server.DefaultColor + "is already that rank");
+                p.SendMessage(group.colour + who.Username + Server.DefaultColor + "is already that rank");
                 return;
             }
             group.AddPlayer(who);
-            Player.UniversalChat(group.colour + who.USERNAME + Server.DefaultColor + " had their rank set to " + group.colour + group.name);
+            Player.UniversalChat(group.colour + who.Username + Server.DefaultColor + " had their rank set to " + group.colour + group.name);
 
         }
 

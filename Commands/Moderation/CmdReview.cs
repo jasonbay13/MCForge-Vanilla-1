@@ -51,7 +51,7 @@ namespace CommandDll
                     }
                         Server.reviewlist.Add(p);
                         p.SendMessage("You have been added to the review queue!");
-                        Player.UniversalChatOps(p.USERNAME + " has entered the review queue!");
+                        Player.UniversalChatOps(p.Username + " has entered the review queue!");
                         int poss = Server.reviewlist.IndexOf(p);
                         SendPositon(false, p);
                     break;
@@ -60,7 +60,7 @@ namespace CommandDll
                 case "view":
                     if (Server.reviewlist.Count == 0) { p.SendMessage("There are no players in the review queue!"); return; }
                     string send = "Players in the review queue: ";
-                    foreach (Player pl in Server.reviewlist) { send += pl.USERNAME + ", "; }
+                    foreach (Player pl in Server.reviewlist) { send += pl.Username + ", "; }
                     send = send.Trim().TrimEnd(',');
                     p.SendMessage(send);
                     break;
@@ -87,7 +87,7 @@ namespace CommandDll
                         return;
                     }
                     Server.reviewlist.Remove(p);
-                    Player.UniversalChat(p.USERNAME + " has left the queue!");
+                    Player.UniversalChat(p.Username + " has left the queue!");
                     p.SendMessage("You have been removed from the review queue!");
                     SendPositon(true);
                     break;
@@ -101,22 +101,22 @@ namespace CommandDll
                         return;
                     }
                     Player rev = Server.reviewlist[0];
-                    if (rev == null) { p.SendMessage(rev.USERNAME + " isn't online! Removing..."); Server.reviewlist.Remove(rev); SendPositon(true); return; }
+                    if (rev == null) { p.SendMessage(rev.Username + " isn't online! Removing..."); Server.reviewlist.Remove(rev); SendPositon(true); return; }
                     if (rev == p) { p.SendMessage("Cannot review yourself! Removing..."); Server.reviewlist.Remove(rev); SendPositon(true); return; }              
                     SendPositon(true);
-                    string[] meep = new string[1] { rev.USERNAME };
+                    string[] meep = new string[1] { rev.Username };
                     ICommand cmd = Command.Find("tp");
                     p.SendMessage(cmd.Name);
                     cmd.Use(p, meep);
                     Server.reviewlist.Remove(rev);
-                    p.SendMessage("You are reviewing " + rev.USERNAME + "!");
+                    p.SendMessage("You are reviewing " + rev.Username + "!");
                     p.SendMessage("Rank: " + rev.group.name);
-                    p.SendMessage(p.USERNAME + " has came to review you!");
+                    p.SendMessage(p.Username + " has came to review you!");
                     break;
                 #endregion
                 case "clear":
                     if (p.group.permission < Server.reviewnextperm) { p.SendMessage("You can't clear the review queue!"); return; }
-                    Player.UniversalChat("The review queue has been cleared by " + p.USERNAME + "!");
+                    Player.UniversalChat("The review queue has been cleared by " + p.Username + "!");
                     Server.reviewlist.Clear();
                     break;
                 default:

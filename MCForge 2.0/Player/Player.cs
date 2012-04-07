@@ -67,7 +67,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// Checks if the player is the server owner.
         /// </summary>
-        public bool isOwner { get { if (USERNAME == Server.owner) { return true; } else { return false; } } }
+        public bool isOwner { get { if (Username == Server.owner) { return true; } else { return false; } } }
         /// <summary>
         /// The number of times the player has tried to use /pass.
         /// </summary>
@@ -80,7 +80,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// The player's real username
         /// </summary>
-        public string USERNAME;
+        public string Username;
         /// <summary>
         /// Last command the player used.
         /// </summary>
@@ -140,7 +140,7 @@ namespace MCForge.Entity {
         public string username //Lowercase Username feild
         {
             get {
-                if (_username == null) _username = USERNAME.ToLower();
+                if (_username == null) _username = Username.ToLower();
                 return _username;
             }
         }
@@ -319,7 +319,7 @@ namespace MCForge.Entity {
             if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
-                    if (!Server.agreed.Contains(USERNAME) && name != "rules" && name != "agree" && name != "disagree") {
+                    if (!Server.agreed.Contains(Username) && name != "rules" && name != "agree" && name != "disagree") {
                         SendMessage("You need to /agree to the /rules before you can use commands!"); return;
                     }
                     if (!group.CanExecute(cmd)) {
@@ -328,7 +328,7 @@ namespace MCForge.Entity {
                     }
                     try { cmd.Use(this, sendArgs); } //Just so it doesn't crash the server if custom command makers release broken commands!
                     catch (Exception ex) {
-                        Server.Log("[Error] An error occured when " + USERNAME + " tried to use " + name + "!", ConsoleColor.Red, ConsoleColor.Black);
+                        Server.Log("[Error] An error occured when " + Username + " tried to use " + name + "!", ConsoleColor.Red, ConsoleColor.Black);
                         Server.Log(ex);
                     }
                     lastcmd = name;

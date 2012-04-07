@@ -81,12 +81,12 @@ namespace CommandDll
                 b = Block.NameToByte("stone");
             }
             //Need to wait for permissions for cannot place that block type.
-            if (y >= p.level.Size.y)
+            if (y >= p.Level.Size.y)
             {
-                y = (ushort)(p.level.Size.y - 1);
+                y = (ushort)(p.Level.Size.y - 1);
             }
-            p.level.BlockChange(x, z, y, b);
-            p.SendMessage("An " + Block.ByteToName(b) + " block was placed at (" + x + ", " + z + ", " + y + ").");
+            p.Level.BlockChange(x, z, y, b);
+            p.SendMessage("An " + Blocks.ByteToName(b) + " block was placed at (" + x + ", " + z + ", " + y + ").");
         }
         public void Help(Player p)
         {
