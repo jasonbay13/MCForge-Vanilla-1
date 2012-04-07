@@ -29,7 +29,8 @@ namespace MCForge.World
 		//As a note, the coordinates are right, it is xzy, its based on the users view, not the map itself.
 		//WIDTH = X, LENGTH = Z, DEPTH = Y
 		//NEST ORDER IS XZY
-
+        public static List<Level> levels = new List<Level>();
+        public int PhysicsTick = 100;
 		/// <summary>
 		/// This delegate is used for looping through the blocks in a level in an automated fashion, and each cycle returns the position in xzy format
 		/// </summary>

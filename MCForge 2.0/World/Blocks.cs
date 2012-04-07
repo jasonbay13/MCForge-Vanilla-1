@@ -112,6 +112,19 @@ namespace MCForge.World
             return Enum.Parse(typeof(Blocks.Types), type.ToString()).ToString();
         }
         /// <summary>
+        /// This bool returns true if the string provided is a valid block.
+        /// </summary>
+        /// <param name="name">Name of the block</param>
+        /// <returns></returns>
+        public static bool ValidBlockName(string name)
+        {
+            if (Enum.IsDefined(typeof(Blocks.Types), name))
+            {
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
         /// A DYNAMIC dictionary of all the CustomBlocks in the server.
         /// </summary>
         public static Dictionary<byte, CustomBlock> CustomBlocks = new Dictionary<byte, CustomBlock>();

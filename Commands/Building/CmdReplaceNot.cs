@@ -43,15 +43,9 @@ namespace CommandDll
                 Help(p);
                 return;
             }
-            try
-            {
-                type = Blocks.NameToByte(args[0]);
-                type2 = Blocks.NameToByte(args[1]);
-            }
-            catch
+            if (!Blocks.ValidBlockName(args[0 | 1]))
             {
                 p.SendMessage("Could not find block specified");
-                return;
             }
 
             //Block permissions here.

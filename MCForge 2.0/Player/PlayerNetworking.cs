@@ -409,9 +409,29 @@ namespace MCForge.Entity
 				else if (vote == "no" || vote == "n") { Server.NoVotes++; voted = true; SendMessage("Thanks for voting!"); return; }
 				else { SendMessage("Use either %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + " to vote!"); }
 			}
+            if (incomingText[0] == '#') //Opchat ouo
+            {
+                UniversalChatOps("&a<&fTo Ops&a> " + group.color + USERNAME + ": &f" + incomingText.Trim().TrimStart('#'));
+                if (group.permission < 80) { SendMessage("&a<&fTo Ops&a> " + group.color + USERNAME + ": &f" + incomingText.Trim().TrimStart('#')); } //So players who aren't op see their messages
+                Server.Log("<OpChat> <" + USERNAME + "> " + incomingText.Trim().TrimStart('#'));
+                return;
+            }
+            if (incomingText[0] == '*') //Rank chat
+            {
+                string groupname = group.name;
+                if (!groupname.EndsWith("ed") && !groupname.EndsWith("s")) { groupname += "s"; } //Plural
+                RankChat(this, "&a<&fTo " + groupname + "&a> " + group.color + USERNAME + ": &f" + incomingText.Trim().TrimStart('*'));
+                Server.Log("<" + groupname + " Chat> <" + USERNAME + "> " + incomingText.Trim().TrimStart('*'));
+                return;
+            }
 			Server.Log("<" + USERNAME + "> " + incomingText);
-			UniversalChat(voicestring + group.colour + USERNAME + ": &f" + incomingText);
-		}
+            UniversalChat(voicestring + color + prefix + USERNAME + ": &f" + incomingText);
+        }
+
+        public void SetPrefix()
+        {
+            prefix = title == "" ? "" : "[" + titleColor + title + color + "]";
+        }
 
 		#endregion
 		#region Outgoing Packets
@@ -535,7 +555,7 @@ namespace MCForge.Entity
 				Server.Log(e);
 			}
 		}
-		protected void SendSpawn(Player p)
+		public void SendSpawn(Player p)
 		{
 			byte ID = 0xFF;
 			if (p != this)
@@ -638,6 +658,9 @@ namespace MCForge.Entity
 		public void SendToPos(Vector3 _pos, byte[] _rot)
 		{
 			oldPos = Pos; oldRot = Rot;
+            _pos.x = (_pos.x < 0) ? (short)32 : (_pos.x > level.Size.x * 32) ? (short)(level.Size.x * 32 - 32) : (_pos.x > 32767) ? (short)32730 : _pos.x;
+            _pos.z = (_pos.z < 0) ? (short)32 : (_pos.z > level.Size.z * 32) ? (short)(level.Size.z * 32 - 32) : (_pos.z > 32767) ? (short)32730 : _pos.z;
+            _pos.y = (_pos.y < 0) ? (short)32 : (_pos.y > level.Size.y * 32) ? (short)(level.Size.y * 32 - 32) : (_pos.y > 32767) ? (short)32730 : _pos.y;
 
 			packet pa = new packet();
 			pa.Add(packet.types.SendTeleport);
@@ -798,7 +821,29 @@ namespace MCForge.Entity
 				p.SendMessage(text);
 			});
 		}
-
+        /// <summary>
+        /// Sends a message to all operators+
+        /// </summary>
+        /// <param name="message">The message to send</param>
+        public static void UniversalChatOps(string message)
+        {
+            Server.ForeachPlayer(delegate(Player p)
+            {
+                if (p.group.permission >= 80) { p.SendMessage(message); }
+            });
+        }
+        /// <summary>
+        /// Sends a message to all of the players with the same rank
+        /// </summary>
+        /// <param name="from">The player sending the message</param>
+        /// <param name="message">The message to send</param>
+        public static void RankChat(Player from, string message)
+        {
+            Server.ForeachPlayer(delegate(Player p)
+            {
+                if (p.group.permission == from.group.permission) { p.SendMessage(message); }
+            });
+        }
 		protected void CloseConnection()
 		{
 			isLoggedIn = false;

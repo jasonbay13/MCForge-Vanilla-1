@@ -3,30 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge.Entity;
-using MCForge.Core;
 
 namespace MCForge.API.PlayerEvent
 {
-    public class OnPlayerMove : PlayerEvent
+    public class OnPlayerDisconnect : PlayerEvent
     {
-        Vector3 oldpos;
-        Vector3 currentpos;
-        public delegate void OnCall(OnPlayerMove args);
-        public OnPlayerMove(Player p, Vector3 oldpos, Vector3 currentpos) : base(p) { 
-            this.oldpos = oldpos; this.currentpos = currentpos;
+        public delegate void OnCall(OnPlayerDisconnect args);
+        string reason;
+        public OnPlayerDisconnect(Player p, string reason) : base(p) { this.reason = reason; }
+        internal OnPlayerDisconnect() { }
+        public string GetReason()
+        {
+            return reason;
         }
-        internal OnPlayerMove() { }
         public override bool IsCancelable
         {
-            get { return true; }
-        }
-        public Vector3 GetPos()
-        {
-            return currentpos;
-        }
-        public Vector3 GetOldPos()
-        {
-            return oldpos;
+            get { return false; }
         }
         public override void Call()
         {
@@ -43,8 +35,6 @@ namespace MCForge.API.PlayerEvent
                     }
                 }
             });
-            if (IsCanceled)
-                GetPlayer().SendToPos(oldpos, GetPlayer().Rot);
         }
         /// <summary>
         /// Register this event
@@ -53,7 +43,7 @@ namespace MCForge.API.PlayerEvent
         /// <param name="priority">The importance of the call</param>
         public static void Register(OnCall method, Priority priority, object datapass = null, Player target = null)
         {
-            Muffins temp = new Muffins(method, priority, new OnPlayerMove(), datapass, target);
+            Muffins temp = new Muffins(method, priority, new OnPlayerDisconnect(), datapass, target);
             Muffins.GiveDerpyMuffins(temp);
         }
     }

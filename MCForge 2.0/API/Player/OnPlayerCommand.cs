@@ -6,22 +6,16 @@ using MCForge.Entity;
 
 namespace MCForge.API.PlayerEvent
 {
-    public class OnPlayerCommand : Event, Cancelable, PlayerEvent
+    public class OnPlayerCommand : PlayerEvent
     {
-        protected Player p;
         public delegate void OnCall(OnPlayerCommand eventargs);
-        object datapass;
-        bool _unregister;
-        protected bool _canceled;
         protected string _cmd;
         protected string[] args;
-        public OnPlayerCommand(Player p, string cmd, string[] args) { this.p = p; this._cmd = cmd; this.args = args; }
+        public OnPlayerCommand(Player p, string cmd, string[] args) : base(p) { 
+            this._cmd = cmd; this.args = args; 
+        }
         internal OnPlayerCommand() { }
 
-        public Player GetPlayer()
-        {
-            return p;
-        }
         public string GetCmd()
         {
             return _cmd;
@@ -35,33 +29,14 @@ namespace MCForge.API.PlayerEvent
             return args[index];
         }
 
-        public void Unregister(bool value)
+        public override bool IsCancelable
         {
-            _unregister = value;
-        }
-
-        /// <summary>
-        /// Is the event canceled
-        /// </summary>
-        public bool IsCanceled { get { return _canceled; } }
-
-        /// <summary>
-        /// Cancel the event
-        /// </summary>
-        /// <param name="value">True will cancel the event, false will un-cancel the event</param>
-        public void Cancel(bool value)
-        {
-            _canceled = value;
-        }
-
-        public object GetData()
-        {
-            return datapass;
+            get { return true; }
         }
         /// <summary>
         /// Call the event
         /// </summary>
-        public override void Call()
+        public override  void Call()
         {
             Muffins.cache.ForEach(e =>
             {

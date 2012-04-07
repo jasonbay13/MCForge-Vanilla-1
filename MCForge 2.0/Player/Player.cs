@@ -61,6 +61,23 @@ namespace MCForge.Entity {
         protected packet.types lastPacket = packet.types.SendPing;
 
         /// <summary>
+        /// The player's money.
+        /// </summary>
+        public int money = 0;
+        /// <summary>
+        /// Checks if the player is the server owner.
+        /// </summary>
+        public bool isOwner { get { if (USERNAME == Server.owner) { return true; } else { return false; } } }
+        /// <summary>
+        /// The number of times the player has tried to use /pass.
+        /// </summary>
+        public int passtries = 0;
+        bool _verified = false;
+        /// <summary>
+        /// Has the player used password verification?
+        /// </summary>
+        public bool verified { get { if (!Server.Verifying) { return true; } else { return _verified; }; } set { _verified = value; } }
+        /// <summary>
         /// The player's real username
         /// </summary>
         public string USERNAME;
@@ -173,9 +190,21 @@ namespace MCForge.Entity {
         /// </summary>
         public Vector3 lastClick;
         /// <summary>
-        /// The players COLOR
+        /// The player's COLOR
         /// </summary>
         public string color = Colors.navy;
+        /// <summary>
+        /// The player's TITLE
+        /// </summary>
+        public string title = "";
+        /// <summary>
+        /// The player's TITLE COLOR
+        /// </summary>
+        public string titleColor = "";
+        /// <summary>
+        /// The player's PREFIX
+        /// </summary>
+        public string prefix = "";
         /// <summary>
         /// True if this player is hidden
         /// </summary>
@@ -253,6 +282,10 @@ namespace MCForge.Entity {
             }
 
             string name = args[0].ToLower().Trim();
+            OnPlayerCommand c = new OnPlayerCommand(this, name, args);
+            c.Call();
+            if (c.IsCanceled)
+                return;
             if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
