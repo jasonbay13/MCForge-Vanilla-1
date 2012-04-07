@@ -39,10 +39,10 @@ namespace MCForge.Core
             string requestURL =
                 "http://www.minecraft.net/heartbeat.jsp?port=" + port +
                 "&max=" + maxUsers +
-                "&name=" + System.Net.WebUtility.HtmlEncode(serverName) +
+                "&name=" + System.Web.HttpUtility.UrlEncode(serverName) +
                 "&public=" + Public +
                 "&version=" + version +
-                "&salt=" + System.Net.WebUtility.HtmlEncode(salt) +
+                "&salt=" + System.Web.HttpUtility.UrlEncode(salt) +
                 "&users=" + onlineUsers;
 
             WebRequest Heartbeat = WebRequest.Create(requestURL);
