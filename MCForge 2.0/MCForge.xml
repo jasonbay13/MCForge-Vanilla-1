@@ -90,16 +90,15 @@
             </summary>
             <param name="p">The player to stop showing the message to.</param>
         </member>
+        <member name="T:MCForge.API.PlayerEvent.PlayerEvent">
+            <summary>
+            An event that is connected to a player
+            </summary>
+        </member>
         <member name="M:MCForge.API.Event.Call">
             <summary>
             Call the event
             </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.GetPlayer">
-            <summary>
-            Get the player connected to the event
-            </summary>
-            <returns>The player</returns>
         </member>
         <member name="M:MCForge.API.Cancelable.Cancel(System.Boolean)">
             <summary>
@@ -110,6 +109,51 @@
         <member name="P:MCForge.API.Cancelable.IsCanceled">
             <summary>
             Is the event canceled
+            </summary>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.GetPlayer">
+            <summary>
+            Get the player connected to the event
+            </summary>
+            <returns>The player</returns>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.Unregister(System.Boolean)">
+            <summary>
+            Unregister the event
+            </summary>
+            <param name="value">True will unregister the event, false wont</param>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.Cancel(System.Boolean)">
+            <summary>
+            Cancel the event (Make sure the event is Cancelable <seealso cref="P:MCForge.API.PlayerEvent.PlayerEvent.IsCancelable"/>
+            </summary>
+            <param name="value">True will cancel the event, false will un-cancel it</param>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.GetData">
+            <summary>
+            Get the data you passed when registering the event
+            </summary>
+            <returns>The object in the form of a object type</returns>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.#ctor(MCForge.Entity.Player)">
+            <summary>
+            Create a new instance of the event
+            </summary>
+            <param name="p">The player connected to the event</param>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.Call">
+            <summary>
+            Call the event
+            </summary>
+        </member>
+        <member name="P:MCForge.API.PlayerEvent.PlayerEvent.IsCancelable">
+            <summary>
+            Check to see if you can cancel the event
+            </summary>
+        </member>
+        <member name="P:MCForge.API.PlayerEvent.PlayerEvent.IsCanceled">
+            <summary>
+            Check to see if the event is canceled
             </summary>
         </member>
         <member name="M:MCForge.API.PlayerEvent.OnPlayerBlockChange.Register(MCForge.API.PlayerEvent.OnPlayerBlockChange.OnCall,MCForge.API.Priority,System.Object,MCForge.Entity.Player)">
@@ -136,6 +180,13 @@
             This functions takes in a block byte and returns its name as a string.
             </summary>
             <param name="type"></param>Byte of the block
+            <returns></returns>
+        </member>
+        <member name="M:MCForge.World.Blocks.ValidBlockName(System.String)">
+            <summary>
+            This bool returns true if the string provided is a valid block.
+            </summary>
+            <param name="name">Name of the block</param>
             <returns></returns>
         </member>
         <member name="F:MCForge.World.Blocks.CustomBlocks">
@@ -195,6 +246,26 @@
             <returns></returns>
             <remarks></remarks>
         </member>
+        <member name="F:MCForge.Core.Server.moneys">
+            <summary>
+            The name of the server currency.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.VerifyGroup">
+            <summary>
+            The miniumum rank that needs to verify.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.Verifying">
+            <summary>
+            Do people need to use /pass?
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.owner">
+            <summary>
+            The server owner.
+            </summary>
+        </member>
         <member name="F:MCForge.Core.Server.shuttingDown">
             <summary>
             Get whether the server is currently shutting down
@@ -218,6 +289,11 @@
         <member name="F:MCForge.Core.Server.devs">
             <summary>
             The list of MCForge developers.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.reviewlist">
+            <summary>
+            
             </summary>
         </member>
         <member name="F:MCForge.Core.Server.agreed">
@@ -263,6 +339,21 @@
         <member name="F:MCForge.Core.Server.DefaultColor">
             <summary>
             The server's default color.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.opchatperm">
+            <summary>
+            Server's op chat permission
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.adminchatperm">
+            <summary>
+            Server's admin chat permission
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.reviewnextperm">
+            <summary>
+            Group permission that can use /review next
             </summary>
         </member>
         <member name="F:MCForge.Core.Server.URL">
@@ -372,6 +463,42 @@
             </summary>
             <param name="text">The message to send.</param>
         </member>
+        <member name="M:MCForge.Entity.Player.UniversalChatOps(System.String)">
+            <summary>
+            Sends a message to all operators+
+            </summary>
+            <param name="message">The message to send</param>
+        </member>
+        <member name="M:MCForge.Entity.Player.UniversalChatAdmins(System.String)">
+            <summary>
+            Sends a message to all admins+
+            </summary>
+            <param name="message">The message to be sent</param>
+        </member>
+        <member name="M:MCForge.Entity.Player.RankChat(MCForge.Entity.Player,System.String)">
+            <summary>
+            Sends a message to all of the players with the same rank
+            </summary>
+            <param name="from">The player sending the message</param>
+            <param name="message">The message to send</param>
+        </member>
+        <member name="M:MCForge.Entity.Player.LevelChat(MCForge.Entity.Player,System.String)">
+            <summary>
+            Sends a message to all of the players on the specified level
+            </summary>
+            <param name="from">The player sending the message</param>
+            <param name="message">The message to be sent</param>
+        </member>
+        <member name="F:MCForge.Entity.Player.money">
+            <summary>
+            The player's money.
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.passtries">
+            <summary>
+            The number of times the player has tried to use /pass.
+            </summary>
+        </member>
         <member name="F:MCForge.Entity.Player.USERNAME">
             <summary>
             The player's real username
@@ -410,6 +537,26 @@
         <member name="F:MCForge.Entity.Player.jokered">
             <summary>
             Derermines if the player is jokered
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.opchat">
+            <summary>
+            Determines if the player has opchat on. All messages will be sent to ops
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.adminchat">
+            <summary>
+            Determines if the player has adminchat on. All messages will be sent to admins
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.whispering">
+            <summary>
+            Determines if the player is in /whisper mode
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.whisperto">
+            <summary>
+            The player to whisper to
             </summary>
         </member>
         <member name="F:MCForge.Entity.Player.voicestring">
@@ -494,7 +641,22 @@
         </member>
         <member name="F:MCForge.Entity.Player.color">
             <summary>
-            The players COLOR
+            The player's COLOR
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.title">
+            <summary>
+            The player's TITLE
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.titleColor">
+            <summary>
+            The player's TITLE COLOR
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.prefix">
+            <summary>
+            The player's PREFIX
             </summary>
         </member>
         <member name="F:MCForge.Entity.Player.isHidden">
@@ -546,6 +708,16 @@
             </summary>
             <param name="name">The player name to find</param>
             <remarks>Can be a partial name</remarks>
+        </member>
+        <member name="P:MCForge.Entity.Player.isOwner">
+            <summary>
+            Checks if the player is the server owner.
+            </summary>
+        </member>
+        <member name="P:MCForge.Entity.Player.verified">
+            <summary>
+            Has the player used password verification?
+            </summary>
         </member>
         <member name="P:MCForge.Entity.Player.username">
             <summary>
@@ -619,29 +791,12 @@
             </summary>
             <param name="message">The new message</param>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Cancel(System.Boolean)">
-            <summary>
-            Cancel the event
-            </summary>
-            <param name="value">True will cancel the event, false will un-cancel the event</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.GetPlayer">
-            <summary>
-            Get the player connected to the event
-            </summary>
-            <returns>The player</returns>
-        </member>
         <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Register(MCForge.API.PlayerEvent.OnPlayerChat.OnCall,MCForge.API.Priority,System.Object,MCForge.Entity.Player)">
             <summary>
             Register this event
             </summary>
             <param name="method">The method to call when this event gets excuted</param>
             <param name="priority">The importance of the call</param>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.OnPlayerChat.IsCanceled">
-            <summary>
-            Is the event canceled
-            </summary>
         </member>
         <member name="M:MCForge.Core.Program.Main">
             <summary>
@@ -716,18 +871,6 @@
             </summary>
             <param name="p">The player connected to the event</param>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Cancel(System.Boolean)">
-            <summary>
-            Cancel the event
-            </summary>
-            <param name="value">True will cancel the event, false will un-cancel the event</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.GetPlayer">
-            <summary>
-            Get the player connected to the event
-            </summary>
-            <returns>The player</returns>
-        </member>
         <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Call">
             <summary>
             Call the event
@@ -739,11 +882,6 @@
             </summary>
             <param name="method">The method to call when this event gets excuted</param>
             <param name="priority">The importance of the call</param>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.OnPlayerConnect.IsCanceled">
-            <summary>
-            Is the event canceled
-            </summary>
         </member>
         <member name="T:MCForge.Interface.Plugin.PluginManager">
             <summary>
@@ -1230,18 +1368,19 @@
             Creates all of the core directories and files
             </summary>
         </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Register(MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall,MCForge.API.Priority,System.Object,MCForge.Entity.Player)">
+            <summary>
+            Register this event
+            </summary>
+            <param name="method">The method to call when this event gets excuted</param>
+            <param name="priority">The importance of the call</param>
+        </member>
         <member name="T:MCForge.API.Priority">
             <summary>
             The priority of the call
             Low will be called first so it can make the first changes
             High will be called last so it gets the last say
             </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerCommand.Cancel(System.Boolean)">
-            <summary>
-            Cancel the event
-            </summary>
-            <param name="value">True will cancel the event, false will un-cancel the event</param>
         </member>
         <member name="M:MCForge.API.PlayerEvent.OnPlayerCommand.Call">
             <summary>
@@ -1254,11 +1393,6 @@
             </summary>
             <param name="method">The method to call when this event gets excuted</param>
             <param name="priority">The importance of the call</param>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.OnPlayerCommand.IsCanceled">
-            <summary>
-            Is the event canceled
-            </summary>
         </member>
     </members>
 </doc>

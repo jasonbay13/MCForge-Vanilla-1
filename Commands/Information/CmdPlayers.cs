@@ -14,13 +14,15 @@ permissions and limitations under the Licenses.
 */
 using MCForge.Core;
 using MCForge.Entity;
+using MCForge.Groups;
 using MCForge.Interface.Command;
+
 namespace CommandDll
 {
-    public class CmdDisagree : ICommand
+    public class CmdPlayers : ICommand
     {
-        public string Name { get { return "Disagree"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public string Name { get { return "Players"; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -28,20 +30,27 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            if (Server.agreed.Contains(p.USERNAME)) { p.SendMessage("You have already agreed to the rules!"); return; }
-            if (!p.readrules) { p.SendMessage("You need to read the /rules before you can disagree!"); return; }
-            p.Kick("Kicked for disagreeing to the rules!");
+            foreach (PlayerGroup group in PlayerGroup.groups)
+            {
+                string send = group.color + group.name;
+                if (!send.EndsWith("ed") && !send.EndsWith("s")) { send += "s: " + Server.DefaultColor; } //Plural
+                else { send += ": " + Server.DefaultColor; }
+                Server.ForeachPlayer(delegate(Player pl)
+                    {
+                        if (pl.group.permission == group.permission) { send +=  pl.USERNAME + "&a, " + Server.DefaultColor; }
+                    });
+                p.SendMessage(send.Trim().Remove(send.Length - 4, 4));
+            }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/disagree - disagree to the rules");
+            p.SendMessage("/players - shows the online players");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "disagree" });
+            Command.AddReference(this, new string[2] { "players", "online" });
         }
     }
 }
-

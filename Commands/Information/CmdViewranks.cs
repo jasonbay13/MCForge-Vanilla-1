@@ -12,15 +12,18 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
+using System.IO;
 using MCForge.Core;
 using MCForge.Entity;
+using MCForge.Groups;
 using MCForge.Interface.Command;
+
 namespace CommandDll
 {
-    public class CmdDisagree : ICommand
+    public class CmdViewranks : ICommand
     {
-        public string Name { get { return "Disagree"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public string Name { get { return "Viewranks"; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -28,20 +31,27 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            if (Server.agreed.Contains(p.USERNAME)) { p.SendMessage("You have already agreed to the rules!"); return; }
-            if (!p.readrules) { p.SendMessage("You need to read the /rules before you can disagree!"); return; }
-            p.Kick("Kicked for disagreeing to the rules!");
+            if (args.Length == 0) { Help(p); }
+            PlayerGroup group = PlayerGroup.Find(args[0]);
+            if (group == null) { p.SendMessage("The rank \"" + args[0] + "\" doesn't exist!"); return; }
+            try
+            {
+                string[] players = File.ReadAllLines(group.file);
+                string send = "People with the rank " + group.color + group.name + Server.DefaultColor + ": ";
+                foreach (string player in players) { send += player + "&a, " + Server.DefaultColor; }         
+                p.SendMessage(send.Remove(send.Length - 4, 4));
+            }
+            catch { p.SendMessage("Error reading ranks!"); return; }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/disagree - disagree to the rules");
+            p.SendMessage("/viewranks <rank> - Shows all players with the specified rank");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "disagree" });
+            Command.AddReference(this, new string[1] { "viewranks" });
         }
     }
 }
-

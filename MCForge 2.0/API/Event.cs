@@ -19,11 +19,11 @@ using System.Text;
 
 namespace MCForge.API
 {
-    public abstract class Event
+    public interface Event
     {
         /// <summary>
         /// Call the event
         /// </summary>
-        public abstract void Call();
+        void Call();
     }
 }

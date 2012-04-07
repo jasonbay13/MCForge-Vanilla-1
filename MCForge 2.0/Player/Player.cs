@@ -61,6 +61,23 @@ namespace MCForge.Entity {
         protected packet.types lastPacket = packet.types.SendPing;
 
         /// <summary>
+        /// The player's money.
+        /// </summary>
+        public int money = 0;
+        /// <summary>
+        /// Checks if the player is the server owner.
+        /// </summary>
+        public bool isOwner { get { if (USERNAME == Server.owner) { return true; } else { return false; } } }
+        /// <summary>
+        /// The number of times the player has tried to use /pass.
+        /// </summary>
+        public int passtries = 0;
+        bool _verified = false;
+        /// <summary>
+        /// Has the player used password verification?
+        /// </summary>
+        public bool verified { get { if (!Server.Verifying) { return true; } else { return _verified; }; } set { _verified = value; } }
+        /// <summary>
         /// The player's real username
         /// </summary>
         public string USERNAME;
@@ -92,6 +109,23 @@ namespace MCForge.Entity {
         /// Derermines if the player is jokered
         /// </summary>
         public bool jokered = false;
+        /// <summary>
+        /// Determines if the player has opchat on. All messages will be sent to ops
+        /// </summary>
+        public bool opchat = false;
+        /// <summary>
+        /// Determines if the player has adminchat on. All messages will be sent to admins
+        /// </summary>
+        public bool adminchat = false;
+        /// <summary>
+        /// Determines if the player is in /whisper mode
+        /// </summary>
+        public bool whispering = false;
+        /// <summary>
+        /// The player to whisper to
+        /// </summary>
+        public Player whisperto;
+
         /// <summary>
         /// Appears in front of player's name if he is voiced
         /// </summary>
@@ -173,9 +207,21 @@ namespace MCForge.Entity {
         /// </summary>
         public Vector3 lastClick;
         /// <summary>
-        /// The players COLOR
+        /// The player's COLOR
         /// </summary>
         public string color = Colors.navy;
+        /// <summary>
+        /// The player's TITLE
+        /// </summary>
+        public string title = "";
+        /// <summary>
+        /// The player's TITLE COLOR
+        /// </summary>
+        public string titleColor = "";
+        /// <summary>
+        /// The player's PREFIX
+        /// </summary>
+        public string prefix = "";
         /// <summary>
         /// True if this player is hidden
         /// </summary>
@@ -253,6 +299,10 @@ namespace MCForge.Entity {
             }
 
             string name = args[0].ToLower().Trim();
+            OnPlayerCommand c = new OnPlayerCommand(this, name, args);
+            c.Call();
+            if (c.IsCanceled)
+                return;
             if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
@@ -375,6 +425,7 @@ namespace MCForge.Entity {
                         lines[lines.Count - 1] = lines[lines.Count - 1].
                             Substring(0, lines[lines.Count - 1].Length - 1);
                         message = message.Substring(1);
+                       
                     }
                 }
             } return lines;

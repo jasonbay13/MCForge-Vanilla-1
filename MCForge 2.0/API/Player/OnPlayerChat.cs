@@ -10,23 +10,16 @@ namespace MCForge.API.PlayerEvent
     /// The OnPlayerChat event is excuted everytime a player chats on the server
     /// This event can be canceled
     /// </summary>
-    public class OnPlayerChat : Event, Cancelable, PlayerEvent
+    public class OnPlayerChat : PlayerEvent
     {
 
-        Player p;
-        object datapass;
         public delegate void OnCall(OnPlayerChat eventargs);
         string message;
-        bool _canceled = false;
-        bool _unregister;
-        public OnPlayerChat(Player p, string message) { this.p = p; this.message = message; }
+        public OnPlayerChat(Player p, string message) : base(p) { 
+            this.message = message; 
+        }
 
         internal OnPlayerChat() { }
-
-        public object GetData()
-        {
-            return datapass;
-        }
          /// <summary>
         /// Call the event
         /// </summary>
@@ -65,32 +58,9 @@ namespace MCForge.API.PlayerEvent
             this.message = message;
         }
 
-        public void Unregister(bool value)
+        public override bool IsCancelable
         {
-            _unregister = value;
-        }
-
-        /// <summary>
-        /// Is the event canceled
-        /// </summary>
-        public bool IsCanceled { get { return _canceled; } }
-
-         /// <summary>
-        /// Cancel the event
-        /// </summary>
-        /// <param name="value">True will cancel the event, false will un-cancel the event</param>
-        public void Cancel(bool value)
-        {
-            _canceled = value;
-        }
-
-        /// <summary>
-        /// Get the player connected to the event
-        /// </summary>
-        /// <returns>The player</returns>
-        public Player GetPlayer()
-        {
-            return p;
+            get { return true; }
         }
 
         /// <summary>

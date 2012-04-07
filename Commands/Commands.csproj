@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\MCForge 2.0\bin\Debug\</OutputPath>
+    <OutputPath>..\MCForge 2.0\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -41,9 +41,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building\CmdClick.cs" />
+    <Compile Include="Building\CmdCuboid.cs" />
     <Compile Include="Building\CmdReplace.cs" />
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Building\CmdReplaceAll.cs" />
+    <Compile Include="Information\CmdPlayers.cs" />
+    <Compile Include="Information\CmdViewranks.cs" />
+    <Compile Include="Misc\CmdAdminChat.cs" />
+    <Compile Include="Misc\CmdOpChat.cs" />
+    <Compile Include="Misc\CmdPay.cs" />
+    <Compile Include="Misc\CmdRob.cs" />
+    <Compile Include="Misc\CmdSteal.cs" />
+    <Compile Include="Misc\CmdTake.cs" />
+    <Compile Include="Misc\CmdGive.cs" />
+    <Compile Include="Misc\CmdPass.cs" />
+    <Compile Include="Misc\CmdResetPass.cs" />
+    <Compile Include="Misc\CmdSetPass.cs" />
+    <Compile Include="Misc\CmdWhisper.cs" />
+    <Compile Include="Moderation\CmdColor.cs" />
+    <Compile Include="Moderation\CmdReview.cs" />
+    <Compile Include="Moderation\CmdRTitle.cs" />
     <Compile Include="Moderation\CmdSettings.cs" />
     <Compile Include="Information\CmdHelp.cs" />
     <Compile Include="Information\CmdImpersonate.cs" />
@@ -74,6 +91,8 @@
     <Compile Include="Moderation\CmdModerate.cs" />
     <Compile Include="Moderation\CmdMute.cs" />
     <Compile Include="Moderation\CmdSay.cs" />
+    <Compile Include="Moderation\CmdTColor.cs" />
+    <Compile Include="Moderation\CmdTitle.cs" />
     <Compile Include="Moderation\CmdVoice.cs" />
     <Compile Include="Moderation\CmdVoteKick.cs" />
     <Compile Include="Misc\CmdSpawn.cs" />

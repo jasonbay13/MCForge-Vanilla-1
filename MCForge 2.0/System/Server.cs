@@ -26,9 +26,26 @@ using MCForge.Interface;
 using MCForge.Interface.Command;
 using MCForge.API.PlayerEvent;
 using MCForge.Utilities.Settings;
+using MCForge.Groups;
 
 namespace MCForge.Core {
     public static class Server {
+        /// <summary>
+        /// The name of the server currency.
+        /// </summary>
+        public static string moneys;
+        /// <summary>
+        /// The miniumum rank that needs to verify.
+        /// </summary>
+        public static Groups.PlayerGroup VerifyGroup;
+        /// <summary>
+        /// Do people need to use /pass?
+        /// </summary>
+        public static bool Verifying = false;
+        /// <summary>
+        /// The server owner.
+        /// </summary>
+        public static string owner;
         /// <summary>
         /// Get whether the server is currently shutting down
         /// </summary>
@@ -60,6 +77,10 @@ namespace MCForge.Core {
         /// The list of MCForge developers.
         /// </summary>
         public static readonly List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "headdetect", "Gamemakergm", "cazzar", "hirsty", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "TheMusiKid", "Nerketur" });
+        /// <summary>
+        /// 
+        /// </summary>
+        public static List<Player> reviewlist = new List<Player>();
         /// <summary>
         /// List of players that agreed to the rules
         /// </summary>
@@ -101,6 +122,18 @@ namespace MCForge.Core {
         /// </summary>
         public static string DefaultColor = Colors.yellow;
 
+        /// <summary>
+        /// Server's op chat permission
+        /// </summary>
+        public static byte opchatperm = 80; //TODO: add this to properties
+        /// <summary>
+        /// Server's admin chat permission
+        /// </summary>
+        public static byte adminchatperm = 100;
+        /// <summary>
+        /// Group permission that can use /review next
+        /// </summary>
+        public static byte reviewnextperm = 80;
         /// <summary>
         /// The minecraft.net URL of the server
         /// </summary>
