@@ -49,7 +49,7 @@ namespace CommandDll
             if (!newmessage.EndsWith(" ")) { p.SendMessage("Please enter a message"); return; }
             if (who != null)
             {
-                Player.UniversalChat(who.color + who.USERNAME + "%f: " + newmessage);
+                Player.UniversalChat(who.color + who.Username + "%f: " + newmessage);
             }
             else
             {

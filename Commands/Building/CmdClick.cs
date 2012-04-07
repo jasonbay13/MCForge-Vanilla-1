@@ -96,7 +96,7 @@ namespace CommandDll
                 return;
             }
 
-            p.Click((ushort)click.x, (ushort)click.z, (ushort)click.y, (byte)(Blocks.Types.stone));
+            p.Click((ushort)click.x, (ushort)click.z, (ushort)click.y, Block.NameToByte("stone"));
             p.SendMessage("Click &b(" + click.x + ", " + click.z + ", " + click.y + ").");
         }
 
@@ -121,9 +121,9 @@ namespace CommandDll
             if (testValue < 0)
                 return false;
 
-            if (testValue >= p.level.Size.x && dimension == 0) return false;
-            else if (testValue >= p.level.Size.z && dimension == 1) return false;
-            else if (testValue >= p.level.Size.y && dimension == 2) return false;
+            if (testValue >= p.Level.Size.x && dimension == 0) return false;
+            else if (testValue >= p.Level.Size.z && dimension == 1) return false;
+            else if (testValue >= p.Level.Size.y && dimension == 2) return false;
             return true;
         }
 

@@ -14,8 +14,8 @@ permissions and limitations under the Licenses.
 */﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Linq;
 using MCForge;
 using System.Timers;
 using MCForge.Interface.Plugin;
@@ -87,28 +87,12 @@ namespace PluginsDLL
         }
         private int indexOfPlayer(Player p)
         {
-            return viewing.FindIndex(v => { return v.p.USERNAME == p.USERNAME; });
+            return viewing.FindIndex(v => { return v.p.Username == p.Username; });
         }
-        public string Name
-        {
-            get { return "MessageViewer"; }
-        }
-
-        public string Author
-        {
-            get { return "ninedrafted"; }
-        }
-
-        public int Version
-        {
-            get { return 1; }
-        }
-
-        public string CUD
-        {
-            get { throw new NotImplementedException(); }
-        }
-
+        public string Name { get { return "MessageViewer"; } }
+        public string Author { get { return "ninedrafted"; } }
+        public int Version { get { return 1; } }
+        public string CUD { get { return ""; } }
         public void Initialize()
         {
         }
@@ -224,6 +208,15 @@ namespace PluginsDLL
             int i = indexOfPlayer(p);
             SendEnd(p);
             if (i > 0) viewing.RemoveAt(i);
+        }
+
+
+        public void OnLoad() {
+            
+        }
+
+        public void OnUnload() {
+            throw new NotImplementedException();
         }
     }
 }

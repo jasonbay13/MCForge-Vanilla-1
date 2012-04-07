@@ -13,11 +13,7 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
@@ -44,8 +40,8 @@ namespace CommandDll
             }
             else if (args.Length == 0)
             {
-                Vector3 meep = new Vector3((short)(0.5 + p.level.SpawnPos.x * 32), (short)(0.5 + p.level.SpawnPos.z * 32), (short)(1 + p.level.SpawnPos.y * 32));
-                p.SendToPos(meep, p.level.SpawnRot);
+                Vector3 meep = new Vector3((short)(0.5 + p.Level.SpawnPos.x * 32), (short)(0.5 + p.Level.SpawnPos.z * 32), (short)(1 + p.Level.SpawnPos.y * 32));
+                p.SendToPos(meep, p.Level.SpawnRot);
             }
             else if (args.Length == 1)
             {
@@ -67,12 +63,12 @@ namespace CommandDll
                 }
                 else
                 {
-                    if (p.level != who.level)
+                    if (p.Level != who.Level)
                     {
                         //Need goto here
                         if (who.isLoading)
                         {
-                            p.SendMessage("Waiting for " + who.color + who.USERNAME + Server.DefaultColor + " to spawn...");
+                            p.SendMessage("Waiting for " + who.color + who.Username + Server.DefaultColor + " to spawn...");
                             while (who.isLoading) { }
                         }
                     }
@@ -106,18 +102,18 @@ namespace CommandDll
                 }
                 else
                 {
-                    if (one.level != two.level)
+                    if (one.Level != two.Level)
                     {
                         //Need goto here
                         if (two.isLoading)
                         {
-                            p.SendMessage("Waiting for " + two.color + two.USERNAME + Server.DefaultColor + " to spawn...");
+                            p.SendMessage("Waiting for " + two.color + two.Username + Server.DefaultColor + " to spawn...");
                             while (two.isLoading) { }
                         }
                     }
                 }
                 one.SendToPos(two.Pos, two.Rot);
-                p.SendMessage(one.USERNAME + " has been succesfully teleported to " + two.USERNAME + "!");
+                p.SendMessage(one.Username + " has been succesfully teleported to " + two.Username + "!");
                 return;
             }
         }

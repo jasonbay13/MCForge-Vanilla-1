@@ -35,14 +35,12 @@ namespace CommandDll
             if (args.Length == 0) { p.SendMessage("You!"); return; }
             string message = null;
             foreach (string s in args) { message += s + " "; }
-            Player.UniversalChat("*" + p.USERNAME + " " + message);
+            Player.UniversalChat("*" + p.Username + " " + message);
         }
-
         public void Help(Player p)
         {
-            p.SendMessage("/me - You");
+            p.SendMessage("What do you need help with m'boy? Are you stuck in a well?");
         }
-
         public void Initialize()
         {
             Command.AddReference(this, new string[1] { "me" });

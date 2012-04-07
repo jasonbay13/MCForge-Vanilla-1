@@ -24,55 +24,29 @@ namespace MCForge.API.PlayerEvent
     /// The OnPlayerConnect event is executed everytime a player connects to the server
     /// This event can be canceled
     /// </summary>
-    public class OnPlayerConnect: Event, Cancelable, PlayerEvent
+    public class OnPlayerConnect: PlayerEvent
     {
-        bool _canceled = false;
-        object datapass;
-        bool _unregister;
         public delegate void OnCall(OnPlayerConnect eventargs);
-        
-        Player p;
 
         /// <summary>
         /// Create a new Event to call
         /// </summary>
         /// <param name="p">The player connected to the event</param>
-        public OnPlayerConnect(Player p) { this.p = p; }
+        public OnPlayerConnect(Player p) : base(p) { }
 
         internal OnPlayerConnect() { }
-        public object GetData()
-        {
-            return datapass;
-        }
-        /// <summary>
-        /// Cancel the event
-        /// </summary>
-        /// <param name="value">True will cancel the event, false will un-cancel the event</param>
-        public void Cancel(bool value)
-        {
-            _canceled = value;
-        }
 
-        /// <summary>
-        /// Get the player connected to the event
-        /// </summary>
-        /// <returns>The player</returns>
-        public Player GetPlayer()
+        public override bool IsCancelable
         {
-            return p;
+            get { return true; }
         }
-
-        /// <summary>
-        /// Is the event canceled
-        /// </summary>
-        public bool IsCanceled { get { return _canceled; } }
 
         /// <summary>
         /// Call the event
         /// </summary>
         public override void Call()
         {
-            Muffins.cache.ForEach(e =>
+            Muffins.muffinbag.ForEach(e =>
                 {
                     if (e.type.GetType() == GetType())
                     {
@@ -81,18 +55,14 @@ namespace MCForge.API.PlayerEvent
                         if (_unregister)
                         {
                             _unregister = false;
-                            Muffins.cache.Remove(e);
+                            Muffins.muffinbag.Remove(e);
                         }
                     }
                 });
-            if (IsCanceled && p.isOnline)
-                p.Kick("");
+            if (IsCanceled && GetPlayer().isOnline)
+                GetPlayer().Kick("");
         }
 
-        public void Unregister(bool value)
-        {
-            _unregister = value;
-        }
         /// <summary>
         /// Register this event
         /// </summary>

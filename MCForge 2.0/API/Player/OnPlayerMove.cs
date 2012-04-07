@@ -7,26 +7,18 @@ using MCForge.Core;
 
 namespace MCForge.API.PlayerEvent
 {
-    public class OnPlayerMove : Event, Cancelable, PlayerEvent
+    public class OnPlayerMove : PlayerEvent
     {
         Vector3 oldpos;
         Vector3 currentpos;
-        Player p;
-        bool _unregister;
-        object datapass;
         public delegate void OnCall(OnPlayerMove args);
-        bool _canceled;
-        public OnPlayerMove(Player p, Vector3 oldpos, Vector3 currentpos) { this.oldpos = oldpos; this.currentpos = currentpos; this.p = p; }
-        internal OnPlayerMove() { }
-        public bool IsCanceled { get { return _canceled; } }
-        public void Cancel(bool value)
-        {
-            _canceled = value;
+        public OnPlayerMove(Player p, Vector3 oldpos, Vector3 currentpos) : base(p) { 
+            this.oldpos = oldpos; this.currentpos = currentpos;
         }
-
-        public Player GetPlayer()
+        internal OnPlayerMove() { }
+        public override bool IsCancelable
         {
-            return p;
+            get { return true; }
         }
         public Vector3 GetPos()
         {
@@ -38,7 +30,7 @@ namespace MCForge.API.PlayerEvent
         }
         public override void Call()
         {
-            Muffins.cache.ForEach(e =>
+            Muffins.muffinbag.ForEach(e =>
             {
                 if (e.type.GetType() == GetType() && ((Player)(e.target) == p || e.target == null))
                 {
@@ -47,16 +39,12 @@ namespace MCForge.API.PlayerEvent
                     if (_unregister)
                     {
                         _unregister = false;
-                        Muffins.cache.Remove(e);
+                        Muffins.muffinbag.Remove(e);
                     }
                 }
             });
             if (IsCanceled)
-                p.SendToPos(oldpos, p.Rot);
-        }
-        public void Unregister(bool value)
-        {
-            _unregister = value;
+                GetPlayer().SendToPos(oldpos, GetPlayer().Rot);
         }
         /// <summary>
         /// Register this event
@@ -65,7 +53,7 @@ namespace MCForge.API.PlayerEvent
         /// <param name="priority">The importance of the call</param>
         public static void Register(OnCall method, Priority priority, object datapass = null, Player target = null)
         {
-            Muffins temp = new Muffins(method, priority, new OnPlayerCommand(), datapass, target);
+            Muffins temp = new Muffins(method, priority, new OnPlayerMove(), datapass, target);
             Muffins.GiveDerpyMuffins(temp);
         }
     }

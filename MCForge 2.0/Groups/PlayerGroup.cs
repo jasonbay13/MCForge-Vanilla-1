@@ -249,9 +249,9 @@ namespace MCForge.Groups
 
         public void AddPlayer(Player p)
         {
-            p.group.players.Remove(p.USERNAME.ToLower());
+            p.group.players.Remove(p.Username.ToLower());
             p.group = this;
-            players.Add(p.USERNAME.ToLower());
+            players.Add(p.Username.ToLower());
             SaveGroup();
         }
 

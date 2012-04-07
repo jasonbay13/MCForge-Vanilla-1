@@ -46,22 +46,16 @@ namespace CommandDll
                 Help(p);
                 return;
             }
-            try
-            {
-                type = Blocks.NameToByte(args[0]);
-                type2 = Blocks.NameToByte(args[1]);
-            }
-            catch
+            if (!Block.ValidBlockName(args[0 | 1]))
             {
                 p.SendMessage("Could not find block specified");
-                return;
             }
 
-            foreach (byte b in p.level.data)
+            foreach (byte b in p.Level.data)
             {
                 if (b == type)
                 {
-                    Vector3 meep = p.level.IntToPos(currentBlock);
+                    Vector3 meep = p.Level.IntToPos(currentBlock);
                     pos.pos = meep;
                     stored.Add(pos);
                 }
@@ -69,13 +63,13 @@ namespace CommandDll
             }
 
             //Permissions here.
-            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + Blocks.ByteToName(type));
+            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + Block.ByteToName(type));
 
             //Blockqueue here
 
             foreach (Pos _pos in stored)
             {
-                p.level.BlockChange((ushort)(_pos.pos.x), (ushort)(_pos.pos.z), (ushort)(_pos.pos.y), type2);
+                p.Level.BlockChange((ushort)(_pos.pos.x), (ushort)(_pos.pos.z), (ushort)(_pos.pos.y), type2);
             }
             p.SendMessage("&4/replaceall finished!");
         }

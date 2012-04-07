@@ -40,9 +40,9 @@ namespace CommandDll
             if (args.Length == 0) { who = p; }
             else { who = Player.Find(args[0]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
-            if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("Cannot change MCForge Developer's voice status!"); return; }
-            if (who.voiced) { who.voiced = false; who.voicestring = ""; Player.UniversalChat(who.USERNAME + " is no longer voiced!"); return; }
-            else { who.voiced = true; who.voicestring = "+ "; Player.UniversalChat(who.USERNAME + " is now voiced!"); return; }
+            if (Server.devs.Contains(who.Username)) { p.SendMessage("Cannot change MCForge Developer's voice status!"); return; }
+            if (who.voiced) { who.voiced = false; who.voicestring = ""; Player.UniversalChat(who.Username + " is no longer voiced!"); return; }
+            else { who.voiced = true; who.voicestring = "+ "; Player.UniversalChat(who.Username + " is now voiced!"); return; }
         }
 
         public void Help(Player p)

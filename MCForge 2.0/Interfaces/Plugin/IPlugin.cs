@@ -41,7 +41,12 @@ namespace MCForge.Interface.Plugin
         /// <summary>
         /// The initialization of the plugin.
         /// </summary>
-        void Initialize();
+        void Load();
+
+        /// <summary>
+        /// The unload of a plugin.
+        /// </summary>
+        void Unload();
 
     }
 }

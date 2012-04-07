@@ -40,7 +40,7 @@ namespace CommandDll
             if (args.Length == 0) { who = null; }
             else { who = Player.Find(args[0]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
-            p.SendMessage("Last command " + who.USERNAME + " used is " + who.lastcmd);
+            p.SendMessage("Last command " + who.Username + " used is " + who.lastcmd);
         }
 
         public void Help(Player p)

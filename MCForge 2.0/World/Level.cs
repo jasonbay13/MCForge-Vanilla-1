@@ -29,7 +29,8 @@ namespace MCForge.World
 		//As a note, the coordinates are right, it is xzy, its based on the users view, not the map itself.
 		//WIDTH = X, LENGTH = Z, DEPTH = Y
 		//NEST ORDER IS XZY
-
+        public static List<Level> levels = new List<Level>();
+        public int PhysicsTick = 100;
 		/// <summary>
 		/// This delegate is used for looping through the blocks in a level in an automated fashion, and each cycle returns the position in xzy format
 		/// </summary>
@@ -76,11 +77,18 @@ namespace MCForge.World
 		/// </summary>
 		public byte[] data;
 
+        /// <summary>
+        /// Data to store with in the level
+        /// </summary>
+        public Dictionary<object, object> ExtraData;
+
 		private Level(Vector3 size)
 		{
 			Size = size;
 			//data = new byte[Size.x, Size.z, Size.y];
 			data = new byte[TotalBlocks];
+
+            ExtraData = new Dictionary<object, object>();
 		}
 
 		/// <summary>
@@ -112,12 +120,12 @@ namespace MCForge.World
 			{
 				if (y < middle)
 				{
-					SetBlock((ushort)x, (ushort)z, (ushort)y, Blocks.Types.dirt);
+					SetBlock((ushort)x, (ushort)z, (ushort)y, Block.NameToByte("dirt"));
 					return;
 				}
 				if(y==middle)
 				{
-					SetBlock((ushort)x, (ushort)z, (ushort)y, Blocks.Types.grass);
+                    SetBlock((ushort)x, (ushort)z, (ushort)y, Block.NameToByte("grass"));
 					return;
 				}
 
@@ -174,51 +182,42 @@ namespace MCForge.World
 			if (block == currentType) return;
 
 			SetBlock(x, z, y, block);
-
-			if (currentType >= 50)
-			{
-				if (Blocks.CustomBlocks[currentType].VisibleType != block)
-					Player.GlobalBlockchange(this, x, z, y, block);
-			}
-			else
-			{
-				Player.GlobalBlockchange(this, x, z, y, block);
-			}
+			Player.GlobalBlockchange(this, x, z, y, block);
 
 			//TODO Special stuff for block changing
 		}
 
 		#region SetBlock And Overloads
-		void SetBlock(Vector3 pos, Blocks.Types block)
+		void SetBlock(Vector3 pos, Block block)
 		{
-			SetBlock(pos.x, pos.z, pos.y, (byte)block);
+            block.SetBlock(pos, this);
 		}
-		void SetBlock(int x, int z, int y, Blocks.Types block)
+		void SetBlock(int x, int z, int y, Block block)
 		{
-			SetBlock((ushort)x, (ushort)z, (ushort)y, (byte)block);
+            block.SetBlock(x, y, z, this);
 		}
-		void SetBlock(ushort x, ushort z, ushort y, Blocks.Types block)
+		void SetBlock(ushort x, ushort z, ushort y, Block block)
 		{
-			SetBlock(x, z, y, (byte)block);
+            block.SetBlock(x, y, z, this);
 		}
-		void SetBlock(int pos, Blocks.Types block)
+		void SetBlock(int pos, Block block)
 		{
-			SetBlock(pos, (byte)block);
+            block.SetBlock(pos, this);
 		}
 		void SetBlock(Vector3 pos, byte block)
 		{
 			SetBlock(pos.x, pos.z, pos.y, block);
 		}
-		void SetBlock(int x, int z, int y, byte block)
+		internal void SetBlock(int x, int z, int y, byte block)
 		{
 			SetBlock((ushort)x, (ushort)z, (ushort)y, block);
 		}
-		void SetBlock(ushort x, ushort z, ushort y, byte block)
+		internal void SetBlock(ushort x, ushort z, ushort y, byte block)
 		{
 			SetBlock(PosToInt(x, z, y), block);
 			
 		}
-		void SetBlock(int pos, byte block)
+		internal void SetBlock(int pos, byte block)
 		{
 			data[pos] = block;
 		}
@@ -266,7 +265,7 @@ namespace MCForge.World
 				return data[pos];
 			} catch (Exception e) {
 				Server.Log(e);
-				return (byte)Blocks.Types.unknown;
+                return Block.NameToByte("unknown");
 			}
 		}
 		#endregion
@@ -322,5 +321,9 @@ namespace MCForge.World
 			Flat,
 		}
 
-	}
+
+        public static object FindLevel(string p) {
+            throw new NotImplementedException();
+        }
+    }
 }

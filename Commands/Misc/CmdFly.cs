@@ -12,16 +12,14 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
 using MCForge.World;
+using MCForge.World.Blocks;
 
 namespace CommandDll
 {
@@ -67,7 +65,7 @@ namespace CommandDll
                                 {
                                     for (ushort zz = (ushort)(z - 1); zz <= z + 1; zz++)
                                     {
-                                        if (p.level.GetBlock(xx,zz, yy) == (byte)Blocks.Types.air)
+                                        if (p.Level.GetBlock(xx, zz, yy) == new Air().VisibleBlock)
                                         {
                                             pos.x = (short)xx; pos.y = (short)yy; pos.z = (short)zz;
                                             tempBuffer.Add(pos);
@@ -80,14 +78,14 @@ namespace CommandDll
                                 if (!buffer.Contains(cP))
                                 {
                                     buffer.Add(cP);
-                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, (byte)Blocks.Types.glass);
+                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Glass().VisibleBlock);
                                 }
                             }
                             foreach (Vector3 cP in buffer)
                             {
                                 if (!tempBuffer.Contains(cP))
                                 {
-                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, (byte)Blocks.Types.air);
+                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Air().VisibleBlock);
                                     toRemove.Add(cP);
                                 }
                             }
@@ -107,7 +105,7 @@ namespace CommandDll
 
                 foreach (Vector3 cP in buffer)
                 {
-                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, (byte)Blocks.Types.air);
+                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Air().VisibleBlock);
                 }
 
                 p.SendMessage("Stopped flying");

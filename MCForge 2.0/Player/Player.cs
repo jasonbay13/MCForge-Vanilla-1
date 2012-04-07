@@ -61,9 +61,26 @@ namespace MCForge.Entity {
         protected packet.types lastPacket = packet.types.SendPing;
 
         /// <summary>
+        /// The player's money.
+        /// </summary>
+        public int money = 0;
+        /// <summary>
+        /// Checks if the player is the server owner.
+        /// </summary>
+        public bool isOwner { get { if (Username == Server.owner) { return true; } else { return false; } } }
+        /// <summary>
+        /// The number of times the player has tried to use /pass.
+        /// </summary>
+        public int passtries = 0;
+        bool _verified = false;
+        /// <summary>
+        /// Has the player used password verification?
+        /// </summary>
+        public bool verified { get { if (!Server.Verifying) { return true; } else { return _verified; }; } set { _verified = value; } }
+        /// <summary>
         /// The player's real username
         /// </summary>
-        public string USERNAME;
+        public string Username;
         /// <summary>
         /// Last command the player used.
         /// </summary>
@@ -93,6 +110,23 @@ namespace MCForge.Entity {
         /// </summary>
         public bool jokered = false;
         /// <summary>
+        /// Determines if the player has opchat on. All messages will be sent to ops
+        /// </summary>
+        public bool opchat = false;
+        /// <summary>
+        /// Determines if the player has adminchat on. All messages will be sent to admins
+        /// </summary>
+        public bool adminchat = false;
+        /// <summary>
+        /// Determines if the player is in /whisper mode
+        /// </summary>
+        public bool whispering = false;
+        /// <summary>
+        /// The player to whisper to
+        /// </summary>
+        public Player whisperto;
+
+        /// <summary>
         /// Appears in front of player's name if he is voiced
         /// </summary>
         public string voicestring = "";
@@ -106,7 +140,7 @@ namespace MCForge.Entity {
         public string username //Lowercase Username feild
         {
             get {
-                if (_username == null) _username = USERNAME.ToLower();
+                if (_username == null) _username = Username.ToLower();
                 return _username;
             }
         }
@@ -147,7 +181,20 @@ namespace MCForge.Entity {
         /// <summary>
         /// This players current level
         /// </summary>
-        public Level level = Server.Mainlevel;
+        Level level = Server.Mainlevel;
+        /// <summary>
+        /// This is the players current level
+        /// When the value of the level is changed, the user is sent the new map.
+        /// </summary>
+        public Level Level
+        {
+            get { return level; }
+            set
+            {
+                level = value;
+                SendMap();
+            }
+        }
         /// <summary>
         /// The players MC Id, this changes each time the player logs in
         /// </summary>
@@ -173,9 +220,21 @@ namespace MCForge.Entity {
         /// </summary>
         public Vector3 lastClick;
         /// <summary>
-        /// The players COLOR
+        /// The player's COLOR
         /// </summary>
         public string color = Colors.navy;
+        /// <summary>
+        /// The player's TITLE
+        /// </summary>
+        public string title = "";
+        /// <summary>
+        /// The player's TITLE COLOR
+        /// </summary>
+        public string titleColor = "";
+        /// <summary>
+        /// The player's PREFIX
+        /// </summary>
+        public string prefix = "";
         /// <summary>
         /// True if this player is hidden
         /// </summary>
@@ -253,10 +312,14 @@ namespace MCForge.Entity {
             }
 
             string name = args[0].ToLower().Trim();
+            OnPlayerCommand c = new OnPlayerCommand(this, name, args);
+            c.Call();
+            if (c.IsCanceled)
+                return;
             if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
-                    if (!Server.agreed.Contains(USERNAME) && name != "rules" && name != "agree" && name != "disagree") {
+                    if (!Server.agreed.Contains(Username) && name != "rules" && name != "agree" && name != "disagree") {
                         SendMessage("You need to /agree to the /rules before you can use commands!"); return;
                     }
                     if (!group.CanExecute(cmd)) {
@@ -265,7 +328,7 @@ namespace MCForge.Entity {
                     }
                     try { cmd.Use(this, sendArgs); } //Just so it doesn't crash the server if custom command makers release broken commands!
                     catch (Exception ex) {
-                        Server.Log("[Error] An error occured when " + USERNAME + " tried to use " + name + "!", ConsoleColor.Red, ConsoleColor.Black);
+                        Server.Log("[Error] An error occured when " + Username + " tried to use " + name + "!", ConsoleColor.Red, ConsoleColor.Black);
                         Server.Log(ex);
                     }
                     lastcmd = name;
@@ -375,6 +438,7 @@ namespace MCForge.Entity {
                         lines[lines.Count - 1] = lines[lines.Count - 1].
                             Substring(0, lines[lines.Count - 1].Length - 1);
                         message = message.Substring(1);
+                       
                     }
                 }
             } return lines;
@@ -384,10 +448,7 @@ namespace MCForge.Entity {
 		{
             List<byte> usedIds = new List<byte>();
 
-			Server.ForeachPlayer(delegate(Player p)
-			{
-				usedIds.Add(p.id);
-			});
+            Server.ForeachPlayer(p => usedIds.Add(p.id));
 
             for (byte i = 0; i < ServerSettings.GetSettingInt("maxplayers"); ++i) {
                 if (usedIds.Contains(i)) continue;

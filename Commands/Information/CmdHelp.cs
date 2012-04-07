@@ -110,19 +110,19 @@ namespace CommandDll.Information {
 							return;
 						} catch (Exception) { }
 						
-						try {
-							byte b = Blocks.NameToByte(args[0]);
-							KeyValuePair<byte, Blocks.CustomBlock> customBlock = Blocks.CustomBlocks.ToList().Find(want => want.Key == b);
+						/*try { TODO, redo this section..
+							byte b = Block.NameToByte(args[0]);
+							KeyValuePair<byte, Block> customBlock = Block.CustomBlocks.ToList().Find(want => want.Key == b);
 							string custom;
 							if (customBlock.Value.Name == null) // only happens when there is no such block.
 								custom = args[0];
 							else
-								custom = Blocks.ByteToName(customBlock.Value.VisibleType); // Custom block is this.
+								custom = Block.ByteToName(customBlock.Value.VisibleType); // Custom block is this.
 							p.SendMessage("Block \"" + args[0] + "\" appears as &b" + custom);
 							//PlayerGroup foundRank = PlayerGroup.findPerm(Blocks.Types.BlockList.Find(bs => bs.type == b).lowestRank);
 							//Player.SendMessage(p, "Rank needed: " + foundRank.color + foundRank.name);
 							return;
-						} catch (Exception) { }
+						} catch (Exception) { }*/
 						p.SendMessage("Could not find command or block specified");
 						return;
 				}
