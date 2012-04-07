@@ -12,14 +12,13 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 namespace CommandDll
 {
-    public class CmdDisagree : ICommand
+    public class CmdAdminChat : ICommand
     {
-        public string Name { get { return "Disagree"; } }
+        public string Name { get { return "AdminChat"; } }
         public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
@@ -28,19 +27,23 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            if (Server.agreed.Contains(p.USERNAME)) { p.SendMessage("You have already agreed to the rules!"); return; }
-            if (!p.readrules) { p.SendMessage("You need to read the /rules before you can disagree!"); return; }
-            p.Kick("Kicked for disagreeing to the rules!");
+            if (!p.adminchat) 
+            {
+                p.SendMessage("AdminChat activated. All messages will be sent to admins!"); p.adminchat = true;                
+                if (p.opchat) { p.SendMessage("OpChat deactivated!"); p.opchat = false; }
+                return; 
+            }
+            else { p.SendMessage("AdminChat off!"); p.adminchat = false; return; }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/disagree - disagree to the rules");
+            p.SendMessage("/adminchat - makes all messages sent go to admins");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "disagree" });
+            Command.AddReference(this, new string[1] { "adminchat" });
         }
     }
 }

@@ -26,6 +26,7 @@ using MCForge.Interface;
 using MCForge.Interface.Command;
 using MCForge.API.PlayerEvent;
 using MCForge.Utilities.Settings;
+using MCForge.Groups;
 
 namespace MCForge.Core {
     public static class Server {
@@ -117,6 +118,14 @@ namespace MCForge.Core {
         /// </summary>
         public static string DefaultColor = Colors.yellow;
 
+        /// <summary>
+        /// Server's op chat permission
+        /// </summary>
+        public static byte opchatperm = 80; //TODO: add this to properties
+        /// <summary>
+        /// Server's admin chat permission
+        /// </summary>
+        public static byte adminchatperm = 100;
         /// <summary>
         /// The minecraft.net URL of the server
         /// </summary>
