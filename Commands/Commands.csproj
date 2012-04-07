@@ -47,6 +47,10 @@
     <Compile Include="Building\CmdReplaceAll.cs" />
     <Compile Include="Information\CmdPlayers.cs" />
     <Compile Include="Information\CmdViewranks.cs" />
+    <Compile Include="Misc\CmdPay.cs" />
+    <Compile Include="Misc\CmdSteal.cs" />
+    <Compile Include="Misc\CmdTake.cs" />
+    <Compile Include="Misc\CmdGive.cs" />
     <Compile Include="Misc\CmdPass.cs" />
     <Compile Include="Misc\CmdResetPass.cs" />
     <Compile Include="Misc\CmdSetPass.cs" />

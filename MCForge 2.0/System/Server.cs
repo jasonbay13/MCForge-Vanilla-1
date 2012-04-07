@@ -30,6 +30,10 @@ using MCForge.Utilities.Settings;
 namespace MCForge.Core {
     public static class Server {
         /// <summary>
+        /// The name of the server currency.
+        /// </summary>
+        public static string moneys;
+        /// <summary>
         /// The miniumum rank that needs to verify.
         /// </summary>
         public static Groups.PlayerGroup VerifyGroup;

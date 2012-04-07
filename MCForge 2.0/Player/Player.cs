@@ -61,6 +61,10 @@ namespace MCForge.Entity {
         protected packet.types lastPacket = packet.types.SendPing;
 
         /// <summary>
+        /// The player's money.
+        /// </summary>
+        public int money = 0;
+        /// <summary>
         /// Checks if the player is the server owner.
         /// </summary>
         public bool isOwner { get { if (USERNAME == Server.owner) { return true; } else { return false; } } }
@@ -186,19 +190,19 @@ namespace MCForge.Entity {
         /// </summary>
         public Vector3 lastClick;
         /// <summary>
-        /// The players COLOR
+        /// The player's COLOR
         /// </summary>
         public string color = Colors.navy;
         /// <summary>
-        /// The players TITLE
+        /// The player's TITLE
         /// </summary>
         public string title = "";
         /// <summary>
-        /// The players TITLE COLOR
+        /// The player's TITLE COLOR
         /// </summary>
         public string titleColor = "";
         /// <summary>
-        /// The players PREFIX
+        /// The player's PREFIX
         /// </summary>
         public string prefix = "";
         /// <summary>
