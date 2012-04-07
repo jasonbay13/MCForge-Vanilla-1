@@ -626,6 +626,18 @@ namespace MCForge.Entity
 			SendPacket(pingPacket);
 		}
 
+        /// <summary>
+        /// Sends a empty message to the player
+        /// </summary>
+        public void SendEmptyMessage()
+        {
+            packet pa = new packet();
+            pa.Add(packet.types.Message);
+            pa.Add(id);
+            pa.Add(" ", 64);
+            SendPacket(pa);
+        }
+
 		/// <summary>
 		/// Send this player a message
 		/// </summary>

@@ -16,6 +16,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
+using System.Reflection;
+using MCForge.Interface.Command;
+using MCForge.Core;
 
 namespace MCForge.Interface.Plugin
 {
@@ -42,12 +46,87 @@ namespace MCForge.Interface.Plugin
         }
 
         /// <summary>
+        /// Get the names of all plugins
+        /// </summary>
+        /// <returns>The names of all plugins</returns>
+        public static string[] GetNames()
+        {
+            List<string> ret = new List<string>();
+            foreach (IPlugin ip in Plugins)
+            {
+                ret.Add(ip.Name);
+            }
+            return ret.ToArray();
+        }
+        /// <summary>
+        /// Unloads a plugin
+        /// </summary>
+        /// <param name="name">The name of the plugin to unload</param>
+        /// <param name="ignoreCase">Wheter or not to ignore the case. (default true)</param>
+        /// <returns>Wheter or not the plugin is unloaded</returns>
+        public static bool unload(string name, bool ignoreCase=true)
+        {
+            foreach (IPlugin ip in Plugins)
+            {
+                if ((ignoreCase && ip.Name.ToLower() == name.ToLower()) || ip.Name == name)
+                {
+                    Plugins.Remove(ip);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool isLoaded(string name, bool ignoreCase=true)
+        {
+            foreach (IPlugin ip in Plugins)
+            {
+                if ((ignoreCase && ip.Name.ToLower() == name.ToLower()) || ip.Name == name)
+                    return true;
+            }
+            return false;
+        }
+
+        public static int reload(string name="", bool ignoreCase=true)
+        {
+			string path = Directory.GetCurrentDirectory();
+			string[] DLLFiles = Directory.GetFiles(path, "*.DLL");
+            int ret = 0;
+            foreach (string s in DLLFiles)
+            {
+                Assembly DLLAssembly = LoadAllDlls.LoadFile(s); //Prevents the dll from being in use inside windows
+                foreach (Type ClassType in DLLAssembly.GetTypes())
+                {
+                    if (ClassType.IsPublic)
+                    {
+                        if (!ClassType.IsAbstract)
+                        {
+                            Type typeInterface = ClassType.GetInterface("IPlugin", true);
+                            if (typeInterface != null)
+                            {
+                                IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
+                                if (!isLoaded(instance.Name) && (name == "" || ((ignoreCase && instance.Name.ToLower() == name.ToLower()) || instance.Name == name)))
+                                {
+                                    instance.Initialize();
+                                    PluginManager.AddReference(instance);
+                                    Server.Log("[Plugin]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
+                                    ret++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
         /// Add an array of references to your command here
         /// </summary>
         /// <param name="plugin">The plugin d that this reference... references, you should most likely use 'this'</param>    
         public static void AddReference(IPlugin plugin)
         {
-            if (plugin.GetType().GetInterface("ICommand", false) != null) //lolwut
+            if (plugin.GetType().GetInterface("ICommand", false) != null) //nothing prevents a plugin from being a command (except this line)
             {
             }
             else

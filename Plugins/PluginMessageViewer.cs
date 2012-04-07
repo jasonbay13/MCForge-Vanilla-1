@@ -20,6 +20,8 @@ using MCForge;
 using System.Timers;
 using MCForge.Interface.Plugin;
 using MCForge.Entity;
+using MCForge.API.PlayerEvent;
+using MCForge.Core;
 
 namespace PluginsDLL
 {
@@ -28,30 +30,41 @@ namespace PluginsDLL
         List<Viewer> viewing = new List<Viewer>();
         public void ShowMessage(Player p, string message)
         {
-            viewing.Add(new Viewer(p, message, 0));
-            viewing[viewing.Count - 1].NeedsUpdate += new Viewer.update(SendMessage);
-            viewing[viewing.Count - 1].ForceUpdate();
+            int i = viewing.FindIndex(v => { return v.p.USERNAME == p.USERNAME; });
+            if (i >= 0)
+            {
+                viewing[i].message = prepare(message);
+                viewing[i].pos = 0;
+            }
+            else
+            {
+                viewing.Add(new Viewer(p, message, 0));
+                viewing[viewing.Count - 1].NeedsUpdate += new Viewer.update(SendMessage);
+                viewing[viewing.Count - 1].ForceUpdate();
+            }
         }
         private void SendMessage(Viewer v)
         {
-            for (int i = totalHeight - messageHeight; i > 0; i--)
-                v.p.SendMessage("");
+            for (int i = 0;i< totalHeight - messageHeight; i++)
+                v.p.SendEmptyMessage();
             for (int i = v.pos; i < v.pos + messageHeight; i++)
             {
-                if (i < v.message.Length)
-                    v.p.SendMessage(v.message[i]);
+                if (i < v.message.Length && i >= 0)
+                    if (v.message[i] != "")
+                        v.p.SendMessage(v.message[i]);
+                    else v.p.SendEmptyMessage();
                 else
-                    v.p.SendMessage("");
+                    v.p.SendEmptyMessage();
             }
         }
-        private static int width = 100;
+        private static int width = 62;
         private static int messageHeight = 10;
         private static int totalHeight = 20;
         private static char col = '%';
         private static double refreshTime = 9500;
         private static int calcLength(string part)
         {
-            return part.Length - 2 * part.Count(c => { return c == col; });
+            return part.Length; // -2 * part.Count(c => { return c == col; });
         }
         private static string getMaxString(string line, int max)
         {
@@ -69,6 +82,7 @@ namespace PluginsDLL
         }
         private static string[] prepare(string text)
         {
+            //Todo: Colors for multiple lines
             List<string> ret = new List<string>();
             string[] lines = text.Split('\n');
             foreach (string l in lines)
@@ -111,6 +125,11 @@ namespace PluginsDLL
 
         public void Initialize()
         {
+            OnPlayerDisconnect.Register(OnDisconnect, MCForge.API.Priority.High); //not working yet
+        }
+        public void OnDisconnect(OnPlayerDisconnect eventargs)
+        {
+            Stop(eventargs.GetPlayer());
         }
         public class Viewer
         {
@@ -142,6 +161,11 @@ namespace PluginsDLL
                     t.Start();
                 }
             }
+            public void Stop()
+            {
+                t.Stop();
+                t.Close();
+            }
             public event update NeedsUpdate;
             public delegate void update(Viewer v);
             Timer t;
@@ -149,23 +173,37 @@ namespace PluginsDLL
         private void setMessagePos(Player p, int pos)
         {
             int index = indexOfPlayer(p);
-            if (index > 0)
+            if (index >= 0)
             {
-                if (pos > 0 && pos < viewing[index].message.Length)
+                if (pos >= minPos(viewing[index]) && pos <= maxPos(viewing[index]))
                 {
                     viewing[index].pos = pos;
+                    viewing[index].ForceUpdate();
                 }
+                else if (pos < minPos(viewing[index])) viewing[index].pos = minPos(viewing[index]);
+                else viewing[index].pos = maxPos(viewing[index]);
             }
+        }
+        private int maxPos(Viewer v)
+        {
+            return v.message.Length + messageHeight - 1;
+        }
+        private int minPos(Viewer v)
+        {
+            return 1 - messageHeight;
         }
         private void moveMessagePos(Player p, int move)
         {
             int index = indexOfPlayer(p);
-            if (index > 0)
+            if (index >= 0)
             {
-                if (viewing[index].pos + move > 0 && viewing[index].pos + move + messageHeight < viewing[index].message.Length)
+                if (viewing[index].pos + move >= minPos(viewing[index]) && viewing[index].pos + move <= maxPos(viewing[index]))
                 {
                     viewing[index].pos = viewing[index].pos + move;
+                    viewing[index].ForceUpdate();
                 }
+                else if (viewing[index].pos + move < minPos(viewing[index])) viewing[index].pos = minPos(viewing[index]);
+                else viewing[index].pos = maxPos(viewing[index]);
             }
         }
         public void ShowNextPage(Player p)
@@ -222,8 +260,12 @@ namespace PluginsDLL
         public void Stop(Player p)
         {
             int i = indexOfPlayer(p);
-            SendEnd(p);
-            if (i > 0) viewing.RemoveAt(i);
+            if (i >= 0)
+            {
+                SendEnd(p);
+                viewing[i].Stop();
+                viewing.RemoveAt(i);
+            }
         }
     }
 }
