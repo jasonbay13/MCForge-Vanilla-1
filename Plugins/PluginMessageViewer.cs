@@ -30,6 +30,7 @@ namespace PluginsDLL
         List<Viewer> viewing = new List<Viewer>();
         public void ShowMessage(Player p, string message)
         {
+            if (_isUnloading) return;
             int i = viewing.FindIndex(v => { return v.p.USERNAME == p.USERNAME; });
             if (i >= 0)
             {
@@ -123,14 +124,6 @@ namespace PluginsDLL
             get { throw new NotImplementedException(); }
         }
 
-        public void Initialize()
-        {
-            OnPlayerDisconnect.Register(OnDisconnect, MCForge.API.Priority.High); //not working yet
-        }
-        public void OnDisconnect(OnPlayerDisconnect eventargs)
-        {
-            Stop(eventargs.GetPlayer());
-        }
         public class Viewer
         {
             public Viewer(Player p, string message, int pos) : this(p, prepare(message), pos) { }
@@ -265,6 +258,24 @@ namespace PluginsDLL
                 SendEnd(p);
                 viewing[i].Stop();
                 viewing.RemoveAt(i);
+            }
+        }
+        public void Load()
+        {
+            _isUnloading = false;
+            OnPlayerDisconnect.Register(OnDisconnect, MCForge.API.Priority.High); //not working yet
+        }
+        public void OnDisconnect(OnPlayerDisconnect eventargs)
+        {
+            Stop(eventargs.GetPlayer());
+        }
+        bool _isUnloading = false;
+        public void Unload()
+        {
+            _isUnloading = true;
+            for (int i = viewing.Count-1; i >=0; i--)
+            {
+                Stop(viewing[i].p);
             }
         }
     }

@@ -70,6 +70,7 @@ namespace MCForge.Interface.Plugin
             {
                 if ((ignoreCase && ip.Name.ToLower() == name.ToLower()) || ip.Name == name)
                 {
+                    ip.Unload();
                     Plugins.Remove(ip);
                     return true;
                 }
@@ -107,7 +108,7 @@ namespace MCForge.Interface.Plugin
                                 IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
                                 if (!isLoaded(instance.Name) && (name == "" || ((ignoreCase && instance.Name.ToLower() == name.ToLower()) || instance.Name == name)))
                                 {
-                                    instance.Initialize();
+                                    instance.Load();
                                     PluginManager.AddReference(instance);
                                     Server.Log("[Plugin]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
                                     ret++;
