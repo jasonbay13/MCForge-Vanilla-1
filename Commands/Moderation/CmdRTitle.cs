@@ -56,7 +56,8 @@ namespace CommandDll
             }
             else
                 who = p;
-            message = (message == who.title) ? who.title : message.Substring(0, message.Length - 1);
+            if (message != who.title)
+                message = message.Substring(0, message.Length - 1);
             max = (19 - message.Length) / 2;
             int temp = message.Length / max;
             skip = message.Length % max > 0 ? temp + 1 : temp;
