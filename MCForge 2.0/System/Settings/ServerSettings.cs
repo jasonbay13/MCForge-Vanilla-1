@@ -229,7 +229,7 @@ namespace MCForge.Utilities.Settings {
             using (var writer = File.CreateText(FileUtils.PropertiesPath + "server.properties")) {
                 foreach (var v in Values) {
 
-                    writer.Write(v.Description == null && v.Key== null
+                    writer.Write(v.Description == null && v.Key == null
                         ? v.Value + (v != Values.Last() ? "\n" : "")
                         : v.Description == null
                             ? string.Format("{0}={1}" + (v != Values.Last() ? "\n" : ""), v.Key, v.Value)
@@ -269,15 +269,11 @@ namespace MCForge.Utilities.Settings {
 
         }
 
-        internal static string GenerateSalt()
-        {
-            Random r = new Random();
-            byte[] b = new byte[24];//sometimes is too long for salt, longer salt is more secure
-            for (int i = 0; i < b.Length; i++)
-            {
-                b[i] = (byte)r.Next(128);
-            }
-            return Encoding.ASCII.GetString(b);//supports only 0-127, every thing above gets (char)63=='?', using full byte range will produce 50% same characters
+        internal static string GenerateSalt() {
+            var numberGen = new RNGCryptoServiceProvider();
+            var data = new byte[16];
+            numberGen.GetBytes(data);
+            return Convert.ToBase64String(data);
         }
 
         public static bool HasKey(string key) {
