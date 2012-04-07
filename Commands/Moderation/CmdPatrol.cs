@@ -43,19 +43,19 @@ namespace CommandDll.Moderation {
 			}
 			p.SendMessage("Finding a person " + (wanted==null?"under you":"of the specified rank") + " to patrol...");
 			ICommand gotoCmd = Command.Find("goto"); //If goto exists, we can use it to go to the new level before teleporting.
-			List<Player> allUnder = Server.Players.FindAll(plr => (wanted == null ? true : plr.group.permission == wanted.permission) && plr.group.permission < p.group.permission && (gotoCmd == null ? p.level == plr.level : true));
+			List<Player> allUnder = Server.Players.FindAll(plr => (wanted == null ? true : plr.group.permission == wanted.permission) && plr.group.permission < p.group.permission && (gotoCmd == null ? p.Level == plr.Level : true));
 			if (allUnder.Count == 0) {
 				p.SendMessage("There are no people " + (wanted == null ? "under your" : "of the specified") + " rank that are " + (gotoCmd == null ? "in your level." : "currently online."));
 				return;
 			}
 			Player found = allUnder[(new Random()).Next(allUnder.Count)];
-			p.SendMessage("Player found!  Transporting you to " + found.color + found.USERNAME + Server.DefaultColor + "!");
-			if (p.level != found.level) {
+			p.SendMessage("Player found!  Transporting you to " + found.color + found.Username + Server.DefaultColor + "!");
+			if (p.Level != found.Level) {
 				//Go to the level first
-				gotoCmd.Use(p, new string[] { found.level.name });
+				gotoCmd.Use(p, new string[] { found.Level.name });
 			}
 			if (found.isLoading) {
-				p.SendMessage("Waiting for " + found.color + found.USERNAME + Server.DefaultColor + " to spawn...");
+				p.SendMessage("Waiting for " + found.color + found.Username + Server.DefaultColor + " to spawn...");
 				
 				while (found.isLoading) { } // until event works
 			}
