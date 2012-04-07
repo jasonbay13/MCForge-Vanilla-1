@@ -441,6 +441,27 @@ namespace MCForge.Entity
                 Server.Log("<AdminChat> <" + USERNAME + "> " + incomingText);
                 return;
             }
+            if (whispering) // /whisper command
+            {
+                Player to = whisperto;
+                if (to == null) { SendMessage("Player not found!"); return; }
+                if (to == this) { SendMessage("Trying to talk to yourself huh?"); return; }
+                SendMessage("[>] <" + to.USERNAME + ">&f " + incomingText);
+                to.SendMessage("[<] " + USERNAME + ":&f " + incomingText);
+                return;
+            }
+            if (incomingText[0] == '@') //Whisper whisper woosh woosh
+            {
+                incomingText = incomingText.Trim();
+                if (incomingText[1] == ' ') { incomingText = incomingText.Remove(1, 1); } //Get rid of whitespace (@ alem_zupa)
+                incomingText = incomingText.Remove(0, 1);
+                Player to = Player.Find(incomingText.Split(' ')[0]);
+                incomingText = incomingText.Remove(0, to.USERNAME.Length);
+                if (to == null) { SendMessage("Player not found!"); return; }
+                SendMessage("[>] <" + to.USERNAME + ">&f " + incomingText.Trim());
+                to.SendMessage("[<] " + USERNAME + ":&f " + incomingText.Trim());
+                return;
+            }
 			Server.Log("<" + USERNAME + "> " + incomingText);
             UniversalChat(voicestring + color + prefix + USERNAME + ": &f" + incomingText);
         }

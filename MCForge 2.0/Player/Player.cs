@@ -118,6 +118,15 @@ namespace MCForge.Entity {
         /// </summary>
         public bool adminchat = false;
         /// <summary>
+        /// Determines if the player is in /whisper mode
+        /// </summary>
+        public bool whispering = false;
+        /// <summary>
+        /// The player to whisper to
+        /// </summary>
+        public Player whisperto;
+
+        /// <summary>
         /// Appears in front of player's name if he is voiced
         /// </summary>
         public string voicestring = "";
