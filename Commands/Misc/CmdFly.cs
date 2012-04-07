@@ -67,7 +67,7 @@ namespace CommandDll
                                 {
                                     for (ushort zz = (ushort)(z - 1); zz <= z + 1; zz++)
                                     {
-                                        if (p.level.GetBlock(xx,zz, yy) == (byte)Blocks.Types.air)
+                                        if (p.Level.GetBlock(xx,zz, yy) == (byte)Blocks.Types.air)
                                         {
                                             pos.x = (short)xx; pos.y = (short)yy; pos.z = (short)zz;
                                             tempBuffer.Add(pos);

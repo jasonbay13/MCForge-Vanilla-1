@@ -44,8 +44,8 @@ namespace CommandDll
             }
             else if (args.Length == 0)
             {
-                Vector3 meep = new Vector3((short)(0.5 + p.level.SpawnPos.x * 32), (short)(0.5 + p.level.SpawnPos.z * 32), (short)(1 + p.level.SpawnPos.y * 32));
-                p.SendToPos(meep, p.level.SpawnRot);
+                Vector3 meep = new Vector3((short)(0.5 + p.Level.SpawnPos.x * 32), (short)(0.5 + p.Level.SpawnPos.z * 32), (short)(1 + p.Level.SpawnPos.y * 32));
+                p.SendToPos(meep, p.Level.SpawnRot);
             }
             else if (args.Length == 1)
             {
@@ -67,7 +67,7 @@ namespace CommandDll
                 }
                 else
                 {
-                    if (p.level != who.level)
+                    if (p.Level != who.Level)
                     {
                         //Need goto here
                         if (who.isLoading)
@@ -106,7 +106,7 @@ namespace CommandDll
                 }
                 else
                 {
-                    if (one.level != two.level)
+                    if (one.Level != two.Level)
                     {
                         //Need goto here
                         if (two.isLoading)

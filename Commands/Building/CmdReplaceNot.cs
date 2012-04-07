@@ -74,7 +74,7 @@ namespace CommandDll
                     for (ushort yy = Math.Min((ushort)(FirstBlock.pos.y), y); yy <= Math.Max((ushort)(FirstBlock.pos.y), y); ++yy)
                     {
                         Vector3 loop = new Vector3(xx, zz, yy);
-                        if (p.level.GetBlock(loop) != FirstBlock.type)
+                        if (p.Level.GetBlock(loop) != FirstBlock.type)
                         {
                             BufferAdd(buffer, loop);
                         }
@@ -88,7 +88,7 @@ namespace CommandDll
 
             buffer.ForEach(delegate(Pos pos)
             {
-                p.level.BlockChange((ushort)(pos.pos.x), (ushort)(pos.pos.z), (ushort)(pos.pos.y), FirstBlock.type2);
+                p.Level.BlockChange((ushort)(pos.pos.x), (ushort)(pos.pos.z), (ushort)(pos.pos.y), FirstBlock.type2);
             });
         }
         public void Help(Player p)

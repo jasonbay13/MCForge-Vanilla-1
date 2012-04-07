@@ -38,6 +38,7 @@ namespace CommandDll
         {
             //To-do
             //Broken types: Walls,
+            //Hollows seems to make an error on GetBlock because of negative pos value >_>
             //Need testing for: Wire
             CatchPos cpos = new CatchPos();
             cpos.block = 255;
@@ -72,7 +73,8 @@ namespace CommandDll
                 case 6: //Coordinates
                     Default(cpos);
                     cpos.block = 1; //Silliness
-                    CoordinatesParse(p, args, cpos);
+                    cpos = CoordinatesParse(p, args, cpos);
+                    p.SendMessage("Coordinates");
                     OnPlayerBlockChange coordinates = new OnPlayerBlockChange((ushort)cpos.secondPos.x, (ushort)cpos.secondPos.z, (ushort)cpos.secondPos.y, ActionType.Place, p, cpos.block);
                     coordinates.Call();
                     return;
@@ -165,7 +167,7 @@ namespace CommandDll
                             for (yy = Math.Min((ushort)(cpos.pos.y), y); yy <= Math.Max((ushort)(cpos.pos.y), y); ++yy)
                             {
                                 Vector3 loop = new Vector3(xx, zz, yy);
-                                if (p.level.GetBlock(loop) != NewType)
+                                if (p.Level.GetBlock(loop) != NewType)
                                 {
                                     BufferAdd(buffer, xx, zz, yy);
                                 }
@@ -177,13 +179,13 @@ namespace CommandDll
                     for (zz = Math.Min((ushort)cpos.pos.z, z); zz <= Math.Max(cpos.pos.z, y); ++zz)
                         for (yy = Math.Min((ushort)cpos.pos.z, z); yy <= Math.Max(cpos.pos.z, z); ++yy)
                         {
-                            if (p.level.GetBlock(cpos.pos.x, yy, zz) != NewType)
+                            if (p.Level.GetBlock(cpos.pos.x, yy, zz) != NewType)
                             {
                                 BufferAdd(buffer, (ushort)cpos.pos.x, yy, zz);
                             }
                             if (cpos.pos.x != x)
                             {
-                                if (p.level.GetBlock(x, yy, zz) != NewType)
+                                if (p.Level.GetBlock(x, yy, zz) != NewType)
                                 {
                                     BufferAdd(buffer, x, yy, zz);
                                 }
@@ -194,13 +196,13 @@ namespace CommandDll
                         for (xx = (ushort)(Math.Min(cpos.pos.x, x) + 1); xx <= Math.Max(cpos.pos.x, x) - 1; ++xx)
                             for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max((ushort)cpos.pos.y, y); ++yy)
                             {
-                                if (p.level.GetBlock(xx, cpos.pos.z, yy) != NewType)
+                                if (p.Level.GetBlock(xx, cpos.pos.z, yy) != NewType)
                                 {
                                     BufferAdd(buffer, xx, (ushort)cpos.pos.z, yy);
                                 }
                                 if (cpos.pos.z != z)
                                 {
-                                    if (p.level.GetBlock(xx, z, yy) != NewType)
+                                    if (p.Level.GetBlock(xx, z, yy) != NewType)
                                     {
                                         BufferAdd(buffer, xx, z, yy);
                                     }
@@ -211,13 +213,13 @@ namespace CommandDll
                             for (xx = (ushort)(Math.Min(cpos.pos.x, x) + 1); xx <= Math.Max(cpos.pos.x, x) - 1; ++xx)
                                 for (zz = (ushort)(Math.Min(cpos.pos.z, y) + 1); zz <= Math.Max(cpos.pos.z, y) - 1; ++zz)
                                 {
-                                    if (p.level.GetBlock(xx, zz, cpos.pos.y) != NewType)
+                                    if (p.Level.GetBlock(xx, zz, cpos.pos.y) != NewType)
                                     {
                                         BufferAdd(buffer, xx, zz, (ushort)cpos.pos.y);
                                     }
                                     if (cpos.pos.y != y)
                                     {
-                                        if (p.level.GetBlock(xx, zz, y) != NewType)
+                                        if (p.Level.GetBlock(xx, zz, y) != NewType)
                                         {
                                             BufferAdd(buffer, xx, zz, y);
                                         }
@@ -230,13 +232,13 @@ namespace CommandDll
                     for (zz = Math.Min((ushort)cpos.pos.z, z); zz <= Math.Max(cpos.pos.z, z); ++zz)
                         for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max(cpos.pos.y, y); ++yy)
                         {
-                            if (p.level.GetBlock(cpos.pos.x, zz, yy) != NewType)
+                            if (p.Level.GetBlock(cpos.pos.x, zz, yy) != NewType)
                             {
                                 BufferAdd(buffer, (ushort)cpos.pos.x, zz, yy);
                             }
                             if (cpos.pos.x != x)
                             {
-                                if (p.level.GetBlock(x, zz, yy) != NewType)
+                                if (p.Level.GetBlock(x, zz, yy) != NewType)
                                 {
                                     BufferAdd(buffer, x, zz, yy);
                                 }
@@ -249,13 +251,13 @@ namespace CommandDll
                             for (xx = (ushort)(Math.Min(cpos.pos.x, x) + 1); xx <= Math.Max(cpos.pos.x, x) - 1; ++xx)
                                 for (zz = (ushort)(Math.Min(cpos.pos.z, z)); zz <= Math.Max(cpos.pos.z, z); ++zz)
                                 {
-                                    if (p.level.GetBlock(xx, zz, (ushort)cpos.pos.y) != NewType)
+                                    if (p.Level.GetBlock(xx, zz, (ushort)cpos.pos.y) != NewType)
                                     {
                                         BufferAdd(buffer, xx, zz, (ushort)cpos.pos.y);
                                     }
                                     if (cpos.pos.y != y)
                                     {
-                                        if (p.level.GetBlock(xx, zz, y) != NewType)
+                                        if (p.Level.GetBlock(xx, zz, y) != NewType)
                                         {
                                             BufferAdd(buffer, xx, zz, y);
                                         }
@@ -276,7 +278,7 @@ namespace CommandDll
                             for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max((ushort)cpos.pos.y, y); ++yy)
                             {
                                 Checked = !Checked;
-                                if (Checked && p.level.GetBlock(xx, zz, yy) != NewType)
+                                if (Checked && p.Level.GetBlock(xx, zz, yy) != NewType)
                                 {
                                     BufferAdd(buffer, xx, zz, yy);
                                 }
@@ -313,7 +315,7 @@ namespace CommandDll
                         for (zz = Math.Min((ushort)cpos.pos.z, z); zz <= Math.Max(cpos.pos.z, z); ++zz)
                             for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max(cpos.pos.y, y); ++yy)
                             {
-                                if (rand.Next(1, 11) <= 5 && p.level.GetBlock(xx, zz, yy) != NewType)
+                                if (rand.Next(1, 11) <= 5 && p.Level.GetBlock(xx, zz, yy) != NewType)
                                 {
                                     BufferAdd(buffer, xx, zz, yy);
                                 }
@@ -339,7 +341,7 @@ namespace CommandDll
             p.SendMessage(buffer.Count.ToString() + " blocks.");
             buffer.ForEach(delegate(Pos pos)
             {
-                p.level.BlockChange((ushort)(pos.pos.x), (ushort)(pos.pos.z), (ushort)(pos.pos.y), NewType);
+                p.Level.BlockChange((ushort)(pos.pos.x), (ushort)(pos.pos.z), (ushort)(pos.pos.y), NewType);
             });
         }
         protected CatchPos Default(CatchPos cpos)

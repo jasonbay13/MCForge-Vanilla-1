@@ -41,8 +41,8 @@ namespace CommandDll
                 return;
             }
             Vector3 meep = new Vector3((short)(p.Pos.x / 32), (short)(p.Pos.z / 32), (short)(p.Pos.y / 32));
-            p.level.SpawnPos = meep;
-            p.level.SpawnRot = p.Rot;
+            p.Level.SpawnPos = meep;
+            p.Level.SpawnRot = p.Rot;
             p.SendMessage("Spawn location changed.");
         }
 
