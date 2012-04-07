@@ -437,6 +437,16 @@
             Determines if the player has adminchat on. All messages will be sent to admins
             </summary>
         </member>
+        <member name="F:MCForge.Entity.Player.whispering">
+            <summary>
+            Determines if the player is in /whisper mode
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.whisperto">
+            <summary>
+            The player to whisper to
+            </summary>
+        </member>
         <member name="F:MCForge.Entity.Player.voicestring">
             <summary>
             Appears in front of player's name if he is voiced

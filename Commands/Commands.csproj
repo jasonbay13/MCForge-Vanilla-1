@@ -56,6 +56,7 @@
     <Compile Include="Misc\CmdPass.cs" />
     <Compile Include="Misc\CmdResetPass.cs" />
     <Compile Include="Misc\CmdSetPass.cs" />
+    <Compile Include="Misc\CmdWhisper.cs" />
     <Compile Include="Moderation\CmdColor.cs" />
     <Compile Include="Moderation\CmdReview.cs" />
     <Compile Include="Moderation\CmdRTitle.cs" />
