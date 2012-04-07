@@ -23,6 +23,7 @@ using System.Security.Cryptography;
 using System.Net;
 using System.Security.Authentication;
 using System.Threading;
+using System.Text;
 
 namespace CommandDll.Misc
 {
@@ -105,6 +106,7 @@ namespace CommandDll.Misc
         }
         public class Crypto
         {
+           
             // This is the base encryption salt! DO NOT CHANGE IT!!!
             private static byte[] _salt = Encoding.ASCII.GetBytes("o6806642kbM7c5");
             /// <summary>
