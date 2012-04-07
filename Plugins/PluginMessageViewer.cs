@@ -88,28 +88,6 @@ namespace PluginsDLL
         {
             return viewing.FindIndex(v => { return v.p.Username == p.Username; });
         }
-<<<<<<< Updated upstream
-        public string Name
-        {
-            get { return "MessageViewer"; }
-        }
-
-        public string Author
-        {
-            get { return "ninedrafted"; }
-        }
-
-        public int Version
-        {
-            get { return 1; }
-        }
-
-        public string CUD
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-=======
         public string Name { get { return "MessageViewer"; } }
         public string Author { get { return "ninedrafted"; } }
         public int Version { get { return 1; } }
@@ -117,7 +95,6 @@ namespace PluginsDLL
         public void Initialize()
         {
         }
->>>>>>> Stashed changes
         public class Viewer
         {
             public Viewer(Player p, string message, int pos) : this(p, prepare(message), pos) { }
