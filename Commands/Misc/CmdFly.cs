@@ -22,6 +22,7 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
 using MCForge.World;
+using MCForge.World.Blocks;
 
 namespace CommandDll
 {
@@ -67,7 +68,7 @@ namespace CommandDll
                                 {
                                     for (ushort zz = (ushort)(z - 1); zz <= z + 1; zz++)
                                     {
-                                        if (p.level.GetBlock(xx,zz, yy) == (byte)Blocks.Types.air)
+                                        if (p.level.GetBlock(xx, zz, yy) == new Air().VisableBlock)
                                         {
                                             pos.x = (short)xx; pos.y = (short)yy; pos.z = (short)zz;
                                             tempBuffer.Add(pos);
@@ -80,14 +81,14 @@ namespace CommandDll
                                 if (!buffer.Contains(cP))
                                 {
                                     buffer.Add(cP);
-                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, (byte)Blocks.Types.glass);
+                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Glass().VisableBlock);
                                 }
                             }
                             foreach (Vector3 cP in buffer)
                             {
                                 if (!tempBuffer.Contains(cP))
                                 {
-                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, (byte)Blocks.Types.air);
+                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Air().VisableBlock);
                                     toRemove.Add(cP);
                                 }
                             }
@@ -107,7 +108,7 @@ namespace CommandDll
 
                 foreach (Vector3 cP in buffer)
                 {
-                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, (byte)Blocks.Types.air);
+                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Air().VisableBlock);
                 }
 
                 p.SendMessage("Stopped flying");

@@ -211,7 +211,7 @@ namespace MCForge.Entity
 			}
 
 			byte currentType = level.GetBlock(x, z, y);
-			if (currentType == (byte)Blocks.Types.zero)
+			if (currentType == Block.NameToByte("unknown"))
 			{
 				Kick("HACKED CLIENT!");
 				return;
@@ -240,7 +240,7 @@ namespace MCForge.Entity
 
 			if (action == 0) //Deleting
 			{
-				level.BlockChange(x, z, y, (byte)Blocks.Types.air);
+				level.BlockChange(x, z, y, Block.NameToByte("air"));
 			}
 			else //Placing
 			{
@@ -548,13 +548,11 @@ namespace MCForge.Entity
 				byte[] blocks = new byte[level.TotalBlocks]; //Temporary byte array so we dont have to keep modding the packet array
 
 				byte block; //A block byte outside the loop, we save cycles by not making this for every loop iteration
-				level.ForEachBlock(delegate(int pos)
+				level.ForEachBlock(pos =>
 				{
 					//Here we loop through the whole map and check/convert the blocks as necesary
 					//We then add them to our blocks array so we can send them to the player
 					block = level.data[pos];
-					if (block < 50) blocks[pos] = block;
-					else blocks[pos] = Blocks.CustomBlocks[block].VisibleType;
 				});
 
 				pa.Add(blocks); //add the blocks to the packet
@@ -626,7 +624,7 @@ namespace MCForge.Entity
 			pa.Add(y);
 			pa.Add(z);
 
-			if (type > 49) type = Blocks.CustomBlocks[type].VisibleType;
+			//if (type > 49) type = Block.CustomBlocks[type].VisibleType;
 			pa.Add(type);
 
 			SendPacket(pa);

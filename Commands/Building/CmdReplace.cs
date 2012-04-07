@@ -45,7 +45,7 @@ namespace CommandDll
                 Help(p);
                 return;
             }
-            if (!Blocks.ValidBlockName(args[0 | 1]))
+            if (!Block.ValidBlockName(args[0 | 1]))
             {
                 p.SendMessage("Could not find block specified");
             }

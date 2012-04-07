@@ -22,7 +22,7 @@ namespace MCForge.API.PlayerEvent
         }
         public override void Call()
         {
-            Muffins.cache.ForEach(e =>
+            Muffins.muffinbag.ForEach(e =>
             {
                 if (e.type.GetType() == GetType() && ((Player)(e.target) == p || e.target == null))
                 {
@@ -31,7 +31,7 @@ namespace MCForge.API.PlayerEvent
                     if (_unregister)
                     {
                         _unregister = false;
-                        Muffins.cache.Remove(e);
+                        Muffins.muffinbag.Remove(e);
                     }
                 }
             });

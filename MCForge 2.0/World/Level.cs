@@ -120,12 +120,12 @@ namespace MCForge.World
 			{
 				if (y < middle)
 				{
-					SetBlock((ushort)x, (ushort)z, (ushort)y, Blocks.Types.dirt);
+					SetBlock((ushort)x, (ushort)z, (ushort)y, Block.NameToByte("dirt"));
 					return;
 				}
 				if(y==middle)
 				{
-					SetBlock((ushort)x, (ushort)z, (ushort)y, Blocks.Types.grass);
+                    SetBlock((ushort)x, (ushort)z, (ushort)y, Block.NameToByte("grass"));
 					return;
 				}
 
@@ -182,51 +182,42 @@ namespace MCForge.World
 			if (block == currentType) return;
 
 			SetBlock(x, z, y, block);
-
-			if (currentType >= 50)
-			{
-				if (Blocks.CustomBlocks[currentType].VisibleType != block)
-					Player.GlobalBlockchange(this, x, z, y, block);
-			}
-			else
-			{
-				Player.GlobalBlockchange(this, x, z, y, block);
-			}
+			Player.GlobalBlockchange(this, x, z, y, block);
 
 			//TODO Special stuff for block changing
 		}
 
 		#region SetBlock And Overloads
-		void SetBlock(Vector3 pos, Blocks.Types block)
+		void SetBlock(Vector3 pos, Block block)
 		{
-			SetBlock(pos.x, pos.z, pos.y, (byte)block);
+            block.SetBlock(pos, this);
 		}
-		void SetBlock(int x, int z, int y, Blocks.Types block)
+		void SetBlock(int x, int z, int y, Block block)
 		{
-			SetBlock((ushort)x, (ushort)z, (ushort)y, (byte)block);
+            block.SetBlock(x, y, z, this);
 		}
-		void SetBlock(ushort x, ushort z, ushort y, Blocks.Types block)
+		void SetBlock(ushort x, ushort z, ushort y, Block block)
 		{
-			SetBlock(x, z, y, (byte)block);
+            block.SetBlock(x, y, z, this);
 		}
-		void SetBlock(int pos, Blocks.Types block)
+		void SetBlock(int pos, Block block)
 		{
-			SetBlock(pos, (byte)block);
+            block.SetBlock(pos, this);
 		}
 		void SetBlock(Vector3 pos, byte block)
 		{
 			SetBlock(pos.x, pos.z, pos.y, block);
 		}
-		void SetBlock(int x, int z, int y, byte block)
+		internal void SetBlock(int x, int z, int y, byte block)
 		{
 			SetBlock((ushort)x, (ushort)z, (ushort)y, block);
 		}
-		void SetBlock(ushort x, ushort z, ushort y, byte block)
+		internal void SetBlock(ushort x, ushort z, ushort y, byte block)
 		{
 			SetBlock(PosToInt(x, z, y), block);
 			
 		}
-		void SetBlock(int pos, byte block)
+		internal void SetBlock(int pos, byte block)
 		{
 			data[pos] = block;
 		}
@@ -274,7 +265,7 @@ namespace MCForge.World
 				return data[pos];
 			} catch (Exception e) {
 				Server.Log(e);
-				return (byte)Blocks.Types.unknown;
+                return Block.NameToByte("unknown");
 			}
 		}
 		#endregion

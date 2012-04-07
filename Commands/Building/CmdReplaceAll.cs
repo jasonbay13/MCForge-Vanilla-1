@@ -46,7 +46,7 @@ namespace CommandDll
                 Help(p);
                 return;
             }
-            if (!Blocks.ValidBlockName(args[0 | 1]))
+            if (!Block.ValidBlockName(args[0 | 1]))
             {
                 p.SendMessage("Could not find block specified");
             }
@@ -63,7 +63,7 @@ namespace CommandDll
             }
 
             //Permissions here.
-            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + Blocks.ByteToName(type));
+            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + Block.ByteToName(type));
 
             //Blockqueue here
 

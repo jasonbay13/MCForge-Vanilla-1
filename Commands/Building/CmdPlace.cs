@@ -36,7 +36,7 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            byte b = (byte)(Blocks.Types.zero);
+            byte b = Block.NameToByte("unknown");
             ushort x, z, y;
             Vector3 pos = p.Pos;
             try
@@ -47,13 +47,13 @@ namespace CommandDll
                         x = (ushort)(pos.x / 32);
                         z = (ushort)(pos.z / 32);
                         y = (ushort)(pos.y / 32 - 2);
-                        b = (byte)(Blocks.Types.stone);
+                        b = Block.NameToByte("stone");
                         break;
                     case 1:
                         x = (ushort)(pos.x / 32);
                         z = (ushort)(pos.z / 32);
                         y = (ushort)(pos.y / 32 - 1);
-                        b = Blocks.NameToByte(args[0]);
+                        b = Block.NameToByte(args[0]);
                         break;
                     case 3:
                         x = Convert.ToUInt16(args[0]);
@@ -61,7 +61,7 @@ namespace CommandDll
                         y = Convert.ToUInt16(args[2]);
                         break;
                     case 4:
-                        b = Blocks.NameToByte(args[0]);
+                        b = Block.NameToByte(args[0]);
                         x = Convert.ToUInt16(args[1]);
                         z = Convert.ToUInt16(args[2]);
                         y = Convert.ToUInt16(args[3]);
@@ -76,9 +76,9 @@ namespace CommandDll
                 p.SendMessage("Invalid parameters.");
                 return;
             }
-            if (b == (byte)(Blocks.Types.zero))
+            if (b == Block.NameToByte("unknown"))
             {
-                b = (byte)(Blocks.Types.stone);
+                b = Block.NameToByte("stone");
             }
             //Need to wait for permissions for cannot place that block type.
             if (y >= p.level.Size.y)
@@ -86,7 +86,7 @@ namespace CommandDll
                 y = (ushort)(p.level.Size.y - 1);
             }
             p.level.BlockChange(x, z, y, b);
-            p.SendMessage("An " + Blocks.ByteToName(b) + " block was placed at (" + x + ", " + z + ", " + y + ").");
+            p.SendMessage("An " + Block.ByteToName(b) + " block was placed at (" + x + ", " + z + ", " + y + ").");
         }
         public void Help(Player p)
         {

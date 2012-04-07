@@ -48,7 +48,7 @@ namespace CommandDll
                     Default(cpos);
                     break;
                 case 1: //Block or type only
-                    if (ValidSolidType(args[0]) || Blocks.ValidBlockName(args[0]))
+                    if (ValidSolidType(args[0]) || Block.ValidBlockName(args[0]))
                     {
                         cpos = Parser(p, true, false, args, cpos);
                         break;
@@ -59,7 +59,7 @@ namespace CommandDll
                         return;
                     }
                 case 2: //Block and type
-                    if (ValidSolidType(args[0 | 1]) || Blocks.ValidBlockName(args[0 | 1]))
+                    if (ValidSolidType(args[0 | 1]) || Block.ValidBlockName(args[0 | 1]))
                     {
                         cpos = Parser(p, false, false, args, cpos);
                         break;
@@ -77,7 +77,7 @@ namespace CommandDll
                     coordinates.Call();
                     return;
                 case 7: //Coordinates and block or type
-                    if (ValidSolidType(args[7]) || Blocks.ValidBlockName(args[7]))
+                    if (ValidSolidType(args[7]) || Block.ValidBlockName(args[7]))
                     {
                         cpos = Parser(p, true, true, args, cpos);
                         coordinates = new OnPlayerBlockChange((ushort)cpos.secondPos.x, (ushort)cpos.secondPos.z, (ushort)cpos.secondPos.y, ActionType.Place, p, cpos.block);
@@ -90,7 +90,7 @@ namespace CommandDll
                         return;
                     }
                 case 8: //Coordinates block and type
-                    if (ValidSolidType(args[7 | 8]) || Blocks.ValidBlockName(args[7 | 8]))
+                    if (ValidSolidType(args[7 | 8]) || Block.ValidBlockName(args[7 | 8]))
                     {
                         CoordinatesParse(p, args, cpos);
                         cpos = Parser(p, false, true, args, cpos);
@@ -372,31 +372,31 @@ namespace CommandDll
             ushort unused;
             if (one && !coordinates)
             {
-                cpos.block = (Blocks.ValidBlockName(args[0]) ? Blocks.NameToByte(args[0]) : (byte)255);
+                cpos.block = (Block.ValidBlockName(args[0]) ? Block.NameToByte(args[0]) : (byte)255);
                 cpos.cuboidType = (ValidSolidType(args[0]) ? StringToSolidType(args[0]) : SolidType.solid);
             }
             else if (coordinates && !one)
             {
                 cpos = CoordinatesParse(p, args, cpos);
-                cpos.block = (Blocks.ValidBlockName(args[6]) ? Blocks.NameToByte(args[6]) : (Blocks.ValidBlockName(args[7]) ? Blocks.NameToByte(args[7]) : (byte)255));
+                cpos.block = (Block.ValidBlockName(args[6]) ? Block.NameToByte(args[6]) : (Block.ValidBlockName(args[7]) ? Block.NameToByte(args[7]) : (byte)255));
                 cpos.cuboidType = (ValidSolidType(args[6]) ? StringToSolidType(args[6]) : ValidSolidType(args[7]) ? StringToSolidType(args[7]) : SolidType.solid);
             }
             else if (one && coordinates)
             {
                 cpos = CoordinatesParse(p, args, cpos);
-                cpos.block = (Blocks.ValidBlockName(args[7]) ? Blocks.NameToByte(args[7]) : (byte)255);
+                cpos.block = (Block.ValidBlockName(args[7]) ? Block.NameToByte(args[7]) : (byte)255);
                 cpos.cuboidType = (ValidSolidType(args[7]) ? StringToSolidType(args[7]) : SolidType.solid);
             }
             else if (!coordinates && !one)
             {
-                cpos.block = (Blocks.ValidBlockName(args[0]) ? Blocks.NameToByte(args[0]) : (Blocks.ValidBlockName(args[1]) ? Blocks.NameToByte(args[1]) : (byte)255));
+                cpos.block = (Block.ValidBlockName(args[0]) ? Block.NameToByte(args[0]) : (Block.ValidBlockName(args[1]) ? Block.NameToByte(args[1]) : (byte)255));
                 cpos.cuboidType = (ValidSolidType(args[0]) ? StringToSolidType(args[0]) : ValidSolidType(args[1]) ? StringToSolidType(args[1]) : SolidType.solid);
             }
             else if (!coordinates && (ushort.TryParse(args[0 | 1 | 2 | 3 | 4 | 5], out unused)))
             {
                 p.SendMessage("You need 6 coordinates for cuboid to work like that!");
             }
-            p.SendMessage("[Debug] Cpos.Block " + Blocks.ByteToName(cpos.block) + " Cpos.cuboidType " + cpos.cuboidType.ToString());
+            p.SendMessage("[Debug] Cpos.Block " + Block.ByteToName(cpos.block) + " Cpos.cuboidType " + cpos.cuboidType.ToString());
             return cpos;
         }
         protected bool ValidSolidType(string solidTypeName)

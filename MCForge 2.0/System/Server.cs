@@ -152,11 +152,12 @@ namespace MCForge.Core {
 
         internal static void Init() {
             //TODO load the level if it exists
+            Block.InIt();
             Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
             UpdateTimer.Start();
-
+            
             Groups.PlayerGroup.InitDefaultGroups();
 
             LoadAllDlls.Init();

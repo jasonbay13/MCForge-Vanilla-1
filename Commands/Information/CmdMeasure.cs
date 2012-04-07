@@ -42,7 +42,7 @@ namespace CommandDll
             {
                 try
                 {
-                    cpos.ignore = Blocks.NameToByte(args[0]);
+                    cpos.ignore = Block.NameToByte(args[0]);
                 }
                 catch
                 {
@@ -52,7 +52,7 @@ namespace CommandDll
                 p.SendMessage("Ignoring " + args[0]);
             }
             else
-                cpos.ignore = (byte)(Blocks.Types.zero); //So it doesn't ignore air.
+                cpos.ignore = Block.NameToByte("unknown"); //So it doesn't ignore air.
             p.SendMessage("Place two blocks to determine the edges.");
             p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
         }

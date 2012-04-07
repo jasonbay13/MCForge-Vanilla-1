@@ -181,17 +181,17 @@ namespace MCForge.Entity {
         /// <summary>
         /// This players current level
         /// </summary>
-        Level level = Server.Mainlevel;
+        Level Level = Server.Mainlevel;
         /// <summary>
         /// This is the players current level
         /// When the value of the level is changed, the user is sent the new map.
         /// </summary>
-        public Level Level
+        public Level level
         {
-            get { return level; }
+            get { return Level; }
             set
             {
-                level = value;
+                Level = value;
                 SendMap();
             }
         }
