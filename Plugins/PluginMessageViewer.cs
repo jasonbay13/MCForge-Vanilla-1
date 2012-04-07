@@ -109,9 +109,6 @@ namespace PluginsDLL
             get { throw new NotImplementedException(); }
         }
 
-        public void Initialize()
-        {
-        }
         public class Viewer
         {
             public Viewer(Player p, string message, int pos) : this(p, prepare(message), pos) { }
@@ -224,6 +221,15 @@ namespace PluginsDLL
             int i = indexOfPlayer(p);
             SendEnd(p);
             if (i > 0) viewing.RemoveAt(i);
+        }
+
+
+        public void OnLoad() {
+            
+        }
+
+        public void OnUnload() {
+            throw new NotImplementedException();
         }
     }
 }

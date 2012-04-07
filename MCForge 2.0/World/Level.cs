@@ -77,11 +77,18 @@ namespace MCForge.World
 		/// </summary>
 		public byte[] data;
 
+        /// <summary>
+        /// Data to store with in the level
+        /// </summary>
+        public Dictionary<object, object> ExtraData;
+
 		private Level(Vector3 size)
 		{
 			Size = size;
 			//data = new byte[Size.x, Size.z, Size.y];
 			data = new byte[TotalBlocks];
+
+            ExtraData = new Dictionary<object, object>();
 		}
 
 		/// <summary>
@@ -323,5 +330,9 @@ namespace MCForge.World
 			Flat,
 		}
 
-	}
+
+        public static object FindLevel(string p) {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -448,10 +448,7 @@ namespace MCForge.Entity {
 		{
             List<byte> usedIds = new List<byte>();
 
-			Server.ForeachPlayer(delegate(Player p)
-			{
-				usedIds.Add(p.id);
-			});
+            Server.ForeachPlayer(p => usedIds.Add(p.id));
 
             for (byte i = 0; i < ServerSettings.GetSettingInt("maxplayers"); ++i) {
                 if (usedIds.Contains(i)) continue;

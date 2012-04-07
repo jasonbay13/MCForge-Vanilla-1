@@ -88,7 +88,7 @@ namespace MCForge.Interface
                                 if (typeInterface != null)
                                 {
                                     IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                    instance.Load();
+                                    instance.OnLoad();
                                     PluginManager.AddReference(instance);
                                     Server.Log("[Plugin]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
                                 }

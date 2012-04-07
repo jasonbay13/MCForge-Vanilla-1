@@ -21,6 +21,9 @@ using MCForge;
 
 namespace MCForge.Interface.Plugin
 {
+    /// <summary>
+    /// Interface for making a plugin with a message viewer
+    /// </summary>
     public interface IPluginMessageViewer : IPlugin
     {
         /// <summary>

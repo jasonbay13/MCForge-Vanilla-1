@@ -11,50 +11,40 @@ software distributed under the Licenses are distributed on an "AS IS"
 BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
-*/﻿
-using System;
+*/
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MCForge.Interface.Plugin
-{
-    /// <summary>
-    /// The command class, used to store commands for players to use
-    /// </summary>
-    public class PluginManager
-    {
-        internal static List<IPlugin> Plugins = new List<IPlugin>();
+namespace MCForge.Interface.Plugin {
+    public interface IPlugin {
+        /// <summary>
+        /// The name of the plugin
+        /// </summary>
+        string Name { get; }
+        /// <summary>
+        /// The author of the plugin (to add multiple authors just make the string like "Merlin33069, someone else"
+        /// </summary>
+         string Author { get; }
+        /// <summary>
+        /// The command version
+        /// </summary>
+         int Version { get; }
+        /// <summary>
+        /// Unique identifier for this plugin, will be used later to link to McForge databases
+        /// </summary>
+         string CUD { get; }
 
         /// <summary>
-        /// Gets a plugin by interface.
+        /// When the plugin is first loaded
         /// </summary>
-        /// <param name="name">The name of the interface</param>
-        /// <returns></returns>
-        public static IPlugin getByInterface(string name)
-        {
-            foreach (IPlugin ip in Plugins)
-            {
-                if (ip.GetType().GetInterface(name) != null)
-                    return ip;
-            }
-            return null;
-        }
+         void OnLoad();
 
         /// <summary>
-        /// Add an array of references to your command here
+        /// When the plugin is unloaded.
         /// </summary>
-        /// <param name="plugin">The plugin d that this reference... references, you should most likely use 'this'</param>    
-        public static void AddReference(IPlugin plugin)
-        {
-            if (plugin.GetType().GetInterface("ICommand", false) != null) //lolwut
-            {
-            }
-            else
-            {
-                Plugins.Add(plugin);
-            }
-        }
+       void OnUnload();
+
     }
-
 }

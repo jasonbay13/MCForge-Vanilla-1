@@ -88,9 +88,9 @@
     <Compile Include="Interfaces\Commands\ICommand.cs" />
     <Compile Include="Interfaces\Commands\Command.cs" />
     <Compile Include="Interfaces\LoadAllDlls.cs" />
-    <Compile Include="Interfaces\Plugin\IPlugin.cs" />
-    <Compile Include="Interfaces\Plugin\IPluginMessageViewer.cs" />
     <Compile Include="Interfaces\Plugin\Plugin.cs" />
+    <Compile Include="Interfaces\Plugin\IPluginMessageViewer.cs" />
+    <Compile Include="Interfaces\Plugin\PluginManager.cs" />
     <Compile Include="Player\Player.cs" />
     <Compile Include="World\Level.cs" />
     <Compile Include="System\LoadedData.cs" />
