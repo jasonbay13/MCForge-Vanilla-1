@@ -658,6 +658,9 @@ namespace MCForge.Entity
 		public void SendToPos(Vector3 _pos, byte[] _rot)
 		{
 			oldPos = Pos; oldRot = Rot;
+            _pos.x = (_pos.x < 0) ? (short)32 : (_pos.x > level.Size.x * 32) ? (short)(level.Size.x * 32 - 32) : (_pos.x > 32767) ? (short)32730 : _pos.x;
+            _pos.z = (_pos.z < 0) ? (short)32 : (_pos.z > level.Size.z * 32) ? (short)(level.Size.z * 32 - 32) : (_pos.z > 32767) ? (short)32730 : _pos.z;
+            _pos.y = (_pos.y < 0) ? (short)32 : (_pos.y > level.Size.y * 32) ? (short)(level.Size.y * 32 - 32) : (_pos.y > 32767) ? (short)32730 : _pos.y;
 
 			packet pa = new packet();
 			pa.Add(packet.types.SendTeleport);
