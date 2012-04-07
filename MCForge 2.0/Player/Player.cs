@@ -181,7 +181,20 @@ namespace MCForge.Entity {
         /// <summary>
         /// This players current level
         /// </summary>
-        public Level level = Server.Mainlevel;
+        Level level = Server.Mainlevel;
+        /// <summary>
+        /// This is the players current level
+        /// When the value of the level is changed, the user is sent the new map.
+        /// </summary>
+        public Level Level
+        {
+            get { return level; }
+            set
+            {
+                level = value;
+                SendMap();
+            }
+        }
         /// <summary>
         /// The players MC Id, this changes each time the player logs in
         /// </summary>
