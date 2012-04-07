@@ -11,7 +11,7 @@ namespace MCForge.World.Blocks
         {
             get { return "bookcase"; }
         }
-        public override byte VisableBlock
+        public override byte VisibleBlock
         {
             get { return 47; }
         }

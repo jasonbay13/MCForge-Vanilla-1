@@ -11,7 +11,7 @@ namespace MCForge.World.Blocks
         {
             get { return "gold_ore"; }
         }
-        public override byte VisableBlock
+        public override byte VisibleBlock
         {
             get { return 14; }
         }

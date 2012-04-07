@@ -11,7 +11,7 @@ namespace MCForge.World.Physics
         {
             get { return "active_water"; }
         }
-        public override byte VisableBlock
+        public override byte VisibleBlock
         {
             get { return 8; }
         }

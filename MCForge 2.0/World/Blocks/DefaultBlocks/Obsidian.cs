@@ -11,7 +11,7 @@ namespace MCForge.World.Blocks
         {
             get { return "obsidian"; }
         }
-        public override byte VisableBlock
+        public override byte VisibleBlock
         {
             get { return 49; }
         }

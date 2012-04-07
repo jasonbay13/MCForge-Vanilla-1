@@ -65,7 +65,7 @@ namespace CommandDll
                                 {
                                     for (ushort zz = (ushort)(z - 1); zz <= z + 1; zz++)
                                     {
-                                        if (p.level.GetBlock(xx, zz, yy) == new Air().VisableBlock)
+                                        if (p.Level.GetBlock(xx, zz, yy) == new Air().VisibleBlock)
                                         {
                                             pos.x = (short)xx; pos.y = (short)yy; pos.z = (short)zz;
                                             tempBuffer.Add(pos);
@@ -78,14 +78,14 @@ namespace CommandDll
                                 if (!buffer.Contains(cP))
                                 {
                                     buffer.Add(cP);
-                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Glass().VisableBlock);
+                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Glass().VisibleBlock);
                                 }
                             }
                             foreach (Vector3 cP in buffer)
                             {
                                 if (!tempBuffer.Contains(cP))
                                 {
-                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Air().VisableBlock);
+                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Air().VisibleBlock);
                                     toRemove.Add(cP);
                                 }
                             }
@@ -105,7 +105,7 @@ namespace CommandDll
 
                 foreach (Vector3 cP in buffer)
                 {
-                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Air().VisableBlock);
+                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Air().VisibleBlock);
                 }
 
                 p.SendMessage("Stopped flying");

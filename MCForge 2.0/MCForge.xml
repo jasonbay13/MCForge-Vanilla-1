@@ -556,7 +556,7 @@
             The number of times the player has tried to use /pass.
             </summary>
         </member>
-        <member name="F:MCForge.Entity.Player.USERNAME">
+        <member name="F:MCForge.Entity.Player.Username">
             <summary>
             The player's real username
             </summary>
@@ -661,7 +661,7 @@
             True is the player is flying
             </summary>
         </member>
-        <member name="F:MCForge.Entity.Player.Level">
+        <member name="F:MCForge.Entity.Player.level">
             <summary>
             This players current level
             </summary>
@@ -781,7 +781,7 @@
             This is the player's LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
             </summary>       
         </member>
-        <member name="P:MCForge.Entity.Player.level">
+        <member name="P:MCForge.Entity.Player.Level">
             <summary>
             This is the players current level
             When the value of the level is changed, the user is sent the new map.

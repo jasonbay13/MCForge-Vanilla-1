@@ -11,7 +11,7 @@ namespace MCForge.World.Blocks
         {
             get { return "magenta"; }
         }
-        public override byte VisableBlock
+        public override byte VisibleBlock
         {
             get { return 32; }
         }

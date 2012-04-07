@@ -10,23 +10,23 @@ namespace MCForge.World
     public abstract class Block
     {
         static List<Block> blocks = new List<Block>();
-        public abstract byte VisableBlock { get; }
+        public abstract byte VisibleBlock { get; }
         public abstract string Name { get; }
         public virtual void SetBlock(Vector3 pos, Level l)
         {
-            l.SetBlock(pos.x, pos.z, pos.y, VisableBlock);
+            l.SetBlock(pos.x, pos.z, pos.y, VisibleBlock);
         }
         public virtual void SetBlock(int x, int z, int y, Level l)
         {
-            l.SetBlock((ushort)x, (ushort)z, (ushort)y, VisableBlock);
+            l.SetBlock((ushort)x, (ushort)z, (ushort)y, VisibleBlock);
         }
         public virtual void SetBlock(ushort x, ushort z, ushort y, Level l)
         {
-            l.SetBlock(x, z, y, VisableBlock);
+            l.SetBlock(x, z, y, VisibleBlock);
         }
         public virtual void SetBlock(int pos, Level l)
         {
-            l.SetBlock(pos, VisableBlock);
+            l.SetBlock(pos, VisibleBlock);
         }
         public static void Add(Block b)
         {
@@ -89,8 +89,8 @@ namespace MCForge.World
         }
         public static byte NameToByte(string name)
         {
-            byte nametoreturn = new UNKNOWN().VisableBlock;
-            blocks.ForEach(b => { if (b.Name == name.ToLower()) nametoreturn = b.VisableBlock; });
+            byte nametoreturn = new UNKNOWN().VisibleBlock;
+            blocks.ForEach(b => { if (b.Name == name.ToLower()) nametoreturn = b.VisibleBlock; });
             return nametoreturn;
         }
         public static bool ValidBlockName(string name)
@@ -100,7 +100,7 @@ namespace MCForge.World
         public static string ByteToName(byte b)
         {
             string nametoreturn = new UNKNOWN().Name;
-            blocks.ForEach(b1 => { if (b1.VisableBlock == b) nametoreturn = b1.Name; });
+            blocks.ForEach(b1 => { if (b1.VisibleBlock == b) nametoreturn = b1.Name; });
             return nametoreturn;
         }
     }

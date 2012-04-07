@@ -86,7 +86,7 @@ namespace CommandDll
                 y = (ushort)(p.Level.Size.y - 1);
             }
             p.Level.BlockChange(x, z, y, b);
-            p.SendMessage("An " + Blocks.ByteToName(b) + " block was placed at (" + x + ", " + z + ", " + y + ").");
+            p.SendMessage("An " + Block.ByteToName(b) + " block was placed at (" + x + ", " + z + ", " + y + ").");
         }
         public void Help(Player p)
         {
