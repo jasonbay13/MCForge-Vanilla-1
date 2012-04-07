@@ -37,7 +37,7 @@ namespace CommandDll.Misc
             try { amt = int.Parse(args[1]); }
             catch { p.SendMessage("Invalid amount!"); return; }
             if (who.money + amt > 16777215) p.SendMessage("Players cannot have over 16777215 " + Server.moneys + "."); return;
-            if (p.money - amt < 0) p.SendMessage("You cannot pay more than you have!"); return;
+            if (p.money - amt < 0) p.SendMessage("You cannot pay with more " + Server.moneys + " than you have!"); return;
             if (amt < 0) p.SendMessage("Cannot pay negative amounts of " + Server.moneys + "."); return;
             who.money += amt;
             p.money -= amt;
