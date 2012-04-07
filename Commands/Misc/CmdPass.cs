@@ -13,9 +13,7 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
 using System.Text;
-using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
@@ -25,6 +23,7 @@ using System.Security.Cryptography;
 using System.Net;
 using System.Security.Authentication;
 using System.Threading;
+using System.Text;
 
 namespace CommandDll.Misc
 {
@@ -107,6 +106,7 @@ namespace CommandDll.Misc
         }
         public class Crypto
         {
+           
             // This is the base encryption salt! DO NOT CHANGE IT!!!
             private static byte[] _salt = Encoding.ASCII.GetBytes("o6806642kbM7c5");
             /// <summary>

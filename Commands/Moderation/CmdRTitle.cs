@@ -52,11 +52,14 @@ namespace CommandDll
             {
                 who = Player.Find(message.Split(' ')[0]);
                 if (who == null) { p.SendMessage("Could not find player."); return; }
+                if (p.group.permission <= who.group.permission) { p.SendMessage("You can't change the title of someone of equal or higher rank!"); return; }
+                if (Server.devs.Contains(who.USERNAME) && !Server.devs.Contains(p.USERNAME)) { p.SendMessage("You can't change a dev's title!"); return; }
                 message = message.Substring(message.IndexOf(' ') + 1);
             }
             else
                 who = p;
-            message = (message == who.title) ? who.title : message.Substring(0, message.Length - 1);
+            if (message != who.title)
+                message = message.Substring(0, message.Length - 1);
             max = (19 - message.Length) / 2;
             int temp = message.Length / max;
             skip = message.Length % max > 0 ? temp + 1 : temp;

@@ -61,6 +61,10 @@ namespace MCForge.Entity {
         protected packet.types lastPacket = packet.types.SendPing;
 
         /// <summary>
+        /// The player's money.
+        /// </summary>
+        public int money = 0;
+        /// <summary>
         /// Checks if the player is the server owner.
         /// </summary>
         public bool isOwner { get { if (USERNAME == Server.owner) { return true; } else { return false; } } }
@@ -105,6 +109,23 @@ namespace MCForge.Entity {
         /// Derermines if the player is jokered
         /// </summary>
         public bool jokered = false;
+        /// <summary>
+        /// Determines if the player has opchat on. All messages will be sent to ops
+        /// </summary>
+        public bool opchat = false;
+        /// <summary>
+        /// Determines if the player has adminchat on. All messages will be sent to admins
+        /// </summary>
+        public bool adminchat = false;
+        /// <summary>
+        /// Determines if the player is in /whisper mode
+        /// </summary>
+        public bool whispering = false;
+        /// <summary>
+        /// The player to whisper to
+        /// </summary>
+        public Player whisperto;
+
         /// <summary>
         /// Appears in front of player's name if he is voiced
         /// </summary>
@@ -186,19 +207,19 @@ namespace MCForge.Entity {
         /// </summary>
         public Vector3 lastClick;
         /// <summary>
-        /// The players COLOR
+        /// The player's COLOR
         /// </summary>
         public string color = Colors.navy;
         /// <summary>
-        /// The players TITLE
+        /// The player's TITLE
         /// </summary>
         public string title = "";
         /// <summary>
-        /// The players TITLE COLOR
+        /// The player's TITLE COLOR
         /// </summary>
         public string titleColor = "";
         /// <summary>
-        /// The players PREFIX
+        /// The player's PREFIX
         /// </summary>
         public string prefix = "";
         /// <summary>
@@ -404,6 +425,7 @@ namespace MCForge.Entity {
                         lines[lines.Count - 1] = lines[lines.Count - 1].
                             Substring(0, lines[lines.Count - 1].Length - 1);
                         message = message.Substring(1);
+                       
                     }
                 }
             } return lines;

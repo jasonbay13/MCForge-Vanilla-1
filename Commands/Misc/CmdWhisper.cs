@@ -17,9 +17,9 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 namespace CommandDll
 {
-    public class CmdDisagree : ICommand
+    public class CmdWhisper : ICommand
     {
-        public string Name { get { return "Disagree"; } }
+        public string Name { get { return "Whisper"; } }
         public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
@@ -28,20 +28,34 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            if (Server.agreed.Contains(p.USERNAME)) { p.SendMessage("You have already agreed to the rules!"); return; }
-            if (!p.readrules) { p.SendMessage("You need to read the /rules before you can disagree!"); return; }
-            p.Kick("Kicked for disagreeing to the rules!");
+            Player who = Player.Find(args[0]);
+            if (who == null) { p.SendMessage("Player not found!"); return; }
+            if (who == p) { p.SendMessage("Cannot talk to yourself!"); return; }
+            if (!p.whispering)
+            {
+                p.SendMessage("All messages will be sent to " + who.USERNAME);
+                p.whispering = true;
+                p.whisperto = who;
+                return;
+            }
+            else
+            {
+                p.SendMessage("Whisper mode disabled!");
+                p.whispering = false;
+                p.whisperto = null;
+                return;
+            }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/disagree - disagree to the rules");
+            p.SendMessage("/whisper <player> - enables whisper mode");
+            p.SendMessage("All messages will be sent to <player>");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "disagree" });
+            Command.AddReference(this, new string[1] { "whisper" });
         }
     }
 }
-
