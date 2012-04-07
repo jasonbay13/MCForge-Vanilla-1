@@ -14,7 +14,6 @@ permissions and limitations under the Licenses.
 */
 using System.IO;
 using System;
-using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;

@@ -13,9 +13,6 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using System.IO;
@@ -33,12 +30,12 @@ namespace CommandDll.Misc
         public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
         {
-            if (args[0] == "") Help(p); return;
+            if (args[0] == "") { Help(p); return; }
             Player who = Player.Find(args[0]);
-            if (p != null && !p.isOwner) p.SendMessage("Only the server owner can reset passwords!"); return;
-            if (who == null) p.SendMessage("Could not find \"" + args[0] + "\"."); return;
-            if (!File.Exists("extra/passwords/" + who.Username + ".xml")) p.SendMessage("The player you specified does not have a password!"); return;
-            if (p != null && !p.verified) p.SendMessage("You cannot reset passwords until you have verified with &a/pass <password>" + Server.DefaultColor + "!"); return;
+            if (p != null && !p.isOwner) { p.SendMessage("Only the server owner can reset passwords!"); return; }
+            if (who == null) { p.SendMessage("Could not find \"" + args[0] + "\"."); return; }
+            if (!File.Exists("extra/passwords/" + who.Username + ".xml")) { p.SendMessage("The player you specified does not have a password!"); return; }
+            if (p != null && !p.verified) { p.SendMessage("You cannot reset passwords until you have verified with &a/pass <password>" + Server.DefaultColor + "!"); return; }
             try
             {
                 File.Delete("extra/passwords/" + who.Username + ".xml");
