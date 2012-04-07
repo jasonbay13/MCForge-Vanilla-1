@@ -361,7 +361,7 @@
             <summary>
             Sends a message to all admins+
             </summary>
-            <param name="message"></param>
+            <param name="message">The message to be sent</param>
         </member>
         <member name="M:MCForge.Entity.Player.RankChat(MCForge.Entity.Player,System.String)">
             <summary>
@@ -435,16 +435,6 @@
         <member name="F:MCForge.Entity.Player.adminchat">
             <summary>
             Determines if the player has adminchat on. All messages will be sent to admins
-            </summary>
-        </member>
-        <member name="F:MCForge.Entity.Player.rankchat">
-            <summary>
-            Determines if the player has rankchat on. All messages will be sent to players with the same rank
-            </summary>
-        </member>
-        <member name="F:MCForge.Entity.Player.levelchat">
-            <summary>
-            Deretmines if the player has levelchat on. All messages will be sent to players on the same level
             </summary>
         </member>
         <member name="F:MCForge.Entity.Player.voicestring">

@@ -121,7 +121,7 @@ namespace MCForge.Core {
         /// <summary>
         /// Server's op chat permission
         /// </summary>
-        public static byte opchatperm = 80;
+        public static byte opchatperm = 80; //TODO: add this to properties
         /// <summary>
         /// Server's admin chat permission
         /// </summary>

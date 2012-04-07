@@ -118,14 +118,6 @@ namespace MCForge.Entity {
         /// </summary>
         public bool adminchat = false;
         /// <summary>
-        /// Determines if the player has rankchat on. All messages will be sent to players with the same rank
-        /// </summary>
-        public bool rankchat = false;
-        /// <summary>
-        /// Deretmines if the player has levelchat on. All messages will be sent to players on the same level
-        /// </summary>
-        public bool levelchat = false;
-        /// <summary>
         /// Appears in front of player's name if he is voiced
         /// </summary>
         public string voicestring = "";

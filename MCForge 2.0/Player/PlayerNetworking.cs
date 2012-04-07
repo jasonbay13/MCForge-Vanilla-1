@@ -284,7 +284,7 @@ namespace MCForge.Entity
 			byte incomingID = message[0];
 			if (incomingID != 0xFF && incomingID != id && incomingID != 0)
 			{
-				//TODO Player.GlobalMessageOps("Player sent a malformed packet!");
+				Player.UniversalChatOps("Player " + USERNAME + ", sent a malformed packet!");
 				Kick("Hacked Client!");
 				return;
 			}
@@ -417,7 +417,7 @@ namespace MCForge.Entity
                 Server.Log("<OpChat> <" + USERNAME + "> " + incomingText);
                 return;
             }
-            if (incomingText[0] == '*' || rankchat) //Rank chat
+            if (incomingText[0] == '*') //Rank chat
             {
                 string groupname = group.name;
                 incomingText = incomingText.Trim().TrimStart('*');
@@ -426,19 +426,20 @@ namespace MCForge.Entity
                 Server.Log("<" + groupname + " Chat> <" + USERNAME + "> " + incomingText);
                 return;
             }
-            if (incomingText[0] == '!' || levelchat) //Level chat
+            if (incomingText[0] == '!') //Level chat
             {
                 incomingText = incomingText.Trim().TrimStart('!');
-                LevelChat(this, "&a<&f" + level + "&a> " + USERNAME + ":&f " + incomingText);
-                Server.Log("<" + level + " Chat> " + USERNAME + ": " + incomingText);
+                LevelChat(this, "&a<&f" + level.name + "&a> " + USERNAME + ":&f " + incomingText);
+                Server.Log("<" + level.name + " Chat> " + USERNAME + ": " + incomingText);
                 return;
             }
             if (incomingText[0] == '+' || adminchat) //Admin chat
             {
                 incomingText = incomingText.TrimStart().TrimStart('+');
-                UniversalChatAdmins("&a<&fTo Ops&a> " + group.color + USERNAME + ": &f" + incomingText);
+                UniversalChatAdmins("&a<&fTo Admins&a> " + group.color + USERNAME + ": &f" + incomingText);
                 if (group.permission < Server.adminchatperm) { SendMessage("&a<&fTo Admins&a> " + group.color + USERNAME + ": &f" + incomingText); }
                 Server.Log("<AdminChat> <" + USERNAME + "> " + incomingText);
+                return;
             }
 			Server.Log("<" + USERNAME + "> " + incomingText);
             UniversalChat(voicestring + color + prefix + USERNAME + ": &f" + incomingText);
@@ -851,7 +852,7 @@ namespace MCForge.Entity
         /// <summary>
         /// Sends a message to all admins+
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message">The message to be sent</param>
         public static void UniversalChatAdmins(string message)
         {
             Server.ForeachPlayer(delegate(Player p)
