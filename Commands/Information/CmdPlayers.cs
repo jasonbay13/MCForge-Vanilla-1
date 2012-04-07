@@ -37,7 +37,7 @@ namespace CommandDll
                 else { send += ": " + Server.DefaultColor; }
                 Server.ForeachPlayer(delegate(Player pl)
                     {
-                        if (pl.group.permission == group.permission) { send +=  pl.USERNAME + "&a, " + Server.DefaultColor; }
+                        if (pl.group.permission == group.permission) { send +=  pl.Username + "&a, " + Server.DefaultColor; }
                     });
                 p.SendMessage(send.Trim().Remove(send.Length - 4, 4));
             }

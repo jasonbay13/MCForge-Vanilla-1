@@ -45,7 +45,7 @@ namespace CommandDll
                 if (who == null) { p.SendMessage("Could not find player."); return; }
                 if (p.group.permission <= who.group.permission) { p.SendMessage("You can't change the title color of someone of equal or higher rank!"); return; }
                 //devs should be able to change their own color
-                if (Server.devs.Contains(who.USERNAME) && !Server.devs.Contains(p.USERNAME)) { p.SendMessage("You can't change a dev's title color!"); return; }
+                if (Server.devs.Contains(who.Username) && !Server.devs.Contains(p.Username)) { p.SendMessage("You can't change a dev's title color!"); return; }
                 titleColor = args[1] == "del" ? "del" : Colors.Parse(args[1]);
                 if (who.titleColor == titleColor) { p.SendMessage("Their title is already that color!"); return; }
             }
@@ -62,7 +62,7 @@ namespace CommandDll
                 who.titleColor = titleColor;
                 message = "was set to " + titleColor + Colors.Name(titleColor) + who.color + ".";
             }
-            Player.UniversalChat(who.color + "*" + who.USERNAME + (who.USERNAME.EndsWith("s") || who.USERNAME.EndsWith("x") ? "'" : "'s") + " title color " + message);
+            Player.UniversalChat(who.color + "*" + who.Username + (who.Username.EndsWith("s") || who.Username.EndsWith("x") ? "'" : "'s") + " title color " + message);
 
             who.SetPrefix();
             //TODO Save to database.

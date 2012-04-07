@@ -38,17 +38,17 @@ namespace CommandDll
             if (args.Length == 0) { who = null; }
             else { who = Player.Find(args[0]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
-            if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("You can't votekick a MCForge Developer!"); return; }
+            if (Server.devs.Contains(who.Username)) { p.SendMessage("You can't votekick a MCForge Developer!"); return; }
             Server.kicker = who;
             ResetVotes();
             Server.voting = true;
             Server.kickvote = true;
-            Player.UniversalChat("VOTE: Kick " + who.USERNAME + "?");
+            Player.UniversalChat("VOTE: Kick " + who.Username + "?");
             Player.UniversalChat("Use: %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + "to vote!");
             Thread.Sleep(15000);
             Player.UniversalChat("The votes are in! %aYes: " + Server.YesVotes + " %cNo: " + Server.NoVotes + Server.DefaultColor + "!");
             if (Server.YesVotes > Server.NoVotes) { who.Kick("Votekick'd"); return; }
-            else if (Server.NoVotes > Server.YesVotes || Server.YesVotes == Server.NoVotes) { Player.UniversalChat("Looks like " + who.USERNAME + " is staying!"); return; }
+            else if (Server.NoVotes > Server.YesVotes || Server.YesVotes == Server.NoVotes) { Player.UniversalChat("Looks like " + who.Username + " is staying!"); return; }
 			Server.ForeachPlayer(delegate(Player pl)
 			{
 				pl.voted = false;

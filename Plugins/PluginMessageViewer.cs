@@ -14,7 +14,6 @@ permissions and limitations under the Licenses.
 */﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using MCForge;
 using System.Timers;
@@ -87,8 +86,9 @@ namespace PluginsDLL
         }
         private int indexOfPlayer(Player p)
         {
-            return viewing.FindIndex(v => { return v.p.USERNAME == p.USERNAME; });
+            return viewing.FindIndex(v => { return v.p.Username == p.Username; });
         }
+<<<<<<< Updated upstream
         public string Name
         {
             get { return "MessageViewer"; }
@@ -109,6 +109,15 @@ namespace PluginsDLL
             get { throw new NotImplementedException(); }
         }
 
+=======
+        public string Name { get { return "MessageViewer"; } }
+        public string Author { get { return "ninedrafted"; } }
+        public int Version { get { return 1; } }
+        public string CUD { get { return ""; } }
+        public void Initialize()
+        {
+        }
+>>>>>>> Stashed changes
         public class Viewer
         {
             public Viewer(Player p, string message, int pos) : this(p, prepare(message), pos) { }

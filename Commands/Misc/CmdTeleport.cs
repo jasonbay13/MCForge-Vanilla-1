@@ -72,7 +72,7 @@ namespace CommandDll
                         //Need goto here
                         if (who.isLoading)
                         {
-                            p.SendMessage("Waiting for " + who.color + who.USERNAME + Server.DefaultColor + " to spawn...");
+                            p.SendMessage("Waiting for " + who.color + who.Username + Server.DefaultColor + " to spawn...");
                             while (who.isLoading) { }
                         }
                     }
@@ -111,13 +111,13 @@ namespace CommandDll
                         //Need goto here
                         if (two.isLoading)
                         {
-                            p.SendMessage("Waiting for " + two.color + two.USERNAME + Server.DefaultColor + " to spawn...");
+                            p.SendMessage("Waiting for " + two.color + two.Username + Server.DefaultColor + " to spawn...");
                             while (two.isLoading) { }
                         }
                     }
                 }
                 one.SendToPos(two.Pos, two.Rot);
-                p.SendMessage(one.USERNAME + " has been succesfully teleported to " + two.USERNAME + "!");
+                p.SendMessage(one.Username + " has been succesfully teleported to " + two.Username + "!");
                 return;
             }
         }

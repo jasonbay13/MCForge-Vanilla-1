@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
@@ -11,40 +8,24 @@ namespace CommandDll
 {
 	public class CmdIds : ICommand
 	{
-		string _Name = "PlayerIds";
-		public string Name { get { return _Name; } }
-
-		CommandTypes _Type = CommandTypes.information;
-		public CommandTypes Type { get { return _Type; } }
-
-		string _Author = "Merlin33069";
-		public string Author { get { return _Author; } }
-
-		int _Version = 1;
-		public int Version { get { return _Version; } }
-
-		string _CUD = "";
-		public string CUD { get { return _CUD; } }
-
-        byte _Permission = 120;
-        public byte Permission { get { return _Permission; } }
-
-
+        public string Name { get { return "PlayerIds"; } }
+		public CommandTypes Type { get { return CommandTypes.information; } }
+        public string Author { get { return "Merlin33069"; } }
+		public int Version { get { return 1; } }
+		public string CUD { get { return ""; } }
+        public byte Permission { get { return 120; } }
 		string[] CommandStrings = new string[1] { "ids" };
-
 		public void Use(Player p, string[] args)
 		{
 			Server.ForeachPlayer(delegate(Player pl)
 			{
-				p.SendMessage(pl.USERNAME + " " + pl.id);
+				p.SendMessage(pl.Username + " " + pl.id);
 			});
 		}
-
 		public void Help(Player p)
 		{
 
 		}
-
 		public void Initialize()
 		{
 			Command.AddReference(this, CommandStrings);

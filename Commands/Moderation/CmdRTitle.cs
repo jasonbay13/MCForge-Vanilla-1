@@ -53,7 +53,7 @@ namespace CommandDll
                 who = Player.Find(message.Split(' ')[0]);
                 if (who == null) { p.SendMessage("Could not find player."); return; }
                 if (p.group.permission <= who.group.permission) { p.SendMessage("You can't change the title of someone of equal or higher rank!"); return; }
-                if (Server.devs.Contains(who.USERNAME) && !Server.devs.Contains(p.USERNAME)) { p.SendMessage("You can't change a dev's title!"); return; }
+                if (Server.devs.Contains(who.Username) && !Server.devs.Contains(p.Username)) { p.SendMessage("You can't change a dev's title!"); return; }
                 message = message.Substring(message.IndexOf(' ') + 1);
             }
             else
@@ -85,7 +85,7 @@ namespace CommandDll
             who.titleColor = "&c";
             who.title = message;
             who.SetPrefix();
-            Player.UniversalChat(who.color + who.USERNAME + Server.DefaultColor + " had thier title set to &b[" + who.titleColor + who.title + "&b]");
+            Player.UniversalChat(who.color + who.Username + Server.DefaultColor + " had thier title set to &b[" + who.titleColor + who.title + "&b]");
             //TODO Save to database.
         }
 

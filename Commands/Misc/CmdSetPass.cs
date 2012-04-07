@@ -113,20 +113,20 @@ namespace CommandDll.Misc
                 }
                 try
                 {
-                    if (File.Exists("extra/passwords/" + who.USERNAME + ".xml"))
+                    if (File.Exists("extra/passwords/" + who.Username + ".xml"))
                     {
-                        File.Delete("extra/passwords/" + who.USERNAME + ".xml");
+                        File.Delete("extra/passwords/" + who.Username + ".xml");
                     }
-                    StreamWriter SW = new StreamWriter(File.Create("extra/passwords/" + who.USERNAME + ".xml"));
+                    StreamWriter SW = new StreamWriter(File.Create("extra/passwords/" + who.Username + ".xml"));
                     SW.WriteLine(outStr);
                     SW.Flush();
                     SW.Close();
-                    File.WriteAllText("extra/passwords/" + who.USERNAME + ".xml", outStr);
+                    File.WriteAllText("extra/passwords/" + who.Username + ".xml", outStr);
                 }
                 catch
                 {
                     who.SendMessage("&cFailed to Save Password, &aTry Again Later!");
-                    Server.Log(who.USERNAME + " failed to save password.");
+                    Server.Log(who.Username + " failed to save password.");
                 }
                 return outStr;
 

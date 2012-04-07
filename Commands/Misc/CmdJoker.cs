@@ -38,17 +38,17 @@ namespace CommandDll
             if (args.Length == 1) { who = Player.Find(args[0]); }
             else { who = Player.Find(args[1]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
-            if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("You can't joker a MCForge Developer!"); return; }
+            if (Server.devs.Contains(who.Username)) { p.SendMessage("You can't joker a MCForge Developer!"); return; }
             CheckEmpty();
             if (args.Length == 1) //normal joker
             {
-                if (who.jokered) { who.jokered = false; Player.UniversalChat(who.USERNAME + " is no longer a &aJ&bo&ck&5e&9r"); return; }
-                else { who.jokered = true; Player.UniversalChat(who.USERNAME + " is now a &aJ&bo&ck&5e&9r"); return; }
+                if (who.jokered) { who.jokered = false; Player.UniversalChat(who.Username + " is no longer a &aJ&bo&ck&5e&9r"); return; }
+                else { who.jokered = true; Player.UniversalChat(who.Username + " is now a &aJ&bo&ck&5e&9r"); return; }
             }
             else //stealth
             {
-                if (who.jokered) { who.jokered = false; p.SendMessage("Successfully stealth unjokered " + who.USERNAME); return; }
-                else { who.jokered = true; p.SendMessage("Successfully stealth jokered " + who.USERNAME); return; }
+                if (who.jokered) { who.jokered = false; p.SendMessage("Successfully stealth unjokered " + who.Username); return; }
+                else { who.jokered = true; p.SendMessage("Successfully stealth jokered " + who.Username); return; }
             }
 
         }

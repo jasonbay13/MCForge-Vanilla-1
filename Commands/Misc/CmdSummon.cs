@@ -50,10 +50,10 @@ namespace CommandDll
 						if (pl.level == p.level && pl != p && p.group.permission > pl.group.permission) //Missing permissions
 						{
 							pl.SendToPos(p.Pos, p.Rot);
-							pl.SendMessage("You were summoned by " + p.color + p.USERNAME + Server.DefaultColor + ".");
+							pl.SendMessage("You were summoned by " + p.color + p.Username + Server.DefaultColor + ".");
 						}
 					});
-                    Player.UniversalChat(p.color + p.USERNAME + Server.DefaultColor + " summoned everyone!");
+                    Player.UniversalChat(p.color + p.Username + Server.DefaultColor + " summoned everyone!");
                     return;
                 }
                 else
@@ -78,7 +78,7 @@ namespace CommandDll
                     {
                         if (p.level != who.level)
                         {
-                            p.SendMessage(who.USERNAME + " is in a different level. Forcefetching has started!");
+                            p.SendMessage(who.Username + " is in a different level. Forcefetching has started!");
                             Level where = p.level;
                             //Need to use goto here
                             Thread.Sleep(1000); //Let them load;   

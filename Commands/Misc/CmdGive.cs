@@ -29,17 +29,17 @@ namespace CommandDll.Misc
         public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
         {
-            if (args.Length != 2) Help(p); return;
+            if (args.Length != 2) { Help(p); return; }
             Player who = Player.Find(args[0]);
-            if (who == null) p.SendMessage("Could not find \"" + args[0] + "\"!"); return;
-            if (who == p && !p.isOwner) p.SendMessage("You cannot give yourself money!"); return;
+            if (who == null) { p.SendMessage("Could not find \"" + args[0] + "\"!"); return; }
+            if (who == p && !p.isOwner) { p.SendMessage("You cannot give yourself money!"); return; }
             int amt;
             try { amt = int.Parse(args[1]); }
             catch { p.SendMessage("Invalid amount!"); return; }
-            if (who.money + amt > 16777215) p.SendMessage("Players cannot have over 16777215 " + Server.moneys + "."); return;
-            if (amt < 0) p.SendMessage("Cannot give negative amounts of " + Server.moneys + "."); return;
+            if (who.money + amt > 16777215) { p.SendMessage("Players cannot have over 16777215 " + Server.moneys + "."); return; }
+            if (amt < 0) { p.SendMessage("Cannot give negative amounts of " + Server.moneys + "."); return; }
             who.money += amt;
-            Player.UniversalChat(who.color + who.USERNAME + Server.DefaultColor + " was given &3" + amt + Server.DefaultColor + " " + Server.moneys + ".");
+            Player.UniversalChat(who.color + who.Username + Server.DefaultColor + " was given &3" + amt + Server.DefaultColor + " " + Server.moneys + ".");
             //TODO: DB save
         }
         public void Help(Player p)

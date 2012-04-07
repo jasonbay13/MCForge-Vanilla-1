@@ -44,7 +44,7 @@ namespace CommandDll
             string[] rules = File.ReadAllLines("text/rules.txt");
             who.SendMessage("Server rules:");
             foreach (string rule in rules) { who.SendMessage(rule); }
-            if (!who.readrules && !Server.agreed.Contains(who.USERNAME)) { who.readrules = true; } //Need this for /agree
+            if (!who.readrules && !Server.agreed.Contains(who.Username)) { who.readrules = true; } //Need this for /agree
             if (who != p) { p.SendMessage("Sent rules to " + who.username); }
         }
 

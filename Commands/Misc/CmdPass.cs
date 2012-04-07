@@ -39,13 +39,13 @@ namespace CommandDll.Misc
         public static string password = "";
         public void Use(Player p, string[] args)
         {
-            if (p.verified) p.SendMessage("You already verified!"); return;
-            if (!Server.Verifying) p.SendMessage("You don't need to verify!"); return;
-            if (p.group.permission < Server.VerifyGroup.permission) p.SendMessage("Only " + Server.VerifyGroup.color + Server.VerifyGroup.name + "s " + Server.DefaultColor + "and above need to verify."); return;
+            if (p.verified) { p.SendMessage("You already verified!"); return; }
+            if (!Server.Verifying) { p.SendMessage("You don't need to verify!"); return; }
+            if (p.group.permission < Server.VerifyGroup.permission) { p.SendMessage("Only " + Server.VerifyGroup.color + Server.VerifyGroup.name + "s " + Server.DefaultColor + "and above need to verify."); return; }
             #region *
-            if (p.passtries == 3) p.Kick("Did you really think you could keep on guessing?"); return;
+            if (p.passtries == 3) { p.Kick("Did you really think you could keep on guessing?"); return; }
             int foundone = 0;
-            if (args[0] == "") Help(p); return;
+            if (args[0] == "") { Help(p); return; }
             int number = args.Length;
             if (number > 1)
             {
@@ -64,7 +64,7 @@ namespace CommandDll.Misc
             {
                 foreach (FileInfo file in fi)
                 {
-                    if (file.Name.Replace(".xml", "") == p.USERNAME)
+                    if (file.Name.Replace(".xml", "") == p.Username)
                     {
                         foundone++;
                     }
@@ -85,15 +85,15 @@ namespace CommandDll.Misc
                 p.SendMessage("&cAn error has occurred!");
                 return;
             }
-            if (!File.Exists("extra/passwords/" + p.USERNAME + ".xml"))
+            if (!File.Exists("extra/passwords/" + p.Username + ".xml"))
             {
                 p.SendMessage("You have not &cset a password, " + Server.DefaultColor + "use &a/setpass [Password] &cto set one!");
                 return;
             }
-            Crypto.DecryptStringAES(File.ReadAllText("extra/passwords/" + p.USERNAME + ".xml"), "MCForgeEncryption", p, args[0]);
+            Crypto.DecryptStringAES(File.ReadAllText("extra/passwords/" + p.Username + ".xml"), "MCForgeEncryption", p, args[0]);
             if (args[0] == password)
             {
-                p.SendMessage("Thank you, " + p.color + p.USERNAME + Server.DefaultColor + "! You have now &averified " + Server.DefaultColor + "and have &aaccess to admin commands and features!");
+                p.SendMessage("Thank you, " + p.color + p.Username + Server.DefaultColor + "! You have now &averified " + Server.DefaultColor + "and have &aaccess to admin commands and features!");
                 if (p.verified == false) { p.verified = true; }
                 password = "";
                 p.passtries = 0;

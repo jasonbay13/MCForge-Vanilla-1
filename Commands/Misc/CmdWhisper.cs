@@ -33,7 +33,7 @@ namespace CommandDll
             if (who == p) { p.SendMessage("Cannot talk to yourself!"); return; }
             if (!p.whispering)
             {
-                p.SendMessage("All messages will be sent to " + who.USERNAME);
+                p.SendMessage("All messages will be sent to " + who.Username);
                 p.whispering = true;
                 p.whisperto = who;
                 return;
