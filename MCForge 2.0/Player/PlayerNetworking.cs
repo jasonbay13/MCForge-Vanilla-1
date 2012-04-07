@@ -815,10 +815,7 @@ namespace MCForge.Entity
 
 		internal static void GlobalPing()
 		{
-			Server.ForeachPlayer(delegate(Player p)
-			{
-				p.SendPing();
-			});
+            Server.ForeachPlayer(p => p.SendPing());
 		}
 
 	}

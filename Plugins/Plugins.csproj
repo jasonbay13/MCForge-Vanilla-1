@@ -41,7 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PluginMessageViewer.cs" />
+    <Compile Include="WomPlugin\PluginWomTextures.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WomPlugin\WomSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCForge 2.0\MCForge.csproj">

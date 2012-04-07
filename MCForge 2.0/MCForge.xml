@@ -4,9 +4,19 @@
         <name>MCForge</name>
     </assembly>
     <members>
-        <member name="M:MCForge.Interface.Plugin.IPlugin.Initialize">
+        <member name="T:MCForge.Interface.Plugin.IPluginMessageViewer">
             <summary>
-            The initialization of the plugin.
+            Interface for making a plugin with a message viewer
+            </summary>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPlugin.OnLoad">
+            <summary>
+            When the plugin is first loaded
+            </summary>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPlugin.OnUnload">
+            <summary>
+            When the plugin is unloaded.
             </summary>
         </member>
         <member name="P:MCForge.Interface.Plugin.IPlugin.Name">
@@ -735,6 +745,24 @@
             Is the event canceled
             </summary>
         </member>
+        <member name="T:MCForge.Interface.Plugin.PluginManager">
+            <summary>
+            The command class, used to store commands for players to use
+            </summary>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.PluginManager.getByInterface(System.String)">
+            <summary>
+            Gets a plugin by interface.
+            </summary>
+            <param name="name">The name of the interface</param>
+            <returns></returns>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.PluginManager.AddReference(MCForge.Interface.Plugin.IPlugin)">
+            <summary>
+            Add an array of references to your command here
+            </summary>
+            <param name="plugin">The plugin d that this reference... references, you should most likely use 'this'</param>    
+        </member>
         <member name="T:MCForge.World.Level">
             <summary>
             This class is used for loading/saving/handling/manipulation of server levels.
@@ -758,6 +786,11 @@
         <member name="F:MCForge.World.Level.data">
             <summary>
             This holds the map data for the entire map
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Level.ExtraData">
+            <summary>
+            Data to store with in the level
             </summary>
         </member>
         <member name="M:MCForge.World.Level.CreateLevel(MCForge.Core.Vector3,MCForge.World.Level.LevelTypes,System.String)">
@@ -868,23 +901,61 @@
             An enumeration of all the types of levels
             </summary>
         </member>
-        <member name="T:MCForge.Interface.Plugin.PluginManager">
+        <member name="M:MCForge.Utilities.Settings.ExtraSettings.GetSettingArray(System.String)">
             <summary>
-            The command class, used to store commands for players to use
+            Gets a setting
             </summary>
+            <param name="key">The key</param>
+            <returns>The setting values, use [0] at end if it only has 1 value</returns>
         </member>
-        <member name="M:MCForge.Interface.Plugin.PluginManager.getByInterface(System.String)">
+        <member name="M:MCForge.Utilities.Settings.ExtraSettings.GetSetting(System.String)">
             <summary>
-            Gets a plugin by interface.
+            Gets a setting
             </summary>
-            <param name="name">The name of the interface</param>
-            <returns></returns>
+            <param name="key">The key</param>
+            <returns>The setting value</returns>
+            <remarks>Returns the first value if multiple values are present</remarks>
         </member>
-        <member name="M:MCForge.Interface.Plugin.PluginManager.AddReference(MCForge.Interface.Plugin.IPlugin)">
+        <member name="M:MCForge.Utilities.Settings.ExtraSettings.GetSettingInt(System.String)">
             <summary>
-            Add an array of references to your command here
+            Gets a setting
             </summary>
-            <param name="plugin">The plugin d that this reference... references, you should most likely use 'this'</param>    
+            <param name="key">The key</param>
+            <returns>The setting value specified by the key, or -1 if the setting is not found or could not be parsed</returns>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ExtraSettings.GetSettingBoolean(System.String)">
+            <summary>
+            Gets a setting
+            </summary>
+            <param name="key">The key</param>
+            <returns>The setting value specified by the key, or false if the setting is not found</returns>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ExtraSettings.SetSetting(System.String,System.String,System.String[])">
+            <summary>
+            Set the setting
+            </summary>
+            <param name="key">key to save value to</param>
+            <param name="description">Write a description (optional)</param>
+            <param name="values">for each string in values, it will be seperated by a comma ','</param>
+            <remarks>If the setting does not exist, it will create a new one</remarks>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ExtraSettings.SetSetting(System.String,System.Int32,System.String)">
+            <summary>
+            Set the setting
+            </summary>
+            <param name="key">key to save value to</param>
+            <param name="value">value (or multiple values sperated by a comma ',') to set setting to</param>
+            <param name="description">Write a description (optional)</param>
+            <remarks>If the setting does not exist, it will create a new one</remarks>
+        </member>
+        <member name="M:MCForge.Utilities.Settings.ExtraSettings.SetSetting(System.String,System.Boolean,System.String)">
+            <summary>
+            Set the setting
+            </summary>
+            <param name="key">key to save value to</param>
+            <param name="value">value to set setting to</param>
+            <param name="description">Write a description (optional)</param>
+            <remarks>If the setting does not exist, it will create a new one</remarks>
         </member>
         <member name="T:MCForge.Groups.Permission">
             <summary>
@@ -1116,6 +1187,11 @@
         <member name="P:MCForge.Utilities.Settings.SettingsChangedEventArgs.NewValue">
             <summary>
             The new value of the setting
+            </summary>
+        </member>
+        <member name="T:MCForge.Utilities.Settings.SettingNode">
+            <summary>
+            A simple class housing information of a setting key, value, and description
             </summary>
         </member>
         <member name="F:MCForge.frmMain.components">
