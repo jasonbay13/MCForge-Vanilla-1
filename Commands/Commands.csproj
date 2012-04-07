@@ -47,7 +47,6 @@
     <Compile Include="Building\CmdReplaceAll.cs" />
     <Compile Include="Information\CmdPlayers.cs" />
     <Compile Include="Information\CmdViewranks.cs" />
-    <Compile Include="Misc\CmdEconomy.cs" />
     <Compile Include="Misc\CmdAdminChat.cs" />
     <Compile Include="Misc\CmdOpChat.cs" />
     <Compile Include="Misc\CmdPay.cs" />
