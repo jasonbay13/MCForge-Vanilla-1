@@ -75,5 +75,6 @@ namespace MCForge.Interface.Command
         mod,
         misc,
         information,
+        fun,
     }
 }
