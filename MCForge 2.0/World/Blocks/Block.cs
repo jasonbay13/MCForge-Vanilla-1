@@ -9,6 +9,54 @@ namespace MCForge.World
 {
     public abstract class Block
     {
+        public static readonly Block Adminium = new Adminium();
+        public static readonly Block Air = new Air();
+        public static readonly Block Black = new Black();
+        public static readonly Block Blue = new Blue();
+        public static readonly Block BlueViolet = new BlueViolet();
+        public static readonly Block Bookcase = new Bookcase();
+        public static readonly Block Brick = new Brick();
+        public static readonly Block BrownShroom = new BrownShroom();
+        public static readonly Block Coal = new Coal();
+        public static readonly Block Cobblestone = new Cobblestone();
+        public static readonly Block Cyan = new Cyan();
+        public static readonly Block Dirt = new Dirt();
+        public static readonly Block DoubleStair = new DoubleStair();
+        public static readonly Block Glass = new Glass();
+        public static readonly Block Gold = new Gold();
+        public static readonly Block Gold_Ore = new Gold_Ore();
+        public static readonly Block Grass = new Grass();
+        public static readonly Block Gravel = new Gravel();
+        public static readonly Block Gray = new Gray();
+        public static readonly Block Green = new Green();
+        public static readonly Block GreenYellow = new GreenYellow();
+        public static readonly Block Indigo = new Indigo();
+        public static readonly Block Iron = new Iron();
+        public static readonly Block Iron_Ore = new Iron_Ore();
+        public static readonly Block Lava = new Lava();
+        public static readonly Block Leaves = new Leaves();
+        public static readonly Block Magenta = new Magenta();
+        public static readonly Block MossyCobbleStone = new MossyCobbleStone();
+        public static readonly Block Obsidian = new Obsidian();
+        public static readonly Block Pink = new Pink();
+        public static readonly Block Purple = new Purple();
+        public static readonly Block Red = new Red();
+        public static readonly Block RedFlower = new RedFlower();
+        public static readonly Block RedShroom = new RedShroom();
+        public static readonly Block Sand = new Sand();
+        public static readonly Block Shrub = new Shrub();
+        public static readonly Block Sponge = new Sponge();
+        public static readonly Block SpringGreen = new SpringGreen();
+        public static readonly Block Stair = new Stair();
+        public static readonly Block Stone = new Stone();
+        public static readonly Block TNT = new TNT();
+        public static readonly Block Tree = new Tree();
+        public static readonly Block UNKNOWN = new UNKNOWN();
+        public static readonly Block Water = new Water();
+        public static readonly Block White = new White();
+        public static readonly Block Wood = new Wood();
+        public static readonly Block Yellow = new Yellow();
+        public static readonly Block YellowFlower = new YellowFlower();
         static List<Block> blocks = new List<Block>();
         public abstract byte VisibleBlock { get; }
         public abstract string Name { get; }
@@ -33,7 +81,7 @@ namespace MCForge.World
             if (!blocks.Contains(b))
                 blocks.Add(b);
         }
-        internal static void InIt()
+        internal static void InIt() //Possibly get rid of this...we might not need it.
         {
             Server.Log("Loading blocks...");
             Add(new Adminium());
