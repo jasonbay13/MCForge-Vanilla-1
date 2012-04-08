@@ -138,13 +138,13 @@ namespace CommandDll
             cpos.pos = new Vector3(args.GetX(), args.GetZ(), args.GetY());
             args.Cancel(true);
             args.Unregister(true);
-            OnPlayerBlockChange.Register(CatchBlock2, MCForge.API.Priority.Normal, cpos, args.GetPlayer());
+            OnPlayerBlockChange.Register(CatchBlock2, MCForge.API.Priority.Normal, cpos, args.Player);
         }
         public void CatchBlock2(OnPlayerBlockChange args)
         {
             CatchPos cpos = (CatchPos)args.GetData();
             byte NewType = args.GetPlayerHolding();
-            Player p = args.GetPlayer();
+            Player p = args.Player;
             ushort x = args.GetX();
             ushort z = args.GetZ();
             ushort y = args.GetY();

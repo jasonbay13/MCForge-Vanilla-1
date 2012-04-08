@@ -32,7 +32,7 @@ namespace MCForge.API.PlayerEvent
         {
             Muffins.cache.ForEach(e =>
             {
-                if (e.type.GetType() == GetType() && ((Player)(e.target) == p || e.target == null))
+                if (e.type.GetType() == GetType() && ((Player)(e.target) == Player || e.target == null))
                 {
                     datapass = e.datapass;
                     ((OnCall)e.Delegate)(this);
@@ -44,7 +44,7 @@ namespace MCForge.API.PlayerEvent
                 }
             });
             if (IsCanceled)
-                GetPlayer().SendToPos(oldpos, GetPlayer().Rot);
+                Player.SendToPos(oldpos, Player.Rot);
         }
         /// <summary>
         /// Register this event

@@ -64,7 +64,7 @@ namespace CommandDll
             CatchPos cpos = (CatchPos)args.GetData();
             cpos.pos = new Vector3(args.GetX(), args.GetZ(), args.GetZ());
             args.Unregister(true);
-            args.GetPlayer().CatchNextBlockchange(CatchBlock2, (object)cpos);
+            args.Player.CatchNextBlockchange(CatchBlock2, (object)cpos);
         }
         public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
         {

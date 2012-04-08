@@ -26,20 +26,16 @@ namespace MCForge.API.PlayerEvent
     /// </summary>
     public abstract class PlayerEvent : Event, Cancelable //We can assume we can cancel most player events..because we can
     {
-        internal Player p;
-        internal object datapass;
-        bool _canceled;
-        internal bool _unregister;
-
         /// <summary>
         /// Get the player connected to the event
         /// </summary>
         /// <returns>The player</returns>
-        public virtual Player GetPlayer()
-        {
-            return p;
-        }
+        public Player Player { get; private set; }
+        internal object datapass;
+        bool _canceled;
+        internal bool _unregister;
 
+       
         /// <summary>
         /// Unregister the event
         /// </summary>
@@ -81,7 +77,7 @@ namespace MCForge.API.PlayerEvent
         /// <param name="p">The player connected to the event</param>
         public PlayerEvent(Player p)
         {
-            this.p = p;
+            this.Player = p;
         }
         internal PlayerEvent() { }
 

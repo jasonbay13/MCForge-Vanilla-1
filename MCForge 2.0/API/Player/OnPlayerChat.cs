@@ -14,9 +14,8 @@ namespace MCForge.API.PlayerEvent
     {
 
         public delegate void OnCall(OnPlayerChat eventargs);
-        string message;
         public OnPlayerChat(Player p, string message) : base(p) { 
-            this.message = message; 
+            this.Message = message; 
         }
 
         internal OnPlayerChat() { }
@@ -27,7 +26,7 @@ namespace MCForge.API.PlayerEvent
         {
             Muffins.cache.ForEach(e =>
             {
-                if (e.type.GetType() == GetType() && ((Player)(e.target) == p || e.target == null))
+                if (e.type.GetType() == GetType() && ((Player)(e.target) == Player || e.target == null))
                 {
                     datapass = e.datapass;
                     ((OnCall)e.Delegate)(this);
@@ -41,22 +40,10 @@ namespace MCForge.API.PlayerEvent
         }
 
         /// <summary>
-        /// Get the message the player sent
+        /// Get or set the message the player sent
         /// </summary>
         /// <returns>The message</returns>
-        public string GetMessage()
-        {
-            return message;
-        }
-
-        /// <summary>
-        /// Change the message the player sent
-        /// </summary>
-        /// <param name="message">The new message</param>
-        public void SetMessage(string message)
-        {
-            this.message = message;
-        }
+        public string Message { get; set; }
 
         public override bool IsCancelable
         {

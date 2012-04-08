@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PluginChatAdditions.cs" />
     <Compile Include="PluginMessageViewer.cs" />
     <Compile Include="WomPlugin\PluginWomTextures.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

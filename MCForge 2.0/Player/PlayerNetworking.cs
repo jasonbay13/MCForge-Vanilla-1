@@ -398,7 +398,7 @@ namespace MCForge.Entity
 			e.Call();
 			if (e.IsCanceled)
 				return;
-			incomingText = e.GetMessage();
+            incomingText = e.Message;
 
 			if (Server.voting)
 			{
@@ -840,13 +840,11 @@ namespace MCForge.Entity
 		public void GlobalDie()
 		{
 			packet pa = new packet(new byte[2] { (byte)packet.types.SendDie, id });
-			Server.ForeachPlayer(delegate(Player p)
-			{
-				if (p != this)
-				{
-					p.SendPacket(pa);
-				}
-			});
+            Server.ForeachPlayer(p => {
+                if (p != this) {
+                    p.SendPacket(pa);
+                }
+            });
 		}
 		/// <summary>
 		/// Send a message to everyone, on every world
@@ -854,10 +852,7 @@ namespace MCForge.Entity
 		/// <param name="text">The message to send.</param>
 		public static void UniversalChat(string text)
 		{
-			Server.ForeachPlayer(delegate(Player p)
-			{
-				p.SendMessage(text);
-			});
+            Server.ForeachPlayer(p => p.SendMessage(text));
 		}
         /// <summary>
         /// Sends a message to all operators+
@@ -865,9 +860,10 @@ namespace MCForge.Entity
         /// <param name="message">The message to send</param>
         public static void UniversalChatOps(string message)
         {
-            Server.ForeachPlayer(delegate(Player p)
-            {
-                if (p.group.permission >= Server.opchatperm) { p.SendMessage(message); }
+            Server.ForeachPlayer(p => {
+                if (p.group.permission >= Server.opchatperm) {
+                    p.SendMessage(message);
+                }
             });
         }
         /// <summary>
@@ -876,9 +872,10 @@ namespace MCForge.Entity
         /// <param name="message">The message to be sent</param>
         public static void UniversalChatAdmins(string message)
         {
-            Server.ForeachPlayer(delegate(Player p)
-            {
-                if (p.group.permission >= Server.adminchatperm) { p.SendMessage(message); }
+            Server.ForeachPlayer(p => {
+                if (p.group.permission >= Server.adminchatperm) {
+                    p.SendMessage(message);
+                }
             });
         }
         /// <summary>

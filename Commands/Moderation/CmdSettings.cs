@@ -2,34 +2,42 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MCForge;
 using MCForge.Interface.Command;
-using MCForge.Utilities.Settings;
 using MCForge.Entity;
-
-namespace CommandDll.Moderation {
-    class CmdSettings : ICommand {
+using MCForge.Core;
+using MCForge.Utilities.Settings;
+namespace CommandDll {
+    public class CmdSettings : ICommand {
         public string Name {
-            get { return "settings"; }
+            get {
+                return "settings";
+            }
         }
-
         public CommandTypes Type {
-            get { return CommandTypes.mod; }
+            get {
+                return CommandTypes.mod;
+            }
         }
-
         public string Author {
-            get { return "headdetect"; }
+            get {
+                return "headdetect";
+            }
         }
-
         public int Version {
-            get { return 1; }
+            get {
+                return 1;
+            }
         }
-
         public string CUD {
-            get { return ""; } //idk wtf this do
+            get {
+                return "";
+            }
         }
-
         public byte Permission {
-            get { return 100; }
+            get {
+                return 80;
+            }
         }
 
         public void Use(Player p, string[] args) {
@@ -37,20 +45,21 @@ namespace CommandDll.Moderation {
                 Help(p);
                 return;
             }
-            if (args.Length > 2) {
+            if (args.Length > 1) {
                 if (args[0].ToLower() == "help") {
                     if (ServerSettings.HasKey(args[1]))
-                        p.SendMessage(ServerSettings.GetDescription(args[1]));
+                        p.SendMessage(ServerSettings.GetDescription(args[1]) ?? String.Format("No description for {0}", args[1]));
                     else
                         p.SendMessage("Key doesn't exist");
                     return;
                 }
-                else if (ServerSettings.HasKey(args[0])) {
-                    ServerSettings.SetSetting(args[0], values:String.Join(" ", args, 1, args.Count()));
+                if (ServerSettings.HasKey(args[0])) {
+                    ServerSettings.SetSetting(args[0], values: String.Join(" ", args, 1, args.Count() - 1));
+                    p.SendMessage(String.Format("{0} has been changed to {1}", args[0], ServerSettings.GetSetting(args[0])));
                     return;
                 }
                 else {
-                    Help(p);
+                    p.SendMessage("Key doesn't exist");
                     return;
                 }
             }
@@ -73,3 +82,4 @@ namespace CommandDll.Moderation {
         }
     }
 }
+

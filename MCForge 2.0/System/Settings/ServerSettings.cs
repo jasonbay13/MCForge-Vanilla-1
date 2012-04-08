@@ -29,7 +29,7 @@ namespace MCForge.Utilities.Settings {
     public class ServerSettings {
 
         internal const byte Version = 7;
-        internal static string Salt { get; set; }
+        internal static string Salt { get; private set; }
 
         private static bool _initCalled;
         private static List<SettingNode> Values;
@@ -50,7 +50,7 @@ namespace MCForge.Utilities.Settings {
             if (_initCalled)
                 throw new ArgumentException("\"Settings.Init()\" can only be called once");
 
-            Salt = GenerateSalt();
+            GenerateSalt();
 
             _initCalled = true;
             Values = new List<SettingNode>{
@@ -269,11 +269,11 @@ namespace MCForge.Utilities.Settings {
 
         }
 
-        internal static string GenerateSalt() {
+        internal static void GenerateSalt() {
             var numberGen = new RNGCryptoServiceProvider();
             var data = new byte[16];
             numberGen.GetBytes(data);
-            return Convert.ToBase64String(data);
+            Salt = Convert.ToBase64String(data);
         }
 
         public static bool HasKey(string key) {

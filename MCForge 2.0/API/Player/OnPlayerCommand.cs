@@ -40,7 +40,7 @@ namespace MCForge.API.PlayerEvent
         {
             Muffins.cache.ForEach(e =>
             {
-                if (e.type.GetType() == GetType() && ((Player)(e.target) == p || e.target == null))
+                if (e.type.GetType() == GetType() && ((Player)(e.target) == Player || e.target == null))
                 {
                     datapass = e.datapass;
                     ((OnCall)e.Delegate)(this);

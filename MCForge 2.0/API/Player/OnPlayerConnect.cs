@@ -59,8 +59,8 @@ namespace MCForge.API.PlayerEvent
                         }
                     }
                 });
-            if (IsCanceled && GetPlayer().isOnline)
-                GetPlayer().Kick("");
+            if (IsCanceled && Player.isOnline)
+                Player.Kick("");
         }
 
         /// <summary>

@@ -22,13 +22,35 @@ using System.Net;
 using System.IO.Compression;
 
 namespace MCForge.Core {
-    public struct Point2 {
+    public struct Vector2 {
         public ushort x;
         public ushort y;
 
-        public Point2(ushort X, ushort Y) {
+        public Vector2(ushort X, ushort Y) {
             x = X;
             y = Y;
+        }
+
+        public static Vector2 operator -(Vector2 a, Vector2 b) {
+            return new Vector2((ushort)(a.x - b.x),  (ushort)(a.y - b.y));
+        }
+        public static Vector2 operator +(Vector2 a, Vector2 b) {
+            return new Vector2((ushort)(a.x + b.x),  (ushort)(a.y + b.y));
+        }
+        public static Vector2 operator *(Vector2 a, Vector2 b) {
+            return new Vector2((ushort)(a.x * b.x),  (ushort)(a.y * b.y));
+        }
+        public static Vector2 operator /(Vector2 a, Vector2 b) {
+            return new Vector2((ushort)(a.x / b.x),  (ushort)(a.y / b.y));
+        }
+        public static bool operator ==(Vector2 a, Vector2 b) {
+            return (a.x == b.x && a.y == b.y);
+        }
+        public static bool operator !=(Vector2 a, Vector2 b) {
+            return !(a.x == b.x && a.y == b.y);
+        }
+        public bool Equals(Vector2 obj) {
+            return this == obj;
         }
 
     }

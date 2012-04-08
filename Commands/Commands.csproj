@@ -12,6 +12,8 @@
     <AssemblyName>Commands</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,7 +49,6 @@
     <Compile Include="Building\CmdReplaceAll.cs" />
     <Compile Include="Information\CmdPlayers.cs" />
     <Compile Include="Information\CmdViewranks.cs" />
-    <Compile Include="Misc\CmdEconomy.cs" />
     <Compile Include="Misc\CmdAdminChat.cs" />
     <Compile Include="Misc\CmdOpChat.cs" />
     <Compile Include="Misc\CmdPay.cs" />
