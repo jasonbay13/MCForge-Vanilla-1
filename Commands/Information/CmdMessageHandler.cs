@@ -26,7 +26,7 @@ namespace CommandDll.Information
 
         public CommandTypes Type
         {
-            get { return CommandTypes.information; }
+            get { return CommandTypes.Information; }
         }
 
         public string Author

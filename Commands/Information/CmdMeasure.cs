@@ -29,7 +29,7 @@ namespace CommandDll
     public class CmdMeasure : ICommand
     {
         public string Name { get { return "Measure"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "Gamemakergm"; } }
         public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }

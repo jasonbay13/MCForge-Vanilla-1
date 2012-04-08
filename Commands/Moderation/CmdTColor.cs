@@ -22,7 +22,7 @@ namespace CommandDll
     public class CmdTColor : ICommand
     {
         public string Name { get { return "TColor"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "7imekeeper"; } }
         public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }

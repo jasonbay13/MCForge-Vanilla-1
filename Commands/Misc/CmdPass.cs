@@ -30,7 +30,7 @@ namespace CommandDll.Misc
     class CmdPass : ICommand
     {
         public string Name { get { return "Pass"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Sinjai"; } }
         public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }

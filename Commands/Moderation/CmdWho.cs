@@ -6,7 +6,7 @@ using MCForge.Core;
 namespace CommandDll.Moderation {
     public class CmdWho : ICommand {
         public string Name { get { return "Who"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Nerketur"; } }
         public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }

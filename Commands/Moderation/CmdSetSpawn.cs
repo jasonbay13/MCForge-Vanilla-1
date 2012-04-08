@@ -27,7 +27,7 @@ namespace CommandDll
     public class CmdSetSpawn : ICommand
     {
         public string Name { get { return "SetSpawn"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Gamemakergm"; } }
         public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }

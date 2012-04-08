@@ -28,7 +28,7 @@ namespace CommandDll.Moderation {
 		string _Name = "Kick";
 		public string Name { get { return _Name; } }
 
-		CommandTypes _Type = CommandTypes.mod;
+		CommandTypes _Type = CommandTypes.Mod;
 		public CommandTypes Type { get { return _Type; } }
 
 		string _Author = "Nerketur";

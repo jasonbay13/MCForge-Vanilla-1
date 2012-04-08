@@ -13,7 +13,7 @@ namespace CommandDll
     public class CmdSetRank : ICommand
     {
         public string Name { get { return "SetRank"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "cazzar"; } }
         public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }

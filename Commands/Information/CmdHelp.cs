@@ -28,7 +28,7 @@ namespace CommandDll.Information {
 		string _Name = "Help";
 		public string Name { get { return _Name; } }
 
-		CommandTypes _Type = CommandTypes.information;
+		CommandTypes _Type = CommandTypes.Information;
 		public CommandTypes Type { get { return _Type; } }
 
 		string _Author = "Nerketur";
@@ -58,25 +58,25 @@ namespace CommandDll.Information {
 			} else if (args.Length == 1) {
 				//Help about a particular command
 				string cmdTypeName = "Unknown";
-				CommandTypes cmdType = CommandTypes.misc;
+				CommandTypes cmdType = CommandTypes.Misc;
 
 				switch (args[0]) {
 					case "build":
 						cmdTypeName = "Building";
-						cmdType = CommandTypes.building;
+						cmdType = CommandTypes.Building;
 						break;
 					case "mod":
 						cmdTypeName = "Moderation";
-						cmdType = CommandTypes.mod;
+						cmdType = CommandTypes.Mod;
 						break;
 					case "information":
 						cmdTypeName = "Informative";
-						cmdType = CommandTypes.information;
+						cmdType = CommandTypes.Information;
 						break;
 					case "misc":
 					case "other":
 						cmdTypeName = "Miscellaneous";
-						cmdType = CommandTypes.misc;
+						cmdType = CommandTypes.Misc;
 						break;
 					case "colours":
 					case "colors":

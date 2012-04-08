@@ -23,7 +23,7 @@ namespace CommandDll
     public class CmdAgree : ICommand
     {
         public string Name { get { return "Agree"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Arrem"; } }
         public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }

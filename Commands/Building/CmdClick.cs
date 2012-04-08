@@ -28,7 +28,7 @@ namespace CommandDll
     public class CmdClick : ICommand
     {
         public string Name { get { return "Click"; } }
-        public CommandTypes Type { get { return CommandTypes.building; } }
+        public CommandTypes Type { get { return CommandTypes.Building; } }
         public string Author { get { return "Gamemakergm"; } }
         public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }

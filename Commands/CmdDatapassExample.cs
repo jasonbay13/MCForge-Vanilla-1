@@ -16,7 +16,7 @@ namespace CommandDll
 		string _Name = "DataPassExample";
 		public string Name { get { return _Name; } }
 
-		CommandTypes _Type = CommandTypes.misc;
+		CommandTypes _Type = CommandTypes.Misc;
 		public CommandTypes Type { get { return _Type; } }
 
 		string _Author = "Merlin33069";

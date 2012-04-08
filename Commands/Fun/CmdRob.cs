@@ -22,7 +22,7 @@ namespace CommandDll.Misc
     class CmdRob : ICommand
     {
         public string Name { get { return "Rob"; } }
-        public CommandTypes Type { get { return CommandTypes.fun; } }
+        public CommandTypes Type { get { return CommandTypes.Fun; } }
         public string Author { get { return "Sinjai"; } }
         public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }
