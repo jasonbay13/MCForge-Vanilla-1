@@ -710,7 +710,7 @@ namespace MCForge.Entity
 
 			Server.ForeachPlayer(delegate(Player p)
 			{
-				if (p.level == level && p.isLoggedIn && !p.isLoading)
+				if (p.Level == level && p.isLoggedIn && !p.isLoading)
 				{
 					p.SendPacket(pa);
 				}
@@ -797,7 +797,7 @@ namespace MCForge.Entity
 
 			Server.ForeachPlayer(delegate(Player p)
 			{
-				if (p != this && p.level == level && p.isLoggedIn && !p.isLoading)
+				if (p != this && p.Level == level && p.isLoggedIn && !p.isLoading)
 				{
 					p.SendPacket(pa);
 				}
@@ -830,7 +830,7 @@ namespace MCForge.Entity
 		{
 			Server.ForeachPlayer(delegate(Player p)
 			{
-				if (p.level == l)
+				if (p.Level == l)
 					p.SendBlockChange(x, z, y, block);
 			});
 		}
@@ -902,7 +902,7 @@ namespace MCForge.Entity
         {
             Server.ForeachPlayer(delegate(Player p)
             {
-                if (p.level == from.level) { p.SendMessage(message); }
+                if (p.Level == from.Level) { p.SendMessage(message); }
             });
         }
 		protected void CloseConnection()

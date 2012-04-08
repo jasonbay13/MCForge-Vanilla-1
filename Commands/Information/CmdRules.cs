@@ -28,9 +28,9 @@ namespace CommandDll
     public class CmdRules : ICommand
     {
         public string Name { get { return "Rules"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "Arrem"; } }
-        public int Version { get { return 1; } }
+        public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 

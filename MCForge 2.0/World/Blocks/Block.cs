@@ -137,9 +137,9 @@ namespace MCForge.World
         }
         public static byte NameToByte(string name)
         {
-            byte nametoreturn = new UNKNOWN().VisibleBlock;
-            blocks.ForEach(b => { if (b.Name == name.ToLower()) nametoreturn = b.VisibleBlock; });
-            return nametoreturn;
+            byte bytetoreturn = new UNKNOWN().VisibleBlock;
+            blocks.ForEach(b => { if (b.Name == name.ToLower()) bytetoreturn = b.VisibleBlock; });
+            return bytetoreturn;
         }
         public static bool ValidBlockName(string name)
         {

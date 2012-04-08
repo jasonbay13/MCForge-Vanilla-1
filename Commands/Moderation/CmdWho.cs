@@ -6,9 +6,9 @@ using MCForge.Core;
 namespace CommandDll.Moderation {
     public class CmdWho : ICommand {
         public string Name { get { return "Who"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Nerketur"; } }
-        public int Version { get { return 1; } }
+        public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }
         string[] CommandStrings = new string[3] { "whois", "whowas", "whoip" };
         public byte Permission { get { return 80; } }

@@ -13,9 +13,9 @@ namespace CommandDll
     public class CmdSetRank : ICommand
     {
         public string Name { get { return "SetRank"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "cazzar"; } }
-        public int Version { get { return 1; } }
+        public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
         string[] CommandStrings = new string[2] { "setrank", "rank" };

@@ -45,13 +45,13 @@
     <Compile Include="Building\CmdReplace.cs" />
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Building\CmdReplaceAll.cs" />
+    <Compile Include="Moderation\CmdPatrol.cs" />
     <Compile Include="Information\CmdPlayers.cs" />
     <Compile Include="Information\CmdViewranks.cs" />
-    <Compile Include="Misc\CmdEconomy.cs" />
     <Compile Include="Misc\CmdAdminChat.cs" />
     <Compile Include="Misc\CmdOpChat.cs" />
     <Compile Include="Misc\CmdPay.cs" />
-    <Compile Include="Misc\CmdRob.cs" />
+    <Compile Include="Fun\CmdRob.cs" />
     <Compile Include="Misc\CmdSteal.cs" />
     <Compile Include="Misc\CmdTake.cs" />
     <Compile Include="Misc\CmdGive.cs" />

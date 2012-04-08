@@ -27,9 +27,9 @@ namespace CommandDll
     public class CmdReplaceNot : ICommand
     {
         public string Name { get { return "ReplaceNot"; } }
-        public CommandTypes Type { get { return CommandTypes.building; } }
+        public CommandTypes Type { get { return CommandTypes.Building; } }
         public string Author { get { return "Gamemakergm"; } }
-        public int Version { get { return 1; } }
+        public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 

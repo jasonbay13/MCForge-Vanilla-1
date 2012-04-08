@@ -16,14 +16,14 @@ namespace CommandDll
 		string _Name = "DataPassExample";
 		public string Name { get { return _Name; } }
 
-		CommandTypes _Type = CommandTypes.misc;
+		CommandTypes _Type = CommandTypes.Misc;
 		public CommandTypes Type { get { return _Type; } }
 
 		string _Author = "Merlin33069";
 		public string Author { get { return _Author; } }
 
-		int _Version = 1;
-		public int Version { get { return _Version; } }
+		decimal _Version = 1.00m;
+		public decimal Version { get { return _Version; } }
 
 		string _CUD = "";
 		public string CUD { get { return _CUD; } }

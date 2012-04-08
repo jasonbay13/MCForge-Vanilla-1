@@ -91,7 +91,7 @@ namespace PluginsDLL
         }
         public string Name { get { return "MessageViewer"; } }
         public string Author { get { return "ninedrafted"; } }
-        public int Version { get { return 1; } }
+        public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }
         public void Initialize()
         {

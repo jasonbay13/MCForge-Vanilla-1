@@ -26,7 +26,7 @@ namespace CommandDll.Information
 
         public CommandTypes Type
         {
-            get { return CommandTypes.information; }
+            get { return CommandTypes.Information; }
         }
 
         public string Author
@@ -34,9 +34,9 @@ namespace CommandDll.Information
             get { return "ninedrafted"; }
         }
 
-        public int Version
+        public decimal Version
         {
-            get { return 1; }
+            get { return 1.00m; }
         }
 
         public string CUD
