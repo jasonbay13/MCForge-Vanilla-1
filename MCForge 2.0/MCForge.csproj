@@ -57,17 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Cancelable.cs" />
-    <Compile Include="API\EventHelper.cs" />
-    <Compile Include="API\Player\OnPlayerBlockChange.cs" />
-    <Compile Include="API\Player\OnPlayerChat.cs" />
-    <Compile Include="API\Player\OnPlayerCommand.cs" />
-    <Compile Include="API\Player\OnPlayerConnect.cs" />
-    <Compile Include="API\Player\OnPlayerDisconnect.cs" />
-    <Compile Include="API\Player\OnPlayerMove.cs" />
+    <Compile Include="API\Player\OnPlayerCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="API\Player\PlayerEvent.cs" />
     <Compile Include="API\Priority.cs" />
-    <Compile Include="API\System\SystemEvent.cs" />
-    <Compile Include="API\World\WorldEvent.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
     <Compile Include="Player\PlayerNetworking.cs" />
@@ -175,6 +169,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="API\System\" />
+    <Folder Include="API\World\" />
     <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>

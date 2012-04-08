@@ -141,10 +141,10 @@ namespace MCForge.Entity
 				if (!VerifyAccount(Username, verify)) return;
 				if (version != ServerSettings.Version) { SKick("Wrong Version!."); return; }
 
-				OnPlayerConnect e = new OnPlayerConnect(this);
-				e.Call();
-				if (e.IsCanceled)
-					return;
+				//OnPlayerConnect e = new OnPlayerConnect(this);
+				//e.Call();
+				//if (e.IsCanceled)
+				//    return;
             
 				//TODO Database Stuff
 
@@ -220,10 +220,10 @@ namespace MCForge.Entity
 			//TODO Check for permissions to build and distance > max
 			bool placing = false;
 			if (action == 1) placing = true;
-			OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, (placing ? ActionType.Place : ActionType.Delete), this, newType);
-			b.Call();
-			if (b.IsCanceled)
-				return;
+			//OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, (placing ? ActionType.Place : ActionType.Delete), this, newType);
+			//b.Call();
+			//if (b.IsCanceled)
+			//    return;
 			if (blockChange != null)
 			{
 				SendBlockChange(x, z, y, currentType);
@@ -266,10 +266,10 @@ namespace MCForge.Entity
 			ushort z = packet.NTHO(message, 5);
 			byte rotx = message[7];
 			byte roty = message[8];
-			OnPlayerMove m = new OnPlayerMove(this, Pos, new Vector3(x, z, y));
-			m.Call();
-			if (m.IsCanceled)
-				return;
+			//OnPlayerMove m = new OnPlayerMove(this, Pos, new Vector3(x, z, y));
+			//m.Call();
+			//if (m.IsCanceled)
+			//    return;
 			Pos.x = (short)x;
 			Pos.y = (short)y;
 			Pos.z = (short)z;
@@ -394,11 +394,11 @@ namespace MCForge.Entity
 				return;
 			}*/
 
-			OnPlayerChat e = new OnPlayerChat(this, incomingText);
-			e.Call();
-			if (e.IsCanceled)
-				return;
-			incomingText = e.GetMessage();
+			//OnPlayerChat e = new OnPlayerChat(this, incomingText);
+			//e.Call();
+			//if (e.IsCanceled)
+			//    return;
+			//incomingText = e.GetMessage();
 
 			if (Server.voting)
 			{

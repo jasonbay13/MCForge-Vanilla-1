@@ -312,10 +312,10 @@ namespace MCForge.Entity {
             }
 
             string name = args[0].ToLower().Trim();
-            OnPlayerCommand c = new OnPlayerCommand(this, name, args);
-            c.Call();
-            if (c.IsCanceled)
-                return;
+			List<PlayerEvent> pcList = OnPlayerCommand.Call(this, name, args);
+			foreach(OnPlayerCommand opc in pcList)
+				if (opc.canceled) // If any event canceled us
+					return; // then return
             if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
@@ -386,8 +386,8 @@ namespace MCForge.Entity {
         /// <param name="y"></param>
         /// <param name="type"></param>
         public void Click(ushort x, ushort z, ushort y, byte type) {
-            OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, ActionType.Place, this, type);
-            b.Call();
+			//OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, ActionType.Place, this, type);
+			//b.Call();
             if (blockChange != null) {
                 bool placing = true;
                 BlockChangeDelegate tempBlockChange = blockChange;

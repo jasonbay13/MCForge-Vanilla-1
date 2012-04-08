@@ -6,6 +6,8 @@ using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
+using MCForge.API.PlayerEvent;
+using MCForge.API;
 
 namespace CommandDll
 {
@@ -33,8 +35,14 @@ namespace CommandDll
 
 		public void Use(Player p, string[] args)
 		{
-			p.SendMessage("Please place/destroy a block.");
-			p.CatchNextBlockchange(new Player.BlockChangeDelegate(BlockChange), null);
+			p.SendMessage("Command event activated!");
+			OnPlayerCommand.Register(CallBack, Priority.Normal, p);
+			//p.SendMessage("Please place/destroy a block.");
+			//p.CatchNextBlockchange(new Player.BlockChangeDelegate(BlockChange), null);
+		}
+
+		public void CallBack(PlayerEvent e) {
+			e.target.SendMessage("Test: You issued a command!");
 		}
 		public void BlockChange(Player p, ushort x, ushort z, ushort y, byte NewType, bool action, object data)
 		{

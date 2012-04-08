@@ -19,11 +19,16 @@ using System.Text;
 
 namespace MCForge.API
 {
-    public interface Event
-    {
-        /// <summary>
-        /// Call the event
-        /// </summary>
-        void Call();
-    }
+	public abstract class Event {
+
+		protected EventType _type;
+		protected Priority _pri;
+
+	}
+
+	public enum EventType {
+		Player,
+		Server,
+		World
+	}
 }
