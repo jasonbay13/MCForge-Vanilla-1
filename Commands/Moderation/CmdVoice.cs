@@ -28,9 +28,9 @@ namespace CommandDll
     public class CmdVoice : ICommand
     {
         public string Name { get { return "Voice"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Arrem"; } }
-        public int Version { get { return 1; } }
+        public Version Version { get { return new Version(1,0); } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 

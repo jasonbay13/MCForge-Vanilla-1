@@ -21,7 +21,7 @@ namespace MCForge.API
 {
     public class Muffins
     {
-        internal static List<Muffins> cache = new List<Muffins>();
+        internal static List<Muffins> muffinbag = new List<Muffins>();
         public object Delegate;
         public object datapass;
         public object target;
@@ -30,17 +30,17 @@ namespace MCForge.API
         public Muffins(object Delegate, Priority pri, Event type, object passdata, object target) { this.Delegate = Delegate; this.priority = pri; this.type = type; this.target = target; this.datapass = passdata; }
         public static void GiveDerpyMuffins(Muffins c)
         {
-            int i = cache.FindIndex(c1 => { return c1.type.GetType() == c.type.GetType(); });//finds first element with same type
+            int i = muffinbag.FindIndex(c1 => { return c1.type.GetType() == c.type.GetType(); });//finds first element with same type
             if (i >= 0)
             {
-                i = cache.FindIndex(i, cache.Count - i, c1 =>
+                i = muffinbag.FindIndex(i, muffinbag.Count - i, c1 =>
                 {
                     return (c1.priority >= c.priority && c1.type.GetType() == c.type.GetType()) //if c has less priority and same event type (lower value == higher priority)
                         || c1.type != c.type;                                 //or c has another type
                 });
-                if (i >= 0) cache.Insert(i, c);                                          //this takes place in front of c
+                if (i >= 0) muffinbag.Insert(i, c);                                          //this takes place in front of c
             }
-            if (i < 0) cache.Add(c);
+            if (i < 0) muffinbag.Add(c);
         }
     }
 }

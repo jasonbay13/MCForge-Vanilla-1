@@ -28,9 +28,9 @@ namespace CommandDll
     public class CmdImpersonate : ICommand
     {
         public string Name { get { return "Impersonate"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Givo"; } }
-        public int Version { get { return 1; } }
+        public Version Version { get { return new Version(1,0); } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 

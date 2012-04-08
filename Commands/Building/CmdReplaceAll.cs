@@ -27,9 +27,9 @@ namespace CommandDll
     public class CmdReplaceAll : ICommand
     {
         public string Name { get { return "ReplaceAll"; } }
-        public CommandTypes Type { get { return CommandTypes.building; } }
+        public CommandTypes Type { get { return CommandTypes.Building; } }
         public string Author { get { return "Gamemakergm"; } }
-        public int Version { get { return 1; } }
+        public Version Version { get { return new Version(1,0); } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 100; } }
 
@@ -46,7 +46,7 @@ namespace CommandDll
                 Help(p);
                 return;
             }
-            if (!Blocks.ValidBlockName(args[0 | 1]))
+            if (!Block.ValidBlockName(args[0 | 1]))
             {
                 p.SendMessage("Could not find block specified");
             }
@@ -63,7 +63,7 @@ namespace CommandDll
             }
 
             //Permissions here.
-            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + Blocks.ByteToName(type));
+            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + ((Block)type).Name);
 
             //Blockqueue here
 

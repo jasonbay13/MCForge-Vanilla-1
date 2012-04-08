@@ -17,15 +17,15 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Interface.Command;
-
+using System;
 namespace CommandDll
 {
     public class CmdViewranks : ICommand
     {
         public string Name { get { return "Viewranks"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "Arrem"; } }
-        public int Version { get { return 1; } }
+        public Version Version { get { return new Version(1,0); } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 

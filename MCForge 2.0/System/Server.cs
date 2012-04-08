@@ -67,7 +67,7 @@ namespace MCForge.Core {
         /// <summary>
         /// Get the current list of online players, note that if your doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
         /// </summary>
-        static List<Player> Players = new List<Player>();
+        public static List<Player> Players = new List<Player>();
 		public static int PlayerCount { get { return Players.Count; } }
         /// <summary>
         /// Get the current list of banned ip addresses, note that if your doing a foreach on this (or any other public list) you should always add .ToArray() to the end so that you avoid errors!
@@ -152,11 +152,12 @@ namespace MCForge.Core {
 
         internal static void Init() {
             //TODO load the level if it exists
+            Block.InIt();
             Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
             UpdateTimer.Start();
-
+            
             Groups.PlayerGroup.InitDefaultGroups();
 
             LoadAllDlls.Init();

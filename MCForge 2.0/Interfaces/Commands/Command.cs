@@ -61,15 +61,20 @@ namespace MCForge.Interface.Command
 		}
 
 		public static ICommand Find(string p) {
-			KeyValuePair<string, ICommand> firstCmd = Commands.First<KeyValuePair<string, ICommand>>((entry) => entry.Key == p);
-			return firstCmd.Value;
+			try {
+				KeyValuePair<string, ICommand> firstCmd = Commands.First((entry) => entry.Key == p);
+				return firstCmd.Value;
+			} catch {
+				return null;
+			}
 		}
 	}
     public enum CommandTypes
     {
-        building,
-        mod,
-        misc,
-        information,
+        Building,
+        Mod,
+        Misc,
+        Information,
+        Fun,
     }
 }

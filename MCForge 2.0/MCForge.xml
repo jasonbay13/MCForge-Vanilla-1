@@ -4,6 +4,36 @@
         <name>MCForge</name>
     </assembly>
     <members>
+        <member name="M:MCForge.World.Block.Add(MCForge.World.Block)">
+            <summary>
+            Add your custom block to the list
+            </summary>
+            <param name="b">Block to add</param>
+        </member>
+        <member name="M:MCForge.World.Block.NameToBlock(System.String)">
+            <summary>
+            Get a byte based on the name of the block
+            </summary>
+            <param name="name">The name of the block</param>
+            <returns>A byte of the block</returns>
+        </member>
+        <member name="M:MCForge.World.Block.ValidBlockName(System.String)">
+            <summary>
+            Check to see if a block from the specified name exists.
+            </summary>
+            <param name="name">Name of the block to check</param>
+            <returns>If the block exists</returns>
+        </member>
+        <member name="M:MCForge.World.Block.op_Implicit(MCForge.World.Block)~System.Byte">
+            <summary>
+            Converts a Block to a byte
+            </summary>
+        </member>
+        <member name="M:MCForge.World.Block.op_Implicit(System.Byte)~MCForge.World.Block">
+            <summary>
+            Converts a byte to a Block
+            </summary>
+        </member>
         <member name="T:MCForge.Interface.Plugin.IPluginMessageViewer">
             <summary>
             Interface for making a plugin with a message viewer
@@ -162,42 +192,6 @@
             </summary>
             <param name="method">The method to call when this event gets excuted</param>
             <param name="priority">The importance of the call</param>
-        </member>
-        <member name="T:MCForge.World.Blocks">
-            <summary>
-            A class that contains blocks / custom blocks and methods to work with them.
-            </summary>
-        </member>
-        <member name="M:MCForge.World.Blocks.NameToByte(System.String)">
-            <summary>
-            This function takes in a block name and gives out its byte.
-            </summary>
-            <param name="name"></param> Name of the block.
-            <returns></returns>
-        </member>
-        <member name="M:MCForge.World.Blocks.ByteToName(System.Byte)">
-            <summary>
-            This functions takes in a block byte and returns its name as a string.
-            </summary>
-            <param name="type"></param>Byte of the block
-            <returns></returns>
-        </member>
-        <member name="M:MCForge.World.Blocks.ValidBlockName(System.String)">
-            <summary>
-            This bool returns true if the string provided is a valid block.
-            </summary>
-            <param name="name">Name of the block</param>
-            <returns></returns>
-        </member>
-        <member name="F:MCForge.World.Blocks.CustomBlocks">
-            <summary>
-            A DYNAMIC dictionary of all the CustomBlocks in the server.
-            </summary>
-        </member>
-        <member name="T:MCForge.World.Blocks.Types">
-            <summary>
-            An enumeration of all the default Minecraft blocks
-            </summary>
         </member>
         <member name="M:MCForge.Core.PDB.CompareTo(MCForge.Core.PDB)">
             <summary>
@@ -956,6 +950,15 @@
             loop through all the blocks in xzy running a delegated method for each block, the delegated method will be passed coordinated in int format
             </summary>
             <param name="FEBD">the delegate to call on each cycle</param>
+        </member>
+        <member name="M:MCForge.World.Level.BlockChange(System.UInt16,System.UInt16,System.UInt16,System.Byte)">
+            <summary>
+            Causes a block change for the level
+            </summary>
+            <param name="x">Location of x</param>
+            <param name="z">Location of z</param>
+            <param name="y">Location of y</param>
+            <param name="block">Block to set</param>
         </member>
         <member name="M:MCForge.World.Level.GetBlock(MCForge.Core.Vector3)">
             <summary>

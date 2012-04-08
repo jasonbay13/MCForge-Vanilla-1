@@ -16,7 +16,7 @@ namespace CommandDll {
         }
         public CommandTypes Type {
             get {
-                return CommandTypes.mod;
+                return CommandTypes.Mod;
             }
         }
         public string Author {
@@ -24,9 +24,9 @@ namespace CommandDll {
                 return "headdetect";
             }
         }
-        public int Version {
+        public Version Version {
             get {
-                return 1;
+                return new Version(1, 0);
             }
         }
         public string CUD {

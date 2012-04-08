@@ -22,9 +22,9 @@ namespace CommandDll.Misc
     class CmdPay : ICommand
     {
         public string Name { get { return "Pay"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Sinjai"; } }
-        public int Version { get { return 1; } }
+        public Version Version { get { return new Version(1,0); } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)

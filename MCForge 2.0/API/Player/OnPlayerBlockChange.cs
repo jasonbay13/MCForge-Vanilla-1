@@ -41,13 +41,13 @@ namespace MCForge.API.PlayerEvent {
             get { return true; }
         }
         public override void Call() {
-            Muffins.cache.ForEach(e => {
+            Muffins.muffinbag.ForEach(e => {
                 if (e.type.GetType() == GetType() && ((Player)(e.target) == Player || e.target == null)) {
                     datapass = e.datapass;
                     ((OnCall)e.Delegate)(this);
                     if (_unregister) {
                         _unregister = false;
-                        Muffins.cache.Remove(e);
+                        Muffins.muffinbag.Remove(e);
                     }
                 }
             });

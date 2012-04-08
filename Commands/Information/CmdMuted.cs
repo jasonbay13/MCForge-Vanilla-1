@@ -24,9 +24,9 @@ namespace CommandDll
     public class CmdMuted : ICommand
     {
         public string Name { get { return "Muted"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "Givo"; } }
-        public int Version { get { return 1; } }
+        public Version Version { get { return new Version(1,0); } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 

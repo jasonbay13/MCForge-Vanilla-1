@@ -29,30 +29,27 @@ namespace CommandDll
     public class CmdMeasure : ICommand
     {
         public string Name { get { return "Measure"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "Gamemakergm"; } }
-        public int Version { get { return 1; } }
+        public Version Version { get { return new Version(1,0); } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 30; } }        
 
         public void Use(Player p, string[] args)
         {
             CatchPos cpos = new CatchPos();
-            if (args.Length == 1)
-            {
-                try
-                {
-                    cpos.ignore = Blocks.NameToByte(args[0]);
+            if (args.Length == 1) {
+                try {
+                    cpos.ignore = Block.NameToBlock(args[0]);
                 }
-                catch
-                {
+                catch {
                     p.SendMessage("Could not find block specified");
                     return;
                 }
                 p.SendMessage("Ignoring " + args[0]);
             }
             else
-                cpos.ignore = (byte)(Blocks.Types.zero); //So it doesn't ignore air.
+                cpos.ignore = Block.BlockList.UNKNOWN; //So it doesn't ignore air.
             p.SendMessage("Place two blocks to determine the edges.");
             p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
         }

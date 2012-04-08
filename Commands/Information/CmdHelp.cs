@@ -28,14 +28,17 @@ namespace CommandDll.Information {
 		string _Name = "Help";
 		public string Name { get { return _Name; } }
 
-		CommandTypes _Type = CommandTypes.information;
+		CommandTypes _Type = CommandTypes.Information;
 		public CommandTypes Type { get { return _Type; } }
 
 		string _Author = "Nerketur";
 		public string Author { get { return _Author; } }
 
-		int _Version = 1;
-		public int Version { get { return _Version; } }
+        public Version Version {
+            get {
+                return new Version(1, 0);
+            }
+        }
 
 		string _CUD = "";
 		public string CUD { get { return _CUD; } }
@@ -58,25 +61,25 @@ namespace CommandDll.Information {
 			} else if (args.Length == 1) {
 				//Help about a particular command
 				string cmdTypeName = "Unknown";
-				CommandTypes cmdType = CommandTypes.misc;
+				CommandTypes cmdType = CommandTypes.Misc;
 
 				switch (args[0]) {
 					case "build":
 						cmdTypeName = "Building";
-						cmdType = CommandTypes.building;
+						cmdType = CommandTypes.Building;
 						break;
 					case "mod":
 						cmdTypeName = "Moderation";
-						cmdType = CommandTypes.mod;
+						cmdType = CommandTypes.Mod;
 						break;
 					case "information":
 						cmdTypeName = "Informative";
-						cmdType = CommandTypes.information;
+						cmdType = CommandTypes.Information;
 						break;
 					case "misc":
 					case "other":
 						cmdTypeName = "Miscellaneous";
-						cmdType = CommandTypes.misc;
+						cmdType = CommandTypes.Misc;
 						break;
 					case "colours":
 					case "colors":
@@ -110,19 +113,19 @@ namespace CommandDll.Information {
 							return;
 						} catch (Exception) { }
 						
-						try {
-							byte b = Blocks.NameToByte(args[0]);
-							KeyValuePair<byte, Blocks.CustomBlock> customBlock = Blocks.CustomBlocks.ToList().Find(want => want.Key == b);
+						/*try { TODO, redo this section..
+							byte b = Block.NameToBlock(args[0]);
+							KeyValuePair<byte, Block> customBlock = Block.CustomBlocks.ToList().Find(want => want.Key == b);
 							string custom;
 							if (customBlock.Value.Name == null) // only happens when there is no such block.
 								custom = args[0];
 							else
-								custom = Blocks.ByteToName(customBlock.Value.VisibleType); // Custom block is this.
+								custom = Block.ByteToName(customBlock.Value.VisibleType); // Custom block is this.
 							p.SendMessage("Block \"" + args[0] + "\" appears as &b" + custom);
 							//PlayerGroup foundRank = PlayerGroup.findPerm(Blocks.Types.BlockList.Find(bs => bs.type == b).lowestRank);
 							//Player.SendMessage(p, "Rank needed: " + foundRank.color + foundRank.name);
 							return;
-						} catch (Exception) { }
+						} catch (Exception) { }*/
 						p.SendMessage("Could not find command or block specified");
 						return;
 				}

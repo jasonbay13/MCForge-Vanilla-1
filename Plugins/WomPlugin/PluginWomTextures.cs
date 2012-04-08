@@ -35,8 +35,8 @@ namespace Plugins.WomPlugin {
             get { return "headdetect"; }
         }
 
-        public int Version {
-            get { return 1; }
+       public Version Version {
+            get { return new Version(1, 0); }
         }
 
         public string CUD {

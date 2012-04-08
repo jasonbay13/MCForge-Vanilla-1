@@ -38,7 +38,7 @@ namespace MCForge.Interface.Command
 		/// <summary>
 		/// The command version
 		/// </summary>
-		int Version { get; }
+		Version Version { get; }
 		/// <summary>
 		/// Unique identifier for this plugin, will be used later to link to MCForge databases
 		/// </summary>

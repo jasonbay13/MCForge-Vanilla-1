@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using MCForge.Core;
+using MCForge.World.Blocks;
 
 namespace MCForge.World.Physics
 {
-    public abstract class PhysicsBlock
+    public abstract class PhysicsBlock : Block
     {
         protected static Thread tick;
         protected static List<PhysicsBlock> blocks = new List<PhysicsBlock>();
@@ -15,6 +16,8 @@ namespace MCForge.World.Physics
         int _z;
         Level _l;
         public virtual Level l { get { return _l; } }
+        //TODO
+        //Check to see if the new value is out of bound or not.
         public virtual int X { get { return _x; } set { _x = value; } }
         public virtual int Y { get { return _y; } set { _y = value; } }
         public virtual int Z { get { return _z; } set { _z = value; } }

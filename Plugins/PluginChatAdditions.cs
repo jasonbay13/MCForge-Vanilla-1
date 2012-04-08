@@ -7,7 +7,7 @@ using MCForge.Entity;
 using MCForge.API.PlayerEvent;
 
 namespace Plugins {
-    public class PluginChatAdditions : IPlugin{
+    public class PluginChatAdditions : IPlugin {
         public string Name {
             get { return "ChatAdditions"; }
         }
@@ -16,8 +16,10 @@ namespace Plugins {
             get { return "headdetect"; }
         }
 
-        public int Version {
-            get { return 1; }
+        public Version Version { 
+            get { 
+                return new Version(1, 0); 
+            } 
         }
 
         public string CUD {
@@ -29,7 +31,7 @@ namespace Plugins {
         }
 
         public void OnUnload() {
-            
+
         }
 
         void OnChat(OnPlayerChat args) {

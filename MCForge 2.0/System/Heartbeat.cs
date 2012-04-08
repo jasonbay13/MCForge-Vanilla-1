@@ -88,9 +88,10 @@ namespace MCForge.Core
                     (byte)ServerSettings.GetSettingInt("maxplayers"),
                     ServerSettings.Version);
             }
-            catch
+            catch (Exception e)
             {
                 output[i] = "Error when sending heartbeat";
+				Server.Log(e);
             }
             if (output[i] == "bad heartbeat! (salt is too long)")
             {
