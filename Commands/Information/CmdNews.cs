@@ -30,7 +30,7 @@ namespace CommandDll
         public string Name { get { return "News"; } }
         public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Givo"; } }
-        public int Version { get { return 1; } }
+        public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }
         byte _Permission = 0;
         public byte Permission { get { return _Permission; } }

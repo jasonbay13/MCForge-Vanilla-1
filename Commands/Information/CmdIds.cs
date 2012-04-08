@@ -11,7 +11,7 @@ namespace CommandDll
         public string Name { get { return "PlayerIds"; } }
 		public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Merlin33069"; } }
-		public int Version { get { return 1; } }
+		public decimal Version { get { return 1.00m; } }
 		public string CUD { get { return ""; } }
         public byte Permission { get { return 120; } }
 		string[] CommandStrings = new string[1] { "ids" };

@@ -24,7 +24,7 @@ namespace CommandDll
         public string Name { get { return "Title"; } }
         public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "7imekeeper"; } }
-        public int Version { get { return 1; } }
+        public decimal Version { get { return 1.00m; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 
