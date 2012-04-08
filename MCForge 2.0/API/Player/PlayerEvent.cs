@@ -21,15 +21,33 @@ namespace MCForge.API.PlayerEvent
     /// <summary>
     /// An event that is connected to a player
     /// </summary>
-	public abstract class PlayerEvent : Event {
+	public abstract class PlayerEvent : Event, Cancelable {
     
 		protected Player _target;
 		public Player target { get { return _target;} }
+
 		protected string _msg;
+		public string msg { get { return _msg; } }
+
 		protected Vector3 _oldPos;
+		public Vector3 oldPos { get { return _oldPos; } }
+
 		public delegate void OnCall(PlayerEvent e);
 		protected OnCall _queue;
 		protected static List<PlayerEvent> _eventQueue = new List<PlayerEvent>();
-    
+		
+		
+		private bool _canceled;
+		public bool cancel {
+			get { return _canceled; }
+		}
+
+		public void Cancel() {
+			_canceled = true;
+		}
+
+		public void Allow() {
+			_canceled = false;
+		}
 	}
 }

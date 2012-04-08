@@ -9,18 +9,18 @@ namespace MCForge.API.PlayerEvent
 {
 	public class OnPlayerCommand : PlayerEvent {
 
-		protected OnPlayerCommand(OnCall callback, Priority pri, Player target) {
+		protected OnPlayerCommand(OnCall callback, Player target, string tag) {
 			_type = EventType.Player;
-			_pri = pri;
+			this.tag = tag;
 			_target = target;
 			_queue += callback;
 		}
 
 		public string cmd { get; set; }
 		public string[] args { get; set; }
-		public bool canceled { get; set; }
+		public bool cancel { get; set; }
 
-		internal static List<PlayerEvent> Call(Player p, string cmd, string[] args) {
+		internal static bool Call(Player p, string cmd, string[] args) {
 			//Event was called from the code.
 			List<PlayerEvent> opcList = new List<PlayerEvent>();
 			//Do we keep or discard the event?
@@ -34,13 +34,29 @@ namespace MCForge.API.PlayerEvent
 					opcList.Add(opc);
 				}
 			});
-			return opcList; //Retern list to see if any canceled the event.
+			return opcList.Any(pe => pe.cancel); //Retern list to see if any canceled the event.
 		}
 
-		public static void Register(PlayerEvent.OnCall callback, Priority pri, Player target) {
+		public static PlayerEvent Register(PlayerEvent.OnCall callback, Player target, String tag) {
 			//We add it to the list here
-			OnPlayerCommand pe = new OnPlayerCommand(callback, pri, target);
-			_eventQueue.Add(pe);
+			tag += "OPC";
+			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
+			if (pe != null)
+				//It already exists, so wqe just add it to the queue.
+				((OnPlayerCommand)pe)._queue += callback;
+			else {
+				//Doesn't exist yet.  Make a new one.
+				pe = new OnPlayerCommand(callback, target, tag);
+				_eventQueue.Add(pe);
+			}
+			return pe;
+		}
+
+		public static void Unregister(string tag) {
+			tag += "OPC";
+			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
+			if (pe != null)
+				_eventQueue.Remove(pe);
 		}
 	}
 }

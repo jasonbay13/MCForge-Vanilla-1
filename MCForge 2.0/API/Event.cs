@@ -23,6 +23,10 @@ namespace MCForge.API
 
 		protected EventType _type;
 		protected Priority _pri;
+		/// <summary>
+		/// Used to tell two different events apart.
+		/// </summary>
+		internal string tag;
 
 	}
 

@@ -312,11 +312,10 @@ namespace MCForge.Entity {
             }
 
             string name = args[0].ToLower().Trim();
-			List<PlayerEvent> pcList = OnPlayerCommand.Call(this, name, args);
-			foreach(OnPlayerCommand opc in pcList)
-				if (opc.canceled) // If any event canceled us
-					return; // then return
-            if (Command.Commands.ContainsKey(name)) {
+			bool canceled = OnPlayerCommand.Call(this, name, args);
+			if (canceled) // If any event canceled us
+				return;
+			if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
                     if (!Server.agreed.Contains(Username) && name != "rules" && name != "agree" && name != "disagree") {
