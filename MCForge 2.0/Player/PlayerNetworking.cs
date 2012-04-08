@@ -81,7 +81,7 @@ namespace MCForge.Entity {
                     case 8: length = 9; break; // input
                     case 13: length = 65; break; // chat
                     default: {
-                            var listener = new OnRecievePacket(this, buffer);
+                            var listener = new OnReceivePacket(this, buffer);
                             listener.Call();
                             if (!listener.IsCanceled)
                                 Kick("Unhandled message id \"" + msg + "\"!");

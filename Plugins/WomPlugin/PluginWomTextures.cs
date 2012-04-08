@@ -50,10 +50,10 @@ namespace Plugins.WomPlugin {
             WomSettings = new WomSettings();
             WomSettings.OnLoad();
 
-            OnRecievePacket.Register(OnData);
+            OnReceivePacket.Register(OnData);
         }
 
-        void OnData(OnRecievePacket args) {
+        void OnData(OnReceivePacket args) {
             if (args.Data.Length < 0)
                 return;
             //Server.Log("RECIEVED DATA : " + args.Data.Length);

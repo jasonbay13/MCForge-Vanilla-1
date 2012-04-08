@@ -9,7 +9,7 @@ namespace MCForge.API.System {
     /// <summary>
     /// Event for recieveing all overflowed packets, this event can be canceled
     /// </summary>
-    public class OnRecievePacket : Event, Cancelable {
+    public class OnReceivePacket : Event, Cancelable {
 
         /// <summary>
         /// Data Recieved
@@ -25,9 +25,9 @@ namespace MCForge.API.System {
         /// Delegate for recieveing packets
         /// </summary>
         /// <param name="args">OnReceivePacket class to recieve</param>
-        public delegate void OnPacket(OnRecievePacket args);
+        public delegate void OnPacket(OnReceivePacket args);
 
-        public OnRecievePacket(Player sender, byte[] data) {
+        public OnReceivePacket(Player sender, byte[] data) {
             Player = sender;
             Data = data;
         }
