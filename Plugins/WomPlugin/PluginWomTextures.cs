@@ -23,6 +23,7 @@ using MCForge.Entity;
 using MCForge.Core;
 using MCForge.Utilities.Settings;
 using System.IO;
+using MCForge.API.System;
 
 namespace Plugins.WomPlugin {
     public class PluginWomTextures : IPlugin {
@@ -35,7 +36,7 @@ namespace Plugins.WomPlugin {
             get { return "headdetect"; }
         }
 
-       public Version Version {
+        public Version Version {
             get { return new Version(1, 0); }
         }
 
@@ -44,10 +45,20 @@ namespace Plugins.WomPlugin {
         }
 
         private WomSettings WomSettings { get; set; }
+
         public void OnLoad() {
             WomSettings = new WomSettings();
             WomSettings.OnLoad();
-            //WomSettings.L
+
+            OnRecievePacket.Register(OnData);
+        }
+
+        void OnData(OnRecievePacket args) {
+            if (args.Data.Length < 0)
+                return;
+            //Server.Log("RECIEVED DATA : " + args.Data.Length);
+            if (args.Data[0] != 'G')
+                return;
         }
 
         public void OnUnload() {

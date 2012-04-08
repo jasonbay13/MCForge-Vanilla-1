@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MCForge.Core;
 using MCForge.World.Blocks;
+using MCForge.World.Physics;
 
 namespace MCForge.World {
     public abstract class Block {

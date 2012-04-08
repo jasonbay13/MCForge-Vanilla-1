@@ -36,7 +36,7 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            byte b = Block.NameToBlock("unknown");
+            byte b = Block.BlockList.UNKNOWN;
             ushort x, z, y;
             Vector3 pos = p.Pos;
             try
@@ -47,7 +47,7 @@ namespace CommandDll
                         x = (ushort)(pos.x / 32);
                         z = (ushort)(pos.z / 32);
                         y = (ushort)(pos.y / 32 - 2);
-                        b = Block.NameToBlock("stone");
+                        b = Block.BlockList.STONE;
                         break;
                     case 1:
                         x = (ushort)(pos.x / 32);
@@ -76,9 +76,9 @@ namespace CommandDll
                 p.SendMessage("Invalid parameters.");
                 return;
             }
-            if (b == Block.NameToBlock("unknown"))
+            if (b == Block.BlockList.UNKNOWN)
             {
-                b = Block.NameToBlock("stone");
+                b = Block.BlockList.STONE;
             }
             //Need to wait for permissions for cannot place that block type.
             if (y >= p.Level.Size.y)

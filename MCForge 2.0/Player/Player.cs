@@ -29,6 +29,7 @@ using MCForge.World;
 using MCForge.Interface.Command;
 using MCForge.Groups;
 using MCForge.Utilities.Settings;
+using MCForge.API.System;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -275,6 +276,7 @@ namespace MCForge.Entity {
         /// The current Group of the player
         /// </summary>
         public PlayerGroup group = PlayerGroup.Find(ServerSettings.GetSetting("defaultgroup"));
+
 
 
         #endregion

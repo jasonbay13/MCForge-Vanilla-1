@@ -143,7 +143,7 @@ namespace CommandDll
             cpos.pos = new Vector3(args.GetX(), args.GetZ(), args.GetY());
             args.Player.SendBlockChange(args.GetX(), args.GetZ(), args.GetY(), args.Player.Level.GetBlock(cpos.pos));
             args.Unregister(true);
-            args.Cancel(true);
+            args.IsCanceled = true;
             OnPlayerBlockChange.Register(CatchBlock2, MCForge.API.Priority.Normal, cpos, args.Player);
         }
         public void CatchBlock2(OnPlayerBlockChange args)
@@ -156,7 +156,7 @@ namespace CommandDll
             ushort y = args.GetY();
             args.Player.SendBlockChange(args.GetX(), args.GetZ(), args.GetY(), args.Player.Level.GetBlock(cpos.pos));
             args.Unregister(true);
-            args.Cancel(true);
+            args.IsCanceled = true;
             List<Pos> buffer = new List<Pos>();
             ushort xx, zz, yy;
             if (cpos.block != 255)

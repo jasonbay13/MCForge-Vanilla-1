@@ -53,15 +53,14 @@ namespace MCForge.API.PlayerEvent
         /// <summary>
         /// Check to see if the event is canceled
         /// </summary>
-        public virtual bool IsCanceled { get { return _canceled; } }
-        /// <summary>
-        /// Cancel the event (Make sure the event is Cancelable <seealso cref="IsCancelable"/>
-        /// </summary>
-        /// <param name="value">True will cancel the event, false will un-cancel it</param>
-        public virtual void Cancel(bool value)
-        {
-            if (IsCancelable)
-                _canceled = value;
+        public bool IsCanceled {
+            get {
+                return _canceled;
+            }
+            set {
+                if (IsCancelable) return;
+                else _canceled = value;
+            }
         }
         /// <summary>
         /// Get the data you passed when registering the event
