@@ -20,8 +20,8 @@ namespace CommandDll.Moderation {
             get { return "headdetect"; }
         }
 
-        public int Version {
-            get { return 1; }
+        public decimal Version {
+            get { return 1.00m; }
         }
 
         public string CUD {
