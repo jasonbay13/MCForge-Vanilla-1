@@ -127,7 +127,7 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/cuboid [block] [type] - Creates a cuboid of blocks.");
-            p.SendMessage("/cuboid x1 z1 y1 x2 z2 y2 [block] [type[ - Creates a cuboid at the specified coordinates.");
+            p.SendMessage("/cuboid x1 z1 y1 x2 z2 y2 [block] [type] - Creates a cuboid at the specified coordinates.");
             p.SendMessage("Available types: <solid/hollow/walls/holes/wire/random>");
             p.SendMessage("Note that [block] and [type] are optional and can be in any order.");
         }
