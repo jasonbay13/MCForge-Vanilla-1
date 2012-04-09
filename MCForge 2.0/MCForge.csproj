@@ -62,6 +62,7 @@
     <Compile Include="API\Player\OnPlayerCommand.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="API\Player\OnPlayerConnect.cs" />
     <Compile Include="API\Player\PlayerEvent.cs" />
     <Compile Include="API\Priority.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />

@@ -66,7 +66,7 @@ namespace MCForge.API.PlayerEvent
 		/// <returns></returns>
 		public static PlayerEvent Register(PlayerEvent.OnCall callback, Player target, String tag) {
 			//We add it to the list here
-			tag += "OPC";
+			tag += "OPCha";
 			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
 			if (pe != null)
 				//It already exists, so we just add it to the queue.
@@ -84,7 +84,7 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		/// <param name="tag">The tag to unregister</param>
 		public static void Unregister(string tag) {
-			tag += "OPC";
+			tag += "OPCha";
 			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
 			if (pe != null)
 				_eventQueue.Remove(pe);

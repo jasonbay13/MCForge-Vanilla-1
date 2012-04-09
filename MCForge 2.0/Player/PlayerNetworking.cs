@@ -141,10 +141,12 @@ namespace MCForge.Entity
 				if (!VerifyAccount(Username, verify)) return;
 				if (version != ServerSettings.Version) { SKick("Wrong Version!."); return; }
 
-				//OnPlayerConnect e = new OnPlayerConnect(this);
-				//e.Call();
-				//if (e.IsCanceled)
-				//    return;
+				bool cancel = OnPlayerConnect.Call(this);
+				if (cancel) {
+					if (isOnline)
+						SKick("Access Denied");
+					return;
+				}
             
 				//TODO Database Stuff
 
