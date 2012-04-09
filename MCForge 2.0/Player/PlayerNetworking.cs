@@ -460,7 +460,6 @@ namespace MCForge.Entity {
         protected void SendMessage(byte PlayerID, string message) {
             packet pa = new packet();
 
-
             for (int i = 0; i < 10; i++) {
                 message = message.Replace("%" + i, "&" + i);
                 message = message.Replace("&" + i + " &", "&");
