@@ -264,7 +264,7 @@ namespace MCForge.Groups
             PlayerGroupProperties.Load();
             foreach (PlayerGroup g in PlayerGroup.groups)
             {
-                Server.Log("[Group] " + g.name + "Initialized");
+                Server.Log("[Group] " + g.name + " Initialized", ConsoleColor.Green, ConsoleColor.Black);
             }
             if (groups.Count < 1)
                 InitDefaultGroups();
