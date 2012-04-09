@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2011 MCForge
+Copyright 2012 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -13,54 +13,36 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using MCForge;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
-using System.Collections.Generic;
 
-namespace CommandDll
+namespace CommandDll.Fun
 {
-    public class CmdMuted : ICommand
+    class CmdFlipheads : ICommand
     {
-        public string Name { get { return "Muted"; } }
-        public CommandTypes Type { get { return CommandTypes.Information; } }
+        public string Name { get { return "Flipheads"; } }
+        public CommandTypes Type { get { return CommandTypes.Fun; } }
         public string Author { get { return "Givo"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public Version Version { get { return new Version(1, 0); } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
-        public static List<string> mutedlist = new List<string>();
-
         public void Use(Player p, string[] args)
         {
-            mutedlist.Clear();
-
-            if (args.Length > 0) { Help(p); }
-
-			Server.ForeachPlayer(delegate(Player pl)
-			{
-				if (pl.muted)
-				{
-					mutedlist.Add(pl.Username);
-				}
-			});
-            p.SendMessage("Muted: ");
-            foreach (string muted in mutedlist)
-            {
-                p.SendMessage(muted);
-            }
+            if (Server.flipheads) { Server.flipheads = false; Player.UniversalChat("All necks were mended!"); return; }
+            if (!Server.flipheads) { Server.flipheads = true; Player.UniversalChat("All necks were broken!"); return; }
         }
-
         public void Help(Player p)
         {
-            p.SendMessage("/mute - Displays muted players");
+            p.SendMessage("/flipheads - Flips heads ?");
         }
-
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "Muted" });
+            Command.AddReference(this, new string[1] { "Flipheads" });
         }
     }
 }
-

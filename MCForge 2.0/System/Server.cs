@@ -147,6 +147,10 @@ namespace MCForge.Core {
         /// <returns>this delegate returns an updated object for the datapass</returns>
         public delegate object TimedMethodDelegate(object dataPass);
         static List<TimedMethod> TimedMethodList = new List<TimedMethod>();
+        /// <summary>
+        /// If flipheads is on or off
+        /// </summary>
+        public static bool flipheads = false;
 
 		public delegate void ForeachPlayerDelegate(Player p);
 
