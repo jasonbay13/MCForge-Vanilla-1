@@ -148,6 +148,10 @@ namespace MCForge.Core {
         /// <returns>this delegate returns an updated object for the datapass</returns>
         public delegate object TimedMethodDelegate(object dataPass);
         static List<TimedMethod> TimedMethodList = new List<TimedMethod>();
+        /// <summary>
+        /// If flipheads is on or off
+        /// </summary>
+        public static bool flipheads = false;
 
         public delegate void ForeachPlayerDelegate(Player p);
 
@@ -159,15 +163,14 @@ namespace MCForge.Core {
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
             UpdateTimer.Start();
-
-            Groups.PlayerGroup.InitDefaultGroups();
-
             LoadAllDlls.Init();
 
             Heartbeat.sendHeartbeat();
 
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
+
+            Groups.PlayerGroup.Init(); 
 
             CreateDirectories();
 

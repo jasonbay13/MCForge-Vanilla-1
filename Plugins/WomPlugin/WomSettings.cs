@@ -46,8 +46,8 @@ namespace Plugins.WomPlugin {
             if (!path.EndsWith(".cgf"))
                 return;
             var lines = File.ReadAllLines(path);
-            int start = path.LastIndexOf('/');
-            int end =  path.LastIndexOf('.') - start -1;
+            int start = path.LastIndexOf('/') + 1;
+            int end =  path.LastIndexOf('.') - start;
             var level = Server.FindLevel(path.Substring( start , end));
             if (level == null) {
                 Server.Log(String.Format("{0} was formatted incorrectly, this file will not be loaded", path), ConsoleColor.Red, ConsoleColor.Black);
