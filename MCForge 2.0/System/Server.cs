@@ -161,8 +161,6 @@ namespace MCForge.Core {
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
             UpdateTimer.Start();
-            
-            Groups.PlayerGroup.Init();
 
             LoadAllDlls.Init();
 
@@ -170,6 +168,8 @@ namespace MCForge.Core {
 
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
+
+            Groups.PlayerGroup.Init(); 
 
             CreateDirectories();
 
