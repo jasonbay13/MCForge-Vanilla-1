@@ -157,11 +157,11 @@ namespace MCForge.Core {
                 if (File.Exists("levels\\main.lvl"))
                     Mainlevel = Level.LoadLevel("main");
                 else
-                    Mainlevel = Level.CreateLevel(new Vector3(256, 64, 256), Level.LevelTypes.Flat);
+                    Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
             else
-                Mainlevel = Level.CreateLevel(new Vector3(256, 64, 256), Level.LevelTypes.Flat);
+                Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
             if (Mainlevel == null)
-                Mainlevel = Level.CreateLevel(new Vector3(256, 64, 256), Level.LevelTypes.Flat);
+                Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
             MCForge.World.Level.AddLevel(Mainlevel);
             #endregion
 
