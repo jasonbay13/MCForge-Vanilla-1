@@ -9,34 +9,61 @@ namespace MCForge.API.PlayerEvent
 {
 	public class OnPlayerCommand : PlayerEvent {
 
-		protected OnPlayerCommand(OnCall callback, Player target, string tag) {
+		/// <summary>
+		/// Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
+		/// </summary>
+		/// <param name="callback">the method used for the delegate to callback upon event fire</param>
+		/// <param name="target">The target Player we want the event for.</param>
+		/// <param name="tag">The tag of this event, so it can be cancelled, unregistered, etc.</param>
+		internal OnPlayerCommand(OnCall callback, Player target, string tag) {
 			_type = EventType.Player;
 			this.tag = tag;
 			_target = target;
 			_queue += callback;
 		}
 
+		/// <summary>
+		/// The command that the player tried to use
+		/// </summary>
 		public string cmd { get; set; }
+		/// <summary>
+		/// The arguments given for the command.
+		/// </summary>
 		public string[] args { get; set; }
-		public bool cancel { get; set; }
 
+		/// <summary>
+		/// This is meant to be called from the code where you mean for the event to happen.
+		/// 
+		/// In this case, it is called from the command processing code.
+		/// </summary>
+		/// <param name="p">The player that caused the event.</param>
+		/// <param name="cmd">The command the player gave</param>
+		/// <param name="args">The arguments the player gave for the command.</param>
+		/// <returns> A boolean value specifying whether or not to cancel the event.</returns>
 		internal static bool Call(Player p, string cmd, string[] args) {
 			//Event was called from the code.
 			List<PlayerEvent> opcList = new List<PlayerEvent>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(playerEvent => {
 				OnPlayerCommand opc = (OnPlayerCommand)playerEvent;
-				if (opc._target == p) {// We keep it
+				if (opc.target == p) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.cmd = cmd;
 					opc.args = args;
-					opc._queue(opc);
-					opcList.Add(opc);
+					opc._queue(opc); // fire callback
+					opcList.Add(opc); // add to used list
 				}
 			});
-			return opcList.Any(pe => pe.cancel); //Retern list to see if any canceled the event.
+			return opcList.Any(pe => pe.cancel); //Return if any canceled the event.
 		}
 
+		/// <summary>
+		/// Used to register a method to be executed when the event is fired.
+		/// </summary>
+		/// <param name="callback">The method to call</param>
+		/// <param name="target">The player to watch for. (null for any players)</param>
+		/// <param name="tag">The tag to use (Required if you ever want to unregister the event.</param>
+		/// <returns></returns>
 		public static PlayerEvent Register(PlayerEvent.OnCall callback, Player target, String tag) {
 			//We add it to the list here
 			tag += "OPC";
@@ -52,11 +79,19 @@ namespace MCForge.API.PlayerEvent
 			return pe;
 		}
 
+		/// <summary>
+		/// Unregisters the event with the specified tag.
+		/// </summary>
+		/// <param name="tag">The tag to unregister</param>
 		public static void Unregister(string tag) {
 			tag += "OPC";
 			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
 			if (pe != null)
 				_eventQueue.Remove(pe);
+		}
+
+		public override void Unregister() {
+			_eventQueue.Remove(this);
 		}
 	}
 }

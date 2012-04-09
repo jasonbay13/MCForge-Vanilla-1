@@ -218,12 +218,10 @@ namespace MCForge.Entity
 			}
 
 			//TODO Check for permissions to build and distance > max
-			bool placing = false;
-			if (action == 1) placing = true;
-			//OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, (placing ? ActionType.Place : ActionType.Delete), this, newType);
-			//b.Call();
-			//if (b.IsCanceled)
-			//    return;
+			bool placing = (action == 1);
+			bool canceled = OnPlayerBlockChange.Call(x, y, z, (placing ? ActionType.Place : ActionType.Delete), this, newType);
+			if (canceled) // If any event canceled us
+				return;
 			if (blockChange != null)
 			{
 				SendBlockChange(x, z, y, currentType);

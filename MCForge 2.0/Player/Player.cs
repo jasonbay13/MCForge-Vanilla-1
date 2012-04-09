@@ -385,8 +385,9 @@ namespace MCForge.Entity {
         /// <param name="y"></param>
         /// <param name="type"></param>
         public void Click(ushort x, ushort z, ushort y, byte type) {
-			//OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, ActionType.Place, this, type);
-			//b.Call();
+			bool canceled = OnPlayerBlockChange.Call(x, y, z, ActionType.Place, this, type);
+			if (canceled) // If any event canceled us
+				return;
             if (blockChange != null) {
                 bool placing = true;
                 BlockChangeDelegate tempBlockChange = blockChange;

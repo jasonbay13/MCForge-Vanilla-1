@@ -40,6 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Building\CmdClick.cs" />
+    <Compile Include="Building\CmdCuboid.cs" />
+    <Compile Include="Building\CmdPlace.cs" />
+    <Compile Include="Building\CmdReplace.cs" />
+    <Compile Include="Building\CmdReplaceAll.cs" />
+    <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Moderation\CmdPatrol.cs" />
     <Compile Include="Information\CmdPlayers.cs" />
     <Compile Include="Information\CmdViewranks.cs" />
@@ -106,9 +112,7 @@
       <Name>Plugins</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Building\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

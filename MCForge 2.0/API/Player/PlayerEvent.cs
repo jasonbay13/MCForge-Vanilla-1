@@ -24,30 +24,64 @@ namespace MCForge.API.PlayerEvent
 	public abstract class PlayerEvent : Event, Cancelable {
     
 		protected Player _target;
+		/// <summary>
+		/// The player that this event applies to.  If null, applies to all players.
+		/// </summary>
 		public Player target { get { return _target;} }
 
-		protected string _msg;
+		private string _msg;
+		/// <summary>
+		/// The message that the wanted player sent (before processing)
+		/// </summary>
 		public string msg { get { return _msg; } }
 
-		protected Vector3 _oldPos;
+		private Vector3 _oldPos;
+		/// <summary>
+		/// The position the player was at before moving to their current position.
+		/// </summary>
 		public Vector3 oldPos { get { return _oldPos; } }
-
+		/// <summary>
+		/// Ther delegate used for callbacks.  The caller will have this method run when the event fires.
+		/// </summary>
+		/// <param name="e">The Event that fired</param>
 		public delegate void OnCall(PlayerEvent e);
+		/// <summary>
+		/// The queue of delegates to call for the particular tag
+		/// </summary>
 		protected OnCall _queue;
+
+		/// <summary>
+		/// The list of all events currently active of a PlayerEvent type.
+		/// </summary>
 		protected static List<PlayerEvent> _eventQueue = new List<PlayerEvent>();
 		
 		
 		private bool _canceled;
+		/// <summary>
+		/// Do we want to prevent the default ptroccessing?
+		/// </summary>
 		public bool cancel {
 			get { return _canceled; }
 		}
 
+		/// <summary>
+		/// Prevent default processing until event is unregistered. (or Allow() is called)
+		/// 
+		/// <b>Note: If ANY event cancels the default, then it will be cancelled for all current and future events as well.</b>
+		/// </summary>
 		public void Cancel() {
 			_canceled = true;
 		}
 
+		/// <summary>
+		/// Allow default processing. (until Cancel() is called)
+		/// 
+		/// <b>Note: If ANY event still has default canceled, then it will still be cancelled for all current and future events as well.</b>
+		/// </summary>
 		public void Allow() {
 			_canceled = false;
 		}
+
+		public abstract void Unregister();
 	}
 }

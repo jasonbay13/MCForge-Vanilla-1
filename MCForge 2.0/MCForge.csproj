@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Cancelable.cs" />
+    <Compile Include="API\Player\OnPlayerBlockChange.cs" />
     <Compile Include="API\Player\OnPlayerCommand.cs">
       <SubType>Code</SubType>
     </Compile>

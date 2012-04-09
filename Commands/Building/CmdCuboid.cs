@@ -75,15 +75,13 @@ namespace CommandDll
                     cpos.block = 1; //Silliness
                     cpos = CoordinatesParse(p, args, cpos);
                     p.SendMessage("Coordinates");
-                    OnPlayerBlockChange coordinates = new OnPlayerBlockChange((ushort)cpos.secondPos.x, (ushort)cpos.secondPos.z, (ushort)cpos.secondPos.y, ActionType.Place, p, cpos.block);
-                    coordinates.Call();
+					Cuboid(cpos, cpos.block, p, (ushort)cpos.secondPos.x, (ushort)cpos.secondPos.y, (ushort)cpos.secondPos.z);
                     return;
                 case 7: //Coordinates and block or type
                     if (ValidSolidType(args[7]) || Block.ValidBlockName(args[7]))
                     {
                         cpos = Parser(p, true, true, args, cpos);
-                        coordinates = new OnPlayerBlockChange((ushort)cpos.secondPos.x, (ushort)cpos.secondPos.z, (ushort)cpos.secondPos.y, ActionType.Place, p, cpos.block);
-                        coordinates.Call();
+						Cuboid(cpos, cpos.block, p, (ushort)cpos.secondPos.x, (ushort)cpos.secondPos.y, (ushort)cpos.secondPos.z);
                         return;
                     }
                     else
@@ -96,9 +94,8 @@ namespace CommandDll
                     {
                         CoordinatesParse(p, args, cpos);
                         cpos = Parser(p, false, true, args, cpos);
-                        coordinates = new OnPlayerBlockChange((ushort)cpos.secondPos.x, (ushort)cpos.secondPos.z, (ushort)cpos.secondPos.y, ActionType.Place, p, cpos.block);
-                        coordinates.Call();
-                        return;
+						Cuboid(cpos, cpos.block, p, (ushort)cpos.secondPos.x, (ushort)cpos.secondPos.y, (ushort)cpos.secondPos.z);
+						return;
                     }
                     else
                     {
@@ -117,7 +114,7 @@ namespace CommandDll
                     return;
             }
             p.SendMessage("Place two blocks to determine the corners.");
-            OnPlayerBlockChange.Register(CatchBlock, MCForge.API.Priority.Normal, cpos, p);
+            OnPlayerBlockChange.Register(CatchBlock, p, cpos, "first");
         }
         public void Help(Player p)
         {
@@ -132,25 +129,25 @@ namespace CommandDll
             string[] CommandStrings = new string[2] { "cuboid", "z" };
             Command.AddReference(this, CommandStrings);
         }
-        public void CatchBlock(OnPlayerBlockChange args)
+        public void CatchBlock(PlayerEvent pe)
         {
-            CatchPos cpos = (CatchPos)args.GetData();
-            cpos.pos = new Vector3(args.GetX(), args.GetZ(), args.GetY());
-            args.Cancel(true);
-            args.Unregister(true);
-            OnPlayerBlockChange.Register(CatchBlock2, MCForge.API.Priority.Normal, cpos, args.GetPlayer());
+			OnPlayerBlockChange args = (OnPlayerBlockChange)pe;
+            CatchPos cpos = (CatchPos)args.datapass;
+            cpos.pos = new Vector3(args.x, args.z, args.y);
+            args.Cancel();
+            args.Unregister();
+            OnPlayerBlockChange.Register(CatchBlock2, args.target, cpos, "second");
         }
-        public void CatchBlock2(OnPlayerBlockChange args)
+        public void CatchBlock2(PlayerEvent pe)
         {
-            CatchPos cpos = (CatchPos)args.GetData();
-            byte NewType = args.GetPlayerHolding();
-            Player p = args.GetPlayer();
-            ushort x = args.GetX();
-            ushort z = args.GetZ();
-            ushort y = args.GetY();
-            args.Cancel(true);
-            args.Unregister(true);
-            List<Pos> buffer = new List<Pos>();
+			OnPlayerBlockChange args = (OnPlayerBlockChange)pe;
+			CatchPos cpos = (CatchPos)args.datapass;
+			Cuboid(cpos, args.holding, args.target, args.x, args.y, args.z);
+			args.Cancel();
+			args.Unregister();
+		}
+		private void Cuboid(CatchPos cpos, byte NewType, Player p, ushort x, ushort y, ushort z) {
+			List<Pos> buffer = new List<Pos>();
             ushort xx, zz, yy;
             if (cpos.block != 255)
             {
