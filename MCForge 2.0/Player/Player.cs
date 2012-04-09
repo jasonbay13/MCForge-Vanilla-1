@@ -341,10 +341,10 @@ namespace MCForge.Entity {
                 SendMessage("Unknown command \"" + name + "\"!");
             }
 
-            foreach (string s in Command.Commands.Keys) {
+            /*foreach (string s in Command.Commands.Keys) {
                 Console.WriteLine(args[0]);
                 Console.WriteLine("'" + s + "'");
-            }
+            }*/// debugging something?
         }
         #endregion
 

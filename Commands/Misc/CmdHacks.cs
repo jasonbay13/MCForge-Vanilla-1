@@ -54,9 +54,9 @@ namespace CommandDll
             if (!File.Exists("text/hacksmessages.txt")) { File.Create("text/hacksmessages.txt").Close(); }
             string text = File.ReadAllText("text/hacksmessages.txt");
             if (text == "") { File.WriteAllText("text/hacksmessages.txt", "Your IP has been backtraced & reported to FBI Cyber Crimes Unit."); }
-            StreamReader r = File.OpenText("text/hacksmessages.txt");
-            while (!r.EndOfStream) hacksmessages.Add(r.ReadLine());
-            r.Dispose();
+            using (StreamReader r = File.OpenText("text/hacksmessages.txt"))
+                while (!r.EndOfStream)
+                    hacksmessages.Add(r.ReadLine());
             p.Kick(hacksmessages[new Random().Next(0, hacksmessages.Count)]);
         }
 
