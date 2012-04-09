@@ -16,6 +16,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
+using System.IO.Compression;
 using MCForge.Entity;
 using MCForge.Core;
 using MCForge.World.Blocks;
@@ -77,14 +79,14 @@ namespace MCForge.World {
         /// <summary>
         /// Data to store with in the level
         /// </summary>
-        public Dictionary<object, object> ExtraData;
+        public Dictionary<string, string> ExtraData;
 
         private Level(Vector3 size) {
             Size = size;
             //data = new byte[Size.x, Size.z, Size.y];
             data = new byte[TotalBlocks];
 
-            ExtraData = new Dictionary<object, object>();
+            ExtraData = new Dictionary<string, string>();
         }
 
         /// <summary>
@@ -95,8 +97,6 @@ namespace MCForge.World {
         /// <returns>returns the level that was created</returns>
         public static Level CreateLevel(Vector3 size, LevelTypes type, String name = "main") {
             Level newlevel = new Level(size);
-            newlevel.name = name;
-
             newlevel.name = name;
             switch (type) {
                 case LevelTypes.Flat:
@@ -138,12 +138,113 @@ namespace MCForge.World {
         }
 
         /// <summary>
-        /// Load a level (todo)
+        /// Load a level.
         /// </summary>
-        /// <returns>the loaded level</returns>
-        public Level LoadLevel() {
-            //TODO
-            return null;
+        /// <returns>The loaded level</returns>
+        public static Level LoadLevel(string levelName) {
+            string Name = "levels\\" + levelName + ".lvl";
+            Level finalLevel = Level.CreateLevel(new Vector3(32, 32, 32), LevelTypes.Flat, levelName);
+            try
+            {
+                var Binary = new BinaryReader(File.Open(Name, FileMode.Open));
+
+                using (Binary)
+                {
+                    long v = Binary.ReadInt64();
+                    if (v != 28542713840690029) //The magic number
+                    {
+                        Server.Log("Not a new MCForge Level! Attemping to load old MCForge level format!", ConsoleColor.Red, ConsoleColor.Black);
+                        //TODO Load old MCForge level here
+                    }
+                    else //Is a new MCForge level!
+                    {
+                        string s = Binary.ReadString();
+                        int x = Convert.ToInt32(s.Split('@')[0]);
+                        int y = Convert.ToInt32(s.Split('@')[1]);
+                        int z = Convert.ToInt32(s.Split('@')[2]);
+                        finalLevel.Size = new Vector3((short)x, (short)z, (short)y);
+
+                        s = Binary.ReadString();
+                        x = Convert.ToInt32(s.Split('!')[0]);
+                        y = Convert.ToInt32(s.Split('!')[1]);
+                        z = Convert.ToInt32(s.Split('!')[2]);
+                        finalLevel.SpawnPos = new Vector3((short)x, (short)z, (short)y);
+
+                        s = Binary.ReadString();
+                        int heading = Convert.ToInt32(s.Split('~')[0]);
+                        int yaw = Convert.ToInt32(s.Split('~')[1]);
+                        finalLevel.SpawnRot = new byte[2] { (byte)heading, (byte)yaw };
+
+                        finalLevel.SpawnPos = new Vector3((short)(finalLevel.Size.x / 2), (short)(finalLevel.Size.z / 2), (short)(finalLevel.Size.y));
+                        finalLevel.SpawnRot = new byte[2] { 0, 0 };
+
+                        int count = Binary.ReadInt32();
+
+                        for (int i = 0; i < count; i++) //Metadata for blocks
+                        {
+                            string key = Binary.ReadString();
+                            string value = Binary.ReadString();
+                            finalLevel.ExtraData[key] = value;
+                        }
+
+                        finalLevel._TotalBlocks = Binary.ReadInt32();
+                        int ByteLength = Binary.ReadInt32();
+                        byte[] b = Decompress(Binary.ReadBytes(ByteLength));
+                        finalLevel.data = new byte[finalLevel._TotalBlocks];
+                        finalLevel.data = b;
+                        try
+                        {
+                            string EOF = Binary.ReadString();
+                            if (EOF != "EOF")
+                            {
+                                Binary.Dispose();
+                                return null;
+                            }
+                        }
+                        catch { Binary.Dispose(); return null; }
+                    }
+                }
+                Binary.Dispose();
+                return finalLevel;
+            }
+            catch (Exception e) { Server.Log(e.Message); Server.Log(e.StackTrace); } return null;
+        }
+
+
+        /// <summary>
+        /// Saves this world to a given directory
+        /// in the MCForge-only binary format.
+        /// </summary>
+        /// <param name="TargetDirectory">The target directory.</param>
+        /// <param name="FileName">Name of the file.</param>
+        /// <remarks>The resulting files are not compatible with the official Minecraft software.</remarks>
+        public bool SaveToBinary()
+        {
+            string Name = "levels\\" + name + ".lvl";
+            var Binary = new BinaryWriter(File.Open(Name, FileMode.Create));
+
+            try
+            {
+                Binary.Write(0x6567726f66636d); //Magic Number to make sure it is a compatible file.
+                Binary.Write(Size.x + "@" + Size.y + "@" + Size.z);
+                Binary.Write(SpawnPos.x + "!" + SpawnPos.y + "!" + SpawnPos.z); //Unused
+                Binary.Write(SpawnRot[0] + "~" + SpawnRot[1]); //Unused
+                Binary.Write(ExtraData.Count);
+                foreach (var pair in ExtraData)
+                {
+                    Binary.Write(pair.Key);
+                    Binary.Write(pair.Value);
+                }
+                Binary.Write(_TotalBlocks);
+                Binary.Write(Compress(data).Length);
+                Binary.Write(Compress(data));
+                Binary.Write("EOF"); //EOF makes sure the entire file saved.
+            }
+            finally
+            {
+                Binary.Dispose();
+            }
+            return true;
         }
 
         /// <summary>
@@ -308,9 +409,80 @@ namespace MCForge.World {
             Flat,
         }
 
+        /// <summary>
+        /// Compresses the specified byte array.
+        /// </summary>
+        /// <param name="input">The byte array.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        private byte[] Compress(byte[] input)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (GZipStream deflateStream = new GZipStream(ms, CompressionMode.Compress))
+                {
+                    deflateStream.Write(input, 0, input.Length);
+                }
+                return ms.ToArray();
+            }
+        }
 
-        public static object FindLevel(string p) {
-            throw new NotImplementedException();
+        /// <summary>
+        /// Decompresses the specified byte array.
+        /// </summary>
+        /// <param name="gzip">The byte array.</param>
+        /// <returns></returns>
+        /// <remarks></remarks>
+        private static byte[] Decompress(byte[] gzip)
+        {
+            using (GZipStream stream = new GZipStream(new MemoryStream(gzip), CompressionMode.Decompress))
+            {
+                const int size = 4096;
+                byte[] buffer = new byte[size];
+                using (MemoryStream memory = new MemoryStream())
+                {
+                    int count = 0;
+                    do
+                    {
+                        count = stream.Read(buffer, 0, size);
+                        if (count > 0)
+                        {
+                            memory.Write(buffer, 0, count);
+                        }
+                    }
+                    while (count > 0);
+                    return memory.ToArray();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds the specified level.
+        /// </summary>
+        /// <param name="LevelName">Name of the level.</param>
+        public static Level FindLevel(string LevelName)
+        {
+            try
+            {
+                return levels.Find(delegate(Level e)
+                {
+                    if (e.name == LevelName)
+                        return true;
+                    else
+                        return false;
+                });
+            }
+            catch { }
+            return null;
+        }
+
+        /// <summary>
+        /// Adds the level to the level list.
+        /// </summary>
+        /// <param name="level">Name of the level.</param>
+        public static void AddLevel(Level level)
+        {
+            levels.Add(level);
         }
     }
 }

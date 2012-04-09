@@ -151,9 +151,20 @@ namespace MCForge.Core {
 		public delegate void ForeachPlayerDelegate(Player p);
 
         internal static void Init() {
-            //TODO load the level if it exists
             Block.InIt();
-            Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
+            #region "Level Loading
+            if (Directory.Exists("levels"))
+                if (File.Exists("levels\\main.lvl"))
+                    Mainlevel = Level.LoadLevel("main");
+                else
+                    Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
+            else
+                Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
+            if (Mainlevel == null)
+                Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
+            MCForge.World.Level.AddLevel(Mainlevel);
+            #endregion
+
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
             UpdateTimer.Start();
@@ -198,6 +209,7 @@ namespace MCForge.Core {
 
         static void CreateDirectories() {
             if (!Directory.Exists("text")) { Directory.CreateDirectory("text"); Log("Created text directory...", ConsoleColor.White, ConsoleColor.Black); }
+            if (!Directory.Exists("levels")) { Directory.CreateDirectory("levels"); Log("Created level directory...", ConsoleColor.White, ConsoleColor.Black); }
             if (!File.Exists("text/badwords.txt")) { File.Create("text/badwords.txt").Close(); Log("[File] Created badwords.txt", ConsoleColor.White, ConsoleColor.Black); }
             if (!File.Exists("text/replacementwords.txt")) { File.Create("text/replacementwords.txt").Close(); Log("[File] Created replacementwords.txt", ConsoleColor.White, ConsoleColor.Black); }
             if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); Log("[File] Created agreed.txt", ConsoleColor.White, ConsoleColor.Black); }
