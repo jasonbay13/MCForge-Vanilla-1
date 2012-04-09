@@ -78,8 +78,8 @@ namespace MCForge.Utilities.Settings {
                 using (var writer = File.CreateText(FileUtils.PropertiesPath + "server.properties")) {
                     foreach (var v in Values) {
                         writer.WriteLine(v.Description == null
-                                             ? string.Format("{0} -> {1}\n", v.Key.ToLower(), v.Value)
-                                             : string.Format("#{0}\n{1} -> {2}\n", v.Description, v.Key.ToLower(), v.Value));
+                                             ? string.Format("{0}={1}\n", v.Key.ToLower(), v.Value)
+                                             : string.Format("#{0}\n{1}={2}\n", v.Description, v.Key.ToLower(), v.Value));
 
                     }
                 }
@@ -233,8 +233,8 @@ namespace MCForge.Utilities.Settings {
                     writer.Write(v.Description == null && v.Key == null
                         ? v.Value + (v != Values.Last() ? "\n" : "")
                         : v.Description == null
-                            ? string.Format("{0} -> {1}" + (v != Values.Last() ? "\n" : ""), v.Key, v.Value)
-                            : string.Format("#{0}\n{1} -> {2}" + (v != Values.Last() ? "\n" : ""), v.Description, v.Key, v.Value));
+                            ? string.Format("{0}={1}" + (v != Values.Last() ? "\n" : ""), v.Key, v.Value)
+                            : string.Format("#{0}\n{1}={2}" + (v != Values.Last() ? "\n" : ""), v.Description, v.Key, v.Value));
 
                 }
             }
@@ -258,15 +258,18 @@ namespace MCForge.Utilities.Settings {
 
                 if (read[0] == '#' && (i + 1 < text.Count()) ? text[i + 1][0] != '#' && !String.IsNullOrWhiteSpace(text[i + 1]) : false) {
                     i++;
-                    pair = new SettingNode(text[i].Split(new[] { " -> " }, StringSplitOptions.None)[0].Trim().ToLower(),
-                                           text[i].Split(new[] { " -> " }, StringSplitOptions.None)[1].Trim(),
+                    var split = text[i].Split('=');
+                    pair = new SettingNode(split[0].Trim().ToLower(),
+                                           String.Join("=", split, 1, split.Length - 1).Trim(),
                                            read.Substring(1));
                 }
                 else {
-                    if (read[0] != '#')
-                        pair = new SettingNode(read.Split(new[] { " -> " }, StringSplitOptions.None)[0].Trim().ToLower(),
-                                               read.Split(new[] { " -> " }, StringSplitOptions.None)[1].Trim(),
+                    if (read[0] != '#') {
+                        var split = text[i].Split('=');
+                        pair = new SettingNode(split[0].Trim().ToLower(),
+                                               String.Join("=", split, 1, split.Length - 1).Trim(),
                                                null);
+                    }
                     else pair = new SettingNode(null, read, null);
                 }
                 Values.Add(pair);

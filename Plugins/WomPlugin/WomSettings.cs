@@ -53,6 +53,20 @@ namespace Plugins.WomPlugin {
                 Server.Log(String.Format("{0} was formatted incorrectly, this file will not be loaded", path), ConsoleColor.Red, ConsoleColor.Black);
                 return;
             }
+
+            var tempValues = new List<SettingNode>(lines.Count());
+            try {
+                for (int i = 0; i < lines.Length; i++) {
+                    var line = lines[i];
+                    var split = line.Split('=');
+                    tempValues.Add(new SettingNode(split[0].Trim(), String.Join("=", split, 1, split.Length - 1).Trim(), null));
+                }
+                _cgfvalues.Clear();
+                _cgfvalues.AddRange(tempValues);
+            }
+            catch {
+                return;
+            }
             LevelsWithTextures.Add(level);
             level.ExtraData.Add("WomConfig", Config);
 
