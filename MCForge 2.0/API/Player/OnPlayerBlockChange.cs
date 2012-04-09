@@ -68,7 +68,7 @@ namespace MCForge.API.PlayerEvent
 			List<PlayerEvent> opbcList = new List<PlayerEvent>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(playerEvent => {
-				if (playerEvent.GetType() != Type.GetType("OnPlayerBlockChange"))
+				if (playerEvent.GetType().Name != "OnPlayerBlockChange")
 					return;
 				OnPlayerBlockChange opbc = (OnPlayerBlockChange)playerEvent;
 				if (opbc.target == p) {// We keep it

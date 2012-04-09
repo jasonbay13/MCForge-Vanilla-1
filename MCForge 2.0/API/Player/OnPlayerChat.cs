@@ -44,7 +44,7 @@ namespace MCForge.API.PlayerEvent
 			List<PlayerEvent> opcList = new List<PlayerEvent>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(playerEvent => {
-				if (playerEvent.GetType() != Type.GetType("OnPlayerChat"))
+				if (playerEvent.GetType().Name != "OnPlayerChat")
 					return;
 				OnPlayerChat opc = (OnPlayerChat)playerEvent;
 				if (opc.target == p) {// We keep it

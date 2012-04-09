@@ -49,7 +49,7 @@ namespace MCForge.API.PlayerEvent
 			List<PlayerEvent> opcList = new List<PlayerEvent>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(playerEvent => {
-				if (playerEvent.GetType() != Type.GetType("OnPlayerCommand"))
+				if (playerEvent.GetType().Name != "OnPlayerCommand")
 					return;
 				OnPlayerCommand opc = (OnPlayerCommand)playerEvent;
 				if (opc.target == p) {// We keep it

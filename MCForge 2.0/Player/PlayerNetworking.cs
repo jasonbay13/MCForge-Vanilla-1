@@ -266,10 +266,15 @@ namespace MCForge.Entity
 			ushort z = packet.NTHO(message, 5);
 			byte rotx = message[7];
 			byte roty = message[8];
-			//OnPlayerMove m = new OnPlayerMove(this, Pos, new Vector3(x, z, y));
-			//m.Call();
-			//if (m.IsCanceled)
-			//    return;
+			Vector3 old = new Vector3(Pos.x, Pos.z, Pos.y);
+			Vector3 newPos = new Vector3(x, z, y);
+			if (!(old.x == newPos.x && old.y == newPos.y && old.z == newPos.z)) {
+				bool cancel = OnPlayerMove.Call(this, old);
+				if (cancel) {
+					this.SendToPos(old, Rot);
+					return;
+				}
+			}
 			Pos.x = (short)x;
 			Pos.y = (short)y;
 			Pos.z = (short)z;

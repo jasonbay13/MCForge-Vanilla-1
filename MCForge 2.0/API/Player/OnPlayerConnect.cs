@@ -45,17 +45,16 @@ namespace MCForge.API.PlayerEvent
 		/// In this case, it is called from the command processing code.
 		/// </summary>
 		/// <param name="p">The player that caused the event.</param>
-		/// <param name="msg">The message sent by the player.</param>
 		/// <returns> A boolean value specifying whether or not to cancel the event.</returns>
 		internal static bool Call(Player p) {
 			//Event was called from the code.
 			List<PlayerEvent> opcList = new List<PlayerEvent>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(playerEvent => {
-				if (playerEvent.GetType() != Type.GetType("OnPlayerConnect"))
+				if (playerEvent.GetType().Name != "OnPlayerConnect")
 					return;
 				OnPlayerConnect opc = (OnPlayerConnect)playerEvent;
-				if (opc.target == p) {// We keep it
+				if (opc.target.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc._queue(opc); // fire callback
 					opcList.Add(opc); // add to used list
