@@ -7,6 +7,10 @@ using MCForge.Core;
 
 namespace MCForge.API.PlayerEvent
 {
+	/// <summary>
+	/// The OnPlayerCommand event is used to catch whenever a player uses a command.
+	/// The command need not be valid.
+	/// </summary>
 	public class OnPlayerCommand : PlayerEvent {
 
 		/// <summary>
@@ -45,6 +49,8 @@ namespace MCForge.API.PlayerEvent
 			List<PlayerEvent> opcList = new List<PlayerEvent>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(playerEvent => {
+				if (playerEvent.GetType() != Type.GetType("OnPlayerCommand"))
+					return;
 				OnPlayerCommand opc = (OnPlayerCommand)playerEvent;
 				if (opc.target == p) {// We keep it
 					//Set up variables, then fire all callbacks.
@@ -69,7 +75,7 @@ namespace MCForge.API.PlayerEvent
 			tag += "OPC";
 			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
 			if (pe != null)
-				//It already exists, so wqe just add it to the queue.
+				//It already exists, so we just add it to the queue.
 				((OnPlayerCommand)pe)._queue += callback;
 			else {
 				//Doesn't exist yet.  Make a new one.
@@ -90,6 +96,9 @@ namespace MCForge.API.PlayerEvent
 				_eventQueue.Remove(pe);
 		}
 
+		/// <summary>
+		/// Unregisters this event.
+		/// </summary>
 		public override void Unregister() {
 			_eventQueue.Remove(this);
 		}

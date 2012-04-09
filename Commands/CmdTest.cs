@@ -35,20 +35,16 @@ namespace CommandDll
 
 		public void Use(Player p, string[] args)
 		{
-			p.SendMessage("Command cancelling event activated!");
-			PlayerEvent pe = OnPlayerCommand.Register(CallBack, p, "Test");
+			p.SendMessage("Chat cancelling event activated!");
+			PlayerEvent pe = OnPlayerChat.Register(CallBack, p, "Test");
 			pe.Cancel();
 			//p.SendMessage("Please place/destroy a block.");
 			//p.CatchNextBlockchange(new Player.BlockChangeDelegate(BlockChange), null);
 		}
 
 		public void CallBack(PlayerEvent e) {
-			e.target.SendMessage("Test: You issued a command!");
-			OnPlayerCommand.Unregister("Test");
-		}
-		public void BlockChange(Player p, ushort x, ushort z, ushort y, byte NewType, bool action, object data)
-		{
-			//HandleBlockChange
+			e.target.SendMessage("Test: You issued a chat message!");
+			e.Unregister();
 		}
 
 		public void Help(Player p)

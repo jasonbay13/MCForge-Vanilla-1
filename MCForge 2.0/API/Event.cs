@@ -24,7 +24,8 @@ namespace MCForge.API
 		/// <summary>
 		/// The type of event (currently not used, but still important.)
 		/// </summary>
-		protected EventType _type;
+		internal EventType _type;
+		public EventType type { get { return _type;} }
 		/// <summary>
 		/// The priority of the event (currently ignored)
 		/// </summary>

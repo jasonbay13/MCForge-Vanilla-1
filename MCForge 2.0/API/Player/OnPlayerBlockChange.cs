@@ -19,6 +19,7 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		/// <param name="callback">the method used for the delegate to callback upon event fire</param>
 		/// <param name="target">The target Player we want the event for.</param>
+		/// <param name="datapass">The data we want to pass between events.</param>
 		/// <param name="tag">The tag of this event, so it can be cancelled, unregistered, etc.</param>
 		internal OnPlayerBlockChange(OnCall callback, Player target, object datapass, string tag) {
 			_type = EventType.Player;
@@ -59,14 +60,16 @@ namespace MCForge.API.PlayerEvent
 		/// In this case, it is called from the command processing code.
 		/// </summary>
 		/// <param name="p">The player that caused the event.</param>
-		/// <param name="cmd">The command the player gave</param>
-		/// <param name="args">The arguments the player gave for the command.</param>
+		/// <param name="action">The action of the player.  Destroyed, or placed?</param>
+		/// <param name="holding">What the player was holding at the time.</param>
 		/// <returns> A boolean value specifying whether or not to cancel the event.</returns>
 		internal static bool Call(ushort x, ushort y, ushort z, ActionType action, Player p, byte holding) {
 			//Event was called from the code.
 			List<PlayerEvent> opbcList = new List<PlayerEvent>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(playerEvent => {
+				if (playerEvent.GetType() != Type.GetType("OnPlayerBlockChange"))
+					return;
 				OnPlayerBlockChange opbc = (OnPlayerBlockChange)playerEvent;
 				if (opbc.target == p) {// We keep it
 					//Set up variables, then fire all callbacks.
@@ -87,6 +90,7 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		/// <param name="callback">The method to call</param>
 		/// <param name="target">The player to watch for. (null for any players)</param>
+		/// <param name="datapass">The data to return when this event fires.</param>
 		/// <param name="tag">The tag to use (Required if you ever want to unregister the event.</param>
 		/// <returns></returns>
 		public static PlayerEvent Register(PlayerEvent.OnCall callback, Player target, object datapass, String tag) {
@@ -115,6 +119,9 @@ namespace MCForge.API.PlayerEvent
 				_eventQueue.Remove(pe);
 		}
 
+		/// <summary>
+		/// Unregisters this event.
+		/// </summary>
 		public override void Unregister() {
 			_eventQueue.Remove(this);
 		}
