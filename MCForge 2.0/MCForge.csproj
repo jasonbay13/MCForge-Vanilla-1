@@ -60,6 +60,7 @@
     <Compile Include="API\EventHelper.cs" />
     <Compile Include="API\Player\OnPlayerBlockChange.cs" />
     <Compile Include="API\Player\OnPlayerChat.cs" />
+    <Compile Include="API\Player\OnPlayerChatRaw.cs" />
     <Compile Include="API\Player\OnPlayerCommand.cs" />
     <Compile Include="API\Player\OnPlayerConnect.cs" />
     <Compile Include="API\Player\OnPlayerDisconnect.cs" />

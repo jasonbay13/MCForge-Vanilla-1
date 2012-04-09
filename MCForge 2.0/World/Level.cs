@@ -44,7 +44,7 @@ namespace MCForge.World {
         public delegate void ForEachBlockDelegate(int pos);
 
         string _name = "main";
-        public string name { get; set; }
+        public string Name { get; set; }
 
         int _TotalBlocks;
         /// <summary>
@@ -95,9 +95,9 @@ namespace MCForge.World {
         /// <returns>returns the level that was created</returns>
         public static Level CreateLevel(Vector3 size, LevelTypes type, String name = "main") {
             Level newlevel = new Level(size);
-            newlevel.name = name;
+            newlevel.Name = name;
 
-            newlevel.name = name;
+            newlevel.Name = name;
             switch (type) {
                 case LevelTypes.Flat:
                     newlevel.CreatePixelArtLevel();

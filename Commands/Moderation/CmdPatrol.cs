@@ -55,7 +55,7 @@ namespace CommandDll.Moderation {
 			p.SendMessage("Player found!  Transporting you to " + found.color + found.Username + Server.DefaultColor + "!");
 			if (p.Level != found.Level) {
 				//Go to the level first
-				gotoCmd.Use(p, new string[] { found.Level.name });
+				gotoCmd.Use(p, new string[] { found.Level.Name });
 			}
 			if (found.isLoading) {
 				p.SendMessage("Waiting for " + found.color + found.Username + Server.DefaultColor + " to spawn...");

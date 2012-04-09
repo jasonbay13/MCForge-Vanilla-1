@@ -8,30 +8,30 @@ using MCForge.Entity;
 namespace MCForge.API.System {
 
     /// <summary>
-    /// Event for recieveing all overflowed packets, this event can be canceled
+    /// Event for recieveing all messages, unedited and unmodified.
     /// </summary>
-    public class OnReceivePacket : Event, Cancelable {
+    public class OnPlayerChatRaw : Event, Cancelable {
 
         /// <summary>
         /// Data Recieved
         /// </summary>
-        public byte[] Data { get; set; }
+        public string Message { get; set; }
 
         /// <summary>
-        /// Player that recieved the packet
+        /// Player that recieved the message
         /// </summary>
         public Player Player { get; set; }
 
         /// <summary>
-        /// Delegate for recieveing packets
+        /// Delegate for recieveing messages
         /// </summary>
         /// <param name="args">OnReceivePacket class to recieve</param>
-        public delegate void OnPacket(OnReceivePacket args);
+        public delegate void OnMessage(OnPlayerChatRaw args);
 
 
-        internal OnReceivePacket(Player sender, byte[] data) {
+        internal OnPlayerChatRaw(Player sender, string message) {
             Player = sender;
-            Data = data;
+            Message = message;
         }
 
         /// <summary>
@@ -45,17 +45,17 @@ namespace MCForge.API.System {
         /// </summary>
         public void Call() {
             ToCall.ForEach(method => {
-                method(this);    
+                method(this);
             });
         }
 
-        private static readonly List<OnPacket> ToCall = new List<OnPacket>();
+        private static readonly List<OnMessage> ToCall = new List<OnMessage>();
 
         /// <summary>
         /// Register an OnPacket event to the server
         /// </summary>
         /// <param name="Event">OnPacket Delegate to register</param>
-        public static void Register(OnPacket Event) {
+        public static void Register(OnMessage Event) {
             ToCall.Add(Event);
         }
 
@@ -63,7 +63,7 @@ namespace MCForge.API.System {
         /// Unregister the event
         /// </summary>
         /// <param name="Event">Event to unregister</param>
-        public static void Unregister(OnPacket Event) {
+        public static void Unregister(OnMessage Event) {
             if (ToCall.Contains(Event))
                 ToCall.Remove(Event);
         }

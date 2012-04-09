@@ -57,8 +57,8 @@ namespace MCForge.Entity {
             }
         }
 
-        protected Socket socket;
-
+        public Socket Socket { get; protected set; }
+        public TcpClient Client { get; protected set; }
         protected packet.types lastPacket = packet.types.SendPing;
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace MCForge.Entity {
         public string storedMessage = "";
 
         protected byte[] buffer = new byte[0];
-        protected byte[] tempBuffer = new byte[0xFF];
+        protected byte[] tempBuffer = new byte[0xFFF];
         protected string tempString = null;
         protected byte tempByte = 0xFF;
 
@@ -250,7 +250,7 @@ namespace MCForge.Entity {
         /// </summary>
         public static List<string> replacement = new List<string>();
 
-        object PassBackData;
+        public readonly Dictionary<object, object> ExtraData = new Dictionary<object, object>();
         /// <summary>
         /// This delegate is used for when a command wants to be activated the first time a player places a block
         /// </summary>
@@ -285,15 +285,16 @@ namespace MCForge.Entity {
             CheckMotdPackets();
             try {
 
-                socket = TcpClient.Client;
+                Socket = TcpClient.Client;
+                Client = TcpClient;
 
-                ip = socket.RemoteEndPoint.ToString().Split(':')[0];
+                ip = Socket.RemoteEndPoint.ToString().Split(':')[0];
                 Server.Log("[System]: " + ip + " connected", ConsoleColor.Gray, ConsoleColor.Black);
 
                 CheckMultipleConnections();
                 if (CheckIfBanned()) return;
 
-                socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
+                Socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
 
                 Server.Connections.Add(this);
             }
@@ -365,7 +366,9 @@ namespace MCForge.Entity {
         /// <param name="data">A passback object that can be used for a command to send data back to itself for use</param>
         [Obsolete("Please use OnPlayerBlockChange event (will be removed before release)")]
         public void CatchNextBlockchange(BlockChangeDelegate change, object data) {
-            PassBackData = data;
+            if(!ExtraData.ContainsKey("PassBackData"))
+                ExtraData.Add("PassBackData", null);
+            ExtraData["PassBackData"] = data;
             nextChat = null;
             blockChange = change;
         }
@@ -393,10 +396,12 @@ namespace MCForge.Entity {
             if (blockChange != null) {
                 bool placing = true;
                 BlockChangeDelegate tempBlockChange = blockChange;
-                object tempPassBack = PassBackData;
+                if (!ExtraData.ContainsKey("PassBackData"))
+                    ExtraData.Add("PassBackData", null);
+                object tempPassBack = ExtraData["PassBackData"];
 
                 blockChange = null;
-                PassBackData = null;
+                ExtraData["PassBackData"] = null;
 
                 ThreadPool.QueueUserWorkItem(delegate { tempBlockChange.Invoke(this, x, z, y, type, placing, tempPassBack); });
                 return;
@@ -469,6 +474,8 @@ namespace MCForge.Entity {
 
         #region Verification Stuffs
         protected void CheckMultipleConnections() {
+            if (Server.Connections.Count < 2)
+                return;
             foreach (Player p in Server.Connections.ToArray()) {
                 if (p.ip == ip && p != this) {
                     p.Kick("Only one half open connection is allowed per IP address.");

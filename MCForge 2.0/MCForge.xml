@@ -1208,6 +1208,49 @@
             The filename to save the group list into. when setting it des not contain the "ranks/" part
             </summary>
         </member>
+        <member name="T:MCForge.API.System.OnReceivePacket">
+            <summary>
+            Event for recieveing all overflowed packets, this event can be canceled
+            </summary>
+        </member>
+        <member name="M:MCForge.API.System.OnReceivePacket.Call">
+            <summary>
+            Calls every event
+            </summary>
+        </member>
+        <member name="M:MCForge.API.System.OnReceivePacket.Register(MCForge.API.System.OnReceivePacket.OnPacket)">
+            <summary>
+            Register an OnPacket event to the server
+            </summary>
+            <param name="Event">OnPacket Delegate to register</param>
+        </member>
+        <member name="M:MCForge.API.System.OnReceivePacket.Unregister(MCForge.API.System.OnReceivePacket.OnPacket)">
+            <summary>
+            Unregister the event
+            </summary>
+            <param name="Event">Event to unregister</param>
+        </member>
+        <member name="P:MCForge.API.System.OnReceivePacket.Data">
+            <summary>
+            Data Recieved
+            </summary>
+        </member>
+        <member name="P:MCForge.API.System.OnReceivePacket.Player">
+            <summary>
+            Player that recieved the packet
+            </summary>
+        </member>
+        <member name="P:MCForge.API.System.OnReceivePacket.IsCanceled">
+            <summary>
+            Gets or Sets the canceledness of the event
+            </summary>
+        </member>
+        <member name="T:MCForge.API.System.OnReceivePacket.OnPacket">
+            <summary>
+            Delegate for recieveing packets
+            </summary>
+            <param name="args">OnReceivePacket class to recieve</param>
+        </member>
         <member name="T:MCForge.Utilities.Settings.ServerSettings">
             <summary>
             Settings Utility
@@ -1385,46 +1428,46 @@
             <param name="method">The method to call when this event gets excuted</param>
             <param name="priority">The importance of the call</param>
         </member>
-        <member name="T:MCForge.API.System.OnReceivePacket">
+        <member name="T:MCForge.API.System.OnPlayerChatRaw">
             <summary>
-            Event for recieveing all overflowed packets, this event can be canceled
+            Event for recieveing all messages, unedited and unmodified.
             </summary>
         </member>
-        <member name="M:MCForge.API.System.OnReceivePacket.Call">
+        <member name="M:MCForge.API.System.OnPlayerChatRaw.Call">
             <summary>
             Calls every event
             </summary>
         </member>
-        <member name="M:MCForge.API.System.OnReceivePacket.Register(MCForge.API.System.OnReceivePacket.OnPacket)">
+        <member name="M:MCForge.API.System.OnPlayerChatRaw.Register(MCForge.API.System.OnPlayerChatRaw.OnMessage)">
             <summary>
             Register an OnPacket event to the server
             </summary>
             <param name="Event">OnPacket Delegate to register</param>
         </member>
-        <member name="M:MCForge.API.System.OnReceivePacket.Unregister(MCForge.API.System.OnReceivePacket.OnPacket)">
+        <member name="M:MCForge.API.System.OnPlayerChatRaw.Unregister(MCForge.API.System.OnPlayerChatRaw.OnMessage)">
             <summary>
             Unregister the event
             </summary>
             <param name="Event">Event to unregister</param>
         </member>
-        <member name="P:MCForge.API.System.OnReceivePacket.Data">
+        <member name="P:MCForge.API.System.OnPlayerChatRaw.Message">
             <summary>
             Data Recieved
             </summary>
         </member>
-        <member name="P:MCForge.API.System.OnReceivePacket.Player">
+        <member name="P:MCForge.API.System.OnPlayerChatRaw.Player">
             <summary>
-            Player that recieved the packet
+            Player that recieved the message
             </summary>
         </member>
-        <member name="P:MCForge.API.System.OnReceivePacket.IsCanceled">
+        <member name="P:MCForge.API.System.OnPlayerChatRaw.IsCanceled">
             <summary>
             Gets or Sets the canceledness of the event
             </summary>
         </member>
-        <member name="T:MCForge.API.System.OnReceivePacket.OnPacket">
+        <member name="T:MCForge.API.System.OnPlayerChatRaw.OnMessage">
             <summary>
-            Delegate for recieveing packets
+            Delegate for recieveing messages
             </summary>
             <param name="args">OnReceivePacket class to recieve</param>
         </member>

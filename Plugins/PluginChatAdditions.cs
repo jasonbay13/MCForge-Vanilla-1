@@ -5,6 +5,7 @@ using System.Text;
 using MCForge.Interface.Plugin;
 using MCForge.Entity;
 using MCForge.API.PlayerEvent;
+using MCForge.API.System;
 
 namespace Plugins {
     public class PluginChatAdditions : IPlugin {
@@ -27,15 +28,20 @@ namespace Plugins {
         }
 
         public void OnLoad() {
-            OnPlayerChat.Register(OnChat, MCForge.API.Priority.System_Level);
+            OnPlayerChatRaw.Register(OnChat);
         }
 
         public void OnUnload() {
-
+            OnPlayerChatRaw.Unregister(OnChat);
         }
 
-        void OnChat(OnPlayerChat args) {
+        void OnChat(OnPlayerChatRaw args) {
             //This will be used for the mess that is in HandleChat in Player.cs
+            if (args.Message.StartsWith("/womid ")) {
+                args.Player.ExtraData.Add("UsingWom", true);
+                args.IsCanceled = true;
+            }
+
         }
     }
 }

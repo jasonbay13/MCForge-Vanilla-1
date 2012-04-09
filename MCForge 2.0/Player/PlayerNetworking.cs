@@ -30,6 +30,7 @@ using MCForge.Interface.Command;
 using MCForge.Groups;
 using MCForge.Utilities.Settings;
 using MCForge.API.System;
+using System.Text;
 
 namespace MCForge.Entity {
     public partial class Player {
@@ -43,7 +44,7 @@ namespace MCForge.Entity {
             if (!p.isOnline) return;
 
             try {
-                int length = p.socket.EndReceive(result);
+                int length = p.Socket.EndReceive(result);
                 if (length == 0) {
                     p.CloseConnection();
                     if (!p.beingkicked) {
@@ -55,15 +56,13 @@ namespace MCForge.Entity {
                 Buffer.BlockCopy(p.buffer, 0, b, 0, p.buffer.Length);
                 Buffer.BlockCopy(p.tempBuffer, 0, b, p.buffer.Length, length);
                 p.buffer = p.HandlePacket(b);
-                p.socket.BeginReceive(p.tempBuffer, 0, p.tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), p);
+                p.Socket.BeginReceive(p.tempBuffer, 0, p.tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), p);
             }
-            catch (SocketException e) {
-                SocketException rawr = e;
+            catch (SocketException) {
                 p.CloseConnection();
                 return;
             }
             catch (Exception e) {
-                Exception rawr = e;
                 p.Kick("Error!");
                 Server.Log(e);
                 return;
@@ -76,15 +75,16 @@ namespace MCForge.Entity {
                 // Get the length of the message by checking the first byte
                 switch (msg) {
                     case 0: length = 130; break; // login
-                    case 2: SMPKick("This is not an SMP Server!"); break; // login??
+                    case 2: SMPKick("This is not an SMP Server!"); break; // SMP Handshake packet
                     case 5: length = 8; break; // blockchange
                     case 8: length = 9; break; // input
                     case 13: length = 65; break; // chat
                     default: {
                             var listener = new OnReceivePacket(this, buffer);
                             listener.Call();
-                            if (!listener.IsCanceled)
-                                Kick("Unhandled message id \"" + msg + "\"!");
+                            if (listener.IsCanceled)
+                                return new byte[1];
+                            Kick("Unhandled message id \"" + msg + "\"!");
                             return new byte[0];
                         }
 
@@ -216,10 +216,13 @@ namespace MCForge.Entity {
                 SendBlockChange(x, z, y, currentType);
 
                 BlockChangeDelegate tempBlockChange = blockChange;
-                object tempPassBack = PassBackData;
+                if (!ExtraData.ContainsKey("PassBackData"))
+                    ExtraData.Add("PassBackData", null);
+
+                object tempPassBack = ExtraData["PassBackData"];
 
                 blockChange = null;
-                PassBackData = null;
+                ExtraData["PassBackData"] = null;
 
                 ThreadPool.QueueUserWorkItem(delegate { tempBlockChange.Invoke(this, x, z, y, newType, placing, tempPassBack); });
                 return;
@@ -264,6 +267,10 @@ namespace MCForge.Entity {
             if (!isLoggedIn) return;
 
             string incomingText = enc.GetString(message, 1, 64).Trim();
+            var ChatEventRaw = new OnPlayerChatRaw(this, incomingText);
+            ChatEventRaw.Call();
+            if (ChatEventRaw.IsCanceled)
+                return;
 
             byte incomingID = message[0];
             if (incomingID != 0xFF && incomingID != id && incomingID != 0) {
@@ -398,8 +405,8 @@ namespace MCForge.Entity {
             if (incomingText[0] == '!') //Level chat
             {
                 incomingText = incomingText.Trim().TrimStart('!');
-                LevelChat(this, "&a<&f" + level.name + "&a> " + Username + ":&f " + incomingText);
-                Server.Log("<" + level.name + " Chat> " + Username + ": " + incomingText);
+                LevelChat(this, "&a<&f" + level.Name + "&a> " + Username + ":&f " + incomingText);
+                Server.Log("<" + level.Name + " Chat> " + Username + ": " + incomingText);
                 return;
             }
             if (incomingText[0] == '+' || adminchat) //Admin chat
@@ -448,7 +455,7 @@ namespace MCForge.Entity {
             catch (Exception e) { Server.Log(e); }
             for (int i = 0; i < 3; i++) {
                 try {
-                    socket.BeginSend(pa.bytes, 0, pa.bytes.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
+                    Socket.BeginSend(pa.bytes, 0, pa.bytes.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
                     return;
                 }
                 catch {
@@ -587,7 +594,30 @@ namespace MCForge.Entity {
             SendPacket(pa);
         }
         protected void SMPKick(string a) {
-            //TODO SMPKICK
+            //Read first, then kick
+            var Stream = Client.GetStream();
+            var Reader = new BinaryReader(Stream);
+            var Writer = new BinaryWriter(Stream);
+            short len = IPAddress.HostToNetworkOrder(Reader.ReadInt16());
+
+            if (len > 1 && len < 17) {
+                string name = Encoding.BigEndianUnicode.GetString(Reader.ReadBytes(len * 2));
+                Server.Log(String.Format("{0} tried to log in from an smp client", name));
+
+                byte[] messageInBytes = Encoding.BigEndianUnicode.GetBytes(a);
+                Writer.Write((byte)255);
+                Writer.Write((short)messageInBytes.Length);
+                Writer.Write(messageInBytes);
+                Writer.Flush();
+                CloseConnection();
+            }
+            else {
+                Server.Log("Received unknown packet");
+                Kick("Unknown Packet received");
+            }
+
+
+
         }
         protected void SendPing() {
             SendPacket(pingPacket);
@@ -827,7 +857,7 @@ namespace MCForge.Entity {
             Server.RemovePlayer(this);
             Server.Connections.Remove(this);
 
-            socket.Close();
+            Socket.Close();
         }
 
         internal static void GlobalPing() {
