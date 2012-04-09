@@ -71,7 +71,7 @@ namespace MCForge.API.PlayerEvent
 				if (playerEvent.GetType().Name != "OnPlayerBlockChange")
 					return;
 				OnPlayerBlockChange opbc = (OnPlayerBlockChange)playerEvent;
-				if (opbc.target == p) {// We keep it
+				if (opc.target == null || opbc.target.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opbc.action = action;
 					opbc.holding = holding;

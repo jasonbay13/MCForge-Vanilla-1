@@ -35,15 +35,15 @@ namespace CommandDll
 
 		public void Use(Player p, string[] args)
 		{
-			p.SendMessage("Move canceling event activated!");
-			PlayerEvent pe = OnPlayerMove.Register(CallBack, p, "Test");
-			pe.Cancel();
+			p.SendMessage("Disconnection event activated!");
+			PlayerEvent pe = OnPlayerDisconnect.Register(CallBack, p, "Test");
+			//pe.Cancel();
 			//p.SendMessage("Please place/destroy a block.");
 			//p.CatchNextBlockchange(new Player.BlockChangeDelegate(BlockChange), null);
 		}
 
 		public void CallBack(PlayerEvent e) {
-			Server.Log("Test: " + e.target.Username + " Tried to move!");
+			Server.Log("Test: " + e.target.Username + " disconnected!");
 			e.Unregister();
 		}
 

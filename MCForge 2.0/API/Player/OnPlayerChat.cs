@@ -47,7 +47,7 @@ namespace MCForge.API.PlayerEvent
 				if (playerEvent.GetType().Name != "OnPlayerChat")
 					return;
 				OnPlayerChat opc = (OnPlayerChat)playerEvent;
-				if (opc.target == p) {// We keep it
+				if (opc.target == null || opc.target.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.message = msg;
 					opc._queue(opc); // fire callback

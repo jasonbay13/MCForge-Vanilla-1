@@ -54,7 +54,7 @@ namespace MCForge.API.PlayerEvent
 				if (playerEvent.GetType().Name != "OnPlayerConnect")
 					return;
 				OnPlayerConnect opc = (OnPlayerConnect)playerEvent;
-				if (opc.target.username == p.username) {// We keep it
+				if (opc.target == null || opc.target.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc._queue(opc); // fire callback
 					opcList.Add(opc); // add to used list

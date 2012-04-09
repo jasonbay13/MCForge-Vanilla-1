@@ -75,7 +75,7 @@ namespace CommandDll
         }
         public void Help(Player p)
         {
-            p.SendMessage("/replaceall [block] [block2] - Replaces all of [block] with [block2] in the map.");
+            p.SendMessage("/replaceall <block> <block2> - Replaces all of [block] with [block2] in the map.");
         }
         public void Initialize()
         {

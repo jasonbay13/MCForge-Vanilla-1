@@ -8,7 +8,6 @@ namespace MCForge.API.PlayerEvent
 {
 	/// <summary>
 	/// Called whenever anyone leaves the server.
-	/// (Currently not ever called.)
 	/// 
 	/// <b>Note: This event CANNOT be canceled.  Cancel() will have no effect.</b>
 	/// </summary>
@@ -27,7 +26,7 @@ namespace MCForge.API.PlayerEvent
 			_queue += callback;
 		}
 
-		public string reason { get; set; }
+		public String reason { get; set; }
 
 		/// <summary>
 		/// This is meant to be called from the code where you mean for the event to happen.
@@ -43,7 +42,7 @@ namespace MCForge.API.PlayerEvent
 				if (playerEvent.GetType().Name != "OnPlayerDisconnect")
 					return;
 				OnPlayerDisconnect opc = (OnPlayerDisconnect)playerEvent;
-				if (opc.target.username == p.username) {// We keep it
+				if (opc.target == null || opc.target.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.reason = reason;
 					opc._queue(opc); // fire callback

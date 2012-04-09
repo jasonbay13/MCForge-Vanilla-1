@@ -64,13 +64,13 @@ namespace MCForge.Entity
 			}
 			catch (SocketException e)
 			{
-				SocketException rawr = e;
+				//SocketException rawr = e;
 				p.CloseConnection();
 				return;
 			}
 			catch (Exception e)
 			{
-				Exception rawr = e;
+				//Exception rawr = e;
 				p.Kick("Error!");
 				Server.Log(e);
 				return;
@@ -917,6 +917,7 @@ namespace MCForge.Entity
 			GlobalDie();
 			Server.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", ConsoleColor.Gray, ConsoleColor.Black);
 
+			OnPlayerDisconnect.Call(this, lastPacket.ToString());
 			Server.RemovePlayer(this);
 			Server.Connections.Remove(this);
 

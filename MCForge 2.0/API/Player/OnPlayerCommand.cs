@@ -52,7 +52,7 @@ namespace MCForge.API.PlayerEvent
 				if (playerEvent.GetType().Name != "OnPlayerCommand")
 					return;
 				OnPlayerCommand opc = (OnPlayerCommand)playerEvent;
-				if (opc.target == p) {// We keep it
+				if (opc.target == null || opc.target.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.cmd = cmd;
 					opc.args = args;

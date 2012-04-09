@@ -39,7 +39,7 @@ namespace MCForge.API.PlayerEvent
 				if (playerEvent.GetType().Name != "OnPlayerMove")
 					return;
 				OnPlayerMove opc = (OnPlayerMove)playerEvent;
-				if (opc.target.username == p.username) {// We keep it
+				if (opc.target == null || opc.target.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.oldPos = oldPos;
 					opc._queue(opc); // fire callback
