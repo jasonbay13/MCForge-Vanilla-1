@@ -29,7 +29,7 @@ namespace CommandDll
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 
-        public void Use(Player p, string[] args) //Make this more customizeable
+        public void Use(Player p, string[] args) //TODO Make this more customizeable
         {
             if (Level.FindLevel(args[0]) == null)
             {
