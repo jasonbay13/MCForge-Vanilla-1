@@ -50,11 +50,12 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/promote <player> - promotes a player.");
+            p.SendMessage("Shortcut: /pr");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "promote" });
+            Command.AddReference(this, new string[2] { "promote", "pr" });
         }
     }
 }

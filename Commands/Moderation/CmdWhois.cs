@@ -18,9 +18,9 @@ using MCForge.Interface.Command;
 
 namespace CommandDll.Moderation
 {
-    public class CmdWho : ICommand
+    public class CmdWhois : ICommand
     {
-        public string Name { get { return "Who"; } }
+        public string Name { get { return "Whois"; } }
         public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Nerketur"; } }
         public int Version { get { return 1; } }
@@ -54,7 +54,7 @@ namespace CommandDll.Moderation
                     //p.SendMessage("> " + found.numAwarded + "/" + Server.numAwards + " awards.");
                     p.SendMessage("> the IP of " + found.ip);
                     if (Server.devs.Contains(found.Username))
-                        p.SendMessage("> Player is a Developer.");
+                        p.SendMessage("> " + found.Username + " is an MCForge Developer.");
                 }
             }
             else
@@ -65,7 +65,7 @@ namespace CommandDll.Moderation
 
         public void Help(Player p)
         {
-            p.SendMessage("/who - Displays information about a player or IP.");
+            p.SendMessage("/whois <player/IP> - Displays information about a player or IP.");
             p.SendMessage("  If there are multiple results, it returns all associated accounts.");
         }
         public void Initialize()

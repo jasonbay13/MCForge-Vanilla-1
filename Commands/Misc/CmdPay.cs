@@ -49,7 +49,7 @@ namespace CommandDll.Misc
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "pay" });
+            Command.AddReference(this, "pay");
         }
     }
 }

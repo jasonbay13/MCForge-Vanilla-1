@@ -43,7 +43,7 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/setspawn - Sets the default spawn location");
+            p.SendMessage("/setspawn - Sets the default spawn location for your current map.");
         }
 
         public void Initialize()

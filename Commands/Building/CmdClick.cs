@@ -100,6 +100,7 @@ namespace CommandDll
             p.SendMessage("/click [x z y]- Fakes a click");
             p.SendMessage("if no xyz is given, it uses the last place clicked.");
             p.SendMessage("/click 200 z 200 will cuase it to click at 200x, last z, and 200y");
+            p.SendMessage("Shortcut: /x");
         }
 
         private bool isValid(string message, int dimension, Player p)

@@ -23,7 +23,7 @@ namespace CommandDll
         public string Name { get { return "Me"; } }
         public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
-        public int Version { get { return 1; } }
+        public decimal Version { get { return 1.0m; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
@@ -38,11 +38,11 @@ namespace CommandDll
         }
         public void Help(Player p)
         {
-            p.SendMessage("What do you need help with m'boy? Are you stuck in a well?");
+            p.SendMessage("What do you need help with, m'boy? Are you stuck down a well?");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "me" });
+            Command.AddReference(this, "me");
         }
     }
 }

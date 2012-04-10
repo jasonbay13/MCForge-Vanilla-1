@@ -45,7 +45,8 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/goto [level] - Goes to [level].");
+            p.SendMessage("/goto <level> - Goes to <level>.");
+            p.SendMessage("Shortcut: /g");
         }
 
         public void Initialize()

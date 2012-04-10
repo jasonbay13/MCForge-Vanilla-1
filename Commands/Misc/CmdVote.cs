@@ -49,6 +49,7 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/vote <message> - Starts a 15 second vote");
+            p.SendMessage("Shortcut: /vo");
         }
 
         public void Initialize()

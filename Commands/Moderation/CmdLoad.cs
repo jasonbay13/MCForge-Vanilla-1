@@ -50,12 +50,12 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/load [level] - Loads [level].");
+            p.SendMessage("/load <level> - Loads <level>.");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "load" });
+            Command.AddReference(this, "load");
         }
     }
 }

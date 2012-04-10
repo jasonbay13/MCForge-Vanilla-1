@@ -30,7 +30,7 @@ namespace CommandDll
         {
             Player who = Player.Find(args[0]);
             if (who == null) { p.SendMessage("Player not found!"); return; }
-            if (who == p) { p.SendMessage("Cannot talk to yourself!"); return; }
+            if (who == p) { p.SendMessage("Cannot whisper to yourself!"); return; }
             if (!p.whispering)
             {
                 p.SendMessage("All messages will be sent to " + who.Username);
@@ -55,7 +55,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "whisper" });
+            Command.AddReference(this, "whisper");
         }
     }
 }

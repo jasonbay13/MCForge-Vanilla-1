@@ -13,9 +13,7 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MCForge.Interface.Command;
 using MCForge.Utilities.Settings;
 using MCForge.Entity;
@@ -24,7 +22,7 @@ namespace CommandDll.Moderation
 {
     class CmdSettings : ICommand
     {
-        public string Name { get { return "settings"; } }
+        public string Name { get { return "Settings"; } }
         public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "headdetect"; } }
         public int Version { get { return 1; } }
@@ -67,11 +65,11 @@ namespace CommandDll.Moderation
 
         public void Help(Player p)
         {
-            p.SendMessage("Usage: /settings <key> [optional:<value>]");
-            p.SendMessage("To get a value, do not add a value at the end of the command");
-            p.SendMessage("To set a value, add a value at the end of the command");
-            p.SendMessage("ex: /setting motd Welcome $user");
-            p.SendMessage("to get a description of a setting, type /setting help <key>");
+            p.SendMessage("Usage: /settings <key> [value]");
+            p.SendMessage("To get a value, do not add a value at the end of the command.");
+            p.SendMessage("To set a value, add a value at the end of the command.");
+            p.SendMessage("ex: /settings motd Welcome $user");
+            p.SendMessage("To get a description of a setting, type /settings help <key>.");
         }
 
         public void Initialize()

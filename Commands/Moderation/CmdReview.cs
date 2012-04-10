@@ -139,7 +139,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "review" });
+            Command.AddReference(this, "review");
         }
         void SendPositon(bool all, Player player = null)
         {

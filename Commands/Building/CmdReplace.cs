@@ -110,6 +110,7 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/replace [type] [type2] - Replaces type with type2 inside a selected cuboid.");
+            p.SendMessage("Shortcut: /r");
         }
 
         public void Initialize()

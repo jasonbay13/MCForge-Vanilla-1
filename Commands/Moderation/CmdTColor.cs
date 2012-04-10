@@ -69,11 +69,12 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/tcolor [player] <color> - Changes the title color.");
-            p.SendMessage("&0black &1navy &2green &3teal &4maroon &5purple &6gold &7silver");
+            p.SendMessage("/titlecolor <color> - Change your own title color.");
+            p.SendMessage("/titlecolor [player] <color> - Changes [player]'s title color.");
+            p.SendMessage("Available colors: &0black &1navy &2green &3teal &4maroon &5purple &6gold &7silver");
             p.SendMessage("&8gray &9blue &alime &baqua &cred &dpink &eyellow &fwhite");
+            p.SendMessage("Shortcut: /tcolor");
         }
-
         public void Initialize()
         {
             Command.AddReference(this, new string[2] { "tcolor", "titlecolor" });

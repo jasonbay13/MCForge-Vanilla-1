@@ -87,6 +87,7 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/place [block] <x z y> - Places block at your feet or <x z y>");
+            p.SendMessage("Shortcut: /pl");
         }
 
         public void Initialize()

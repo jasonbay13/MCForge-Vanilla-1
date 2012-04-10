@@ -25,7 +25,7 @@ namespace CommandDll
         public string Name { get { return "Joker"; } }
         public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
-        public int Version { get { return 1; } }
+        public decimal Version { get { return 1.0m; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 
@@ -54,11 +54,11 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/joker <name> - Causes a player to become a joker!");
-            p.SendMessage("/joker # <name> - Makes the player a joker silently");
+            p.SendMessage("/joker # <name> - Makes the player a joker silently.");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "joker" });
+            Command.AddReference(this, "joker");
         }
         void CheckEmpty()
         {

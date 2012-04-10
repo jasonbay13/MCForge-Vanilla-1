@@ -21,7 +21,7 @@ namespace CommandDll
 {
     public class CmdVoteKick : ICommand
     {
-        public string Name { get { return "Votekick"; } }
+        public string Name { get { return "VoteKick"; } }
         public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
@@ -61,7 +61,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "votekick" });
+            Command.AddReference(this, "votekick");
         }
         public void ResetVotes() { Server.YesVotes = 0; Server.NoVotes = 0; }
     }

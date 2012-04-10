@@ -47,7 +47,7 @@ namespace CommandDll.Misc
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "give" });
+            Command.AddReference(this, "give");
         }
     }
 }

@@ -44,7 +44,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "opchat" });
+            Command.AddReference(this, "opchat");
         }
     }
 }

@@ -15,7 +15,6 @@ permissions and limitations under the Licenses.
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
@@ -74,13 +73,13 @@ namespace CommandDll.Moderation
 
         public void Help(Player p)
         {
-            p.SendMessage("/patrol - teleports the user to 'patrol' a user with a lower rank than them.");
-            p.SendMessage("/patrol [rank] - teleports the user to 'patrol' a random user within a certain rank");
+            p.SendMessage("/patrol - Teleports you to \"patrol\" a user with a lower rank.");
+            p.SendMessage("/patrol [rank] - Teleports you to \"patrol\" a random user with the rank [rank].");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "patrol" });
+            Command.AddReference(this, "patrol");
         }
     }
 }

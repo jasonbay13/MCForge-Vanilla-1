@@ -51,12 +51,13 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/demote <player> - Demotes a player.");
+            p.SendMessage("/demote <player> - Demotes <player>.");
+            p.SendMessage("Shortcut: /de");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "demote" });
+            Command.AddReference(this, new string[2] { "demote", "de" });
         }
     }
 }

@@ -43,12 +43,12 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/moderate - Moderates the chat. Only voiced players will be able to speak!");
+            p.SendMessage("/moderate - Toggles chat moderation. Only voiced players will be able to speak!");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "moderate" });
+            Command.AddReference(this, "moderate");
         }
     }
 }

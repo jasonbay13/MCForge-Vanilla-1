@@ -46,10 +46,11 @@ namespace CommandDll.Misc
         public void Help(Player p)
         {
             p.SendMessage("/steal <player> <amount> - Steal <amount> " + Server.moneys + " from <player>.");
+            p.SendMessage("Differs from /rob in that /steal is always successful.");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "steal" });
+            Command.AddReference(this, "steal");
         }
     }
 }

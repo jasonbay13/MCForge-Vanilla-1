@@ -54,7 +54,7 @@ namespace CommandDll.Misc
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "rob" });
+            Command.AddReference(this, "rob");
         }
         bool InBetween(int min, int num, int max)
         {

@@ -73,13 +73,13 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/title <title> - Sets your title");
-            p.SendMessage("/title [player] <title> - Sets a [player] title");
+            p.SendMessage("/title [player] <title> - Sets [player]'s title");
             p.SendMessage("If <title> is \"del\" it deletes the title");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "title" });
+            Command.AddReference(this, "title");
         }
     }
 }

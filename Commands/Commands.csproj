@@ -74,7 +74,7 @@
     <Compile Include="Information\CmdHelp.cs" />
     <Compile Include="Information\CmdImpersonate.cs" />
     <Compile Include="Misc\CmdSummon.cs" />
-    <Compile Include="Misc\CmdCrashserver.cs" />
+    <Compile Include="Misc\CmdCrashServer.cs" />
     <Compile Include="Misc\CmdHacks.cs" />
     <Compile Include="Moderation\CmdSetRank.cs" />
     <Compile Include="Moderation\CmdSetSpawn.cs" />
@@ -105,7 +105,7 @@
     <Compile Include="Moderation\CmdVoteKick.cs" />
     <Compile Include="Misc\CmdSpawn.cs" />
     <Compile Include="Misc\CmdTeleport.cs" />
-    <Compile Include="Moderation\CmdWho.cs" />
+    <Compile Include="Moderation\CmdWhois.cs" />
     <Compile Include="Information\CmdMuted.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

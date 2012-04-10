@@ -46,7 +46,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "voice" });
+            Command.AddReference(this, "voice");
         }
     }
 }
