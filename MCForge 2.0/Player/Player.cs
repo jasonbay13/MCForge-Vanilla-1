@@ -337,10 +337,10 @@ namespace MCForge.Entity {
                 SendMessage("Unknown command \"" + name + "\"!");
             }
 
-            foreach (string s in Command.Commands.Keys) {
+            /*foreach (string s in Command.Commands.Keys) {
                 Console.WriteLine(args[0]);
                 Console.WriteLine("'" + s + "'");
-            }
+            }*/ // if you want this to stay uncommented, just say so. (but i think it was from merge conflict)
         }
         #endregion
 

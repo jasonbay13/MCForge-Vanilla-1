@@ -35,8 +35,9 @@ namespace CommandDll
         public void Use(Player p, string[] args)
         {
             Level l = args.Length != 0
-                ? Level.levels.Find((lev) => { if (lev.Name.IndexOf(String.Join(" ", args)) != -1) return true; return false; })
+                ? Level.levels.Find(lev => { if (lev.Name.IndexOf(String.Join(" ", args)) != -1) return true; return false; })
                 : p.Level;
+            if (l == null) { p.SendMessage("Could not find specified level."); return; }
 
             p.SendMessage(String.Concat(Colors.yellow, "Map Name: ", Colors.white, l.Name));
             p.SendMessage(String.Concat(Colors.yellow, "Map Size: ", Colors.white, l.Size));
@@ -45,18 +46,33 @@ namespace CommandDll
             p.SendMessage(String.Concat(Colors.yellow, "Physics Tick: ", Colors.white, l.PhysicsTick));
             p.SendMessage(String.Concat("To see a list of players currently on ", l.Name, ", type \"yes\"."));
             //OnPlayerChat.Register(plist, MCForge.API.Priority.Normal, l, p);
+            OnPlayerChat.Register(plist, p).datapass = l;
         }
 
         private void plist(OnPlayerChat eventargs)
         {
-            //eventargs.Unregister(true);
-            //if (eventargs.Message.ToLower() != "yes") return;
-            //eventargs.IsCanceled = true;
-            //Server.Players.FindAll((p) => { if (p.Level == (Level)eventargs.GetData()) return true; return false; }).ForEach((p) =>
-            //{
-            //    eventargs.Player.SendMessage(String.Concat(p.titleColor, p.title, p.color, p.Username));
-            //});
+            eventargs.Unregister();
+            if (eventargs.message.ToLower() != "yes") return;
+            eventargs.Cancel();
+            List<Player> templist = Server.Players.FindAll((p) => { if (p.Level == (Level)eventargs.datapass) return true; return false; });
+            
+            if (templist.Count == 0)
+            {
+                eventargs.target.SendMessage("No one is on " + ((Level)eventargs.datapass).Name + ".");
+                return;
+            }
+            if (templist.Count == 1 && eventargs.target.Level == (Level)eventargs.datapass)
+            {
+                eventargs.target.SendMessage("No one besides you is on " + ((Level)eventargs.datapass).Name + ".");
+                return;
+            }
+            
+            templist.ForEach((p) =>
+            {
+                eventargs.target.SendMessage(String.Concat(p.titleColor, p.title, p.color, p.Username));
+            });
         }
+
         public void Help(Player p)
         {
             p.SendMessage("/mapinfo (mapname) - Shows info of the map your currently on or mapname.");
