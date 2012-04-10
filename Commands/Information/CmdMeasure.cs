@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2011 MCForge
+Copyright 2012 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -13,11 +13,7 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using MCForge;
 using System.IO;
 using MCForge.Interface.Command;
 using MCForge.Core;
@@ -33,8 +29,7 @@ namespace CommandDll
         public string Author { get { return "Gamemakergm"; } }
         public Version Version { get { return new Version(1,0); } }
         public string CUD { get { return ""; } }
-        public byte Permission { get { return 30; } }        
-
+        public byte Permission { get { return 30; } }
         public void Use(Player p, string[] args)
         {
             CatchPos cpos = new CatchPos();
@@ -81,15 +76,14 @@ namespace CommandDll
         {
             p.SendMessage("/measure [ignore] - Measures all the blocks between two points.");
             p.SendMessage("[ignore] - Enter a block to ignore them");
+            p.SendMessage("Shortcut: /ms");
         }
-
         public struct CatchPos
         {
             public Vector3 FirstBlock;
             public byte ignore;
             public int count;
         }
-
         public void Initialize()
         {
             Command.AddReference(this, new string[2] { "measure", "ms" });

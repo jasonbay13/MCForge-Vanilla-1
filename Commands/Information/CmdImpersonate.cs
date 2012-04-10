@@ -13,11 +13,7 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using MCForge;
 using System.IO;
 using MCForge.Interface.Command;
 using MCForge.Entity;
@@ -33,7 +29,6 @@ namespace CommandDll
         public Version Version { get { return new Version(1,0); } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
-
         public void Use(Player p, string[] args)
         {
             if (args.Length == 0) { Help(p); return; }
@@ -58,11 +53,12 @@ namespace CommandDll
         }
         public void Help(Player p)
         {
-            p.SendMessage("/impersonate <Player> <Message> - Impersonates <Player>");
+            p.SendMessage("/impersonate <player> <message> - Impersonates <player>.");
+            p.SendMessage("Shortcut: /imp");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "Impersonate" });
+            Command.AddReference(this, new string[2] { "impersonate", "imp" });
         }
     }
 }
