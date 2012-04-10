@@ -729,8 +729,8 @@ namespace MCForge.Entity
 			int diffX = tempPos.x - tempOldPos.x;
 			int diffZ = tempPos.z - tempOldPos.z;
 			int diffY = tempPos.y - tempOldPos.y;
-			int diffR0 = tempRot[0] - tempRot[0];
-			int diffR1 = tempRot[1] - tempRot[1];
+			int diffR0 = tempRot[0] - tempOldRot[0];
+			int diffR1 = tempRot[1] - tempOldRot[1];
 
 			if (ForceTp) changed = 4;
 			else
@@ -773,15 +773,15 @@ namespace MCForge.Entity
 				case 2: //Rot Change
 					pa.Add(packet.types.SendRotChange);
 					pa.Add(id);
-					pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
+					pa.Add(Rot);
 					break;
 				case 3: //Pos AND Rot Change
 					pa.Add(packet.types.SendPosANDRotChange);
 					pa.Add(id);
-					pa.Add(diffX);
-					pa.Add(diffY);
-					pa.Add(diffZ);
-					pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
+					pa.Add((sbyte)diffX);
+                    pa.Add((sbyte)diffY);
+                    pa.Add((sbyte)diffZ);
+					pa.Add(Rot);
 					break;
 				case 4: //Teleport Required
 					pa.Add(packet.types.SendTeleport);

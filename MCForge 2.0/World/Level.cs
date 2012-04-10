@@ -287,6 +287,7 @@ namespace MCForge.World
         public bool SaveToBinary()
         {
             string Name = "levels\\" + this.Name + ".lvl";
+            if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             var Binary = new BinaryWriter(File.Open(Name, FileMode.Create));
 
             try
