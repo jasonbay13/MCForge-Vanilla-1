@@ -331,6 +331,11 @@ namespace MCForge.Entity {
                     incomingText = Regex.Replace(text, word, replacement[new Random().Next(0, replacement.Count)]);
                 }
             }
+            if (decaps)
+            {
+                string newtext = incomingText.ToLower();
+                incomingText = newtext;
+            }
             if (muted) { SendMessage("You are muted!"); return; }
             if (Server.moderation && !voiced && !Server.devs.Contains(Username)) { SendMessage("You can't talk during chat moderation!"); return; }
             if (jokered) {

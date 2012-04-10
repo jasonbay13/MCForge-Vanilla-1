@@ -249,7 +249,10 @@ namespace MCForge.Entity {
         /// Holds replacement messages for profan filter
         /// </summary>
         public static List<string> replacement = new List<string>();
-
+        /// <summary>
+        /// Can the player use Caps ?
+        /// </summary>
+        public bool decaps = false;
         public readonly Dictionary<object, object> ExtraData = new Dictionary<object, object>();
         /// <summary>
         /// This delegate is used for when a command wants to be activated the first time a player places a block
