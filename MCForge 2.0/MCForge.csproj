@@ -131,6 +131,7 @@
     <Compile Include="Interfaces\Plugin\PluginManager.cs" />
     <Compile Include="Player\Player.cs" />
     <Compile Include="World\Blocks\Block.cs" />
+    <Compile Include="World\Blocks\OldMCForgeToNewMCForge.cs" />
     <Compile Include="World\Blocks\Physics\DefaultPhysicBlocks\Active_Lava.cs" />
     <Compile Include="World\Blocks\Physics\DefaultPhysicBlocks\Active_Water.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Adminium.cs" />
