@@ -46,9 +46,7 @@
     <Compile Include="Building\CmdReplace.cs" />
     <Compile Include="Building\CmdReplaceAll.cs" />
     <Compile Include="Building\CmdReplaceNot.cs" />
-    <Compile Include="Fun\CmdFlipheads.cs" />
     <Compile Include="Information\CmdMapInfo.cs" />
-    <Compile Include="Misc\CmdCaps.cs" />
     <Compile Include="Moderation\CmdPatrol.cs" />
     <Compile Include="Information\CmdPlayers.cs" />
     <Compile Include="Information\CmdViewranks.cs" />

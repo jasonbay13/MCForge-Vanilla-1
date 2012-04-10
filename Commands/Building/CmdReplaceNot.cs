@@ -80,7 +80,7 @@ namespace CommandDll
                     for (ushort yy = Math.Min((ushort)(FirstBlock.pos.y), opbc.y); yy <= Math.Max((ushort)(FirstBlock.pos.y), opbc.y); ++yy)
                     {
                         Vector3 loop = new Vector3(xx, zz, yy);
-                        if (p.Level.GetBlock(loop) != FirstBlock.type)
+                        if (opbc.target.Level.GetBlock(loop) != FirstBlock.type)
                         {
                             BufferAdd(buffer, loop);
                         }

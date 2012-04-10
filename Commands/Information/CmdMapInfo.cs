@@ -26,36 +26,36 @@ namespace CommandDll
     public class CmdMapInfo : ICommand
     {
         public string Name { get { return "MapInfo"; } }
-        public CommandTypes Type { get { return CommandTypes.Information; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "jasonbay13"; } }
-        public Version Version { get { return new Version(1, 0, 0, 0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
         public void Use(Player p, string[] args)
         {
             Level l = args.Length != 0
-                ? Level.levels.Find((lev) => { if (lev.Name.IndexOf(String.Join(" ", args)) != -1) return true; return false; })
+                ? Level.levels.Find((lev) => { if (lev.name.IndexOf(String.Join(" ", args)) != -1) return true; return false; })
                 : p.Level;
 
-            p.SendMessage(String.Concat(Colors.yellow, "Map Name: ", Colors.white, l.Name));
+            p.SendMessage(String.Concat(Colors.yellow, "Map Name: ", Colors.white, l.name));
             p.SendMessage(String.Concat(Colors.yellow, "Map Size: ", Colors.white, l.Size));
             p.SendMessage(String.Concat(Colors.yellow, "Total Blocks: ", Colors.white, l.TotalBlocks));
             p.SendMessage(String.Concat(Colors.yellow, "Spawn Pos: ", Colors.white, l.SpawnPos));
             p.SendMessage(String.Concat(Colors.yellow, "Physics Tick: ", Colors.white, l.PhysicsTick));
-            p.SendMessage(String.Concat("To see a list of players currently on ", l.Name, ", type \"yes\"."));
-            OnPlayerChat.Register(plist, MCForge.API.Priority.Normal, l, p);
+            p.SendMessage(String.Concat("To see a list of players currently on ", l.name, ", type \"yes\"."));
+            //OnPlayerChat.Register(plist, MCForge.API.Priority.Normal, l, p);
         }
 
         private void plist(OnPlayerChat eventargs)
         {
-            eventargs.Unregister(true);
-            if (eventargs.Message.ToLower() != "yes") return;
-            eventargs.IsCanceled = true;
-            Server.Players.FindAll((p) => { if (p.Level == (Level)eventargs.GetData()) return true; return false; }).ForEach((p) =>
-            {
-                eventargs.Player.SendMessage(String.Concat(p.titleColor, p.title, p.color, p.Username));
-            });
+            //eventargs.Unregister(true);
+            //if (eventargs.Message.ToLower() != "yes") return;
+            //eventargs.IsCanceled = true;
+            //Server.Players.FindAll((p) => { if (p.Level == (Level)eventargs.GetData()) return true; return false; }).ForEach((p) =>
+            //{
+            //    eventargs.Player.SendMessage(String.Concat(p.titleColor, p.title, p.color, p.Username));
+            //});
         }
         public void Help(Player p)
         {

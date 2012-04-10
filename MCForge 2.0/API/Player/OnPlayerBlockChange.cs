@@ -65,13 +65,13 @@ namespace MCForge.API.PlayerEvent
 		/// <returns> A boolean value specifying whether or not to cancel the event.</returns>
 		internal static bool Call(ushort x, ushort y, ushort z, ActionType action, Player p, byte holding) {
 			//Event was called from the code.
-			List<PlayerEvent> opbcList = new List<PlayerEvent>();
+			List<OnPlayerBlockChange> opbcList = new List<OnPlayerBlockChange>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(playerEvent => {
 				if (playerEvent.GetType().Name != "OnPlayerBlockChange")
 					return;
 				OnPlayerBlockChange opbc = (OnPlayerBlockChange)playerEvent;
-				if (opc.target == null || opbc.target.username == p.username) {// We keep it
+				if (opbc.target == null || opbc.target.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opbc.action = action;
 					opbc.holding = holding;
