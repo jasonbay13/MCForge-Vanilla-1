@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2011 MCForge
+Copyright 2012 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -29,31 +29,23 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		public Player target { get { return _target;} }
 
-		private string _msg;
-		/// <summary>
-		/// The message that the wanted player sent (before processing)
-		/// </summary>
-		public string msg { get { return _msg; } }
-
-		private Vector3 _oldPos;
-		/// <summary>
-		/// The position the player was at before moving to their current position.
-		/// </summary>
-		public Vector3 oldPos { get { return _oldPos; } }
 		/// <summary>
 		/// Ther delegate used for callbacks.  The caller will have this method run when the event fires.
 		/// </summary>
 		/// <param name="e">The Event that fired</param>
 		public delegate void OnCall(PlayerEvent e);
+		//Note: Perhaps we need to have one per event, so it can prevent casting problems.
+
 		/// <summary>
-		/// The queue of delegates to call for the particular tag
+		/// The queue of delegates to call for the particular tag (One for each event)
 		/// </summary>
 		protected OnCall _queue;
 
 		/// <summary>
 		/// The list of all events currently active of a PlayerEvent type.
 		/// </summary>
-		protected static List<PlayerEvent> _eventQueue = new List<PlayerEvent>();
+		protected static List<PlayerEvent> _eventQueue = new List<PlayerEvent>(); // Same across all Player events
+		//Note: Should we make this one queue per event as well?
 		
 		
 		private bool _canceled;
@@ -82,6 +74,11 @@ namespace MCForge.API.PlayerEvent
 			_canceled = false;
 		}
 
-		public abstract void Unregister();
+		/// <summary>
+		/// Unregisters the event from the queue.  If more processing is required, override this method
+		/// </summary>
+		public virtual void Unregister() {
+			_eventQueue.Remove(this);
+		}
 	}
 }

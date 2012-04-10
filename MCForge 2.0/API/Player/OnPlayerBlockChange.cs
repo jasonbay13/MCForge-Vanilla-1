@@ -118,12 +118,5 @@ namespace MCForge.API.PlayerEvent
 			if (pe != null)
 				_eventQueue.Remove(pe);
 		}
-
-		/// <summary>
-		/// Unregisters this event.
-		/// </summary>
-		public override void Unregister() {
-			_eventQueue.Remove(this);
-		}
 	}
 }

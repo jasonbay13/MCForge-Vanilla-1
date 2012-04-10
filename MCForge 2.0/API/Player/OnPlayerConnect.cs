@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2011 MCForge
+Copyright 2012 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -15,7 +15,6 @@ permissions and limitations under the Licenses.
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MCForge.Entity;
 
 namespace MCForge.API.PlayerEvent
@@ -94,13 +93,6 @@ namespace MCForge.API.PlayerEvent
 			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
 			if (pe != null)
 				_eventQueue.Remove(pe);
-		}
-
-		/// <summary>
-		/// Unregisters this event.
-		/// </summary>
-		public override void Unregister() {
-			_eventQueue.Remove(this);
 		}
     }
 }
