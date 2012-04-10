@@ -37,7 +37,7 @@ namespace CommandDll.Moderation {
 				if (found == null) {
 					p.SendMessage("The specified player is not online.");
 				} else {
-					p.SendMessage(found.Username + " is on " + found.Level.name);
+					p.SendMessage(found.Username + " is on " + found.Level.Name);
 					p.SendMessage(/*found.title + " " + */found.Username + " has:");
 					p.SendMessage("> the rank of " + found.group.color + found.group.name);
 					//p.SendMessage("> modified " + found.allmodified + " blocks and " + found.modified + " were changed since logging in.");

@@ -433,8 +433,8 @@ namespace MCForge.Entity
             if (incomingText[0] == '!') //Level chat
             {
                 incomingText = incomingText.Trim().TrimStart('!');
-                LevelChat(this, "&a<&f" + level.name + "&a> " + Username + ":&f " + incomingText);
-                Server.Log("<" + level.name + " Chat> " + Username + ": " + incomingText);
+                LevelChat(this, "&a<&f" + level.Name + "&a> " + Username + ":&f " + incomingText);
+                Server.Log("<" + level.Name + " Chat> " + Username + ": " + incomingText);
                 return;
             }
             if (incomingText[0] == '+' || adminchat) //Admin chat

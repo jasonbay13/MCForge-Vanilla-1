@@ -106,10 +106,13 @@ namespace MCForge.World
             newlevel.Name = name;
             switch (type)
             {
-                case LevelTypes.Flat:
-                    newlevel.CreatePixelArtLevel();
-                    break;
-            }
+				case LevelTypes.Flat:
+					newlevel.CreateFlatLevel();
+					break;
+				case LevelTypes.Pixel:
+					newlevel.CreatePixelArtLevel();
+					break;
+			}
 
             return newlevel;
         }
@@ -121,12 +124,12 @@ namespace MCForge.World
             {
                 if (y < middle)
                 {
-                    SetBlock((ushort)x, (ushort)z, (ushort)y, Block.BlockList.DIRT);
+                    SetBlock((ushort)x, (ushort)z, (ushort)y, Block.NameToByte("dirt"));
                     return;
                 }
                 if (y == middle)
                 {
-                    SetBlock((ushort)x, (ushort)z, (ushort)y, Block.BlockList.PINK_CLOTH);
+                    SetBlock((ushort)x, (ushort)z, (ushort)y, Block.NameToByte("grass"));
                     return;
                 }
 
@@ -141,10 +144,10 @@ namespace MCForge.World
             ForEachBlockXZY((x, z, y) =>
             {
                 if (x == 0 || x == Size.x - 1 || z == 0 || z == Size.z - 1)
-                    SetBlock(x, z, y, Block.BlockList.WHITE_CLOTH);
+                    SetBlock(x, z, y, Block.NameToByte("white"));
 
                 if (y == 0)
-                    SetBlock(x, z, y, Block.BlockList.GRAY_CLOTH);
+                    SetBlock(x, z, y, Block.NameToByte("gray"));
             });
             SpawnPos = new Vector3((short)(Size.x / 2), (short)(Size.z / 2), (short)(Size.y));
             SpawnRot = new byte[2] { 0, 0 };
@@ -436,7 +439,7 @@ namespace MCForge.World
             catch (Exception e)
             {
                 Server.Log(e);
-                return (Block)50; //Unknown Block
+                return Block.NameToByte("unknown"); //Unknown Block
             }
         }
         #endregion
@@ -494,10 +497,10 @@ namespace MCForge.World
         /// <summary>
         /// An enumeration of all the types of levels
         /// </summary>
-        public enum LevelTypes
-        {
-            Flat,
-        }
+		public enum LevelTypes {
+			Flat,
+			Pixel,
+		}
 
         /// <summary>
         /// Compresses the specified byte array.

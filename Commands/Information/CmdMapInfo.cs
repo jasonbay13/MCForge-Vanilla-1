@@ -35,15 +35,15 @@ namespace CommandDll
         public void Use(Player p, string[] args)
         {
             Level l = args.Length != 0
-                ? Level.levels.Find((lev) => { if (lev.name.IndexOf(String.Join(" ", args)) != -1) return true; return false; })
+                ? Level.levels.Find((lev) => { if (lev.Name.IndexOf(String.Join(" ", args)) != -1) return true; return false; })
                 : p.Level;
 
-            p.SendMessage(String.Concat(Colors.yellow, "Map Name: ", Colors.white, l.name));
+            p.SendMessage(String.Concat(Colors.yellow, "Map Name: ", Colors.white, l.Name));
             p.SendMessage(String.Concat(Colors.yellow, "Map Size: ", Colors.white, l.Size));
             p.SendMessage(String.Concat(Colors.yellow, "Total Blocks: ", Colors.white, l.TotalBlocks));
             p.SendMessage(String.Concat(Colors.yellow, "Spawn Pos: ", Colors.white, l.SpawnPos));
             p.SendMessage(String.Concat(Colors.yellow, "Physics Tick: ", Colors.white, l.PhysicsTick));
-            p.SendMessage(String.Concat("To see a list of players currently on ", l.name, ", type \"yes\"."));
+            p.SendMessage(String.Concat("To see a list of players currently on ", l.Name, ", type \"yes\"."));
             //OnPlayerChat.Register(plist, MCForge.API.Priority.Normal, l, p);
         }
 
