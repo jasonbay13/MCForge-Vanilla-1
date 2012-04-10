@@ -25,6 +25,10 @@ using MCForge.World;
 namespace MCForge.Core {
     public static class Server {
         /// <summary>
+        /// Show the first run screen?
+        /// </summary>
+        public static bool ShowFirstRunScreen = true;
+        /// <summary>
         /// The name of the server currency.
         /// </summary>
         public static string moneys;
