@@ -54,7 +54,7 @@ namespace CommandDll
             }
             if (who.group == group)
             {
-                p.SendMessage(group.colour + who.Username + Server.DefaultColor + "is already that rank");
+                p.SendMessage(group.colour + who.Username + Server.DefaultColor + " is already that rank");
                 return;
             }
             group.AddPlayer(who);

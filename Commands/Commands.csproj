@@ -47,6 +47,7 @@
     <Compile Include="Building\CmdReplaceAll.cs" />
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Information\CmdMapInfo.cs" />
+    <Compile Include="Moderation\CmdDemote.cs" />
     <Compile Include="Moderation\CmdGoto.cs" />
     <Compile Include="Moderation\CmdLoad.cs" />
     <Compile Include="Moderation\CmdNewLevel.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Misc\CmdSetPass.cs" />
     <Compile Include="Misc\CmdWhisper.cs" />
     <Compile Include="Moderation\CmdColor.cs" />
+    <Compile Include="Moderation\CmdPromote.cs" />
     <Compile Include="Moderation\CmdReview.cs" />
     <Compile Include="Moderation\CmdRTitle.cs" />
     <Compile Include="Moderation\CmdSave.cs" />
