@@ -33,7 +33,7 @@ namespace CommandDll
             Player who = Player.Find(args[0]);
             if (who == null) { p.SendMessage("Cannot find player!"); return; }
             if (who == p) { p.SendMessage("Cannot demote yourself!"); return; }
-            if (who.group == PlayerGroup.groups[0]) { p.SendMessage(who.Username + " is already the lowest rank!"); }
+            if (who.group == PlayerGroup.groups[0]) { p.SendMessage(who.Username + " is already the lowest rank!"); return; }
             PlayerGroup current = who.group;
             PlayerGroup previous = null;
             bool next = false;
