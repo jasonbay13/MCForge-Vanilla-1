@@ -52,6 +52,7 @@ namespace MCForge.Groups
         public static void Load()
         {
             string file = ServerSettings.GetSetting("configpath") + "groups.xml";
+            if (!File.Exists(file)) Save();
 
             XPathDocument document = new XPathDocument(file);
             XPathNavigator nav = document.CreateNavigator();

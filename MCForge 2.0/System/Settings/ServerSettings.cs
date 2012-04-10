@@ -20,8 +20,6 @@ using System.IO;
 using System.Linq;
 using MCForge.Core;
 using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace MCForge.Utilities.Settings {
     /// <summary>
@@ -278,10 +276,12 @@ namespace MCForge.Utilities.Settings {
         }
 
         internal static void GenerateSalt() {
-            var numberGen = new RNGCryptoServiceProvider();
-            var data = new byte[16];
-            numberGen.GetBytes(data);
-            Salt = Convert.ToBase64String(data);
+            using (var numberGen = new RNGCryptoServiceProvider())
+            {
+                var data = new byte[16];
+                numberGen.GetBytes(data);
+                Salt = Convert.ToBase64String(data);
+            }
         }
 
         public static bool HasKey(string key) {

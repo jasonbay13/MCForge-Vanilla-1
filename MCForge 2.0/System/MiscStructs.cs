@@ -55,7 +55,9 @@ namespace MCForge.Core {
         public override int GetHashCode() {
             return base.GetHashCode();
         }
-
+        public override string ToString() {
+            return String.Format("x:{0} y:{1}", x, y);
+        }
     }
     public struct Vector3 {
         public short x;
@@ -96,6 +98,9 @@ namespace MCForge.Core {
         }
         public override int GetHashCode() {
             return base.GetHashCode();
+        }
+        public override string ToString() {
+            return String.Format("x:{0} z:{1} y:{2}", x, z, y);
         }
     }
 
