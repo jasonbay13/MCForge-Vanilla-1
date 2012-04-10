@@ -14,11 +14,9 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll.Moderation {
 	/// <summary>
@@ -28,17 +26,14 @@ namespace CommandDll.Moderation {
 		string _Name = "Kick";
 		public string Name { get { return _Name; } }
 
-		CommandTypes _Type = CommandTypes.Mod;
+		CommandTypes _Type = CommandTypes.mod;
 		public CommandTypes Type { get { return _Type; } }
 
 		string _Author = "Nerketur";
 		public string Author { get { return _Author; } }
 
-        public Version Version {
-            get {
-                return new Version(1, 0);
-            }
-        }
+		int _Version = 1;
+		public int Version { get { return _Version; } }
 
 		string _CUD = "";
 		public string CUD { get { return _CUD; } }

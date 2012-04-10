@@ -1,68 +1,111 @@
-﻿using System;
+﻿/*
+Copyright 2012 MCForge
+Dual-licensed under the Educational Community License, Version 2.0 and
+the GNU General Public License, Version 3 (the "Licenses"); you may
+not use this file except in compliance with the Licenses. You may
+obtain a copy of the Licenses at
+http://www.opensource.org/licenses/ecl2.php
+http://www.gnu.org/licenses/gpl-3.0.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the Licenses are distributed on an "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the Licenses for the specific language governing
+permissions and limitations under the Licenses.
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MCForge.Entity;
 
 namespace MCForge.API.PlayerEvent
 {
-    public class OnPlayerCommand : PlayerEvent
-    {
-        public delegate void OnCall(OnPlayerCommand eventargs);
-        protected string _cmd;
-        protected string[] args;
-        public OnPlayerCommand(Player p, string cmd, string[] args) : base(p) { 
-            this._cmd = cmd; this.args = args; 
-        }
-        internal OnPlayerCommand() { }
+	/// <summary>
+	/// The OnPlayerCommand event is used to catch whenever a player uses a command.
+	/// The command need not be valid.
+	/// </summary>
+	public class OnPlayerCommand : PlayerEvent {
 
-        public string GetCmd()
-        {
-            return _cmd;
-        }
-        public string[] GetArgs()
-        {
-            return args;
-        }
-        public string GetArg(int index)
-        {
-            return args[index];
-        }
+		/// <summary>
+		/// Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
+		/// </summary>
+		/// <param name="callback">the method used for the delegate to callback upon event fire</param>
+		/// <param name="target">The target Player we want the event for.</param>
+		/// <param name="tag">The tag of this event, so it can be cancelled, unregistered, etc.</param>
+		internal OnPlayerCommand(OnCall callback, Player target, string tag) {
+			_type = EventType.Player;
+			this.tag = tag;
+			_target = target;
+			_queue += callback;
+		}
 
-        public override bool IsCancelable
-        {
-            get { return true; }
-        }
-        /// <summary>
-        /// Call the event
-        /// </summary>
-        public override  void Call()
-        {
-            Muffins.muffinbag.ForEach(e =>
-            {
-                if (e.type.GetType() == GetType() && ((Player)(e.target) == Player || e.target == null))
-                {
-                    datapass = e.datapass;
-                    ((OnCall)e.Delegate)(this);
-                    if (_unregister)
-                    {
-                        _unregister = false;
-                        Muffins.muffinbag.Remove(e);
-                    }
-                }
-            });
-        }
+		/// <summary>
+		/// The command that the player tried to use
+		/// </summary>
+		public string cmd { get; set; }
+		/// <summary>
+		/// The arguments given for the command.
+		/// </summary>
+		public string[] args { get; set; }
 
-        /// <summary>
-        /// Register this event
-        /// </summary>
-        /// <param name="method">The method to call when this event gets excuted</param>
-        /// <param name="priority">The importance of the call</param>
-        public static void Register(OnCall method, Priority priority, object datapass = null, Player target = null)
-        {
-            Muffins temp = new Muffins(method, priority, new OnPlayerCommand(), datapass, target);
-            Muffins.GiveDerpyMuffins(temp);
-        }
+		/// <summary>
+		/// This is meant to be called from the code where you mean for the event to happen.
+		/// 
+		/// In this case, it is called from the command processing code.
+		/// </summary>
+		/// <param name="p">The player that caused the event.</param>
+		/// <param name="cmd">The command the player gave</param>
+		/// <param name="args">The arguments the player gave for the command.</param>
+		/// <returns> A boolean value specifying whether or not to cancel the event.</returns>
+		internal static bool Call(Player p, string cmd, string[] args) {
+			//Event was called from the code.
+			List<PlayerEvent> opcList = new List<PlayerEvent>();
+			//Do we keep or discard the event?
+			_eventQueue.ForEach(playerEvent => {
+				if (playerEvent.GetType().Name != "OnPlayerCommand")
+					return;
+				OnPlayerCommand opc = (OnPlayerCommand)playerEvent;
+				if (opc.target == null || opc.target.username == p.username) {// We keep it
+					//Set up variables, then fire all callbacks.
+					opc.cmd = cmd;
+					opc.args = args;
+					opc._queue(opc); // fire callback
+					opcList.Add(opc); // add to used list
+				}
+			});
+			return opcList.Any(pe => pe.cancel); //Return if any canceled the event.
+		}
 
-    }
+		/// <summary>
+		/// Used to register a method to be executed when the event is fired.
+		/// </summary>
+		/// <param name="callback">The method to call</param>
+		/// <param name="target">The player to watch for. (null for any players)</param>
+		/// <param name="tag">The tag to use (Required if you ever want to unregister the event.</param>
+		/// <returns></returns>
+		public static PlayerEvent Register(PlayerEvent.OnCall callback, Player target, String tag) {
+			//We add it to the list here
+			tag += "OPCom";
+			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
+			if (pe != null)
+				//It already exists, so we just add it to the queue.
+				((OnPlayerCommand)pe)._queue += callback;
+			else {
+				//Doesn't exist yet.  Make a new one.
+				pe = new OnPlayerCommand(callback, target, tag);
+				_eventQueue.Add(pe);
+			}
+			return pe;
+		}
+
+		/// <summary>
+		/// Unregisters the event with the specified tag.
+		/// </summary>
+		/// <param name="tag">The tag to unregister</param>
+		public static void Unregister(string tag) {
+			tag += "OPCom";
+			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
+			if (pe != null)
+				_eventQueue.Remove(pe);
+		}
+	}
 }

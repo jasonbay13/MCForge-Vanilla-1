@@ -28,9 +28,9 @@ namespace CommandDll
     public class CmdLastCmd : ICommand
     {
         public string Name { get { return "Last Command"; } }
-        public CommandTypes Type { get { return CommandTypes.Information; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Arrem"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 

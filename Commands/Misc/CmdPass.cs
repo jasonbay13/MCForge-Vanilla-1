@@ -13,11 +13,15 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
+using System.Text;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Groups;
 using System.IO;
 using System.Security.Cryptography;
+using System.Net;
+using System.Security.Authentication;
 using System.Threading;
 using System.Text;
 
@@ -26,9 +30,9 @@ namespace CommandDll.Misc
     class CmdPass : ICommand
     {
         public string Name { get { return "Pass"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Sinjai"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
         public static bool gotpass = false;

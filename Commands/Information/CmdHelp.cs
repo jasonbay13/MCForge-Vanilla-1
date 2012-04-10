@@ -1,10 +1,10 @@
 ﻿/*
-Copyright 2010 MCSharp team (Modified for use with MCZall/MCLawl/MCForge)
+Copyright 2012 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
 obtain a copy of the Licenses at
-http://www.osedu.org/licenses/ECL-2.0
+http://www.opensource.org/licenses/ecl2.php
 http://www.gnu.org/licenses/gpl-3.0.html
 Unless required by applicable law or agreed to in writing,
 software distributed under the Licenses are distributed on an "AS IS"
@@ -28,17 +28,14 @@ namespace CommandDll.Information {
 		string _Name = "Help";
 		public string Name { get { return _Name; } }
 
-		CommandTypes _Type = CommandTypes.Information;
+		CommandTypes _Type = CommandTypes.information;
 		public CommandTypes Type { get { return _Type; } }
 
 		string _Author = "Nerketur";
 		public string Author { get { return _Author; } }
 
-        public Version Version {
-            get {
-                return new Version(1, 0);
-            }
-        }
+		int _Version = 1;
+		public int Version { get { return _Version; } }
 
 		string _CUD = "";
 		public string CUD { get { return _CUD; } }
@@ -61,25 +58,25 @@ namespace CommandDll.Information {
 			} else if (args.Length == 1) {
 				//Help about a particular command
 				string cmdTypeName = "Unknown";
-				CommandTypes cmdType = CommandTypes.Misc;
+				CommandTypes cmdType = CommandTypes.misc;
 
 				switch (args[0]) {
 					case "build":
 						cmdTypeName = "Building";
-						cmdType = CommandTypes.Building;
+						cmdType = CommandTypes.building;
 						break;
 					case "mod":
 						cmdTypeName = "Moderation";
-						cmdType = CommandTypes.Mod;
+						cmdType = CommandTypes.mod;
 						break;
 					case "information":
 						cmdTypeName = "Informative";
-						cmdType = CommandTypes.Information;
+						cmdType = CommandTypes.information;
 						break;
 					case "misc":
 					case "other":
 						cmdTypeName = "Miscellaneous";
-						cmdType = CommandTypes.Misc;
+						cmdType = CommandTypes.misc;
 						break;
 					case "colours":
 					case "colors":
@@ -114,7 +111,7 @@ namespace CommandDll.Information {
 						} catch (Exception) { }
 						
 						/*try { TODO, redo this section..
-							byte b = Block.NameToBlock(args[0]);
+							byte b = Block.NameToByte(args[0]);
 							KeyValuePair<byte, Block> customBlock = Block.CustomBlocks.ToList().Find(want => want.Key == b);
 							string custom;
 							if (customBlock.Value.Name == null) // only happens when there is no such block.

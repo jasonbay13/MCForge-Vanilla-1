@@ -24,9 +24,9 @@ namespace CommandDll
     public class CmdHacks : ICommand
     {
         public string Name { get { return "Hacks"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Givo"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
         public static List<string> hacksmessages = new List<string>();
@@ -54,9 +54,9 @@ namespace CommandDll
             if (!File.Exists("text/hacksmessages.txt")) { File.Create("text/hacksmessages.txt").Close(); }
             string text = File.ReadAllText("text/hacksmessages.txt");
             if (text == "") { File.WriteAllText("text/hacksmessages.txt", "Your IP has been backtraced & reported to FBI Cyber Crimes Unit."); }
-            using (StreamReader r = File.OpenText("text/hacksmessages.txt"))
-                while (!r.EndOfStream)
-                    hacksmessages.Add(r.ReadLine());
+            StreamReader r = File.OpenText("text/hacksmessages.txt");
+            while (!r.EndOfStream) hacksmessages.Add(r.ReadLine());
+            r.Dispose();
             p.Kick(hacksmessages[new Random().Next(0, hacksmessages.Count)]);
         }
 

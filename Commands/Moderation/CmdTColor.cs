@@ -16,15 +16,15 @@ using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
-using System;
+
 namespace CommandDll
 {
     public class CmdTColor : ICommand
     {
         public string Name { get { return "TColor"; } }
-        public CommandTypes Type { get { return CommandTypes.Mod; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "7imekeeper"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 

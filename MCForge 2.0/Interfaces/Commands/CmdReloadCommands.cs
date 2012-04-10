@@ -26,15 +26,14 @@ namespace MCForge.Interface.Command
 		string _Name = "Reload Commands";
 		public string Name { get { return _Name; } }
 
-		CommandTypes _Type = CommandTypes.Misc;
+		CommandTypes _Type = CommandTypes.misc;
 		public CommandTypes Type { get { return _Type; } }
 
 		string _Author = "Merlin33069";
 		public string Author { get { return _Author; } }
 
-       public Version Version {
-            get { return new Version(1, 0); }
-        }
+		int _Version = 1;
+		public int Version { get { return _Version; } }
 
 		string _CUD = "";
 		public string CUD { get { return _CUD; } }

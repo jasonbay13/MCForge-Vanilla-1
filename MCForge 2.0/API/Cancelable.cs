@@ -21,9 +21,17 @@ namespace MCForge.API
 {
     public interface Cancelable
     {
-        /// <summary>
-        /// Is the event canceled
-        /// </summary>
-        bool IsCanceled { get; set; }
-    }
+		/// <summary>
+		/// Is the event canceled?
+		/// </summary>
+		bool cancel { get; }
+		/// <summary>
+		/// Cancel the events of this type.
+		/// </summary>
+		void Cancel();
+		/// <summary>
+		/// Allow the events of this type.
+		/// </summary>
+		void Allow();
+	}
 }

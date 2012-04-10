@@ -6,7 +6,6 @@ using System.IO;
 using MCForge.Core;
 using System.Xml;
 using MCForge.Utilities.Settings;
-using System.Xml.XPath;
 
 namespace MCForge.Groups
 {
@@ -33,7 +32,7 @@ namespace MCForge.Groups
                     writer.WriteElementString("permission", group.permission.ToString());
                     writer.WriteElementString("color", group.colour.ToString().Remove(0, 1));
 
-                    writer.WriteElementString("file", group.file.Replace("ranks/", ""));
+                    writer.WriteElementString("file", group.file);
                     //{
                     //    writer.WriteStartElement("players");
                     //    foreach (string s in group.players)
@@ -51,41 +50,48 @@ namespace MCForge.Groups
 
         public static void Load()
         {
-            string file = ServerSettings.GetSetting("configpath") + "groups.xml";
-
-            XPathDocument document = new XPathDocument(file);
-            XPathNavigator nav = document.CreateNavigator();
-
-            //expressions
-            XPathExpression rankName, rankPerm, rankColor, rankFile;
-            rankName = nav.Compile("/Groups/Group/name");       //name node
-            rankPerm = nav.Compile("/Groups/Group/permission"); //permission node
-            rankColor = nav.Compile("/Groups/Group/color");     //color node
-            rankFile = nav.Compile("/Groups/Group/file");       //file node
-            XPathNodeIterator rankNameIterator = nav.Select(rankName);
-            XPathNodeIterator rankPermIterator = nav.Select(rankPerm);
-            XPathNodeIterator rankColorIterator = nav.Select(rankColor);
-            XPathNodeIterator rankFileIterator = nav.Select(rankFile);
-
-            try
+            using (XmlReader reader = XmlReader.Create(ServerSettings.GetSetting("configpath") + "groups.xml"))
             {
-                while (rankNameIterator.MoveNext())
-                {
-                    if (rankPermIterator.MoveNext() && rankColorIterator.MoveNext() && rankFileIterator.MoveNext())
-                    {
-                        XPathNavigator rank = rankNameIterator.Current.Clone();
-                        XPathNavigator perm = rankPermIterator.Current.Clone();
-                        XPathNavigator color = rankColorIterator.Current.Clone();
-                        XPathNavigator save = rankFileIterator.Current.Clone();
+                PlayerGroup group = new PlayerGroup();
 
-                        PlayerGroup group = new PlayerGroup(perm.ValueAsInt, rank.Value, color.Value, save.Value);
+                while (reader.Read())
+                {
+                    if (reader.IsStartElement())
+                    {
+                        switch (reader.Name.ToLower())
+                        {                         
+                            case "name":
+                                group.name = reader.ReadString();
+                                Server.Log("[Group] Name: " + group.name);
+                                break;
+                            case "permission":
+                                try { group.permission = byte.Parse(reader.ReadString()); }
+                                catch { }
+                                Server.Log("[Group] Permission: " + group.permission);
+                                break;
+                            case "color":
+                                group.colour = '&' + reader.ReadString();
+                                Server.Log("[Group] Color: " + group.colour);
+                                break;
+                            case "file":
+                                group.file = reader.ReadString();
+                                Server.Log("[Group] File: " + group.file);
+                                break;
+                            case "maxblockchanges":
+                                try { group.maxBlockChange = int.Parse(reader.ReadString()); }
+                                catch { }
+                                Server.Log("[Group] Max Block Changes: " + group.maxBlockChange);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        try { group.add(); group = new PlayerGroup(); }
+                        catch { }
+                        break;
                     }
                 }
             }
-            catch
-            {
-            }
-
         }
     }
 }

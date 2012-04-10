@@ -22,9 +22,9 @@ namespace CommandDll.Misc
     class CmdTake : ICommand
     {
         public string Name { get { return "Take"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Sinjai"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)

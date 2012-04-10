@@ -12,50 +12,55 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge.Core;
-using MCForge.Entity;
+using System;
+using MCForge;
 using MCForge.Interface.Command;
+using MCForge.Entity;
+using MCForge.Core;
+using System.Collections.Generic;
+
 namespace CommandDll
 {
-    public class CmdWhisper : ICommand
+    public class CmdMuted : ICommand
     {
-        public string Name { get { return "Whisper"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
-        public string Author { get { return "Arrem"; } }
+        public string Name { get { return "Muted"; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
+        public string Author { get { return "Givo"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
+        public static List<string> mutedlist = new List<string>();
+
         public void Use(Player p, string[] args)
         {
-            Player who = Player.Find(args[0]);
-            if (who == null) { p.SendMessage("Player not found!"); return; }
-            if (who == p) { p.SendMessage("Cannot talk to yourself!"); return; }
-            if (!p.whispering)
+            mutedlist.Clear();
+
+            if (args.Length > 0) { Help(p); }
+
+			Server.ForeachPlayer(delegate(Player pl)
+			{
+				if (pl.muted)
+				{
+					mutedlist.Add(pl.Username);
+				}
+			});
+            p.SendMessage("Muted: ");
+            foreach (string muted in mutedlist)
             {
-                p.SendMessage("All messages will be sent to " + who.Username);
-                p.whispering = true;
-                p.whisperto = who;
-                return;
-            }
-            else
-            {
-                p.SendMessage("Whisper mode disabled!");
-                p.whispering = false;
-                p.whisperto = null;
-                return;
+                p.SendMessage(muted);
             }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/whisper <player> - enables whisper mode");
-            p.SendMessage("All messages will be sent to <player>");
+            p.SendMessage("/mute - Displays muted players");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "whisper" });
+            Command.AddReference(this, new string[1] { "Muted" });
         }
     }
 }
+

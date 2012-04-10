@@ -29,9 +29,9 @@ namespace CommandDll
     public class CmdReplace : ICommand
     {
         public string Name { get { return "Replace"; } }
-        public CommandTypes Type { get { return CommandTypes.Building; } }
+        public CommandTypes Type { get { return CommandTypes.building; } }
         public string Author { get { return "Gamemakergm"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 100; } }
 
@@ -56,19 +56,28 @@ namespace CommandDll
             cpos.type2 = type2;
 
             p.SendMessage("Place two blocks to determine the edges.");
-            OnPlayerBlockChange.Register(CatchBlock, Priority.Normal, cpos, p);
+            OnPlayerBlockChange.Register(CatchBlock, p, cpos, "");
             //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
         }
-        public void CatchBlock(OnPlayerBlockChange args)
+        public void CatchBlock(PlayerEvent e)
         {
-            CatchPos cpos = (CatchPos)args.GetData();
-            cpos.pos = new Vector3(args.GetX(), args.GetZ(), args.GetZ());
-            args.Unregister(true);
-            args.Player.CatchNextBlockchange(CatchBlock2, (object)cpos);
+			OnPlayerBlockChange args = (OnPlayerBlockChange)e;
+			CatchPos cpos = (CatchPos)args.datapass;
+            cpos.pos = new Vector3(args.x, args.y, args.z);
+			args.Unregister();
+			args.Cancel();
+			OnPlayerBlockChange.Register(CatchBlock2, args.target, cpos, "");
         }
-        public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
+        public void CatchBlock2(PlayerEvent e)
         {
-            CatchPos FirstBlock = (CatchPos)DataPass;
+			OnPlayerBlockChange bc = (OnPlayerBlockChange)e;
+			Player p = bc.target;
+			ushort x = bc.x;
+			ushort y = bc.y;
+			ushort z = bc.z;
+			byte NewType = bc.holding;
+			bool placed = (bc.action == ActionType.Place);
+			CatchPos FirstBlock = (CatchPos)bc.datapass;
             unchecked
             {
                 if (FirstBlock.type != (byte)-1)

@@ -21,7 +21,6 @@ using System.Linq;
 using MCForge.Core;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace MCForge.Utilities.Settings {
     /// <summary>
@@ -30,7 +29,7 @@ namespace MCForge.Utilities.Settings {
     public class ServerSettings {
 
         internal const byte Version = 7;
-        internal static string Salt { get; private set; }
+        internal static string Salt { get; set; }
 
         private static bool _initCalled;
         private static List<SettingNode> Values;
@@ -51,7 +50,7 @@ namespace MCForge.Utilities.Settings {
             if (_initCalled)
                 throw new ArgumentException("\"Settings.Init()\" can only be called once");
 
-            GenerateSalt();
+            Salt = GenerateSalt();
 
             _initCalled = true;
             Values = new List<SettingNode>{
@@ -258,30 +257,23 @@ namespace MCForge.Utilities.Settings {
 
                 if (read[0] == '#' && (i + 1 < text.Count()) ? text[i + 1][0] != '#' && !String.IsNullOrWhiteSpace(text[i + 1]) : false) {
                     i++;
-                    var split = text[i].Split('=');
-                    pair = new SettingNode(split[0].Trim().ToLower(),
-                                           String.Join("=", split, 1, split.Length - 1).Trim(),
-                                           read.Substring(1));
+                    pair = new SettingNode(text[i].Split('=')[0].Trim().ToLower(), text[i].Split('=')[1].Trim(), read.Substring(1));
                 }
                 else {
-                    if (read[0] != '#') {
-                        var split = text[i].Split('=');
-                        pair = new SettingNode(split[0].Trim().ToLower(),
-                                               String.Join("=", split, 1, split.Length - 1).Trim(),
-                                               null);
-                    }
-                    else pair = new SettingNode(null, read, null);
+                    if (read[0] != '#')
+                        pair = new SettingNode(read.Split('=')[0].Trim().ToLower(), read.Split('=')[1].Trim(), null);
+                    else pair = new SettingNode(null, text[i], null);
                 }
                 Values.Add(pair);
             }
 
         }
 
-        internal static void GenerateSalt() {
+        internal static string GenerateSalt() {
             var numberGen = new RNGCryptoServiceProvider();
             var data = new byte[16];
             numberGen.GetBytes(data);
-            Salt = Convert.ToBase64String(data);
+            return Convert.ToBase64String(data);
         }
 
         public static bool HasKey(string key) {

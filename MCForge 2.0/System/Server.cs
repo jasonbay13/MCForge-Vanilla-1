@@ -60,15 +60,15 @@ namespace MCForge.Core {
         private static int HeartbeatIntervalCurrent = 0;
         private static int GroupsaveInterval = 3000;
         private static int GroupsaveIntervalCurrent = 0;
-        private static int PingInterval = 10;
-        private static int PintIntervalCurrent = 0;
+		private static int PingInterval = 10;
+		private static int PintIntervalCurrent = 0;
 
         internal static List<Player> Connections = new List<Player>();
         /// <summary>
         /// Get the current list of online players, note that if your doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
         /// </summary>
         public static List<Player> Players = new List<Player>();
-        public static int PlayerCount { get { return Players.Count; } }
+		public static int PlayerCount { get { return Players.Count; } }
         /// <summary>
         /// Get the current list of banned ip addresses, note that if your doing a foreach on this (or any other public list) you should always add .ToArray() to the end so that you avoid errors!
         /// </summary>
@@ -140,7 +140,6 @@ namespace MCForge.Core {
         /// 
         public static string URL = "";
 
-        public static readonly List<Level> Levels = new List<Level>();
         /// <summary>
         /// This delegate is used when a command or plugin needs to call a method after a certain amount of time
         /// </summary>
@@ -148,29 +147,25 @@ namespace MCForge.Core {
         /// <returns>this delegate returns an updated object for the datapass</returns>
         public delegate object TimedMethodDelegate(object dataPass);
         static List<TimedMethod> TimedMethodList = new List<TimedMethod>();
-        /// <summary>
-        /// If flipheads is on or off
-        /// </summary>
-        public static bool flipheads = false;
 
-        public delegate void ForeachPlayerDelegate(Player p);
+		public delegate void ForeachPlayerDelegate(Player p);
 
         internal static void Init() {
             //TODO load the level if it exists
             Block.InIt();
             Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
-            Levels.Add(Mainlevel);
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
             UpdateTimer.Start();
+            
+            Groups.PlayerGroup.InitDefaultGroups();
+
             LoadAllDlls.Init();
 
             Heartbeat.sendHeartbeat();
 
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
-
-            Groups.PlayerGroup.Init(); 
 
             CreateDirectories();
 
@@ -182,13 +177,13 @@ namespace MCForge.Core {
         static void Update() {
             HeartbeatIntervalCurrent++;
             GroupsaveIntervalCurrent++;
-            PintIntervalCurrent++;
+			PintIntervalCurrent++;
 
             Player.GlobalUpdate();
 
             if (HeartbeatIntervalCurrent >= HeartbeatInterval) { Heartbeat.sendHeartbeat(); HeartbeatIntervalCurrent = 0; }
             if (GroupsaveIntervalCurrent >= GroupsaveInterval) { foreach (Groups.PlayerGroup g in Groups.PlayerGroup.groups) { g.SaveGroup(); } GroupsaveIntervalCurrent = 0; }
-            if (PintIntervalCurrent >= PingInterval) { Player.GlobalPing(); }
+			if (PintIntervalCurrent >= PingInterval) { Player.GlobalPing(); }
 
             foreach (TimedMethod TM in TimedMethodList.ToArray()) {
                 TM.time--;
@@ -222,23 +217,28 @@ namespace MCForge.Core {
             catch { Log("[Error] Error reading agreed players!", ConsoleColor.Red, ConsoleColor.Black); }
         }
 
-        public static void ForeachPlayer(ForeachPlayerDelegate a) {
-            for (int i = 0; i < Players.Count; i++) {
-                if (Players.Count > i)
-                    a.Invoke(Players[i]);
-            }
-        }
-        internal static void AddConnection(Player p) {
-            Connections.Add(p);
-        }
-        internal static void UpgradeConnectionToPlayer(Player p) {
-            Connections.Remove(p);
-            Players.Add(p);
-        }
-        internal static void RemovePlayer(Player p) {
-            Connections.Remove(p);
-            Players.Remove(p);
-        }
+		public static void ForeachPlayer(ForeachPlayerDelegate a)
+		{
+			for (int i = 0; i < Players.Count; i++)
+			{
+				if (Players.Count > i)
+					a.Invoke(Players[i]);
+			}
+		}
+		internal static void AddConnection(Player p)
+		{
+			Connections.Add(p);
+		}
+		internal static void UpgradeConnectionToPlayer(Player p)
+		{
+			Connections.Remove(p);
+			Players.Add(p);
+		}
+		internal static void RemovePlayer(Player p)
+		{
+			Connections.Remove(p);
+			Players.Remove(p);
+		}
 
         /// <summary>
         /// Add a method to be called in a specified time for a specified number of repetitions
@@ -329,13 +329,6 @@ namespace MCForge.Core {
                 repeat = c;
                 PassBack = d;
             }
-        }
-
-        public static Level FindLevel(string p) {
-            foreach (var lvl in Levels)
-                if (lvl.Name == p)
-                    return lvl;
-            return null;
         }
     }
 }

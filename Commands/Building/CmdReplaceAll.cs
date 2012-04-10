@@ -27,9 +27,9 @@ namespace CommandDll
     public class CmdReplaceAll : ICommand
     {
         public string Name { get { return "ReplaceAll"; } }
-        public CommandTypes Type { get { return CommandTypes.Building; } }
+        public CommandTypes Type { get { return CommandTypes.building; } }
         public string Author { get { return "Gamemakergm"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 100; } }
 
@@ -63,7 +63,7 @@ namespace CommandDll
             }
 
             //Permissions here.
-            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + ((Block)type).Name);
+            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + Block.ByteToName(type));
 
             //Blockqueue here
 
@@ -75,7 +75,7 @@ namespace CommandDll
         }
         public void Help(Player p)
         {
-            p.SendMessage("/replaceall [block] [block2] - Replaces all of [block] with [block2] in the map.");
+            p.SendMessage("/replaceall <block> <block2> - Replaces all of [block] with [block2] in the map.");
         }
         public void Initialize()
         {

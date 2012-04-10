@@ -27,16 +27,16 @@ namespace CommandDll
     public class CmdPlace : ICommand
     {
         public string Name { get { return "Place"; } }
-        public CommandTypes Type { get { return CommandTypes.Building; } }
+        public CommandTypes Type { get { return CommandTypes.building; } }
         public string Author { get { return "Gamemakergm"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 30; } }
 
 
         public void Use(Player p, string[] args)
         {
-            byte b = Block.BlockList.UNKNOWN;
+            byte b = Block.NameToByte("unknown");
             ushort x, z, y;
             Vector3 pos = p.Pos;
             try
@@ -47,13 +47,13 @@ namespace CommandDll
                         x = (ushort)(pos.x / 32);
                         z = (ushort)(pos.z / 32);
                         y = (ushort)(pos.y / 32 - 2);
-                        b = Block.BlockList.STONE;
+                        b = Block.NameToByte("stone");
                         break;
                     case 1:
                         x = (ushort)(pos.x / 32);
                         z = (ushort)(pos.z / 32);
                         y = (ushort)(pos.y / 32 - 1);
-                        b = Block.NameToBlock(args[0]);
+                        b = Block.NameToByte(args[0]);
                         break;
                     case 3:
                         x = Convert.ToUInt16(args[0]);
@@ -61,7 +61,7 @@ namespace CommandDll
                         y = Convert.ToUInt16(args[2]);
                         break;
                     case 4:
-                        b = Block.NameToBlock(args[0]);
+                        b = Block.NameToByte(args[0]);
                         x = Convert.ToUInt16(args[1]);
                         z = Convert.ToUInt16(args[2]);
                         y = Convert.ToUInt16(args[3]);
@@ -76,9 +76,9 @@ namespace CommandDll
                 p.SendMessage("Invalid parameters.");
                 return;
             }
-            if (b == Block.BlockList.UNKNOWN)
+            if (b == Block.NameToByte("unknown"))
             {
-                b = Block.BlockList.STONE;
+                b = Block.NameToByte("stone");
             }
             //Need to wait for permissions for cannot place that block type.
             if (y >= p.Level.Size.y)
@@ -86,7 +86,7 @@ namespace CommandDll
                 y = (ushort)(p.Level.Size.y - 1);
             }
             p.Level.BlockChange(x, z, y, b);
-            p.SendMessage("An " + ((Block)b).Name + " block was placed at (" + x + ", " + z + ", " + y + ").");
+            p.SendMessage("An " + Block.ByteToName(b) + " block was placed at (" + x + ", " + z + ", " + y + ").");
         }
         public void Help(Player p)
         {

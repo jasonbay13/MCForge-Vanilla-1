@@ -14,15 +14,14 @@ permissions and limitations under the Licenses.
 */
 using MCForge.Entity;
 using MCForge.Interface.Command;
-using System;
 namespace CommandDll
 {
     public class CmdOpChat : ICommand
     {
         public string Name { get { return "OpChat"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 

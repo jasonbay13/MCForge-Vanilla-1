@@ -14,23 +14,20 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
-using System.Text;
-using MCForge;
-using MCForge.Entity;
-using MCForge.Core;
-using MCForge.World;
-using MCForge.Interface.Command;
-using MCForge.Interface.Plugin;
 using MCForge.API.PlayerEvent;
+using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+using MCForge.World;
 
 namespace CommandDll
 {
     public class CmdCuboid : ICommand
     {
         public string Name { get { return "Cuboid"; } }
-        public CommandTypes Type { get { return CommandTypes.Building; } }
+        public CommandTypes Type { get { return CommandTypes.building; } }
         public string Author { get { return "Gamemakergm"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
@@ -40,7 +37,6 @@ namespace CommandDll
             //Broken types: Walls,
             //Hollows seems to make an error on GetBlock because of negative pos value >_>
             //Need testing for: Wire
-            //Solid and holes are working ^_^
             CatchPos cpos = new CatchPos();
             cpos.block = 255;
             ushort unused; //For the TryParse
@@ -72,22 +68,17 @@ namespace CommandDll
                         return;
                     }
                 case 6: //Coordinates
+                    Default(cpos);
+                    cpos.block = 1; //Silliness
                     cpos = CoordinatesParse(p, args, cpos);
-                    cpos.block = 1;
-                    cpos.cuboidType = SolidType.solid;
-                    OnPlayerBlockChange.Register(CatchBlock, MCForge.API.Priority.Normal, cpos, p);
-                    p.Click((ushort)cpos.pos.x, (ushort)cpos.pos.z, (ushort)cpos.pos.y, cpos.block);
-                    OnPlayerBlockChange.Register(CatchBlock2, MCForge.API.Priority.Normal, cpos, p);
-                    p.Click((ushort)cpos.secondPos.x, (ushort)cpos.secondPos.z, (ushort)cpos.secondPos.y, cpos.block);
+                    p.SendMessage("Coordinates");
+					Cuboid(cpos, cpos.block, p, (ushort)cpos.secondPos.x, (ushort)cpos.secondPos.y, (ushort)cpos.secondPos.z);
                     return;
                 case 7: //Coordinates and block or type
-                    if (ValidSolidType(args[6]) || Block.ValidBlockName(args[6]))
+                    if (ValidSolidType(args[7]) || Block.ValidBlockName(args[7]))
                     {
                         cpos = Parser(p, true, true, args, cpos);
-                        OnPlayerBlockChange.Register(CatchBlock, MCForge.API.Priority.Normal, cpos, p);
-                        p.Click((ushort)cpos.pos.x, (ushort)cpos.pos.z, (ushort)cpos.pos.y, cpos.block);
-                        OnPlayerBlockChange.Register(CatchBlock2, MCForge.API.Priority.Normal, cpos, p);
-                        p.Click((ushort)cpos.secondPos.x, (ushort)cpos.secondPos.z, (ushort)cpos.secondPos.y, cpos.block);
+						Cuboid(cpos, cpos.block, p, (ushort)cpos.secondPos.x, (ushort)cpos.secondPos.y, (ushort)cpos.secondPos.z);
                         return;
                     }
                     else
@@ -96,14 +87,12 @@ namespace CommandDll
                         return;
                     }
                 case 8: //Coordinates block and type
-                    if (ValidSolidType(args[6 | 7]) || Block.ValidBlockName(args[6 | 7]))
+                    if (ValidSolidType(args[7 | 8]) || Block.ValidBlockName(args[7 | 8]))
                     {
+                        CoordinatesParse(p, args, cpos);
                         cpos = Parser(p, false, true, args, cpos);
-                        OnPlayerBlockChange.Register(CatchBlock, MCForge.API.Priority.Normal, cpos, p);
-                        p.Click((ushort)cpos.pos.x, (ushort)cpos.pos.z, (ushort)cpos.pos.y, cpos.block);
-                        OnPlayerBlockChange.Register(CatchBlock2, MCForge.API.Priority.Normal, cpos, p);
-                        p.Click((ushort)cpos.secondPos.x, (ushort)cpos.secondPos.z, (ushort)cpos.secondPos.y, cpos.block);
-                        return;
+						Cuboid(cpos, cpos.block, p, (ushort)cpos.secondPos.x, (ushort)cpos.secondPos.y, (ushort)cpos.secondPos.z);
+						return;
                     }
                     else
                     {
@@ -122,12 +111,12 @@ namespace CommandDll
                     return;
             }
             p.SendMessage("Place two blocks to determine the corners.");
-            OnPlayerBlockChange.Register(CatchBlock, MCForge.API.Priority.Normal, cpos, p);
+            OnPlayerBlockChange.Register(CatchBlock, p, cpos, "first");
         }
         public void Help(Player p)
         {
             p.SendMessage("/cuboid [block] [type] - Creates a cuboid of blocks.");
-            p.SendMessage("/cuboid x1 z1 y1 x2 z2 y2 [block] [type] - Creates a cuboid at the specified coordinates.");
+            p.SendMessage("/cuboid x1 z1 y1 x2 z2 y2 [block] [type[ - Creates a cuboid at the specified coordinates.");
             p.SendMessage("Available types: <solid/hollow/walls/holes/wire/random>");
             p.SendMessage("Note that [block] and [type] are optional and can be in any order.");
         }
@@ -137,27 +126,25 @@ namespace CommandDll
             string[] CommandStrings = new string[2] { "cuboid", "z" };
             Command.AddReference(this, CommandStrings);
         }
-        public void CatchBlock(OnPlayerBlockChange args)
+        public void CatchBlock(PlayerEvent pe)
         {
-            CatchPos cpos = (CatchPos)args.GetData();
-            cpos.pos = new Vector3(args.GetX(), args.GetZ(), args.GetY());
-            args.Player.SendBlockChange(args.GetX(), args.GetZ(), args.GetY(), args.Player.Level.GetBlock(cpos.pos));
-            args.Unregister(true);
-            args.IsCanceled = true;
-            OnPlayerBlockChange.Register(CatchBlock2, MCForge.API.Priority.Normal, cpos, args.Player);
+			OnPlayerBlockChange args = (OnPlayerBlockChange)pe;
+            CatchPos cpos = (CatchPos)args.datapass;
+            cpos.pos = new Vector3(args.x, args.z, args.y);
+            args.Cancel();
+            args.Unregister();
+            OnPlayerBlockChange.Register(CatchBlock2, args.target, cpos, "second");
         }
-        public void CatchBlock2(OnPlayerBlockChange args)
+        public void CatchBlock2(PlayerEvent pe)
         {
-            CatchPos cpos = (CatchPos)args.GetData();
-            byte NewType = args.GetPlayerHolding();
-            Player p = args.Player;
-            ushort x = args.GetX();
-            ushort z = args.GetZ();
-            ushort y = args.GetY();
-            args.Player.SendBlockChange(args.GetX(), args.GetZ(), args.GetY(), args.Player.Level.GetBlock(cpos.pos));
-            args.Unregister(true);
-            args.IsCanceled = true;
-            List<Pos> buffer = new List<Pos>();
+			OnPlayerBlockChange args = (OnPlayerBlockChange)pe;
+			CatchPos cpos = (CatchPos)args.datapass;
+			Cuboid(cpos, args.holding, args.target, args.x, args.y, args.z);
+			args.Cancel();
+			args.Unregister();
+		}
+		private void Cuboid(CatchPos cpos, byte NewType, Player p, ushort x, ushort y, ushort z) {
+			List<Pos> buffer = new List<Pos>();
             ushort xx, zz, yy;
             if (cpos.block != 255)
             {
@@ -357,64 +344,55 @@ namespace CommandDll
             cpos.cuboidType = SolidType.solid;
             return cpos;
         }
-        protected CatchPos CoordinatesParse(Player p, string[] args, CatchPos cpos)
+        protected CatchPos CoordinatesParse(Player p, string[] coordinates, CatchPos cpos)
         {
-            CCheck(p, args);
-            cpos.pos.x = short.Parse(args[0]);
-            cpos.pos.z = short.Parse(args[1]);
-            cpos.pos.y = short.Parse(args[2]);
-            cpos.secondPos.x = short.Parse(args[3]);
-            cpos.secondPos.z = short.Parse(args[4]);
-            cpos.secondPos.y = short.Parse(args[5]);
-            return cpos;
-        }
-
-        protected void CCheck(Player p, string[] args)
-        {
-            foreach (var i in args)
+            short unused;
+            if (!short.TryParse(coordinates[0 | 1 | 2 | 3 | 4 | 5], out unused))
             {
-                    short unused;
-                    if (!short.TryParse(i, out unused) && !ValidSolidType(i) && !Block.ValidBlockName(i))
-                    {
-                        p.SendMessage("Invalid coordinate \"" + i + "\"!");
-                    }
-            }
-        }
-        protected CatchPos Parser(Player p, bool one, bool coordinates, string[] args, CatchPos cpos)
-        {
-            ushort unused;
-            if (coordinates)
-            {
-                if (one)
-                {
-                    cpos = CoordinatesParse(p, args, cpos);
-                    cpos.block = (Block.ValidBlockName(args[6]) ? Block.NameToBlock(args[6]) : (byte)1);
-                    cpos.cuboidType = (ValidSolidType(args[6]) ? StringToSolidType(args[6]) : SolidType.solid);
-                }
-                else if (!one)
-                {
-                    cpos = CoordinatesParse(p, args, cpos);
-                    cpos.block = (Block.ValidBlockName(args[6]) ? Block.NameToBlock(args[6]) : (Block.ValidBlockName(args[7]) ? Block.NameToBlock(args[7]) : (byte)1));
-                    cpos.cuboidType = (ValidSolidType(args[6]) ? StringToSolidType(args[6]) : ValidSolidType(args[7]) ? StringToSolidType(args[7]) : SolidType.solid);
-                }
+                p.SendMessage("Invalid coordinates!");
             }
             else
             {
-                if (one)
-                {
-                    cpos.block = (Block.ValidBlockName(args[0]) ? Block.NameToBlock(args[0]) : Block.BlockList.AIR);
-                    cpos.cuboidType = (ValidSolidType(args[0]) ? StringToSolidType(args[0]) : SolidType.solid);
-                }
-                else if (!one)
-                {
-                    cpos.block = (Block.ValidBlockName(args[0]) ? Block.NameToBlock(args[0]) : (Block.ValidBlockName(args[1]) ? Block.NameToBlock(args[1]) : (byte)255));
-                    cpos.cuboidType = (ValidSolidType(args[0]) ? StringToSolidType(args[0]) : ValidSolidType(args[1]) ? StringToSolidType(args[1]) : SolidType.solid);
-                }
-                else if ((ushort.TryParse(args[0 | 1 | 2 | 3 | 4 | 5], out unused)))
-                {
-                    p.SendMessage("You need 6 coordinates for cuboid to work like that!");
-                }
+                cpos.pos.x = short.Parse(coordinates[0]);
+                cpos.pos.z = short.Parse(coordinates[1]);
+                cpos.pos.y = short.Parse(coordinates[2]);
+                cpos.secondPos.x = short.Parse(coordinates[3]);
+                cpos.secondPos.z = short.Parse(coordinates[4]);
+                cpos.secondPos.y = short.Parse(coordinates[5]);
             }
+            return cpos;
+        }
+
+        protected CatchPos Parser(Player p, bool one, bool coordinates, string[] args, CatchPos cpos)
+        {
+            ushort unused;
+            if (one && !coordinates)
+            {
+                cpos.block = (Block.ValidBlockName(args[0]) ? Block.NameToByte(args[0]) : (byte)255);
+                cpos.cuboidType = (ValidSolidType(args[0]) ? StringToSolidType(args[0]) : SolidType.solid);
+            }
+            else if (coordinates && !one)
+            {
+                cpos = CoordinatesParse(p, args, cpos);
+                cpos.block = (Block.ValidBlockName(args[6]) ? Block.NameToByte(args[6]) : (Block.ValidBlockName(args[7]) ? Block.NameToByte(args[7]) : (byte)255));
+                cpos.cuboidType = (ValidSolidType(args[6]) ? StringToSolidType(args[6]) : ValidSolidType(args[7]) ? StringToSolidType(args[7]) : SolidType.solid);
+            }
+            else if (one && coordinates)
+            {
+                cpos = CoordinatesParse(p, args, cpos);
+                cpos.block = (Block.ValidBlockName(args[7]) ? Block.NameToByte(args[7]) : (byte)255);
+                cpos.cuboidType = (ValidSolidType(args[7]) ? StringToSolidType(args[7]) : SolidType.solid);
+            }
+            else if (!coordinates && !one)
+            {
+                cpos.block = (Block.ValidBlockName(args[0]) ? Block.NameToByte(args[0]) : (Block.ValidBlockName(args[1]) ? Block.NameToByte(args[1]) : (byte)255));
+                cpos.cuboidType = (ValidSolidType(args[0]) ? StringToSolidType(args[0]) : ValidSolidType(args[1]) ? StringToSolidType(args[1]) : SolidType.solid);
+            }
+            else if (!coordinates && (ushort.TryParse(args[0 | 1 | 2 | 3 | 4 | 5], out unused)))
+            {
+                p.SendMessage("You need 6 coordinates for cuboid to work like that!");
+            }
+            p.SendMessage("[Debug] Cpos.Block " + Block.ByteToName(cpos.block) + " Cpos.cuboidType " + cpos.cuboidType.ToString());
             return cpos;
         }
         protected bool ValidSolidType(string solidTypeName)

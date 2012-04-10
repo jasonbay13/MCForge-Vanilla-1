@@ -28,9 +28,9 @@ namespace CommandDll
     public class CmdClick : ICommand
     {
         public string Name { get { return "Click"; } }
-        public CommandTypes Type { get { return CommandTypes.Building; } }
+        public CommandTypes Type { get { return CommandTypes.building; } }
         public string Author { get { return "Gamemakergm"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 50; } }
 
@@ -96,7 +96,7 @@ namespace CommandDll
                 return;
             }
 
-            p.Click((ushort)click.x, (ushort)click.z, (ushort)click.y, Block.BlockList.STONE);
+            p.Click((ushort)click.x, (ushort)click.z, (ushort)click.y, Block.NameToByte("stone"));
             p.SendMessage("Click &b(" + click.x + ", " + click.z + ", " + click.y + ").");
         }
 

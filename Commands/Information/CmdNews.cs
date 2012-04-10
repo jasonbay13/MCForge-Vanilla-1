@@ -28,9 +28,9 @@ namespace CommandDll
     public class CmdNews : ICommand
     {
         public string Name { get { return "News"; } }
-        public CommandTypes Type { get { return CommandTypes.Information; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Givo"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         byte _Permission = 0;
         public byte Permission { get { return _Permission; } }

@@ -29,7 +29,6 @@ using MCForge.World;
 using MCForge.Interface.Command;
 using MCForge.Groups;
 using MCForge.Utilities.Settings;
-using MCForge.API.System;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -57,8 +56,8 @@ namespace MCForge.Entity {
             }
         }
 
-        public Socket Socket { get; protected set; }
-        public TcpClient Client { get; protected set; }
+        protected Socket socket;
+
         protected packet.types lastPacket = packet.types.SendPing;
 
         /// <summary>
@@ -155,7 +154,7 @@ namespace MCForge.Entity {
         public string storedMessage = "";
 
         protected byte[] buffer = new byte[0];
-        protected byte[] tempBuffer = new byte[0xFFF];
+        protected byte[] tempBuffer = new byte[0xFF];
         protected string tempString = null;
         protected byte tempByte = 0xFF;
 
@@ -249,11 +248,8 @@ namespace MCForge.Entity {
         /// Holds replacement messages for profan filter
         /// </summary>
         public static List<string> replacement = new List<string>();
-        /// <summary>
-        /// Can the player use Caps ?
-        /// </summary>
-        public bool decaps = false;
-        public readonly Dictionary<object, object> ExtraData = new Dictionary<object, object>();
+
+        object PassBackData;
         /// <summary>
         /// This delegate is used for when a command wants to be activated the first time a player places a block
         /// </summary>
@@ -281,23 +277,21 @@ namespace MCForge.Entity {
         public PlayerGroup group = PlayerGroup.Find(ServerSettings.GetSetting("defaultgroup"));
 
 
-
         #endregion
 
         internal Player(TcpClient TcpClient) {
             CheckMotdPackets();
             try {
 
-                Socket = TcpClient.Client;
-                Client = TcpClient;
+                socket = TcpClient.Client;
 
-                ip = Socket.RemoteEndPoint.ToString().Split(':')[0];
+                ip = socket.RemoteEndPoint.ToString().Split(':')[0];
                 Server.Log("[System]: " + ip + " connected", ConsoleColor.Gray, ConsoleColor.Black);
 
                 CheckMultipleConnections();
                 if (CheckIfBanned()) return;
 
-                Socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
+                socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
 
                 Server.Connections.Add(this);
             }
@@ -318,11 +312,10 @@ namespace MCForge.Entity {
             }
 
             string name = args[0].ToLower().Trim();
-            OnPlayerCommand c = new OnPlayerCommand(this, name, args);
-            c.Call();
-            if (c.IsCanceled)
-                return;
-            if (Command.Commands.ContainsKey(name)) {
+			bool canceled = OnPlayerCommand.Call(this, name, args);
+			if (canceled) // If any event canceled us
+				return;
+			if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
                     if (!Server.agreed.Contains(Username) && name != "rules" && name != "agree" && name != "disagree") {
@@ -344,10 +337,10 @@ namespace MCForge.Entity {
                 SendMessage("Unknown command \"" + name + "\"!");
             }
 
-            /*foreach (string s in Command.Commands.Keys) {
+            foreach (string s in Command.Commands.Keys) {
                 Console.WriteLine(args[0]);
                 Console.WriteLine("'" + s + "'");
-            }*/// debugging something?
+            }
         }
         #endregion
 
@@ -369,9 +362,7 @@ namespace MCForge.Entity {
         /// <param name="data">A passback object that can be used for a command to send data back to itself for use</param>
         [Obsolete("Please use OnPlayerBlockChange event (will be removed before release)")]
         public void CatchNextBlockchange(BlockChangeDelegate change, object data) {
-            if(!ExtraData.ContainsKey("PassBackData"))
-                ExtraData.Add("PassBackData", null);
-            ExtraData["PassBackData"] = data;
+            PassBackData = data;
             nextChat = null;
             blockChange = change;
         }
@@ -394,17 +385,16 @@ namespace MCForge.Entity {
         /// <param name="y"></param>
         /// <param name="type"></param>
         public void Click(ushort x, ushort z, ushort y, byte type) {
-            OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, ActionType.Place, this, type);
-            b.Call();
+			bool canceled = OnPlayerBlockChange.Call(x, y, z, ActionType.Place, this, type);
+			if (canceled) // If any event canceled us
+				return;
             if (blockChange != null) {
                 bool placing = true;
                 BlockChangeDelegate tempBlockChange = blockChange;
-                if (!ExtraData.ContainsKey("PassBackData"))
-                    ExtraData.Add("PassBackData", null);
-                object tempPassBack = ExtraData["PassBackData"];
+                object tempPassBack = PassBackData;
 
                 blockChange = null;
-                ExtraData["PassBackData"] = null;
+                PassBackData = null;
 
                 ThreadPool.QueueUserWorkItem(delegate { tempBlockChange.Invoke(this, x, z, y, type, placing, tempPassBack); });
                 return;
@@ -477,8 +467,6 @@ namespace MCForge.Entity {
 
         #region Verification Stuffs
         protected void CheckMultipleConnections() {
-            if (Server.Connections.Count < 2)
-                return;
             foreach (Player p in Server.Connections.ToArray()) {
                 if (p.ip == ip && p != this) {
                     p.Kick("Only one half open connection is allowed per IP address.");

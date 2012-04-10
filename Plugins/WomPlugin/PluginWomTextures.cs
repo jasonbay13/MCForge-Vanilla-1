@@ -23,9 +23,6 @@ using MCForge.Entity;
 using MCForge.Core;
 using MCForge.Utilities.Settings;
 using System.IO;
-using MCForge.API.System;
-using System.Text.RegularExpressions;
-using System.Net.Sockets;
 
 namespace Plugins.WomPlugin {
     public class PluginWomTextures : IPlugin {
@@ -38,8 +35,8 @@ namespace Plugins.WomPlugin {
             get { return "headdetect"; }
         }
 
-        public Version Version {
-            get { return new Version(1, 0); }
+        public int Version {
+            get { return 1; }
         }
 
         public string CUD {
@@ -47,72 +44,14 @@ namespace Plugins.WomPlugin {
         }
 
         private WomSettings WomSettings { get; set; }
-
         public void OnLoad() {
             WomSettings = new WomSettings();
             WomSettings.OnLoad();
-
-            OnReceivePacket.Register(OnData);
-        }
-
-        private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
-        void OnData(OnReceivePacket args) {
-            if (args.Data.Length < 0)
-                return;
-            if (args.Data[0] != (byte)'G')
-                return;
-
-            args.IsCanceled = true;
-            var netStream = new NetworkStream(args.Player.Socket);
-            using (var Reader = new StreamReader(netStream)) {
-                using (var Writer = new StreamWriter(netStream)) {
-                    var line = Encoding.UTF8.GetString(args.Data, 0, args.Data.Length).Split('\n')[0];
-                    var match = Parser.Match(line);
-
-                    if (match.Success) {
-                        var lvl = Server.FindLevel(match.Groups[1].Value);
-
-                        if (lvl == null) {
-                            Writer.Write("HTTP/1.1 404 Not Found");
-                            Writer.Flush();
-                        }
-                        else {
-                            if (!lvl.ExtraData.ContainsKey("WomConfig")) {
-                                Writer.Write("HTTP/1.1 Internal Server Error");
-                                Writer.Flush();
-                            }
-                            else {
-                                var Config = (string)lvl.ExtraData["WomConfig"];
-                                var bytes = Encoding.UTF8.GetBytes(Config);
-                                Writer.Write("HTTP/1.1 200 OK");
-                                Writer.WriteLine("Date: " + DateTime.UtcNow.ToString("R"));
-                                Writer.WriteLine("Server: Apache/2.2.21 (CentOS)");
-                                Writer.WriteLine("Last-Modified: " + DateTime.UtcNow.ToString("R"));
-                                Writer.WriteLine("Accept-Ranges: bytes");
-                                Writer.WriteLine("Content-Length: " + bytes.Length);
-                                Writer.WriteLine("Connection: close");
-                                Writer.WriteLine("Content-Type: text/plain");
-                                Writer.WriteLine();
-                                Writer.WriteLine(Config);
-                            }
-                        }
-
-                    }
-
-                    else {
-                        Writer.Write("HTTP/1.1 400 Bad Request");
-                        Writer.Flush();
-                    }
-
-
-                }
-            }
-            args.Player.Kick("");
-
+            //WomSettings.L
         }
 
         public void OnUnload() {
-            OnReceivePacket.Unregister(OnData);
+            throw new NotImplementedException();
         }
     }
 }

@@ -12,17 +12,14 @@ namespace CommandDll.Moderation {
 		string _Name = "Patrol";
 		public string Name { get { return _Name; } }
 
-		CommandTypes _Type = CommandTypes.Mod;
+		CommandTypes _Type = CommandTypes.mod;
 		public CommandTypes Type { get { return _Type; } }
 
 		string _Author = "Nerketur";
 		public string Author { get { return _Author; } }
 
-        public Version Version {
-            get {
-                return new Version(1, 0);
-            }
-        }
+		int _Version = 1;
+		public int Version { get { return _Version; } }
 
 		string _CUD = "";
 		public string CUD { get { return _CUD; } }
@@ -55,7 +52,7 @@ namespace CommandDll.Moderation {
 			p.SendMessage("Player found!  Transporting you to " + found.color + found.Username + Server.DefaultColor + "!");
 			if (p.Level != found.Level) {
 				//Go to the level first
-				gotoCmd.Use(p, new string[] { found.Level.Name });
+				gotoCmd.Use(p, new string[] { found.Level.name });
 			}
 			if (found.isLoading) {
 				p.SendMessage("Waiting for " + found.color + found.Username + Server.DefaultColor + " to spawn...");
