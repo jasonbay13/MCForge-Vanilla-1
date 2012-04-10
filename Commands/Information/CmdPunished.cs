@@ -24,9 +24,9 @@ namespace CommandDll
     public class CmdPunished : ICommand
     {
         public string Name { get { return "Punished"; } }
-        public CommandTypes Type { get { return CommandTypes.Information; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Givo"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
@@ -101,7 +101,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "Punished" });
+            Command.AddReference(this, new string[1] { "punished" });
         }
     }
 }

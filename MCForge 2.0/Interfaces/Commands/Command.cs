@@ -69,11 +69,11 @@ namespace MCForge.Interface.Command
 			}
 		}
 	}
-    public enum CommandTypes
-    {
-        building,
-        mod,
-        misc,
-        information,
-    }
+	public enum CommandTypes {
+		building,
+		mod,
+		misc,
+		information,
+		//fun,
+	}
 }

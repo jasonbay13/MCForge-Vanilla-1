@@ -28,25 +28,6 @@ namespace MCForge.API.PlayerEvent
 		/// The player that this event applies to.  If null, applies to all players.
 		/// </summary>
 		public Player target { get { return _target;} }
-
-		/// <summary>
-		/// Ther delegate used for callbacks.  The caller will have this method run when the event fires.
-		/// </summary>
-		/// <param name="e">The Event that fired</param>
-		public delegate void OnCall(PlayerEvent e);
-		//Note: Perhaps we need to have one per event, so it can prevent casting problems.
-
-		/// <summary>
-		/// The queue of delegates to call for the particular tag (One for each event)
-		/// </summary>
-		protected OnCall _queue;
-
-		/// <summary>
-		/// The list of all events currently active of a PlayerEvent type.
-		/// </summary>
-		protected static List<PlayerEvent> _eventQueue = new List<PlayerEvent>(); // Same across all Player events
-		//Note: Should we make this one queue per event as well?
-		
 		
 		private bool _canceled;
 		/// <summary>
@@ -77,8 +58,6 @@ namespace MCForge.API.PlayerEvent
 		/// <summary>
 		/// Unregisters the event from the queue.  If more processing is required, override this method
 		/// </summary>
-		public virtual void Unregister() {
-			_eventQueue.Remove(this);
-		}
+		public abstract void Unregister();
 	}
 }

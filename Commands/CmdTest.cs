@@ -30,7 +30,7 @@ namespace CommandDll
 		public void Use(Player p, string[] args)
 		{
 			p.SendMessage("Disconnection event activated!");
-			PlayerEvent pe = OnPlayerDisconnect.Register(CallBack, p, "Test");
+			OnPlayerDisconnect pe = OnPlayerDisconnect.Register(CallBack, p);
 			//pe.Cancel();
 			//p.SendMessage("Please place/destroy a block.");
 			//p.CatchNextBlockchange(new Player.BlockChangeDelegate(BlockChange), null);

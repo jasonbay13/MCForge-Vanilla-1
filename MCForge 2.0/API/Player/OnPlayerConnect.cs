@@ -30,13 +30,26 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		/// <param name="callback">the method used for the delegate to callback upon event fire</param>
 		/// <param name="target">The target Player we want the event for.</param>
-		/// <param name="tag">The tag of this event, so it can be cancelled, unregistered, etc.</param>
-		internal OnPlayerConnect(OnCall callback, Player target, string tag) {
-			_type = EventType.Player;
-			this.tag = tag;
+		internal OnPlayerConnect(OnCall callback, Player target) {
 			_target = target;
 			_queue += callback;
 		}
+
+		/// <summary>
+		/// The delegate used for callbacks.  The caller will have this method run when the event fires.
+		/// </summary>
+		/// <param name="e">The Event that fired</param>
+		public delegate void OnCall(OnPlayerConnect e);
+
+		/// <summary>
+		/// The queue of delegates to call for the particular tag (One for each event)
+		/// </summary>
+		private OnCall _queue;
+
+		/// <summary>
+		/// The list of all events currently active of a PlayerEvent type.
+		/// </summary>
+		protected static List<OnPlayerConnect> _eventQueue = new List<OnPlayerConnect>(); // Same across all events of this kind
 
 		/// <summary>
 		/// This is meant to be called from the code where you mean for the event to happen.
@@ -47,12 +60,9 @@ namespace MCForge.API.PlayerEvent
 		/// <returns> A boolean value specifying whether or not to cancel the event.</returns>
 		internal static bool Call(Player p) {
 			//Event was called from the code.
-			List<PlayerEvent> opcList = new List<PlayerEvent>();
+			List<OnPlayerConnect> opcList = new List<OnPlayerConnect>();
 			//Do we keep or discard the event?
-			_eventQueue.ForEach(playerEvent => {
-				if (playerEvent.GetType().Name != "OnPlayerConnect")
-					return;
-				OnPlayerConnect opc = (OnPlayerConnect)playerEvent;
+			_eventQueue.ForEach(opc => {
 				if (opc.target == null || opc.target.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc._queue(opc); // fire callback
@@ -67,32 +77,34 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		/// <param name="callback">The method to call</param>
 		/// <param name="target">The player to watch for. (null for any players)</param>
-		/// <param name="tag">The tag to use (Required if you ever want to unregister the event.</param>
-		/// <returns></returns>
-		public static PlayerEvent Register(PlayerEvent.OnCall callback, Player target, String tag) {
+		/// <returns>the new OnPlayerConnect event</returns>
+		public static OnPlayerConnect Register(OnCall callback, Player target) {
 			//We add it to the list here
-			tag += "OPCon";
-			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
+			OnPlayerConnect pe = _eventQueue.Find(match => (match.target == null ? target == null : target != null && target.username == match.target.username));
 			if (pe != null)
 				//It already exists, so we just add it to the queue.
-				((OnPlayerConnect)pe)._queue += callback;
+				pe._queue += callback;
 			else {
 				//Doesn't exist yet.  Make a new one.
-				pe = new OnPlayerConnect(callback, target, tag);
+				pe = new OnPlayerConnect(callback, target);
 				_eventQueue.Add(pe);
 			}
 			return pe;
 		}
 
 		/// <summary>
-		/// Unregisters the event with the specified tag.
+		/// Unregisters the sxpecified event
 		/// </summary>
-		/// <param name="tag">The tag to unregister</param>
-		public static void Unregister(string tag) {
-			tag += "OPCon";
-			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
-			if (pe != null)
-				_eventQueue.Remove(pe);
+		/// <param name="pe">The event to unregister</param>
+		public static void Unregister(OnPlayerMove pe) {
+			pe.Unregister();
 		}
-    }
+		/// <summary>
+		/// Unregisters the sxpecified event
+		/// </summary>
+		/// <param name="pe">The event to unregister</param>
+		public override void Unregister() {
+			_eventQueue.Remove(this);
+		}
+	}
 }

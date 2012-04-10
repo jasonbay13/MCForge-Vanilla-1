@@ -56,7 +56,7 @@ namespace CommandDll
             cpos.type2 = type2;
 
             p.SendMessage("Place two blocks to determine the edges.");
-            OnPlayerBlockChange.Register(CatchBlock, p, cpos, "");
+            OnPlayerBlockChange.Register(CatchBlock, p, cpos);
             //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
         }
         public void CatchBlock(PlayerEvent e)
@@ -66,7 +66,7 @@ namespace CommandDll
             cpos.pos = new Vector3(args.x, args.y, args.z);
 			args.Unregister();
 			args.Cancel();
-			OnPlayerBlockChange.Register(CatchBlock2, args.target, cpos, "");
+			OnPlayerBlockChange.Register(CatchBlock2, args.target, cpos);
         }
         public void CatchBlock2(PlayerEvent e)
         {

@@ -111,7 +111,7 @@ namespace CommandDll
                     return;
             }
             p.SendMessage("Place two blocks to determine the corners.");
-            OnPlayerBlockChange.Register(CatchBlock, p, cpos, "first");
+            OnPlayerBlockChange.Register(CatchBlock, p, cpos);
         }
         public void Help(Player p)
         {
@@ -126,18 +126,16 @@ namespace CommandDll
             string[] CommandStrings = new string[2] { "cuboid", "z" };
             Command.AddReference(this, CommandStrings);
         }
-        public void CatchBlock(PlayerEvent pe)
+        public void CatchBlock(OnPlayerBlockChange args)
         {
-			OnPlayerBlockChange args = (OnPlayerBlockChange)pe;
             CatchPos cpos = (CatchPos)args.datapass;
             cpos.pos = new Vector3(args.x, args.z, args.y);
             args.Cancel();
             args.Unregister();
-            OnPlayerBlockChange.Register(CatchBlock2, args.target, cpos, "second");
+            OnPlayerBlockChange.Register(CatchBlock2, args.target, cpos);
         }
-        public void CatchBlock2(PlayerEvent pe)
+        public void CatchBlock2(OnPlayerBlockChange args)
         {
-			OnPlayerBlockChange args = (OnPlayerBlockChange)pe;
 			CatchPos cpos = (CatchPos)args.datapass;
 			Cuboid(cpos, args.holding, args.target, args.x, args.y, args.z);
 			args.Cancel();

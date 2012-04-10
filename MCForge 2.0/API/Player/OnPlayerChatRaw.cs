@@ -25,7 +25,7 @@ namespace MCForge.API.System {
         /// <summary>
         /// Delegate for recieveing messages
         /// </summary>
-        /// <param name="args">OnReceivePacket class to recieve</param>
+        /// <param name="args">OnPlayerChatRaw class to recieve</param>
         public delegate void OnMessage(OnPlayerChatRaw args);
 
 
@@ -34,10 +34,19 @@ namespace MCForge.API.System {
             Message = message;
         }
 
+		private bool _canceled = false;
         /// <summary>
         /// Gets or Sets the canceledness of the event
         /// </summary>
-        public bool IsCanceled { get; set; }
+		public bool cancel { get { return _canceled;} }
+
+		public void Cancel() {
+			_canceled = true;
+		}
+
+		public void Allow() {
+			_canceled = false;
+		}
 
 
         /// <summary>

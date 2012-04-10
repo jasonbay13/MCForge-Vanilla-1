@@ -55,23 +55,21 @@ namespace CommandDll
             cpos.type2 = type2;
 
             p.SendMessage("Place two blocks to determine the edges.");
-			OnPlayerBlockChange.Register(CatchBlock, p, cpos, "first");
+			OnPlayerBlockChange.Register(CatchBlock, p, cpos);
 			//p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
         }
 		//public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass) 
-		public void CatchBlock(PlayerEvent pe) {
+		public void CatchBlock(OnPlayerBlockChange opbc) {
 
-            CatchPos cpos = (CatchPos)pe.datapass;
-			OnPlayerBlockChange opbc = (OnPlayerBlockChange)pe;
+            CatchPos cpos = (CatchPos)opbc.datapass;
             cpos.pos = new Vector3(opbc.x, opbc.z, opbc.y);
-			pe.Unregister();
-			OnPlayerBlockChange.Register(CatchBlock2, pe.target, cpos, "second");
+			opbc.Unregister();
+			OnPlayerBlockChange.Register(CatchBlock2, opbc.target, cpos);
 			//p.CatchNextBlockchange(CatchBlock2, (object)cpos);
         }
-        public void CatchBlock2(PlayerEvent pe) {
-            CatchPos FirstBlock = (CatchPos)pe.datapass;
+        public void CatchBlock2(OnPlayerBlockChange opbc) {
+            CatchPos FirstBlock = (CatchPos)opbc.datapass;
             List<Pos> buffer = new List<Pos>();
-			OnPlayerBlockChange opbc = (OnPlayerBlockChange)pe;
 
             for (ushort xx = Math.Min((ushort)(FirstBlock.pos.x), opbc.x); xx <= Math.Max((ushort)(FirstBlock.pos.x), opbc.x); ++xx)
             {
@@ -80,7 +78,7 @@ namespace CommandDll
                     for (ushort yy = Math.Min((ushort)(FirstBlock.pos.y), opbc.y); yy <= Math.Max((ushort)(FirstBlock.pos.y), opbc.y); ++yy)
                     {
                         Vector3 loop = new Vector3(xx, zz, yy);
-                        if (p.Level.GetBlock(loop) != FirstBlock.type)
+                        if (opbc.target.Level.GetBlock(loop) != FirstBlock.type)
                         {
                             BufferAdd(buffer, loop);
                         }

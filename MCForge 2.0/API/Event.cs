@@ -22,37 +22,13 @@ namespace MCForge.API
 	public abstract class Event {
 
 		/// <summary>
-		/// The type of event (currently not used, but still important.)
-		/// </summary>
-		internal EventType _type;
-		public EventType type { get { return _type;} }
-		/// <summary>
 		/// The priority of the event (currently ignored)
 		/// </summary>
 		protected Priority _pri;
-		/// <summary>
-		/// Used to tell two different events apart.
-		/// </summary>
-		internal string tag;
 		/// <summary>
 		/// Data to pass to future commands.
 		/// </summary>
 		public object datapass { get; set; }
 
-	}
-
-	public enum EventType {
-		/// <summary>
-		/// Events dealing with players
-		/// </summary>
-		Player,
-		/// <summary>
-		/// Events dealing with the server
-		/// </summary>
-		Server,
-		/// <summary>
-		/// Events dealing with the world (Block, levels, etc.)
-		/// </summary>
-		World
 	}
 }

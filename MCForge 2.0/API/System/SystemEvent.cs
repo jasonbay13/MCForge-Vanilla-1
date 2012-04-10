@@ -19,7 +19,7 @@ using System.Text;
 
 namespace MCForge.API.SystemEvent
 {
-    public interface SystemEvent
+    public abstract class SystemEvent : Event
     {
         //add stuff here..
     }

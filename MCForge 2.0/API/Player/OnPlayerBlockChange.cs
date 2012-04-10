@@ -20,11 +20,8 @@ namespace MCForge.API.PlayerEvent
 		/// <param name="callback">the method used for the delegate to callback upon event fire</param>
 		/// <param name="target">The target Player we want the event for.</param>
 		/// <param name="datapass">The data we want to pass between events.</param>
-		/// <param name="tag">The tag of this event, so it can be cancelled, unregistered, etc.</param>
-		internal OnPlayerBlockChange(OnCall callback, Player target, object datapass, string tag) {
-			_type = EventType.Player;
+		internal OnPlayerBlockChange(OnCall callback, Player target, object datapass) {
 			this.datapass = datapass;
-			this.tag = tag;
 			_target = target;
 			_queue += callback;
 		}
@@ -55,6 +52,22 @@ namespace MCForge.API.PlayerEvent
 		public string[] args { get; set; }
 
 		/// <summary>
+		/// The delegate used for callbacks.  The caller will have this method run when the event fires.
+		/// </summary>
+		/// <param name="e">The Event that fired</param>
+		public delegate void OnCall(OnPlayerBlockChange e);
+
+		/// <summary>
+		/// The queue of delegates to call for the particular tag (One for each event)
+		/// </summary>
+		private OnCall _queue;
+
+		/// <summary>
+		/// The list of all events currently active of a PlayerEvent type.
+		/// </summary>
+		protected static List<OnPlayerBlockChange> _eventQueue = new List<OnPlayerBlockChange>(); // Same across all events of this kind
+
+		/// <summary>
 		/// This is meant to be called from the code where you mean for the event to happen.
 		/// 
 		/// In this case, it is called from the command processing code.
@@ -65,13 +78,10 @@ namespace MCForge.API.PlayerEvent
 		/// <returns> A boolean value specifying whether or not to cancel the event.</returns>
 		internal static bool Call(ushort x, ushort y, ushort z, ActionType action, Player p, byte holding) {
 			//Event was called from the code.
-			List<PlayerEvent> opbcList = new List<PlayerEvent>();
+			List<OnPlayerBlockChange> opbcList = new List<OnPlayerBlockChange>();
 			//Do we keep or discard the event?
-			_eventQueue.ForEach(playerEvent => {
-				if (playerEvent.GetType().Name != "OnPlayerBlockChange")
-					return;
-				OnPlayerBlockChange opbc = (OnPlayerBlockChange)playerEvent;
-				if (opc.target == null || opbc.target.username == p.username) {// We keep it
+			_eventQueue.ForEach(opbc => {
+				if (opbc.target == null || opbc.target.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opbc.action = action;
 					opbc.holding = holding;
@@ -91,32 +101,34 @@ namespace MCForge.API.PlayerEvent
 		/// <param name="callback">The method to call</param>
 		/// <param name="target">The player to watch for. (null for any players)</param>
 		/// <param name="datapass">The data to return when this event fires.</param>
-		/// <param name="tag">The tag to use (Required if you ever want to unregister the event.</param>
 		/// <returns></returns>
-		public static PlayerEvent Register(PlayerEvent.OnCall callback, Player target, object datapass, String tag) {
+		public static OnPlayerBlockChange Register(OnCall callback, Player target, object datapass) {
 			//We add it to the list here
-			tag += "OPBC";
-			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
+			OnPlayerBlockChange pe = _eventQueue.Find(match => (match.target == null ? target == null : target != null && target.username == match.target.username));
 			if (pe != null)
 				//It already exists, so we just add it to the queue.
-				((OnPlayerBlockChange)pe)._queue += callback;
+				pe._queue += callback;
 			else {
 				//Doesn't exist yet.  Make a new one.
-				pe = new OnPlayerBlockChange(callback, target, datapass, tag);
+				pe = new OnPlayerBlockChange(callback, target, datapass);
 				_eventQueue.Add(pe);
 			}
 			return pe;
 		}
 
 		/// <summary>
-		/// Unregisters the event with the specified tag.
+		/// Unregisters the sxpecified event
 		/// </summary>
-		/// <param name="tag">The tag to unregister</param>
-		public static void Unregister(string tag) {
-			tag += "OPBC";
-			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
-			if (pe != null)
-				_eventQueue.Remove(pe);
+		/// <param name="pe">The event to unregister</param>
+		public static void Unregister(OnPlayerMove pe) {
+			pe.Unregister();
+		}
+		/// <summary>
+		/// Unregisters the sxpecified event
+		/// </summary>
+		/// <param name="pe">The event to unregister</param>
+		public override void Unregister() {
+			_eventQueue.Remove(this);
 		}
 	}
 }

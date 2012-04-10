@@ -23,7 +23,7 @@ namespace CommandDll.Moderation {
         public string Author { get { return "Nerketur"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
-        string[] CommandStrings = new string[3] { "who", "whois", "whowas", "whoip" };
+        string[] CommandStrings = new string[] { "who", "whois", "whowas", "whoip" };
         public byte Permission { get { return 80; } }
         public void Use(Player p, string[] args) {
             //We can get an IP, or a name.

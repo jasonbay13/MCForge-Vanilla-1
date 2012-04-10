@@ -14,6 +14,7 @@ permissions and limitations under the Licenses.
 */
 using System;
 using MCForge.Entity;
+using System.Collections.Generic;
 
 namespace MCForge.API.PlayerEvent
 {
@@ -29,15 +30,28 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		/// <param name="callback">the method used for the delegate to callback upon event fire</param>
 		/// <param name="target">The target Player we want the event for.</param>
-		/// <param name="tag">The tag of this event, so it can be cancelled, unregistered, etc.</param>
-		internal OnPlayerDisconnect(OnCall callback, Player target, string tag) {
-			_type = EventType.Player;
-			this.tag = tag;
+		internal OnPlayerDisconnect(OnCall callback, Player target) {
 			_target = target;
 			_queue += callback;
 		}
 
 		public String reason { get; set; }
+
+		/// <summary>
+		/// The delegate used for callbacks.  The caller will have this method run when the event fires.
+		/// </summary>
+		/// <param name="e">The Event that fired</param>
+		public delegate void OnCall(OnPlayerDisconnect e);
+
+		/// <summary>
+		/// The queue of delegates to call for the particular tag (One for each event)
+		/// </summary>
+		private OnCall _queue;
+
+		/// <summary>
+		/// The list of all events currently active of a PlayerEvent type.
+		/// </summary>
+		protected static List<OnPlayerDisconnect> _eventQueue = new List<OnPlayerDisconnect>(); // Same across all events of this kind
 
 		/// <summary>
 		/// This is meant to be called from the code where you mean for the event to happen.
@@ -49,10 +63,7 @@ namespace MCForge.API.PlayerEvent
 		internal static void Call(Player p, string reason) {
 			//Event was called from the code.
 			//Do we keep or discard the event?
-			_eventQueue.ForEach(playerEvent => {
-				if (playerEvent.GetType().Name != "OnPlayerDisconnect")
-					return;
-				OnPlayerDisconnect opc = (OnPlayerDisconnect)playerEvent;
+			_eventQueue.ForEach(opc => {
 				if (opc.target == null || opc.target.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.reason = reason;
@@ -66,32 +77,34 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		/// <param name="callback">The method to call</param>
 		/// <param name="target">The player to watch for. (null for any players)</param>
-		/// <param name="tag">The tag to use (Required if you ever want to unregister the event.</param>
-		/// <returns></returns>
-		public static PlayerEvent Register(PlayerEvent.OnCall callback, Player target, String tag) {
+		/// <returns>The new OnPlayerDisconnect event</returns>
+		public static OnPlayerDisconnect Register(OnCall callback, Player target) {
 			//We add it to the list here
-			tag += "OPDis";
-			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
+			OnPlayerDisconnect pe = _eventQueue.Find(match => match.target == null || match.target.username == target.username);
 			if (pe != null)
 				//It already exists, so we just add it to the queue.
-				((OnPlayerDisconnect)pe)._queue += callback;
+				pe._queue += callback;
 			else {
 				//Doesn't exist yet.  Make a new one.
-				pe = new OnPlayerDisconnect(callback, target, tag);
+				pe = new OnPlayerDisconnect(callback, target);
 				_eventQueue.Add(pe);
 			}
 			return pe;
 		}
 
 		/// <summary>
-		/// Unregisters the event with the specified tag.
+		/// Unregisters the sxpecified event
 		/// </summary>
-		/// <param name="tag">The tag to unregister</param>
-		public static void Unregister(string tag) {
-			tag += "OPDis";
-			PlayerEvent pe = _eventQueue.Find(match => match.tag == tag);
-			if (pe != null)
-				_eventQueue.Remove(pe);
+		/// <param name="pe">The event to unregister</param>
+		public static void Unregister(OnPlayerMove pe) {
+			pe.Unregister();
 		}
-    }
+		/// <summary>
+		/// Unregisters the sxpecified event
+		/// </summary>
+		/// <param name="pe">The event to unregister</param>
+		public override void Unregister() {
+			_eventQueue.Remove(this);
+		}
+	}
 }
