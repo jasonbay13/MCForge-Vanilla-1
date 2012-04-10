@@ -79,10 +79,10 @@
     <Compile Include="Moderation\CmdSetRank.cs" />
     <Compile Include="Moderation\CmdSetSpawn.cs" />
     <Compile Include="Misc\CmdFly.cs" />
-    <Compile Include="CmdDatapassExample.cs" />
+    <None Include="CmdDatapassExample.cs" />
     <Compile Include="Information\CmdDevs.cs" />
     <Compile Include="Information\CmdIds.cs" />
-    <Compile Include="CmdTest.cs" />
+    <None Include="CmdTest.cs" />
     <Compile Include="Information\CmdNews.cs" />
     <Compile Include="Information\CmdLastCmd.cs" />
     <Compile Include="Information\CmdMeasure.cs" />

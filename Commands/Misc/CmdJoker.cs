@@ -25,7 +25,7 @@ namespace CommandDll
         public string Name { get { return "Joker"; } }
         public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
-        public decimal Version { get { return 1.0m; } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 

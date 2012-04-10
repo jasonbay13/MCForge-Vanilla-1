@@ -56,7 +56,7 @@ namespace MCForge.Entity
 				p.buffer = p.HandlePacket(b);
 				p.socket.BeginReceive(p.tempBuffer, 0, p.tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), p);
 			}
-			catch (SocketException e)
+			catch (SocketException/* e*/)
 			{
 				//SocketException rawr = e;
 				p.CloseConnection();

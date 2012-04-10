@@ -36,7 +36,7 @@ namespace CommandDll
             if (who.group == PlayerGroup.groups[0]) { p.SendMessage(who.Username + " is already the lowest rank!"); return; }
             PlayerGroup current = who.group;
             PlayerGroup previous = null;
-            bool next = false;
+            //bool next = false; // unused
             foreach (PlayerGroup rank in PlayerGroup.groups)
             {             
                 if (current == rank) 

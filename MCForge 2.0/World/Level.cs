@@ -48,7 +48,7 @@ namespace MCForge.World
         public delegate void ForEachBlockDelegate(int pos);
 
         string _name = "main";
-        public string Name { get; set; }
+        public string Name { get { return _name; } set { _name = value; } }
 
         int _TotalBlocks;
         /// <summary>
