@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2011 MCForge
+Copyright 2012 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -27,7 +27,6 @@ namespace CommandDll
         public Version Version { get { return new Version(1,0); } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
-
         public void Use(Player p, string[] args)
         {
             foreach (PlayerGroup group in PlayerGroup.groups)
@@ -42,15 +41,14 @@ namespace CommandDll
                 p.SendMessage(send.Trim().Remove(send.Length - 4, 4));
             }
         }
-
         public void Help(Player p)
         {
             p.SendMessage("/players - shows the online players");
+            p.SendMessage("Shortcuts: /who, /online");
         }
-
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "players", "online" });
+            Command.AddReference(this, new string[3] { "players", "online", "who" });
         }
     }
 }
