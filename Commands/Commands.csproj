@@ -50,6 +50,9 @@
     <Compile Include="Fun\CmdFlipheads.cs" />
     <Compile Include="Information\CmdMapInfo.cs" />
     <Compile Include="Misc\CmdCaps.cs" />
+    <Compile Include="Moderation\CmdGoto.cs" />
+    <Compile Include="Moderation\CmdLoad.cs" />
+    <Compile Include="Moderation\CmdNewLevel.cs" />
     <Compile Include="Moderation\CmdPatrol.cs" />
     <Compile Include="Information\CmdPlayers.cs" />
     <Compile Include="Information\CmdViewranks.cs" />
@@ -67,6 +70,7 @@
     <Compile Include="Moderation\CmdColor.cs" />
     <Compile Include="Moderation\CmdReview.cs" />
     <Compile Include="Moderation\CmdRTitle.cs" />
+    <Compile Include="Moderation\CmdSave.cs" />
     <Compile Include="Moderation\CmdSettings.cs" />
     <Compile Include="Information\CmdHelp.cs" />
     <Compile Include="Information\CmdImpersonate.cs" />
