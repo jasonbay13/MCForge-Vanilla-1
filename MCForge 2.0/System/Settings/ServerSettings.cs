@@ -20,7 +20,6 @@ using System.IO;
 using System.Linq;
 using MCForge.Core;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace MCForge.Utilities.Settings {
     /// <summary>
@@ -50,7 +49,8 @@ namespace MCForge.Utilities.Settings {
             if (_initCalled)
                 throw new ArgumentException("\"Settings.Init()\" can only be called once");
 
-            Salt = GenerateSalt();
+            
+			GenerateSalt();
 
             _initCalled = true;
             Values = new List<SettingNode>{
@@ -269,11 +269,13 @@ namespace MCForge.Utilities.Settings {
 
         }
 
-        internal static string GenerateSalt() {
-            var numberGen = new RNGCryptoServiceProvider();
-            var data = new byte[16];
-            numberGen.GetBytes(data);
-            return Convert.ToBase64String(data);
+        internal static void GenerateSalt() {
+            using (var numberGen = new RNGCryptoServiceProvider())
+            {
+                var data = new byte[16];
+                numberGen.GetBytes(data);
+                Salt = Convert.ToBase64String(data);
+            }
         }
 
         public static bool HasKey(string key) {
