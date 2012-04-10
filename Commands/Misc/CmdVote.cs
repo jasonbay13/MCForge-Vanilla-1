@@ -13,10 +13,9 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System.Threading;
-using System;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {

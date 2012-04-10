@@ -14,9 +14,9 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.IO;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {

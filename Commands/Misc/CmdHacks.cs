@@ -13,11 +13,10 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
@@ -66,7 +65,7 @@ namespace CommandDll
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[3] { "Hacks", "hax", "haxor" });
+            Command.AddReference(this, new string[3] { "hacks", "hax", "haxor" });
         }
     }
 }

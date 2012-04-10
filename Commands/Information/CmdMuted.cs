@@ -12,12 +12,10 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
 using System.Collections.Generic;
+using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
@@ -59,7 +57,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "Muted" });
+            Command.AddReference(this, new string[1] { "muted" });
         }
     }
 }

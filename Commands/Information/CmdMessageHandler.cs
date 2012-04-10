@@ -13,10 +13,9 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 ﻿using System;
-using PluginsDLL;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 using MCForge.Interface.Plugin;
 
 namespace CommandDll.Information
@@ -24,38 +23,12 @@ namespace CommandDll.Information
     class CmdMessageHandler : ICommand
     {
 
-        public string Name
-        {
-            get { return "MessageHandler"; }
-        }
-
-        public string[] CommandNames
-        {
-            get { return new string[] { "stop", "1", "2", "3", "4", "5", "6", "7", "8", "9", "next", "np", "nl", "previous", "prev", "pp", "pl" }; }
-        }
-
-        public CommandTypes Type
-        {
-            get { return CommandTypes.information; }
-        }
-
-        public string Author
-        {
-            get { return "ninedrafted"; }
-        }
-
-        public int Version
-        {
-            get { return 1; }
-        }
-
-        public string CUD
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        byte _Permission = 0;
-        public byte Permission { get { return _Permission; } }
+        public string Name { get { return "MessageHandler"; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
+        public string Author { get { return "ninedrafted"; } }
+        public int Version { get { return 1; } }
+        public string CUD { get { return ""; } }
+        public byte Permission { get { return 0; } }
 
         public void Use(Player p, string[] args)
         {
@@ -133,7 +106,7 @@ namespace CommandDll.Information
         IPluginMessageViewer viewer;
         public void Initialize()
         {
-            viewer = (IPluginMessageViewer)PluginManager.getByInterface("IPluginMessageViewer");
+            Command.AddReference(this, new string[17] {"stop", "1", "2", "3", "4", "5", "6", "7", "8", "9", "next", "np", "nl", "previous", "prev", "pp", "pl"});
         }
     }
 }

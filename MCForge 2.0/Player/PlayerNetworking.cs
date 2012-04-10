@@ -14,21 +14,15 @@ permissions and limitations under the Licenses.
 */
 
 using System;
-using System.Threading;
-using System.Net;
-using System.Net.Sockets;
-using System.Collections.Generic;
-using System.IO.Compression;
 using System.IO;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
-using System.Security.Cryptography;
-using System.Windows.Forms;
+using System.Threading;
 using MCForge.API.PlayerEvent;
 using MCForge.Core;
-using MCForge.World;
-using MCForge.Interface.Command;
 using MCForge.Groups;
 using MCForge.Utilities.Settings;
+using MCForge.World;
 
 namespace MCForge.Entity
 {
