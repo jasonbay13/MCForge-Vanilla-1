@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2011 MCForge
+Copyright 2012 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -13,40 +13,36 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Text;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
 
-namespace CommandDll
+namespace CommandDll.Fun
 {
-    public class CmdSpawn : ICommand
+    class CmdFlipheads : ICommand
     {
-        public string Name { get { return "Spawn"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
-        public string Author { get { return "Gamemakergm"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public string Name { get { return "Flipheads"; } }
+        public CommandTypes Type { get { return CommandTypes.Fun; } }
+        public string Author { get { return "Givo"; } }
+        public Version Version { get { return new Version(1, 0); } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
         public void Use(Player p, string[] args)
         {
-            if (args.Count() != 0)
-            {
-                Help(p);
-                return;
-            }
-            Vector3 meep = new Vector3((short)(p.Level.SpawnPos.x * 32), (short)(p.Level.SpawnPos.z * 32 + 51), (short)(p.Level.SpawnPos.y * 32));
-            p.SendToPos(meep, p.Level.SpawnRot);
+            Server.flipheads = !Server.flipheads;
+            Player.UniversalChat(Server.flipheads ? "All necks were broken" : "All necks were mended!");
         }
         public void Help(Player p)
         {
-            p.SendMessage("/spawn - Teleports yourself to the spawn location.");
+            p.SendMessage("/flipheads - Flips heads ?");
         }
         public void Initialize()
         {
-            Command.AddReference(this, "spawn");
+            Command.AddReference(this, new string[1] { "Flipheads" });
         }
     }
 }
