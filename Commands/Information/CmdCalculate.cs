@@ -13,11 +13,7 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using MCForge;
 using System.IO;
 using MCForge.Interface.Command;
 using MCForge.Entity;
@@ -33,8 +29,6 @@ namespace CommandDll
         public Version Version { get { return new Version(1,0); } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 30; } }
-
-
         public void Use(Player p, string[] args)
         {
             try
@@ -125,15 +119,14 @@ namespace CommandDll
                 return;
             }
         }
-
         public void Help(Player p)
         {
             p.SendMessage("/calculate <num1> <method> <num2> - Evaluates two number using a method.");
             p.SendMessage("Available methods for two numbers: /, x, -, +, ^(Exponent),");
             p.SendMessage("/calculate <num1> <method> - Evaluates a number using a complex method.");
             p.SendMessage("Available methods for one number: square, root, pi, cube");
+            p.SendMessage("Shortcut: /calc");
         }
-
         public void Initialize()
         {
             Command.AddReference(this, new string[2] { "calculate", "calc" });

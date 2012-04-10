@@ -13,7 +13,6 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
@@ -93,15 +92,13 @@ namespace CommandDll
             else { Help(p); }
             Help(p);
         }
-
         public void Help(Player p)
         {
             p.SendMessage("/punished <muted/jokered>- Displays punished players");
         }
-
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "Punished" });
+            Command.AddReference(this, new string[1] { "punished" });
         }
     }
 }

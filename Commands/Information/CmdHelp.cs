@@ -12,7 +12,6 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,30 +24,12 @@ using MCForge.Groups;
 
 namespace CommandDll.Information {
 	public class CmdHelp : ICommand {
-		string _Name = "Help";
-		public string Name { get { return _Name; } }
-
-		CommandTypes _Type = CommandTypes.Information;
-		public CommandTypes Type { get { return _Type; } }
-
-		string _Author = "Nerketur";
-		public string Author { get { return _Author; } }
-
-        public Version Version {
-            get {
-                return new Version(1, 0);
-            }
-        }
-
-		string _CUD = "";
-		public string CUD { get { return _CUD; } }
-
-		string[] CommandStrings = new string[1] { "help" };
-
-		byte perm = 0;
-		public byte Permission {
-			get { return perm; }
-		}
+		public string Name { get { return "Help"; } }
+        public CommandTypes Type { get { return CommandTypes.Information; } }
+		public string Author { get { return "Nerketur"; } }
+        public Version Version { get { return new Version(1, 0); } }
+		public string CUD { get { return ""; } }
+        public byte Permission { get { return 0; } }
 		public void Use(Player p, string[] args) {
 			if (args.Length == 0) {
 				p.SendMessage("Use &b/help ranks" + Server.DefaultColor + " for a list of ranks.");
@@ -151,13 +132,11 @@ namespace CommandDll.Information {
 				}
 			}
 		}
-
 		public void Help(Player p) {
 			p.SendMessage("...really? Wow. Just...wow.");
 		}
-
 		public void Initialize() {
-			Command.AddReference(this, CommandStrings);
+			Command.AddReference(this, new string[1] { "help" });
 		}
 	}
 }
