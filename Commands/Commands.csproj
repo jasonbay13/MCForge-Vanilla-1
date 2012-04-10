@@ -46,7 +46,7 @@
     <Compile Include="Building\CmdReplace.cs" />
     <Compile Include="Building\CmdReplaceAll.cs" />
     <Compile Include="Building\CmdReplaceNot.cs" />
-    <Compile Include="Information\CmdPunished.cs" />
+    <Compile Include="Information\CmdMapInfo.cs" />
     <Compile Include="Moderation\CmdPatrol.cs" />
     <Compile Include="Information\CmdPlayers.cs" />
     <Compile Include="Information\CmdViewranks.cs" />
