@@ -13,11 +13,10 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
@@ -26,7 +25,7 @@ namespace CommandDll
         public string Name { get { return "Hacks"; } }
         public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Givo"; } }
-        public int Version { get { return 1; } }
+        public int Version { get { return 1; ; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
         public static List<string> hacksmessages = new List<string>();
@@ -36,9 +35,9 @@ namespace CommandDll
             int random = new Random().Next(1, 6);
             switch (random)
             {
-                case 1: p.Kick("Your IP has been backtraced & reported to FBI Cyber Crimes Unit."); //classic :P
+                case 1: p.Kick("Your IP has been backtraced & reported to the FBI Cyber Crimes Unit."); //classic :P
                     break;
-                case 2: p.Kick("Your IP has been backtraced & reported to FBI Cyber Crimes Unit.");
+                case 2: p.Kick("Your IP has been backtraced & reported to the FBI Cyber Crimes Unit.");
                     break;
                 case 3: p.Kick("Vaše IP byla backtraced & hlášeny FBI Cyber ​​zločiny jednotky.");
                     break;
@@ -66,7 +65,7 @@ namespace CommandDll
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[3] { "Hacks", "hax", "haxor" });
+            Command.AddReference(this, new string[3] { "hacks", "hax", "haxor" });
         }
     }
 }

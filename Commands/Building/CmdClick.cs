@@ -13,14 +13,9 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 using MCForge.World;
 
 namespace CommandDll
@@ -105,6 +100,7 @@ namespace CommandDll
             p.SendMessage("/click [x z y]- Fakes a click");
             p.SendMessage("if no xyz is given, it uses the last place clicked.");
             p.SendMessage("/click 200 z 200 will cuase it to click at 200x, last z, and 200y");
+            p.SendMessage("Shortcut: /x");
         }
 
         private bool isValid(string message, int dimension, Player p)

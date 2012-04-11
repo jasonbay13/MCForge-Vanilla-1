@@ -12,12 +12,11 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 using MCForge.World;
-using System;
+
 namespace CommandDll
 {
     public class CmdNewLevel : ICommand
@@ -73,6 +72,7 @@ namespace CommandDll
         {
             p.SendMessage("/newlevel [name] (x z y) (type) - Creates a new level called [name].");
             p.SendMessage("Currently, types are experimental.");
+            p.SendMessage("Shortcut: /newlvl");
         }
 
         public void Initialize()

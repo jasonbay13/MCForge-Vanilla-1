@@ -13,10 +13,9 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System.Threading;
-using System;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
@@ -50,6 +49,7 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/vote <message> - Starts a 15 second vote");
+            p.SendMessage("Shortcut: /vo");
         }
 
         public void Initialize()

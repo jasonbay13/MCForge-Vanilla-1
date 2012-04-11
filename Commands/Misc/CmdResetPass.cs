@@ -13,10 +13,10 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using System.IO;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll.Misc
 {
@@ -54,7 +54,7 @@ namespace CommandDll.Misc
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "resetpass" });
+            Command.AddReference(this, new string[2] { "resetpass", "resetpassword" });
         }
     }
 }

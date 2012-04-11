@@ -12,11 +12,8 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
-using MCForge.Interface.Command;
 using MCForge.Entity;
-using MCForge.Core;
-using System;
+using MCForge.Interface.Command;
 using MCForge.World;
 namespace CommandDll
 {
@@ -53,12 +50,12 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/load [level] - Loads [level].");
+            p.SendMessage("/load <level> - Loads <level>.");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "load" });
+            Command.AddReference(this, "load");
         }
     }
 }

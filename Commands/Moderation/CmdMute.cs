@@ -14,10 +14,9 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Threading;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
@@ -64,7 +63,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "mute" });
+            Command.AddReference(this, "mute");
         }
     }
 }

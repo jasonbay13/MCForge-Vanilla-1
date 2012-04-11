@@ -12,10 +12,9 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
@@ -91,15 +90,16 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/rtitle - Rainbows your current title.");
-            p.SendMessage("/rtitle <title> - Gives you a rainbow title.");
-            p.SendMessage("/rtitle <player> <title> - Gives <player> a rainbow title.");
+            p.SendMessage("/rainbowtitle - Rainbows your current title.");
+            p.SendMessage("/rainbowtitle <title> - Gives you a rainbow title.");
+            p.SendMessage("/rainbowtitle [player] <title> - Gives [player] a rainbow title.");
             p.SendMessage("Note: Rainbow titles can only be up to 15 letters long.");
+            p.SendMessage("Shortcut: /rtitle");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "rtitle" });
+            Command.AddReference(this, new string[2] { "rainbowtitle", "rtitle" });
         }
     }
 }

@@ -12,10 +12,9 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll.Misc
 {
@@ -47,10 +46,11 @@ namespace CommandDll.Misc
         public void Help(Player p)
         {
             p.SendMessage("/steal <player> <amount> - Steal <amount> " + Server.moneys + " from <player>.");
+            p.SendMessage("Differs from /rob in that /steal is always successful.");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "steal" });
+            Command.AddReference(this, "steal");
         }
     }
 }

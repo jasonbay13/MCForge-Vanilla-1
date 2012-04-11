@@ -13,23 +13,21 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
 using System.Collections.Generic;
-using System.Timers;
 using System.IO;
+using System.Net.Sockets;
 using MCForge.Entity;
-using MCForge.World;
 using MCForge.Interface;
 using MCForge.Interface.Command;
-using MCForge.API.PlayerEvent;
 using MCForge.Utilities.Settings;
-using MCForge.Groups;
+using MCForge.World;
 
 namespace MCForge.Core {
     public static class Server {
+        /// <summary>
+        /// Show the first run screen?
+        /// </summary>
+        public static bool ShowFirstRunScreen = true;
         /// <summary>
         /// The name of the server currency.
         /// </summary>

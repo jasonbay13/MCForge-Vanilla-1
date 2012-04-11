@@ -14,6 +14,7 @@ permissions and limitations under the Licenses.
 */
 using MCForge.Entity;
 using MCForge.Interface.Command;
+
 namespace CommandDll
 {
     public class CmdOpChat : ICommand
@@ -43,7 +44,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "opchat" });
+            Command.AddReference(this, "opchat");
         }
     }
 }

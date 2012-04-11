@@ -13,17 +13,13 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Text;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
-using MCForge.Groups;
 using System.IO;
 using System.Security.Cryptography;
-using System.Net;
-using System.Security.Authentication;
-using System.Threading;
 using System.Text;
+using System.Threading;
+using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll.Misc
 {
@@ -42,7 +38,6 @@ namespace CommandDll.Misc
             if (p.verified) { p.SendMessage("You already verified!"); return; }
             if (!Server.Verifying) { p.SendMessage("You don't need to verify!"); return; }
             if (p.group.permission < Server.VerifyGroup.permission) { p.SendMessage("Only " + Server.VerifyGroup.color + Server.VerifyGroup.name + "s " + Server.DefaultColor + "and above need to verify."); return; }
-            #region *
             if (p.passtries == 3) { p.Kick("Did you really think you could keep on guessing?"); return; }
             int foundone = 0;
             if (args[0] == "") { Help(p); return; }
@@ -173,15 +168,15 @@ namespace CommandDll.Misc
                 gotpass = true;
                 return plaintext;
             }
-            #endregion
         }
         public void Help(Player p)
         {
-            p.SendMessage("/pass <password> - complete password verification");
+            p.SendMessage("/pass <password> - Complete password verification.");
+            p.SendMessage("/password, /verify, and /login may also be used.");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "pass" });
+            Command.AddReference(this, new string[4] { "pass", "password", "verify", "login" });
         }
     }
 }

@@ -12,15 +12,15 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge.Core;
 using MCForge.Entity;
+using MCForge.Groups;
 using MCForge.Interface.Command;
 
 namespace CommandDll
 {
-    public class CmdModerate : ICommand
+    public class CmdDemote : ICommand
     {
-        public string Name { get { return "Moderate"; } }
+        public string Name { get { return "Demote"; } }
         public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
@@ -29,26 +29,36 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            if (Server.moderation)
-            {
-                Server.moderation = false;
-                Player.UniversalChat("Chat moderation has been disabled!"); return;
-            }
-            else
-            {
-                Server.moderation = true;
-                Player.UniversalChat("Chat moderation has been enabled!"); return;
+            if (args.Length == 0) { Help(p); return; }
+            Player who = Player.Find(args[0]);
+            if (who == null) { p.SendMessage("Cannot find player!"); return; }
+            if (who == p) { p.SendMessage("Cannot demote yourself!"); return; }
+            if (who.group == PlayerGroup.groups[0]) { p.SendMessage(who.Username + " is already the lowest rank!"); return; }
+            PlayerGroup current = who.group;
+            PlayerGroup previous = null;
+            //bool next = false; // unused
+            foreach (PlayerGroup rank in PlayerGroup.groups)
+            {             
+                if (current == rank) 
+                {
+                    string[] info = new string[2] { who.Username, previous.name };
+                    Command.Find("setrank").Use(p, info);
+                    break;
+                }
+                previous = rank;
             }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/moderate - Toggles chat moderation. Only voiced players will be able to speak!");
+            p.SendMessage("/demote <player> - Demotes <player>.");
+            p.SendMessage("Shortcut: /de");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, "moderate");
+            Command.AddReference(this, new string[2] { "demote", "de" });
         }
     }
 }
+

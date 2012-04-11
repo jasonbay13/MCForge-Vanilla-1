@@ -14,21 +14,17 @@ permissions and limitations under the Licenses.
 */
 
 using System;
-using System.Threading;
-using System.Net;
-using System.Net.Sockets;
 using System.Collections.Generic;
-using System.IO.Compression;
-using System.IO;
-using System.Text.RegularExpressions;
+using System.Net.Sockets;
 using System.Security.Cryptography;
-using System.Windows.Forms;
+using System.Text.RegularExpressions;
+using System.Threading;
 using MCForge.API.PlayerEvent;
 using MCForge.Core;
-using MCForge.World;
-using MCForge.Interface.Command;
 using MCForge.Groups;
+using MCForge.Interface.Command;
 using MCForge.Utilities.Settings;
+using MCForge.World;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -337,10 +333,10 @@ namespace MCForge.Entity {
                 SendMessage("Unknown command \"" + name + "\"!");
             }
 
-            foreach (string s in Command.Commands.Keys) {
+            /*foreach (string s in Command.Commands.Keys) {
                 Console.WriteLine(args[0]);
                 Console.WriteLine("'" + s + "'");
-            }
+            }*/ // if you want this to stay uncommented, just say so. (but i think it was from merge conflict)
         }
         #endregion
 
@@ -522,6 +518,25 @@ namespace MCForge.Entity {
                 if (p.username.StartsWith(name.ToLower()))
                     players.Add(p);
 			});
+
+            if (players.Count == 1)
+                return players[0];
+            return null;
+        }
+        
+        /// <summary>
+        /// Attempts to find the player in the list of online players
+        /// </summary>
+        /// <param name="id">The player id to find</param>
+        public static Player Find(int id)
+        {
+            List<Player> players = new List<Player>();
+
+            Server.ForeachPlayer(delegate(Player p)
+            {
+                if (p.id == id)
+                    players.Add(p);
+            });
 
             if (players.Count == 1)
                 return players[0];

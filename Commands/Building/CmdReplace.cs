@@ -14,15 +14,11 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
-using MCForge.World;
-using MCForge.API;
 using MCForge.API.PlayerEvent;
+using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+using MCForge.World;
 
 namespace CommandDll
 {
@@ -114,6 +110,7 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/replace [type] [type2] - Replaces type with type2 inside a selected cuboid.");
+            p.SendMessage("Shortcut: /r");
         }
 
         public void Initialize()

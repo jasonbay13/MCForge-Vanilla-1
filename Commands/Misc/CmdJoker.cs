@@ -14,9 +14,9 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.IO;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
@@ -54,11 +54,11 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/joker <name> - Causes a player to become a joker!");
-            p.SendMessage("/joker # <name> - Makes the player a joker silently");
+            p.SendMessage("/joker # <name> - Makes the player a joker silently.");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "joker" });
+            Command.AddReference(this, "joker");
         }
         void CheckEmpty()
         {

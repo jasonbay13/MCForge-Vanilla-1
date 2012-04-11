@@ -14,21 +14,15 @@ permissions and limitations under the Licenses.
 */
 
 using System;
-using System.Threading;
-using System.Net;
-using System.Net.Sockets;
-using System.Collections.Generic;
-using System.IO.Compression;
 using System.IO;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
-using System.Security.Cryptography;
-using System.Windows.Forms;
+using System.Threading;
 using MCForge.API.PlayerEvent;
 using MCForge.Core;
-using MCForge.World;
-using MCForge.Interface.Command;
 using MCForge.Groups;
 using MCForge.Utilities.Settings;
+using MCForge.World;
 
 namespace MCForge.Entity
 {
@@ -62,7 +56,7 @@ namespace MCForge.Entity
 				p.buffer = p.HandlePacket(b);
 				p.socket.BeginReceive(p.tempBuffer, 0, p.tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), p);
 			}
-			catch (SocketException e)
+			catch (SocketException/* e*/)
 			{
 				//SocketException rawr = e;
 				p.CloseConnection();
@@ -735,8 +729,8 @@ namespace MCForge.Entity
 			int diffX = tempPos.x - tempOldPos.x;
 			int diffZ = tempPos.z - tempOldPos.z;
 			int diffY = tempPos.y - tempOldPos.y;
-			int diffR0 = tempRot[0] - tempRot[0];
-			int diffR1 = tempRot[1] - tempRot[1];
+			int diffR0 = tempRot[0] - tempOldRot[0];
+			int diffR1 = tempRot[1] - tempOldRot[1];
 
 			if (ForceTp) changed = 4;
 			else
@@ -779,15 +773,15 @@ namespace MCForge.Entity
 				case 2: //Rot Change
 					pa.Add(packet.types.SendRotChange);
 					pa.Add(id);
-					pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
+					pa.Add(Rot);
 					break;
 				case 3: //Pos AND Rot Change
 					pa.Add(packet.types.SendPosANDRotChange);
 					pa.Add(id);
-					pa.Add(diffX);
-					pa.Add(diffY);
-					pa.Add(diffZ);
-					pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
+					pa.Add((sbyte)diffX);
+                    pa.Add((sbyte)diffY);
+                    pa.Add((sbyte)diffZ);
+					pa.Add(Rot);
 					break;
 				case 4: //Teleport Required
 					pa.Add(packet.types.SendTeleport);

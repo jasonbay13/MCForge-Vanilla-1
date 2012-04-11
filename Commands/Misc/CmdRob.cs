@@ -13,8 +13,8 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
 using MCForge.Interface.Command;
 
 namespace CommandDll.Misc
@@ -54,7 +54,7 @@ namespace CommandDll.Misc
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "rob" });
+            Command.AddReference(this, "rob");
         }
         bool InBetween(int min, int num, int max)
         {

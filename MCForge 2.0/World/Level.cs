@@ -48,7 +48,7 @@ namespace MCForge.World
         public delegate void ForEachBlockDelegate(int pos);
 
         string _name = "main";
-        public string Name { get; set; }
+        public string Name { get { return _name; } set { _name = value; } }
 
         int _TotalBlocks;
         /// <summary>
@@ -120,7 +120,12 @@ namespace MCForge.World
         private void CreateFlatLevel()
         {
             int middle = Size.y / 2;
-            ForEachBlockXZY(delegate(int x, int z, int y)
+            for (int x = 0; x < Size.x; ++x)
+                for (int z = 0; z < Size.z; ++z)
+                    for (int y = 0; y <= middle; ++y)
+                        data[x + z * Size.x + y * Size.x * Size.z] = y < middle ? (byte)3 : (byte)2;
+
+            /*ForEachBlockXZY(delegate(int x, int z, int y) // this code is very slow (about 1 minute for every second of above)
             {
                 if (y < middle)
                 {
@@ -133,7 +138,7 @@ namespace MCForge.World
                     return;
                 }
 
-            });
+            });*/
 
             SpawnPos = new Vector3((short)(Size.x / 2), (short)(Size.z / 2), (short)(Size.y));
             SpawnRot = new byte[2] { 0, 0 };
@@ -282,6 +287,7 @@ namespace MCForge.World
         public bool SaveToBinary()
         {
             string Name = "levels\\" + this.Name + ".lvl";
+            if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             var Binary = new BinaryWriter(File.Open(Name, FileMode.Create));
 
             try

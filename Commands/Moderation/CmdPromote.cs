@@ -12,15 +12,15 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge.Interface.Command;
 using MCForge.Entity;
-using MCForge.Core;
+using MCForge.Groups;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
-    public class CmdSay : ICommand
+    public class CmdPromote : ICommand
     {
-        public string Name { get { return "Say"; } }
+        public string Name { get { return "Promote"; } }
         public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
@@ -29,20 +29,33 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            if (args.Length == 0) { p.SendMessage("You have to specify a message!"); return; }
-            string message = null;
-            foreach (string s in args) { message += s + " "; }
-            Player.UniversalChat(message);
+            if (args.Length == 0) { Help(p); return; }
+            Player who = Player.Find(args[0]);
+            if (who == null) { p.SendMessage("Cannot find player!"); return; }
+            if (who == p) { p.SendMessage("Cannot demote yourself!"); return; }
+            PlayerGroup current = who.group;
+            bool next = false;
+            foreach (PlayerGroup rank in PlayerGroup.groups)
+            {
+                if (rank == current) { next = true; continue; }
+                if (next) 
+                {
+                    string[] info = new string[2] { who.Username, rank.name };
+                    Command.Find("setrank").Use(p, info);
+                    break;
+                }
+            }         
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/say - Broadcast a universal message");
+            p.SendMessage("/promote <player> - promotes a player.");
+            p.SendMessage("Shortcut: /pr");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, "say");
+            Command.AddReference(this, new string[2] { "promote", "pr" });
         }
     }
 }
