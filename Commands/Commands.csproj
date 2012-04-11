@@ -47,6 +47,7 @@
     <Compile Include="Building\CmdReplaceAll.cs" />
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Information\CmdMapInfo.cs" />
+    <Compile Include="Misc\CmdMode.cs" />
     <Compile Include="Moderation\CmdDemote.cs" />
     <Compile Include="Moderation\CmdGoto.cs" />
     <Compile Include="Moderation\CmdLoad.cs" />

@@ -4,12 +4,17 @@ using System.Linq;
 using System.Text;
 using MCForge.Core;
 using MCForge.World.Blocks;
+using MCForge.World.Physics;
 
 namespace MCForge.World
 {
     public abstract class Block
     {
         static List<Block> blocks = new List<Block>();
+        /// <summary>
+        /// List of block names
+        /// </summary>
+        public static List<string> blocknames = new List<string>();
         public abstract byte VisibleBlock { get; }
         public abstract string Name { get; }
         public virtual void SetBlock(Vector3 pos, Level l)
@@ -86,12 +91,26 @@ namespace MCForge.World
             Add(new Yellow());
             Add(new YellowFlower());
             Add(new Wood());
+            foreach (Block b in blocks) { blocknames.Add(b.Name); }
         }
+
         public static byte NameToByte(string name)
         {
             byte bytetoreturn = new UNKNOWN().VisibleBlock;
             blocks.ForEach(b => { if (b.Name == name.ToLower()) bytetoreturn = b.VisibleBlock; });
             return bytetoreturn;
+        }
+        /// <summary>
+        /// Finds a block by specified name
+        /// </summary>
+        /// <param name="name">The name of the block</param>
+        /// <returns></returns>
+        public static Block FindByName(string name)
+        {
+            List<Block> found = new List<Block>();
+            foreach (Block b in blocks) { if (b.Name == name.ToLower()) { found.Add(b); } }
+            if (found.Count == 1) { return found[0]; }
+            return null;
         }
         public static bool ValidBlockName(string name)
         {

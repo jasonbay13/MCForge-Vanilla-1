@@ -121,7 +121,14 @@ namespace MCForge.Entity {
         /// The player to whisper to
         /// </summary>
         public Player whisperto;
-
+        /// <summary>
+        /// Determines if the player is using /mode
+        /// </summary>
+        public bool mode;
+        /// <summary>
+        /// Player's /mode block
+        /// </summary> //TODO: describe this better >.>
+        public Block modeblock;
         /// <summary>
         /// Appears in front of player's name if he is voiced
         /// </summary>
@@ -314,13 +321,14 @@ namespace MCForge.Entity {
 			if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
-                    if (!Server.agreed.Contains(Username) && name != "rules" && name != "agree" && name != "disagree") {
+                    if (!Server.agreed.Contains(Username) && name != "rules" && name != "agree" && name != "disagree" && name != "help") {
                         SendMessage("You need to /agree to the /rules before you can use commands!"); return;
                     }
                     if (!group.CanExecute(cmd)) {
                         SendMessage(Colors.red + "You cannot use /" + name + "!");
                         return;
                     }
+                    
                     try { cmd.Use(this, sendArgs); } //Just so it doesn't crash the server if custom command makers release broken commands!
                     catch (Exception ex) {
                         Server.Log("[Error] An error occured when " + Username + " tried to use " + name + "!", ConsoleColor.Red, ConsoleColor.Black);
@@ -330,6 +338,7 @@ namespace MCForge.Entity {
                 });
             }
             else {
+                if (Block.blocknames.Contains(name.ToLower())) { Command.Find("mode").Use(this, new string[] { name.ToLower() }); return; }
                 SendMessage("Unknown command \"" + name + "\"!");
             }
 

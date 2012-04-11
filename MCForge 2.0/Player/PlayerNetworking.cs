@@ -238,6 +238,7 @@ namespace MCForge.Entity
 			}
 			else //Placing
 			{
+                if (mode) { level.BlockChange(x, z, y, Block.NameToByte(modeblock.Name)); return; }
 				level.BlockChange(x, z, y, newType);
 			}
 		}
