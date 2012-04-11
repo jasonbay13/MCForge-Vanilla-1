@@ -29,9 +29,9 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		public Player target { get { return _target;} }
 		
-		private bool _canceled;
+		private static bool _canceled;
 		/// <summary>
-		/// Do we want to prevent the default ptroccessing?
+		/// Do we want to prevent the default proccessing?
 		/// </summary>
 		public bool cancel {
 			get { return _canceled; }
@@ -39,8 +39,6 @@ namespace MCForge.API.PlayerEvent
 
 		/// <summary>
 		/// Prevent default processing until event is unregistered. (or Allow() is called)
-		/// 
-		/// <b>Note: If ANY event cancels the default, then it will be cancelled for all current and future events as well.</b>
 		/// </summary>
 		public void Cancel() {
 			_canceled = true;
@@ -48,15 +46,13 @@ namespace MCForge.API.PlayerEvent
 
 		/// <summary>
 		/// Allow default processing. (until Cancel() is called)
-		/// 
-		/// <b>Note: If ANY event still has default canceled, then it will still be cancelled for all current and future events as well.</b>
 		/// </summary>
 		public void Allow() {
 			_canceled = false;
 		}
 
 		/// <summary>
-		/// Unregisters the event from the queue.  If more processing is required, override this method
+		/// Unregisters the event from the queue.
 		/// </summary>
 		public abstract void Unregister();
 	}

@@ -21,7 +21,8 @@ namespace MCForge.API.PlayerEvent
 {
     /// <summary>
     /// The OnPlayerChat event is excuted everytime a player chats on the server
-    /// This event can be canceled
+    /// This event can be canceled.
+	/// This event can also modify what the user says. by changing the message.
     /// </summary>
     public class OnPlayerChat : PlayerEvent
     {
@@ -60,12 +61,12 @@ namespace MCForge.API.PlayerEvent
 		/// <summary>
 		/// This is meant to be called from the code where you mean for the event to happen.
 		/// 
-		/// In this case, it is called from the command processing code.
+		/// In this case, it is called from the chat processing code.
 		/// </summary>
 		/// <param name="p">The player that caused the event.</param>
 		/// <param name="msg">The message sent by the player.</param>
-		/// <returns> the modified string..</returns>
-		internal static string Call(Player p, string msg) {
+		/// <returns>a new (or existing) event with the modified string.</returns>
+		internal static OnPlayerChat Call(Player p, string msg) {
 			//Event was called from the code.
 			List<OnPlayerChat> opcList = new List<OnPlayerChat>();
 			//Do we keep or discard the event?
@@ -77,7 +78,16 @@ namespace MCForge.API.PlayerEvent
 					opcList.Add(opc); // add to used list
 				}
 			});
-			return (opcList.Any(pe => pe.cancel) ? "" : (opcList.Count > 0 ? opcList.Last().message : msg )); //Return if last canceled the event. (empty string)
+			OnPlayerChat pc = new OnPlayerChat(null, p);
+			//If the messages are equal, we return it.
+			pc.message = (opcList.Count > 0 ? opcList[0].message : msg);
+			if (opcList.Any(pe => pe.cancel)) {
+				pc.Cancel();
+			}
+
+			//The message returned is the new message to use.  If two events return different messages, then the 'null' message is used first. (Prevents duplicates)
+			return ((opcList.All((opc) => opc.message == pc.message)) ? pc : opcList.Find(opc => opc.target == null)); // Retern an event with the message
+			//return (opcList.Any(pe => pe.cancel) ? "" : (opcList.Count > 0 ? opcList.Last().message : msg )); //Return if last canceled the event. (empty string)
 		}
 
 		/// <summary>

@@ -29,15 +29,22 @@ namespace CommandDll
 
 		public void Use(Player p, string[] args)
 		{
-			p.SendMessage("Disconnection event activated!");
-			OnPlayerDisconnect pe = OnPlayerDisconnect.Register(CallBack, p);
+			p.SendMessage("Message change event activated!");
+			OnPlayerChat pe = OnPlayerChat.Register(CallBack, p);
+			OnPlayerChat pe2 = OnPlayerChat.Register(CallBack2, p);
 			//pe.Cancel();
 			//p.SendMessage("Please place/destroy a block.");
 			//p.CatchNextBlockchange(new Player.BlockChangeDelegate(BlockChange), null);
 		}
 
-		public void CallBack(PlayerEvent e) {
-			Server.Log("Test: " + e.target.Username + " disconnected!");
+		public void CallBack(OnPlayerChat e) {
+			//Server.Log("Test: " + e.target.Username + " disconnected!");
+			e.message += " in accordance with the Prophecy.";
+			e.Unregister();
+		}
+		public void CallBack2(OnPlayerChat e) {
+			//Server.Log("Test: " + e.target.Username + " disconnected!");
+			e.message += "  Yeah, and Pikachu ROCKS!";
 			e.Unregister();
 		}
 

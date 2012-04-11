@@ -399,10 +399,10 @@ namespace MCForge.Entity
 				return;
 			}*/
 
-			string msg = OnPlayerChat.Call(this, incomingText);
-			if (msg == "") // If any event canceled us
+			OnPlayerChat msg = OnPlayerChat.Call(this, incomingText);
+			if (msg.cancel) // If any event canceled us
 				return;
-			incomingText = msg;
+			incomingText = msg.message;
 
 			if (Server.voting)
 			{
