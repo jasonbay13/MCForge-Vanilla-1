@@ -51,10 +51,12 @@ namespace CommandDll
         private void plist(OnPlayerChat eventargs)
         {
             eventargs.Unregister();
-            if (eventargs.message.ToLower() != "yes") return;
+            if (eventargs.message.ToLower() != "yes" || eventargs.target.lastcmd != "mapinfo" && eventargs.target.lastcmd != "mi")
+                return;
+
             eventargs.Cancel();
             List<Player> templist = Server.Players.FindAll((p) => { if (p.Level == (Level)eventargs.datapass) return true; return false; });
-            
+
             if (templist.Count == 0)
             {
                 eventargs.target.SendMessage("No one is on " + ((Level)eventargs.datapass).Name + ".");
@@ -65,7 +67,7 @@ namespace CommandDll
                 eventargs.target.SendMessage("No one besides you is on " + ((Level)eventargs.datapass).Name + ".");
                 return;
             }
-            
+
             templist.ForEach((p) =>
             {
                 eventargs.target.SendMessage(String.Concat(p.titleColor, p.title, p.color, p.Username));

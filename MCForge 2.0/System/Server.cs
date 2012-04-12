@@ -61,6 +61,7 @@ namespace MCForge.Core {
 		private static int PingInterval = 10;
 		private static int PintIntervalCurrent = 0;
 
+        public static DateTime StartTime = DateTime.Now;
         internal static List<Player> Connections = new List<Player>();
         /// <summary>
         /// Get the current list of online players, note that if your doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
