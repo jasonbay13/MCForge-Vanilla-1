@@ -12,12 +12,10 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System.IO;
-using System;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.World;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+using MCForge.World;
 
 namespace CommandDll
 {
@@ -38,9 +36,10 @@ namespace CommandDll
                 Block b = Block.FindByName(args[0]);
                 if (b == null) { p.SendMessage("Cannot find block\"" + args[0] + "\"!"); return; }
                 if (b == Block.FindByName("air")) { p.SendMessage("Cannot use air mode!"); return; }
+                if (b.Permission > p.group.permission) { p.SendMessage("Cannot place " + b.Name + "!"); return; }
                 p.mode = true;
                 p.modeblock = b;
-                p.SendMessage("&b" + b.Name + Server.DefaultColor + " mode &9on");
+                p.SendMessage("&b" + Up(b.Name) + Server.DefaultColor + " mode &9on");
                 return;
             }
             else
@@ -50,9 +49,10 @@ namespace CommandDll
                     Block b = Block.FindByName(args[0]);
                     if (b == null) { p.SendMessage("Cannot find block\"" + args[0] + "\"!"); return; }
                     if (b == Block.FindByName("air")) { p.SendMessage("Cannot use air mode!"); return; }
+                    if (b.Permission > p.group.permission) { p.SendMessage("Cannot place " + b.Name + "!"); return; }
                     p.mode = true;
                     p.modeblock = b;
-                    p.SendMessage("&b" + b.Name + Server.DefaultColor + " mode &9on");
+                    p.SendMessage("&b" + Up(b.Name) + Server.DefaultColor + " mode &9on");
                     return;
                 }
                 p.SendMessage("&b" + p.modeblock.Name + Server.DefaultColor + " mode &coff");
@@ -69,6 +69,13 @@ namespace CommandDll
         public void Initialize()
         {
             Command.AddReference(this, "mode");
+        }
+        string Up(string str)
+        {
+            string ret = null;
+            bool first = true;
+            foreach (char c in str) { if (first) { ret += char.ToUpper(c); first = false; } else { ret += c; } }
+            return ret;
         }
     }
 }

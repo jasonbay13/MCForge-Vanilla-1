@@ -45,6 +45,14 @@ namespace MCForge.Core {
         /// </summary>
         public static string owner;
         /// <summary>
+        /// The rank that can destroy griefer_stone without getting kicked
+        /// </summary>
+        public static byte grieferstoneperm = 80;
+        /// <summary>
+        /// The amount of griefer_stone warns player will recieve before getting kicked
+        /// </summary>
+        public static int grieferstonewarns = 3;
+        /// <summary>
         /// Get whether the server is currently shutting down
         /// </summary>
         public static bool shuttingDown;

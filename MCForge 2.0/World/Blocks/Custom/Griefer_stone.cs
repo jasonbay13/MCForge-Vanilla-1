@@ -15,19 +15,19 @@ permissions and limitations under the Licenses.
 
 namespace MCForge.World.Blocks
 {
-    public class Gray : Block
+    public class Griefer_stone : Block
     {
         public override string Name
         {
-            get { return "gray"; }
+            get { return "griefer_stone"; }
         }
         public override byte VisibleBlock
         {
-            get { return 35; }
+            get { return 1; }
         }
         public override byte Permission
         {
-            get { return 0; }
+            get { return 80; }
         }
     }
 }

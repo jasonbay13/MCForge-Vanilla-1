@@ -25,5 +25,9 @@ namespace MCForge.World.Blocks
         {
             get { return 9; }
         }
+        public override byte Permission
+        {
+            get { return 0; }
+        }
     }
 }

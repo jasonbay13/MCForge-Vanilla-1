@@ -234,11 +234,24 @@ namespace MCForge.Entity
 
 			if (action == 0) //Deleting
 			{
+                byte b = level.GetBlock(x, z, y);
+                Block bl = Block.FindByName(Block.ByteToName(b));
+                if (b == Block.NameToByte("griefer_stone")) 
+                {
+                    level.BlockChange(x, z, y, Block.NameToByte("air"));
+                    if (group.permission >= Server.grieferstoneperm) { return; }
+                    if (grieferstonewarns < Server.grieferstonewarns) { SendMessage("Stop griefing!"); grieferstonewarns++; return; }
+                    Kick("Kicked for griefing!");
+                    return;
+                }
+                if (bl.Permission > group.permission) { SendMessage("Cannot place " + bl.Name + "!"); return; }
 				level.BlockChange(x, z, y, Block.NameToByte("air"));
 			}
 			else //Placing
 			{
                 if (mode) { level.BlockChange(x, z, y, Block.NameToByte(modeblock.Name)); return; }
+                Block b = Block.FindByName(Block.ByteToName(newType));
+                if (b.Permission > group.permission) { SendMessage("Cannot place " + b.Name + "!"); return; }
 				level.BlockChange(x, z, y, newType);
 			}
 		}

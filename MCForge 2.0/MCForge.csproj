@@ -78,6 +78,7 @@
     <Compile Include="System\Settings\ExtraSettings.cs" />
     <Compile Include="System\Settings\GroupSettings.cs" />
     <Compile Include="System\Settings\LevelSettings.cs" />
+    <Compile Include="World\Blocks\Custom\Griefer_stone.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Black.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Blue.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\BlueViolet.cs" />

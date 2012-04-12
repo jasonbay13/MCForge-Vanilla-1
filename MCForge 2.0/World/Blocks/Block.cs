@@ -5,6 +5,7 @@ using System.Text;
 using MCForge.Core;
 using MCForge.World.Blocks;
 using MCForge.World.Physics;
+using MCForge.Groups;
 
 namespace MCForge.World
 {
@@ -17,6 +18,7 @@ namespace MCForge.World
         public static List<string> blocknames = new List<string>();
         public abstract byte VisibleBlock { get; }
         public abstract string Name { get; }
+        public abstract byte Permission { get; }
         public virtual void SetBlock(Vector3 pos, Level l)
         {
             l.SetBlock(pos.x, pos.z, pos.y, VisibleBlock);
@@ -62,6 +64,7 @@ namespace MCForge.World
             Add(new Gray());
             Add(new Green());
             Add(new GreenYellow());
+            Add(new Griefer_stone());
             Add(new Indigo());
             Add(new Iron());
             Add(new Iron_Ore());

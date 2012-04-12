@@ -26,6 +26,10 @@ namespace MCForge.World.Physics
         {
             get { return 8; }
         }
+        public override byte Permission
+        {
+            get { return 80; }
+        }
         public Active_Water(int x, int y, int z, Level l)
             : base(x, y, z, l)
         {

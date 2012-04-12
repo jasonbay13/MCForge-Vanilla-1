@@ -68,6 +68,10 @@ namespace MCForge.Entity {
         /// The number of times the player has tried to use /pass.
         /// </summary>
         public int passtries = 0;
+        /// <summary>
+        /// Amount of player's griefer_stone warns
+        /// </summary>
+        public int grieferstonewarns;
         bool _verified = false;
         /// <summary>
         /// Has the player used password verification?
@@ -337,8 +341,16 @@ namespace MCForge.Entity {
                     lastcmd = name;
                 });
             }
-            else {
-                if (Block.blocknames.Contains(name.ToLower())) { Command.Find("mode").Use(this, new string[] { name.ToLower() }); return; }
+            else 
+            {
+                if (Block.blocknames.Contains(name.ToLower())) 
+                {
+                    if (!Server.agreed.Contains(Username) && name != "rules" && name != "agree" && name != "disagree" && name != "help")
+                    {
+                        SendMessage("You need to /agree to the /rules before you can use commands!"); return;
+                    }
+                    Command.Find("mode").Use(this, new string[] { name.ToLower() }); return; 
+                }
                 SendMessage("Unknown command \"" + name + "\"!");
             }
 
