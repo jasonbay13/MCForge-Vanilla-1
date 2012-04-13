@@ -52,6 +52,7 @@ namespace CommandDll
 				pl.voted = false;
 			});
             Server.voting = false;
+            ResetVotes();
         }
 
         public void Help(Player p)

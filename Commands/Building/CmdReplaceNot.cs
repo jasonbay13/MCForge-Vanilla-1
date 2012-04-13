@@ -94,7 +94,7 @@ namespace CommandDll
         }
         public void Help(Player p)
         {
-            p.SendMessage("/replacenot [block] [block2] - Replaces everything but <block> with <block2> inside a selected cuboid.");
+            p.SendMessage("/replacenot <block> <block2> - Replaces everything but <block> with <block2> inside a selected cuboid.");
             p.SendMessage("Shortcut: /rn");
         }
 

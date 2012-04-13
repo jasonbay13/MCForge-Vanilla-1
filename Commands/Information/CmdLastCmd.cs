@@ -36,6 +36,7 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/lastcmd <player> - Shows the last command <player> used.");
+            p.SendMessage("Shortcut: /lastcommand");
         }
         public void Initialize()
         {

@@ -12,17 +12,15 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge.Core;
 using MCForge.Entity;
-using MCForge.Groups;
 using MCForge.Interface.Command;
 
 namespace CommandDll
 {
-    public class CmdPlayers : ICommand
+    public class CmdAbort : ICommand
     {
-        public string Name { get { return "Players"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public string Name { get { return "Abort"; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -30,28 +28,24 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            foreach (PlayerGroup group in PlayerGroup.groups)
-            {
-                string send = group.color + group.name;
-                if (!send.EndsWith("ed") && !send.EndsWith("s")) { send += "s: " + Server.DefaultColor; } //Plural
-                else { send += ": " + Server.DefaultColor; }
-                Server.ForeachPlayer(delegate(Player pl)
-                    {
-                        if (pl.group.permission == group.permission) { send +=  pl.Username + "&a, " + Server.DefaultColor; }
-                    });
-                p.SendMessage(send.Trim().Remove(send.Length - 4, 4));
-            }
+            p.mode = false;
+            p.opchat = false;
+            p.adminchat = false;
+            p.whispering = false;
+            p.whisperto = null;
+            p.modeblock = null;
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/players - shows the online players");
-            p.SendMessage("Shortcuts: /online, /who");
+            p.SendMessage("/abort - cancels every toggled action");
+            p.SendMessage("Shortcut: /a");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[3] { "players", "online", "who" });
+            Command.AddReference(this, new string[2] {"abort", "a"});
         }
     }
 }
+

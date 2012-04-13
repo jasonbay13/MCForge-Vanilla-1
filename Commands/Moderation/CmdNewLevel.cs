@@ -70,7 +70,7 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/newlevel [name] (x z y) (type) - Creates a new level called [name].");
+            p.SendMessage("/newlevel <name> <x z y> [type] - Creates a new level called <name>.");
             p.SendMessage("Currently, types are experimental.");
             p.SendMessage("Shortcut: /newlvl");
         }

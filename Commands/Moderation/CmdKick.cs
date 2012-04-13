@@ -81,7 +81,7 @@ namespace CommandDll.Moderation
 
         public void Help(Player p)
         {
-            p.SendMessage("/kick [player/IP] [message] - Kicks a player from the server");
+            p.SendMessage("/kick <player/IP> [message] - Kicks a player from the server");
             p.SendMessage("/kick - Kicks YOU from the server.");
             p.SendMessage("When using an IP, it kicks every user with a matching name and/or IP.");
             p.SendMessage("When using a username, it kicks every user with a matching beginning name.");

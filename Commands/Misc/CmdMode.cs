@@ -12,6 +12,7 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
+using System.Globalization;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
@@ -36,7 +37,7 @@ namespace CommandDll
                 Block b = Block.FindByName(args[0]);
                 if (b == null) { p.SendMessage("Cannot find block\"" + args[0] + "\"!"); return; }
                 if (b == Block.FindByName("air")) { p.SendMessage("Cannot use air mode!"); return; }
-                if (b.Permission > p.group.permission) { p.SendMessage("Cannot place " + b.Name + "!"); return; }
+                if (b.Permission > p.group.permission) { p.SendMessage("Cannot place " + Up(b.Name) + "!"); return; }
                 p.mode = true;
                 p.modeblock = b;
                 p.SendMessage("&b" + Up(b.Name) + Server.DefaultColor + " mode &9on");
@@ -49,13 +50,13 @@ namespace CommandDll
                     Block b = Block.FindByName(args[0]);
                     if (b == null) { p.SendMessage("Cannot find block\"" + args[0] + "\"!"); return; }
                     if (b == Block.FindByName("air")) { p.SendMessage("Cannot use air mode!"); return; }
-                    if (b.Permission > p.group.permission) { p.SendMessage("Cannot place " + b.Name + "!"); return; }
+                    if (b.Permission > p.group.permission) { p.SendMessage("Cannot place " + Up(b.Name) + "!"); return; }
                     p.mode = true;
                     p.modeblock = b;
                     p.SendMessage("&b" + Up(b.Name) + Server.DefaultColor + " mode &9on");
                     return;
                 }
-                p.SendMessage("&b" + p.modeblock.Name + Server.DefaultColor + " mode &coff");
+                p.SendMessage("&b" + Up(p.modeblock.Name) + Server.DefaultColor + " mode &coff");
                 p.mode = false;
                 p.modeblock = null;
             }
@@ -64,6 +65,7 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/mode <block> - makes every placed block turn into the block specified");
+            p.SendMessage("/<block> will also work");
         }
 
         public void Initialize()
@@ -72,10 +74,7 @@ namespace CommandDll
         }
         string Up(string str)
         {
-            string ret = null;
-            bool first = true;
-            foreach (char c in str) { if (first) { ret += char.ToUpper(c); first = false; } else { ret += c; } }
-            return ret;
+            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
         }
     }
 }

@@ -51,6 +51,7 @@ namespace CommandDll.Misc
         public void Help(Player p)
         {
             p.SendMessage("/resetpass <player> - Reset <player>'s password. Can only be used by the server owner.");
+            p.SendMessage("Shortcut: /resetpassword");
         }
         public void Initialize()
         {

@@ -76,7 +76,8 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/mapinfo (mapname) - Shows info of the map your currently on or mapname.");
+            p.SendMessage("/mapinfo [mapname] - Shows info of the map your currently on or mapname.");
+            p.SendMessage("Shortcut: /mi");
         }
 
         public void Initialize()

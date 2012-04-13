@@ -14,12 +14,11 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
+using MCForge.API.PlayerEvent;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
-using MCForge.API.PlayerEvent;
-using System.Linq;
 
 namespace CommandDll
 {
