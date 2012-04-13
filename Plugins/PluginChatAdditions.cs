@@ -36,11 +36,6 @@ namespace Plugins {
         }
 
         void OnChat(OnPlayerChatRaw args) {
-            //This will be used for the mess that is in HandleChat in Player.cs
-            if (args.Message.StartsWith("/womid ")) {
-                args.Player.ExtraData.Add("UsingWom", true);
-                args.IsCanceled = true;
-            }
 
         }
     }
