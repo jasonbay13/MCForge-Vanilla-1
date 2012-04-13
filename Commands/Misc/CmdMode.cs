@@ -72,10 +72,7 @@ namespace CommandDll
         }
         string Up(string str)
         {
-            string ret = null;
-            bool first = true;
-            foreach (char c in str) { if (first) { ret += char.ToUpper(c); first = false; } else { ret += c; } }
-            return ret;
+			return char.ToUpper(str[1]) + str.Substring(1); // edited by Nerketur
         }
     }
 }
