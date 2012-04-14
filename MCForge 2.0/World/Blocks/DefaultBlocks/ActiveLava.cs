@@ -12,5 +12,9 @@ namespace MCForge.World.Blocks {
         public override string Name {
             get { return "Active_Water"; }
         }
+
+        public override byte Permission {
+            get { return 80; }
+        }
     }
 }

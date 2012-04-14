@@ -149,11 +149,13 @@ namespace MCForge.World
             ForEachBlockXZY((x, z, y) =>
             {
                 if (x == 0 || x == Size.x - 1 || z == 0 || z == Size.z - 1)
-                    SetBlock(x, z, y, Block.NameToByte("white"));
+                    SetBlock(x, z, y, Block.BlockList.WHITE_CLOTH);
 
                 if (y == 0)
-                    SetBlock(x, z, y, Block.NameToByte("gray"));
+                    SetBlock(x, z, y, Block.BlockList.BLACK_CLOTH);
             });
+
+            //TODO: ^ make faster
             SpawnPos = new Vector3((short)(Size.x / 2), (short)(Size.z / 2), (short)(Size.y));
             SpawnRot = new byte[2] { 0, 0 };
         }
@@ -445,7 +447,7 @@ namespace MCForge.World
             catch (Exception e)
             {
                 Server.Log(e);
-                return Block.NameToByte("unknown"); //Unknown Block
+                return Block.BlockList.UNKNOWN; //Unknown Block
             }
         }
         #endregion

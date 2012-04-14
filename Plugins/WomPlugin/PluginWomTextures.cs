@@ -29,6 +29,7 @@ using System.Net.Sockets;
 using MCForge.API.PlayerEvent;
 using System.Threading;
 using MCForge.API.SystemEvent;
+using MCForge.World;
 
 namespace Plugins.WomPlugin {
     public class PluginWomTextures : IPlugin {
@@ -74,7 +75,7 @@ namespace Plugins.WomPlugin {
                 var match = Parser.Match(line);
 
                 if (match.Success) {
-                    var lvl = Server.FindLevel(match.Groups[1].Value);
+                    var lvl = Level.FindLevel(match.Groups[1].Value);
                     var userNameLine = Encoding.UTF8.GetString(args.Data, 0, args.Data.Length).Split('\n')[3];
                     var username = userNameLine.Remove(0, "X-WoM-Username: ".Length).Replace("\r", "");
                     Thread.CurrentThread.Join(2000);

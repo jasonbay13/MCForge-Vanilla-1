@@ -17,11 +17,12 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
+using MCForge.World.Blocks;
+using MCForge.Utils;
+using System;
 
-namespace CommandDll
-{
-    public class CmdMode : ICommand
-    {
+namespace CommandDll {
+    public class CmdMode : ICommand {
         public string Name { get { return "Mode"; } }
         public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
@@ -29,52 +30,75 @@ namespace CommandDll
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
-        public void Use(Player p, string[] args)
-        {
+        public void Use(Player p, string[] args) {
             if (args.Length == 0) { Help(p); return; }
-            if (!p.mode)
-            {
-                Block b = Block.FindByName(args[0]);
-                if (b == null) { p.SendMessage("Cannot find block\"" + args[0] + "\"!"); return; }
-                if (b == Block.FindByName("air")) { p.SendMessage("Cannot use air mode!"); return; }
-                if (b.Permission > p.group.permission) { p.SendMessage("Cannot place " + Up(b.Name) + "!"); return; }
-                p.mode = true;
-                p.modeblock = b;
-                p.SendMessage("&b" + Up(b.Name) + Server.DefaultColor + " mode &9on");
-                return;
+            if (!p.ExtraData.ContainsKey("Mode")) {
+                p.ExtraData.Add("Mode", false);
             }
-            else
-            {
-                if (Block.FindByName(args[0]).Name != p.modeblock.Name)
-                {
-                    Block b = Block.FindByName(args[0]);
-                    if (b == null) { p.SendMessage("Cannot find block\"" + args[0] + "\"!"); return; }
-                    if (b == Block.FindByName("air")) { p.SendMessage("Cannot use air mode!"); return; }
-                    if (b.Permission > p.group.permission) { p.SendMessage("Cannot place " + Up(b.Name) + "!"); return; }
-                    p.mode = true;
-                    p.modeblock = b;
-                    p.SendMessage("&b" + Up(b.Name) + Server.DefaultColor + " mode &9on");
+
+            if (!(bool)p.ExtraData["Mode"]) {
+
+
+                Block b = Block.NameToBlock(args[0]);
+                if (b is UNKNOWN) {
+                    p.SendMessage("Cannot find block\"" + args[0] + "\"!");
                     return;
                 }
-                p.SendMessage("&b" + Up(p.modeblock.Name) + Server.DefaultColor + " mode &coff");
-                p.mode = false;
-                p.modeblock = null;
+                if (b == Block.BlockList.AIR) {
+                    p.SendMessage("Cannot use air mode!");
+                    return;
+                }
+                if (b.Permission > p.group.permission) {
+                    p.SendMessage("Cannot place " + StringUtils.TitleCase(b.Name) + "!");
+                    return;
+                }
+
+                p.ExtraData["Mode"] = true;
+                if (!p.ExtraData.ContainsKey("BlockMode"))
+                    p.ExtraData.Add("BlockMode", b);
+
+                p.SendMessage("&b" + StringUtils.TitleCase(b.Name) + Server.DefaultColor + " mode &9on");
+                return;
+            }
+            else {
+                if (args[0] != ((Block)p.ExtraData["BlockMode"]).Name) {
+                    Block b = Block.NameToBlock(args[0]);
+                    if (b is UNKNOWN) { 
+                        p.SendMessage("Cannot find block\"" + args[0] + "\"!");
+                        return; 
+                    }
+                    if (b == Block.BlockList.AIR) {
+                        p.SendMessage("Cannot use air mode!");
+                        return; 
+                    }
+                    if (b.Permission > p.group.permission) { 
+                        p.SendMessage("Cannot place " + StringUtils.TitleCase(b.Name) + "!");
+                        return; 
+                    }
+
+                    p.ExtraData["Mode"] = true;
+                    if (!p.ExtraData.ContainsKey("BlockMode"))
+                        p.ExtraData.Add("BlockMode", b);
+                    p.SendMessage("&b" + StringUtils.TitleCase(b.Name) + Server.DefaultColor + " mode &9on");
+                    return;
+                }
+                if (!p.ExtraData.ContainsKey("BlockMode"))
+                    throw new Exception("No block set in block mode");
+
+                Block prev = (Block)p.ExtraData["BlockMode"];
+                p.SendMessage("&b" + StringUtils.TitleCase(prev.Name) + Server.DefaultColor + " mode &coff");
+                p.ExtraData["Mode"] = false;
+                p.ExtraData["BlockMode"] = null;
             }
         }
 
-        public void Help(Player p)
-        {
+        public void Help(Player p) {
             p.SendMessage("/mode <block> - makes every placed block turn into the block specified");
             p.SendMessage("/<block> will also work");
         }
 
-        public void Initialize()
-        {
+        public void Initialize() {
             Command.AddReference(this, "mode");
-        }
-        string Up(string str)
-        {
-            return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
         }
     }
 }

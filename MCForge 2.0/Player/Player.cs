@@ -285,7 +285,7 @@ namespace MCForge.Entity {
 
                 Socket = TcpClient.Client;
                 Client = TcpClient;
-
+                Server.Connections.Add(this);
                 ip = Socket.RemoteEndPoint.ToString().Split(':')[0];
                 Server.Log("[System]: " + ip + " connected", ConsoleColor.Gray, ConsoleColor.Black);
 
@@ -294,7 +294,7 @@ namespace MCForge.Entity {
 
                 Socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
 
-                Server.Connections.Add(this);
+
             }
             catch (Exception e) {
                 SKick("There has been an Error.");
@@ -313,9 +313,8 @@ namespace MCForge.Entity {
             }
 
             string name = args[0].ToLower().Trim();
-            OnPlayerCommand c = new OnPlayerCommand(this, name, args);
-            c.Call();
-            if (c.IsCanceled)
+            bool canceled = OnPlayerCommand.Call(this, name, args);
+            if (canceled) // If any event canceled us
                 return;
             if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
@@ -345,6 +344,7 @@ namespace MCForge.Entity {
             }
         }
         #endregion
+
 
         internal static void GlobalUpdate() {
             ForceTpCounter++;
@@ -388,8 +388,9 @@ namespace MCForge.Entity {
         /// <param name="y"></param>
         /// <param name="type"></param>
         public void Click(ushort x, ushort z, ushort y, byte type) {
-            OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, ActionType.Place, this, type);
-            b.Call();
+            bool canceled = OnPlayerBlockChange.Call(x, y, z, ActionType.Place, this, type);
+            if (canceled) // If any event canceled us
+                return;
             if (blockChange != null) {
                 bool placing = true;
                 BlockChangeDelegate tempBlockChange = blockChange;

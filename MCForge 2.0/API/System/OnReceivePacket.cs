@@ -10,7 +10,7 @@ namespace MCForge.API.SystemEvent {
     /// <summary>
     /// Event for recieveing all overflowed packets, this event can be canceled
     /// </summary>
-    public class OnReceivePacket : SystemEvent, Cancelable {
+    public class OnReceivePacket : SystemEvent {
 
         /// <summary>
         /// Data Recieved
@@ -34,20 +34,7 @@ namespace MCForge.API.SystemEvent {
             Data = data;
         }
 
-		private bool _canceled = false;
-        /// <summary>
-        /// Gets or Sets the canceledness of the event
-        /// </summary>
-		public bool cancel { get { return _canceled;} }
-
-		public void Cancel() {
-			_canceled = true;
-		}
-
-		public void Allow() {
-			_canceled = false;
-		}
-
+        public bool IsCanceled { get; set; }
 		/// <summary>
         /// Calls every event
         /// </summary>

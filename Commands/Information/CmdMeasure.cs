@@ -40,7 +40,7 @@ namespace CommandDll
                 {
                     try
                     {
-                        cpos.ignore.Add(Block.NameToByte(args[i]));
+                        cpos.ignore.Add(Block.NameToBlock(args[i]));
                     }
                     catch
                     {
@@ -51,7 +51,7 @@ namespace CommandDll
                 string s = "";
                 for (int i = 0; i < cpos.ignore.Count; i++)
                 {
-                    s += Block.ByteToName(cpos.ignore[i]);
+                    s += ((Block)cpos.ignore[i]).Name;
                     if (i == cpos.ignore.Count - 2) s += " and ";
                     else if (i != cpos.ignore.Count - 1) s += ", ";
                 }

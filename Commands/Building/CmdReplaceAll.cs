@@ -59,7 +59,7 @@ namespace CommandDll
             }
 
             //Permissions here.
-            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + Block.ByteToName(type));
+            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + ((Block)type).Name);
 
             //Blockqueue here
 

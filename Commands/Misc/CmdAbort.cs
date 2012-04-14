@@ -28,12 +28,14 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            p.mode = false;
+            if (p.ExtraData.ContainsKey("Mode"))
+                p.ExtraData["Mode"] = false;
             p.opchat = false;
             p.adminchat = false;
             p.whispering = false;
             p.whisperto = null;
-            p.modeblock = null;
+            if (p.ExtraData.ContainsKey("ModeBlock"))
+                p.ExtraData["ModeBlock"] = null;
         }
 
         public void Help(Player p)
