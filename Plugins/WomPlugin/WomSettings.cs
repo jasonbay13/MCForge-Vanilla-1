@@ -22,7 +22,12 @@ namespace Plugins.WomPlugin {
             new SettingNode("environment.side", "7c0fdebeb6637929b9b3170680fa7a79b656c3f7", null),
             new SettingNode("server.sendwomid","true", null),
         };
-        public static List<Level> LevelsWithTextures { get; private set; }
+        private readonly List<MCForge.Utilities.Settings.SettingNode> _values = new List<MCForge.Utilities.Settings.SettingNode>() {
+            new SettingNode("LevelName", "main", null),
+            new SettingNode("ConfigPath", ServerSettings.GetSetting("configpath") + "main.cgf", null),
+        };
+
+        public List<Level> LevelsWithTextures { get; private set; }
 
         public override string SettingsName {
             get { return "WomSettings"; }
@@ -31,44 +36,29 @@ namespace Plugins.WomPlugin {
         public override void OnLoad() {
             LevelsWithTextures = new List<Level>();
             if (!Directory.Exists(ServerSettings.GetSetting("configpath") + "wom/")) {
-                Directory.CreateDirectory(ServerSettings.GetSetting("configpath") + "wom/");
-                File.WriteAllText(ServerSettings.GetSetting("configpath") + "wom/main.cgf", Config, Encoding.UTF8);
-                LoadFile(ServerSettings.GetSetting("configpath") + "wom/main.cgf");
+
             }
             else {
-                foreach (var s in Directory.GetFiles(ServerSettings.GetSetting("configpath") + "wom/", "*.cgf"))
+                foreach (var s in Directory.GetFiles(ServerSettings.GetSetting("configpath") + "wom/", "*.wom.property"))
                     LoadFile(s);
             }
 
         }
 
         public void LoadFile(string path) {
-            if (!path.EndsWith(".cgf"))
+            if (!path.EndsWith(".wom.property"))
                 return;
             var lines = File.ReadAllLines(path);
-            int start = path.LastIndexOf('/') + 1;
-            int end =  path.LastIndexOf('.') - start;
-            var level = Server.FindLevel(path.Substring( start , end));
-            if (level == null) {
+            if (lines.Count() != 2) {
                 Server.Log(String.Format("{0} was formatted incorrectly, this file will not be loaded", path), ConsoleColor.Red, ConsoleColor.Black);
                 return;
             }
-
-            var tempValues = new List<SettingNode>(lines.Count());
-            try {
-                for (int i = 0; i < lines.Length; i++) {
-                    var line = lines[i];
-                    var split = line.Split('=');
-                    tempValues.Add(new SettingNode(split[0].Trim(), String.Join("=", split, 1, split.Length - 1).Trim(), null));
-                }
-                _cgfvalues.Clear();
-                _cgfvalues.AddRange(tempValues);
-            }
-            catch {
-                return;
-            }
-            LevelsWithTextures.Add(level);
-            level.ExtraData.Add("WomConfig", Config);
+            //var level = Level.FindLevel(lines[0].Split('=')[1].Trim());
+            //if(level == null){
+            //    Server.Log(String.Format("{0} was formatted incorrectly (level not found), this file will not be loaded", path), ConsoleColor.Red, ConsoleColor.Black);
+            //    return;
+            //}
+            // LevelsWithTextures.Add(
 
         }
 
@@ -79,7 +69,7 @@ namespace Plugins.WomPlugin {
                 }
             }
         }
-
+        
         public override void Save() {
 
         }
@@ -89,16 +79,7 @@ namespace Plugins.WomPlugin {
         }
 
         public override List<MCForge.Utilities.Settings.SettingNode> Values {
-            get { return null; }
-        }
-
-        public string Config {
-            get {
-                var s = new StringBuilder();
-                foreach (var node in _cgfvalues)
-                    s.Append(node.Key + "=" + node.Value).Append('\n');
-                return s.ToString();
-            }
+            get { return _values; }
         }
     }
 }

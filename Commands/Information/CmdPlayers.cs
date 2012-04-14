@@ -16,15 +16,15 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Interface.Command;
-using System;
+
 namespace CommandDll
 {
     public class CmdPlayers : ICommand
     {
         public string Name { get { return "Players"; } }
-        public CommandTypes Type { get { return CommandTypes.Information; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Arrem"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
@@ -46,11 +46,12 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/players - shows the online players");
+            p.SendMessage("Shortcuts: /online, /who");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "players", "online" });
+            Command.AddReference(this, new string[3] { "players", "online", "who" });
         }
     }
 }

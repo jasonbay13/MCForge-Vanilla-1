@@ -14,18 +14,18 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.IO;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
     public class CmdJoker : ICommand
     {
         public string Name { get { return "Joker"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 
@@ -54,11 +54,11 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/joker <name> - Causes a player to become a joker!");
-            p.SendMessage("/joker # <name> - Makes the player a joker silently");
+            p.SendMessage("/joker # <name> - Makes the player a joker silently.");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "joker" });
+            Command.AddReference(this, "joker");
         }
         void CheckEmpty()
         {

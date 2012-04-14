@@ -14,21 +14,19 @@ permissions and limitations under the Licenses.
 */
 using System.Collections.Generic;
 using System.Threading;
-using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
-using MCForge.World;
-using System;
 using MCForge.World.Blocks;
+
 namespace CommandDll
 {
     public class CmdFly : ICommand
     {
         public string Name { get { return "Fly"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Gamemakergm"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 30; } }
 

@@ -12,21 +12,19 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
 using System.Threading;
-using System;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
     public class CmdVoteKick : ICommand
     {
-        public string Name { get { return "Votekick"; } }
-        public CommandTypes Type { get { return CommandTypes.Mod; } }
+        public string Name { get { return "VoteKick"; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Arrem"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 50; } }
 
@@ -54,6 +52,7 @@ namespace CommandDll
 				pl.voted = false;
 			});
             Server.voting = false;
+            ResetVotes();
         }
 
         public void Help(Player p)
@@ -63,7 +62,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "votekick" });
+            Command.AddReference(this, "votekick");
         }
         public void ResetVotes() { Server.YesVotes = 0; Server.NoVotes = 0; }
     }

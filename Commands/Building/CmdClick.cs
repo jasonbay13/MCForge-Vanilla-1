@@ -13,14 +13,9 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 using MCForge.World;
 
 namespace CommandDll
@@ -28,9 +23,9 @@ namespace CommandDll
     public class CmdClick : ICommand
     {
         public string Name { get { return "Click"; } }
-        public CommandTypes Type { get { return CommandTypes.Building; } }
+        public CommandTypes Type { get { return CommandTypes.building; } }
         public string Author { get { return "Gamemakergm"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 50; } }
 
@@ -96,7 +91,7 @@ namespace CommandDll
                 return;
             }
 
-            p.Click((ushort)click.x, (ushort)click.z, (ushort)click.y, Block.BlockList.STONE);
+            p.Click((ushort)click.x, (ushort)click.z, (ushort)click.y, Block.NameToByte("stone"));
             p.SendMessage("Click &b(" + click.x + ", " + click.z + ", " + click.y + ").");
         }
 
@@ -105,6 +100,7 @@ namespace CommandDll
             p.SendMessage("/click [x z y]- Fakes a click");
             p.SendMessage("if no xyz is given, it uses the last place clicked.");
             p.SendMessage("/click 200 z 200 will cuase it to click at 200x, last z, and 200y");
+            p.SendMessage("Shortcut: /x");
         }
 
         private bool isValid(string message, int dimension, Player p)

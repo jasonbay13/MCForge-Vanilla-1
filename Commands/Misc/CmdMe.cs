@@ -12,19 +12,18 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
-using System;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+
 namespace CommandDll
 {
     public class CmdMe : ICommand
     {
         public string Name { get { return "Me"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
@@ -39,11 +38,11 @@ namespace CommandDll
         }
         public void Help(Player p)
         {
-            p.SendMessage("What do you need help with m'boy? Are you stuck in a well?");
+            p.SendMessage("What do you need help with, m'boy? Are you stuck down a well?");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "me" });
+            Command.AddReference(this, "me");
         }
     }
 }

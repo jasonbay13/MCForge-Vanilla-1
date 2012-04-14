@@ -12,19 +12,18 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
-using System;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+
 namespace CommandDll
 {
     public class CmdTColor : ICommand
     {
         public string Name { get { return "TColor"; } }
-        public CommandTypes Type { get { return CommandTypes.Mod; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "7imekeeper"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 
@@ -70,14 +69,15 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/tcolor [player] <color> - Changes the title color.");
-            p.SendMessage("&0black &1navy &2green &3teal &4maroon &5purple &6gold &7silver");
+            p.SendMessage("/titlecolor <color> - Change your own title color.");
+            p.SendMessage("/titlecolor [player] <color> - Changes [player]'s title color.");
+            p.SendMessage("Available colors: &0black &1navy &2green &3teal &4maroon &5purple &6gold &7silver");
             p.SendMessage("&8gray &9blue &alime &baqua &cred &dpink &eyellow &fwhite");
+            p.SendMessage("Shortcut: /tcolor");
         }
-
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "tcolor" });
+            Command.AddReference(this, new string[2] { "tcolor", "titlecolor" });
         }
     }
 }

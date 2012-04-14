@@ -12,18 +12,17 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-using System;
+
 namespace CommandDll
 {
     public class CmdWhisper : ICommand
     {
         public string Name { get { return "Whisper"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
@@ -31,7 +30,7 @@ namespace CommandDll
         {
             Player who = Player.Find(args[0]);
             if (who == null) { p.SendMessage("Player not found!"); return; }
-            if (who == p) { p.SendMessage("Cannot talk to yourself!"); return; }
+            if (who == p) { p.SendMessage("Cannot whisper to yourself!"); return; }
             if (!p.whispering)
             {
                 p.SendMessage("All messages will be sent to " + who.Username);
@@ -56,7 +55,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "whisper" });
+            Command.AddReference(this, "whisper");
         }
     }
 }

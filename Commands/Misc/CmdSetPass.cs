@@ -13,22 +13,21 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Linq;
-using System.Text;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
+using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll.Misc
 {
     class CmdSetPass : ICommand
     {
         public string Name { get { return "SetPass"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Sinjai"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
@@ -36,7 +35,6 @@ namespace CommandDll.Misc
             if (!p.verified) { p.SendMessage("&cYou already have a password set. " + Server.DefaultColor + "You &ccannot change " + Server.DefaultColor + "it unless &cyou verify it with &a/pass [Password]. " + Server.DefaultColor + "If you have &cforgotten " + Server.DefaultColor + "your password, contact the server host and they can &creset it!"); return; }
             if (args[0] == "") { Help(p); return; }
             if (p.group.permission < Server.VerifyGroup.permission) { p.SendMessage("Only " + Server.VerifyGroup.color + Server.VerifyGroup.name + "s " + Server.DefaultColor + "and above need to verify."); return; }
-            #region *
             int number = args[0].Split(' ').Length;
             if (number > 1)
             {
@@ -129,7 +127,6 @@ namespace CommandDll.Misc
                 return outStr;
 
             }
-            #endregion
         }
         public void Help(Player p)
         {
@@ -137,7 +134,7 @@ namespace CommandDll.Misc
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "setpass" });
+            Command.AddReference(this, "setpass");
         }
     }
 }

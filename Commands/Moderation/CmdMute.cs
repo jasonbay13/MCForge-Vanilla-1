@@ -14,19 +14,18 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Threading;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
     public class CmdMute : ICommand
     {
         public string Name { get { return "Mute"; } }
-        public CommandTypes Type { get { return CommandTypes.Mod; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Arrem"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 
@@ -64,7 +63,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "mute" });
+            Command.AddReference(this, "mute");
         }
     }
 }

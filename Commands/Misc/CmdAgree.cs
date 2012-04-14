@@ -23,9 +23,9 @@ namespace CommandDll
     public class CmdAgree : ICommand
     {
         public string Name { get { return "Agree"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
@@ -47,7 +47,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "agree" });
+            Command.AddReference(this, "agree");
         }
     }
 }

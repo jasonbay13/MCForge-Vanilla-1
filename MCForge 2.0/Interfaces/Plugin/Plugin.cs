@@ -30,7 +30,7 @@ namespace MCForge.Interface.Plugin {
         /// <summary>
         /// The command version
         /// </summary>
-        Version Version { get; }
+         int Version { get; }
         /// <summary>
         /// Unique identifier for this plugin, will be used later to link to McForge databases
         /// </summary>

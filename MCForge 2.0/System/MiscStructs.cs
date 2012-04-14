@@ -49,10 +49,15 @@ namespace MCForge.Core {
         public static bool operator !=(Vector2 a, Vector2 b) {
             return !(a.x == b.x && a.y == b.y);
         }
-        public bool Equals(Vector2 obj) {
-            return this == obj;
+        public override bool Equals(object obj) {
+            return base.Equals(obj);
         }
-
+        public override int GetHashCode() {
+            return base.GetHashCode();
+        }
+        public override string ToString() {
+            return String.Format("x:{0} y:{1}", x, y);
+        }
     }
     public struct Vector3 {
         public short x;
@@ -88,8 +93,14 @@ namespace MCForge.Core {
         public static bool operator !=(Vector3 a, Vector3 b) {
             return !(a.x == b.x && a.y == b.y && a.z == b.z);
         }
-        public bool Equals(Vector3 obj) {
-            return this == obj;
+        public override bool Equals(object obj) {
+            return base.Equals(obj);
+        }
+        public override int GetHashCode() {
+            return base.GetHashCode();
+        }
+        public override string ToString() {
+            return String.Format("x:{0} z:{1} y:{2}", x, z, y);
         }
     }
 

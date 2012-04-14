@@ -14,24 +14,20 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
-using MCForge.World;
-using MCForge.API;
 using MCForge.API.PlayerEvent;
+using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+using MCForge.World;
 
 namespace CommandDll
 {
     public class CmdReplace : ICommand
     {
         public string Name { get { return "Replace"; } }
-        public CommandTypes Type { get { return CommandTypes.Building; } }
+        public CommandTypes Type { get { return CommandTypes.building; } }
         public string Author { get { return "Gamemakergm"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 100; } }
 
@@ -56,19 +52,28 @@ namespace CommandDll
             cpos.type2 = type2;
 
             p.SendMessage("Place two blocks to determine the edges.");
-            OnPlayerBlockChange.Register(CatchBlock, Priority.Normal, cpos, p);
+            OnPlayerBlockChange.Register(CatchBlock, p, cpos);
             //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
         }
-        public void CatchBlock(OnPlayerBlockChange args)
+        public void CatchBlock(PlayerEvent e)
         {
-            CatchPos cpos = (CatchPos)args.GetData();
-            cpos.pos = new Vector3(args.GetX(), args.GetZ(), args.GetZ());
-            args.Unregister(true);
-            args.Player.CatchNextBlockchange(CatchBlock2, (object)cpos);
+			OnPlayerBlockChange args = (OnPlayerBlockChange)e;
+			CatchPos cpos = (CatchPos)args.datapass;
+            cpos.pos = new Vector3(args.x, args.y, args.z);
+			args.Unregister();
+			args.Cancel();
+			OnPlayerBlockChange.Register(CatchBlock2, args.target, cpos);
         }
-        public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
+        public void CatchBlock2(PlayerEvent e)
         {
-            CatchPos FirstBlock = (CatchPos)DataPass;
+			OnPlayerBlockChange bc = (OnPlayerBlockChange)e;
+			Player p = bc.target;
+			ushort x = bc.x;
+			ushort y = bc.y;
+			ushort z = bc.z;
+			byte NewType = bc.holding;
+			bool placed = (bc.action == ActionType.Place);
+			CatchPos FirstBlock = (CatchPos)bc.datapass;
             unchecked
             {
                 if (FirstBlock.type != (byte)-1)
@@ -104,7 +109,8 @@ namespace CommandDll
         }
         public void Help(Player p)
         {
-            p.SendMessage("/replace [type] [type2] - Replaces type with type2 inside a selected cuboid.");
+            p.SendMessage("/replace <type> <type2> - Replaces <type> with <type2> inside a selected cuboid.");
+            p.SendMessage("Shortcut: /r");
         }
 
         public void Initialize()

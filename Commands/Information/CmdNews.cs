@@ -13,28 +13,21 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using MCForge;
 using System.IO;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
     public class CmdNews : ICommand
     {
         public string Name { get { return "News"; } }
-        public CommandTypes Type { get { return CommandTypes.Information; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Givo"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
-        byte _Permission = 0;
-        public byte Permission { get { return _Permission; } }
-
+        public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
         {
             if (!File.Exists("text/news.txt"))
@@ -65,12 +58,10 @@ namespace CommandDll
                 }
             }
         }
-
         public void Help(Player p)
         {
             p.SendMessage("/news <player> - Displays the news!");
         }
-
         public void Initialize()
         {
             Command.AddReference(this, new string[1] { "news" });

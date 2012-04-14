@@ -23,9 +23,6 @@ using MCForge.Entity;
 using MCForge.Core;
 using MCForge.Utilities.Settings;
 using System.IO;
-using MCForge.API.System;
-using System.Text.RegularExpressions;
-using System.Net.Sockets;
 using MCForge.API.PlayerEvent;
 using System.Threading;
 
@@ -40,8 +37,8 @@ namespace Plugins.WomPlugin {
             get { return "headdetect"; }
         }
 
-        public Version Version {
-            get { return new Version(1, 0); }
+        public int Version {
+            get { return 1; }
         }
 
         public string CUD {
@@ -49,16 +46,14 @@ namespace Plugins.WomPlugin {
         }
 
         private WomSettings WomSettings { get; set; }
-
         public void OnLoad() {
             WomSettings = new WomSettings();
             WomSettings.OnLoad();
-
-            OnReceivePacket.Register(OnData);
+            //WomSettings.L
             OnPlayerChatRaw.Register((args) => SendDetailToPlayer(args.Player, "This is a detail, deal &4With &3It"));
         }
 
-        private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
+<<<<<<< .mine        private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
         void OnData(OnReceivePacket args) {
             if (args.Data.Length < 0)
                 return;
@@ -118,8 +113,8 @@ namespace Plugins.WomPlugin {
             args.Player.Kick("");
 
         }
-        public void OnUnload() {
-            OnReceivePacket.Unregister(OnData);
+=======>>>>>>> .theirs        public void OnUnload() {
+            throw new NotImplementedException();
         }
 
         #region Static Helper Methods

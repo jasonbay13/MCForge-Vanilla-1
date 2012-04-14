@@ -38,5 +38,10 @@ namespace Plugins {
         void OnChat(OnPlayerChatRaw args) {
 
         }
+
+
+        int IPlugin.Version {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

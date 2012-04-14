@@ -5,12 +5,12 @@ using System.Text;
 using MCForge.Entity;
 
 
-namespace MCForge.API.System {
+namespace MCForge.API.SystemEvent {
 
     /// <summary>
     /// Event for recieveing all overflowed packets, this event can be canceled
     /// </summary>
-    public class OnReceivePacket : Event, Cancelable {
+    public class OnReceivePacket : SystemEvent, Cancelable {
 
         /// <summary>
         /// Data Recieved
@@ -34,13 +34,21 @@ namespace MCForge.API.System {
             Data = data;
         }
 
+		private bool _canceled = false;
         /// <summary>
         /// Gets or Sets the canceledness of the event
         /// </summary>
-        public bool IsCanceled { get; set; }
+		public bool cancel { get { return _canceled;} }
 
+		public void Cancel() {
+			_canceled = true;
+		}
 
-        /// <summary>
+		public void Allow() {
+			_canceled = false;
+		}
+
+		/// <summary>
         /// Calls every event
         /// </summary>
         public void Call() {

@@ -12,20 +12,18 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
-using MCForge.Groups;
-using System;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+
 namespace CommandDll
 {
     public class CmdReview : ICommand
     {
         public string Name { get { return "Review"; } }
-        public CommandTypes Type { get { return CommandTypes.Mod; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Arrem"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
@@ -141,7 +139,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "review" });
+            Command.AddReference(this, "review");
         }
         void SendPositon(bool all, Player player = null)
         {

@@ -24,8 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>MCForge.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -58,11 +57,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\Cancelable.cs" />
-    <Compile Include="API\EventHelper.cs" />
     <Compile Include="API\Player\OnPlayerBlockChange.cs" />
     <Compile Include="API\Player\OnPlayerChat.cs" />
     <Compile Include="API\Player\OnPlayerChatRaw.cs" />
-    <Compile Include="API\Player\OnPlayerCommand.cs" />
+    <Compile Include="API\Player\OnPlayerCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="API\Player\OnPlayerConnect.cs" />
     <Compile Include="API\Player\OnPlayerDisconnect.cs" />
     <Compile Include="API\Player\OnPlayerMove.cs" />
@@ -78,8 +78,7 @@
     <Compile Include="System\Settings\ExtraSettings.cs" />
     <Compile Include="System\Settings\GroupSettings.cs" />
     <Compile Include="System\Settings\LevelSettings.cs" />
-    <Compile Include="World\Blocks\DefaultBlocks\ActiveLava.cs" />
-    <Compile Include="World\Blocks\DefaultBlocks\ActiveWater.cs" />
+    <Compile Include="World\Blocks\Custom\Griefer_stone.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Black.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Blue.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\BlueViolet.cs" />
@@ -133,6 +132,7 @@
     <Compile Include="Interfaces\Plugin\PluginManager.cs" />
     <Compile Include="Player\Player.cs" />
     <Compile Include="World\Blocks\Block.cs" />
+    <Compile Include="World\Blocks\OldMCForgeToNewMCForge.cs" />
     <Compile Include="World\Blocks\Physics\DefaultPhysicBlocks\Active_Lava.cs" />
     <Compile Include="World\Blocks\Physics\DefaultPhysicBlocks\Active_Water.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Adminium.cs" />

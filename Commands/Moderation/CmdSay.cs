@@ -12,19 +12,18 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
-using System;
+
 namespace CommandDll
 {
     public class CmdSay : ICommand
     {
         public string Name { get { return "Say"; } }
-        public CommandTypes Type { get { return CommandTypes.Mod; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Arrem"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 
@@ -38,12 +37,12 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/say - Broadcast an universal message");
+            p.SendMessage("/say - Broadcast a universal message");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "say" });
+            Command.AddReference(this, "say");
         }
     }
 }

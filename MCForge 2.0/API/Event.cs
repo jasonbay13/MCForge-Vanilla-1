@@ -19,11 +19,16 @@ using System.Text;
 
 namespace MCForge.API
 {
-    public interface Event
-    {
-        /// <summary>
-        /// Call the event
-        /// </summary>
-        void Call();
-    }
+	public abstract class Event {
+
+		/// <summary>
+		/// The priority of the event (currently ignored)
+		/// </summary>
+		protected Priority _pri;
+		/// <summary>
+		/// Data to pass to future commands.
+		/// </summary>
+		public object datapass { get; set; }
+
+	}
 }

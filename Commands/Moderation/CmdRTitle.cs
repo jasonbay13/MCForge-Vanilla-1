@@ -12,19 +12,18 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
-using System;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+
 namespace CommandDll
 {
     public class CmdRTitle : ICommand
     {
         public string Name { get { return "RTitle"; } }
-        public CommandTypes Type { get { return CommandTypes.Mod; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "7imekeeper"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 
@@ -91,15 +90,16 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/rtitle - Rainbows your current title.");
-            p.SendMessage("/rtitle <title> - Gives you a rainbow title.");
-            p.SendMessage("/rtitle <player> <title> - Gives <player> a rainbow title.");
+            p.SendMessage("/rainbowtitle - Rainbows your current title.");
+            p.SendMessage("/rainbowtitle <title> - Gives you a rainbow title.");
+            p.SendMessage("/rainbowtitle [player] <title> - Gives [player] a rainbow title.");
             p.SendMessage("Note: Rainbow titles can only be up to 15 letters long.");
+            p.SendMessage("Shortcut: /rtitle");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "rtitle" });
+            Command.AddReference(this, new string[2] { "rainbowtitle", "rtitle" });
         }
     }
 }

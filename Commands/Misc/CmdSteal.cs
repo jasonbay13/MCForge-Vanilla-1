@@ -12,19 +12,18 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll.Misc
 {
     class CmdSteal : ICommand
     {
         public string Name { get { return "Steal"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Sinjai"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
@@ -47,10 +46,11 @@ namespace CommandDll.Misc
         public void Help(Player p)
         {
             p.SendMessage("/steal <player> <amount> - Steal <amount> " + Server.moneys + " from <player>.");
+            p.SendMessage("Differs from /rob in that /steal is always successful.");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "steal" });
+            Command.AddReference(this, "steal");
         }
     }
 }

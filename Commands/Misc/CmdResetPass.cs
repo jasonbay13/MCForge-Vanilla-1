@@ -13,19 +13,19 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using System.IO;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll.Misc
 {
     class CmdResetPass : ICommand
     {
         public string Name { get { return "ResetPass"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Sinjai"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
@@ -51,10 +51,11 @@ namespace CommandDll.Misc
         public void Help(Player p)
         {
             p.SendMessage("/resetpass <player> - Reset <player>'s password. Can only be used by the server owner.");
+            p.SendMessage("Shortcut: /resetpassword");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "resetpass" });
+            Command.AddReference(this, new string[2] { "resetpass", "resetpassword" });
         }
     }
 }

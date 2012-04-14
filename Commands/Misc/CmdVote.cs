@@ -13,19 +13,18 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System.Threading;
-using System;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
     public class CmdVote : ICommand
     {
         public string Name { get { return "Vote"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 50; } }
 
@@ -45,11 +44,13 @@ namespace CommandDll
 				pl.voted = false;
 			});
             Server.voting = false;
+            ResetVotes();
         }
 
         public void Help(Player p)
         {
             p.SendMessage("/vote <message> - Starts a 15 second vote");
+            p.SendMessage("Shortcut: /vo");
         }
 
         public void Initialize()

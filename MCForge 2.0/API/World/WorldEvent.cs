@@ -20,8 +20,8 @@ using MCForge.World;
 
 namespace MCForge.API.WorldEvent
 {
-    public interface WorldEvent
+    public abstract class WorldEvent : Event
     {
-        Level GetWorld();
+        //Level GetWorld();
     }
 }

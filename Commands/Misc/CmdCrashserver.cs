@@ -16,15 +16,15 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
 using System.IO;
-using System;
+
 namespace CommandDll
 {
-    public class CmdCrashserver : ICommand
+    public class CmdCrashServer : ICommand
     {
-        public string Name { get { return "Crashserver"; } }
-        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public string Name { get { return "CrashServer"; } }
+        public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Givo"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
@@ -35,14 +35,13 @@ namespace CommandDll
             random = random.Replace(".", "");
             p.Kick("SERVER CRASH ERROR CODE x8" + random.ToUpper());
         }
-
         public void Help(Player p)
         {
             p.SendMessage("/crashserver - Crash the server, they'll never know its you"); 
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "Crashserver" });
+            Command.AddReference(this, "crashserver");
         }
     }
 }

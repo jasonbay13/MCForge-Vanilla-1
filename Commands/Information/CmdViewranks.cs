@@ -17,18 +17,17 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Interface.Command;
-using System;
+
 namespace CommandDll
 {
     public class CmdViewranks : ICommand
     {
         public string Name { get { return "Viewranks"; } }
-        public CommandTypes Type { get { return CommandTypes.Information; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Arrem"; } }
-        public Version Version { get { return new Version(1,0); } }
+        public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
-
         public void Use(Player p, string[] args)
         {
             if (args.Length == 0) { Help(p); }
@@ -43,12 +42,10 @@ namespace CommandDll
             }
             catch { p.SendMessage("Error reading ranks!"); return; }
         }
-
         public void Help(Player p)
         {
             p.SendMessage("/viewranks <rank> - Shows all players with the specified rank");
         }
-
         public void Initialize()
         {
             Command.AddReference(this, new string[1] { "viewranks" });
