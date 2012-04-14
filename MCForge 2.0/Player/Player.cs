@@ -14,17 +14,22 @@ permissions and limitations under the Licenses.
 */
 
 using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Security.Cryptography;
-using System.Text.RegularExpressions;
 using System.Threading;
+using System.Net;
+using System.Net.Sockets;
+using System.Collections.Generic;
+using System.IO.Compression;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Security.Cryptography;
+using System.Windows.Forms;
 using MCForge.API.PlayerEvent;
 using MCForge.Core;
-using MCForge.Groups;
-using MCForge.Interface.Command;
-using MCForge.Utilities.Settings;
 using MCForge.World;
+using MCForge.Interface.Command;
+using MCForge.Groups;
+using MCForge.Utilities.Settings;
+using MCForge.API.System;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -52,8 +57,8 @@ namespace MCForge.Entity {
             }
         }
 
-        protected Socket socket;
-
+        public Socket Socket { get; protected set; }
+        public TcpClient Client { get; protected set; }
         protected packet.types lastPacket = packet.types.SendPing;
 
         /// <summary>
@@ -68,10 +73,6 @@ namespace MCForge.Entity {
         /// The number of times the player has tried to use /pass.
         /// </summary>
         public int passtries = 0;
-        /// <summary>
-        /// Amount of player's griefer_stone warns
-        /// </summary>
-        public int grieferstonewarns;
         bool _verified = false;
         /// <summary>
         /// Has the player used password verification?
@@ -125,14 +126,7 @@ namespace MCForge.Entity {
         /// The player to whisper to
         /// </summary>
         public Player whisperto;
-        /// <summary>
-        /// Determines if the player is using /mode
-        /// </summary>
-        public bool mode;
-        /// <summary>
-        /// Player's /mode block
-        /// </summary> //TODO: describe this better >.>
-        public Block modeblock;
+
         /// <summary>
         /// Appears in front of player's name if he is voiced
         /// </summary>
@@ -161,7 +155,7 @@ namespace MCForge.Entity {
         public string storedMessage = "";
 
         protected byte[] buffer = new byte[0];
-        protected byte[] tempBuffer = new byte[0xFF];
+        protected byte[] tempBuffer = new byte[0xFFF];
         protected string tempString = null;
         protected byte tempByte = 0xFF;
 
@@ -193,11 +187,9 @@ namespace MCForge.Entity {
         /// This is the players current level
         /// When the value of the level is changed, the user is sent the new map.
         /// </summary>
-        public Level Level
-        {
+        public Level Level {
             get { return level; }
-            set
-            {
+            set {
                 level = value;
                 SendMap();
             }
@@ -256,7 +248,7 @@ namespace MCForge.Entity {
         /// </summary>
         public static List<string> replacement = new List<string>();
 
-        object PassBackData;
+        public readonly Dictionary<object, object> ExtraData = new Dictionary<object, object>();
         /// <summary>
         /// This delegate is used for when a command wants to be activated the first time a player places a block
         /// </summary>
@@ -284,21 +276,23 @@ namespace MCForge.Entity {
         public PlayerGroup group = PlayerGroup.Find(ServerSettings.GetSetting("defaultgroup"));
 
 
+
         #endregion
 
         internal Player(TcpClient TcpClient) {
             CheckMotdPackets();
             try {
 
-                socket = TcpClient.Client;
+                Socket = TcpClient.Client;
+                Client = TcpClient;
 
-                ip = socket.RemoteEndPoint.ToString().Split(':')[0];
+                ip = Socket.RemoteEndPoint.ToString().Split(':')[0];
                 Server.Log("[System]: " + ip + " connected", ConsoleColor.Gray, ConsoleColor.Black);
 
                 CheckMultipleConnections();
                 if (CheckIfBanned()) return;
 
-                socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
+                Socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
 
                 Server.Connections.Add(this);
             }
@@ -319,20 +313,20 @@ namespace MCForge.Entity {
             }
 
             string name = args[0].ToLower().Trim();
-			bool canceled = OnPlayerCommand.Call(this, name, args);
-			if (canceled) // If any event canceled us
-				return;
-			if (Command.Commands.ContainsKey(name)) {
+            OnPlayerCommand c = new OnPlayerCommand(this, name, args);
+            c.Call();
+            if (c.IsCanceled)
+                return;
+            if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
-                    if (!Server.agreed.Contains(Username) && name != "rules" && name != "agree" && name != "disagree" && name != "help") {
+                    if (!Server.agreed.Contains(Username) && name != "rules" && name != "agree" && name != "disagree") {
                         SendMessage("You need to /agree to the /rules before you can use commands!"); return;
                     }
                     if (!group.CanExecute(cmd)) {
                         SendMessage(Colors.red + "You cannot use /" + name + "!");
                         return;
                     }
-                    
                     try { cmd.Use(this, sendArgs); } //Just so it doesn't crash the server if custom command makers release broken commands!
                     catch (Exception ex) {
                         Server.Log("[Error] An error occured when " + Username + " tried to use " + name + "!", ConsoleColor.Red, ConsoleColor.Black);
@@ -341,34 +335,24 @@ namespace MCForge.Entity {
                     lastcmd = name;
                 });
             }
-            else 
-            {
-                if (Block.blocknames.Contains(name.ToLower())) 
-                {
-                    if (!Server.agreed.Contains(Username) && name != "rules" && name != "agree" && name != "disagree" && name != "help")
-                    {
-                        SendMessage("You need to /agree to the /rules before you can use commands!"); return;
-                    }
-                    Command.Find("mode").Use(this, new string[] { name.ToLower() }); return; 
-                }
+            else {
                 SendMessage("Unknown command \"" + name + "\"!");
             }
 
-            /*foreach (string s in Command.Commands.Keys) {
+            foreach (string s in Command.Commands.Keys) {
                 Console.WriteLine(args[0]);
                 Console.WriteLine("'" + s + "'");
-            }*/ // if you want this to stay uncommented, just say so. (but i think it was from merge conflict)
+            }
         }
         #endregion
 
         internal static void GlobalUpdate() {
             ForceTpCounter++;
 
-			Server.ForeachPlayer(delegate(Player p)
-			{
-				if (ForceTpCounter == 100) { if (!p.isHidden) p.UpdatePosition(true); }
-				else { if (!p.isHidden) p.UpdatePosition(false); }		
-			});
+            Server.ForeachPlayer(delegate(Player p) {
+                if (ForceTpCounter == 100) { if (!p.isHidden) p.UpdatePosition(true); }
+                else { if (!p.isHidden) p.UpdatePosition(false); }
+            });
         }
 
         #region PluginStuff
@@ -379,7 +363,9 @@ namespace MCForge.Entity {
         /// <param name="data">A passback object that can be used for a command to send data back to itself for use</param>
         [Obsolete("Please use OnPlayerBlockChange event (will be removed before release)")]
         public void CatchNextBlockchange(BlockChangeDelegate change, object data) {
-            PassBackData = data;
+            if (!ExtraData.ContainsKey("PassBackData"))
+                ExtraData.Add("PassBackData", null);
+            ExtraData["PassBackData"] = data;
             nextChat = null;
             blockChange = change;
         }
@@ -402,16 +388,17 @@ namespace MCForge.Entity {
         /// <param name="y"></param>
         /// <param name="type"></param>
         public void Click(ushort x, ushort z, ushort y, byte type) {
-			bool canceled = OnPlayerBlockChange.Call(x, y, z, ActionType.Place, this, type);
-			if (canceled) // If any event canceled us
-				return;
+            OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, ActionType.Place, this, type);
+            b.Call();
             if (blockChange != null) {
                 bool placing = true;
                 BlockChangeDelegate tempBlockChange = blockChange;
-                object tempPassBack = PassBackData;
+                if (!ExtraData.ContainsKey("PassBackData"))
+                    ExtraData.Add("PassBackData", null);
+                object tempPassBack = ExtraData["PassBackData"];
 
                 blockChange = null;
-                PassBackData = null;
+                ExtraData["PassBackData"] = null;
 
                 ThreadPool.QueueUserWorkItem(delegate { tempBlockChange.Invoke(this, x, z, y, type, placing, tempPassBack); });
                 return;
@@ -455,14 +442,13 @@ namespace MCForge.Entity {
                         lines[lines.Count - 1] = lines[lines.Count - 1].
                             Substring(0, lines[lines.Count - 1].Length - 1);
                         message = message.Substring(1);
-                       
+
                     }
                 }
             } return lines;
         }
-        
-        protected byte FreeId()
-		{
+
+        protected byte FreeId() {
             List<byte> usedIds = new List<byte>();
 
             Server.ForeachPlayer(p => usedIds.Add(p.id));
@@ -475,15 +461,16 @@ namespace MCForge.Entity {
             Server.Log("Too many players O_O", ConsoleColor.Red, ConsoleColor.Black);
             return 254;
         }
-        protected void UpgradeConnectionToPlayer()
-		{
-			Server.UpgradeConnectionToPlayer(this);
-            
+        protected void UpgradeConnectionToPlayer() {
+            Server.UpgradeConnectionToPlayer(this);
+
             //TODO Update form list
         }
 
         #region Verification Stuffs
         protected void CheckMultipleConnections() {
+            if (Server.Connections.Count < 2)
+                return;
             foreach (Player p in Server.Connections.ToArray()) {
                 if (p.ip == ip && p != this) {
                     p.Kick("Only one half open connection is allowed per IP address.");
@@ -491,13 +478,11 @@ namespace MCForge.Entity {
             }
         }
         protected static void CheckDuplicatePlayers(string username) {
-			Server.ForeachPlayer(delegate(Player p)
-			{
-				if (p.username == username)
-				{
-					p.Kick("You have logged in elsewhere!");
-				}
-			});
+            Server.ForeachPlayer(delegate(Player p) {
+                if (p.username == username) {
+                    p.Kick("You have logged in elsewhere!");
+                }
+            });
         }
         protected bool CheckIfBanned() {
             if (Server.BannedIP.Contains(ip)) { Kick("You're Banned!"); return true; }
@@ -534,28 +519,8 @@ namespace MCForge.Entity {
         public static Player Find(string name) {
             List<Player> players = new List<Player>();
 
-			Server.ForeachPlayer(delegate(Player p)
-			{
+            Server.ForeachPlayer(delegate(Player p) {
                 if (p.username.StartsWith(name.ToLower()))
-                    players.Add(p);
-			});
-
-            if (players.Count == 1)
-                return players[0];
-            return null;
-        }
-        
-        /// <summary>
-        /// Attempts to find the player in the list of online players
-        /// </summary>
-        /// <param name="id">The player id to find</param>
-        public static Player Find(int id)
-        {
-            List<Player> players = new List<Player>();
-
-            Server.ForeachPlayer(delegate(Player p)
-            {
-                if (p.id == id)
                     players.Add(p);
             });
 
@@ -567,5 +532,5 @@ namespace MCForge.Entity {
 
     }
 
-    
+
 }

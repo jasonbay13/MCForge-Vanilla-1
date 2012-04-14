@@ -23,8 +23,12 @@ using MCForge.Entity;
 using MCForge.Core;
 using MCForge.Utilities.Settings;
 using System.IO;
+using MCForge.API.System;
+using System.Text.RegularExpressions;
+using System.Net.Sockets;
 using MCForge.API.PlayerEvent;
 using System.Threading;
+using MCForge.API.SystemEvent;
 
 namespace Plugins.WomPlugin {
     public class PluginWomTextures : IPlugin {
@@ -49,11 +53,11 @@ namespace Plugins.WomPlugin {
         public void OnLoad() {
             WomSettings = new WomSettings();
             WomSettings.OnLoad();
-            //WomSettings.L
+            OnReceivePacket.Register(OnData);
             OnPlayerChatRaw.Register((args) => SendDetailToPlayer(args.Player, "This is a detail, deal &4With &3It"));
         }
 
-<<<<<<< .mine        private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
+        private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
         void OnData(OnReceivePacket args) {
             if (args.Data.Length < 0)
                 return;
@@ -111,9 +115,8 @@ namespace Plugins.WomPlugin {
                 }
             }
             args.Player.Kick("");
-
         }
-=======>>>>>>> .theirs        public void OnUnload() {
+        public void OnUnload() {
             throw new NotImplementedException();
         }
 
