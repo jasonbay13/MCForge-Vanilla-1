@@ -120,7 +120,7 @@ namespace MCForge.API.PlayerEvent
 		/// Unregisters the sxpecified event
 		/// </summary>
 		/// <param name="pe">The event to unregister</param>
-		public static void Unregister(OnPlayerMove pe) {
+		public static void Unregister(OnPlayerBlockChange pe) {
 			pe.Unregister();
 		}
 		/// <summary>
