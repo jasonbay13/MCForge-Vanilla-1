@@ -32,6 +32,8 @@ using MCForge.Utilities.Settings;
 using MCForge.API.System;
 using System.Text;
 using MCForge.API.SystemEvent;
+using System.Diagnostics;
+using System.Diagnostics.Contracts;
 
 namespace MCForge.Entity {
     public partial class Player {
@@ -500,7 +502,7 @@ namespace MCForge.Entity {
                 level.ForEachBlock(pos => {
                     //Here we loop through the whole map and check/convert the blocks as necesary
                     //We then add them to our blocks array so we can send them to the player
-                    block = level.data[pos];
+                    block = level.Data[pos];
                     //TODO ADD CHECKING
                     blocks[pos] = block;
                 });
@@ -576,6 +578,7 @@ namespace MCForge.Entity {
             SendPacket(pa);
         }
         protected void SendKick(string message) {
+    
             packet pa = new packet();
             pa.Add(packet.types.SendKick);
             pa.Add(message, 64);

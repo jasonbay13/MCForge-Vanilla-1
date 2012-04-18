@@ -133,10 +133,15 @@ namespace MCForge.World {
             return Blocks[b];
         }
 
-
-        public static bool IsValidBlock(byte currentType) {
-            return (currentType < 50);
+        /// <summary>
+        /// Checks to see if a block is valid (MCProtocol)
+        /// </summary>
+        /// <param name="blockToCheck">Byte or block to check its validness</param>
+        /// <returns>A boolean stating whether its valid</returns>
+        public static bool IsValidBlock(byte blockToCheck) {
+            return (blockToCheck < 50);
         }
+
         /// <summary>
         /// List of blocks (in the form of a byte)
         /// </summary>
@@ -145,17 +150,63 @@ namespace MCForge.World {
             /// Air Block
             /// </summary>
             public const byte AIR = 0;
+
+            /// <summary>
+            /// Air Block
+            /// </summary>
             public const byte STONE = 1;
+
+            /// <summary>
+            /// Air Block
+            /// </summary>
             public const byte GRASS = 2;
+
+            /// <summary>
+            /// Air Block
+            /// </summary>
             public const byte DIRT = 3;
+
+            /// <summary>
+            /// Air Block
+            /// </summary>
             public const byte COBBLESTONE = 4;
+
+            /// <summary>
+            /// Air Block
+            /// </summary>
             public const byte WOOD_PLANK = 5;
+
+            /// <summary>
+            /// Air Block
+            /// </summary>
             public const byte SAPLING = 6;
+
+            /// <summary>
+            /// Air Block
+            /// </summary>
             public const byte BEDROCK = 7;
+
+            /// <summary>
+            /// Air Block
+            /// </summary>
             public const byte ACTIVE_WATER = 8;
+
+            /// <summary>
+            /// Air Block
+            /// </summary>
             public const byte WATER = 9;
+
+            /// <summary>
+            /// Air Block
+            /// </summary>
             public const byte ACTIVE_LAVA = 10;
+
+            /// <summary>
+            /// Air Block
+            /// </summary>
             public const byte LAVA = 11;
+
+            //TODO: finish (badpokerface)
             public const byte SAND = 12;
             public const byte GRAVEL = 13;
             public const byte GOLD_ORE = 14;
@@ -194,7 +245,7 @@ namespace MCForge.World {
             public const byte BOOKSHELF = 47;
             public const byte MOSSY_COBBLESTONE = 48;
             public const byte OBSIDIAN = 49;
-            public const byte UNKNOWN = 0;
+            public const byte UNKNOWN = 255;
         }
 
     }

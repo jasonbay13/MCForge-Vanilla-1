@@ -248,6 +248,9 @@ namespace MCForge.Entity {
         /// </summary>
         public static List<string> replacement = new List<string>();
 
+        /// <summary>
+        /// Dictionary for housing extra data, great for giving player objects to pass
+        /// </summary>
         public readonly Dictionary<object, object> ExtraData = new Dictionary<object, object>();
         /// <summary>
         /// This delegate is used for when a command wants to be activated the first time a player places a block
@@ -338,10 +341,10 @@ namespace MCForge.Entity {
                 SendMessage("Unknown command \"" + name + "\"!");
             }
 
-            foreach (string s in Command.Commands.Keys) {
-                Console.WriteLine(args[0]);
-                Console.WriteLine("'" + s + "'");
-            }
+            //foreach (string s in Command.Commands.Keys) {
+            //    Console.WriteLine(args[0]);
+            //    Console.WriteLine("'" + s + "'");
+            //}
         }
         #endregion
 
@@ -470,11 +473,13 @@ namespace MCForge.Entity {
 
         #region Verification Stuffs
         protected void CheckMultipleConnections() {
+
+            //Not a good idea, wom uses 2 connections when getting textures
             if (Server.Connections.Count < 2)
                 return;
             foreach (Player p in Server.Connections.ToArray()) {
                 if (p.ip == ip && p != this) {
-                    p.Kick("Only one half open connection is allowed per IP address.");
+                    //p.Kick("Only one half open connection is allowed per IP address.");
                 }
             }
         }

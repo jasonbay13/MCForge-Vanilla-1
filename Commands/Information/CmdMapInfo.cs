@@ -34,7 +34,7 @@ namespace CommandDll
         public void Use(Player p, string[] args)
         {
             Level l = args.Length != 0
-                ? Level.levels.Find(lev => { if (lev.Name.IndexOf(String.Join(" ", args)) != -1) return true; return false; })
+                ? Level.Levels.Find(lev => { if (lev.Name.IndexOf(String.Join(" ", args)) != -1) return true; return false; })
                 : p.Level;
             if (l == null) { p.SendMessage("Could not find specified level."); return; }
 

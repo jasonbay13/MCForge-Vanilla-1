@@ -4,6 +4,11 @@
         <name>MCForge</name>
     </assembly>
     <members>
+        <member name="T:MCForge.World.Generator.GeneratorArgs">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:MCForge.World.Block.Add(MCForge.World.Block)">
             <summary>
             Add your custom block to the list
@@ -34,12 +39,74 @@
             Converts a byte to a Block
             </summary>
         </member>
+        <member name="M:MCForge.World.Block.IsValidBlock(System.Byte)">
+            <summary>
+            Checks to see if a block is valid (MCProtocol)
+            </summary>
+            <param name="blockToCheck">Byte or block to check its validness</param>
+            <returns>A boolean stating whether its valid</returns>
+        </member>
         <member name="T:MCForge.World.Block.BlockList">
             <summary>
             List of blocks (in the form of a byte)
             </summary>
         </member>
         <member name="F:MCForge.World.Block.BlockList.AIR">
+            <summary>
+            Air Block
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Block.BlockList.STONE">
+            <summary>
+            Air Block
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Block.BlockList.GRASS">
+            <summary>
+            Air Block
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Block.BlockList.DIRT">
+            <summary>
+            Air Block
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Block.BlockList.COBBLESTONE">
+            <summary>
+            Air Block
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Block.BlockList.WOOD_PLANK">
+            <summary>
+            Air Block
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Block.BlockList.SAPLING">
+            <summary>
+            Air Block
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Block.BlockList.BEDROCK">
+            <summary>
+            Air Block
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Block.BlockList.ACTIVE_WATER">
+            <summary>
+            Air Block
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Block.BlockList.WATER">
+            <summary>
+            Air Block
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Block.BlockList.ACTIVE_LAVA">
+            <summary>
+            Air Block
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Block.BlockList.LAVA">
             <summary>
             Air Block
             </summary>
@@ -761,6 +828,11 @@
             Holds replacement messages for profan filter
             </summary>
         </member>
+        <member name="F:MCForge.Entity.Player.ExtraData">
+            <summary>
+            Dictionary for housing extra data, great for giving player objects to pass
+            </summary>
+        </member>
         <member name="F:MCForge.Entity.Player.group">
             <summary>
             The current Group of the player
@@ -1151,9 +1223,38 @@
             </summary>
             <param name="plugin">The plugin d that this reference... references, you should most likely use 'this'</param>    
         </member>
+        <member name="T:MCForge.Utils.StringUtils">
+            <summary>
+            Set of utils for manipulating strings
+            </summary>
+        </member>
+        <member name="M:MCForge.Utils.StringUtils.CapitolizeFirstChar(System.String)">
+            <summary>
+            Change your string's first character to uppercase 
+            Specified string is a pointer
+            </summary>
+            <param name="StringToChange">The String message to change</param>
+            <returns>String Version of CapitolizeFirstChar</returns>
+        </member>
+        <member name="M:MCForge.Utils.StringUtils.TitleCase(System.String)">
+            <summary>
+            Change the specified string to title case
+            EX: String = "foo bar"
+            Returns "Foo Bar"
+            
+            The specified string is a pointer
+            </summary>
+            <param name="StringToChange">The string to change</param>
+            <returns>A string version of TitleCase</returns>
+        </member>
         <member name="T:MCForge.World.Level">
             <summary>
             This class is used for loading/saving/handling/manipulation of server levels.
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Level.Levels">
+            <summary>
+            List of levels on the server (loaded)
             </summary>
         </member>
         <member name="F:MCForge.World.Level.Size">
@@ -1171,7 +1272,7 @@
             Levels current Spawn ROT
             </summary>
         </member>
-        <member name="F:MCForge.World.Level.data">
+        <member name="F:MCForge.World.Level.Data">
             <summary>
             This holds the map data for the entire map
             </summary>
@@ -1187,6 +1288,7 @@
             </summary>
             <param name="size">The size to create the level.</param>
             <param name="type">The type of the level you want to create</param>
+            <param name="name">Name of the level to create</param>
             <returns>returns the level that was created</returns>
         </member>
         <member name="M:MCForge.World.Level.LoadLevel(System.String)">
@@ -1200,8 +1302,6 @@
             Saves this world to a given directory
             in the MCForge-only binary format.
             </summary>
-            <param name="TargetDirectory">The target directory.</param>
-            <param name="FileName">Name of the file.</param>
             <remarks>The resulting files are not compatible with the official Minecraft software.</remarks>
         </member>
         <member name="M:MCForge.World.Level.ForEachBlockXZY(MCForge.World.Level.ForEachBlockDelegateXZY)">
@@ -1257,7 +1357,7 @@
             <param name="pos">the pos to get the block from</param>
             <returns>a byte that represents the blocktype at the given location</returns>
         </member>
-        <member name="M:MCForge.World.Level.PosToInt(System.UInt16,System.UInt16,System.UInt16)">
+        <member name="M:MCForge.World.Level.PosToInt(System.Int32,System.Int32,System.Int32)">
             <summary>
             Convert a pos (xzy) into a single INT pos
             </summary>
@@ -1311,6 +1411,11 @@
             </summary>
             <param name="level">Name of the level.</param>
         </member>
+        <member name="P:MCForge.World.Level.Name">
+            <summary>
+            Name of the level
+            </summary>
+        </member>
         <member name="P:MCForge.World.Level.TotalBlocks">
             <summary>
             Get the total blocks in the level
@@ -1333,6 +1438,166 @@
         <member name="T:MCForge.World.Level.LevelTypes">
             <summary>
             An enumeration of all the types of levels
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Level.LevelTypes.Flat">
+            <summary>
+            Grass half way up the map, flat
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Level.LevelTypes.Pixel">
+            <summary>
+            White walls, with a black floor
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Level.LevelTypes.Hell">
+            <summary>
+            Inspired from the Nether
+            </summary>
+        </member>
+        <member name="T:MCForge.World.Generator.LevelGenerator">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Generator.LevelGenerator.OnProgressArgs">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.#ctor(MCForge.World.Level)">
+            <summary>
+            
+            </summary>
+            <param name="level"></param>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.#ctor(MCForge.World.Level,MCForge.World.Generator.GeneratorArgs)">
+            <summary>
+            
+            </summary>
+            <param name="level"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.Init">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.Generate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.FillX(System.Int32,System.Int32,MCForge.World.Block)">
+            <summary>
+            
+            </summary>
+            <param name="y"></param>
+            <param name="z"></param>
+            <param name="block"></param>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.FillY(System.Int32,System.Int32,MCForge.World.Block)">
+            <summary>
+            
+            </summary>
+            <param name="x"></param>
+            <param name="z"></param>
+            <param name="block"></param>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.FillZ(System.Int32,System.Int32,MCForge.World.Block)">
+            <summary>
+            
+            </summary>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="block"></param>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.IsOnEdges(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns if the specified location is on the border of the map
+            </summary>
+            <param name="x">Location of the block on the x axis</param>
+            <param name="z">Location of the block on the z axis</param>
+            <param name="y">Location of the block on the y axis</param>
+            <returns>Returns if the specified location is on the border of the map</returns>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.GenerateNoise">
+            <summary>
+            Generates a blocky non smooth version of a terrain. To be smoothed later in other methods
+            </summary>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.ApplyFilter">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.SetBlocks">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.GenerateTree(MCForge.World.Generator.LevelGenerator.TreeType,MCForge.Core.Vector3)">
+            <summary>
+            Generate a tree at any location
+            </summary>
+            <param name="type">Type of tree to generate</param>
+            <param name="pos">Location to generate the tree</param>
+        </member>
+        <member name="T:MCForge.World.Generator.LevelGenerator.GenerationEventArgs">
+            <summary>
+            Generation Event args to track the status of the current generation job
+            </summary>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.GenerationEventArgs.#ctor(System.String,System.Byte)">
+            <summary>
+            Constructor for a generator event argument
+            </summary>
+            <param name="message">Message to give</param>
+            <param name="increment">Value to increase by</param>
+        </member>
+        <member name="P:MCForge.World.Generator.LevelGenerator.GenerationEventArgs.Message">
+            <summary>
+            Message with in the event args
+            </summary>
+        </member>
+        <member name="P:MCForge.World.Generator.LevelGenerator.GenerationEventArgs.Increment">
+            <summary>
+            Increment to increase by
+            </summary>
+        </member>
+        <member name="T:MCForge.World.Generator.LevelGenerator.TreeType">
+            <summary>
+            Enum containing the types of trees that can be generated
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Generator.LevelGenerator.TreeType.Big">
+            <summary>
+            MCForge's version of a big tree
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Generator.LevelGenerator.TreeType.Small">
+            <summary>
+            MCForge's version of a small tree
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Generator.LevelGenerator.TreeType.Thin">
+            <summary>
+            MCForge's verion of a thin tree
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Generator.LevelGenerator.TreeType.Fat">
+            <summary>
+            MCForge's version of a fat tree
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Generator.LevelGenerator.TreeType.NotchBig">
+            <summary>
+            Notch's version of a big tree
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Generator.LevelGenerator.TreeType.NotchSmall">
+            <summary>
+            Notch's version of a small tree
             </summary>
         </member>
         <member name="M:MCForge.Utilities.Settings.ExtraSettings.GetSettingArray(System.String)">
@@ -1838,29 +2103,15 @@
             </summary>
             <param name="e">The Event that fired</param>
         </member>
-        <member name="T:MCForge.Utils.StringUtils">
+        <member name="T:MCForge.World.PerlinNoise">
             <summary>
-            Set of utils for manipulating strings
+            Implementation of 3D Perlin Noise after Ken Perlin's reference implementation.
             </summary>
         </member>
-        <member name="M:MCForge.Utils.StringUtils.CapitolizeFirstChar(System.String)">
+        <member name="T:MCForge.World.NoiseUtils">
             <summary>
-            Change your string's first character to uppercase 
-            Specified string is a pointer
+            6
             </summary>
-            <param name="StringToChange">The String message to change</param>
-            <returns>String Version of CapitolizeFirstChar</returns>
-        </member>
-        <member name="M:MCForge.Utils.StringUtils.TitleCase(System.String)">
-            <summary>
-            Change the specified string to title case
-            EX: String = "foo bar"
-            Returns "Foo Bar"
-            
-            The specified string is a pointer
-            </summary>
-            <param name="StringToChange">The string to change</param>
-            <returns>A string version of TitleCase</returns>
         </member>
     </members>
 </doc>
