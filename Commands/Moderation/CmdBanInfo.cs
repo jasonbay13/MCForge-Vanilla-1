@@ -14,9 +14,9 @@ namespace CommandDll.Moderation
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
         public void Initialize() { Command.AddReference(this, new string[2] { "baninfo", "baninformation" }); }
-        public int _ = 0;
         public void Use(Player p, string[] args)
         {
+            int _ = 0;
             string[] lines = File.ReadAllLines("baninfo.txt");
             if (lines.Length < 1) { p.SendMessage("Could not find ban information for \"" + args[0] + "\"."); return; }
             foreach (string line in lines)
