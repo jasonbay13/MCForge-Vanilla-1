@@ -114,7 +114,7 @@ namespace MCForge.World {
         /// <param name="name">Name of the block to check</param>
         /// <returns>If the block exists</returns>
         public static bool ValidBlockName(string name) {
-            return NameToBlock(name) != 255;
+            return !(NameToBlock(name) is UNKNOWN);
         }
 
         /// <summary>
