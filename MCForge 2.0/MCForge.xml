@@ -4,6 +4,16 @@
         <name>MCForge</name>
     </assembly>
     <members>
+        <member name="T:MCForge.World.PerlinNoise">
+            <summary>
+            Implementation of 3D Perlin Noise after Ken Perlin's reference implementation.
+            </summary>
+        </member>
+        <member name="T:MCForge.World.NoiseUtils">
+            <summary>
+            6
+            </summary>
+        </member>
         <member name="T:MCForge.World.Generator.GeneratorArgs">
             <summary>
             
@@ -337,6 +347,23 @@
             The delegate used for callbacks.  The caller will have this method run when the event fires.
             </summary>
             <param name="e">The Event that fired</param>
+        </member>
+        <member name="F:MCForge.Gui.FirstRunScreen.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:MCForge.Gui.FirstRunScreen.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:MCForge.Gui.FirstRunScreen.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
         </member>
         <member name="M:MCForge.Core.PDB.CompareTo(MCForge.Core.PDB)">
             <summary>
@@ -1535,6 +1562,7 @@
             <summary>
             
             </summary>
+            
         </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.GenerateTree(MCForge.World.Generator.LevelGenerator.TreeType,MCForge.Core.Vector3)">
             <summary>
@@ -2102,16 +2130,6 @@
             The delegate used for callbacks.  The caller will have this method run when the event fires.
             </summary>
             <param name="e">The Event that fired</param>
-        </member>
-        <member name="T:MCForge.World.PerlinNoise">
-            <summary>
-            Implementation of 3D Perlin Noise after Ken Perlin's reference implementation.
-            </summary>
-        </member>
-        <member name="T:MCForge.World.NoiseUtils">
-            <summary>
-            6
-            </summary>
         </member>
     </members>
 </doc>

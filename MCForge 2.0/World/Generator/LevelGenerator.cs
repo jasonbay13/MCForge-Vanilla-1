@@ -18,7 +18,7 @@ namespace MCForge.World.Generator {
         private Level Level;
         private PerlinNoise NoiseGenerator;
         private float[,] map, overlay, plants;
-
+        private Random random;
         /// <summary>
         /// 
         /// </summary>
@@ -42,6 +42,7 @@ namespace MCForge.World.Generator {
                 Seed = new Random().Next(),
             };
             Level = level;
+            random = new Random((int)GenArgs.Seed);
         }
 
         /// <summary>
@@ -52,6 +53,7 @@ namespace MCForge.World.Generator {
         public LevelGenerator(Level level, GeneratorArgs args) {
             this.Level = level;
             this.GenArgs = args;
+            random = new Random((int)args.Seed);
         }
 
         #endregion
@@ -205,6 +207,7 @@ namespace MCForge.World.Generator {
         /// <summary>
         /// 
         /// </summary>
+        /// 
         public void SetBlocks() {
             DateTime curr = DateTime.Now;
             for (int i = 0; i < overlay.Length - 1; i++) {
@@ -214,9 +217,9 @@ namespace MCForge.World.Generator {
                                              GenArgs.MinLevelGenerationHeight - NoiseUtils.NegateEdge(x, z, Level.Size.x, Level.Size.z),
                                              GenArgs.MaxLevelGenerationHeight - NoiseUtils.NegateEdge(x, z, Level.Size.x, Level.Size.z));
 
-                Level.SetBlock(x, z, y, Block.BlockList.STONE);
+                Level.SetBlock(x, z, y, (byte)random.Next(1, 9));
             }
-            Server.Log((curr.Millisecond - DateTime.Now.Millisecond) + " = total time");
+           // Server.Log((curr.Millisecond - DateTime.Now.Millisecond) + " = total time");
 
         }
 
