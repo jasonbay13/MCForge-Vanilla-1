@@ -52,6 +52,7 @@
     <Compile Include="Misc\CmdMode.cs" />
     <Compile Include="Moderation\CmdBanInfo.cs" />
     <Compile Include="Moderation\CmdDemote.cs" />
+    <Compile Include="Moderation\CmdEditBan.cs" />
     <Compile Include="Moderation\CmdGoto.cs" />
     <Compile Include="Moderation\CmdLoad.cs" />
     <Compile Include="Moderation\CmdNewLevel.cs" />
