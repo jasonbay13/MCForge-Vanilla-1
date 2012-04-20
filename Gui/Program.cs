@@ -8,7 +8,7 @@ using MCForge.Utilities;
 using MCForge.Utils;
 using MCForge;
 
-namespace Gui {
+namespace MCForge.Gui {
     class Program {
         static void Main(string[] args) {
             Logger.Init();

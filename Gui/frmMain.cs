@@ -24,7 +24,7 @@ using MCForge.Utilities;
 using System.Threading;
 using MCForge.Core;
 
-namespace MCForge
+namespace MCForge.Gui
 {
 	public partial class frmMain : Form
 	{

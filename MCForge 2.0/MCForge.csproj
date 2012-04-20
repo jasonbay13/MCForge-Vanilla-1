@@ -76,22 +76,6 @@
     <Compile Include="API\World\WorldEvent.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
-    <Compile Include="Gui\API\MCForgeGui.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gui\API\MCForgeGuiManager.cs" />
-    <Compile Include="Gui\Components\ColoredTextbox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Gui\Components\ColoredTextbox.Designer.cs">
-      <DependentUpon>ColoredTextbox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Gui\FirstRunScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gui\FirstRunScreen.Designer.cs">
-      <DependentUpon>FirstRunScreen.cs</DependentUpon>
-    </Compile>
     <Compile Include="Player\PlayerNetworking.cs" />
     <Compile Include="System\FileUtils.cs" />
     <Compile Include="System\Logger.cs" />
@@ -140,12 +124,6 @@
     <Compile Include="World\Blocks\DefaultBlocks\Yellow.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\YellowFlower.cs" />
     <Compile Include="API\Event.cs" />
-    <Compile Include="Gui\frmMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gui\frmMain.Designer.cs">
-      <DependentUpon>frmMain.cs</DependentUpon>
-    </Compile>
     <Compile Include="System\Heartbeat.cs" />
     <Compile Include="Interfaces\Commands\CmdReloadCommands.cs" />
     <Compile Include="Interfaces\Commands\ICommand.cs" />
@@ -182,15 +160,6 @@
     <Compile Include="System\Server.cs" />
     <Compile Include="World\Blocks\Physics\PhysicsBlock.cs" />
     <Compile Include="System\Settings\ServerSettings.cs" />
-    <EmbeddedResource Include="Gui\Components\ColoredTextbox.resx">
-      <DependentUpon>ColoredTextbox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Gui\FirstRunScreen.resx">
-      <DependentUpon>FirstRunScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Gui\frmMain.resx">
-      <DependentUpon>frmMain.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

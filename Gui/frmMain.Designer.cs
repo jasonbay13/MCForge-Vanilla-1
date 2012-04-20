@@ -12,7 +12,7 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-namespace MCForge
+namespace MCForge.Gui
 {
 	partial class frmMain
 	{
@@ -133,7 +133,7 @@ namespace MCForge
         private System.Windows.Forms.ToolStripMenuItem pluginsToolStripMenuItem;
         private System.Windows.Forms.GroupBox mPlayerGroupBox;
         private System.Windows.Forms.ListBox mPlayersListBox;
-        private Gui.Components.ColoredTextBox coloredTextBox1;
+        private Components.ColoredTextBox coloredTextBox1;
 	}
 }
 
