@@ -83,7 +83,7 @@ namespace MCForge.Core {
         /// <summary>
         /// The list of MCForge developers.
         /// </summary>
-        public static readonly List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "headdetect", "Gamemakergm", "cazzar", "hirsty", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "TheMusiKid", "Nerketur" });
+        public static readonly List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "headdetect", "Gamemakergm", "cazzar", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "Nerketur", "Serado" });
         /// <summary>
         /// 
         /// </summary>
@@ -210,6 +210,7 @@ namespace MCForge.Core {
             if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); Log("[File] Created agreed.txt", ConsoleColor.White, ConsoleColor.Black); }
             if (!File.Exists("text/hacksmessages.txt")) { File.Create("text/hacksmessages.txt").Close(); Log("[File] Created hacksmessages.txt", ConsoleColor.White, ConsoleColor.Black); }
             if (!File.Exists("text/news.txt")) { File.Create("text/news.txt").Close(); Log("[File] Created news.txt", ConsoleColor.White, ConsoleColor.Black); }
+            if (!File.Exists("baninfo.txt")) { File.Create("baninfo.txt").Close(); Log("[File] Created baninfo.txt", ConsoleColor.White, ConsoleColor.Black); }
             if (!File.Exists("text/jokermessages.txt")) {
                 File.Create("text/jokermessages.txt").Close();
                 Log("[File] Created jokermessages.txt", ConsoleColor.White, ConsoleColor.Black);
