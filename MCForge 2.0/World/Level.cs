@@ -110,9 +110,10 @@ namespace MCForge.World {
             switch (type) {
                 case LevelTypes.Flat:
                     var gen = new Generator.LevelGenerator(newlevel);
-                    for (int i = newlevel.Size.y / 2 - 2; i > 0; i--)
+                    for (int i = newlevel.Size.y / 2 - 1; i > 0; i--)
                         gen.FillPlaneXZ(i, Block.BlockList.DIRT);
-                    gen.FillPlaneXZ(newlevel.Size.y / 2 - 1, Block.BlockList.GRASS);
+                    gen.FillPlaneXZ(newlevel.Size.y / 2, Block.BlockList.PURPLE_CLOTH);
+                    gen.FillY(0, 0, Block.BlockList.RED_CLOTH);
                     gen.SetPosition();
                     break;
                 case LevelTypes.Pixel:

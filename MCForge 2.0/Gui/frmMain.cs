@@ -20,6 +20,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using MCForge.Utilities;
+using System.Threading;
+using MCForge.Core;
 
 namespace MCForge
 {
@@ -29,5 +32,12 @@ namespace MCForge
 		{
 			InitializeComponent();
 		}
+
+        private void frmMain_Load(object sender, EventArgs e) {
+            new Thread(new ThreadStart(Server.Init)).Start();
+            Logger.OnRecieveLog += (obj, args) => {
+                coloredTextBox1.LogText(args.Message + Environment.NewLine);
+            };
+        }
 	}
 }

@@ -21,6 +21,9 @@ using MCForge.Interface;
 using MCForge.Interface.Command;
 using MCForge.Utilities.Settings;
 using MCForge.World;
+using MCForge.Utilities;
+using System.Drawing;
+using MCForge.Utils;
 
 namespace MCForge.Core {
     public static class Server {
@@ -66,8 +69,8 @@ namespace MCForge.Core {
         private static int HeartbeatIntervalCurrent = 0;
         private static int GroupsaveInterval = 3000;
         private static int GroupsaveIntervalCurrent = 0;
-		private static int PingInterval = 10;
-		private static int PintIntervalCurrent = 0;
+        private static int PingInterval = 10;
+        private static int PintIntervalCurrent = 0;
 
         public static DateTime StartTime = DateTime.Now;
         internal static List<Player> Connections = new List<Player>();
@@ -75,7 +78,7 @@ namespace MCForge.Core {
         /// Get the current list of online players, note that if your doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
         /// </summary>
         public static List<Player> Players = new List<Player>();
-		public static int PlayerCount { get { return Players.Count; } }
+        public static int PlayerCount { get { return Players.Count; } }
         /// <summary>
         /// Get the current list of banned ip addresses, note that if your doing a foreach on this (or any other public list) you should always add .ToArray() to the end so that you avoid errors!
         /// </summary>
@@ -155,16 +158,17 @@ namespace MCForge.Core {
         public delegate object TimedMethodDelegate(object dataPass);
         static List<TimedMethod> TimedMethodList = new List<TimedMethod>();
 
-		public delegate void ForeachPlayerDelegate(Player p);
+        public delegate void ForeachPlayerDelegate(Player p);
 
-        internal static void Init() {
+        public static void Init() {
             //TODO load the level if it exists
             Block.InIt();
-            Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Hell);
+
+            Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
             UpdateTimer.Start();
-            
+
             Groups.PlayerGroup.InitDefaultGroups();
 
             LoadAllDlls.Init();
@@ -184,13 +188,13 @@ namespace MCForge.Core {
         static void Update() {
             HeartbeatIntervalCurrent++;
             GroupsaveIntervalCurrent++;
-			PintIntervalCurrent++;
+            PintIntervalCurrent++;
 
             Player.GlobalUpdate();
 
             if (HeartbeatIntervalCurrent >= HeartbeatInterval) { Heartbeat.sendHeartbeat(); HeartbeatIntervalCurrent = 0; }
             if (GroupsaveIntervalCurrent >= GroupsaveInterval) { foreach (Groups.PlayerGroup g in Groups.PlayerGroup.groups) { g.SaveGroup(); } GroupsaveIntervalCurrent = 0; }
-			if (PintIntervalCurrent >= PingInterval) { Player.GlobalPing(); }
+            if (PintIntervalCurrent >= PingInterval) { Player.GlobalPing(); }
 
             foreach (TimedMethod TM in TimedMethodList.ToArray()) {
                 TM.time--;
@@ -224,28 +228,23 @@ namespace MCForge.Core {
             catch { Log("[Error] Error reading agreed players!", ConsoleColor.Red, ConsoleColor.Black); }
         }
 
-		public static void ForeachPlayer(ForeachPlayerDelegate a)
-		{
-			for (int i = 0; i < Players.Count; i++)
-			{
-				if (Players.Count > i)
-					a.Invoke(Players[i]);
-			}
-		}
-		internal static void AddConnection(Player p)
-		{
-			Connections.Add(p);
-		}
-		internal static void UpgradeConnectionToPlayer(Player p)
-		{
-			Connections.Remove(p);
-			Players.Add(p);
-		}
-		internal static void RemovePlayer(Player p)
-		{
-			Connections.Remove(p);
-			Players.Remove(p);
-		}
+        public static void ForeachPlayer(ForeachPlayerDelegate a) {
+            for (int i = 0; i < Players.Count; i++) {
+                if (Players.Count > i)
+                    a.Invoke(Players[i]);
+            }
+        }
+        internal static void AddConnection(Player p) {
+            Connections.Add(p);
+        }
+        internal static void UpgradeConnectionToPlayer(Player p) {
+            Connections.Remove(p);
+            Players.Add(p);
+        }
+        internal static void RemovePlayer(Player p) {
+            Connections.Remove(p);
+            Players.Remove(p);
+        }
 
         /// <summary>
         /// Add a method to be called in a specified time for a specified number of repetitions
@@ -292,32 +291,46 @@ namespace MCForge.Core {
         }
         #endregion
         #region Log Stuff
+
         /// <summary>
         /// Write A message to the Console and the GuiLog using default (white on black) colors.
         /// </summary>
         /// <param name="message">The message to show</param>
+        [Obsolete("Please use Logger.Log", false)]
         public static void Log(string message) {
-            Log(message, ConsoleColor.White, ConsoleColor.Black);
+            Logger.Log(message, Color.White, Color.Black);
         }
         /// <summary>
         /// Write an error to the Console and the GuiLog using Red on black colors
         /// </summary>
         /// <param name="E">The error exception to write.</param>
+        [Obsolete("Please use Logger.Log", false)]
         public static void Log(Exception E) {
-            Log("[ERROR]: ", ConsoleColor.Red, ConsoleColor.Black);
-            Log(E.Message, ConsoleColor.Red, ConsoleColor.Black);
-            Log(E.StackTrace, ConsoleColor.Red, ConsoleColor.Black);
+
+            Logger.Log("[ERROR]:", Color.Red, Color.Black, LogType.Error);
+            Logger.Log(E.Message, Color.Red, Color.Black);
+            Logger.Log(E.StackTrace, Color.Red, Color.Black);
         }
+
         /// <summary>
         /// Write a message to the console and GuiLog using a specified TextColor and BackGround Color
         /// </summary>
         /// <param name="message">The Message to show</param>
         /// <param name="TextColor">The color of the text to show</param>
         /// <param name="BackgroundColor">The color behind the text.</param>
+        [Obsolete("Please use Logger.Log", false)]
         public static void Log(string message, ConsoleColor TextColor, ConsoleColor BackgroundColor) {
-            Console.ForegroundColor = TextColor;
-            Console.BackgroundColor = BackgroundColor;
-            Console.WriteLine(message.PadRight(Console.WindowWidth - 1));
+            var tColor = ColorUtils.ToColor(TextColor);
+            var bColor = ColorUtils.ToColor(BackgroundColor);
+            Logger.Log(message, tColor, bColor);
+        }
+
+        public static void OnLog(object sender, LogEventArgs args) {
+            var tColor = ColorUtils.ToConsoleColor(args.TextColor);
+            var bColor = ColorUtils.ToConsoleColor(args.BackgroundColor);
+            Console.ForegroundColor = tColor;
+            Console.BackgroundColor = bColor;
+            Console.WriteLine(args.Message.PadRight(Console.WindowWidth - 1));
             Console.ResetColor();
         }
         #endregion

@@ -18,6 +18,8 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Threading;
 using MCForge.Utilities.Settings;
+using MCForge.Utilities;
+using MCForge.Utils;
 
 namespace MCForge.Core
 {
@@ -29,19 +31,22 @@ namespace MCForge.Core
         [STAThread]
         static void Main()
         {  
+            Logger.Init();
             ServerSettings.Init();
-            new Thread(new ThreadStart(Server.Init)).Start();
-          
+            ColorUtils.Init();
 
             if (!ServerSettings.GetSettingBoolean("UsingConsole"))
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
+                //new Thread(new ThreadStart(Server.Init)).Start(); Will be called when the main form is created
                 Application.Run(new frmMain());
             }
             else
             {
                 Console.Title = ServerSettings.GetSetting("ServerName") + " - MCForge 2.0"; //Don't know what MCForge version we are using yet.
+                new Thread(new ThreadStart(Server.Init)).Start();
+                Logger.OnRecieveLog += new EventHandler<LogEventArgs>(Server.OnLog);
                 while (true)
                 {
                     string input = Console.ReadLine();
@@ -54,6 +59,7 @@ namespace MCForge.Core
                     }*/
                 }
             }
+            
         }
     }
 }

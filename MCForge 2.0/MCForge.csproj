@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EDC9892F-BBA2-4043-9FD9-94C0BA7D9552}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MCForge</RootNamespace>
     <AssemblyName>MCForge</AssemblyName>
@@ -36,9 +36,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>MCForge.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>MCForge.Core.Program</StartupObject>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>MCForge.ico</ApplicationIcon>
@@ -74,6 +76,16 @@
     <Compile Include="API\World\WorldEvent.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
+    <Compile Include="Gui\API\MCForgeGui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gui\API\MCForgeGuiManager.cs" />
+    <Compile Include="Gui\Components\ColoredTextbox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Gui\Components\ColoredTextbox.Designer.cs">
+      <DependentUpon>ColoredTextbox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Gui\FirstRunScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,9 +94,11 @@
     </Compile>
     <Compile Include="Player\PlayerNetworking.cs" />
     <Compile Include="System\FileUtils.cs" />
+    <Compile Include="System\Logger.cs" />
     <Compile Include="System\Settings\ExtraSettings.cs" />
     <Compile Include="System\Settings\GroupSettings.cs" />
     <Compile Include="System\Settings\LevelSettings.cs" />
+    <Compile Include="Utils\ColorUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="World\Blocks\Custom\Griefer_stone.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\ActiveLava.cs" />
@@ -169,6 +183,9 @@
     <Compile Include="System\Server.cs" />
     <Compile Include="World\Blocks\Physics\PhysicsBlock.cs" />
     <Compile Include="System\Settings\ServerSettings.cs" />
+    <EmbeddedResource Include="Gui\Components\ColoredTextbox.resx">
+      <DependentUpon>ColoredTextbox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Gui\FirstRunScreen.resx">
       <DependentUpon>FirstRunScreen.cs</DependentUpon>
     </EmbeddedResource>

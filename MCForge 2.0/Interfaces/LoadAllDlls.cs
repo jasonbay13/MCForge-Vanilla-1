@@ -62,8 +62,7 @@ namespace MCForge.Interface
         }
 		internal static void InitCommands()
 		{
-			string path = Directory.GetCurrentDirectory();
-			string[] DLLFiles = Directory.GetFiles(path, "*.DLL");
+            string[] DLLFiles = { "Plugins.dll", "Commands.dll" };
 
 			foreach (string s in DLLFiles)
 			{
