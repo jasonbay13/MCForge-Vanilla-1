@@ -1976,11 +1976,6 @@
             <param name="pdb">The comparing PDB</param>
             <returns>returns a comparison of the usernames</returns>
         </member>
-        <member name="M:MCForge.Core.Program.Main">
-            <summary>
-            The main entry point for the application.
-            </summary>
-        </member>
         <member name="F:MCForge.Core.Server.ShowFirstRunScreen">
             <summary>
             Show the first run screen?
