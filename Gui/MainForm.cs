@@ -28,18 +28,20 @@ using MCForge.Utilities;
 using MCForge.Utils;
 using MCForge.Entity;
 using MCForge.API.PlayerEvent;
+using MCForge.Gui.API;
 
-namespace MCForge.Gui
-{
-	internal partial class frmMain : Form
-	{
-		public frmMain()
-		{
-			InitializeComponent();
-		}
+namespace MCForge.Gui {
+    internal partial class MainForm : Form {
+        private MCForgeGuiManager pluginManager;
+        public MainForm() {
+            InitializeComponent();
+            pluginManager = new MCForgeGuiManager(pluginsToolStripMenuItem);
+        }
 
         private void frmMain_Load(object sender, EventArgs e) {
             new Thread(new ThreadStart(Server.Init)).Start();
+            pluginManager.Init();
+            pluginManager.AttachItems();
             Logger.OnRecieveLog += (obj, args) => {
                 coloredTextBox1.LogText(args.Message + Environment.NewLine);
             };
@@ -50,30 +52,29 @@ namespace MCForge.Gui
 
             chatButtonChange.Text = "Chat";
         }
-        private void Chat(object sender, KeyEventArgs e) 
-        {
+        private void Chat(object sender, KeyEventArgs e) {
             if (e.KeyCode == Keys.Enter) {
-                if (String.IsNullOrWhiteSpace(chatBox.Text)) { 
+                if (String.IsNullOrWhiteSpace(chatBox.Text)) {
                     Logger.Log("Please specify a valid message!" + Environment.NewLine);
-                    return; 
+                    return;
                 }
 
-                if (chatButtonChange.Text == "OpChat") { 
-                    Player.UniversalChatOps("&a<&fTo Ops&a> %a[%fConsole%a]:%f " + chatBox.Text); 
-                    Logger.Log("<OpChat> <Console> " + chatBox.Text); 
-                    chatBox.Clear(); 
-                    return; 
+                if (chatButtonChange.Text == "OpChat") {
+                    Player.UniversalChatOps("&a<&fTo Ops&a> %a[%fConsole%a]:%f " + chatBox.Text);
+                    Logger.Log("<OpChat> <Console> " + chatBox.Text);
+                    chatBox.Clear();
+                    return;
                 }
 
-                if (chatButtonChange.Text == "AdminChat") { 
-                    Player.UniversalChatAdmins("&a<&fTo Admins&a> %a[%fConsole%a]:%f " + chatBox.Text); 
-                    Logger.Log("<AdminChat> <Console> " + chatBox.Text); 
-                    chatBox.Clear(); 
-                    return; 
+                if (chatButtonChange.Text == "AdminChat") {
+                    Player.UniversalChatAdmins("&a<&fTo Admins&a> %a[%fConsole%a]:%f " + chatBox.Text);
+                    Logger.Log("<AdminChat> <Console> " + chatBox.Text);
+                    chatBox.Clear();
+                    return;
                 }
 
                 Player.UniversalChat("&a[&fConsole&a]:&f " + chatBox.Text);
-                Logger.Log("&a[&fConsole&a]:&f " + chatBox.Text); 
+                Logger.Log("&a[&fConsole&a]:&f " + chatBox.Text);
                 chatBox.Clear(); return;
             }
         }
@@ -92,5 +93,5 @@ namespace MCForge.Gui
                     return;
             }
         }
-	}
+    }
 }

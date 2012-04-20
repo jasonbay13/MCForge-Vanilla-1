@@ -14,7 +14,7 @@ permissions and limitations under the Licenses.
 */
 namespace MCForge.Gui
 {
-	partial class frmMain
+	partial class MainForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -43,7 +43,7 @@ namespace MCForge.Gui
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mStatus = new System.Windows.Forms.StatusStrip();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.pluginsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();

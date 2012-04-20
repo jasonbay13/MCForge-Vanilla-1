@@ -53,9 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\MCForgeGui.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="API\MCForgeGui.cs" />
     <Compile Include="API\MCForgeGuiManager.cs" />
     <Compile Include="Components\ColoredTextbox.cs">
       <SubType>Component</SubType>
@@ -69,11 +67,11 @@
     <Compile Include="FirstRunScreen.Designer.cs">
       <DependentUpon>FirstRunScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmMain.cs">
+    <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frmMain.Designer.cs">
-      <DependentUpon>frmMain.cs</DependentUpon>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -94,8 +92,8 @@
     <EmbeddedResource Include="FirstRunScreen.resx">
       <DependentUpon>FirstRunScreen.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmMain.resx">
-      <DependentUpon>frmMain.cs</DependentUpon>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <Content Include="MCForge.ico" />
   </ItemGroup>
