@@ -12,28 +12,21 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-
 using System;
-using System.Threading;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Collections.Generic;
-using System.IO.Compression;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Security.Cryptography;
-using System.Windows.Forms;
-using MCForge.API.PlayerEvent;
-using MCForge.Core;
-using MCForge.World;
-using MCForge.Interface.Command;
-using MCForge.Groups;
-using MCForge.Utilities.Settings;
-using MCForge.API.System;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using MCForge.API.PlayerEvent;
+using MCForge.API.System;
 using MCForge.API.SystemEvent;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
+using MCForge.Core;
+using MCForge.Groups;
+using MCForge.Utilities;
+using MCForge.Utilities.Settings;
+using MCForge.World;
 
 namespace MCForge.Entity {
     public partial class Player {
@@ -45,16 +38,32 @@ namespace MCForge.Entity {
             Player p = (Player)result.AsyncState;
 
             if (!p.isOnline) return;
-
+            try {
+                if (Server.reviewlist.Contains(p))
+                {
+                    Server.reviewlist.Remove(p);
+                    foreach (Player pl in Server.reviewlist.ToArray())
+                    {
+                        int position = Server.reviewlist.IndexOf(pl);
+                        if (position == 0) { pl.SendMessage("You're next in the review queue!"); continue; }
+                        pl.SendMessage(position == 1 ? "There is " + position + " players in front of you!" : "There are " + position + " players in front of you!");
+                    }
+                }
+            }
+            catch { Logger.Log("Error removing " + p.Username + " from the review list!", LogType.Error); }
+            
             try {
                 int length = p.Socket.EndReceive(result);
                 if (length == 0) {
                     p.CloseConnection();
                     if (!p.beingkicked) {
-                        UniversalChat(p.color + p.Username + " has disconnected.");
+                        UniversalChat(p.color + p.Username + Server.DefaultColor + " has disconnected.");
                     }
+                    frmMain.players.Items.Remove(p.Username);
                     return;
                 }
+               
+
                 byte[] b = new byte[p.buffer.Length + length];
                 Buffer.BlockCopy(p.buffer, 0, b, 0, p.buffer.Length);
                 Buffer.BlockCopy(p.tempBuffer, 0, b, p.buffer.Length, length);
@@ -147,7 +156,7 @@ namespace MCForge.Entity {
                 UniversalChat(Username + " joined the game!");
 
                 CheckDuplicatePlayers(Username);
-
+                frmMain.players.Items.Add(Username);
                 foreach (PlayerGroup g in PlayerGroup.groups)
                     if (g.players.Contains(Username.ToLower()))
                         group = g;

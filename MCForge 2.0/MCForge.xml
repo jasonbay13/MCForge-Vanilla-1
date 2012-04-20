@@ -2038,7 +2038,7 @@
         </member>
         <member name="F:MCForge.Core.Server.reviewlist">
             <summary>
-            
+            List of players that need to be reviewed
             </summary>
         </member>
         <member name="F:MCForge.Core.Server.agreed">
@@ -2106,6 +2106,12 @@
             The minecraft.net URL of the server
             </summary>
             
+        </member>
+        <member name="M:MCForge.Core.Server.ForeachPlayer(MCForge.Core.Server.ForeachPlayerDelegate)">
+            <summary>
+            Loops through online players
+            </summary>
+            <param name="a"></param>
         </member>
         <member name="M:MCForge.Core.Server.AddTimedMethod(MCForge.Core.Server.TimedMethodDelegate,System.Int32,System.Int32,System.Object)">
             <summary>

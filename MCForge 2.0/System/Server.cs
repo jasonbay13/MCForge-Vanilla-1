@@ -14,16 +14,17 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Net.Sockets;
+using System.Timers;
 using MCForge.Entity;
 using MCForge.Interface;
 using MCForge.Interface.Command;
-using MCForge.Utilities.Settings;
-using MCForge.World;
 using MCForge.Utilities;
-using System.Drawing;
+using MCForge.Utilities.Settings;
 using MCForge.Utils;
+using MCForge.World;
 
 namespace MCForge.Core {
     public static class Server {
@@ -46,7 +47,7 @@ namespace MCForge.Core {
         /// <summary>
         /// The server owner.
         /// </summary>
-        public static string owner;
+        public static string owner;        
         /// <summary>
         /// The rank that can destroy griefer_stone without getting kicked
         /// </summary>
@@ -63,7 +64,6 @@ namespace MCForge.Core {
         /// Get whether the server is currently fully started or not
         /// </summary>
         public static bool Started = false;
-
         private static System.Timers.Timer UpdateTimer;
         private static int HeartbeatInterval = 300;
         private static int HeartbeatIntervalCurrent = 0;
@@ -88,7 +88,7 @@ namespace MCForge.Core {
         /// </summary>
         public static readonly List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "headdetect", "Gamemakergm", "cazzar", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "Nerketur", "Serado" });
         /// <summary>
-        /// 
+        /// List of players that need to be reviewed
         /// </summary>
         public static List<Player> reviewlist = new List<Player>();
         /// <summary>
@@ -177,14 +177,15 @@ namespace MCForge.Core {
 
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
-
+           
             CreateDirectories();
+            
 
             StartListening();
             Started = true;
             Log("[Important]: Server Started.", ConsoleColor.Black, ConsoleColor.White);
         }
-
+        
         static void Update() {
             HeartbeatIntervalCurrent++;
             GroupsaveIntervalCurrent++;
@@ -217,18 +218,21 @@ namespace MCForge.Core {
             if (!File.Exists("baninfo.txt")) { File.Create("baninfo.txt").Close(); Log("[File] Created baninfo.txt", ConsoleColor.White, ConsoleColor.Black); }
             if (!File.Exists("text/jokermessages.txt")) {
                 File.Create("text/jokermessages.txt").Close();
-                Log("[File] Created jokermessages.txt", ConsoleColor.White, ConsoleColor.Black);
+                Logger.Log("Created jokermessages.txt", LogType.Normal);
                 string text = "I am a pony" + Environment.NewLine + "Rainbow Dash <3" + Environment.NewLine + "I like trains!";
                 File.WriteAllText("text/jokermessages.txt", text);
-                Log("[File] Added default messages to jokermessages.txt", ConsoleColor.White, ConsoleColor.Black);
+                Logger.Log("Added default messages to jokermessages.txt", LogType.Normal);
             }
             try {
                 string[] lines = File.ReadAllLines("text/agreed.txt");
                 foreach (string pl in lines) { agreed.Add(pl); }
             }
-            catch { Log("[Error] Error reading agreed players!", ConsoleColor.Red, ConsoleColor.Black); }
+            catch { Logger.Log("Error reading agreed players!", LogType.Error); }
         }
-
+        /// <summary>
+        /// Loops through online players
+        /// </summary>
+        /// <param name="a"></param>
         public static void ForeachPlayer(ForeachPlayerDelegate a) {
             for (int i = 0; i < Players.Count; i++) {
                 if (Players.Count > i)
@@ -246,7 +250,6 @@ namespace MCForge.Core {
             Connections.Remove(p);
             Players.Remove(p);
         }
-
         /// <summary>
         /// Add a method to be called in a specified time for a specified number of repetitions
         /// </summary>
@@ -335,7 +338,7 @@ namespace MCForge.Core {
             Console.ResetColor();
         }
         #endregion
-
+        
         class TimedMethod {
             public TimedMethodDelegate MethodToInvoke;
             public int consistentTime;

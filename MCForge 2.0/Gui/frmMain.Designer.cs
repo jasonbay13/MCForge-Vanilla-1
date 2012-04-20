@@ -43,11 +43,14 @@ namespace MCForge
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.mStatus = new System.Windows.Forms.StatusStrip();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.pluginsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mPlayerGroupBox = new System.Windows.Forms.GroupBox();
             this.mPlayersListBox = new System.Windows.Forms.ListBox();
+            this.chatBox = new System.Windows.Forms.TextBox();
+            this.chatButtonChange = new System.Windows.Forms.ComboBox();
             this.coloredTextBox1 = new MCForge.Gui.Components.ColoredTextBox(this.components);
             this.menuStrip1.SuspendLayout();
             this.mPlayerGroupBox.SuspendLayout();
@@ -85,22 +88,46 @@ namespace MCForge
             this.mPlayerGroupBox.Size = new System.Drawing.Size(220, 412);
             this.mPlayerGroupBox.TabIndex = 3;
             this.mPlayerGroupBox.TabStop = false;
-            this.mPlayerGroupBox.Text = "groupBox1";
+            this.mPlayerGroupBox.Text = "Players";
             // 
             // mPlayersListBox
             // 
-            this.mPlayersListBox.BackColor = System.Drawing.SystemColors.Control;
+            this.mPlayersListBox.BackColor = System.Drawing.Color.White;
             this.mPlayersListBox.FormattingEnabled = true;
             this.mPlayersListBox.Location = new System.Drawing.Point(7, 20);
             this.mPlayersListBox.Name = "mPlayersListBox";
             this.mPlayersListBox.Size = new System.Drawing.Size(207, 381);
             this.mPlayersListBox.TabIndex = 0;
             // 
+            // chatBox
+            // 
+            this.chatBox.Location = new System.Drawing.Point(12, 419);
+            this.chatBox.Name = "chatBox";
+            this.chatBox.Size = new System.Drawing.Size(499, 20);
+            this.chatBox.TabIndex = 5;
+            this.chatBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Chat);
+            // 
+            // chatButtonChange
+            // 
+            this.chatButtonChange.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.chatButtonChange.FormattingEnabled = true;
+            this.chatButtonChange.Items.AddRange(new object[] {
+            "Chat",
+            "OpChat",
+            "AdminChat"});
+            this.chatButtonChange.Location = new System.Drawing.Point(517, 417);
+            this.chatButtonChange.Name = "chatButtonChange";
+            this.chatButtonChange.Size = new System.Drawing.Size(71, 21);
+            this.chatButtonChange.TabIndex = 6;
+            // 
             // coloredTextBox1
             // 
+            this.coloredTextBox1.AutoWordSelection = true;
+            this.coloredTextBox1.BackColor = System.Drawing.Color.White;
             this.coloredTextBox1.Location = new System.Drawing.Point(12, 27);
             this.coloredTextBox1.Name = "coloredTextBox1";
-            this.coloredTextBox1.Size = new System.Drawing.Size(576, 412);
+            this.coloredTextBox1.ReadOnly = true;
+            this.coloredTextBox1.Size = new System.Drawing.Size(576, 386);
             this.coloredTextBox1.TabIndex = 4;
             this.coloredTextBox1.Text = "";
             // 
@@ -109,11 +136,16 @@ namespace MCForge
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(826, 464);
+            this.Controls.Add(this.chatButtonChange);
+            this.Controls.Add(this.chatBox);
             this.Controls.Add(this.coloredTextBox1);
             this.Controls.Add(this.mPlayerGroupBox);
             this.Controls.Add(this.mStatus);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MCForge Server";
@@ -134,6 +166,8 @@ namespace MCForge
         private System.Windows.Forms.GroupBox mPlayerGroupBox;
         private System.Windows.Forms.ListBox mPlayersListBox;
         private Gui.Components.ColoredTextBox coloredTextBox1;
+        private System.Windows.Forms.TextBox chatBox;
+        private System.Windows.Forms.ComboBox chatButtonChange;
 	}
 }
 

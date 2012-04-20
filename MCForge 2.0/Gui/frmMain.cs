@@ -23,11 +23,16 @@ using System.Windows.Forms;
 using MCForge.Utilities;
 using System.Threading;
 using MCForge.Core;
+using MCForge.Interface;
+using MCForge.Utilities;
+using MCForge.Utils;
+using MCForge.Entity;
 
 namespace MCForge
 {
 	public partial class frmMain : Form
 	{
+        public static ListBox players = new ListBox();
 		public frmMain()
 		{
 			InitializeComponent();
@@ -38,6 +43,31 @@ namespace MCForge
             Logger.OnRecieveLog += (obj, args) => {
                 coloredTextBox1.LogText(args.Message + Environment.NewLine);
             };
+            players = mPlayersListBox;
+            chatButtonChange.Text = "Chat";
+        }
+        private void Chat(object sender, KeyEventArgs e) 
+        {
+            if (e.KeyCode == Keys.Enter) {
+                if (String.IsNullOrWhiteSpace(chatBox.Text)) { Logger.Log("Please specify a valid message!" + Environment.NewLine); return; }
+                if (chatButtonChange.Text == "OpChat") { 
+                    Player.UniversalChatOps("&a<&fTo Ops&a> %a[%fConsole%a]:%f " + chatBox.Text); 
+                    Logger.Log("<OpChat> <Console> " + chatBox.Text); 
+                    chatBox.Clear(); 
+                    return; 
+                }
+
+                if (chatButtonChange.Text == "AdminChat") { 
+                    Player.UniversalChatAdmins("&a<&fTo Admins&a> %a[%fConsole%a]:%f " + chatBox.Text); 
+                    Logger.Log("<AdminChat> <Console> " + chatBox.Text); 
+                    chatBox.Clear(); 
+                    return; 
+                }
+
+                Player.UniversalChat("%a[%fConsole%a]:%f " + chatBox.Text); 
+                Logger.Log("<Console> " + chatBox.Text); 
+                chatBox.Clear(); return;
+            }
         }
 	}
 }

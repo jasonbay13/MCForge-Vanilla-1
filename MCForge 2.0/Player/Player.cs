@@ -12,24 +12,18 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-
 using System;
-using System.Threading;
-using System.Net;
-using System.Net.Sockets;
 using System.Collections.Generic;
-using System.IO.Compression;
-using System.IO;
-using System.Text.RegularExpressions;
+using System.Net.Sockets;
 using System.Security.Cryptography;
-using System.Windows.Forms;
+using System.Text.RegularExpressions;
+using System.Threading;
 using MCForge.API.PlayerEvent;
 using MCForge.Core;
-using MCForge.World;
-using MCForge.Interface.Command;
 using MCForge.Groups;
+using MCForge.Interface.Command;
 using MCForge.Utilities.Settings;
-using MCForge.API.System;
+using MCForge.World;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -322,7 +316,7 @@ namespace MCForge.Entity {
             if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
-                    if (!Server.agreed.Contains(Username) && name != "rules" && name != "agree" && name != "disagree") {
+                    if (!Server.agreed.Contains(Username) && group.permission < 80 && name != "rules" && name != "agree" && name != "disagree") {
                         SendMessage("You need to /agree to the /rules before you can use commands!"); return;
                     }
                     if (!group.CanExecute(cmd)) {
