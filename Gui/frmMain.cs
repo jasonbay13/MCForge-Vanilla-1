@@ -23,10 +23,15 @@ using System.Windows.Forms;
 using MCForge.Utilities;
 using System.Threading;
 using MCForge.Core;
+using MCForge.Interface;
+using MCForge.Utilities;
+using MCForge.Utils;
+using MCForge.Entity;
+using MCForge.API.PlayerEvent;
 
 namespace MCForge.Gui
 {
-	public partial class frmMain : Form
+	internal partial class frmMain : Form
 	{
 		public frmMain()
 		{
@@ -38,6 +43,54 @@ namespace MCForge.Gui
             Logger.OnRecieveLog += (obj, args) => {
                 coloredTextBox1.LogText(args.Message + Environment.NewLine);
             };
+
+            OnPlayerConnect.Register((args) => {
+                mPlayersListBox.Items.Add(args.Player.username);
+            }, null);
+
+            chatButtonChange.Text = "Chat";
+        }
+        private void Chat(object sender, KeyEventArgs e) 
+        {
+            if (e.KeyCode == Keys.Enter) {
+                if (String.IsNullOrWhiteSpace(chatBox.Text)) { 
+                    Logger.Log("Please specify a valid message!" + Environment.NewLine);
+                    return; 
+                }
+
+                if (chatButtonChange.Text == "OpChat") { 
+                    Player.UniversalChatOps("&a<&fTo Ops&a> %a[%fConsole%a]:%f " + chatBox.Text); 
+                    Logger.Log("<OpChat> <Console> " + chatBox.Text); 
+                    chatBox.Clear(); 
+                    return; 
+                }
+
+                if (chatButtonChange.Text == "AdminChat") { 
+                    Player.UniversalChatAdmins("&a<&fTo Admins&a> %a[%fConsole%a]:%f " + chatBox.Text); 
+                    Logger.Log("<AdminChat> <Console> " + chatBox.Text); 
+                    chatBox.Clear(); 
+                    return; 
+                }
+
+                Player.UniversalChat("&a[&fConsole&a]:&f " + chatBox.Text);
+                Logger.Log("&a[&fConsole&a]:&f " + chatBox.Text); 
+                chatBox.Clear(); return;
+            }
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e) {
+            switch (MessageBox.Show("Would you like to save all?", "Save?", MessageBoxButtons.YesNoCancel)) {
+                case DialogResult.Yes:
+                    Server.SaveAll();
+                    Server.Stop();
+                    break;
+                case DialogResult.No:
+                    Server.Stop();
+                    break;
+                case DialogResult.Cancel:
+                    e.Cancel = true;
+                    return;
+            }
         }
 	}
 }

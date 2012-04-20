@@ -56,7 +56,7 @@ namespace CommandDll
 
             OnPlayerChat.Register((t) =>
             {
-                if (t.message.ToLower() == "yes" && t.target.lastcmd == "info") 
+                if (t.message.ToLower() == "yes" && t.Player.lastcmd == "info") 
                     Command.all["devs"].Use(p, new string[0]); 
                 t.Cancel(); 
                 t.Unregister();

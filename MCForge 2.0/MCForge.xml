@@ -252,7 +252,7 @@
             Unregisters the event from the queue.
             </summary>
         </member>
-        <member name="P:MCForge.API.PlayerEvent.PlayerEvent.target">
+        <member name="P:MCForge.API.PlayerEvent.PlayerEvent.Player">
             <summary>
             The player that this event applies to.  If null, applies to all players.
             </summary>
@@ -457,7 +457,7 @@
         </member>
         <member name="F:MCForge.Core.Server.reviewlist">
             <summary>
-            
+            List of players that need to be reviewed
             </summary>
         </member>
         <member name="F:MCForge.Core.Server.agreed">
@@ -526,6 +526,12 @@
             </summary>
             
         </member>
+        <member name="M:MCForge.Core.Server.ForeachPlayer(MCForge.Core.Server.ForeachPlayerDelegate)">
+            <summary>
+            Loops through online players
+            </summary>
+            <param name="a"></param>
+        </member>
         <member name="M:MCForge.Core.Server.AddTimedMethod(MCForge.Core.Server.TimedMethodDelegate,System.Int32,System.Int32,System.Object)">
             <summary>
             Add a method to be called in a specified time for a specified number of repetitions
@@ -554,6 +560,16 @@
             <param name="message">The Message to show</param>
             <param name="TextColor">The color of the text to show</param>
             <param name="BackgroundColor">The color behind the text.</param>
+        </member>
+        <member name="M:MCForge.Core.Server.Stop">
+            <summary>
+            Stops the server
+            </summary>
+        </member>
+        <member name="M:MCForge.Core.Server.SaveAll">
+            <summary>
+            Saves all of the levels and groups
+            </summary>
         </member>
         <member name="T:MCForge.Core.Server.TimedMethodDelegate">
             <summary>

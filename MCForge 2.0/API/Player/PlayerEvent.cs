@@ -27,7 +27,7 @@ namespace MCForge.API.PlayerEvent
 		/// <summary>
 		/// The player that this event applies to.  If null, applies to all players.
 		/// </summary>
-		public Player target { get { return _target;} }
+		public Player Player { get { return _target;} }
 		
 		private static bool _canceled;
 		/// <summary>

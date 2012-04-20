@@ -30,8 +30,7 @@ namespace CommandDll
         public void Use(Player p, string[] args)
         {
             if (args.Length == 0) { p.SendMessage("You have to specify a message!"); return; }
-            string message = null;
-            foreach (string s in args) { message += s + " "; }
+            string message = string.Join(" ", args);
             Player.UniversalChat(message);
         }
 

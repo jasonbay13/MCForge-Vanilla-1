@@ -59,6 +59,7 @@ namespace MCForge.Utilities {
         public static void DeInit() {
             _initCalled = false;
             _flushMessages = false;
+            _flushErrorMessages = false;
         }
 
         /// <summary>

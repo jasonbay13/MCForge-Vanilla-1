@@ -117,11 +117,11 @@ namespace CommandDll {
             cpos.pos = new Vector3(args.x, args.z, args.y);
             args.Cancel();
             args.Unregister();
-            OnPlayerBlockChange.Register(CatchBlock2, args.target, cpos);
+            OnPlayerBlockChange.Register(CatchBlock2, args.Player, cpos);
         }
         public void CatchBlock2(OnPlayerBlockChange args) {
             CatchPos cpos = (CatchPos)args.datapass;
-            Cuboid(cpos, args.holding, args.target, args.x, args.y, args.z);
+            Cuboid(cpos, args.holding, args.Player, args.x, args.y, args.z);
             args.Cancel();
             args.Unregister();
         }

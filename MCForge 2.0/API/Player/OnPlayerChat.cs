@@ -71,7 +71,7 @@ namespace MCForge.API.PlayerEvent
 			List<OnPlayerChat> opcList = new List<OnPlayerChat>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(opc => {
-				if (opc.target == null || opc.target.username == p.username) {// We keep it
+				if (opc.Player == null || opc.Player.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.message = msg;
 					opc._queue(opc); // fire callback
@@ -86,7 +86,7 @@ namespace MCForge.API.PlayerEvent
 			}
 
 			//The message returned is the new message to use.  If two events return different messages, then the 'null' message is used first. (Prevents duplicates)
-			return ((opcList.All((opc) => opc.message == pc.message)) ? pc : opcList.Find(opc => opc.target == null)); // Retern an event with the message
+			return ((opcList.All((opc) => opc.message == pc.message)) ? pc : opcList.Find(opc => opc.Player == null)); // Retern an event with the message
 			//return (opcList.Any(pe => pe.cancel) ? "" : (opcList.Count > 0 ? opcList.Last().message : msg )); //Return if last canceled the event. (empty string)
 		}
 
@@ -98,7 +98,7 @@ namespace MCForge.API.PlayerEvent
 		/// <returns>the OnPlayerChat event</returns>
 		public static OnPlayerChat Register(OnCall callback, Player target) {
 			//We add it to the list here
-			OnPlayerChat pe = _eventQueue.Find(match => (match.target == null ? target == null : target != null && target.username == match.target.username));
+			OnPlayerChat pe = _eventQueue.Find(match => (match.Player == null ? target == null : target != null && target.username == match.Player.username));
 			if (pe != null)
 				//It already exists, so we just add it to the queue.
 				pe._queue += callback;

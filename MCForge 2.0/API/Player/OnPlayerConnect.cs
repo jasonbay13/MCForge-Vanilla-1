@@ -63,7 +63,7 @@ namespace MCForge.API.PlayerEvent
 			List<OnPlayerConnect> opcList = new List<OnPlayerConnect>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(opc => {
-				if (opc.target == null || opc.target.username == p.username) {// We keep it
+				if (opc.Player == null || opc.Player.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc._queue(opc); // fire callback
 					opcList.Add(opc); // add to used list
@@ -80,7 +80,7 @@ namespace MCForge.API.PlayerEvent
 		/// <returns>the new OnPlayerConnect event</returns>
 		public static OnPlayerConnect Register(OnCall callback, Player target) {
 			//We add it to the list here
-			OnPlayerConnect pe = _eventQueue.Find(match => (match.target == null ? target == null : target != null && target.username == match.target.username));
+			OnPlayerConnect pe = _eventQueue.Find(match => (match.Player == null ? target == null : target != null && target.username == match.Player.username));
 			if (pe != null)
 				//It already exists, so we just add it to the queue.
 				pe._queue += callback;
