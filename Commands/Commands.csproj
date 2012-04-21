@@ -104,6 +104,7 @@
     <Compile Include="Moderation\CmdMute.cs" />
     <Compile Include="Moderation\CmdSay.cs" />
     <Compile Include="Moderation\CmdTColor.cs" />
+    <Compile Include="Moderation\CmdTempban.cs" />
     <Compile Include="Moderation\CmdTitle.cs" />
     <Compile Include="Moderation\CmdVoice.cs" />
     <Compile Include="Moderation\CmdVoteKick.cs" />

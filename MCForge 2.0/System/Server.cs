@@ -72,6 +72,8 @@ namespace MCForge.Core {
         private static int PingInterval = 10;
         private static int PintIntervalCurrent = 0;
 
+        public struct TempBan { public string name; public DateTime allowed; }
+        public static List<TempBan> tempbans = new List<TempBan>();
         public static DateTime StartTime = DateTime.Now;
         internal static List<Player> Connections = new List<Player>();
         /// <summary>

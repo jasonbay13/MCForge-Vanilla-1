@@ -103,7 +103,7 @@ namespace MCForge.Gui
             // 
             this.chatBox.Location = new System.Drawing.Point(12, 419);
             this.chatBox.Name = "chatBox";
-            this.chatBox.Size = new System.Drawing.Size(499, 20);
+            this.chatBox.Size = new System.Drawing.Size(487, 20);
             this.chatBox.TabIndex = 5;
             this.chatBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Chat);
             // 
@@ -115,9 +115,9 @@ namespace MCForge.Gui
             "Chat",
             "OpChat",
             "AdminChat"});
-            this.chatButtonChange.Location = new System.Drawing.Point(517, 417);
+            this.chatButtonChange.Location = new System.Drawing.Point(505, 417);
             this.chatButtonChange.Name = "chatButtonChange";
-            this.chatButtonChange.Size = new System.Drawing.Size(71, 21);
+            this.chatButtonChange.Size = new System.Drawing.Size(83, 21);
             this.chatButtonChange.TabIndex = 6;
             // 
             // coloredTextBox1
@@ -131,7 +131,7 @@ namespace MCForge.Gui
             this.coloredTextBox1.TabIndex = 4;
             this.coloredTextBox1.Text = "";
             // 
-            // frmMain
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -146,7 +146,7 @@ namespace MCForge.Gui
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
-            this.Name = "frmMain";
+            this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MCForge Server";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);

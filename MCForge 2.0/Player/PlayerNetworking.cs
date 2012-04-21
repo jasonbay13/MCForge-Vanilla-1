@@ -143,6 +143,13 @@ namespace MCForge.Entity {
                 byte type = message[129];
                 if (!VerifyAccount(Username, verify)) return;
                 if (version != ServerSettings.Version) { SKick("Wrong Version!."); return; }
+                try
+                {
+                    Server.TempBan tb = Server.tempbans.Find(ban => ban.name.ToLower() == Username.ToLower());
+                    if (DateTime.Now > tb.allowed) { Server.tempbans.Remove(tb); }
+                    else { SKick("You're still tempbanned!"); return; }
+                }
+                catch { }
 
                 OnPlayerConnect e = new OnPlayerConnect(this);
                 e.Call();
