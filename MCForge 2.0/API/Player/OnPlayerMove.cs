@@ -40,7 +40,7 @@ namespace MCForge.API.PlayerEvent
 		/// In this case, it is called from the command processing code.
 		/// </summary>
 		/// <param name="p">The player that caused the event.</param>
-		/// <param name="reason">The reason for disconnect.</param>
+		/// <param name="oldPos">The old position of the person.</param>
 		internal static bool Call(Player p, Vector3 oldPos) {
 			//Event was called from the code.
 			List<OnPlayerMove> opcList = new List<OnPlayerMove>();
@@ -49,8 +49,11 @@ namespace MCForge.API.PlayerEvent
 				if (opc.Player == null || opc.Player.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.oldPos = oldPos;
+					Player oldPlayer = opc.Player; 
+					opc._target = p; // Set player that triggered event.
 					opc._queue(opc); // fire callback
 					opcList.Add(opc); // add to used list
+					opc._target = oldPlayer;
 				}
 			});
 			return opcList.Any(pe => pe.cancel); //Return if any canceled the event.
@@ -61,7 +64,6 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		/// <param name="e">The Event that fired</param>
 		public delegate void OnCall(OnPlayerMove e);
-		//Note: Perhaps we need to have one per event, so it can prevent casting problems.
 
 		/// <summary>
 		/// The queue of delegates to call for the particular tag (One for each event)

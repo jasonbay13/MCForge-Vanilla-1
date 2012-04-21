@@ -78,8 +78,11 @@ namespace MCForge.API.PlayerEvent
 					//Set up variables, then fire all callbacks.
 					opc.cmd = cmd;
 					opc.args = args;
+					Player oldPlayer = opc.Player;
+					opc._target = p; // Set player that triggered event.
 					opc._queue(opc); // fire callback
 					opcList.Add(opc); // add to used list
+					opc._target = oldPlayer;
 				}
 			});
 			return opcList.Any(pe => pe.cancel); //Return if any canceled the event.

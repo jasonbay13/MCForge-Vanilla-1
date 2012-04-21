@@ -88,8 +88,11 @@ namespace MCForge.API.PlayerEvent
 					opbc.x = x;
 					opbc.y = y;
 					opbc.z = z;
+					Player oldPlayer = opbc.Player;
+					opbc._target = p; // Set player that triggered event.
 					opbc._queue(opbc); // fire callback
 					opbcList.Add(opbc); // add to used list
+					opbc._target = oldPlayer;
 				}
 			});
 			return opbcList.Any(pe => pe.cancel); //Return if any canceled the event.

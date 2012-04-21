@@ -67,7 +67,10 @@ namespace MCForge.API.PlayerEvent
 				if (opc.Player == null || opc.Player.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.reason = reason;
+					Player oldPlayer = opc.Player;
+					opc._target = p; // Set player that triggered event.
 					opc._queue(opc); // fire callback
+					opc._target = oldPlayer;
 				}
 			});
 		}
