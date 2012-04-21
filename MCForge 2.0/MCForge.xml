@@ -329,73 +329,116 @@
             This event can be canceled
             </summary>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.#ctor(MCForge.Entity.Player)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.#ctor(MCForge.API.PlayerEvent.OnPlayerConnect.OnCall,MCForge.Entity.Player)">
             <summary>
             Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
             </summary>
-            <param name="playerConnected">Player that connected</param>
+            <param name="callback">the method used for the delegate to callback upon event fire</param>
+            <param name="target">The target Player we want the event for.</param>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Call">
+        <member name="F:MCForge.API.PlayerEvent.OnPlayerConnect._queue">
+            <summary>
+            The queue of delegates to call for the particular tag (One for each event)
+            </summary>
+        </member>
+        <member name="F:MCForge.API.PlayerEvent.OnPlayerConnect._eventQueue">
+            <summary>
+            The list of all events currently active of a PlayerEvent type.
+            </summary>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Call(MCForge.Entity.Player)">
             <summary>
             This is meant to be called from the code where you mean for the event to happen.
             
             In this case, it is called from the command processing code.
             </summary>
+            <param name="p">The player that caused the event.</param>
+            <returns> A boolean value specifying whether or not to cancel the event.</returns>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Register(MCForge.API.PlayerEvent.OnPlayerConnect.OnCall)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Register(MCForge.API.PlayerEvent.OnPlayerConnect.OnCall,MCForge.Entity.Player)">
             <summary>
             Used to register a method to be executed when the event is fired.
             </summary>
-            <param name="callback">The method to register</param>
+            <param name="callback">The method to call</param>
+            <param name="target">The player to watch for. (null for any players)</param>
+            <returns>the new OnPlayerConnect event</returns>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Unregister(MCForge.API.PlayerEvent.OnPlayerConnect.OnCall)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Unregister(MCForge.API.PlayerEvent.OnPlayerConnect)">
             <summary>
-            Used to unregister a method that was previously registered.
+            Unregisters the sxpecified event
             </summary>
-            <param name="callback">The method to unregister</param>
+            <param name="pe">The event to unregister</param>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Unregister">
+            <summary>
+            Unregisters the sxpecified event
+            </summary>
+            <param name="pe">The event to unregister</param>
         </member>
         <member name="T:MCForge.API.PlayerEvent.OnPlayerConnect.OnCall">
             <summary>
             The delegate used for callbacks.  The caller will have this method run when the event fires.
             </summary>
-            <param name="args">The Event that fired</param>
+            <param name="e">The Event that fired</param>
         </member>
         <member name="T:MCForge.API.PlayerEvent.OnPlayerDisconnect">
             <summary>
-            The OnPlayerConnect event is executed everytime a player disconnects from the server
-            This event can be canceled (but the player will still disconnect)
+            Called whenever anyone leaves the server.
+            
+            <b>Note: This event CANNOT be canceled.  Cancel() will have no effect.</b>
             </summary>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.#ctor(MCForge.Entity.Player)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.#ctor(MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall,MCForge.Entity.Player)">
             <summary>
             Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
             </summary>
-            <param name="playerConnected">Player that disconnected</param>
+            <param name="callback">the method used for the delegate to callback upon event fire</param>
+            <param name="target">The target Player we want the event for.</param>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Call">
+        <member name="F:MCForge.API.PlayerEvent.OnPlayerDisconnect._queue">
+            <summary>
+            The queue of delegates to call for the particular tag (One for each event)
+            </summary>
+        </member>
+        <member name="F:MCForge.API.PlayerEvent.OnPlayerDisconnect._eventQueue">
+            <summary>
+            The list of all events currently active of a PlayerEvent type.
+            </summary>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Call(MCForge.Entity.Player,System.String)">
             <summary>
             This is meant to be called from the code where you mean for the event to happen.
             
             In this case, it is called from the command processing code.
             </summary>
+            <param name="p">The player that caused the event.</param>
+            <param name="reason">The reason for disconnect.</param>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Register(MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Register(MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall,MCForge.Entity.Player)">
             <summary>
             Used to register a method to be executed when the event is fired.
             </summary>
-            <param name="callback">The method to register</param>
+            <param name="callback">The method to call</param>
+            <param name="target">The player to watch for. (null for any players)</param>
+            <returns>The new OnPlayerDisconnect event</returns>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Unregister(MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Unregister(MCForge.API.PlayerEvent.OnPlayerDisconnect)">
             <summary>
-            Used to unregister a method that was previously registered.
+            Unregisters the sxpecified event
             </summary>
-            <param name="callback">The method to unregister</param>
+            <param name="pe">The event to unregister</param>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Unregister">
+            <summary>
+            Unregisters the sxpecified event
+            </summary>
+            <param name="pe">The event to unregister</param>
         </member>
         <member name="T:MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall">
             <summary>
             The delegate used for callbacks.  The caller will have this method run when the event fires.
             </summary>
-            <param name="args">The Event that fired</param>
+            <param name="e">The Event that fired</param>
         </member>
         <member name="M:MCForge.API.PlayerEvent.OnPlayerMove.#ctor(MCForge.API.PlayerEvent.OnPlayerMove.OnCall,MCForge.Entity.Player)">
             <summary>
@@ -411,7 +454,7 @@
             In this case, it is called from the command processing code.
             </summary>
             <param name="p">The player that caused the event.</param>
-            <param name="reason">The reason for disconnect.</param>
+            <param name="oldPos">The old position of the person.</param>
         </member>
         <member name="F:MCForge.API.PlayerEvent.OnPlayerMove._queue">
             <summary>

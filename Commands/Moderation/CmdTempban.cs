@@ -49,8 +49,9 @@ namespace CommandDll
                 if (!Int32.TryParse(args[1], out num)) { Help(p); return; }
                 Server.TempBan tb = new Server.TempBan();
                 tb.name = who.Username; tb.allowed = DateTime.Now.AddMinutes(Int32.Parse(args[1]));
-                who.Kick("Tempbanned for " + args[1] + " minutes!");
-                Player.UniversalChat(who.Username + " has been tempbanned for " + args[1] + args[1] == "1" ? " minute!" : " minutes!");
+                string sipl1 = Int32.Parse(args[1]) == 1 ? "minute" : "minutes";
+                Player.UniversalChat(who.Username + " has been tempbanned for " + args[1] + " " + sipl1 + "!");
+                who.Kick("Tempbanned for " + args[1] + " " + sipl1 + "!");
             }
             #endregion
             #region =Name time and value=
@@ -65,8 +66,9 @@ namespace CommandDll
                         Server.TempBan tb1 = new Server.TempBan();
                         tb1.name = who.Username; tb1.allowed = DateTime.Now.AddMinutes(Int32.Parse(args[1]));
                         Server.tempbans.Add(tb1);
-                         who.Kick("Tempbanned for " + args[1] + " minutes!");
-                        Player.UniversalChat(who.Username + " has been tempbanned for " + args[1] + args[1] == "1" ? " minute!" : " minutes!");
+                        string sipl1 = Int32.Parse(args[1]) == 1 ? "minute" : "minutes";
+                        Player.UniversalChat(who.Username + " has been tempbanned for " + args[1] + " " + sipl1 + "!");
+                        who.Kick("Tempbanned for " + args[1] + " " + sipl1 + "!");
                         break;
                     case "h":
                     case "hours":
@@ -74,24 +76,19 @@ namespace CommandDll
                         Server.TempBan tb2 = new Server.TempBan();
                         tb2.name = who.Username; tb2.allowed = DateTime.Now.AddHours(Int32.Parse(args[1]));
                         Server.tempbans.Add(tb2);
-                        who.Kick("Tempbanned for " + args[1] + " hours!");
-                        Player.UniversalChat(who.Username + " has been tempbanned for " + args[1] + args[1] == "1" ? " hour!" : " hours!");
+                        string sipl2 = Int32.Parse(args[1]) == 1 ? "hour" : "hours";
+                        Player.UniversalChat(who.Username + " has been tempbanned for " + args[1] + " " + sipl2 + "!");
+                        who.Kick("Tempbanned for " + args[1] + " " + sipl2 + "!");
                         break;
                     case "d":
                     case "days":
                         allowed = allowed.AddDays(Int32.Parse(args[1]));                                               
                         Server.TempBan tb3 = new Server.TempBan();
                         tb3.name = who.Username; tb3.allowed = DateTime.Now.AddDays(Int32.Parse(args[1]));
-                        if (Int32.Parse(args[1]) == 1) {
-                            Player.UniversalChat(who.Username + " has been tempbanned for " + args[1] + " day!");
-                            who.Kick("Tempbanned for " + args[1] + " day!");
-                        }
-                        else {
-                            Player.UniversalChat(who.Username + " has been tempbanned for " + args[1] + " days!");
-                            who.Kick("Tempbanned for " + args[1] + " day!");
-                        }
-                           
-                        break;
+                        string sipl3 = Int32.Parse(args[1]) == 1 ? "day" : "days";
+                        Player.UniversalChat(who.Username + " has been tempbanned for " + args[1] + " " + sipl3 + "!");
+                        who.Kick("Tempbanned for " + args[1] + " " + sipl3 + "!");
+                            break;
                     default:
                         p.SendMessage("Invalid type! Use either minutes, hours or days");
                         break;
