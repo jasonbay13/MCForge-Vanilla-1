@@ -144,10 +144,12 @@ namespace MCForge.Entity {
                 if (!VerifyAccount(Username, verify)) return;
                 if (version != ServerSettings.Version) { SKick("Wrong Version!."); return; }
 
-                //OnPlayerConnect e = new OnPlayerConnect(this);
-                //e.Call();
-                //if (e.IsCanceled)
-                //    return;
+                OnPlayerConnect e = new OnPlayerConnect(this);
+                e.Call();
+                if (e.cancel) {
+                    Kick("Disconnected by event");
+                    return;
+                }
 
                 //TODO Database Stuff
 
@@ -846,6 +848,12 @@ namespace MCForge.Entity {
             });
         }
         protected void CloseConnection() {
+            OnPlayerDisconnect di = new OnPlayerDisconnect(this);
+            di.Call();
+            if (di.cancel) 
+                return;
+            
+
             isLoggedIn = false;
             isOnline = false;
 
