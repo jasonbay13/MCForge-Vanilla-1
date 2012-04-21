@@ -29,17 +29,18 @@ namespace CommandDll
 
 		public void Use(Player p, string[] args)
 		{
-			p.SendMessage("Message change event activated!");
-			OnPlayerChat pe = OnPlayerChat.Register(CallBack, p);
-			OnPlayerChat pe2 = OnPlayerChat.Register(CallBack2, p);
+			p.SendMessage("Move event activated!");
+			OnPlayerMove opm = OnPlayerMove.Register(CallBack, null);
+			//OnPlayerChat pe = OnPlayerChat.Register(CallBack, p);
+			//OnPlayerChat pe2 = OnPlayerChat.Register(CallBack2, p);
 			//pe.Cancel();
 			//p.SendMessage("Please place/destroy a block.");
 			//p.CatchNextBlockchange(new Player.BlockChangeDelegate(BlockChange), null);
 		}
 
-		public void CallBack(OnPlayerChat e) {
-			//Server.Log("Test: " + e.target.Username + " disconnected!");
-			e.message += " in accordance with the Prophecy.";
+		public void CallBack(OnPlayerMove e) {
+			MCForge.Utilities.Logger.Log("Test: " + e.Player.Username + " moved!");
+			e.Player.SendMessage("Hi!");
 			e.Unregister();
 		}
 		public void CallBack2(OnPlayerChat e) {

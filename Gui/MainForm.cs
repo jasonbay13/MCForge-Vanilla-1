@@ -46,7 +46,7 @@ namespace MCForge.Gui {
                 coloredTextBox1.LogText(args.Message + Environment.NewLine);
             };
 
-            OnPlayerConnect.Register(OnConnect);
+            OnPlayerConnect.Register(OnConnect, null);
 
             chatButtonChange.Text = "Chat";
         }

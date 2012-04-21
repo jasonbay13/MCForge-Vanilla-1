@@ -13,74 +13,101 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using MCForge.Entity;
+using System.Collections.Generic;
 
-namespace MCForge.API.PlayerEvent {
-    /// <summary>
-    /// The OnPlayerConnect event is executed everytime a player disconnects from the server
-    /// This event can be canceled (but the player will still disconnect)
-    /// </summary>
-    public sealed class OnPlayerDisconnect : PlayerEvent {
+namespace MCForge.API.PlayerEvent
+{
+	/// <summary>
+	/// Called whenever anyone leaves the server.
+	/// 
+	/// <b>Note: This event CANNOT be canceled.  Cancel() will have no effect.</b>
+	/// </summary>
+    public class OnPlayerDisconnect : PlayerEvent
+    {
+		/// <summary>
+		/// Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
+		/// </summary>
+		/// <param name="callback">the method used for the delegate to callback upon event fire</param>
+		/// <param name="target">The target Player we want the event for.</param>
+		internal OnPlayerDisconnect(OnCall callback, Player target) {
+			_target = target;
+			_queue += callback;
+		}
 
-        private Player uSoStoopid;
+		public String reason { get; set; }
 
-        public override Player Player {
-            get {
-                return uSoStoopid;
-            }
-        }
+		/// <summary>
+		/// The delegate used for callbacks.  The caller will have this method run when the event fires.
+		/// </summary>
+		/// <param name="e">The Event that fired</param>
+		public delegate void OnCall(OnPlayerDisconnect e);
 
-        /// <summary>
-        /// Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
-        /// </summary>
-        /// <param name="playerConnected">Player that disconnected</param>
-        internal OnPlayerDisconnect(Player playerDisconnected) {
-            uSoStoopid = playerDisconnected;
-        }
+		/// <summary>
+		/// The queue of delegates to call for the particular tag (One for each event)
+		/// </summary>
+		private OnCall _queue;
 
-        /// <summary>
-        /// The delegate used for callbacks.  The caller will have this method run when the event fires.
-        /// </summary>
-        /// <param name="args">The Event that fired</param>
-        public delegate void OnCall(OnPlayerDisconnect args);
+		/// <summary>
+		/// The list of all events currently active of a PlayerEvent type.
+		/// </summary>
+		protected static List<OnPlayerDisconnect> _eventQueue = new List<OnPlayerDisconnect>(); // Same across all events of this kind
 
+		/// <summary>
+		/// This is meant to be called from the code where you mean for the event to happen.
+		/// 
+		/// In this case, it is called from the command processing code.
+		/// </summary>
+		/// <param name="p">The player that caused the event.</param>
+		/// <param name="reason">The reason for disconnect.</param>
+		internal static void Call(Player p, string reason) {
+			//Event was called from the code.
+			//Do we keep or discard the event?
+			_eventQueue.ForEach(opc => {
+				if (opc.Player == null || opc.Player.username == p.username) {// We keep it
+					//Set up variables, then fire all callbacks.
+					opc.reason = reason;
+					Player oldPlayer = opc.Player;
+					opc._target = p; // Set player that triggered event.
+					opc._queue(opc); // fire callback
+					opc._target = oldPlayer;
+				}
+			});
+		}
 
-        private static List<OnCall> _eventQueue = new List<OnCall>();
+		/// <summary>
+		/// Used to register a method to be executed when the event is fired.
+		/// </summary>
+		/// <param name="callback">The method to call</param>
+		/// <param name="target">The player to watch for. (null for any players)</param>
+		/// <returns>The new OnPlayerDisconnect event</returns>
+		public static OnPlayerDisconnect Register(OnCall callback, Player target) {
+			//We add it to the list here
+			OnPlayerDisconnect pe = _eventQueue.Find(match => match.Player == null || match.Player.username == target.username);
+			if (pe != null)
+				//It already exists, so we just add it to the queue.
+				pe._queue += callback;
+			else {
+				//Doesn't exist yet.  Make a new one.
+				pe = new OnPlayerDisconnect(callback, target);
+				_eventQueue.Add(pe);
+			}
+			return pe;
+		}
 
-        /// <summary>
-        /// This is meant to be called from the code where you mean for the event to happen.
-        /// 
-        /// In this case, it is called from the command processing code.
-        /// </summary>
-        public void Call() {
-            _eventQueue.ForEach(method => {
-                method(this);
-            });
-        }
-
-        /// <summary>
-        /// Used to register a method to be executed when the event is fired.
-        /// </summary>
-        /// <param name="callback">The method to register</param>
-        public static void Register(OnCall callback) {
-            _eventQueue.Add(callback);
-        }
-
-
-        /// <summary>
-        /// Used to unregister a method that was previously registered.
-        /// </summary>
-        /// <param name="callback">The method to unregister</param>
-        public static void Unregister(OnCall callback) {
-            if (_eventQueue.Contains(callback))
-                _eventQueue.RemoveAll(cur => cur == callback);
-        }
-
-        [Obsolete("Please use Unregister(OnCall)", true)]
-        public override void Unregister() {
-            throw new NotImplementedException();
-        }
-    }
+		/// <summary>
+		/// Unregisters the sxpecified event
+		/// </summary>
+		/// <param name="pe">The event to unregister</param>
+		public static void Unregister(OnPlayerDisconnect pe) {
+			pe.Unregister();
+		}
+		/// <summary>
+		/// Unregisters the sxpecified event
+		/// </summary>
+		/// <param name="pe">The event to unregister</param>
+		public override void Unregister() {
+			_eventQueue.Remove(this);
+		}
+	}
 }
