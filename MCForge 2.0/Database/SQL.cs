@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: Eddie
  * Date: 4/15/2012
@@ -16,9 +16,9 @@ namespace MCForge.SQL
 	/// </summary>
 	public abstract class ISQL
 	{
-		public abstract void executeQuery(string queryString);
-		public abstract void executeQuery(string[] queryString);
-		public abstract void onLoad();
-		public abstract DataTable fillData(string queryString);
+	public virtual void executeQuery(string queryString) {}
+        public virtual void executeQuery(string[] queryString) {}
+        public virtual void onLoad() { }
+        public virtual DataTable fillData(string queryString) { return null; }
 	}
 }
