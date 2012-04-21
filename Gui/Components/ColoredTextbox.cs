@@ -70,7 +70,9 @@ namespace MCForge.Gui.Components {
 
         private void WriteToTextBox() {
             if (InvokeRequired) {
-                this.Invoke(new MethodInvoker(WriteToTextBox));
+				try {
+					this.Invoke(new MethodInvoker(WriteToTextBox));
+				} catch { }
                 return;
             }
             if (wList.Count > 200) wList.RemoveAt(0);
