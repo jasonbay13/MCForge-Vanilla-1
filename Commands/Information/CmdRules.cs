@@ -43,7 +43,7 @@ namespace CommandDll
         }
         public void Help(Player p)
         {
-            p.SendMessage("/rules - Shows the server rules");
+            p.SendMessage("/rules [player] - Shows the server rules");
             p.SendMessage("Use a player's name to send the rules to that player!");
         }
         public void Initialize()

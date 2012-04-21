@@ -37,6 +37,7 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/devs - Shows the MCForge Development Team");
+            p.SendMessage("Shortcut: /developers");
         }
 
         public void Initialize()

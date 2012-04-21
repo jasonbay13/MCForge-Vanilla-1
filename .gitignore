@@ -10,3 +10,13 @@
 MCForge 2.0/MCForge.xml
 
 /MCForge 2.0/MCForge.xml
+Console/obj/x86/Release/Console.csproj.FileListAbsolute.txt
+Console/obj/x86/Release/DesignTimeResolveAssemblyReferencesInput.cache
+Console/obj/x86/Release/MCForgeConsole.exe
+Console/obj/x86/Release/MCForgeConsole.pdb
+Gui/obj/x86/Release/DesignTimeResolveAssemblyReferencesInput.cache
+Gui/obj/x86/Release/Gui.csproj.FileListAbsolute.txt
+Gui/obj/x86/Release/Gui.exe
+Gui/obj/x86/Release/Gui.pdb
+Gui/obj/
+Console/obj/

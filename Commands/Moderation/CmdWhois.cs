@@ -66,7 +66,7 @@ namespace CommandDll.Moderation
         public void Help(Player p)
         {
             p.SendMessage("/whois <player/IP> - Displays information about a player or IP.");
-            p.SendMessage("  If there are multiple results, it returns all associated accounts.");
+            p.SendMessage("If there are multiple results, it returns all associated accounts.");
         }
         public void Initialize()
         {

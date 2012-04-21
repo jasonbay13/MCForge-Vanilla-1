@@ -62,12 +62,12 @@ namespace CommandDll
             cpos.pos = new Vector3(args.x, args.y, args.z);
 			args.Unregister();
 			args.Cancel();
-			OnPlayerBlockChange.Register(CatchBlock2, args.target, cpos);
+			OnPlayerBlockChange.Register(CatchBlock2, args.Player, cpos);
         }
         public void CatchBlock2(PlayerEvent e)
         {
 			OnPlayerBlockChange bc = (OnPlayerBlockChange)e;
-			Player p = bc.target;
+			Player p = bc.Player;
 			ushort x = bc.x;
 			ushort y = bc.y;
 			ushort z = bc.z;
@@ -109,7 +109,7 @@ namespace CommandDll
         }
         public void Help(Player p)
         {
-            p.SendMessage("/replace [type] [type2] - Replaces type with type2 inside a selected cuboid.");
+            p.SendMessage("/replace <type> <type2> - Replaces <type> with <type2> inside a selected cuboid.");
             p.SendMessage("Shortcut: /r");
         }
 

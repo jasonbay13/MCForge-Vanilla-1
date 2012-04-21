@@ -47,7 +47,7 @@ namespace CommandDll
                 p.SendMessage("Could not find block specified");
             }
 
-            foreach (byte b in p.Level.data)
+            foreach (byte b in p.Level.Data)
             {
                 if (b == type)
                 {
@@ -59,7 +59,7 @@ namespace CommandDll
             }
 
             //Permissions here.
-            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + Block.ByteToName(type));
+            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + ((Block)type).Name);
 
             //Blockqueue here
 
@@ -71,7 +71,7 @@ namespace CommandDll
         }
         public void Help(Player p)
         {
-            p.SendMessage("/replaceall <block> <block2> - Replaces all of [block] with [block2] in the map.");
+            p.SendMessage("/replaceall <block> <block2> - Replaces all of <block> with <block2> in the map.");
             p.SendMessage("Shortcut: /ra");
         }
         public void Initialize()

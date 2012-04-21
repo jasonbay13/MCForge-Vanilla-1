@@ -36,12 +36,12 @@ namespace MCForge.World.Physics
                 {
                     while (true)
                     {
-                        Level.levels.ForEach(l =>
+                        Level.Levels.ForEach(l =>
                         {
                             blocks.ForEach(b => { if (b.l == l) b.Tick(); });
                             Thread.Sleep(l.PhysicsTick);
                         });
-                        Thread.Sleep(1);
+                        Thread.Sleep(5);
                     }
                 }));
             tick.Start();

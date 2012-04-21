@@ -52,7 +52,7 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/mute - Displays muted players");
+            p.SendMessage("/muted - Displays muted players");
         }
 
         public void Initialize()

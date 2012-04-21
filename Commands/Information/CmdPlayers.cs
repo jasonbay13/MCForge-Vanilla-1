@@ -46,11 +46,12 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/players - shows the online players");
+            p.SendMessage("Shortcuts: /online, /who");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "players", "online" });
+            Command.AddReference(this, new string[3] { "players", "online", "who" });
         }
     }
 }

@@ -14,12 +14,11 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
+using MCForge.API.PlayerEvent;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
-using MCForge.API.PlayerEvent;
-using System.Linq;
 
 namespace CommandDll
 {
@@ -41,7 +40,7 @@ namespace CommandDll
                 {
                     try
                     {
-                        cpos.ignore.Add(Block.NameToByte(args[i]));
+                        cpos.ignore.Add(Block.NameToBlock(args[i]));
                     }
                     catch
                     {
@@ -52,7 +51,7 @@ namespace CommandDll
                 string s = "";
                 for (int i = 0; i < cpos.ignore.Count; i++)
                 {
-                    s += Block.ByteToName(cpos.ignore[i]);
+                    s += ((Block)cpos.ignore[i]).Name;
                     if (i == cpos.ignore.Count - 2) s += " and ";
                     else if (i != cpos.ignore.Count - 1) s += ", ";
                 }
@@ -69,10 +68,10 @@ namespace CommandDll
         {
             args.Cancel();
             args.Unregister();
-            args.target.SendBlockChange(args.x, args.z, args.y, args.target.Level.GetBlock(args.x, args.z, args.y));
+            args.Player.SendBlockChange(args.x, args.z, args.y, args.Player.Level.GetBlock(args.x, args.z, args.y));
             CatchPos cpos = (CatchPos)args.datapass;
             cpos.FirstBlock = new Vector3(args.x, args.z, args.y);
-            OnPlayerBlockChange.Register(CatchBlock2, args.target, cpos);
+            OnPlayerBlockChange.Register(CatchBlock2, args.Player, cpos);
             //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock2), (object)cpos);
         }
         //public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
@@ -80,7 +79,7 @@ namespace CommandDll
         {
             args.Cancel();
             args.Unregister();
-            args.target.SendBlockChange(args.x, args.z, args.y, args.target.Level.GetBlock(args.x, args.z, args.y));
+            args.Player.SendBlockChange(args.x, args.z, args.y, args.Player.Level.GetBlock(args.x, args.z, args.y));
             CatchPos cpos = (CatchPos)args.datapass;
             Vector3 FirstBlock = cpos.FirstBlock;
             ushort xx, zz, yy;
@@ -89,12 +88,12 @@ namespace CommandDll
                 for (zz = Math.Min((ushort)(FirstBlock.z), args.z); zz <= Math.Max((ushort)(FirstBlock.z), args.z); ++zz)
                     for (yy = Math.Min((ushort)(FirstBlock.y), args.y); yy <= Math.Max((ushort)(FirstBlock.y), args.y); ++yy)
                     {
-                        if (cpos.ignore == null || !cpos.ignore.Contains(args.target.Level.GetBlock(xx, zz, yy)))
+                        if (cpos.ignore == null || !cpos.ignore.Contains(args.Player.Level.GetBlock(xx, zz, yy)))
                         {
                             count++;
                         }
                     }
-            args.target.SendMessage(count + " blocks are between (" + FirstBlock.x + ", " + FirstBlock.z + ", " + FirstBlock.y + ") and (" + args.x + ", " + args.z + ", " + args.y + ")");
+            args.Player.SendMessage(count + " blocks are between (" + FirstBlock.x + ", " + FirstBlock.z + ", " + FirstBlock.y + ") and (" + args.x + ", " + args.z + ", " + args.y + ")");
         }
 
         public void Help(Player p)

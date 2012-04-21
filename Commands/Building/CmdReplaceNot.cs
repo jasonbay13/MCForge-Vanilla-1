@@ -61,7 +61,7 @@ namespace CommandDll
             CatchPos cpos = (CatchPos)opbc.datapass;
             cpos.pos = new Vector3(opbc.x, opbc.z, opbc.y);
 			opbc.Unregister();
-			OnPlayerBlockChange.Register(CatchBlock2, opbc.target, cpos);
+			OnPlayerBlockChange.Register(CatchBlock2, opbc.Player, cpos);
 			//p.CatchNextBlockchange(CatchBlock2, (object)cpos);
         }
         public void CatchBlock2(OnPlayerBlockChange opbc) {
@@ -75,7 +75,7 @@ namespace CommandDll
                     for (ushort yy = Math.Min((ushort)(FirstBlock.pos.y), opbc.y); yy <= Math.Max((ushort)(FirstBlock.pos.y), opbc.y); ++yy)
                     {
                         Vector3 loop = new Vector3(xx, zz, yy);
-                        if (opbc.target.Level.GetBlock(loop) != FirstBlock.type)
+                        if (opbc.Player.Level.GetBlock(loop) != FirstBlock.type)
                         {
                             BufferAdd(buffer, loop);
                         }
@@ -83,18 +83,18 @@ namespace CommandDll
                 }
             }
             //Group Max Blocks permissions here
-            opbc.target.SendMessage(buffer.Count.ToString() + " blocks.");
+            opbc.Player.SendMessage(buffer.Count.ToString() + " blocks.");
 
             //Level Blockqueue .-.
 
             buffer.ForEach(delegate(Pos pos)
             {
-                opbc.target.Level.BlockChange((ushort)(pos.pos.x), (ushort)(pos.pos.z), (ushort)(pos.pos.y), FirstBlock.type2);
+                opbc.Player.Level.BlockChange((ushort)(pos.pos.x), (ushort)(pos.pos.z), (ushort)(pos.pos.y), FirstBlock.type2);
             });
         }
         public void Help(Player p)
         {
-            p.SendMessage("/replacenot [block] [block2] - Replaces everything but <block> with <block2> inside a selected cuboid.");
+            p.SendMessage("/replacenot <block> <block2> - Replaces everything but <block> with <block2> inside a selected cuboid.");
             p.SendMessage("Shortcut: /rn");
         }
 

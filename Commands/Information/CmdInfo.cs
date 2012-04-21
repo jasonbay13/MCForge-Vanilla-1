@@ -13,14 +13,13 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
+using System.Reflection;
 using MCForge.API.PlayerEvent;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-using MCForge.World;
 using MCForge.Utilities.Settings;
-using System.Reflection;
+using MCForge.World;
 
 namespace CommandDll
 {
@@ -39,7 +38,7 @@ namespace CommandDll
             p.SendMessage("This server's name is &b" + ServerSettings.GetSetting("servername") + Server.DefaultColor + ".");
             p.SendMessage(Server.Players.Count == 1 ? "There is no one else on the server" : "There are currently " + Server.Players.Count + " players on this server"); //TODO dont include hidden if above current rank
             //p.SendMessage("This server currently has $banned people that are &8banned" + Server.DefaultColor + ".");
-            p.SendMessage("This server currently has " + Level.levels.Count + " levels loaded.");
+            p.SendMessage("This server currently has " + Level.Levels.Count + " levels loaded.");
             //p.SendMessage("This server's currency is: " + Server.moneys); // later for when money works.
             p.SendMessage("This server runs on &bMCForge 2.0" + Server.DefaultColor + ".");
             p.SendMessage("This server's version: &a" + Assembly.GetExecutingAssembly().GetName().Version);
@@ -57,7 +56,7 @@ namespace CommandDll
 
             OnPlayerChat.Register((t) =>
             {
-                if (t.message.ToLower() == "yes" && t.target.lastcmd == "info") 
+                if (t.message.ToLower() == "yes" && t.Player.lastcmd == "info") 
                     Command.all["devs"].Use(p, new string[0]); 
                 t.Cancel(); 
                 t.Unregister();
