@@ -81,15 +81,18 @@ namespace MCForge.API.PlayerEvent
 			List<OnPlayerBlockChange> opbcList = new List<OnPlayerBlockChange>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(opbc => {
-				if (opbc.target == null || opbc.target.username == p.username) {// We keep it
+				if (opbc.Player == null || opbc.Player.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opbc.action = action;
 					opbc.holding = holding;
 					opbc.x = x;
 					opbc.y = y;
 					opbc.z = z;
+					Player oldPlayer = opbc.Player;
+					opbc._target = p; // Set player that triggered event.
 					opbc._queue(opbc); // fire callback
 					opbcList.Add(opbc); // add to used list
+					opbc._target = oldPlayer;
 				}
 			});
 			return opbcList.Any(pe => pe.cancel); //Return if any canceled the event.
@@ -104,7 +107,7 @@ namespace MCForge.API.PlayerEvent
 		/// <returns></returns>
 		public static OnPlayerBlockChange Register(OnCall callback, Player target, object datapass) {
 			//We add it to the list here
-			OnPlayerBlockChange pe = _eventQueue.Find(match => (match.target == null ? target == null : target != null && target.username == match.target.username));
+			OnPlayerBlockChange pe = _eventQueue.Find(match => (match.Player == null ? target == null : target != null && target.username == match.Player.username));
 			if (pe != null)
 				//It already exists, so we just add it to the queue.
 				pe._queue += callback;

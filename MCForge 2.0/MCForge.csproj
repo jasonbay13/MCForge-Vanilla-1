@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{EDC9892F-BBA2-4043-9FD9-94C0BA7D9552}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MCForge</RootNamespace>
     <AssemblyName>MCForge</AssemblyName>
@@ -25,6 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>MCForge.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -35,9 +36,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>MCForge.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>MCForge.Core.Program</StartupObject>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>MCForge.ico</ApplicationIcon>
@@ -85,10 +88,15 @@
     <Compile Include="Groups\PlayerGroup.cs" />
     <Compile Include="Player\PlayerNetworking.cs" />
     <Compile Include="System\FileUtils.cs" />
+    <Compile Include="System\Logger.cs" />
     <Compile Include="System\Settings\ExtraSettings.cs" />
     <Compile Include="System\Settings\GroupSettings.cs" />
     <Compile Include="System\Settings\LevelSettings.cs" />
+    <Compile Include="Utils\ColorUtils.cs" />
+    <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="World\Blocks\Custom\Griefer_stone.cs" />
+    <Compile Include="World\Blocks\DefaultBlocks\ActiveLava.cs" />
+    <Compile Include="World\Blocks\DefaultBlocks\ActiveWater.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Black.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Blue.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\BlueViolet.cs" />
@@ -126,12 +134,6 @@
     <Compile Include="World\Blocks\DefaultBlocks\Yellow.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\YellowFlower.cs" />
     <Compile Include="API\Event.cs" />
-    <Compile Include="Gui\frmMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gui\frmMain.Designer.cs">
-      <DependentUpon>frmMain.cs</DependentUpon>
-    </Compile>
     <Compile Include="System\Heartbeat.cs" />
     <Compile Include="Interfaces\Commands\CmdReloadCommands.cs" />
     <Compile Include="Interfaces\Commands\ICommand.cs" />
@@ -158,17 +160,16 @@
     <Compile Include="World\Blocks\DefaultBlocks\Stone.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Water.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Wood.cs" />
+    <Compile Include="World\Generator\GeneratorArgs.cs" />
+    <Compile Include="World\Generator\LevelGenerator.cs" />
+    <Compile Include="World\Generator\Noise.cs" />
     <Compile Include="World\Level.cs" />
     <Compile Include="System\LoadedData.cs" />
     <Compile Include="System\MiscStructs.cs" />
-    <Compile Include="System\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System\Server.cs" />
     <Compile Include="World\Blocks\Physics\PhysicsBlock.cs" />
     <Compile Include="System\Settings\ServerSettings.cs" />
-    <EmbeddedResource Include="Gui\frmMain.resx">
-      <DependentUpon>frmMain.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

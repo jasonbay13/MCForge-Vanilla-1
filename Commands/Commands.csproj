@@ -50,7 +50,9 @@
     <Compile Include="Information\CmdInfo.cs" />
     <Compile Include="Misc\CmdAbort.cs" />
     <Compile Include="Misc\CmdMode.cs" />
+    <Compile Include="Moderation\CmdBanInfo.cs" />
     <Compile Include="Moderation\CmdDemote.cs" />
+    <Compile Include="Moderation\CmdEditBan.cs" />
     <Compile Include="Moderation\CmdGoto.cs" />
     <Compile Include="Moderation\CmdLoad.cs" />
     <Compile Include="Moderation\CmdNewLevel.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="Moderation\CmdMute.cs" />
     <Compile Include="Moderation\CmdSay.cs" />
     <Compile Include="Moderation\CmdTColor.cs" />
+    <Compile Include="Moderation\CmdTempban.cs" />
     <Compile Include="Moderation\CmdTitle.cs" />
     <Compile Include="Moderation\CmdVoice.cs" />
     <Compile Include="Moderation\CmdVoteKick.cs" />

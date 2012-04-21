@@ -3,7 +3,7 @@ using System;
 namespace MCForge.World
 {
 	public class OldMCForgeToNewMCForge
-	{
+	{ 
 		public const byte air = (byte)0;
         public const byte rock = (byte)1;
         public const byte grass = (byte)2;

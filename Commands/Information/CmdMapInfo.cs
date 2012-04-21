@@ -34,7 +34,7 @@ namespace CommandDll
         public void Use(Player p, string[] args)
         {
             Level l = args.Length != 0
-                ? Level.levels.Find(lev => { if (lev.Name.IndexOf(String.Join(" ", args)) != -1) return true; return false; })
+                ? Level.Levels.Find(lev => { if (lev.Name.IndexOf(String.Join(" ", args)) != -1) return true; return false; })
                 : p.Level;
             if (l == null) { p.SendMessage("Could not find specified level."); return; }
 
@@ -51,7 +51,7 @@ namespace CommandDll
         private void plist(OnPlayerChat eventargs)
         {
             eventargs.Unregister();
-            if (eventargs.message.ToLower() != "yes" || eventargs.target.lastcmd != "mapinfo" && eventargs.target.lastcmd != "mi")
+            if (eventargs.message.ToLower() != "yes" || eventargs.Player.lastcmd != "mapinfo" && eventargs.Player.lastcmd != "mi")
                 return;
 
             eventargs.Cancel();
@@ -59,18 +59,18 @@ namespace CommandDll
 
             if (templist.Count == 0)
             {
-                eventargs.target.SendMessage("No one is on " + ((Level)eventargs.datapass).Name + ".");
+                eventargs.Player.SendMessage("No one is on " + ((Level)eventargs.datapass).Name + ".");
                 return;
             }
-            if (templist.Count == 1 && eventargs.target.Level == (Level)eventargs.datapass)
+            if (templist.Count == 1 && eventargs.Player.Level == (Level)eventargs.datapass)
             {
-                eventargs.target.SendMessage("No one besides you is on " + ((Level)eventargs.datapass).Name + ".");
+                eventargs.Player.SendMessage("No one besides you is on " + ((Level)eventargs.datapass).Name + ".");
                 return;
             }
 
             templist.ForEach((p) =>
             {
-                eventargs.target.SendMessage(String.Concat(p.titleColor, p.title, p.color, p.Username));
+                eventargs.Player.SendMessage(String.Concat(p.titleColor, p.title, p.color, p.Username));
             });
         }
 

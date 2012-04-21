@@ -20,10 +20,8 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
 
-namespace CommandDll
-{
-    public class CmdCuboid : ICommand
-    {
+namespace CommandDll {
+    public class CmdCuboid : ICommand {
         public string Name { get { return "Cuboid"; } }
         public CommandTypes Type { get { return CommandTypes.building; } }
         public string Author { get { return "Gamemakergm"; } }
@@ -31,8 +29,7 @@ namespace CommandDll
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
-        public void Use(Player p, string[] args)
-        {
+        public void Use(Player p, string[] args) {
             //To-do
             //Broken types: Walls,
             //Hollows seems to make an error on GetBlock because of negative pos value >_>
@@ -40,30 +37,25 @@ namespace CommandDll
             CatchPos cpos = new CatchPos();
             cpos.block = 255;
             ushort unused; //For the TryParse
-            switch (args.Length)
-            {
+            switch (args.Length) {
                 case 0:
                     Default(cpos);
                     break;
                 case 1: //Block or type only
-                    if (ValidSolidType(args[0]) || Block.ValidBlockName(args[0]))
-                    {
+                    if (ValidSolidType(args[0]) || Block.ValidBlockName(args[0])) {
                         cpos = Parser(p, true, false, args, cpos);
                         break;
                     }
-                    else
-                    {
+                    else {
                         p.SendMessage("Invalid block or type!");
                         return;
                     }
                 case 2: //Block and type
-                    if (ValidSolidType(args[0 | 1]) || Block.ValidBlockName(args[0 | 1]))
-                    {
+                    if (ValidSolidType(args[0 | 1]) || Block.ValidBlockName(args[0 | 1])) {
                         cpos = Parser(p, false, false, args, cpos);
                         break;
                     }
-                    else
-                    {
+                    else {
                         p.SendMessage("Invalid block or type!");
                         return;
                     }
@@ -72,36 +64,31 @@ namespace CommandDll
                     cpos.block = 1; //Silliness
                     cpos = CoordinatesParse(p, args, cpos);
                     p.SendMessage("Coordinates");
-					Cuboid(cpos, cpos.block, p, (ushort)cpos.secondPos.x, (ushort)cpos.secondPos.y, (ushort)cpos.secondPos.z);
+                    Cuboid(cpos, cpos.block, p, (ushort)cpos.secondPos.x, (ushort)cpos.secondPos.y, (ushort)cpos.secondPos.z);
                     return;
                 case 7: //Coordinates and block or type
-                    if (ValidSolidType(args[7]) || Block.ValidBlockName(args[7]))
-                    {
+                    if (ValidSolidType(args[7]) || Block.ValidBlockName(args[7])) {
                         cpos = Parser(p, true, true, args, cpos);
-						Cuboid(cpos, cpos.block, p, (ushort)cpos.secondPos.x, (ushort)cpos.secondPos.y, (ushort)cpos.secondPos.z);
+                        Cuboid(cpos, cpos.block, p, (ushort)cpos.secondPos.x, (ushort)cpos.secondPos.y, (ushort)cpos.secondPos.z);
                         return;
                     }
-                    else
-                    {
+                    else {
                         p.SendMessage("Invalid block or type!");
                         return;
                     }
                 case 8: //Coordinates block and type
-                    if (ValidSolidType(args[7 | 8]) || Block.ValidBlockName(args[7 | 8]))
-                    {
+                    if (ValidSolidType(args[7 | 8]) || Block.ValidBlockName(args[7 | 8])) {
                         CoordinatesParse(p, args, cpos);
                         cpos = Parser(p, false, true, args, cpos);
-						Cuboid(cpos, cpos.block, p, (ushort)cpos.secondPos.x, (ushort)cpos.secondPos.y, (ushort)cpos.secondPos.z);
-						return;
+                        Cuboid(cpos, cpos.block, p, (ushort)cpos.secondPos.x, (ushort)cpos.secondPos.y, (ushort)cpos.secondPos.z);
+                        return;
                     }
-                    else
-                    {
+                    else {
                         p.SendMessage("Invalid block or type!");
                         return;
                     }
                 default:
-                    if (ushort.TryParse(args[0 | 1 | 2 | 3 | 4 | 5], out unused))
-                    {
+                    if (ushort.TryParse(args[0 | 1 | 2 | 3 | 4 | 5], out unused)) {
                         p.SendMessage("You need 6 coordinates for cuboid to work like that!");
                         return;
                     }
@@ -113,8 +100,7 @@ namespace CommandDll
             p.SendMessage("Place two blocks to determine the corners.");
             OnPlayerBlockChange.Register(CatchBlock, p, cpos);
         }
-        public void Help(Player p)
-        {
+        public void Help(Player p) {
             p.SendMessage("/cuboid [block] [type] - Creates a cuboid of blocks.");
             p.SendMessage("/cuboid x1 z1 y1 x2 z2 y2 [block] [type] - Creates a cuboid at the specified coordinates.");
             p.SendMessage("Available types: <solid/hollow/walls/holes/wire/random>");
@@ -122,46 +108,37 @@ namespace CommandDll
             p.SendMessage("Shortcut: /z");
         }
 
-        public void Initialize()
-        {
+        public void Initialize() {
             string[] CommandStrings = new string[2] { "cuboid", "z" };
             Command.AddReference(this, CommandStrings);
         }
-        public void CatchBlock(OnPlayerBlockChange args)
-        {
+        public void CatchBlock(OnPlayerBlockChange args) {
             CatchPos cpos = (CatchPos)args.datapass;
             cpos.pos = new Vector3(args.x, args.z, args.y);
             args.Cancel();
             args.Unregister();
-            OnPlayerBlockChange.Register(CatchBlock2, args.target, cpos);
+            OnPlayerBlockChange.Register(CatchBlock2, args.Player, cpos);
         }
-        public void CatchBlock2(OnPlayerBlockChange args)
-        {
-			CatchPos cpos = (CatchPos)args.datapass;
-			Cuboid(cpos, args.holding, args.target, args.x, args.y, args.z);
-			args.Cancel();
-			args.Unregister();
-		}
-		private void Cuboid(CatchPos cpos, byte NewType, Player p, ushort x, ushort y, ushort z) {
-			List<Pos> buffer = new List<Pos>();
+        public void CatchBlock2(OnPlayerBlockChange args) {
+            CatchPos cpos = (CatchPos)args.datapass;
+            Cuboid(cpos, args.holding, args.Player, args.x, args.y, args.z);
+            args.Cancel();
+            args.Unregister();
+        }
+        private void Cuboid(CatchPos cpos, byte NewType, Player p, ushort x, ushort y, ushort z) {
+            List<Pos> buffer = new List<Pos>();
             ushort xx, zz, yy;
-            if (cpos.block != 255)
-            {
+            if (cpos.block != 255) {
                 NewType = cpos.block;
             }
-            switch (cpos.cuboidType)
-            {
+            switch (cpos.cuboidType) {
                 case SolidType.solid:
                     buffer.Capacity = Math.Abs(cpos.pos.x - x) * Math.Abs(cpos.pos.z - z) * Math.Abs(cpos.pos.y - y);
-                    for (xx = Math.Min((ushort)(cpos.pos.x), x); xx <= Math.Max((ushort)(cpos.pos.x), x); ++xx)
-                    {
-                        for (zz = Math.Min((ushort)(cpos.pos.z), z); zz <= Math.Max((ushort)(cpos.pos.z), z); ++zz)
-                        {
-                            for (yy = Math.Min((ushort)(cpos.pos.y), y); yy <= Math.Max((ushort)(cpos.pos.y), y); ++yy)
-                            {
+                    for (xx = Math.Min((ushort)(cpos.pos.x), x); xx <= Math.Max((ushort)(cpos.pos.x), x); ++xx) {
+                        for (zz = Math.Min((ushort)(cpos.pos.z), z); zz <= Math.Max((ushort)(cpos.pos.z), z); ++zz) {
+                            for (yy = Math.Min((ushort)(cpos.pos.y), y); yy <= Math.Max((ushort)(cpos.pos.y), y); ++yy) {
                                 Vector3 loop = new Vector3(xx, zz, yy);
-                                if (p.Level.GetBlock(loop) != NewType)
-                                {
+                                if (p.Level.GetBlock(loop) != NewType) {
                                     BufferAdd(buffer, xx, zz, yy);
                                 }
                             }
@@ -170,50 +147,36 @@ namespace CommandDll
                     break;
                 case SolidType.hollow:
                     for (zz = Math.Min((ushort)cpos.pos.z, z); zz <= Math.Max(cpos.pos.z, y); ++zz)
-                        for (yy = Math.Min((ushort)cpos.pos.z, z); yy <= Math.Max(cpos.pos.z, z); ++yy)
-                        {
-                            if (p.Level.GetBlock(cpos.pos.x, yy, zz) != NewType)
-                            {
+                        for (yy = Math.Min((ushort)cpos.pos.z, z); yy <= Math.Max(cpos.pos.z, z); ++yy) {
+                            if (p.Level.GetBlock(cpos.pos.x, yy, zz) != NewType) {
                                 BufferAdd(buffer, (ushort)cpos.pos.x, yy, zz);
                             }
-                            if (cpos.pos.x != x)
-                            {
-                                if (p.Level.GetBlock(x, yy, zz) != NewType)
-                                {
+                            if (cpos.pos.x != x) {
+                                if (p.Level.GetBlock(x, yy, zz) != NewType) {
                                     BufferAdd(buffer, x, yy, zz);
                                 }
                             }
                         }
-                    if (Math.Abs(cpos.pos.x - x) >= 2)
-                    {
+                    if (Math.Abs(cpos.pos.x - x) >= 2) {
                         for (xx = (ushort)(Math.Min(cpos.pos.x, x) + 1); xx <= Math.Max(cpos.pos.x, x) - 1; ++xx)
-                            for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max((ushort)cpos.pos.y, y); ++yy)
-                            {
-                                if (p.Level.GetBlock(xx, cpos.pos.z, yy) != NewType)
-                                {
+                            for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max((ushort)cpos.pos.y, y); ++yy) {
+                                if (p.Level.GetBlock(xx, cpos.pos.z, yy) != NewType) {
                                     BufferAdd(buffer, xx, (ushort)cpos.pos.z, yy);
                                 }
-                                if (cpos.pos.z != z)
-                                {
-                                    if (p.Level.GetBlock(xx, z, yy) != NewType)
-                                    {
+                                if (cpos.pos.z != z) {
+                                    if (p.Level.GetBlock(xx, z, yy) != NewType) {
                                         BufferAdd(buffer, xx, z, yy);
                                     }
                                 }
                             }
-                        if (Math.Abs(cpos.pos.z - z) >= 2)
-                        {
+                        if (Math.Abs(cpos.pos.z - z) >= 2) {
                             for (xx = (ushort)(Math.Min(cpos.pos.x, x) + 1); xx <= Math.Max(cpos.pos.x, x) - 1; ++xx)
-                                for (zz = (ushort)(Math.Min(cpos.pos.z, y) + 1); zz <= Math.Max(cpos.pos.z, y) - 1; ++zz)
-                                {
-                                    if (p.Level.GetBlock(xx, zz, cpos.pos.y) != NewType)
-                                    {
+                                for (zz = (ushort)(Math.Min(cpos.pos.z, y) + 1); zz <= Math.Max(cpos.pos.z, y) - 1; ++zz) {
+                                    if (p.Level.GetBlock(xx, zz, cpos.pos.y) != NewType) {
                                         BufferAdd(buffer, xx, zz, (ushort)cpos.pos.y);
                                     }
-                                    if (cpos.pos.y != y)
-                                    {
-                                        if (p.Level.GetBlock(xx, zz, y) != NewType)
-                                        {
+                                    if (cpos.pos.y != y) {
+                                        if (p.Level.GetBlock(xx, zz, y) != NewType) {
                                             BufferAdd(buffer, xx, zz, y);
                                         }
                                     }
@@ -223,35 +186,25 @@ namespace CommandDll
                     break;
                 case SolidType.walls:
                     for (zz = Math.Min((ushort)cpos.pos.z, z); zz <= Math.Max(cpos.pos.z, z); ++zz)
-                        for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max(cpos.pos.y, y); ++yy)
-                        {
-                            if (p.Level.GetBlock(cpos.pos.x, zz, yy) != NewType)
-                            {
+                        for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max(cpos.pos.y, y); ++yy) {
+                            if (p.Level.GetBlock(cpos.pos.x, zz, yy) != NewType) {
                                 BufferAdd(buffer, (ushort)cpos.pos.x, zz, yy);
                             }
-                            if (cpos.pos.x != x)
-                            {
-                                if (p.Level.GetBlock(x, zz, yy) != NewType)
-                                {
+                            if (cpos.pos.x != x) {
+                                if (p.Level.GetBlock(x, zz, yy) != NewType) {
                                     BufferAdd(buffer, x, zz, yy);
                                 }
                             }
                         }
-                    if (Math.Abs(cpos.pos.x - x) >= 2)
-                    {
-                        if (Math.Abs(cpos.pos.y - y) >= 2)
-                        {
+                    if (Math.Abs(cpos.pos.x - x) >= 2) {
+                        if (Math.Abs(cpos.pos.y - y) >= 2) {
                             for (xx = (ushort)(Math.Min(cpos.pos.x, x) + 1); xx <= Math.Max(cpos.pos.x, x) - 1; ++xx)
-                                for (zz = (ushort)(Math.Min(cpos.pos.z, z)); zz <= Math.Max(cpos.pos.z, z); ++zz)
-                                {
-                                    if (p.Level.GetBlock(xx, zz, (ushort)cpos.pos.y) != NewType)
-                                    {
+                                for (zz = (ushort)(Math.Min(cpos.pos.z, z)); zz <= Math.Max(cpos.pos.z, z); ++zz) {
+                                    if (p.Level.GetBlock(xx, zz, (ushort)cpos.pos.y) != NewType) {
                                         BufferAdd(buffer, xx, zz, (ushort)cpos.pos.y);
                                     }
-                                    if (cpos.pos.y != y)
-                                    {
-                                        if (p.Level.GetBlock(xx, zz, y) != NewType)
-                                        {
+                                    if (cpos.pos.y != y) {
+                                        if (p.Level.GetBlock(xx, zz, y) != NewType) {
                                             BufferAdd(buffer, xx, zz, y);
                                         }
                                     }
@@ -262,17 +215,13 @@ namespace CommandDll
                 case SolidType.holes:
                     bool Checked = true, startZ, startY;
 
-                    for (xx = Math.Min((ushort)cpos.pos.x, x); xx <= Math.Max((ushort)cpos.pos.x, x); ++xx)
-                    {
+                    for (xx = Math.Min((ushort)cpos.pos.x, x); xx <= Math.Max((ushort)cpos.pos.x, x); ++xx) {
                         startZ = Checked;
-                        for (zz = Math.Min((ushort)cpos.pos.z, z); zz <= Math.Max((ushort)cpos.pos.z, z); ++zz)
-                        {
+                        for (zz = Math.Min((ushort)cpos.pos.z, z); zz <= Math.Max((ushort)cpos.pos.z, z); ++zz) {
                             startY = Checked;
-                            for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max((ushort)cpos.pos.y, y); ++yy)
-                            {
+                            for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max((ushort)cpos.pos.y, y); ++yy) {
                                 Checked = !Checked;
-                                if (Checked && p.Level.GetBlock(xx, zz, yy) != NewType)
-                                {
+                                if (Checked && p.Level.GetBlock(xx, zz, yy) != NewType) {
                                     BufferAdd(buffer, xx, zz, yy);
                                 }
                             } Checked = !startY;
@@ -280,22 +229,19 @@ namespace CommandDll
                     }
                     break;
                 case SolidType.wire:
-                    for (xx = Math.Min((ushort)cpos.pos.x, x); xx <= Math.Max(cpos.pos.x, x); ++xx)
-                    {
+                    for (xx = Math.Min((ushort)cpos.pos.x, x); xx <= Math.Max(cpos.pos.x, x); ++xx) {
                         BufferAdd(buffer, xx, z, y);
                         BufferAdd(buffer, xx, (ushort)cpos.pos.z, y);
                         BufferAdd(buffer, xx, y, (ushort)cpos.pos.z);
                         BufferAdd(buffer, xx, (ushort)cpos.pos.z, (ushort)cpos.pos.y);
                     }
-                    for (zz = Math.Min((ushort)cpos.pos.z, z); zz <= Math.Max(cpos.pos.z, z); ++zz)
-                    {
+                    for (zz = Math.Min((ushort)cpos.pos.z, z); zz <= Math.Max(cpos.pos.z, z); ++zz) {
                         BufferAdd(buffer, x, zz, z);
                         BufferAdd(buffer, x, zz, (ushort)cpos.pos.y);
                         BufferAdd(buffer, (ushort)cpos.pos.x, zz, y);
                         BufferAdd(buffer, (ushort)cpos.pos.x, zz, (ushort)cpos.pos.y);
                     }
-                    for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max(cpos.pos.y, y); ++yy)
-                    {
+                    for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max(cpos.pos.y, y); ++yy) {
                         BufferAdd(buffer, x, y, zz);
                         BufferAdd(buffer, x, (ushort)cpos.pos.z, yy);
                         BufferAdd(buffer, (ushort)cpos.pos.x, z, yy);
@@ -306,10 +252,8 @@ namespace CommandDll
                     Random rand = new Random();
                     for (xx = Math.Min((ushort)cpos.pos.x, x); xx <= Math.Max(cpos.pos.x, x); ++xx)
                         for (zz = Math.Min((ushort)cpos.pos.z, z); zz <= Math.Max(cpos.pos.z, z); ++zz)
-                            for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max(cpos.pos.y, y); ++yy)
-                            {
-                                if (rand.Next(1, 11) <= 5 && p.Level.GetBlock(xx, zz, yy) != NewType)
-                                {
+                            for (yy = Math.Min((ushort)cpos.pos.y, y); yy <= Math.Max(cpos.pos.y, y); ++yy) {
+                                if (rand.Next(1, 11) <= 5 && p.Level.GetBlock(xx, zz, yy) != NewType) {
                                     BufferAdd(buffer, xx, zz, yy);
                                 }
                             }
@@ -332,26 +276,21 @@ namespace CommandDll
 
             //Level Blockqueue
             p.SendMessage(buffer.Count.ToString() + " blocks.");
-            buffer.ForEach(delegate(Pos pos)
-            {
+            buffer.ForEach(delegate(Pos pos) {
                 p.Level.BlockChange((ushort)(pos.pos.x), (ushort)(pos.pos.z), (ushort)(pos.pos.y), NewType);
             });
         }
-        protected CatchPos Default(CatchPos cpos)
-        {
+        protected CatchPos Default(CatchPos cpos) {
             cpos.block = 255;
             cpos.cuboidType = SolidType.solid;
             return cpos;
         }
-        protected CatchPos CoordinatesParse(Player p, string[] coordinates, CatchPos cpos)
-        {
+        protected CatchPos CoordinatesParse(Player p, string[] coordinates, CatchPos cpos) {
             short unused;
-            if (!short.TryParse(coordinates[0 | 1 | 2 | 3 | 4 | 5], out unused))
-            {
+            if (!short.TryParse(coordinates[0 | 1 | 2 | 3 | 4 | 5], out unused)) {
                 p.SendMessage("Invalid coordinates!");
             }
-            else
-            {
+            else {
                 cpos.pos.x = short.Parse(coordinates[0]);
                 cpos.pos.z = short.Parse(coordinates[1]);
                 cpos.pos.y = short.Parse(coordinates[2]);
@@ -362,96 +301,76 @@ namespace CommandDll
             return cpos;
         }
 
-        protected CatchPos Parser(Player p, bool one, bool coordinates, string[] args, CatchPos cpos)
-        {
+        protected CatchPos Parser(Player p, bool one, bool coordinates, string[] args, CatchPos cpos) {
             ushort unused;
-            if (one && !coordinates)
-            {
-                cpos.block = (Block.ValidBlockName(args[0]) ? Block.NameToByte(args[0]) : (byte)255);
+            if (one && !coordinates) {
+                cpos.block = (Block.ValidBlockName(args[0]) ? Block.NameToBlock(args[0]) : (byte)255);
                 cpos.cuboidType = (ValidSolidType(args[0]) ? StringToSolidType(args[0]) : SolidType.solid);
             }
-            else if (coordinates && !one)
-            {
+            else if (coordinates && !one) {
                 cpos = CoordinatesParse(p, args, cpos);
-                cpos.block = (Block.ValidBlockName(args[6]) ? Block.NameToByte(args[6]) : (Block.ValidBlockName(args[7]) ? Block.NameToByte(args[7]) : (byte)255));
+                cpos.block = (Block.ValidBlockName(args[6]) ? Block.NameToBlock(args[6]) : (Block.ValidBlockName(args[7]) ? Block.NameToBlock(args[7]) : (byte)255));
                 cpos.cuboidType = (ValidSolidType(args[6]) ? StringToSolidType(args[6]) : ValidSolidType(args[7]) ? StringToSolidType(args[7]) : SolidType.solid);
             }
-            else if (one && coordinates)
-            {
+            else if (one && coordinates) {
                 cpos = CoordinatesParse(p, args, cpos);
-                cpos.block = (Block.ValidBlockName(args[7]) ? Block.NameToByte(args[7]) : (byte)255);
+                cpos.block = (Block.ValidBlockName(args[7]) ? Block.NameToBlock(args[7]) : (byte)255);
                 cpos.cuboidType = (ValidSolidType(args[7]) ? StringToSolidType(args[7]) : SolidType.solid);
             }
-            else if (!coordinates && !one)
-            {
-                cpos.block = (Block.ValidBlockName(args[0]) ? Block.NameToByte(args[0]) : (Block.ValidBlockName(args[1]) ? Block.NameToByte(args[1]) : (byte)255));
+            else if (!coordinates && !one) {
+                cpos.block = (Block.ValidBlockName(args[0]) ? Block.NameToBlock(args[0]) : (Block.ValidBlockName(args[1]) ? Block.NameToBlock(args[1]) : (byte)255));
                 cpos.cuboidType = (ValidSolidType(args[0]) ? StringToSolidType(args[0]) : ValidSolidType(args[1]) ? StringToSolidType(args[1]) : SolidType.solid);
             }
-            else if (!coordinates && (ushort.TryParse(args[0 | 1 | 2 | 3 | 4 | 5], out unused)))
-            {
+            else if (!coordinates && (ushort.TryParse(args[0 | 1 | 2 | 3 | 4 | 5], out unused))) {
                 p.SendMessage("You need 6 coordinates for cuboid to work like that!");
             }
-            p.SendMessage("[Debug] Cpos.Block " + Block.ByteToName(cpos.block) + " Cpos.cuboidType " + cpos.cuboidType.ToString());
+            p.SendMessage("[Debug] Cpos.Block " + ((Block)cpos.block).Name + " Cpos.cuboidType " + cpos.cuboidType.ToString());
             return cpos;
         }
-        protected bool ValidSolidType(string solidTypeName)
-        {
-            if (Enum.IsDefined(typeof(SolidType), solidTypeName))
-            {
+        protected bool ValidSolidType(string solidTypeName) {
+            if (Enum.IsDefined(typeof(SolidType), solidTypeName)) {
                 return true;
             }
             return false;
         }
-        protected SolidType StringToSolidType(string _string)
-        {
-            switch (_string)
-            {
-                case "solid":
-                    {
+        protected SolidType StringToSolidType(string _string) {
+            switch (_string) {
+                case "solid": {
                         return SolidType.solid;
                     }
-                case "hollow":
-                    {
+                case "hollow": {
                         return SolidType.hollow;
                     }
-                case "walls":
-                    {
+                case "walls": {
                         return SolidType.walls;
                     }
-                case "holes":
-                    {
+                case "holes": {
                         return SolidType.holes;
                     }
-                case "wire":
-                    {
+                case "wire": {
                         return SolidType.wire;
                     }
-                case "random":
-                    {
+                case "random": {
                         return SolidType.random;
                     }
             }
             return SolidType.solid;
         }
-        protected void BufferAdd(List<Pos> list, ushort x, ushort z, ushort y)
-        {
+        protected void BufferAdd(List<Pos> list, ushort x, ushort z, ushort y) {
             BufferAdd(list, new Vector3(x, z, y));
         }
-        protected void BufferAdd(List<Pos> list, Vector3 type)
-        {
+        protected void BufferAdd(List<Pos> list, Vector3 type) {
             Pos pos;
             pos.pos = type;
             list.Add(pos);
         }
-        protected struct CatchPos
-        {
+        protected struct CatchPos {
             public SolidType cuboidType;
             public byte block;
             public Vector3 pos;
             public Vector3 secondPos;
         }
-        protected struct Pos
-        {
+        protected struct Pos {
             public Vector3 pos;
         }
         protected enum SolidType { solid, hollow, walls, holes, wire, random };

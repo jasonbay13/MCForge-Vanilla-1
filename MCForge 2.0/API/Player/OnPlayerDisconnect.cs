@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2012 MCForge
+Copyright 2011 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -64,10 +64,13 @@ namespace MCForge.API.PlayerEvent
 			//Event was called from the code.
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(opc => {
-				if (opc.target == null || opc.target.username == p.username) {// We keep it
+				if (opc.Player == null || opc.Player.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.reason = reason;
+					Player oldPlayer = opc.Player;
+					opc._target = p; // Set player that triggered event.
 					opc._queue(opc); // fire callback
+					opc._target = oldPlayer;
 				}
 			});
 		}
@@ -80,7 +83,7 @@ namespace MCForge.API.PlayerEvent
 		/// <returns>The new OnPlayerDisconnect event</returns>
 		public static OnPlayerDisconnect Register(OnCall callback, Player target) {
 			//We add it to the list here
-			OnPlayerDisconnect pe = _eventQueue.Find(match => match.target == null || match.target.username == target.username);
+			OnPlayerDisconnect pe = _eventQueue.Find(match => match.Player == null || match.Player.username == target.username);
 			if (pe != null)
 				//It already exists, so we just add it to the queue.
 				pe._queue += callback;

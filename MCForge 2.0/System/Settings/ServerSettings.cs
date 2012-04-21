@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2012 MCForge
+Copyright 2011 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -266,17 +266,25 @@ namespace MCForge.Utilities.Settings {
 
                 if (read[0] == '#' && (i + 1 < text.Count()) ? text[i + 1][0] != '#' && !String.IsNullOrWhiteSpace(text[i + 1]) : false) {
                     i++;
-                    pair = new SettingNode(text[i].Split('=')[0].Trim().ToLower(), text[i].Split('=')[1].Trim(), read.Substring(1));
+                    var split = text[i].Split('=');
+                    pair = new SettingNode(split[0].Trim().ToLower(),
+                                           String.Join("=", split, 1, split.Length - 1).Trim(),
+                                           read.Substring(1));
                 }
                 else {
-                    if (read[0] != '#')
-                        pair = new SettingNode(read.Split('=')[0].Trim().ToLower(), read.Split('=')[1].Trim(), null);
-                    else pair = new SettingNode(null, text[i], null);
+                    if (read[0] != '#') {
+                        var split = text[i].Split('=');
+                        pair = new SettingNode(split[0].Trim().ToLower(),
+                                               String.Join("=", split, 1, split.Length - 1).Trim(),
+                                               null);
+                    }
+                    else pair = new SettingNode(null, read, null);
                 }
                 Values.Add(pair);
             }
 
         }
+
 
         internal static void GenerateSalt() {
             using (var numberGen = new RNGCryptoServiceProvider())

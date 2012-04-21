@@ -148,7 +148,7 @@ namespace CommandDll
                 foreach (Player pl in Server.reviewlist.ToArray())
                 {
                     int position = Server.reviewlist.IndexOf(pl);
-                    if (position == 0) { pl.SendMessage("You're next in the review queue!"); return; }
+                    if (position == 0) { pl.SendMessage("You're next in the review queue!"); continue; }
                     pl.SendMessage(position == 1 ? "There is " + position + " players in front of you!" : "There are " + position + " players in front of you!");
                 }
                 return;

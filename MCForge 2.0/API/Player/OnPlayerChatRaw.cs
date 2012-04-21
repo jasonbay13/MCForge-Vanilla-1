@@ -10,7 +10,7 @@ namespace MCForge.API.System {
     /// <summary>
     /// Event for recieveing all messages, unedited and unmodified.
     /// </summary>
-    public class OnPlayerChatRaw : Event, Cancelable {
+    public class OnPlayerChatRaw : Event{
 
         /// <summary>
         /// Data Recieved
@@ -34,19 +34,10 @@ namespace MCForge.API.System {
             Message = message;
         }
 
-		private bool _canceled = false;
         /// <summary>
-        /// Gets or Sets the canceledness of the event
+        /// Gets or sets the canceledness of the Chat Event
         /// </summary>
-		public bool cancel { get { return _canceled;} }
-
-		public void Cancel() {
-			_canceled = true;
-		}
-
-		public void Allow() {
-			_canceled = false;
-		}
+        public bool IsCanceled { get; set; }
 
 
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2012 MCForge
+Copyright 2011 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -40,17 +40,20 @@ namespace MCForge.API.PlayerEvent
 		/// In this case, it is called from the command processing code.
 		/// </summary>
 		/// <param name="p">The player that caused the event.</param>
-		/// <param name="reason">The reason for disconnect.</param>
+		/// <param name="oldPos">The old position of the person.</param>
 		internal static bool Call(Player p, Vector3 oldPos) {
 			//Event was called from the code.
 			List<OnPlayerMove> opcList = new List<OnPlayerMove>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(opc => {
-				if (opc.target == null || opc.target.username == p.username) {// We keep it
+				if (opc.Player == null || opc.Player.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.oldPos = oldPos;
+					Player oldPlayer = opc.Player; 
+					opc._target = p; // Set player that triggered event.
 					opc._queue(opc); // fire callback
 					opcList.Add(opc); // add to used list
+					opc._target = oldPlayer;
 				}
 			});
 			return opcList.Any(pe => pe.cancel); //Return if any canceled the event.
@@ -61,7 +64,6 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		/// <param name="e">The Event that fired</param>
 		public delegate void OnCall(OnPlayerMove e);
-		//Note: Perhaps we need to have one per event, so it can prevent casting problems.
 
 		/// <summary>
 		/// The queue of delegates to call for the particular tag (One for each event)
@@ -81,7 +83,7 @@ namespace MCForge.API.PlayerEvent
 		/// <returns>A reference to the event</returns>
 		public static OnPlayerMove Register(OnCall callback, Player target) {
 			//We add it to the list here
-			OnPlayerMove pe = _eventQueue.Find(match => match.target == null || match.target.username == target.username);
+			OnPlayerMove pe = _eventQueue.Find(match => match.Player == null || match.Player.username == target.username);
 			if (pe != null)
 				//It already exists, so we just add it to the queue.
 				pe._queue += callback;
