@@ -46,9 +46,7 @@ namespace MCForge.Gui {
                 coloredTextBox1.LogText(args.Message + Environment.NewLine);
             };
 
-            OnPlayerConnect.Register((args) => {
-                mPlayersListBox.Items.Add(args.Player.username);
-            }, null);
+            OnPlayerConnect.Register(OnConnect);
 
             chatButtonChange.Text = "Chat";
         }
@@ -93,5 +91,25 @@ namespace MCForge.Gui {
                     return;
             }
         }
+
+        #region EventHandlers
+
+        void OnConnect(OnPlayerConnect args) {
+            if (mPlayersListBox.InvokeRequired) {
+                mPlayersListBox.Invoke((MethodInvoker)delegate { OnConnect(args); });
+                return;
+            }
+            mPlayersListBox.Items.Add(args.Player.username);
+        }
+
+        void OnDisconnect(OnPlayerDisconnect args) {
+            if (mPlayersListBox.InvokeRequired) {
+                mPlayersListBox.Invoke((MethodInvoker)delegate { OnDisconnect(args);  });
+                return;
+            }
+            mPlayersListBox.Items.Remove(args.Player.username);
+        }
+        #endregion
+
     }
 }
