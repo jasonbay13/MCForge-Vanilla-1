@@ -24,7 +24,6 @@ using MCForge.Utilities;
 using System.Threading;
 using MCForge.Core;
 using MCForge.Interface;
-using MCForge.Utilities;
 using MCForge.Utils;
 using MCForge.Entity;
 using MCForge.API.PlayerEvent;
@@ -46,7 +45,7 @@ namespace MCForge.Gui {
                 coloredTextBox1.Write(args.Message + Environment.NewLine);
             };
 
-            OnPlayerConnect.Register(OnConnect);
+            OnPlayerConnect.Register(OnConnect, null);
 
             chatButtonChange.Text = "Chat";
 

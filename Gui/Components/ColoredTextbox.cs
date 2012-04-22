@@ -72,7 +72,6 @@ namespace MCForge.Gui.Components {
             wList.Add(coloredMessage + END);
             WriteAndScroll();
         }
-
         private void WriteAndScroll() {
 
             string newRtf = TheColorsOfTheRainbow;

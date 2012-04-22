@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2012 MCForge
+Copyright 2011 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -34,7 +34,7 @@ namespace CommandDll.Moderation
             int _ = 0;
             string _newreason = "";
             string newreason = _newreason.Substring(args[0].IndexOf(" ") + 1);
-            string[] lines = File.ReadAllLines("baninfo.txt");
+            string[] lines = File.ReadAllLines("Bans/Ban Info.txt");
             if (lines.Length < 1) { p.SendMessage("Could not find ban information for \"" + args[0] + "\"."); return; }
             foreach (string line in lines)
             {

@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2012 MCForge
+Copyright 2011 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -32,8 +32,7 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		/// <param name="callback">the method used for the delegate to callback upon event fire</param>
 		/// <param name="target">The target Player we want the event for.</param>
-		internal OnPlayerChat(OnCall callback, Player target) {
-			_target = target;
+		internal OnPlayerChat(OnCall callback, Player target) : base (target) {
 			_queue += callback;
 		}
 
@@ -41,7 +40,11 @@ namespace MCForge.API.PlayerEvent
 		/// The messsage sent by the player
 		/// </summary>
 		public string message { get; set; }
-
+		
+		public string OrginalMessage()
+		{
+			return message.Split(':')[1].Substring(1);
+		}
 		/// <summary>
 		/// The delegate used for callbacks.  The caller will have this method run when the event fires.
 		/// </summary>
@@ -74,8 +77,11 @@ namespace MCForge.API.PlayerEvent
 				if (opc.Player == null || opc.Player.username == p.username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.message = msg;
+					Player oldPlayer = opc.Player;
+					opc._target = p; // Set player that triggered event.
 					opc._queue(opc); // fire callback
 					opcList.Add(opc); // add to used list
+					opc._target = oldPlayer;
 				}
 			});
 			OnPlayerChat pc = new OnPlayerChat(null, p);

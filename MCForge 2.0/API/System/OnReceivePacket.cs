@@ -5,7 +5,7 @@ using System.Text;
 using MCForge.Entity;
 
 
-namespace MCForge.API.SystemEvent {
+namespace MCForge.API.System {
 
     /// <summary>
     /// Event for recieveing all overflowed packets, this event can be canceled
@@ -35,12 +35,12 @@ namespace MCForge.API.SystemEvent {
         }
 
         public bool IsCanceled { get; set; }
-		/// <summary>
+        /// <summary>
         /// Calls every event
         /// </summary>
         public void Call() {
             ToCall.ForEach(method => {
-                method(this);    
+                method(this);
             });
         }
 
@@ -61,6 +61,11 @@ namespace MCForge.API.SystemEvent {
         public static void Unregister(OnPacket Event) {
             if (ToCall.Contains(Event))
                 ToCall.Remove(Event);
+        }
+
+        [Obsolete("Please use Unregister(Onpacket)", true)]
+        public override void Unregister() {
+            throw new NotImplementedException();
         }
     }
 }

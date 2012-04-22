@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2012 MCForge
+Copyright 2011 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -28,8 +28,8 @@ using System.Text.RegularExpressions;
 using System.Net.Sockets;
 using MCForge.API.PlayerEvent;
 using System.Threading;
-using MCForge.API.SystemEvent;
 using MCForge.World;
+using MCForge.API;
 
 namespace Plugins.WomPlugin {
     public class PluginWomTextures : IPlugin {
@@ -55,7 +55,7 @@ namespace Plugins.WomPlugin {
             WomSettings = new WomSettings();
             WomSettings.OnLoad();
             OnReceivePacket.Register(OnData);
-            OnPlayerChatRaw.Register((args) => SendDetailToPlayer(args.Player, "This is a detail, deal &4With &3It"));
+            OnPlayerChat.Register((args) => SendDetailToPlayer(args.Player, "This is a detail, deal &4With &3It"), null);
         }
 
         private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
@@ -66,7 +66,7 @@ namespace Plugins.WomPlugin {
                 return;
 
 
-            args.IsCanceled = true;
+            args.Cancel();
             var netStream = new NetworkStream(args.Player.Socket);
             using(var Reader = new StreamReader(netStream)) //Not used but it likes it...
             using (var Writer = new StreamWriter(netStream)) {

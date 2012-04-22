@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2012 MCForge
+Copyright 2011 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -30,8 +30,7 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		/// <param name="callback">the method used for the delegate to callback upon event fire</param>
 		/// <param name="target">The target Player we want the event for.</param>
-		internal OnPlayerCommand(OnCall callback, Player target) {
-			_target = target;
+		internal OnPlayerCommand(OnCall callback, Player target) : base(target) {
 			_queue += callback;
 		}
 
@@ -78,8 +77,11 @@ namespace MCForge.API.PlayerEvent
 					//Set up variables, then fire all callbacks.
 					opc.cmd = cmd;
 					opc.args = args;
+					Player oldPlayer = opc.Player;
+					opc._target = p; // Set player that triggered event.
 					opc._queue(opc); // fire callback
 					opcList.Add(opc); // add to used list
+					opc._target = oldPlayer;
 				}
 			});
 			return opcList.Any(pe => pe.cancel); //Return if any canceled the event.

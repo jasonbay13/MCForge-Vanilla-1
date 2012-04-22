@@ -7,22 +7,21 @@ using MCForge.World;
 
 namespace MCForge.API.PlayerEvent
 {
-    public enum ActionType : byte
-    {
-        Delete,
-        Place
-    }
-    public class OnPlayerBlockChange : PlayerEvent
-    {
+	public enum ActionType : byte
+	{
+		Delete,
+		Place
+	}
+	public class OnPlayerBlockChange : PlayerEvent
+	{
 		/// <summary>
 		/// Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
 		/// </summary>
 		/// <param name="callback">the method used for the delegate to callback upon event fire</param>
 		/// <param name="target">The target Player we want the event for.</param>
 		/// <param name="datapass">The data we want to pass between events.</param>
-		internal OnPlayerBlockChange(OnCall callback, Player target, object datapass) {
+		internal OnPlayerBlockChange(OnCall callback, Player target, object datapass) : base(target)		{
 			this.datapass = datapass;
-			_target = target;
 			_queue += callback;
 		}
 
@@ -81,17 +80,20 @@ namespace MCForge.API.PlayerEvent
 			List<OnPlayerBlockChange> opbcList = new List<OnPlayerBlockChange>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(opbc => {
-				if (opbc.Player == null || opbc.Player.username == p.username) {// We keep it
-					//Set up variables, then fire all callbacks.
-					opbc.action = action;
-					opbc.holding = holding;
-					opbc.x = x;
-					opbc.y = y;
-					opbc.z = z;
-					opbc._queue(opbc); // fire callback
-					opbcList.Add(opbc); // add to used list
-				}
-			});
+			                    	if (opbc.Player == null || opbc.Player.username == p.username) {// We keep it
+			                    		//Set up variables, then fire all callbacks.
+			                    		opbc.action = action;
+			                    		opbc.holding = holding;
+			                    		opbc.x = x;
+			                    		opbc.y = y;
+			                    		opbc.z = z;
+			                    		Player oldPlayer = opbc.Player;
+			                    		opbc._target = p; // Set player that triggered event.
+			                    		opbc._queue(opbc); // fire callback
+			                    		opbcList.Add(opbc); // add to used list
+			                    		opbc._target = oldPlayer;
+			                    	}
+			                    });
 			return opbcList.Any(pe => pe.cancel); //Return if any canceled the event.
 		}
 

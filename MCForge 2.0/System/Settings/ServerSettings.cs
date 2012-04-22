@@ -1,5 +1,5 @@
-﻿/*
-Copyright 2012 MCForge
+/*
+Copyright 2011 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -67,6 +67,15 @@ namespace MCForge.Utilities.Settings {
                 new SettingNode("DefaultGroup", "guest", "The name of the default group, if it doesn't exist it will cause problems"),
                 new SettingNode("Offline", "false", "if set to true, it will skip authintication, causing a major security flaw"),
                 new SettingNode("AllowHigherRankTp", "true", "Allow players of a lower rank to teleport to a user of a higher rank"),
+                new SettingNode("DatabaseType", "sqlite", "The type of database you want to use (mysql/sqlite)"),
+                new SettingNode("MySQL-IP", "127.0.0.1", "The IP of the sql (mysql/sqlite) database"),
+                new SettingNode("MySQL-Port", "3306", "The port for the mysql database (sqlite does not need a port, leave this blank)"),
+                new SettingNode("MySQL-Username", "root", "The username for the mysql database"),
+                new SettingNode("MySQL-Password", "password", "The password for the mysql database"),
+                new SettingNode("MySQL-Pooling", "True", null),
+                new SettingNode("MySQL-DBName", "MCForge", "The database name for MySQL"),
+                new SettingNode("SQLite-Filepath", "MCForge.db", "The filepath for the database"),
+                
                 //TODO: add all of the default settings here
                                                         };
             if (!Directory.Exists(FileUtils.PropertiesPath))

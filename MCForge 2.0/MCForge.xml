@@ -348,6 +348,31 @@
             </summary>
             <param name="e">The Event that fired</param>
         </member>
+        <member name="T:MCForge.SQL.Database">
+            <summary>
+            Description of Database.
+            </summary>
+        </member>
+        <member name="M:MCForge.API.System.SystemEvent.Cancel">
+            <summary>
+            Prevent default processing until event is unregistered. (or Allow() is called)
+            </summary>
+        </member>
+        <member name="M:MCForge.API.System.SystemEvent.Allow">
+            <summary>
+            Allow default processing. (until Cancel() is called)
+            </summary>
+        </member>
+        <member name="M:MCForge.API.System.SystemEvent.Unregister">
+            <summary>
+            Unregisters the event from the queue.
+            </summary>
+        </member>
+        <member name="P:MCForge.API.System.SystemEvent.cancel">
+            <summary>
+            Do we want to prevent the default proccessing?
+            </summary>
+        </member>
         <member name="M:MCForge.Core.PDB.CompareTo(MCForge.Core.PDB)">
             <summary>
             This allows a PDB to be compared to another PDB by looking at the username, and subsequently, it can then be sorted.
@@ -442,12 +467,17 @@
         </member>
         <member name="F:MCForge.Core.Server.Players">
             <summary>
-            Get the current list of online players, note that if your doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
+            Get the current list of online players, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
             </summary>
         </member>
-        <member name="F:MCForge.Core.Server.BannedIP">
+        <member name="F:MCForge.Core.Server.IPBans">
             <summary>
-            Get the current list of banned ip addresses, note that if your doing a foreach on this (or any other public list) you should always add .ToArray() to the end so that you avoid errors!
+            The current list of banned IP addresses. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.UsernameBans">
+            <summary>
+            The list of banned usernames. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
             </summary>
         </member>
         <member name="F:MCForge.Core.Server.devs">
@@ -679,6 +709,11 @@
             The number of times the player has tried to use /pass.
             </summary>
         </member>
+        <member name="F:MCForge.Entity.Player.verified">
+            <summary>
+            Has the player used password verification?
+            </summary>
+        </member>
         <member name="F:MCForge.Entity.Player.Username">
             <summary>
             The player's real username
@@ -899,11 +934,6 @@
             Checks if the player is the server owner.
             </summary>
         </member>
-        <member name="P:MCForge.Entity.Player.verified">
-            <summary>
-            Has the player used password verification?
-            </summary>
-        </member>
         <member name="P:MCForge.Entity.Player.username">
             <summary>
             This is the player's LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
@@ -957,6 +987,16 @@
         <member name="P:MCForge.Interface.Command.Command.all">
             <summary>
             Returns the dictionary of all commands.
+            </summary>
+        </member>
+        <member name="T:MCForge.SQL.SQLite">
+            <summary>
+            Description of SQLite.
+            </summary>
+        </member>
+        <member name="T:MCForge.SQL.ISQL">
+            <summary>
+            Description of SQL.
             </summary>
         </member>
         <member name="T:MCForge.API.PlayerEvent.OnPlayerChat">
@@ -1023,49 +1063,6 @@
             The delegate used for callbacks.  The caller will have this method run when the event fires.
             </summary>
             <param name="e">The Event that fired</param>
-        </member>
-        <member name="T:MCForge.API.System.OnPlayerChatRaw">
-            <summary>
-            Event for recieveing all messages, unedited and unmodified.
-            </summary>
-        </member>
-        <member name="M:MCForge.API.System.OnPlayerChatRaw.Call">
-            <summary>
-            Calls every event
-            </summary>
-        </member>
-        <member name="M:MCForge.API.System.OnPlayerChatRaw.Register(MCForge.API.System.OnPlayerChatRaw.OnMessage)">
-            <summary>
-            Register an OnPacket event to the server
-            </summary>
-            <param name="Event">OnPacket Delegate to register</param>
-        </member>
-        <member name="M:MCForge.API.System.OnPlayerChatRaw.Unregister(MCForge.API.System.OnPlayerChatRaw.OnMessage)">
-            <summary>
-            Unregister the event
-            </summary>
-            <param name="Event">Event to unregister</param>
-        </member>
-        <member name="P:MCForge.API.System.OnPlayerChatRaw.Message">
-            <summary>
-            Data Recieved
-            </summary>
-        </member>
-        <member name="P:MCForge.API.System.OnPlayerChatRaw.Player">
-            <summary>
-            Player that recieved the message
-            </summary>
-        </member>
-        <member name="P:MCForge.API.System.OnPlayerChatRaw.IsCanceled">
-            <summary>
-            Gets or sets the canceledness of the Chat Event
-            </summary>
-        </member>
-        <member name="T:MCForge.API.System.OnPlayerChatRaw.OnMessage">
-            <summary>
-            Delegate for recieveing messages
-            </summary>
-            <param name="args">OnPlayerChatRaw class to recieve</param>
         </member>
         <member name="M:MCForge.Interface.Command.ICommand.Use(MCForge.Entity.Player,System.String[])">
             <summary>
@@ -1150,7 +1147,7 @@
             In this case, it is called from the command processing code.
             </summary>
             <param name="p">The player that caused the event.</param>
-            <param name="reason">The reason for disconnect.</param>
+            <param name="oldPos">The old position of the person.</param>
         </member>
         <member name="F:MCForge.API.PlayerEvent.OnPlayerMove._queue">
             <summary>
@@ -1194,36 +1191,57 @@
             This event can be canceled
             </summary>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.#ctor(MCForge.Entity.Player)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.#ctor(MCForge.API.PlayerEvent.OnPlayerConnect.OnCall,MCForge.Entity.Player)">
             <summary>
             Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
             </summary>
-            <param name="playerConnected">Player that connected</param>
+            <param name="callback">the method used for the delegate to callback upon event fire</param>
+            <param name="target">The target Player we want the event for.</param>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Call">
+        <member name="F:MCForge.API.PlayerEvent.OnPlayerConnect._queue">
+            <summary>
+            The queue of delegates to call for the particular tag (One for each event)
+            </summary>
+        </member>
+        <member name="F:MCForge.API.PlayerEvent.OnPlayerConnect._eventQueue">
+            <summary>
+            The list of all events currently active of a PlayerEvent type.
+            </summary>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Call(MCForge.Entity.Player)">
             <summary>
             This is meant to be called from the code where you mean for the event to happen.
             
             In this case, it is called from the command processing code.
             </summary>
+            <param name="p">The player that caused the event.</param>
+            <returns> A boolean value specifying whether or not to cancel the event.</returns>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Register(MCForge.API.PlayerEvent.OnPlayerConnect.OnCall)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Register(MCForge.API.PlayerEvent.OnPlayerConnect.OnCall,MCForge.Entity.Player)">
             <summary>
             Used to register a method to be executed when the event is fired.
             </summary>
-            <param name="callback">The method to register</param>
+            <param name="callback">The method to call</param>
+            <param name="target">The player to watch for. (null for any players)</param>
+            <returns>the new OnPlayerConnect event</returns>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Unregister(MCForge.API.PlayerEvent.OnPlayerConnect.OnCall)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Unregister(MCForge.API.PlayerEvent.OnPlayerConnect)">
             <summary>
-            Used to unregister a method that was previously registered.
+            Unregisters the sxpecified event
             </summary>
-            <param name="callback">The method to unregister</param>
+            <param name="pe">The event to unregister</param>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Unregister">
+            <summary>
+            Unregisters the sxpecified event
+            </summary>
+            <param name="pe">The event to unregister</param>
         </member>
         <member name="T:MCForge.API.PlayerEvent.OnPlayerConnect.OnCall">
             <summary>
             The delegate used for callbacks.  The caller will have this method run when the event fires.
             </summary>
-            <param name="args">The Event that fired</param>
+            <param name="e">The Event that fired</param>
         </member>
         <member name="T:MCForge.Interface.Plugin.PluginManager">
             <summary>
@@ -1900,39 +1918,44 @@
             The filename to save the group list into. when setting it des not contain the "ranks/" part
             </summary>
         </member>
-        <member name="T:MCForge.API.SystemEvent.OnReceivePacket">
+        <member name="T:MCForge.SQL.MySQL">
+            <summary>
+            Description of MySQL.
+            </summary>
+        </member>
+        <member name="T:MCForge.API.System.OnReceivePacket">
             <summary>
             Event for recieveing all overflowed packets, this event can be canceled
             </summary>
         </member>
-        <member name="M:MCForge.API.SystemEvent.OnReceivePacket.Call">
+        <member name="M:MCForge.API.System.OnReceivePacket.Call">
             <summary>
             Calls every event
             </summary>
         </member>
-        <member name="M:MCForge.API.SystemEvent.OnReceivePacket.Register(MCForge.API.SystemEvent.OnReceivePacket.OnPacket)">
+        <member name="M:MCForge.API.System.OnReceivePacket.Register(MCForge.API.System.OnReceivePacket.OnPacket)">
             <summary>
             Register an OnPacket event to the server
             </summary>
             <param name="Event">OnPacket Delegate to register</param>
         </member>
-        <member name="M:MCForge.API.SystemEvent.OnReceivePacket.Unregister(MCForge.API.SystemEvent.OnReceivePacket.OnPacket)">
+        <member name="M:MCForge.API.System.OnReceivePacket.Unregister(MCForge.API.System.OnReceivePacket.OnPacket)">
             <summary>
             Unregister the event
             </summary>
             <param name="Event">Event to unregister</param>
         </member>
-        <member name="P:MCForge.API.SystemEvent.OnReceivePacket.Data">
+        <member name="P:MCForge.API.System.OnReceivePacket.Data">
             <summary>
             Data Recieved
             </summary>
         </member>
-        <member name="P:MCForge.API.SystemEvent.OnReceivePacket.Player">
+        <member name="P:MCForge.API.System.OnReceivePacket.Player">
             <summary>
             Player that recieved the packet
             </summary>
         </member>
-        <member name="T:MCForge.API.SystemEvent.OnReceivePacket.OnPacket">
+        <member name="T:MCForge.API.System.OnReceivePacket.OnPacket">
             <summary>
             Delegate for recieveing packets
             </summary>
@@ -2067,47 +2090,75 @@
             <param name="bytes"></param>
             <param name="saveLocation"></param>
         </member>
-        <member name="M:MCForge.Utilities.FileUtils.Init">
+        <member name="M:MCForge.Utilities.FileUtils.CreateDirIfNotExist(System.String)">
             <summary>
-            Creates all of the core directories and files
+            Creates a directory if it doesn't exist, will log results
             </summary>
+        </member>
+        <member name="M:MCForge.Utilities.FileUtils.CreateFileIfNotExist(System.String,System.String)">
+            <summary>
+            Creats a file if it doesnt already exist, logs results.
+            </summary>
+            <param name="fileLoc"></param>
         </member>
         <member name="T:MCForge.API.PlayerEvent.OnPlayerDisconnect">
             <summary>
-            The OnPlayerConnect event is executed everytime a player disconnects from the server
-            This event can be canceled (but the player will still disconnect)
+            Called whenever anyone leaves the server.
+            
+            <b>Note: This event CANNOT be canceled.  Cancel() will have no effect.</b>
             </summary>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.#ctor(MCForge.Entity.Player)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.#ctor(MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall,MCForge.Entity.Player)">
             <summary>
             Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
             </summary>
-            <param name="playerConnected">Player that disconnected</param>
+            <param name="callback">the method used for the delegate to callback upon event fire</param>
+            <param name="target">The target Player we want the event for.</param>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Call">
+        <member name="F:MCForge.API.PlayerEvent.OnPlayerDisconnect._queue">
+            <summary>
+            The queue of delegates to call for the particular tag (One for each event)
+            </summary>
+        </member>
+        <member name="F:MCForge.API.PlayerEvent.OnPlayerDisconnect._eventQueue">
+            <summary>
+            The list of all events currently active of a PlayerEvent type.
+            </summary>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Call(MCForge.Entity.Player,System.String)">
             <summary>
             This is meant to be called from the code where you mean for the event to happen.
             
             In this case, it is called from the command processing code.
             </summary>
+            <param name="p">The player that caused the event.</param>
+            <param name="reason">The reason for disconnect.</param>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Register(MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Register(MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall,MCForge.Entity.Player)">
             <summary>
             Used to register a method to be executed when the event is fired.
             </summary>
-            <param name="callback">The method to register</param>
+            <param name="callback">The method to call</param>
+            <param name="target">The player to watch for. (null for any players)</param>
+            <returns>The new OnPlayerDisconnect event</returns>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Unregister(MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall)">
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Unregister(MCForge.API.PlayerEvent.OnPlayerDisconnect)">
             <summary>
-            Used to unregister a method that was previously registered.
+            Unregisters the sxpecified event
             </summary>
-            <param name="callback">The method to unregister</param>
+            <param name="pe">The event to unregister</param>
+        </member>
+        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Unregister">
+            <summary>
+            Unregisters the sxpecified event
+            </summary>
+            <param name="pe">The event to unregister</param>
         </member>
         <member name="T:MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall">
             <summary>
             The delegate used for callbacks.  The caller will have this method run when the event fires.
             </summary>
-            <param name="args">The Event that fired</param>
+            <param name="e">The Event that fired</param>
         </member>
         <member name="T:MCForge.API.Priority">
             <summary>

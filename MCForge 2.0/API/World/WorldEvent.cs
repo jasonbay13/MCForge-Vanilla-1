@@ -22,6 +22,6 @@ namespace MCForge.API.WorldEvent
 {
     public abstract class WorldEvent : Event
     {
-        //Level GetWorld();
+        //TODO Add stuff here..
     }
 }

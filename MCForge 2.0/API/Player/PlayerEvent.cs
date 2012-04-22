@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2012 MCForge
+Copyright 2011 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -30,6 +30,9 @@ namespace MCForge.API.PlayerEvent
 		public virtual Player Player { get { return _target;} }
 		
 		private static bool _canceled;
+		
+		internal PlayerEvent(Player p) { _target = p; }
+		
 		/// <summary>
 		/// Do we want to prevent the default proccessing?
 		/// </summary>

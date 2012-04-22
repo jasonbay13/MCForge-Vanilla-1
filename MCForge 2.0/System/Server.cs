@@ -72,17 +72,23 @@ namespace MCForge.Core {
         private static int PingInterval = 10;
         private static int PintIntervalCurrent = 0;
 
+        public struct TempBan { public string name; public DateTime allowed; }
+        public static List<TempBan> tempbans = new List<TempBan>();
         public static DateTime StartTime = DateTime.Now;
         internal static List<Player> Connections = new List<Player>();
         /// <summary>
-        /// Get the current list of online players, note that if your doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
+        /// Get the current list of online players, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
         /// </summary>
         public static List<Player> Players = new List<Player>();
         public static int PlayerCount { get { return Players.Count; } }
         /// <summary>
-        /// Get the current list of banned ip addresses, note that if your doing a foreach on this (or any other public list) you should always add .ToArray() to the end so that you avoid errors!
+        /// The current list of banned IP addresses. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
         /// </summary>
-        public static List<string> BannedIP = new List<string>();
+        public static List<string> IPBans;
+        /// <summary>
+        /// The list of banned usernames. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
+        /// </summary>
+        public static List<string> UsernameBans;
         /// <summary>
         /// The list of MCForge developers.
         /// </summary>
@@ -177,9 +183,11 @@ namespace MCForge.Core {
 
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
-           
-            CreateDirectories();
-            
+
+            CreateCoreFiles();
+
+            IPBans = new List<string>(File.ReadAllLines("bans/IPBans.txt"));
+            UsernameBans = new List<string>(File.ReadAllLines("bans/NameBans.txt"));
 
             StartListening();
             Started = true;
@@ -208,21 +216,22 @@ namespace MCForge.Core {
             }
         }
 
-        static void CreateDirectories() {
-            if (!Directory.Exists("text")) { Directory.CreateDirectory("text"); Log("Created text directory...", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/badwords.txt")) { File.Create("text/badwords.txt").Close(); Log("[File] Created badwords.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/replacementwords.txt")) { File.Create("text/replacementwords.txt").Close(); Log("[File] Created replacementwords.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); Log("[File] Created agreed.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/hacksmessages.txt")) { File.Create("text/hacksmessages.txt").Close(); Log("[File] Created hacksmessages.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/news.txt")) { File.Create("text/news.txt").Close(); Log("[File] Created news.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("baninfo.txt")) { File.Create("baninfo.txt").Close(); Log("[File] Created baninfo.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/jokermessages.txt")) {
-                File.Create("text/jokermessages.txt").Close();
-                Logger.Log("Created jokermessages.txt", LogType.Normal);
-                string text = "I am a pony" + Environment.NewLine + "Rainbow Dash <3" + Environment.NewLine + "I like trains!";
-                File.WriteAllText("text/jokermessages.txt", text);
-                Logger.Log("Added default messages to jokermessages.txt", LogType.Normal);
-            }
+        static void CreateCoreFiles() {
+
+            //Directories first
+            FileUtils.CreateDirIfNotExist("bans");
+            FileUtils.CreateDirIfNotExist("text");
+
+            FileUtils.CreateFileIfNotExist("text/badwords.txt");
+            FileUtils.CreateFileIfNotExist("text/replacementwords.txt");
+            FileUtils.CreateFileIfNotExist("text/agreed.txt");
+            FileUtils.CreateFileIfNotExist("text/hacksmessages.txt");
+            FileUtils.CreateFileIfNotExist("text/news.txt");
+            FileUtils.CreateFileIfNotExist("text/jokermessages.txt", "I am a pony" + Environment.NewLine + "Rainbow Dash <3" + Environment.NewLine + "I like trains!");
+
+            FileUtils.CreateFileIfNotExist("bans/IPbans.txt");
+            FileUtils.CreateFileIfNotExist("bans/NameBans.txt");
+
             try {
                 string[] lines = File.ReadAllLines("text/agreed.txt");
                 foreach (string pl in lines) { agreed.Add(pl); }

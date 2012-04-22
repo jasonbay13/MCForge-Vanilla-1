@@ -51,8 +51,8 @@ namespace MCForge.Gui
             this.mPlayersListBox = new System.Windows.Forms.ListBox();
             this.chatBox = new System.Windows.Forms.TextBox();
             this.chatButtonChange = new System.Windows.Forms.ComboBox();
-            this.coloredTextBox1 = new MCForge.Gui.Components.ColoredTextBox(this.components);
-            this.newsFeeder1 = new MCForge.Gui.Components.NewsFeeder(this.components);
+            this.coloredTextBox1 = new MCForge.Gui.Components.ColoredTextBox();
+            this.newsFeeder1 = new MCForge.Gui.Components.NewsFeeder();
             this.menuStrip1.SuspendLayout();
             this.mPlayerGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -104,7 +104,7 @@ namespace MCForge.Gui
             // 
             this.chatBox.Location = new System.Drawing.Point(12, 419);
             this.chatBox.Name = "chatBox";
-            this.chatBox.Size = new System.Drawing.Size(499, 20);
+            this.chatBox.Size = new System.Drawing.Size(487, 20);
             this.chatBox.TabIndex = 5;
             this.chatBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Chat);
             // 
@@ -116,9 +116,9 @@ namespace MCForge.Gui
             "Chat",
             "OpChat",
             "AdminChat"});
-            this.chatButtonChange.Location = new System.Drawing.Point(517, 417);
+            this.chatButtonChange.Location = new System.Drawing.Point(505, 417);
             this.chatButtonChange.Name = "chatButtonChange";
-            this.chatButtonChange.Size = new System.Drawing.Size(71, 21);
+            this.chatButtonChange.Size = new System.Drawing.Size(83, 21);
             this.chatButtonChange.TabIndex = 6;
             // 
             // coloredTextBox1

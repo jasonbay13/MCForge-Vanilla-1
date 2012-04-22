@@ -1,5 +1,5 @@
-/*
-Copyright 2011 MCForge
+﻿/*
+Copyright 2012 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -12,54 +12,112 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MCForge;
+using System;
+using System.IO;
+using MCForge.Interface.Command;
+using MCForge.Entity;
+using MCForge.Core;
 
-namespace CommandDll
+namespace CommandDll.Moderation
 {
-    public class CmdBan : ICommand
+    class CmdBan : ICommand
     {
-        string _Name = "ban";
-        public string Name { get { return _Name; } }
-
-        CommandTypes _Type = CommandTypes.mod;
-        public CommandTypes Type { get { return _Type; } }
-
-        string _Author = "cazzar";
-        public string Author { get { return _Author; } }
-
-        int _Version = 1;
-        public int Version { get { return _Version; } }
-
-        string _CUD = "";
-        public string CUD { get { return _CUD; } }
-
-        string[] CommandStrings = new string[1] { "ban" };
-
+        public string Name { get { return "Ban"; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public string Author { get { return "Sinjai"; } }
+        public int Version { get { return 1; } }
+        public string CUD { get { return ""; } }
+        public byte Permission { get { return 0; } }
+        public void Initialize() { Command.AddReference(this, "ban"); }
         public void Use(Player p, string[] args)
         {
-            if (args.Length >= 1)
+            string _reason = "";
+            bool Stealth = false;
+            if (args[0] == "#") Stealth = true;
+            if (!Stealth)
             {
-                if (args.Length == 1)
-                    args[2] = "Banned!";
-
                 Player who = Player.Find(args[0]);
+                string reason = _reason.Substring(args[0].Length + 1);
+                using (StreamWriter SW = File.AppendText("Bans/Username Bans.txt"))
+                {
+                    if (who != null)
+                        SW.WriteLine(who.Username);
+                    else
+                        SW.WriteLine(args[0]);
+                    SW.Dispose();
+                    SW.Close();
+                }
+                using (StreamWriter SW = File.AppendText("Bans/Ban Info.txt"))
+                {
+                    if (who != null)
+                    {
+                        if (reason == "") { SW.WriteLine(who.Username + "`No reason specified.`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                        else { SW.WriteLine(who.Username + "`" + reason + "`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                    }
+                    else
+                    {
+                        if (reason == "") { SW.WriteLine(args[0] + "`No reason specified.`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                        else { SW.WriteLine(args[0] + "`" + reason + "`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                    }
+                    SW.Dispose();
+                    SW.Close();
+                }
+                if (reason == "")
+                {
+                    if (who != null) Player.UniversalChat(who.color + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
+                    else Player.UniversalChat("&3" + args[0] + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
+                }
+                else
+                {
+                    if (who != null) { Player.UniversalChat(who.color + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChat("&4Reason: &f" + reason); }
+                    else { Player.UniversalChat("&3" + args[0] + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChat("&4Reason: &f" + reason); }
+                }
+            }
+            if (Stealth)
+            {
+                Player who = Player.Find(args[1]);
+                string reason = _reason.Substring(args[0].Length + args[1].Length + 2);
+                using (StreamWriter SW = File.AppendText("Bans/Username Bans.txt"))
+                {
+                    if (who != null)
+                        SW.WriteLine(who.Username);
+                    else
+                        SW.WriteLine(args[1]);
+                    SW.Dispose();
+                    SW.Close();
+                }
+                using (StreamWriter SW = File.AppendText("Bans/Ban Info.txt"))
+                {
+                    if (who != null)
+                    {
+                        if (reason == "") { SW.WriteLine(who.Username + "`No reason specified.`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                        else { SW.WriteLine(who.Username + "`" + reason + "`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                    }
+                    else
+                    {
+                        if (reason == "") { SW.WriteLine(args[1] + "`No reason specified.`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                        else { SW.WriteLine(args[1] + "`" + reason + "`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                    }
+                    SW.Dispose();
+                    SW.Close();
+                }
+                if (reason == "")
+                {
+                    if (who != null) Player.UniversalChatOps(who.color + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
+                    else Player.UniversalChatOps("&3" + args[0] + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
+                }
+                else
+                {
+                    if (who != null) { Player.UniversalChatOps(who.color + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
+                    else { Player.UniversalChatOps("&3" + args[0] + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
+                }
             }
         }
-
         public void Help(Player p)
         {
-            p.SendMessage("/ban <player> [reason] - Bans the player by name only");
-            p.SendMessage("/ban @<player> [reason] - Bans the player by name, IP and kicks them");
-            p.SendMessage("/ban #<player> [reason] - Stealth bans the player by name, IP and kicks them");
-        }
-
-        public void Initialize()
-        {
-            Command.AddReference(this, CommandStrings);
+            p.SendMessage("/ban <player> [reason] - Ban <player> with [reason] as the given reason.");
+            p.SendMessage("/ban # <player> [reason] - Stealth ban <player> with [reason] as the given reason. (Banned message sent to ops+ only.");
+            p.SendMessage("[reason] is optional");
         }
     }
 }

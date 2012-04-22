@@ -24,6 +24,7 @@ using MCForge.Groups;
 using MCForge.Interface.Command;
 using MCForge.Utilities.Settings;
 using MCForge.World;
+using MCForge.Utilities;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -67,11 +68,10 @@ namespace MCForge.Entity {
         /// The number of times the player has tried to use /pass.
         /// </summary>
         public int passtries = 0;
-        bool _verified = false;
         /// <summary>
         /// Has the player used password verification?
         /// </summary>
-        public bool verified { get { if (!Server.Verifying) { return true; } else { return _verified; }; } set { _verified = value; } }
+        public bool verified;
         /// <summary>
         /// The player's real username
         /// </summary>
@@ -456,7 +456,7 @@ namespace MCForge.Entity {
                 return i;
             }
 
-            Server.Log("Too many players O_O", ConsoleColor.Red, ConsoleColor.Black);
+            Logger.Log("Too many players O_O");
             return 254;
         }
         protected void UpgradeConnectionToPlayer() {
@@ -485,7 +485,7 @@ namespace MCForge.Entity {
             });
         }
         protected bool CheckIfBanned() {
-            if (Server.BannedIP.Contains(ip)) { Kick("You're Banned!"); return true; }
+            if (Server.IPBans.Contains(ip)) { Kick("You're Banned!"); return true; }
             return false;
         }
         protected bool VerifyAccount(string name, string verify) {

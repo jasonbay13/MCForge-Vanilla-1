@@ -17,10 +17,38 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MCForge.API.SystemEvent
+namespace MCForge.API.System
 {
-    public abstract class SystemEvent : Event
+    public abstract class SystemEvent : Event, Cancelable
     {
-        //add stuff here..
+        //TODO Add stuff here
+        
+        private bool _canceled;
+        
+        /// <summary>
+		/// Do we want to prevent the default proccessing?
+		/// </summary>
+		public bool cancel {
+			get { return _canceled; }
+		}
+		
+		/// <summary>
+		/// Prevent default processing until event is unregistered. (or Allow() is called)
+		/// </summary>
+		public void Cancel() {
+			_canceled = true;
+		}
+
+		/// <summary>
+		/// Allow default processing. (until Cancel() is called)
+		/// </summary>
+		public void Allow() {
+			_canceled = false;
+		}
+        
+        /// <summary>
+		/// Unregisters the event from the queue.
+		/// </summary>
+		public abstract void Unregister();
     }
 }
