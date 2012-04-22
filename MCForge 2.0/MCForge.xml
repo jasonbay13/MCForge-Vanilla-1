@@ -210,49 +210,6 @@
             </summary>
             <param name="e">The Event that fired</param>
         </member>
-        <member name="T:MCForge.API.System.OnPlayerChatRaw">
-            <summary>
-            Event for recieveing all messages, unedited and unmodified.
-            </summary>
-        </member>
-        <member name="M:MCForge.API.System.OnPlayerChatRaw.Call">
-            <summary>
-            Calls every event
-            </summary>
-        </member>
-        <member name="M:MCForge.API.System.OnPlayerChatRaw.Register(MCForge.API.System.OnPlayerChatRaw.OnMessage)">
-            <summary>
-            Register an OnPacket event to the server
-            </summary>
-            <param name="Event">OnPacket Delegate to register</param>
-        </member>
-        <member name="M:MCForge.API.System.OnPlayerChatRaw.Unregister(MCForge.API.System.OnPlayerChatRaw.OnMessage)">
-            <summary>
-            Unregister the event
-            </summary>
-            <param name="Event">Event to unregister</param>
-        </member>
-        <member name="P:MCForge.API.System.OnPlayerChatRaw.Message">
-            <summary>
-            Data Recieved
-            </summary>
-        </member>
-        <member name="P:MCForge.API.System.OnPlayerChatRaw.Player">
-            <summary>
-            Player that recieved the message
-            </summary>
-        </member>
-        <member name="P:MCForge.API.System.OnPlayerChatRaw.IsCanceled">
-            <summary>
-            Gets or sets the canceledness of the Chat Event
-            </summary>
-        </member>
-        <member name="T:MCForge.API.System.OnPlayerChatRaw.OnMessage">
-            <summary>
-            Delegate for recieveing messages
-            </summary>
-            <param name="args">OnPlayerChatRaw class to recieve</param>
-        </member>
         <member name="T:MCForge.API.PlayerEvent.OnPlayerCommand">
             <summary>
             The OnPlayerCommand event is used to catch whenever a player uses a command.
@@ -499,43 +456,78 @@
             High will be called last so it gets the last say
             </summary>
         </member>
-        <member name="T:MCForge.API.SystemEvent.OnReceivePacket">
+        <member name="M:MCForge.API.System.SystemEvent.Cancel">
             <summary>
-            Event for recieveing all overflowed packets, this event can be canceled
+            Prevent default processing until event is unregistered. (or Allow() is called)
             </summary>
         </member>
-        <member name="M:MCForge.API.SystemEvent.OnReceivePacket.Call">
+        <member name="M:MCForge.API.System.SystemEvent.Allow">
             <summary>
-            Calls every event
+            Allow default processing. (until Cancel() is called)
             </summary>
         </member>
-        <member name="M:MCForge.API.SystemEvent.OnReceivePacket.Register(MCForge.API.SystemEvent.OnReceivePacket.OnPacket)">
+        <member name="M:MCForge.API.System.SystemEvent.Unregister">
             <summary>
-            Register an OnPacket event to the server
+            Unregisters the event from the queue.
             </summary>
-            <param name="Event">OnPacket Delegate to register</param>
         </member>
-        <member name="M:MCForge.API.SystemEvent.OnReceivePacket.Unregister(MCForge.API.SystemEvent.OnReceivePacket.OnPacket)">
+        <member name="P:MCForge.API.System.SystemEvent.cancel">
+            <summary>
+            Do we want to prevent the default proccessing?
+            </summary>
+        </member>
+        <member name="F:MCForge.API.System.OnReceivePacket._eventQueue">
+            <summary>
+            The list of all events currently active of a SystemEvent type.
+            </summary>
+        </member>
+        <member name="M:MCForge.API.System.OnReceivePacket.Register(MCForge.API.System.OnReceivePacket.OnCall,MCForge.Entity.Player)">
+            <summary>
+            Used to register a method to be executed when the event is fired.
+            </summary>
+            <param name="callback">The method to call</param>
+            <param name="target">The player to watch for. (null for any players)</param>
+            <returns>A reference to the event</returns>
+        </member>
+        <member name="M:MCForge.API.System.OnReceivePacket.Unregister(MCForge.API.System.OnReceivePacket)">
+            <summary>
+            Unregisters the sxpecified event
+            </summary>
+            <param name="pe">The event to unregister</param>
+        </member>
+        <member name="M:MCForge.API.System.OnReceivePacket.Unregister">
             <summary>
             Unregister the event
             </summary>
-            <param name="Event">Event to unregister</param>
         </member>
-        <member name="P:MCForge.API.SystemEvent.OnReceivePacket.Data">
+        <member name="M:MCForge.API.System.OnReceivePacket.Call(MCForge.Entity.Player,System.Byte[])">
             <summary>
-            Data Recieved
+            This is meant to be called from the code where you mean for the event to happen.
+            
+            In this case, it is called from the command processing code.
+            </summary>
+            <param name="p">The player that caused the event.</param>
+            <param name="oldPos">The old position of the person.</param>
+        </member>
+        <member name="T:MCForge.SQL.Database">
+            <summary>
+            Description of Database.
             </summary>
         </member>
-        <member name="P:MCForge.API.SystemEvent.OnReceivePacket.Player">
+        <member name="T:MCForge.SQL.MySQL">
             <summary>
-            Player that recieved the packet
+            Description of MySQL.
             </summary>
         </member>
-        <member name="T:MCForge.API.SystemEvent.OnReceivePacket.OnPacket">
+        <member name="T:MCForge.SQL.ISQL">
             <summary>
-            Delegate for recieveing packets
+            Description of SQL.
             </summary>
-            <param name="args">OnReceivePacket class to recieve</param>
+        </member>
+        <member name="T:MCForge.SQL.SQLite">
+            <summary>
+            Description of SQLite.
+            </summary>
         </member>
         <member name="T:MCForge.Groups.Permission">
             <summary>

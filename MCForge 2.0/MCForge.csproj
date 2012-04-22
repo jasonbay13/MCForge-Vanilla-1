@@ -68,7 +68,6 @@
     <Compile Include="API\Cancelable.cs" />
     <Compile Include="API\Player\OnPlayerBlockChange.cs" />
     <Compile Include="API\Player\OnPlayerChat.cs" />
-    <Compile Include="API\Player\OnPlayerChatRaw.cs" />
     <Compile Include="API\Player\OnPlayerCommand.cs">
       <SubType>Code</SubType>
     </Compile>

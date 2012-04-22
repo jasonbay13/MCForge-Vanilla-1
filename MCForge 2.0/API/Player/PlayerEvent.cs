@@ -30,6 +30,9 @@ namespace MCForge.API.PlayerEvent
 		public virtual Player Player { get { return _target;} }
 		
 		private static bool _canceled;
+		
+		internal PlayerEvent(Player p) { _target = p; }
+		
 		/// <summary>
 		/// Do we want to prevent the default proccessing?
 		/// </summary>

@@ -30,8 +30,7 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		/// <param name="callback">the method used for the delegate to callback upon event fire</param>
 		/// <param name="target">The target Player we want the event for.</param>
-		internal OnPlayerDisconnect(OnCall callback, Player target) {
-			_target = target;
+		internal OnPlayerDisconnect(OnCall callback, Player target) : base(target) {
 			_queue += callback;
 		}
 

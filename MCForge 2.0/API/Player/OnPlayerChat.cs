@@ -32,8 +32,7 @@ namespace MCForge.API.PlayerEvent
 		/// </summary>
 		/// <param name="callback">the method used for the delegate to callback upon event fire</param>
 		/// <param name="target">The target Player we want the event for.</param>
-		internal OnPlayerChat(OnCall callback, Player target) {
-			_target = target;
+		internal OnPlayerChat(OnCall callback, Player target) : base (target) {
 			_queue += callback;
 		}
 
@@ -41,7 +40,11 @@ namespace MCForge.API.PlayerEvent
 		/// The messsage sent by the player
 		/// </summary>
 		public string message { get; set; }
-
+		
+		public string OrginalMessage()
+		{
+			return message.Split(':')[1].Substring(1);
+		}
 		/// <summary>
 		/// The delegate used for callbacks.  The caller will have this method run when the event fires.
 		/// </summary>

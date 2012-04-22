@@ -21,7 +21,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using MCForge.API.PlayerEvent;
 using MCForge.API.System;
-using MCForge.API.SystemEvent;
 using MCForge.Core;
 using MCForge.Groups;
 using MCForge.Utilities;
@@ -91,13 +90,12 @@ namespace MCForge.Entity {
                     case 8: length = 9; break; // input
                     case 13: length = 65; break; // chat
                     default: {
-                            var listener = new OnReceivePacket(this, buffer);
-                            listener.Call();
-                            if (listener.IsCanceled)
-                                return new byte[1];
-                            Kick("Unhandled message id \"" + msg + "\"!");
-                            return new byte[0];
-                        }
+                    	bool canceled = OnReceivePacket.Call(this, buffer);
+                    	if (canceled)
+                    		return new byte[1];
+                        Kick("Unhandled message id \"" + msg + "\"!");
+                        return new byte[0];
+                    }
 
                 }
                 if (buffer.Length > length) {
@@ -285,10 +283,14 @@ namespace MCForge.Entity {
             if (!isLoggedIn) return;
 
             string incomingText = enc.GetString(message, 1, 64).Trim();
-            var ChatEventRaw = new OnPlayerChatRaw(this, incomingText);
+            
+            bool canceled = OnPlayerChat.Call(this, incomingText).cancel; //...wat?
+            if (canceled)
+            	return;
+            /*var ChatEventRaw = new OnPlayerChatRaw(this, incomingText);
             ChatEventRaw.Call();
             if (ChatEventRaw.IsCanceled)
-                return;
+                return;*/
 
             byte incomingID = message[0];
             if (incomingID != 0xFF && incomingID != id && incomingID != 0) {
