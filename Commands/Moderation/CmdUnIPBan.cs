@@ -21,7 +21,7 @@ using MCForge.Core;
 
 namespace CommandDll.Moderation
 {
-    class CmdUnban : ICommand
+    class CmdUnIPBan : ICommand
     {
         public string Name { get { return "UnIPBan"; } }
         public CommandTypes Type { get { return CommandTypes.mod; } }
