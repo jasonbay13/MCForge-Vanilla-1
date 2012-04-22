@@ -40,14 +40,25 @@ namespace CommandDll.Moderation
                 string reason = _reason.Substring(args[0].Length + 1);
                 using (StreamWriter SW = File.AppendText("Bans/Username Bans.txt"))
                 {
-                    SW.WriteLine(who.Username);
+                    if (who != null)
+                        SW.WriteLine(who.Username);
+                    else
+                        SW.WriteLine(args[0]);
                     SW.Dispose();
                     SW.Close();
                 }
                 using (StreamWriter SW = File.AppendText("Bans/Ban Info.txt"))
                 {
-                    if (reason == "") { SW.WriteLine(who.Username + "`No reason specified.`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
-                    else { SW.WriteLine(who.Username + "`" + reason + "`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                    if (who != null)
+                    {
+                        if (reason == "") { SW.WriteLine(who.Username + "`No reason specified.`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                        else { SW.WriteLine(who.Username + "`" + reason + "`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                    }
+                    else
+                    {
+                        if (reason == "") { SW.WriteLine(args[0] + "`No reason specified.`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                        else { SW.WriteLine(args[0] + "`" + reason + "`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                    }
                     SW.Dispose();
                     SW.Close();
                 }
@@ -68,14 +79,25 @@ namespace CommandDll.Moderation
                 string reason = _reason.Substring(args[0].Length + args[1].Length + 2);
                 using (StreamWriter SW = File.AppendText("Bans/Username Bans.txt"))
                 {
-                    SW.WriteLine(who.Username);
+                    if (who != null)
+                        SW.WriteLine(who.Username);
+                    else
+                        SW.WriteLine(args[1]);
                     SW.Dispose();
                     SW.Close();
                 }
                 using (StreamWriter SW = File.AppendText("Bans/Ban Info.txt"))
                 {
-                    if (reason == "") { SW.WriteLine(who.Username + "`No reason specified.`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
-                    else { SW.WriteLine(who.Username + "`" + reason + "`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                    if (who != null)
+                    {
+                        if (reason == "") { SW.WriteLine(who.Username + "`No reason specified.`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                        else { SW.WriteLine(who.Username + "`" + reason + "`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                    }
+                    else
+                    {
+                        if (reason == "") { SW.WriteLine(args[1] + "`No reason specified.`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                        else { SW.WriteLine(args[1] + "`" + reason + "`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
+                    }
                     SW.Dispose();
                     SW.Close();
                 }
