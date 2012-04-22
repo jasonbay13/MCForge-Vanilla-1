@@ -43,7 +43,7 @@ namespace MCForge.Gui {
             pluginManager.Init();
             pluginManager.AttachItems();
             Logger.OnRecieveLog += (obj, args) => {
-                coloredTextBox1.LogText(args.Message + Environment.NewLine);
+                coloredTextBox1.Write(args.Message + Environment.NewLine);
             };
 
             OnPlayerConnect.Register(OnConnect);
@@ -51,7 +51,6 @@ namespace MCForge.Gui {
             chatButtonChange.Text = "Chat";
 
             newsFeeder1.StartRead();
-            newsFeeder1.DisplayPosts();
         }
         private void Chat(object sender, KeyEventArgs e) {
             if (e.KeyCode == Keys.Enter) {
@@ -75,7 +74,7 @@ namespace MCForge.Gui {
                 }
 
                 Player.UniversalChat("&a[&fConsole&a]:&f " + chatBox.Text);
-                Logger.Log("&a[&fConsole&a]:&f " + chatBox.Text);
+                Logger.Log("&5[&1Console&5]: &1 " + chatBox.Text);
                 chatBox.Clear(); return;
             }
         }

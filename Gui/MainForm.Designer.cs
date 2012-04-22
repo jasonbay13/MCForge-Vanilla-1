@@ -148,7 +148,7 @@ namespace MCForge.Gui
             this.newsFeeder1.ShowPosts = false;
             this.newsFeeder1.Size = new System.Drawing.Size(826, 20);
             this.newsFeeder1.TabIndex = 7;
-            this.newsFeeder1.Text = "newsFeeder1";
+            this.newsFeeder1.Text = "Connecting...";
             // 
             // MainForm
             // 

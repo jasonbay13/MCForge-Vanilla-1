@@ -13,8 +13,9 @@ namespace MCForge.Gui.Components {
     /// RichTextBox with integreted support for colors
     /// </summary>C:\Users\Brayden\Forks\MCForge-Vanilla\MCForge 2.0\Gui\Components\ColoredTextbox.cs
     public partial class ColoredTextBox : RichTextBox {
-       
+
         private List<string> wList;
+        private const string END = "\\cf0\\par";
 
         /// <summary>
         /// RichTextBox with integreted support for colors
@@ -25,7 +26,7 @@ namespace MCForge.Gui.Components {
             wList = new List<string>();
             InitializeComponent();
         }
-        
+
         /// <summary>
         /// RichTextBox with integreted support for colors
         /// </summary>
@@ -35,54 +36,58 @@ namespace MCForge.Gui.Components {
         }
 
         private const string TheColorsOfTheRainbow =
-          @"{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\colortbl;\red0\green0\blue0;\red255\green255\blue0;\red0\green0\blue139;\red0\green100\blue0;\red0\green139\blue139;\red139\green0\blue139;\red128\green128\blue128;\red255\green215\blue0;\red169\green169\blue169;\red0\green0\blue255;\red0\green128\blue0;\red0\green255\blue255;\red255\green0\blue255;\red255\green255\blue255;\red170\green0\blue170;\red139\green0\blue0;}{\fonttbl{\f0\fnil\fcharset0 Calibri;}}\viewkind4\uc1\pard\f0\fs17}";
+          @"{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\colortbl;\red0\green0\blue0;\red255\green255\blue0;\red0\green0\blue139;\red0\green100\blue0;\red0\green139\blue139;\red139\green0\blue139;\red128\green128\blue128;\red255\green215\blue0;\red169\green169\blue169;\red0\green0\blue255;\red0\green128\blue0;\red0\green255\blue255;\red255\green0\blue255;\red255\green255\blue255;\red170\green0\blue170;\red139\green0\blue0;}{\fonttbl{\f0\fnil\fcharset0 Calibri;}}\viewkind4\uc1\pard\f0\fs17";
 
-
-
-        public void LogText(string text) {
-            if (!text.Contains("&") && !text.Contains("%")) {
-                text += "\\cf0\\par";
-                wList.Add(text);
-                WriteToTextBox();
+        public void Write(string message) {
+            if(InvokeRequired) {
+                Invoke((MethodInvoker)delegate { Write(message);});
                 return;
             }
-            var split = text.Split('&', '%');
-            var builder = new StringBuilder();
 
-            for (int index = 0; index < split.Length; index++) {
-                string elString = split[index];
-                if (String.IsNullOrEmpty(elString))
+            message = message.Replace("\\", "\\'5c");
+
+            if (!message.Contains('%') && !message.Contains('&')) {
+                wList.Add(message + END);
+                WriteAndScroll();
+                return;
+            }
+
+            string[] messagesSplit = message.Split(new[] { '%', '&' }, StringSplitOptions.RemoveEmptyEntries);
+            var coloredMessage = "";
+            for(int i = 0; i < messagesSplit.Length; i++) {
+                string split = messagesSplit[i];
+
+                if (String.IsNullOrWhiteSpace(split))
                     continue;
-                string color = GetColor(elString[0]);
-                if (String.IsNullOrEmpty(color)) {
-                    builder.Append(elString);
+
+                string color = GetColor(split[0]);
+
+                if (color == null) {
+                    coloredMessage += '&' + split;
                     continue;
                 }
-                elString = elString.Substring(1);
-                elString = color + elString;
-                builder.Append(elString);
-            }
-            builder.Append("\\cf0\\par");
-            wList.Add(builder.ToString());
-            WriteToTextBox();
 
+                coloredMessage += color + split.Substring(1);
+            }
+            wList.Add(coloredMessage + END);
+            WriteAndScroll();
         }
 
-        private void WriteToTextBox() {
-            if (InvokeRequired) {
-                this.Invoke(new MethodInvoker(WriteToTextBox));
-                return;
-            }
-            if (wList.Count > 200) wList.RemoveAt(0);
-            string all = TheColorsOfTheRainbow.Remove(TheColorsOfTheRainbow.Length - 1);
-            all = wList.Aggregate(all, (current, s) => current + s);
-            all += '}';
-            Rtf = all;
+        private void WriteAndScroll() {
+
+            string newRtf = TheColorsOfTheRainbow;
+            newRtf = wList.Aggregate(newRtf, (msg, s) => msg + s);
+            newRtf += '}';
+            Rtf = newRtf;
+
+            this.Select(this.Text.Length - 1, 0);
+            this.ScrollToCaret();
         }
 
         private string GetColor(char p) {
             switch (p) {
                 case 'e': return "\\cf2";
+                case '0': return "\\cf0";
                 case '1': return "\\cf3";
                 case '2': return "\\cf4";
                 case '3': return "\\cf5";
