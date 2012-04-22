@@ -53,12 +53,12 @@ namespace CommandDll.Moderation
                 string reason = _reason.Substring(args[0].Length + args[1].Length + 2);
                 if (reason == "")
                 {
-                    if (who != null) { Command.Find("ban").Use(p, new string[2] { "#", who.Username }); who.Kick("Banned by " + p.Username + "!"); }
+                    if (who != null) { Command.Find("ban").Use(p, new string[2] { "#", who.Username }); who.SKick("Banned by " + p.Username + "!"); }
                     else { Command.Find("ban").Use(p, new string[2] { "#", args[1] }); p.SendMessage("Could not kick \"" + args[1] + "\" because they are not online."); }
                 }
                 else
                 {
-                    if (who != null) { Command.Find("ban").Use(p, new string[3] { "#", who.Username, reason }); who.Kick("Banned by " + p.Username + " because " + reason); }
+                    if (who != null) { Command.Find("ban").Use(p, new string[3] { "#", who.Username, reason }); who.SKick("Banned by " + p.Username + " because " + reason); }
                     else { Command.Find("ban").Use(p, new string[3] { "#", args[1], reason }); p.SendMessage("Could not kick \"" + args[1] + "\" because they are not online."); }
                 }
             }
