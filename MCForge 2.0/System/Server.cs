@@ -77,7 +77,7 @@ namespace MCForge.Core {
         public static DateTime StartTime = DateTime.Now;
         internal static List<Player> Connections = new List<Player>();
         /// <summary>
-        /// Get the current list of online players, note that if your doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
+        /// Get the current list of online players, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
         /// </summary>
         public static List<Player> Players = new List<Player>();
         public static int PlayerCount { get { return Players.Count; } }
