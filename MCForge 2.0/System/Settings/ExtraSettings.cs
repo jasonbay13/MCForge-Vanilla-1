@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 using MCForge.Core;
+using System.IO;
 
 namespace MCForge.Utilities.Settings {
     public abstract class ExtraSettings {
@@ -11,7 +12,7 @@ namespace MCForge.Utilities.Settings {
         public abstract List<SettingNode> Values { get; }
         public abstract void OnLoad();
         public abstract void Save();
-        public abstract void SetDefaults();
+        public abstract string PropertiesPath { get; }
 
         /// <summary>
         /// Gets a setting
@@ -125,6 +126,46 @@ namespace MCForge.Utilities.Settings {
 
             pair.Description = description;
             pair.Value = string.Join(",", value.ToString(CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>
+        /// Loads all the settings into the memory, if no properties file is found it will return an empty list
+        /// </summary>
+        /// <returns>A list of setting nodes</returns>
+        public List<SettingNode> LoadSettings() {
+            if (!File.Exists(PropertiesPath))
+                return new List<SettingNode>();
+            var text = File.ReadAllLines(PropertiesPath);
+            var Values = new List<SettingNode>();
+            for (int i = 0; i < text.Count(); i++) {
+                string read = text[i];
+                SettingNode pair;
+
+                if (String.IsNullOrWhiteSpace(read))
+                    continue;
+
+
+                if (read[0] == '#' && (i + 1 < text.Count()) ? text[i + 1][0] != '#' && !String.IsNullOrWhiteSpace(text[i + 1]) : false) {
+                    i++;
+                    var split = text[i].Split('=');
+                    pair = new SettingNode(split[0].Trim().ToLower(),
+                                           String.Join("=", split, 1, split.Length - 1).Trim(),
+                                           read.Substring(1));
+                }
+                else {
+                    if (read[0] != '#') {
+                        var split = text[i].Split('=');
+                        pair = new SettingNode(split[0].Trim().ToLower(),
+                                               String.Join("=", split, 1, split.Length - 1).Trim(),
+                                               null);
+                    }
+                    else pair = new SettingNode(null, read, null);
+                }
+                Values.Add(pair);
+            }
+
+            return Values;
+
         }
 
         internal SettingNode GetPair(string key) {

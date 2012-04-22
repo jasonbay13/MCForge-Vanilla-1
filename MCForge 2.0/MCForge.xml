@@ -1677,6 +1677,12 @@
             <param name="description">Write a description (optional)</param>
             <remarks>If the setting does not exist, it will create a new one</remarks>
         </member>
+        <member name="M:MCForge.Utilities.Settings.ExtraSettings.LoadSettings">
+            <summary>
+            Loads all the settings into the memory, if no properties file is found it will return an empty list
+            </summary>
+            <returns>A list of setting nodes</returns>
+        </member>
         <member name="T:MCForge.Utilities.Logger">
             <summary>
             Logger Utility

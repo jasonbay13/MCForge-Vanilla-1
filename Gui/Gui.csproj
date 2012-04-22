@@ -61,6 +61,12 @@
     <Compile Include="Components\ColoredTextbox.Designer.cs">
       <DependentUpon>ColoredTextbox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Components\NewsFeeder.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\NewsFeeder.Designer.cs">
+      <DependentUpon>NewsFeeder.cs</DependentUpon>
+    </Compile>
     <Compile Include="FirstRunScreen.cs">
       <SubType>Form</SubType>
     </Compile>

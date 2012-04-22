@@ -52,13 +52,14 @@ namespace MCForge.Gui
             this.chatBox = new System.Windows.Forms.TextBox();
             this.chatButtonChange = new System.Windows.Forms.ComboBox();
             this.coloredTextBox1 = new MCForge.Gui.Components.ColoredTextBox(this.components);
+            this.newsFeeder1 = new MCForge.Gui.Components.NewsFeeder(this.components);
             this.menuStrip1.SuspendLayout();
             this.mPlayerGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // mStatus
             // 
-            this.mStatus.Location = new System.Drawing.Point(0, 442);
+            this.mStatus.Location = new System.Drawing.Point(0, 475);
             this.mStatus.Name = "mStatus";
             this.mStatus.Size = new System.Drawing.Size(826, 22);
             this.mStatus.TabIndex = 1;
@@ -131,11 +132,30 @@ namespace MCForge.Gui
             this.coloredTextBox1.TabIndex = 4;
             this.coloredTextBox1.Text = "";
             // 
-            // frmMain
+            // newsFeeder1
+            // 
+            this.newsFeeder1.Items.Add("1234");
+            this.newsFeeder1.Items.Add("1234");
+            this.newsFeeder1.Items.Add("12334");
+            this.newsFeeder1.Items.Add("1234");
+            this.newsFeeder1.Items.Add("12");
+            this.newsFeeder1.Items.Add("34125123651346136");
+            this.newsFeeder1.Items.Add("dsfdcv3e1r");
+            this.newsFeeder1.Items.Add("123 r13424");
+            this.newsFeeder1.Items.Add("c1c34");
+            this.newsFeeder1.Location = new System.Drawing.Point(0, 452);
+            this.newsFeeder1.Name = "newsFeeder1";
+            this.newsFeeder1.ShowPosts = false;
+            this.newsFeeder1.Size = new System.Drawing.Size(826, 20);
+            this.newsFeeder1.TabIndex = 7;
+            this.newsFeeder1.Text = "newsFeeder1";
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(826, 464);
+            this.ClientSize = new System.Drawing.Size(826, 497);
+            this.Controls.Add(this.newsFeeder1);
             this.Controls.Add(this.chatButtonChange);
             this.Controls.Add(this.chatBox);
             this.Controls.Add(this.coloredTextBox1);
@@ -146,7 +166,7 @@ namespace MCForge.Gui
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
-            this.Name = "frmMain";
+            this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MCForge Server";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
@@ -169,6 +189,7 @@ namespace MCForge.Gui
         private Components.ColoredTextBox coloredTextBox1;
         private System.Windows.Forms.TextBox chatBox;
         private System.Windows.Forms.ComboBox chatButtonChange;
+        private Components.NewsFeeder newsFeeder1;
 	}
 }
 

@@ -73,13 +73,12 @@ namespace Plugins.WomPlugin {
         public override void Save() {
 
         }
-
-        public override void SetDefaults() {
-
-        }
-
         public override List<MCForge.Utilities.Settings.SettingNode> Values {
             get { return _values; }
+        }
+
+        public override string PropertiesPath {
+            get { return ""; }
         }
     }
 }

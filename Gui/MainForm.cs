@@ -49,6 +49,9 @@ namespace MCForge.Gui {
             OnPlayerConnect.Register(OnConnect);
 
             chatButtonChange.Text = "Chat";
+
+            newsFeeder1.StartRead();
+            newsFeeder1.DisplayPosts();
         }
         private void Chat(object sender, KeyEventArgs e) {
             if (e.KeyCode == Keys.Enter) {
