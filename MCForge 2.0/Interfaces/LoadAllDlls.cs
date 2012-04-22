@@ -50,32 +50,43 @@ namespace MCForge.Interface {
             catch { return null; }
         }
         internal static void InitCommands() {
-            string[] DLLFiles = { "Plugins.dll", "Commands.dll" };
+            string path = Directory.GetCurrentDirectory();
+            string[] DLLFiles = Directory.GetFiles(path, "*.DLL");
 
             foreach (string s in DLLFiles) {
                 Assembly DLLAssembly = LoadFile(s); //Prevents the dll from being in use inside windows
-                foreach (Type ClassType in DLLAssembly.GetTypes()) {
-                    if (ClassType.IsPublic) {
-                        if (!ClassType.IsAbstract) {
-                            Type typeInterface = ClassType.GetInterface("ICommand", true);
+                try
+                {
+                    foreach (Type ClassType in DLLAssembly.GetTypes())
+                    {
+                        if (ClassType.IsPublic)
+                        {
+                            if (!ClassType.IsAbstract)
+                            {
+                                Type typeInterface = ClassType.GetInterface("ICommand", true);
 
-                            if (typeInterface != null) {
-                                ICommand instance = (ICommand)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                instance.Initialize();
-                                Server.Log("[Command]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
-                            }
-                            else {
-                                typeInterface = ClassType.GetInterface("IPlugin", true);
-                                if (typeInterface != null) {
-                                    IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                    instance.OnLoad();
-                                    PluginManager.AddReference(instance);
-                                    Server.Log("[Plugin]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
+                                if (typeInterface != null)
+                                {
+                                    ICommand instance = (ICommand)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
+                                    instance.Initialize();
+                                    Server.Log("[Command]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
+                                }
+                                else
+                                {
+                                    typeInterface = ClassType.GetInterface("IPlugin", true);
+                                    if (typeInterface != null)
+                                    {
+                                        IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
+                                        instance.OnLoad();
+                                        PluginManager.AddReference(instance);
+                                        Server.Log("[Plugin]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                catch { } //Stops loading bad DLL files
             }
         }
     }

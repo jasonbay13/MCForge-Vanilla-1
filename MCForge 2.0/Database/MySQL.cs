@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Created by SharpDevelop.
  * User: Eddie
  * Date: 4/15/2012
@@ -44,7 +44,7 @@ namespace MCForge.SQL
 				Server.Log(e);
 			}
 		}
-		public override void executeQuery(string[] queryString)
+		/*public override void executeQuery(string[] queryString) //TODO: Find out what this does
 		{
 			try {
 				using (var conn = new MySqlConnection(connString))
@@ -53,7 +53,7 @@ namespace MCForge.SQL
 					if (queryString.IndexOf("CREATE DATABASE") != -1)
 						conn.ChangeDatabase(ServerSettings.GetSetting("MySQL-DBName"));
 					for (int i = 0; i < queryString.Length; i++) {
-						using (MySqlCommand cmd = new MySqlCommand(queryString, conn)
+						using (MySqlCommand cmd = new MySqlCommand(queryString, conn))
 							cmd.ExecuteNonQuery();
 					}
 					conn.Clone();
@@ -64,6 +64,6 @@ namespace MCForge.SQL
 			{
 				Server.Log(e);
 			}
-		}
+		}*/
 	}
 }

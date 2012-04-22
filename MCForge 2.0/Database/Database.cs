@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2012 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -24,7 +24,7 @@ namespace MCForge.SQL
 	/// </summary>
 	public static class Database
 	{
-		protected static ISQL SQLType;
+		static ISQL SQLType;
 		public static ISQL SQL { get { return SQLType; } }
 		internal static void init()
 		{
@@ -37,10 +37,12 @@ namespace MCForge.SQL
 						break;
 					case "sqlite":
 						SQLType = new SQLite();
+                        break;
 					default:
 						Server.Log("Database Type not found!", ConsoleColor.Red, ConsoleColor.Gray);
 						Server.Log("Using SQLite", ConsoleColor.Green, ConsoleColor.Gray);
 						SQLType = new SQLite();
+                        break;
 				}
 				SQLType.onLoad();
 			}
