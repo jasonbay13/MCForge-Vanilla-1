@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2011 MCForge
+Copyright 2012 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -30,32 +30,27 @@ namespace CommandDll.Moderation
         public void Initialize() { Command.AddReference(this, new string[2] { "baninfo", "baninformation" }); }
         public void Use(Player p, string[] args)
         {
-            int _ = 0;
-            string[] lines = File.ReadAllLines("baninfo.txt");
+            string[] lines = File.ReadAllLines("Bans/Ban Info.txt");
             if (lines.Length < 1) { p.SendMessage("Could not find ban information for \"" + args[0] + "\"."); return; }
             foreach (string line in lines)
             {
                 string name = line.Split('`')[0];
-                string reason = line.Split('`')[1];
-                string date = line.Split('`')[2];
-                string time = line.Split('`')[3];
-                string banner = line.Split('`')[4];
                 if (args[0] == name)
                 {
+                    string reason = line.Split('`')[1];
+                    string date = line.Split('`')[2];
+                    string time = line.Split('`')[3];
+                    string banner = line.Split('`')[4];
                     p.SendMessage(name + " was banned at " + time + " on " + date + " by " + banner + ".");
-                    p.SendMessage("Reason: " + reason);
+                    p.SendMessage("&4Reason: " + MCForge.Core.Server.DefaultColor + reason);
+                    return;
                 }
-                else
-                {
-                    _++;
-                    if (_ == 1)
-                        p.SendMessage("Could not find ban information for \"" + args[0] + "\".");
-                }
+                p.SendMessage("Could not find ban information for \"" + args[0] + "\".");
             }
         }
         public void Help(Player p)
         {
-            p.SendMessage("/baninfo <player> - See information about <player>'s ban.");
+            p.SendMessage("/baninfo <player/IP> - View information about <player/IP>'s ban.");
         }
     }
 }

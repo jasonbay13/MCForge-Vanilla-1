@@ -82,9 +82,13 @@ namespace MCForge.Core {
         public static List<Player> Players = new List<Player>();
         public static int PlayerCount { get { return Players.Count; } }
         /// <summary>
-        /// Get the current list of banned ip addresses, note that if your doing a foreach on this (or any other public list) you should always add .ToArray() to the end so that you avoid errors!
+        /// The current list of banned IP addresses. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
         /// </summary>
-        public static List<string> BannedIP = new List<string>();
+        public static List<string> IPBans = new List<string>(File.ReadAllLines("Bans/IP Bans.txt"));
+        /// <summary>
+        /// The list of banned usernames. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
+        /// </summary>
+        public static List<string> UsernameBans = new List<string>(File.ReadAllLines("Bans/Username Bans.txt"));
         /// <summary>
         /// The list of MCForge developers.
         /// </summary>
@@ -211,13 +215,16 @@ namespace MCForge.Core {
         }
 
         static void CreateDirectories() {
-            if (!Directory.Exists("text")) { Directory.CreateDirectory("text"); Log("Created text directory...", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/badwords.txt")) { File.Create("text/badwords.txt").Close(); Log("[File] Created badwords.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/replacementwords.txt")) { File.Create("text/replacementwords.txt").Close(); Log("[File] Created replacementwords.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); Log("[File] Created agreed.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/hacksmessages.txt")) { File.Create("text/hacksmessages.txt").Close(); Log("[File] Created hacksmessages.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("text/news.txt")) { File.Create("text/news.txt").Close(); Log("[File] Created news.txt", ConsoleColor.White, ConsoleColor.Black); }
-            if (!File.Exists("baninfo.txt")) { File.Create("baninfo.txt").Close(); Log("[File] Created baninfo.txt", ConsoleColor.White, ConsoleColor.Black); }
+            if (!Directory.Exists("Bans")) { Directory.CreateDirectory("Bans"); Logger.Log("Created bans directory."); }
+            if (!File.Exists("Ban Info.txt")) { File.Create("Ban Info.txt").Close(); Logger.Log("[File] Created BanInfo.txt"); }
+            if (!File.Exists("Username Bans.txt")) { File.Create("Username Bans.txt").Close(); Logger.Log("[File] Created Username Bans.txt"); }
+            if (!File.Exists("IP Bans.txt")) { File.Create("IP Bans.txt").Close(); Logger.Log("[File] Created IP Bans.txt"); }
+            if (!Directory.Exists("text")) { Directory.CreateDirectory("text"); Logger.Log("Created text directory."); }
+            if (!File.Exists("text/badwords.txt")) { File.Create("text/badwords.txt").Close(); Logger.Log("[File] Created badwords.txt"); }
+            if (!File.Exists("text/replacementwords.txt")) { File.Create("text/replacementwords.txt").Close(); Logger.Log("[File] Created replacementwords.txt"); }
+            if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); Logger.Log("[File] Created agreed.txt"); }
+            if (!File.Exists("text/hacksmessages.txt")) { File.Create("text/hacksmessages.txt").Close(); Logger.Log("[File] Created hacksmessages.txt"); }
+            if (!File.Exists("text/news.txt")) { File.Create("text/news.txt").Close(); Logger.Log("[File] Created news.txt"); }
             if (!File.Exists("text/jokermessages.txt")) {
                 File.Create("text/jokermessages.txt").Close();
                 Logger.Log("Created jokermessages.txt", LogType.Normal);

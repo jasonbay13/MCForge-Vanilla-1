@@ -27,17 +27,21 @@ using MCForge.Utilities;
 using MCForge.Utilities.Settings;
 using MCForge.World;
 
-namespace MCForge.Entity {
-    public partial class Player {
+namespace MCForge.Entity
+{
+    public partial class Player
+    {
         #region Incoming Data
-        protected static void Incoming(IAsyncResult result) {
+        protected static void Incoming(IAsyncResult result)
+        {
             while (!Server.Started)
                 Thread.Sleep(100);
 
             Player p = (Player)result.AsyncState;
 
             if (!p.isOnline) return;
-            try {
+            try
+            {
                 if (Server.reviewlist.Contains(p))
                 {
                     Server.reviewlist.Remove(p);
@@ -50,17 +54,20 @@ namespace MCForge.Entity {
                 }
             }
             catch { Logger.Log("Error removing " + p.Username + " from the review list!", LogType.Error); }
-            
-            try {
+
+            try
+            {
                 int length = p.Socket.EndReceive(result);
-                if (length == 0) {
+                if (length == 0)
+                {
                     p.CloseConnection();
-                    if (!p.beingkicked) {
+                    if (!p.beingkicked)
+                    {
                         UniversalChat(p.color + p.Username + Server.DefaultColor + " has disconnected.");
                     }
                     return;
                 }
-               
+
 
                 byte[] b = new byte[p.buffer.Length + length];
                 Buffer.BlockCopy(p.buffer, 0, b, 0, p.buffer.Length);
@@ -68,37 +75,44 @@ namespace MCForge.Entity {
                 p.buffer = p.HandlePacket(b);
                 p.Socket.BeginReceive(p.tempBuffer, 0, p.tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), p);
             }
-            catch (SocketException) {
+            catch (SocketException)
+            {
                 p.CloseConnection();
                 return;
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 p.Kick("Error!");
                 Server.Log(e);
                 return;
             }
         }
-        protected byte[] HandlePacket(byte[] buffer) {
+        protected byte[] HandlePacket(byte[] buffer)
+        {
 
-            try {
+            try
+            {
                 int length = 0; byte msg = buffer[0];
                 // Get the length of the message by checking the first byte
-                switch (msg) {
+                switch (msg)
+                {
                     case 0: length = 130; break; // login
                     case 2: SMPKick("This is not an SMP Server!"); break; // SMP Handshake packet
                     case 5: length = 8; break; // blockchange
                     case 8: length = 9; break; // input
                     case 13: length = 65; break; // chat
-                    default: {
-                    	bool canceled = OnReceivePacket.Call(this, buffer);
-                    	if (canceled)
-                    		return new byte[1];
-                        Kick("Unhandled message id \"" + msg + "\"!");
-                        return new byte[0];
-                    }
+                    default:
+                        {
+                            bool canceled = OnReceivePacket.Call(this, buffer);
+                            if (canceled)
+                                return new byte[1];
+                            Kick("Unhandled message id \"" + msg + "\"!");
+                            return new byte[0];
+                        }
 
                 }
-                if (buffer.Length > length) {
+                if (buffer.Length > length)
+                {
                     byte[] message = new byte[length];
                     Buffer.BlockCopy(buffer, 1, message, 0, length);
 
@@ -107,8 +121,10 @@ namespace MCForge.Entity {
 
                     buffer = tempbuffer;
 
-                    ThreadPool.QueueUserWorkItem(delegate {
-                        switch (msg) {
+                    ThreadPool.QueueUserWorkItem(delegate
+                    {
+                        switch (msg)
+                        {
                             case 0: HandleLogin(message); break;
                             case 5: HandleBlockchange(message); break;
                             case 8: HandleIncomingPos(message); break;
@@ -124,7 +140,8 @@ namespace MCForge.Entity {
 
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Kick("CONNECTION ERROR: (0x03)");
                 Server.Log("[ERROR]: PLAYER MESSAGE RECIEVE ERROR (0x03)", ConsoleColor.Red, ConsoleColor.Black);
                 Server.Log(e);
@@ -132,15 +149,25 @@ namespace MCForge.Entity {
             return buffer;
         }
 
-        protected void HandleLogin(byte[] message) {
-            try {
+        protected void HandleLogin(byte[] message)
+        {
+            try
+            {
                 if (isLoggedIn) return;
                 byte version = message[0];
                 Username = enc.GetString(message, 1, 64).Trim();
+                string BanReason = null;
+                bool banned = false;
+                foreach (string line in File.ReadAllLines("Bans/Ban Info.txt")) { if (Username == line.Split('`')[0]) { BanReason = line.Split('`')[1]; } }
+                foreach (string line in File.ReadAllLines("Bans/IP Bans.txt")) { if (line == ip) banned = true; }
+                foreach (string line in File.ReadAllLines("Bans/Username Bans.txt")) { if (line == Username) banned = true; }
+                if (banned) SKick("You are banned because " + BanReason);
                 string verify = enc.GetString(message, 65, 32).Trim();
                 byte type = message[129];
                 if (!VerifyAccount(Username, verify)) return;
-                if (version != ServerSettings.Version) { SKick("Wrong Version!."); return; }
+                if (Server.Verifying) verified = false;
+                else verified = true;
+                if (version != ServerSettings.Version) { SKick("Wrong Version!"); return; }
                 try
                 {
                     Server.TempBan tb = Server.tempbans.Find(ban => ban.name.ToLower() == Username.ToLower());
@@ -150,7 +177,8 @@ namespace MCForge.Entity {
                 catch { }
 
                 bool cancel = OnPlayerConnect.Call(this);
-                if (cancel) {
+                if (cancel)
+                {
                     Kick("Disconnected by event");
                     return;
                 }
@@ -194,11 +222,13 @@ namespace MCForge.Entity {
                     SendMessage(w);
 
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Server.Log(e);
             }
         }
-        protected void HandleBlockchange(byte[] message) {
+        protected void HandleBlockchange(byte[] message)
+        {
             if (!isLoggedIn) return;
 
             ushort x = packet.NTHO(message, 0);
@@ -209,14 +239,16 @@ namespace MCForge.Entity {
 
             lastClick = new Vector3(x, z, y);
 
-            if (newType > 49 || (newType == 7 && !isAdmin)) {
+            if (newType > 49 || (newType == 7 && !isAdmin))
+            {
                 Kick("HACKED CLIENT!");
                 //TODO Send message to op's for adminium hack
                 return;
             }
 
             byte currentType = level.GetBlock(x, z, y);
-            if (!Block.IsValidBlock(currentType)) {
+            if (!Block.IsValidBlock(currentType))
+            {
                 Kick("HACKED CLIENT!");
                 return;
             }
@@ -225,7 +257,8 @@ namespace MCForge.Entity {
             bool canceled = OnPlayerBlockChange.Call(x, y, z, (placing ? ActionType.Place : ActionType.Delete), this, newType);
             if (canceled) // If any event canceled us
                 return;
-            if (blockChange != null) {
+            if (blockChange != null)
+            {
                 SendBlockChange(x, z, y, currentType);
 
                 BlockChangeDelegate tempBlockChange = blockChange;
@@ -242,21 +275,23 @@ namespace MCForge.Entity {
             }
 
             if (action == 0) //Deleting
-			{
+            {
                 level.BlockChange(x, z, y, 0);
             }
             else //Placing
-			{
+            {
                 level.BlockChange(x, z, y, newType);
             }
         }
-        protected void HandleIncomingPos(byte[] message) {
+        protected void HandleIncomingPos(byte[] message)
+        {
             if (!isLoggedIn)
                 return;
 
             byte thisid = message[0];
 
-            if (thisid != 0xFF && thisid != id && thisid != 0) {
+            if (thisid != 0xFF && thisid != id && thisid != 0)
+            {
                 //TODO Player.GlobalMessageOps("Player sent a malformed packet!");
                 Kick("Hacked Client!");
                 return;
@@ -267,9 +302,11 @@ namespace MCForge.Entity {
             ushort z = packet.NTHO(message, 5);
             byte rotx = message[7];
             byte roty = message[8];
-            if (!(Pos.x == x && Pos.y == y && Pos.z == z)) {
+            if (!(Pos.x == x && Pos.y == y && Pos.z == z))
+            {
                 bool cancel = OnPlayerMove.Call(this, Pos);
-                if (cancel) {
+                if (cancel)
+                {
                     this.SendToPos(Pos, Rot);
                     return;
                 }
@@ -279,29 +316,33 @@ namespace MCForge.Entity {
             Pos.z = (short)z;
             Rot = new byte[2] { rotx, roty };
         }
-        protected void HandleChat(byte[] message) {
+        protected void HandleChat(byte[] message)
+        {
             if (!isLoggedIn) return;
 
             string incomingText = enc.GetString(message, 1, 64).Trim();
-            
+
             bool canceled = OnPlayerChat.Call(this, incomingText).cancel; //...wat?
             if (canceled)
-            	return;
+                return;
             /*var ChatEventRaw = new OnPlayerChatRaw(this, incomingText);
             ChatEventRaw.Call();
             if (ChatEventRaw.IsCanceled)
                 return;*/
 
             byte incomingID = message[0];
-            if (incomingID != 0xFF && incomingID != id && incomingID != 0) {
+            if (incomingID != 0xFF && incomingID != id && incomingID != 0)
+            {
                 Player.UniversalChatOps("Player " + Username + ", sent a malformed packet!");
                 Kick("Hacked Client!");
                 return;
             }
 
             incomingText = Regex.Replace(incomingText, @"\s\s+", " ");
-            foreach (char ch in incomingText) {
-                if (ch < 32 || ch >= 127 || ch == '&') {
+            foreach (char ch in incomingText)
+            {
+                if (ch < 32 || ch >= 127 || ch == '&')
+                {
                     Kick("Illegal character in chat message!");
                     return;
                 }
@@ -309,7 +350,8 @@ namespace MCForge.Entity {
             if (incomingText.Length == 0)
                 return;
             //Fixes crash
-            if (incomingText[0] == '/' && incomingText.Length == 1) {
+            if (incomingText[0] == '/' && incomingText.Length == 1)
+            {
                 SendMessage("You didn't specify a command!");
                 return;
             }
@@ -318,11 +360,13 @@ namespace MCForge.Entity {
                 incomingText.Replace("  ", " ");
 
             //This allows people to use //Command and have it appear as /Command in the chat.
-            if (incomingText[0] == '/' && incomingText[1] == '/') {
+            if (incomingText[0] == '/' && incomingText[1] == '/')
+            {
                 incomingText = incomingText.Remove(0, 1);
                 goto Meep;
             }
-            if (incomingText[0] == '/') {
+            if (incomingText[0] == '/')
+            {
                 incomingText = incomingText.Remove(0, 1);
 
                 string[] args = incomingText.Split(' ');
@@ -345,46 +389,55 @@ namespace MCForge.Entity {
             string[] badwords = File.ReadAllLines("text/badwords.txt");
             string[] replacementwords = File.ReadAllLines("text/replacementwords.txt");
 
-            foreach (string word in badwords) {
+            foreach (string word in badwords)
+            {
                 string text = incomingText;
-                if (text.Contains(word)) {
+                if (text.Contains(word))
+                {
                     incomingText = Regex.Replace(text, word, replacement[new Random().Next(0, replacement.Count)]);
                 }
             }
             if (muted) { SendMessage("You are muted!"); return; }
             if (Server.moderation && !voiced && !Server.devs.Contains(Username)) { SendMessage("You can't talk during chat moderation!"); return; }
-            if (jokered) {
+            if (jokered)
+            {
                 Random r = new Random();
                 int a = r.Next(0, Server.jokermessages.Count);
                 incomingText = Server.jokermessages[a];
             }
             //Message appending stuff.
-            if (ServerSettings.GetSettingBoolean("messageappending")) {
-                if (storedMessage != "") {
-                    if (!incomingText.EndsWith(">") && !incomingText.EndsWith("<")) {
+            if (ServerSettings.GetSettingBoolean("messageappending"))
+            {
+                if (storedMessage != "")
+                {
+                    if (!incomingText.EndsWith(">") && !incomingText.EndsWith("<"))
+                    {
                         incomingText = storedMessage.Replace("|>|", " ").Replace("|<|", "") + incomingText;
                         storedMessage = "";
                     }
                 }
-                if (incomingText.EndsWith(">")) {
+                if (incomingText.EndsWith(">"))
+                {
                     storedMessage += incomingText.Replace(">", "|>|");
                     SendMessage("Message appended!");
                     return;
                 }
-                else if (incomingText.EndsWith("<")) {
+                else if (incomingText.EndsWith("<"))
+                {
                     storedMessage += incomingText.Replace("<", "|<|");
                     SendMessage("Message appended!");
                     return;
                 }
             }
 
-           // OnPlayerChat e = new OnPlayerChat(this, incomingText);
-           // e.Call();
-           // if (e.IsCanceled)
-           //     return;
-           // incomingText = e.Message;
+            // OnPlayerChat e = new OnPlayerChat(this, incomingText);
+            // e.Call();
+            // if (e.IsCanceled)
+            //     return;
+            // incomingText = e.Message;
 
-            if (Server.voting) {
+            if (Server.voting)
+            {
                 if (Server.kickvote && Server.kicker == this) { SendMessage("You're not allowed to vote!"); return; }
                 if (voted) { SendMessage("You have already voted..."); return; }
                 string vote = incomingText.ToLower();
@@ -449,37 +502,46 @@ namespace MCForge.Entity {
             UniversalChat(voicestring + color + prefix + Username + ": &f" + incomingText);
         }
 
-        public void SetPrefix() {
+        public void SetPrefix()
+        {
             prefix = title == "" ? "" : "[" + titleColor + title + color + "]";
         }
 
         #endregion
         #region Outgoing Packets
-        protected void SendPacket(packet pa) {
-            try {
+        protected void SendPacket(packet pa)
+        {
+            try
+            {
                 lastPacket = (packet.types)pa.bytes[0];
             }
             catch (Exception e) { Server.Log(e); }
-            for (int i = 0; i < 3; i++) {
-                try {
+            for (int i = 0; i < 3; i++)
+            {
+                try
+                {
                     Socket.BeginSend(pa.bytes, 0, pa.bytes.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
                     return;
                 }
-                catch {
+                catch
+                {
                     continue;
                 }
             }
             CloseConnection();
         }
-        protected void SendMessage(byte PlayerID, string message) {
+        protected void SendMessage(byte PlayerID, string message)
+        {
             packet pa = new packet();
 
 
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 10; i++)
+            {
                 message = message.Replace("%" + i, "&" + i);
                 message = message.Replace("&" + i + " &", "&");
             }
-            for (char ch = 'a'; ch <= 'f'; ch++) {
+            for (char ch = 'a'; ch <= 'f'; ch++)
+            {
                 message = message.Replace("%" + ch, "&" + ch);
                 message = message.Replace("&" + ch + " &", "&");
             }
@@ -488,8 +550,10 @@ namespace MCForge.Entity {
             pa.Add(packet.types.Message);
             pa.Add(PlayerID);
 
-            try {
-                foreach (string line in LineWrapping(message)) {
+            try
+            {
+                foreach (string line in LineWrapping(message))
+                {
                     if (pa.bytes.Length < 64)
                         pa.Add(line, 64);
                     else
@@ -498,17 +562,21 @@ namespace MCForge.Entity {
                     SendPacket(pa);
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Server.Log(e);
             }
 
         }
-        protected void SendMotd() {
+        protected void SendMotd()
+        {
             if (isAdmin) SendPacket(MOTD_Admin);
             else SendPacket(MOTD_NonAdmin);
         }
-        protected void SendMap() {
-            try {
+        protected void SendMap()
+        {
+            try
+            {
                 SendPacket(mapSendStartPacket); //Send the pre-fab map start packet
 
                 packet pa = new packet(); //Create a packet to handle the data for the map
@@ -516,7 +584,8 @@ namespace MCForge.Entity {
                 byte[] blocks = new byte[level.TotalBlocks]; //Temporary byte array so we dont have to keep modding the packet array
 
                 byte block; //A block byte outside the loop, we save cycles by not making this for every loop iteration
-                level.ForEachBlock(pos => {
+                level.ForEachBlock(pos =>
+                {
                     //Here we loop through the whole map and check/convert the blocks as necesary
                     //We then add them to our blocks array so we can send them to the player
                     block = level.Data[pos];
@@ -529,7 +598,8 @@ namespace MCForge.Entity {
 
                 int number = (int)Math.Ceiling(((double)(pa.bytes.Length)) / 1024); //The magic number for this packet
 
-                for (int i = 1; pa.bytes.Length > 0; ++i) {
+                for (int i = 1; pa.bytes.Length > 0; ++i)
+                {
                     short length = (short)Math.Min(pa.bytes.Length, 1024);
                     byte[] send = new byte[1027];
                     packet.HTNO(length).CopyTo(send, 0);
@@ -554,11 +624,13 @@ namespace MCForge.Entity {
 
                 isLoading = false;
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Server.Log(e);
             }
         }
-        public void SendSpawn(Player p) {
+        public void SendSpawn(Player p)
+        {
             byte ID = 0xFF;
             if (p != this)
                 ID = p.id;
@@ -580,7 +652,8 @@ namespace MCForge.Entity {
         /// <param name="z"></param> The position the block will be placed in (z)
         /// <param name="y"></param> The position the block will be placed in (y)
         /// <param name="type"></param> The type of block that will be placed.
-        public void SendBlockChange(ushort x, ushort z, ushort y, byte type) {
+        public void SendBlockChange(ushort x, ushort z, ushort y, byte type)
+        {
             if (x < 0 || y < 0 || z < 0 || x >= level.Size.x || y >= level.Size.y || z >= level.Size.z) return;
 
             packet pa = new packet();
@@ -594,21 +667,24 @@ namespace MCForge.Entity {
 
             SendPacket(pa);
         }
-        protected void SendKick(string message) {
-    
+        protected void SendKick(string message)
+        {
+
             packet pa = new packet();
             pa.Add(packet.types.SendKick);
             pa.Add(message, 64);
             SendPacket(pa);
         }
-        protected void SMPKick(string a) {
+        protected void SMPKick(string a)
+        {
             //Read first, then kick
             var Stream = Client.GetStream();
             var Reader = new BinaryReader(Stream);
             var Writer = new BinaryWriter(Stream);
             short len = IPAddress.HostToNetworkOrder(Reader.ReadInt16());
 
-            if (len > 1 && len < 17) {
+            if (len > 1 && len < 17)
+            {
                 string name = Encoding.BigEndianUnicode.GetString(Reader.ReadBytes(len * 2));
                 Server.Log(String.Format("{0} tried to log in from an smp client", name));
 
@@ -619,7 +695,8 @@ namespace MCForge.Entity {
                 Writer.Flush();
                 CloseConnection();
             }
-            else {
+            else
+            {
                 Server.Log("Received unknown packet");
                 Kick("Unknown Packet received");
             }
@@ -627,7 +704,8 @@ namespace MCForge.Entity {
 
 
         }
-        protected void SendPing() {
+        protected void SendPing()
+        {
             SendPacket(pingPacket);
         }
 
@@ -635,13 +713,15 @@ namespace MCForge.Entity {
         /// Send this player a message
         /// </summary>
         /// <param name="message">The message to send</param>
-        public void SendMessage(string message) {
+        public void SendMessage(string message)
+        {
             SendMessage(id, message); // 0xFF is NOT a valid player ID
         }
         /// <summary>
         /// Exactly what the function name is, it might be useful to change this players pos first ;)
         /// </summary>
-        public void SendThisPlayerTheirOwnPos() {
+        public void SendThisPlayerTheirOwnPos()
+        {
             packet pa = new packet();
             pa.Add((byte)8);
             pa.Add(Pos.x);
@@ -654,7 +734,8 @@ namespace MCForge.Entity {
         /// Kick this player with the specified message, the message broadcasts across the server
         /// </summary>
         /// <param name="message">The message to send</param>
-        public void Kick(string message) {
+        public void Kick(string message)
+        {
             //GlobalMessage(message);
             beingkicked = true;
             SKick(message);
@@ -663,7 +744,8 @@ namespace MCForge.Entity {
         /// Kick this player with a specified message, this message will only get sent to op's
         /// </summary>
         /// <param name="message">The message to send</param>
-        public void SKick(string message) {
+        public void SKick(string message)
+        {
             Server.Log("[Info]: Kicked: *" + Username + "* " + message, ConsoleColor.Yellow, ConsoleColor.Black);
             SendKick(message);
             //CloseConnection();
@@ -673,7 +755,8 @@ namespace MCForge.Entity {
         /// </summary>
         /// <param name="_pos"></param>Vector3 coordinate to send to.
         /// <param name="_rot"></param>Rot to send to.
-        public void SendToPos(Vector3 _pos, byte[] _rot) {
+        public void SendToPos(Vector3 _pos, byte[] _rot)
+        {
             oldPos = Pos; oldRot = Rot;
             _pos.x = (_pos.x < 0) ? (short)32 : (_pos.x > level.Size.x * 32) ? (short)(level.Size.x * 32 - 32) : (_pos.x > 32767) ? (short)32730 : _pos.x;
             _pos.z = (_pos.z < 0) ? (short)32 : (_pos.z > level.Size.z * 32) ? (short)(level.Size.z * 32 - 32) : (_pos.z > 32767) ? (short)32730 : _pos.z;
@@ -687,14 +770,17 @@ namespace MCForge.Entity {
             pa.Add(_pos.z);
             pa.Add(Rot);
 
-            Server.ForeachPlayer(delegate(Player p) {
-                if (p.Level == level && p.isLoggedIn && !p.isLoading) {
+            Server.ForeachPlayer(delegate(Player p)
+            {
+                if (p.Level == level && p.isLoggedIn && !p.isLoading)
+                {
                     p.SendPacket(pa);
                 }
             });
         }
 
-        protected void UpdatePosition(bool ForceTp) {
+        protected void UpdatePosition(bool ForceTp)
+        {
             byte changed = 0;   //Denotes what has changed (x,y,z, rotation-x, rotation-y)
 
             Vector3 tempOldPos = oldPos;
@@ -711,21 +797,27 @@ namespace MCForge.Entity {
             int diffR1 = tempRot[1] - tempRot[1];
 
             if (ForceTp) changed = 4;
-            else {
+            else
+            {
                 //TODO rewrite local pos change code
-                if (diffX == 0 && diffY == 0 && diffZ == 0 && diffR0 == 0 && diffR1 == 0) {
+                if (diffX == 0 && diffY == 0 && diffZ == 0 && diffR0 == 0 && diffR1 == 0)
+                {
                     return; //No changes
                 }
-                if (Math.Abs(diffX) > 100 || Math.Abs(diffY) > 100 || Math.Abs(diffZ) > 100) {
+                if (Math.Abs(diffX) > 100 || Math.Abs(diffY) > 100 || Math.Abs(diffZ) > 100)
+                {
                     changed = 4; //Teleport Required
                 }
-                else if (diffR0 == 0 && diffR1 == 0) {
+                else if (diffR0 == 0 && diffR1 == 0)
+                {
                     changed = 1; //Pos Update Required
                 }
-                else {
+                else
+                {
                     changed += 2; //Rot Update Required
 
-                    if (diffX != 0 || diffY != 0 || diffZ != 0) {
+                    if (diffX != 0 || diffY != 0 || diffZ != 0)
+                    {
                         changed += 1;
                     }
                 }
@@ -733,7 +825,8 @@ namespace MCForge.Entity {
 
             packet pa = new packet();
 
-            switch (changed) {
+            switch (changed)
+            {
                 case 1: //Pos Change
                     pa.Add(packet.types.SendPosChange);
                     pa.Add(id);
@@ -764,8 +857,10 @@ namespace MCForge.Entity {
                     break;
             }
 
-            Server.ForeachPlayer(delegate(Player p) {
-                if (p != this && p.Level == level && p.isLoggedIn && !p.isLoading) {
+            Server.ForeachPlayer(delegate(Player p)
+            {
+                if (p != this && p.Level == level && p.isLoggedIn && !p.isLoading)
+                {
                     p.SendPacket(pa);
                 }
             });
@@ -775,22 +870,28 @@ namespace MCForge.Entity {
         /// <summary>
         /// Spawns this player to all other players in the server.
         /// </summary>
-        protected void SpawnThisPlayerToOtherPlayers() {
-            Server.ForeachPlayer(delegate(Player p) {
+        protected void SpawnThisPlayerToOtherPlayers()
+        {
+            Server.ForeachPlayer(delegate(Player p)
+            {
                 if (p != this) p.SendSpawn(this);
             });
         }
         /// <summary>
         /// Spawns all other players of the server to this player.
         /// </summary>
-        protected void SpawnOtherPlayersForThisPlayer() {
-            Server.ForeachPlayer(delegate(Player p) {
+        protected void SpawnOtherPlayersForThisPlayer()
+        {
+            Server.ForeachPlayer(delegate(Player p)
+            {
                 if (p != this) SendSpawn(p);
             });
         }
 
-        internal static void GlobalBlockchange(Level l, ushort x, ushort z, ushort y, byte block) {
-            Server.ForeachPlayer(delegate(Player p) {
+        internal static void GlobalBlockchange(Level l, ushort x, ushort z, ushort y, byte block)
+        {
+            Server.ForeachPlayer(delegate(Player p)
+            {
                 if (p.Level == l)
                     p.SendBlockChange(x, z, y, block);
             });
@@ -798,10 +899,13 @@ namespace MCForge.Entity {
         /// <summary>
         /// Kill this player for everyone.
         /// </summary>
-        public void GlobalDie() {
+        public void GlobalDie()
+        {
             packet pa = new packet(new byte[2] { (byte)packet.types.SendDie, id });
-            Server.ForeachPlayer(p => {
-                if (p != this) {
+            Server.ForeachPlayer(p =>
+            {
+                if (p != this)
+                {
                     p.SendPacket(pa);
                 }
             });
@@ -810,16 +914,20 @@ namespace MCForge.Entity {
         /// Send a message to everyone, on every world
         /// </summary>
         /// <param name="text">The message to send.</param>
-        public static void UniversalChat(string text) {
+        public static void UniversalChat(string text)
+        {
             Server.ForeachPlayer(p => p.SendMessage(text));
         }
         /// <summary>
         /// Sends a message to all operators+
         /// </summary>
         /// <param name="message">The message to send</param>
-        public static void UniversalChatOps(string message) {
-            Server.ForeachPlayer(p => {
-                if (p.group.permission >= Server.opchatperm) {
+        public static void UniversalChatOps(string message)
+        {
+            Server.ForeachPlayer(p =>
+            {
+                if (p.group.permission >= Server.opchatperm)
+                {
                     p.SendMessage(message);
                 }
             });
@@ -828,9 +936,12 @@ namespace MCForge.Entity {
         /// Sends a message to all admins+
         /// </summary>
         /// <param name="message">The message to be sent</param>
-        public static void UniversalChatAdmins(string message) {
-            Server.ForeachPlayer(p => {
-                if (p.group.permission >= Server.adminchatperm) {
+        public static void UniversalChatAdmins(string message)
+        {
+            Server.ForeachPlayer(p =>
+            {
+                if (p.group.permission >= Server.adminchatperm)
+                {
                     p.SendMessage(message);
                 }
             });
@@ -840,8 +951,10 @@ namespace MCForge.Entity {
         /// </summary>
         /// <param name="from">The player sending the message</param>
         /// <param name="message">The message to send</param>
-        public static void RankChat(Player from, string message) {
-            Server.ForeachPlayer(delegate(Player p) {
+        public static void RankChat(Player from, string message)
+        {
+            Server.ForeachPlayer(delegate(Player p)
+            {
                 if (p.group.permission == from.group.permission) { p.SendMessage(message); }
             });
         }
@@ -850,13 +963,16 @@ namespace MCForge.Entity {
         /// </summary>
         /// <param name="from">The player sending the message</param>
         /// <param name="message">The message to be sent</param>
-        public static void LevelChat(Player from, string message) {
-            Server.ForeachPlayer(delegate(Player p) {
+        public static void LevelChat(Player from, string message)
+        {
+            Server.ForeachPlayer(delegate(Player p)
+            {
                 if (p.Level == from.Level) { p.SendMessage(message); }
             });
         }
-        protected void CloseConnection() {
-            OnPlayerDisconnect.Call(this, lastPacket.ToString());            
+        protected void CloseConnection()
+        {
+            OnPlayerDisconnect.Call(this, lastPacket.ToString());
 
             isLoggedIn = false;
             isOnline = false;
@@ -870,7 +986,8 @@ namespace MCForge.Entity {
             Socket.Close();
         }
 
-        internal static void GlobalPing() {
+        internal static void GlobalPing()
+        {
             Server.ForeachPlayer(p => p.SendPing());
         }
 

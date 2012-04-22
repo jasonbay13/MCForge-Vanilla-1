@@ -34,7 +34,7 @@ namespace CommandDll.Moderation
             int _ = 0;
             string _newreason = "";
             string newreason = _newreason.Substring(args[0].IndexOf(" ") + 1);
-            string[] lines = File.ReadAllLines("baninfo.txt");
+            string[] lines = File.ReadAllLines("Bans/Ban Info.txt");
             if (lines.Length < 1) { p.SendMessage("Could not find ban information for \"" + args[0] + "\"."); return; }
             foreach (string line in lines)
             {
