@@ -76,7 +76,7 @@ namespace CommandDll.Moderation
         public void Help(Player p)
         {
             p.SendMessage("/ipban <player> [reason] - IP-ban <player> with [reason] as the given reason.");
-            p.SendMessage("/ipban # <player> [reason] - Same as normal, but a stealth ban instead. (Banned message sent to ops+ only.");
+            p.SendMessage("/ipban # <player> [reason] - Stealth IP-ban <player> with [reason] as the given reason. (Banned message sent to ops+ only.");
             p.SendMessage("[reason] is optional");
         }
     }

@@ -109,12 +109,14 @@
     <Compile Include="Moderation\CmdTColor.cs" />
     <Compile Include="Moderation\CmdTempban.cs" />
     <Compile Include="Moderation\CmdTitle.cs" />
+    <Compile Include="Moderation\CmdUnban.cs" />
     <Compile Include="Moderation\CmdVoice.cs" />
     <Compile Include="Moderation\CmdVoteKick.cs" />
     <Compile Include="Misc\CmdSpawn.cs" />
     <Compile Include="Misc\CmdTeleport.cs" />
     <Compile Include="Moderation\CmdWhois.cs" />
     <Compile Include="Information\CmdMuted.cs" />
+    <Compile Include="Moderation\CmdUnIPBan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CmdTest.cs" />
   </ItemGroup>
