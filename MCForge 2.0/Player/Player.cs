@@ -25,6 +25,7 @@ using MCForge.Interface.Command;
 using MCForge.Utilities.Settings;
 using MCForge.World;
 using MCForge.Utilities;
+using System.Linq;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -272,6 +273,7 @@ namespace MCForge.Entity {
         /// </summary>
         public PlayerGroup group = PlayerGroup.Find(ServerSettings.GetSetting("defaultgroup"));
 
+        private Random playerRandom;
 
 
         #endregion
@@ -291,6 +293,7 @@ namespace MCForge.Entity {
 
                 Socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
 
+                playerRandom = new Random();
 
             }
             catch (Exception e) {

@@ -22,13 +22,12 @@ namespace MCForge.Utils {
                 return StringToChange;
 
             //Ex: StringToChange = "foobar"
-
             //Sets "foobar" to "Ffoobar"
             StringToChange = Char.ToUpper(StringToChange[0]) + StringToChange;
 
             //Removes the 2nd char (which was the char to capitolize) 
             //resulting in Foobar
-            StringToChange =StringToChange.Remove(1, 1);
+            StringToChange = StringToChange.Remove(1, 1);
             return StringToChange;
         }
 
@@ -43,6 +42,20 @@ namespace MCForge.Utils {
         /// <returns>A string version of TitleCase</returns>
         public static string TitleCase(string StringToChange) {
             return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(StringToChange.ToLower());
+        }
+
+        //TODO: Comment...
+        /// <summary>
+        /// sdfsdf
+        /// </summary>
+        /// <param name="message">sdfdsf</param>
+        /// <returns>sdfsdf</returns>
+        public static bool ContainsBadChar(string message) {
+            foreach (char ch in message)
+                if (ch < 32 || ch > 128 || ch == '&')
+                    return true;
+            return false;
+
         }
 
     }
