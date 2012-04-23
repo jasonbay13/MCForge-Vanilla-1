@@ -161,7 +161,7 @@ namespace MCForge.Entity
                 foreach (string line in File.ReadAllLines("Bans/Ban Info.txt")) { if (Username == line.Split('`')[0]) { BanReason = line.Split('`')[1]; } }
                 foreach (string line in File.ReadAllLines("Bans/IP Bans.txt")) { if (line == ip) banned = true; }
                 foreach (string line in File.ReadAllLines("Bans/Username Bans.txt")) { if (line == Username) banned = true; }
-                if (banned) { if (BanReason == "No reason given.") { SKick("You are banned because " + BanReason); } else { SKick("You are banned!"); } }
+                if (banned) { if (BanReason != "No reason specified.") { SKick("You are banned because " + BanReason); } else { SKick("You are banned!"); } }
                 string verify = enc.GetString(message, 65, 32).Trim();
                 byte type = message[129];
                 if (!VerifyAccount(Username, verify)) return;
