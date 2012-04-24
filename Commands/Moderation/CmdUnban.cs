@@ -1,4 +1,5 @@
-﻿///*
+﻿//Why is this commented out?
+///*
 //Copyright 2012 MCForge
 //Dual-licensed under the Educational Community License, Version 2.0 and
 //the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -33,13 +34,13 @@
 //            if (args[0] == "#") Stealth = true;
 //            if (!Stealth) {
 //                Player who = Player.Find(args[0]);
-//                foreach (string line in File.ReadAllLines("Bans/Username Bans.txt")) {
+//                foreach (string line in File.ReadAllLines("bans/NameBans.txt")) {
 //                    if (who != null) {
 //                        if (line == who.Username) {
 //                            List<string> l = new List<string>();
 //                            if (line != who.Username)
 //                                l.Add(line);
-//                            File.WriteAllLines("Bans/Username Bans.txt", l.ToArray());
+//                            File.WriteAllLines("bans/NameBans.txt", l.ToArray());
 //                            Player.UniversalChat(who.color + who.Username + Server.DefaultColor + " is now unbanned!");
 //                            return;
 //                        }
@@ -50,7 +51,7 @@
 //                            List<string> l = new List<string>();
 //                            if (line != args[0])
 //                                l.Add(line);
-//                            File.WriteAllLines("Bans/Username Bans.txt", l.ToArray());
+//                            File.WriteAllLines("bans/NameBans.txt", l.ToArray());
 //                            Player.UniversalChat("&3" + args[1] + Server.DefaultColor + " is now unbanned!");
 //                            return;
 //                        }
@@ -60,13 +61,13 @@
 //            }
 //            if (Stealth) {
 //                Player who = Player.Find(args[1]);
-//                foreach (string line in File.ReadAllLines("Bans/Username Bans.txt")) {
+//                foreach (string line in File.ReadAllLines("bans/NameBans.txt")) {
 //                    if (who != null) {
 //                        if (line == who.Username) {
 //                            List<string> l = new List<string>();
 //                            if (line != who.Username)
 //                                l.Add(line);
-//                            File.WriteAllLines("Bans/Username Bans.txt", l.ToArray());
+//                            File.WriteAllLines("bans/NameBans.txt", l.ToArray());
 //                            Player.UniversalChatOps(who.color + who.Username + Server.DefaultColor + " is now unbanned!");
 //                            return;
 //                        }
@@ -77,7 +78,7 @@
 //                            List<string> l = new List<string>();
 //                            if (line != args[0])
 //                                l.Add(line);
-//                            File.WriteAllLines("Bans/Username Bans.txt", l.ToArray());
+//                            File.WriteAllLines("bans/NameBans.txt", l.ToArray());
 //                            Player.UniversalChatOps("&3" + args[1] + Server.DefaultColor + " is now unbanned!");
 //                            return;
 //                        }

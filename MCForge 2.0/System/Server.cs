@@ -229,7 +229,7 @@ namespace MCForge.Core {
             FileUtils.CreateFileIfNotExist("text/news.txt");
             FileUtils.CreateFileIfNotExist("text/jokermessages.txt", "I am a pony" + Environment.NewLine + "Rainbow Dash <3" + Environment.NewLine + "I like trains!");
 
-            FileUtils.CreateFileIfNotExist("bans/IPbans.txt");
+            FileUtils.CreateFileIfNotExist("bans/IPBans.txt");
             FileUtils.CreateFileIfNotExist("bans/NameBans.txt");
             FileUtils.CreateFileIfNotExist("bans/BanInfo.txt");
 

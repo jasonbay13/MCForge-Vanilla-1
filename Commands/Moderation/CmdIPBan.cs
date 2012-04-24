@@ -37,13 +37,13 @@ namespace CommandDll.Moderation
             if (!Stealth)
             {
                 string reason = _reason.Substring(args[0].Length + 1);
-                using (StreamWriter SW = File.AppendText("Bans/IP Bans.txt"))
+                using (StreamWriter SW = File.AppendText("bans/IPBans.txt"))
                 {
                     SW.WriteLine(args[0]);
                     SW.Dispose();
                     SW.Close();
                 }
-                using (StreamWriter SW = File.AppendText("Bans/Ban Info.txt"))
+                using (StreamWriter SW = File.AppendText("bans/BanInfo.txt"))
                 {
                     if (reason == "") { SW.WriteLine(args[0] + "`No reason specified.`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
                     else { SW.WriteLine(args[0] + "`" + reason + "`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
@@ -56,13 +56,13 @@ namespace CommandDll.Moderation
             if (Stealth)
             {
                 string reason = _reason.Substring(args[0].Length + args[1].Length + 2);
-                using (StreamWriter SW = File.AppendText("Bans/IP Bans.txt"))
+                using (StreamWriter SW = File.AppendText("bans/IPBans.txt"))
                 {
                     SW.WriteLine(args[1]);
                     SW.Dispose();
                     SW.Close();
                 }
-                using (StreamWriter SW = File.AppendText("Bans/Ban Info.txt"))
+                using (StreamWriter SW = File.AppendText("bans/BanInfo.txt"))
                 {
                     if (reason == "") { SW.WriteLine(args[1] + "`No reason specified.`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
                     else { SW.WriteLine(args[1] + "`" + reason + "`" + DateTime.Now.Date + "`" + DateTime.Now.TimeOfDay + "`" + p.Username); }
