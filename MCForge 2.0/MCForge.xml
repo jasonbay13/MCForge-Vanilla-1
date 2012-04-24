@@ -709,11 +709,6 @@
             The player's stored message (For appending)
             </summary>
         </member>
-        <member name="F:MCForge.Entity.Player._level">
-            <summary>
-            This players current level
-            </summary>
-        </member>
         <member name="F:MCForge.Entity.Player.Pos">
             <summary>
             The players current position
@@ -781,7 +776,7 @@
         </member>
         <member name="P:MCForge.Entity.Player.Username">
             <summary>
-            This is the player's LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
+            This is the player's username
             </summary>       
         </member>
         <member name="P:MCForge.Entity.Player.IsLoading">
@@ -792,6 +787,11 @@
         <member name="P:MCForge.Entity.Player.IsLoggedIn">
             <summary>
             True if the player has completed the login process
+            </summary>
+        </member>
+        <member name="P:MCForge.Entity.Player.IsBeingKicked">
+            <summary>
+            Get or set if the player is currently being kicked
             </summary>
         </member>
         <member name="P:MCForge.Entity.Player.Level">
@@ -817,12 +817,17 @@
         </member>
         <member name="P:MCForge.Entity.Player.IsHidden">
             <summary>
-            True if this player is hidden
+            Get or set if the player is hidden from other players
             </summary>
         </member>
         <member name="P:MCForge.Entity.Player.IsAdmin">
             <summary>
             True if this player is an admin
+            </summary>
+        </member>
+        <member name="P:MCForge.Entity.Player.IsVerified">
+            <summary>
+            Get or set if the player is verified in the AdminPen
             </summary>
         </member>
         <member name="T:MCForge.Entity.Player.BlockChangeDelegate">
@@ -1164,6 +1169,13 @@
             </summary>
             <param name="StringToChange">The string to change</param>
             <returns>A string version of TitleCase</returns>
+        </member>
+        <member name="M:MCForge.Utils.StringUtils.ContainsBadChar(System.String)">
+            <summary>
+            sdfsdf
+            </summary>
+            <param name="message">sdfdsf</param>
+            <returns>sdfsdf</returns>
         </member>
         <member name="T:MCForge.World.Level">
             <summary>

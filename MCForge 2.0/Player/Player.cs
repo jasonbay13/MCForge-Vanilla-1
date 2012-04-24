@@ -26,12 +26,13 @@ using MCForge.Utilities.Settings;
 using MCForge.World;
 using MCForge.Utilities;
 using MCForge.Utils;
+using System.Linq;
 
 namespace MCForge.Entity {
     /// <summary>
     /// The player class, this contains all player information.
     /// </summary>
-    public partial class Player {
+    public sealed partial class Player {
         #region Variables
 
         //TODO: Change all o dis
@@ -68,71 +69,11 @@ namespace MCForge.Entity {
         /// Checks if the player is the server owner.
         /// </summary>
         public bool IsOwner { get { return Username == Server.owner; } }
+        
         /// <summary>
-        /// The number of times the player has tried to use /pass.
-        /// </summary>
-        //public int passtries = 0;
-        /// <summary>
-        /// Has the player used password verification?
-        /// </summary>
-        //public bool verified;
-        /// <summary>
-        /// The player's real username
-        /// </summary>
-        //public string Username;
-        /// <summary>
-        /// Last command the player used.
-        /// </summary>
-        //public string lastcmd;
-        /// <summary>
-        /// Has the player voted?
-        /// </summary>
-        //public bool voted;
-        /// <summary>
-        /// Has the player read the rules?
-        /// </summary>
-        //public bool readrules = false;
-        /// <summary>
-        /// Is the player muted
-        /// </summary>
-        // public bool muted = false;
-        /// <summary>
-        /// Does the player have voice status
-        /// </summary>
-        //public bool voiced = false;
-        /// <summary>
-        /// Derermines if the player is jokered
-        /// </summary>
-        //public bool jokered = false;
-        /// <summary>
-        /// Determines if the player has opchat on. All messages will be sent to ops
-        /// </summary>
-        // public bool opchat = false;
-        /// <summary>
-        /// Determines if the player has adminchat on. All messages will be sent to admins
-        /// </summary>
-        //public bool adminchat = false;
-        /// <summary>
-        /// Determines if the player is in /whisper mode
-        /// </summary>
-        //public bool whispering = false;
-        /// <summary>
-        /// The player to whisper to
-        /// </summary>
-        //public Player whisperto;
-
-        /// <summary>
-        /// Appears in front of player's name if he is voiced
-        /// </summary>
-        //public string voicestring = "";
-        /// <summary>
-        /// Used for player's LOWERCASE username.
-        /// </summary>
-        //protected string _username; //Lowercase Username
-        /// <summary>
-        /// This is the player's LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
+        /// This is the player's username
         /// </summary>       
-        public string Username //Lowercase Username feild
+        public string Username
         {
             get;
             set;
@@ -148,8 +89,6 @@ namespace MCForge.Entity {
 
         private byte[] buffer = new byte[0];
         private byte[] tempBuffer = new byte[0xFFF];
-        private readonly string tempString = null;
-        private readonly byte tempByte = 0xFF;
 
         /// <summary>
         /// True if the player is currently loading a map
@@ -160,18 +99,11 @@ namespace MCForge.Entity {
         /// </summary>
         public bool IsLoggedIn { get; set; }
 
+        /// <summary>
+        /// Get or set if the player is currently being kicked
+        /// </summary>
         public bool IsBeingKicked { get; set; }
-        /// <summary>
-        /// True if player is using static commands
-        /// </summary>
-        //public bool staticCommands = false;
-        /// <summary>
-        /// True is the player is flying
-        /// </summary>
-        // public bool isFlying = false;
-        /// <summary>
-        /// This players current level
-        /// </summary>
+
         private Level _level;
         /// <summary>
         /// This is the players current level
@@ -213,23 +145,7 @@ namespace MCForge.Entity {
         /// </summary>
         public Vector3 LastClick;
         /// <summary>
-        /// The player's COLOR
-        /// </summary>
-        //public string color = Colors.navy;
-        /// <summary>
-        /// The player's TITLE
-        /// </summary>
-        //public string title = "";
-        /// <summary>
-        /// The player's TITLE COLOR
-        /// </summary>
-        //public string titleColor = "";
-        /// <summary>
-        /// The player's PREFIX
-        /// </summary>
-        //public string prefix = "";
-        /// <summary>
-        /// True if this player is hidden
+        /// Get or set if the player is hidden from other players
         /// </summary>
         public bool IsHidden { get; set; }
 
@@ -238,7 +154,11 @@ namespace MCForge.Entity {
         /// </summary>
         public bool IsAdmin { get; set; }
 
+        /// <summary>
+        /// Get or set if the player is verified in the AdminPen
+        /// </summary>
         public bool IsVerified { get; set; }
+
         /// <summary>
         /// Holds replacement messages for profan filter
         /// </summary>
@@ -266,14 +186,15 @@ namespace MCForge.Entity {
         /// <param name="message">The string the player sent</param>
         /// <param name="PassBack">A passback object that can be used for a command to send data back to itself for use</param>
         public delegate void NextChatDelegate(Player p, string message, object PassBack);
-        protected BlockChangeDelegate blockChange;
-        protected NextChatDelegate nextChat;
+        private BlockChangeDelegate blockChange;
+        private NextChatDelegate nextChat;
 
         /// <summary>
         /// The current Group of the player
         /// </summary>
         public PlayerGroup group = PlayerGroup.Find(ServerSettings.GetSetting("defaultgroup"));
 
+        private Random playerRandom;
 
 
         #endregion
@@ -293,6 +214,7 @@ namespace MCForge.Entity {
 
                 Socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
 
+                playerRandom = new Random();
 
             }
             catch (Exception e) {
