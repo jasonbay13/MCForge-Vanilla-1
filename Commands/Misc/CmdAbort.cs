@@ -30,10 +30,14 @@ namespace CommandDll
         {
             if (p.ExtraData.ContainsKey("Mode"))
                 p.ExtraData["Mode"] = false;
-            p.opchat = false;
-            p.adminchat = false;
-            p.whispering = false;
-            p.whisperto = null;
+            if (p.ExtraData.ContainsKey("OpChat"))
+                p.ExtraData["OpChat"] = false;
+            if (p.ExtraData.ContainsKey("AdminChat"))
+                p.ExtraData["Admin"] = false;
+            if (p.ExtraData.ContainsKey("IsWhispering"))
+                p.ExtraData["IsWhispering"] = false;
+            if (p.ExtraData.ContainsKey("WhisperingTo"))
+                p.ExtraData["WhisperingTo"] = null;
             if (p.ExtraData.ContainsKey("ModeBlock"))
                 p.ExtraData["ModeBlock"] = null;
         }

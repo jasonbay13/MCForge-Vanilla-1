@@ -15,7 +15,7 @@ permissions and limitations under the Licenses.
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-
+using MCForge.Utils;
 namespace CommandDll
 {
     public class CmdRTitle : ICommand
@@ -30,14 +30,17 @@ namespace CommandDll
         public void Use(Player p, string[] args)
         {
             string message = "";
+
+            p.ExtraData.CreateIfNotExist("Title", "");
+
             if (args.Length == 0)
             {
-                if (p.title == "")
+                if (p.ExtraData["Title"] == "")
                 {
                     Help(p);
                     return;
                 }
-                message = p.title;
+                message = (string)p.ExtraData["Title"];
             }
             else
             {
@@ -57,7 +60,11 @@ namespace CommandDll
             }
             else
                 who = p;
-            if (message != who.title)
+
+            who.ExtraData.CreateIfNotExist("Title", "");
+            who.ExtraData.CreateIfNotExist("TitleColor", Server.DefaultColor);
+
+            if (message != who.ExtraData["Title"])
                 message = message.Substring(0, message.Length - 1);
             max = (19 - message.Length) / 2;
             int temp = message.Length / max;
@@ -81,10 +88,10 @@ namespace CommandDll
                 if (i > max - 1)
                     break;
             }
-            who.titleColor = "&c";
-            who.title = message;
+            who.ExtraData["TitleColor"] = "&c";
+            who.ExtraData["Title"] = message;
             who.SetPrefix();
-            Player.UniversalChat(who.color + who.Username + Server.DefaultColor + " had thier title set to &b[" + who.titleColor + who.title + "&b]");
+            Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") + who.Username + Server.DefaultColor + " had thier title set to &b[&c" + message + "&b]");
             //TODO Save to database.
         }
 

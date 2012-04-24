@@ -14,7 +14,7 @@ permissions and limitations under the Licenses.
 */
 using MCForge.Entity;
 using MCForge.Interface.Command;
-
+using MCForge.Utils;
 namespace CommandDll
 {
     public class CmdImpersonate : ICommand
@@ -40,7 +40,7 @@ namespace CommandDll
             if (!newmessage.EndsWith(" ")) { p.SendMessage("Please enter a message"); return; }
             if (who != null)
             {
-                Player.UniversalChat(who.color + who.Username + "%f: " + newmessage);
+                Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + "%f: " + newmessage);
             }
             else
             {
@@ -54,7 +54,7 @@ namespace CommandDll
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "impersonate", "imp" });
+            Command.AddReference(this, new string[] { "impersonate", "imp" });
         }
     }
 }

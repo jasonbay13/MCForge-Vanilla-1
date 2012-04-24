@@ -16,6 +16,7 @@ using System.Threading;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -41,7 +42,8 @@ namespace CommandDll
             Player.UniversalChat("The votes are in! %aYes: " + Server.YesVotes + " %cNo: " + Server.NoVotes + Server.DefaultColor + "!");
 			Server.ForeachPlayer(delegate(Player pl)
 			{
-				pl.voted = false;
+                pl.ExtraData.CreateIfNotExist("Voted", false);
+                pl.ExtraData["Voted"] = false;
 			});
             Server.voting = false;
             ResetVotes();
@@ -55,7 +57,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "vote", "vo" });
+            Command.AddReference(this, new[] { "vote", "vo" });
         }
         public void ResetVotes() { Server.YesVotes = 0; Server.NoVotes = 0; }
     }

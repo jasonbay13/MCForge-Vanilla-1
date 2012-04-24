@@ -29,9 +29,13 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            string send = Colors.blue + "MCForge Development Team: ";
-            foreach (string dev in Server.devs) { send += Colors.maroon + dev + Colors.lime + ", "; }
-            p.SendMessage(send.Trim().TrimEnd(','));
+            string send = Colors.yellow + "MCForge Development Team: ";
+            for (int i = 0; i < Server.devs.Count; i++) {
+                send += i != Server.devs.Count - 1
+                    ? Colors.navy + Server.devs[i] + Colors.white + ", "
+                    : Colors.navy + Server.devs[i];
+            }
+            p.SendMessage(send);
         }
 
         public void Help(Player p)
@@ -42,7 +46,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "developers", "devs" });
+            Command.AddReference(this, new string[] { "developers", "devs" });
         }
     }
 }

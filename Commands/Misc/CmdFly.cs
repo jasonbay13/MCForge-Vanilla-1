@@ -18,7 +18,8 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
 using MCForge.World.Blocks;
-
+using MCForge.Utils;
+using MCForge.World;
 namespace CommandDll
 {
     public class CmdFly : ICommand
@@ -32,8 +33,9 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            p.isFlying = !p.isFlying;
-            if (!p.isFlying)
+            p.ExtraData.CreateIfNotExist("IsFlying", false);
+            p.ExtraData["IsFlying"]  = !(bool)p.ExtraData["IsFlying"];
+            if (!(bool)p.ExtraData["IsFlying"])
             {
                 return;
             }
@@ -44,7 +46,7 @@ namespace CommandDll
                 Vector3 pos;
                 Vector3 oldpos = new Vector3();
                 List<Vector3> buffer = new List<Vector3>();
-                while (p.isFlying)
+                while ((bool)p.ExtraData["IsFlying"])
                 {
                     Thread.Sleep(20);
                     if (p.Pos.x == oldpos.x && p.Pos.z == oldpos.z && p.Pos.y == oldpos.y) continue;
@@ -63,7 +65,7 @@ namespace CommandDll
                                 {
                                     for (ushort zz = (ushort)(z - 1); zz <= z + 1; zz++)
                                     {
-                                        if (p.Level.GetBlock(xx, zz, yy) == new Air().VisibleBlock)
+                                        if (p.Level.GetBlock(xx, zz, yy) == Block.BlockList.AIR)
                                         {
                                             pos.x = (short)xx; pos.y = (short)yy; pos.z = (short)zz;
                                             tempBuffer.Add(pos);
@@ -76,14 +78,14 @@ namespace CommandDll
                                 if (!buffer.Contains(cP))
                                 {
                                     buffer.Add(cP);
-                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Glass().VisibleBlock);
+                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, Block.BlockList.GLASS);
                                 }
                             }
                             foreach (Vector3 cP in buffer)
                             {
                                 if (!tempBuffer.Contains(cP))
                                 {
-                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Air().VisibleBlock);
+                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, Block.BlockList.AIR);
                                     toRemove.Add(cP);
                                 }
                             }
@@ -103,7 +105,7 @@ namespace CommandDll
 
                 foreach (Vector3 cP in buffer)
                 {
-                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, new Air().VisibleBlock);
+                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, 0); //Air
                 }
 
                 p.SendMessage("Stopped flying");

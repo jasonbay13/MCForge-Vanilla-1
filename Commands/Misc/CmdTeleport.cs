@@ -16,7 +16,8 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utilities.Settings;
-
+using MCForge.Utils;
+using System.Threading;
 namespace CommandDll
 {
     public class CmdTeleport : ICommand
@@ -44,7 +45,7 @@ namespace CommandDll
             else if (args.Length == 1)
             {
                 Player who = Player.Find(args[0]);
-                if (who == null || who.isHidden)
+                if (who == null || who.IsHidden)
                 {
                     p.SendMessage("Player: " + args[0] + " not found!");
                     return;
@@ -64,10 +65,12 @@ namespace CommandDll
                     if (p.Level != who.Level)
                     {
                         //Need goto here
-                        if (who.isLoading)
+                        if (who.IsLoading)
                         {
-                            p.SendMessage("Waiting for " + who.color + who.Username + Server.DefaultColor + " to spawn...");
-                            while (who.isLoading) { }
+                            p.SendMessage("Waiting for " + (string)who.ExtraData.GetIfExist("Color") + who.Username + Server.DefaultColor + " to spawn...");
+                            while (who.IsLoading) 
+                                Thread.Sleep(5);
+                            
                         }
                     }
                 }
@@ -103,10 +106,12 @@ namespace CommandDll
                     if (one.Level != two.Level)
                     {
                         //Need goto here
-                        if (two.isLoading)
+                        if (two.IsLoading)
                         {
-                            p.SendMessage("Waiting for " + two.color + two.Username + Server.DefaultColor + " to spawn...");
-                            while (two.isLoading) { }
+                            p.SendMessage("Waiting for " + (string)two.ExtraData.GetIfExist("Color") + two.Username + Server.DefaultColor + " to spawn...");
+                            while (two.IsLoading) {
+                                Thread.Sleep(5);
+                            }
                         }
                     }
                 }

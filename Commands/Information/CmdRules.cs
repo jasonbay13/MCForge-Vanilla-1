@@ -16,11 +16,10 @@ using System.IO;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 
-namespace CommandDll
-{
-    public class CmdRules : ICommand
-    {
+namespace CommandDll {
+    public class CmdRules : ICommand {
         public string Name { get { return "Rules"; } }
         public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Arrem"; } }
@@ -28,26 +27,26 @@ namespace CommandDll
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
-        public void Use(Player p, string[] args)
-        {
+        public void Use(Player p, string[] args) {
             Player who = null;
             if (args.Length == 0) { who = p; }
             else { who = Player.Find(args[0]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
+
+            who.ExtraData.CreateIfNotExist("ReadRules", false);
+
             if (!File.Exists("text/rules.txt")) { File.WriteAllText("text/rules.txt", "No rules added yet!"); }
             string[] rules = File.ReadAllLines("text/rules.txt");
             who.SendMessage("Server rules:");
             foreach (string rule in rules) { who.SendMessage(rule); }
-            if (!who.readrules && !Server.agreed.Contains(who.Username)) { who.readrules = true; } //Need this for /agree
-            if (who != p) { p.SendMessage("Sent rules to " + who.username); }
+            if (!(bool)who.ExtraData["ReadRules"] && !Server.agreed.Contains(who.Username)) { p.ExtraData["ReadRules"] = true; } //Need this for /agree
+            if (who != p) { p.SendMessage("Sent rules to " + who.Username); }
         }
-        public void Help(Player p)
-        {
+        public void Help(Player p) {
             p.SendMessage("/rules [player] - Shows the server rules");
             p.SendMessage("Use a player's name to send the rules to that player!");
         }
-        public void Initialize()
-        {
+        public void Initialize() {
             Command.AddReference(this, new string[1] { "rules" });
         }
     }

@@ -15,7 +15,7 @@ permissions and limitations under the Licenses.
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-
+using MCForge.Utils;
 namespace CommandDll
 {
     public class CmdMe : ICommand
@@ -29,9 +29,20 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            if (Server.voting) { p.SendMessage("Cannot use /me while voting is in progress!"); return; }
-            if (p.muted) { p.SendMessage("Cannot use /me while muted!"); return; }
-            if (args.Length == 0) { p.SendMessage("You!"); return; }
+            p.ExtraData.CreateIfNotExist("Muted", false);
+
+            if (Server.voting) { 
+                p.SendMessage("Cannot use /me while voting is in progress!"); 
+                return; 
+            }
+            if ((bool)p.ExtraData["Muted"]) {
+                p.SendMessage("Cannot use /me while muted!"); 
+                return; 
+            }
+            if (args.Length == 0) { 
+                p.SendMessage("You!"); 
+                return; 
+            }
             string message = null;
             foreach (string s in args) { message += s + " "; }
             Player.UniversalChat("*" + p.Username + " " + message);

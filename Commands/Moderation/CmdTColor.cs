@@ -15,6 +15,7 @@ permissions and limitations under the Licenses.
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -32,11 +33,14 @@ namespace CommandDll
             if (args.Length == 0 || args.Length > 2) { Help(p); return; }
             Player who;
             string titleColor;
+
+            p.ExtraData.CreateIfNotExist("TitleColor", Server.DefaultColor);
+
             if (args.Length == 1)
             {
                 who = p;
                 titleColor = args[0] == "del" ? "del" : Colors.Parse(args[0]);
-                if (p.titleColor == titleColor) { p.SendMessage("Your title is already that color!"); return; }
+                if ((string)p.ExtraData.GetIfExist("TitleColor") == titleColor) { p.SendMessage("Your title is already that color!"); return; }
             }
             else
             {
@@ -46,22 +50,25 @@ namespace CommandDll
                 //devs should be able to change their own color
                 if (Server.devs.Contains(who.Username) && !Server.devs.Contains(p.Username)) { p.SendMessage("You can't change a dev's title color!"); return; }
                 titleColor = args[1] == "del" ? "del" : Colors.Parse(args[1]);
-                if (who.titleColor == titleColor) { p.SendMessage("Their title is already that color!"); return; }
+                if ((string)who.ExtraData.GetIfExist("Color") == titleColor) { p.SendMessage("Their title is already that color!"); return; }
             }
             if (titleColor == "") { p.SendMessage("Could not find color."); return; }
 
             string message = "";
+
+            who.ExtraData.CreateIfNotExist("TitleColor", Server.DefaultColor);
+
             if (titleColor == "del")
             {
-                who.titleColor = "";
+                who.ExtraData["TitleColor"] = "";
                 message = "was removed.";
             }
             else
             {
-                who.titleColor = titleColor;
-                message = "was set to " + titleColor + Colors.Name(titleColor) + who.color + ".";
+                who.ExtraData["TitleColor"] = titleColor;
+                message = "was set to " + titleColor + Colors.Name(titleColor) + (string)who.ExtraData.GetIfExist("Color") ?? "" + ".";
             }
-            Player.UniversalChat(who.color + "*" + who.Username + (who.Username.EndsWith("s") || who.Username.EndsWith("x") ? "'" : "'s") + " title color " + message);
+            Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + "*" + who.Username + (who.Username.EndsWith("s") || who.Username.EndsWith("x") ? "'" : "'s") + " title color " + message);
 
             who.SetPrefix();
             //TODO Save to database.
@@ -77,7 +84,7 @@ namespace CommandDll
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "tcolor", "titlecolor" });
+            Command.AddReference(this, new string[] { "tcolor", "titlecolor" });
         }
     }
 }

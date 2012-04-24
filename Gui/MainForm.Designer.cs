@@ -145,7 +145,6 @@ namespace MCForge.Gui
             this.newsFeeder1.Items.Add("c1c34");
             this.newsFeeder1.Location = new System.Drawing.Point(0, 452);
             this.newsFeeder1.Name = "newsFeeder1";
-            this.newsFeeder1.ShowPosts = false;
             this.newsFeeder1.Size = new System.Drawing.Size(826, 20);
             this.newsFeeder1.TabIndex = 7;
             this.newsFeeder1.Text = "Connecting...";

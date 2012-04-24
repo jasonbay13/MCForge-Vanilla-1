@@ -37,7 +37,7 @@ namespace CommandDll
             string[] rules = File.ReadAllLines("text/oprules.txt");
             who.SendMessage("Operator rules:");
             foreach (string rule in rules) { who.SendMessage(rule); }
-            if (who != p) { p.SendMessage("Sent oprules to " + who.username); }
+            if (who != p) { p.SendMessage("Sent oprules to " + who.Username); }
         }
 
         public void Help(Player p)
@@ -48,7 +48,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "oprules" });
+            Command.AddReference(this,  "oprules" );
         }
     }
 }

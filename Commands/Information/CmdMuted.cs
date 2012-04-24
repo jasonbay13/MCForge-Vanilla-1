@@ -16,11 +16,9 @@ using System.Collections.Generic;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-
-namespace CommandDll
-{
-    public class CmdMuted : ICommand
-    {
+using MCForge.Utils;
+namespace CommandDll {
+    public class CmdMuted : ICommand {
         public string Name { get { return "Muted"; } }
         public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Givo"; } }
@@ -28,36 +26,28 @@ namespace CommandDll
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
-        public static List<string> mutedlist = new List<string>();
-
-        public void Use(Player p, string[] args)
-        {
-            mutedlist.Clear();
-
-            if (args.Length > 0) { Help(p); }
-
-			Server.ForeachPlayer(delegate(Player pl)
-			{
-				if (pl.muted)
-				{
-					mutedlist.Add(pl.Username);
-				}
-			});
-            p.SendMessage("Muted: ");
-            foreach (string muted in mutedlist)
-            {
-                p.SendMessage(muted);
+        public void Use(Player p, string[] args) {
+            if (args.Length > 0) {
+                Help(p);
+                return;
             }
+            p.SendMessage("Muted: ");
+            Server.ForeachPlayer(delegate(Player pl) {
+                pl.ExtraData.CreateIfNotExist("Muted", false);
+                if ((bool)pl.ExtraData["Muted"]) {
+                    p.SendMessage(pl.Username);
+                }
+            });
+
+
         }
 
-        public void Help(Player p)
-        {
+        public void Help(Player p) {
             p.SendMessage("/muted - Displays muted players");
         }
 
-        public void Initialize()
-        {
-            Command.AddReference(this, new string[1] { "muted" });
+        public void Initialize() {
+            Command.AddReference(this, "muted");
         }
     }
 }

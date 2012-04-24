@@ -92,6 +92,7 @@
     <Compile Include="System\Settings\GroupSettings.cs" />
     <Compile Include="System\Settings\LevelSettings.cs" />
     <Compile Include="Utils\ColorUtils.cs" />
+    <Compile Include="Utils\MiscUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="World\Blocks\Custom\Griefer_stone.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\ActiveLava.cs" />
@@ -191,7 +192,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="Database" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MCForge.ico" />

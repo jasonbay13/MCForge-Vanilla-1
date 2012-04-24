@@ -17,45 +17,40 @@ using System.IO;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
+using MCForge.Utilities;
 
-namespace CommandDll.Misc
-{
-    class CmdResetPass : ICommand
-    {
+namespace CommandDll.Misc {
+    class CmdResetPass : ICommand {
         public string Name { get { return "ResetPass"; } }
         public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Sinjai"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
-        public void Use(Player p, string[] args)
-        {
+        public void Use(Player p, string[] args) {
             if (args[0] == "") { Help(p); return; }
             Player who = Player.Find(args[0]);
-            if (p != null && !p.isOwner) { p.SendMessage("Only the server owner can reset passwords!"); return; }
+            if (p != null && !p.IsOwner) { p.SendMessage("Only the server owner can reset passwords!"); return; }
             if (who == null) { p.SendMessage("Could not find \"" + args[0] + "\"."); return; }
             if (!File.Exists("extra/passwords/" + who.Username + ".xml")) { p.SendMessage("The player you specified does not have a password!"); return; }
-            if (p != null && !p.verified) { p.SendMessage("You cannot reset passwords until you have verified with &a/pass <password>" + Server.DefaultColor + "!"); return; }
-            try
-            {
+            if (p != null && !p.IsVerified) { p.SendMessage("You cannot reset passwords until you have verified with &a/pass <password>" + Server.DefaultColor + "!"); return; }
+            try {
                 File.Delete("extra/passwords/" + who.Username + ".xml");
-                p.SendMessage(who.color + who.Username + "'s password has been successfully reset.");
+                p.SendMessage((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + "'s password has been successfully reset.");
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 p.SendMessage("Password deletion failed. Please manually delete the file, extra/passwords/" + who.Username + ".xml, to reset " + who.Username + "'s password.");
-                Server.Log(e);
+                Logger.LogError(e);
                 //No Server.ErrorLog?
             }
         }
-        public void Help(Player p)
-        {
+        public void Help(Player p) {
             p.SendMessage("/resetpass <player> - Reset <player>'s password. Can only be used by the server owner.");
             p.SendMessage("Shortcut: /resetpassword");
         }
-        public void Initialize()
-        {
-            Command.AddReference(this, new string[2] { "resetpass", "resetpassword" });
+        public void Initialize() {
+            Command.AddReference(this, new string[] { "resetpass", "resetpassword" });
         }
     }
 }

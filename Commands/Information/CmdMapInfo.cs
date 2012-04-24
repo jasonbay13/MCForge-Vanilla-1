@@ -19,6 +19,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -34,7 +35,7 @@ namespace CommandDll
         public void Use(Player p, string[] args)
         {
             Level l = args.Length != 0
-                ? Level.Levels.Find(lev => { if (lev.Name.IndexOf(String.Join(" ", args)) != -1) return true; return false; })
+                ? Level.Levels.Find(lev => { return lev.Name.IndexOf(String.Join(" ", args)) != -1; })
                 : p.Level;
             if (l == null) { p.SendMessage("Could not find specified level."); return; }
 
@@ -51,11 +52,11 @@ namespace CommandDll
         private void plist(OnPlayerChat eventargs)
         {
             eventargs.Unregister();
-            if (eventargs.message.ToLower() != "yes" || eventargs.Player.lastcmd != "mapinfo" && eventargs.Player.lastcmd != "mi")
+            if (eventargs.message.ToLower() != "yes" || eventargs.Player.ExtraData.GetIfExist("LastCmd") != "mapinfo" && eventargs.Player.ExtraData.GetIfExist("LastCmd") != "mi")
                 return;
 
             eventargs.Cancel();
-            List<Player> templist = Server.Players.FindAll((p) => { if (p.Level == (Level)eventargs.datapass) return true; return false; });
+            List<Player> templist = Server.Players.FindAll((p) => { return p.Level == (Level)eventargs.datapass; });
 
             if (templist.Count == 0)
             {
@@ -70,7 +71,7 @@ namespace CommandDll
 
             templist.ForEach((p) =>
             {
-                eventargs.Player.SendMessage(String.Concat(p.titleColor, p.title, p.color, p.Username));
+                eventargs.Player.SendMessage(String.Concat((string)p.ExtraData.GetIfExist("Color"), p.Username));
             });
         }
 
@@ -82,7 +83,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "mapinfo", "mi" });
+            Command.AddReference(this, new string[] { "mapinfo", "mi" });
         }
     }
 }

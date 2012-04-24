@@ -12,8 +12,6 @@ using System.Threading;
 namespace MCForge.Gui.Components {
     public partial class NewsFeeder : DomainUpDown {
 
-        public bool ShowPosts { get; set; }
-
         public NewsFeeder() {
             InitializeComponent();
         }

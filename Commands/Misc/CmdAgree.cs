@@ -17,7 +17,7 @@ using System;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
-
+using MCForge.Utils;
 namespace CommandDll
 {
     public class CmdAgree : ICommand
@@ -31,8 +31,9 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
+            p.ExtraData.CreateIfNotExist("ReadRules", false);
             if (Server.agreed.Contains(p.Username)) { p.SendMessage("You have already agreed to the rules!"); return; }
-            if (!p.readrules) { p.SendMessage("You need to read the /rules before you can agree!"); return; }
+            if (!(bool)p.ExtraData["ReadRules"]) { p.SendMessage("You need to read the /rules before you can agree!"); return; }
             Server.agreed.Add(p.Username);
             if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); }
             File.AppendAllText("text/agreed.txt", p.Username + Environment.NewLine); 

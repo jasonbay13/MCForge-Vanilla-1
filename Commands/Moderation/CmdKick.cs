@@ -46,7 +46,7 @@ namespace CommandDll.Moderation
                 //Is it an IP or a name?
                 Server.ForeachPlayer(delegate(Player plr)
                 {
-                    if (plr.ip == args[0] || plr.username.StartsWith(args[0].ToLower()))
+                    if (plr.Ip == args[0] || plr.Username.StartsWith(args[0].ToLower()))
                         kickeeList.Add(plr); //When kicking someone, we don't care for case.
                 });
                 if (kickeeList.Count == 0)
@@ -91,7 +91,7 @@ namespace CommandDll.Moderation
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "kick", "k" });
+            Command.AddReference(this, new string[] { "kick", "k" });
         }
     }
 }

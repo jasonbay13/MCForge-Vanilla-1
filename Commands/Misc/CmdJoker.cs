@@ -17,6 +17,7 @@ using System.IO;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -38,15 +39,17 @@ namespace CommandDll
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
             if (Server.devs.Contains(who.Username)) { p.SendMessage("You can't joker a MCForge Developer!"); return; }
             CheckEmpty();
+
+            who.ExtraData.CreateIfNotExist("Jokered", false);
             if (args.Length == 1) //normal joker
             {
-                if (who.jokered) { who.jokered = false; Player.UniversalChat(who.Username + " is no longer a &aJ&bo&ck&5e&9r"); return; }
-                else { who.jokered = true; Player.UniversalChat(who.Username + " is now a &aJ&bo&ck&5e&9r"); return; }
+                if ((bool)who.ExtraData["Jokered"]) { who.ExtraData["Jokered"] = false; Player.UniversalChat(who.Username + " is no longer a &aJ&bo&ck&5e&9r"); return; }
+                else { who.ExtraData["Jokered"] = true; Player.UniversalChat(who.Username + " is now a &aJ&bo&ck&5e&9r"); return; }
             }
             else //stealth
             {
-                if (who.jokered) { who.jokered = false; p.SendMessage("Successfully stealth unjokered " + who.Username); return; }
-                else { who.jokered = true; p.SendMessage("Successfully stealth jokered " + who.Username); return; }
+                if ((bool)who.ExtraData["Jokered"]) { who.ExtraData["Jokered"] = false; p.SendMessage("Successfully stealth unjokered " + who.Username); return; }
+                else { who.ExtraData["Jokered"] = true; p.SendMessage("Successfully stealth jokered " + who.Username); return; }
             }
 
         }

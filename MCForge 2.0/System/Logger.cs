@@ -98,21 +98,23 @@ namespace MCForge.Utilities {
 
         internal static void Flush() {
                 while (_flushMessages) {
+                    Thread.Sleep(20);
                     if (_flushQueue.Count > 0) {
                         if (OnRecieveLog != null)
                             OnRecieveLog(null, _flushQueue.Dequeue());
                     }
-                    Thread.Sleep(20);
+                    
                 }
         }
 
         internal static void FlushErrors() {
                 while (_flushErrorMessages) {
+                    Thread.Sleep(20);
                     if (_flushErrorQueue.Count > 0) {
                         if (OnRecieveErrorLog != null)
                             OnRecieveErrorLog(null, _flushErrorQueue.Dequeue());
                     }
-                    Thread.Sleep(20);
+                    
                 }
         }
 

@@ -17,7 +17,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
-
+using MCForge.Utils;
 namespace CommandDll
 {
     public class CmdSummon : ICommand
@@ -45,16 +45,16 @@ namespace CommandDll
 						if (pl.Level == p.Level && pl != p && p.group.permission > pl.group.permission) //Missing permissions
 						{
 							pl.SendToPos(p.Pos, p.Rot);
-							pl.SendMessage("You were summoned by " + p.color + p.Username + Server.DefaultColor + ".");
+                            pl.SendMessage("You were summoned by " + (string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + Server.DefaultColor + ".");
 						}
 					});
-                    Player.UniversalChat(p.color + p.Username + Server.DefaultColor + " summoned everyone!");
+                    Player.UniversalChat((string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + Server.DefaultColor + " summoned everyone!");
                     return;
                 }
                 else
                 {
                     Player who = Player.Find(args[0]);
-                    if (who == null || who.isHidden && p.group.permission < who.group.permission)
+                    if (who == null || who.IsHidden && p.group.permission < who.group.permission)
                     {
                         p.SendMessage("Player: " + args[0] + " not found!");
                         return;
@@ -77,7 +77,7 @@ namespace CommandDll
                             Level where = p.Level;
                             //Need to use goto here
                             Thread.Sleep(1000); //Let them load;   
-                            while (who.isLoading)
+                            while (who.IsLoading)
                             {
                                 Thread.Sleep(250);
                             }

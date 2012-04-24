@@ -100,7 +100,7 @@ namespace MCForge.Gui {
                 mPlayersListBox.Invoke((MethodInvoker)delegate { OnConnect(args); });
                 return;
             }
-            mPlayersListBox.Items.Add(args.Player.username);
+            mPlayersListBox.Items.Add(args.Player.Username);
         }
 
         void OnDisconnect(OnPlayerDisconnect args) {
@@ -108,7 +108,7 @@ namespace MCForge.Gui {
                 mPlayersListBox.Invoke((MethodInvoker)delegate { OnDisconnect(args);  });
                 return;
             }
-            mPlayersListBox.Items.Remove(args.Player.username);
+            mPlayersListBox.Items.Remove(args.Player.Username);
         }
         #endregion
 

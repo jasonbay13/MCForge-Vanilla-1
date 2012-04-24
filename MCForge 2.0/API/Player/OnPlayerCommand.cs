@@ -73,7 +73,7 @@ namespace MCForge.API.PlayerEvent
 			List<OnPlayerCommand> opcList = new List<OnPlayerCommand>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(opc => {
-				if (opc.Player == null || opc.Player.username == p.username) {// We keep it
+				if (opc.Player == null || opc.Player.Username == p.Username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.cmd = cmd;
 					opc.args = args;
@@ -95,7 +95,7 @@ namespace MCForge.API.PlayerEvent
 		/// <returns>The OnPlayerCommand event</returns>
 		public static OnPlayerCommand Register(OnCall callback, Player target) {
 			//We add it to the list here
-			OnPlayerCommand pe = _eventQueue.Find(match => (match.Player == null ? target == null : target != null && target.username == match.Player.username));
+			OnPlayerCommand pe = _eventQueue.Find(match => (match.Player == null ? target == null : target != null && target.Username == match.Player.Username));
 			if (pe != null)
 				//It already exists, so we just add it to the queue.
 				pe._queue += callback;

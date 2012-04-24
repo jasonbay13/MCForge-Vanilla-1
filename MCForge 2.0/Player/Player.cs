@@ -25,6 +25,7 @@ using MCForge.Interface.Command;
 using MCForge.Utilities.Settings;
 using MCForge.World;
 using MCForge.Utilities;
+using MCForge.Utils;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -32,10 +33,12 @@ namespace MCForge.Entity {
     /// </summary>
     public partial class Player {
         #region Variables
-        internal static System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
-        internal static MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-        protected static packet pingPacket = new packet(new byte[1] { (byte)packet.types.SendPing });
-        protected static packet mapSendStartPacket = new packet(new byte[1] { (byte)packet.types.MapStart });
+
+        //TODO: Change all o dis
+        internal static readonly System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
+        internal static readonly MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+        protected static readonly packet pingPacket = new packet(new byte[1] { (byte)packet.types.SendPing });
+        protected static readonly packet mapSendStartPacket = new packet(new byte[1] { (byte)packet.types.MapStart });
         private static byte ForceTpCounter = 0;
 
         protected static packet MOTD_NonAdmin = new packet();
@@ -59,139 +62,136 @@ namespace MCForge.Entity {
         /// <summary>
         /// The player's money.
         /// </summary>
-        public int money = 0;
+        //public int money = 0;
+
         /// <summary>
         /// Checks if the player is the server owner.
         /// </summary>
-        public bool isOwner { get { if (Username == Server.owner) { return true; } else { return false; } } }
+        public bool IsOwner { get { return Username == Server.owner; } }
         /// <summary>
         /// The number of times the player has tried to use /pass.
         /// </summary>
-        public int passtries = 0;
+        //public int passtries = 0;
         /// <summary>
         /// Has the player used password verification?
         /// </summary>
-        public bool verified;
+        //public bool verified;
         /// <summary>
         /// The player's real username
         /// </summary>
-        public string Username;
+        //public string Username;
         /// <summary>
         /// Last command the player used.
         /// </summary>
-        public string lastcmd;
+        //public string lastcmd;
         /// <summary>
         /// Has the player voted?
         /// </summary>
-        public bool voted;
-        /// <summary>
-        /// Is the player being kicked ?
-        /// </summary>
-        public bool beingkicked;
+        //public bool voted;
         /// <summary>
         /// Has the player read the rules?
         /// </summary>
-        public bool readrules = false;
+        //public bool readrules = false;
         /// <summary>
         /// Is the player muted
         /// </summary>
-        public bool muted = false;
+        // public bool muted = false;
         /// <summary>
         /// Does the player have voice status
         /// </summary>
-        public bool voiced = false;
+        //public bool voiced = false;
         /// <summary>
         /// Derermines if the player is jokered
         /// </summary>
-        public bool jokered = false;
+        //public bool jokered = false;
         /// <summary>
         /// Determines if the player has opchat on. All messages will be sent to ops
         /// </summary>
-        public bool opchat = false;
+        // public bool opchat = false;
         /// <summary>
         /// Determines if the player has adminchat on. All messages will be sent to admins
         /// </summary>
-        public bool adminchat = false;
+        //public bool adminchat = false;
         /// <summary>
         /// Determines if the player is in /whisper mode
         /// </summary>
-        public bool whispering = false;
+        //public bool whispering = false;
         /// <summary>
         /// The player to whisper to
         /// </summary>
-        public Player whisperto;
+        //public Player whisperto;
 
         /// <summary>
         /// Appears in front of player's name if he is voiced
         /// </summary>
-        public string voicestring = "";
+        //public string voicestring = "";
         /// <summary>
         /// Used for player's LOWERCASE username.
         /// </summary>
-        protected string _username; //Lowercase Username
+        //protected string _username; //Lowercase Username
         /// <summary>
         /// This is the player's LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
         /// </summary>       
-        public string username //Lowercase Username feild
+        public string Username //Lowercase Username feild
         {
-            get {
-                if (_username == null) _username = Username.ToLower();
-                return _username;
-            }
+            get;
+            set;
         }
         /// <summary>
         /// This is the player's IP Address
         /// </summary>
-        public string ip;
+        public string Ip;
         /// <summary>
         /// The player's stored message (For appending)
         /// </summary>
-        public string storedMessage = "";
+        private string _storedMessage = "";
 
-        protected byte[] buffer = new byte[0];
-        protected byte[] tempBuffer = new byte[0xFFF];
-        protected string tempString = null;
-        protected byte tempByte = 0xFF;
+        private byte[] buffer = new byte[0];
+        private byte[] tempBuffer = new byte[0xFFF];
+        private readonly string tempString = null;
+        private readonly byte tempByte = 0xFF;
 
         /// <summary>
         /// True if the player is currently loading a map
         /// </summary>
-        public bool isLoading = true;
-        /// <summary>
-        /// True if the player is Online (false if the player has disconnected)
-        /// </summary>
-        public bool isOnline = true;
+        public bool IsLoading { get; set; }
         /// <summary>
         /// True if the player has completed the login process
         /// </summary>
-        public bool isLoggedIn = false;
+        public bool IsLoggedIn { get; set; }
+
+        public bool IsBeingKicked { get; set; }
         /// <summary>
         /// True if player is using static commands
         /// </summary>
-        public bool staticCommands = false;
+        //public bool staticCommands = false;
         /// <summary>
         /// True is the player is flying
         /// </summary>
-        public bool isFlying = false;
+        // public bool isFlying = false;
         /// <summary>
         /// This players current level
         /// </summary>
-        Level level = Server.Mainlevel;
+        private Level _level;
         /// <summary>
         /// This is the players current level
         /// When the value of the level is changed, the user is sent the new map.
         /// </summary>
         public Level Level {
-            get { return level; }
+            get {
+                if (_level == null)
+                    _level = Server.Mainlevel;
+                return _level;
+            }
             set {
-                level = value;
+                _level = value;
                 SendMap();
             }
         }
         /// <summary>
         /// The players MC Id, this changes each time the player logs in
         /// </summary>
-        public byte id = 255;
+        public byte id { get; set; }
         /// <summary>
         /// The players current position
         /// </summary>
@@ -203,44 +203,46 @@ namespace MCForge.Entity {
         /// <summary>
         /// The players current rotation
         /// </summary>
-        public byte[] Rot;
+        public byte[] Rot { get; set; }
         /// <summary>
         /// The players last known rotation
         /// </summary>
-        public byte[] oldRot;
+        public byte[] oldRot { get; set; }
         /// <summary>
         /// The players last known click
         /// </summary>
-        public Vector3 lastClick;
+        public Vector3 LastClick;
         /// <summary>
         /// The player's COLOR
         /// </summary>
-        public string color = Colors.navy;
+        //public string color = Colors.navy;
         /// <summary>
         /// The player's TITLE
         /// </summary>
-        public string title = "";
+        //public string title = "";
         /// <summary>
         /// The player's TITLE COLOR
         /// </summary>
-        public string titleColor = "";
+        //public string titleColor = "";
         /// <summary>
         /// The player's PREFIX
         /// </summary>
-        public string prefix = "";
+        //public string prefix = "";
         /// <summary>
         /// True if this player is hidden
         /// </summary>
-        public bool isHidden = false;
+        public bool IsHidden { get; set; }
 
         /// <summary>
         /// True if this player is an admin
         /// </summary>
-        public bool isAdmin = true;
+        public bool IsAdmin { get; set; }
+
+        public bool IsVerified { get; set; }
         /// <summary>
         /// Holds replacement messages for profan filter
         /// </summary>
-        public static List<string> replacement = new List<string>();
+        public static readonly List<string> replacement = new List<string>();
 
         /// <summary>
         /// Dictionary for housing extra data, great for giving player objects to pass
@@ -283,8 +285,8 @@ namespace MCForge.Entity {
                 Socket = TcpClient.Client;
                 Client = TcpClient;
                 Server.Connections.Add(this);
-                ip = Socket.RemoteEndPoint.ToString().Split(':')[0];
-                Server.Log("[System]: " + ip + " connected", ConsoleColor.Gray, ConsoleColor.Black);
+                Ip = Socket.RemoteEndPoint.ToString().Split(':')[0];
+                Server.Log("[System]: " + Ip + " connected", ConsoleColor.Gray, ConsoleColor.Black);
 
                 CheckMultipleConnections();
                 if (CheckIfBanned()) return;
@@ -328,17 +330,16 @@ namespace MCForge.Entity {
                         Server.Log("[Error] An error occured when " + Username + " tried to use " + name + "!", ConsoleColor.Red, ConsoleColor.Black);
                         Server.Log(ex);
                     }
-                    lastcmd = name;
+                    if (ExtraData.ContainsKey("LastCmd"))
+                        ExtraData["LastCmd"] = name;
+                    else
+                        ExtraData.Add("LastCmd", name);
                 });
             }
             else {
                 SendMessage("Unknown command \"" + name + "\"!");
             }
 
-            //foreach (string s in Command.Commands.Keys) {
-            //    Console.WriteLine(args[0]);
-            //    Console.WriteLine("'" + s + "'");
-            //}
         }
         #endregion
 
@@ -347,8 +348,8 @@ namespace MCForge.Entity {
             ForceTpCounter++;
 
             Server.ForeachPlayer(delegate(Player p) {
-                if (ForceTpCounter == 100) { if (!p.isHidden) p.UpdatePosition(true); }
-                else { if (!p.isHidden) p.UpdatePosition(false); }
+                if (ForceTpCounter == 100) { if (!p.IsHidden) p.UpdatePosition(true); }
+                else { if (!p.IsHidden) p.UpdatePosition(false); }
             });
         }
 
@@ -472,25 +473,31 @@ namespace MCForge.Entity {
             if (Server.Connections.Count < 2)
                 return;
             foreach (Player p in Server.Connections.ToArray()) {
-                if (p.ip == ip && p != this) {
+                if (p.Ip == Ip && p != this) {
                     //p.Kick("Only one half open connection is allowed per IP address.");
                 }
             }
         }
         protected static void CheckDuplicatePlayers(string username) {
             Server.ForeachPlayer(delegate(Player p) {
-                if (p.username == username) {
+                if (p.Username.ToLower() == username.ToLower()) {
                     p.Kick("You have logged in elsewhere!");
                 }
             });
         }
         protected bool CheckIfBanned() {
-            if (Server.IPBans.Contains(ip)) { Kick("You're Banned!"); return true; }
+            if (Server.IPBans.Contains(Ip)) {
+                Kick("You're Banned!");
+                return true;
+            }
             return false;
         }
         protected bool VerifyAccount(string name, string verify) {
-            if (!ServerSettings.GetSettingBoolean("offline") && ip != "127.0.0.1") {
-                if (Server.PlayerCount >= ServerSettings.GetSettingInt("maxplayers")) { SKick("Server is full, please try again later!"); return false; }
+            if (!ServerSettings.GetSettingBoolean("offline") && Ip != "127.0.0.1") {
+                if (Server.PlayerCount >= ServerSettings.GetSettingInt("maxplayers")) {
+                    SKick("Server is full, please try again later!");
+                    return false;
+                }
 
                 if (verify == null || verify == "" || verify == "--" || (verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0') && verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0'))) {
                     SKick("Account could not be verified, try again.");
@@ -498,7 +505,11 @@ namespace MCForge.Entity {
                     return false;
                 }
             }
-            if (name.Length > 16 || !ValidName(name)) { SKick("Illegal name!"); return false; } //Illegal Name Kick
+            if (name.Length > 16 || !ValidName(name)) {
+                SKick("Illegal name!");
+                return false;
+            }
+
             return true;
         }
         /// <summary>
@@ -507,7 +518,7 @@ namespace MCForge.Entity {
         /// <param name="name">the name to check</param>
         /// <returns>returns true if name is valid</returns>
         public static bool ValidName(string name) {
-            string allowedchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890._";
+            const string allowedchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890._";
             foreach (char ch in name) { if (allowedchars.IndexOf(ch) == -1) { return false; } } return true;
         }
 
@@ -517,15 +528,9 @@ namespace MCForge.Entity {
         /// <param name="name">The player name to find</param>
         /// <remarks>Can be a partial name</remarks>
         public static Player Find(string name) {
-            List<Player> players = new List<Player>();
-
-            Server.ForeachPlayer(delegate(Player p) {
-                if (p.username.StartsWith(name.ToLower()))
-                    players.Add(p);
-            });
-
-            if (players.Count == 1)
-                return players[0];
+            foreach (var p in Server.Players)
+                if (p.Username.ToLower().StartsWith(name.ToLower()))
+                    return p;
             return null;
         }
         #endregion

@@ -16,7 +16,7 @@ using System;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-
+using MCForge.Utils;
 namespace CommandDll.Misc
 {
     class CmdRob : ICommand
@@ -31,22 +31,54 @@ namespace CommandDll.Misc
         {
             if (args.Length != 2) { Help(p); return; }
             Player who = Player.Find(args[0]);
-            if (p.group.permission < who.group.permission) { p.SendMessage("You cannot rob your superiors!"); return; }
-            if (who == null) { p.SendMessage("Could not find \"" + args[0] + "\"!"); return; }
-            if (who == p) { p.SendMessage("You cannot rob yourself!"); return; }
+
+            if (p.group.permission < who.group.permission) { 
+                p.SendMessage("You cannot rob your superiors!"); 
+                return; 
+            }
+
+            if (who == null) {
+                p.SendMessage("Could not find \"" + args[0] + "\"!");
+                return;
+            }
+            if (who == p && !p.IsOwner) {
+                p.SendMessage("You cannot take money from yourself!");
+                return;
+            }
             int amt;
-            try { amt = int.Parse(args[1]); }
-            catch { p.SendMessage("Invalid amount!"); return; }
-            if (p.money + amt > 16777215) { p.SendMessage("If you steal that much, you'll be so rich your wallet will burst! You cannot have over 16777215 " + Server.moneys + "."); return; }
-            if (who.money - amt < 0) { p.SendMessage("You cannot steal money that " + who.Username + " does not have!"); return; }
-            if (amt < 0) { p.SendMessage("Cannot take negative amounts of " + Server.moneys + "."); return; }
+
+            try {
+                amt = int.Parse(args[1]);
+            }
+            catch {
+                p.SendMessage("Invalid amount!");
+                return;
+            }
+
+            who.ExtraData.CreateIfNotExist("Money", 0);
+            p.ExtraData.CreateIfNotExist("Money", 0);
+
+            if ((int)who.ExtraData["Money"] - amt < 0) {
+                p.SendMessage("You cannot steal money that " + who.Username + " does not have!");
+                return;
+            }
+            if ((int)p.ExtraData["Money"] + amt > 16777215) {
+                p.SendMessage("If you steal that much, you'll be so rich your wallet will burst! You cannot have over 16777215 " + Server.moneys + ".");
+                return;
+            }
+            if (amt < 0) {
+                p.SendMessage("Cannot take negative amounts of " + Server.moneys + ".");
+                return;
+            }
+
+
             Random rand = new Random();
             int x = rand.Next(1, 101);
             if (InBetween(1, x, 3)) { Rob(p, who, amt); }
             if (InBetween(4, x, 6)) { amt -= amt / 5; Rob(p, who, amt); }
             if (InBetween(7, x, 15)) { amt = amt / 5; Rob(p, who, amt); }
             if (InBetween(16, x, 25)) { amt = amt / 10; Rob(p, who, amt); }
-            if (InBetween(26, x, 100)) { Player.UniversalChat(p.color + p.Username + Server.DefaultColor + " tried to rob " + who.color + who.Username + Server.DefaultColor + " but failed!"); p.Kick("Thief!"); }
+            if (InBetween(26, x, 100)) { Player.UniversalChat((string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + Server.DefaultColor + " tried to rob " + (string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " but failed!"); p.Kick("Thief!"); }
         }
         public void Help(Player p)
         {
@@ -61,11 +93,11 @@ namespace CommandDll.Misc
             if (num >= min && num <= max) return true;
             else return false;
         }
-        void Rob(Player p, Player who, int amount)
+        void Rob(Player p, Player who, int amt)
         {
-            who.money -= amount;
-            p.money += amount;
-            Player.UniversalChat(p.color + p.Username + Server.DefaultColor + " robbed " + who.color + who.Username + Server.DefaultColor + " of &3" + amount + Server.DefaultColor + " " + Server.moneys + ".");
+            p.ExtraData["Money"] = (int)p.ExtraData["Money"] + amt;
+            who.ExtraData["Money"] = (int)who.ExtraData["Money"] - amt;
+            Player.UniversalChat((string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + Server.DefaultColor + " robbed " + (string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " of &3" + amt + Server.DefaultColor + " " + Server.moneys + ".");
         }
     }
 }

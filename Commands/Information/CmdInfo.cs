@@ -20,7 +20,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utilities.Settings;
 using MCForge.World;
-
+using MCForge.Utils;
 namespace CommandDll
 {
     public class CmdInfo : ICommand
@@ -56,7 +56,8 @@ namespace CommandDll
 
             OnPlayerChat.Register((t) =>
             {
-                if (t.message.ToLower() == "yes" && t.Player.lastcmd == "info") 
+                p.ExtraData.CreateIfNotExist("LastCmd", "");
+                if (t.message.ToLower() == "yes" && t.Player.ExtraData["LastCmd"] == "info") 
                     Command.all["devs"].Use(p, new string[0]); 
                 t.Cancel(); 
                 t.Unregister();

@@ -231,6 +231,7 @@ namespace MCForge.Core {
 
             FileUtils.CreateFileIfNotExist("bans/IPbans.txt");
             FileUtils.CreateFileIfNotExist("bans/NameBans.txt");
+            FileUtils.CreateFileIfNotExist("bans/BanInfo.txt");
 
             try {
                 string[] lines = File.ReadAllLines("text/agreed.txt");

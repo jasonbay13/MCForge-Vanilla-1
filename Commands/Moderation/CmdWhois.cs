@@ -52,7 +52,7 @@ namespace CommandDll.Moderation
                     //p.SendMessage("> First logged into the server on " + found.firstLogin);
                     //p.SendMessage("> Logged in " + found.timesOnline + " times, " + found.timesKicked + " of which ended in a kick.");
                     //p.SendMessage("> " + found.numAwarded + "/" + Server.numAwards + " awards.");
-                    p.SendMessage("> the IP of " + found.ip);
+                    p.SendMessage("> the IP of " + found.Ip);
                     if (Server.devs.Contains(found.Username))
                         p.SendMessage("> " + found.Username + " is an MCForge Developer.");
                 }
@@ -70,7 +70,7 @@ namespace CommandDll.Moderation
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[3] { "whois", "whowas", "whoip" });
+            Command.AddReference(this, new string[] { "whois", "whowas", "whoip" });
         }
     }
 }

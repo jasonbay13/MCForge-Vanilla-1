@@ -19,6 +19,8 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
 using MCForge.Groups;
+using System.Threading;
+using MCForge.Utils;
 
 namespace CommandDll.Moderation
 {
@@ -55,19 +57,23 @@ namespace CommandDll.Moderation
                 return;
             }
             Player found = allUnder[(new Random()).Next(allUnder.Count)];
-            p.SendMessage("Player found!  Transporting you to " + found.color + found.Username + Server.DefaultColor + "!");
+            p.SendMessage("Player found!  Transporting you to " + (string)found.ExtraData.GetIfExist("Color") ?? "" + found.Username + Server.DefaultColor + "!");
             if (p.Level != found.Level)
             {
                 //Go to the level first
                 gotoCmd.Use(p, new string[] { found.Level.Name });
             }
-            if (found.isLoading)
+            if (found.IsLoading)
             {
-                p.SendMessage("Waiting for " + found.color + found.Username + Server.DefaultColor + " to spawn...");
+                p.SendMessage("Waiting for " + (string)found.ExtraData.GetIfExist("Color") ?? "" + found.Username + Server.DefaultColor + " to spawn...");
 
-                while (found.isLoading) { } // until event works
+                while (found.IsLoading) { 
+                    Thread.Sleep(5);
+                } // until event works
             }
-            while (p.isLoading) { } // until event works.
+            while (p.IsLoading) {
+                Thread.Sleep(5);
+            } // until event works.
             p.SendToPos(found.Pos, found.Rot);
         }
 

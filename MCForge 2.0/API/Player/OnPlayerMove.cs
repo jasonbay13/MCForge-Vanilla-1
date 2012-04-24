@@ -45,7 +45,7 @@ namespace MCForge.API.PlayerEvent
 			List<OnPlayerMove> opcList = new List<OnPlayerMove>();
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(opc => {
-				if (opc.Player == null || opc.Player.username == p.username) {// We keep it
+				if (opc.Player == null || opc.Player.Username == p.Username) {// We keep it
 					//Set up variables, then fire all callbacks.
 					opc.oldPos = oldPos;
 					Player oldPlayer = opc.Player; 
@@ -82,7 +82,7 @@ namespace MCForge.API.PlayerEvent
 		/// <returns>A reference to the event</returns>
 		public static OnPlayerMove Register(OnCall callback, Player target) {
 			//We add it to the list here
-			OnPlayerMove pe = _eventQueue.Find(match => match.Player == null || match.Player.username == target.username);
+			OnPlayerMove pe = _eventQueue.Find(match => match.Player == null || match.Player.Username == target.Username);
 			if (pe != null)
 				//It already exists, so we just add it to the queue.
 				pe._queue += callback;

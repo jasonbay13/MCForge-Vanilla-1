@@ -15,6 +15,7 @@ permissions and limitations under the Licenses.
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -32,6 +33,9 @@ namespace CommandDll
             if (args.Length == 0) { p.SendMessage("You have to specify a message!"); return; }
             Player who;
             string title = "";
+
+            p.ExtraData.CreateIfNotExist("Title", "");
+
             if (args.Length < 2)
             {
                 who = p;
@@ -54,19 +58,21 @@ namespace CommandDll
             {
                 if (Server.devs.Contains(who.Username) || title.ToLower() == "dev") { p.SendMessage("Can't let you do that, starfox."); return; }
             }
+
+            who.ExtraData.CreateIfNotExist("Title", "");
             string message = "";
             if (title == "del")
             {
-                who.title = "";
+                who.ExtraData["Title"] = "";
                 message = "removed.";
             }
             else
             {
-                who.title = title;
+                who.ExtraData["Title"] = title;
                 message = "set to &b[" + title + "]";
             }
             who.SetPrefix();
-            Player.UniversalChat(who.color +  who.Username + Server.DefaultColor + " had their title " + message);
+            Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " had their title " + message);
             //TODO Save to database.
         }
 

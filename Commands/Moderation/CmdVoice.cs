@@ -15,6 +15,7 @@ permissions and limitations under the Licenses.
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -34,8 +35,11 @@ namespace CommandDll
             else { who = Player.Find(args[0]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
             if (Server.devs.Contains(who.Username)) { p.SendMessage("Cannot change MCForge Developer's voice status!"); return; }
-            if (who.voiced) { who.voiced = false; who.voicestring = ""; Player.UniversalChat(who.Username + " is no longer voiced!"); return; }
-            else { who.voiced = true; who.voicestring = "+ "; Player.UniversalChat(who.Username + " is now voiced!"); return; }
+
+            who.ExtraData.CreateIfNotExist("Voiced", false);
+            who.ExtraData.CreateIfNotExist("VoiceString", "");
+            if ((bool)who.ExtraData["Voiced"]) { who.ExtraData["Voiced"] = false; who.ExtraData["VoicedString"] = ""; Player.UniversalChat(who.Username + " is no longer voiced!"); return; }
+            else { who.ExtraData["Voiced"] = true; who.ExtraData["VoicedString"] = "+ "; Player.UniversalChat(who.Username + " is now voiced!"); return; }
         }
 
         public void Help(Player p)

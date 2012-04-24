@@ -14,6 +14,7 @@ permissions and limitations under the Licenses.
 */
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -31,7 +32,9 @@ namespace CommandDll
             if (args.Length == 0) { who = null; }
             else { who = Player.Find(args[0]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
-            p.SendMessage("Last command " + who.Username + " used is " + who.lastcmd);
+
+            who.ExtraData.CreateIfNotExist("LastCmd", "");
+            p.SendMessage("Last command " + who.Username + " used is " + who.ExtraData["LastCmd"]);
         }
         public void Help(Player p)
         {

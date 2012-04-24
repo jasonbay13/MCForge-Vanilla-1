@@ -16,6 +16,7 @@ using System.Threading;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -49,7 +50,8 @@ namespace CommandDll
             else if (Server.NoVotes > Server.YesVotes || Server.YesVotes == Server.NoVotes) { Player.UniversalChat("Looks like " + who.Username + " is staying!"); return; }
 			Server.ForeachPlayer(delegate(Player pl)
 			{
-				pl.voted = false;
+                pl.ExtraData.CreateIfNotExist("Voted", false);
+                pl.ExtraData["Voted"] = false;
 			});
             Server.voting = false;
             ResetVotes();
