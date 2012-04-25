@@ -74,9 +74,6 @@ namespace MCForge.Core {
         static bool debug = false;
         public static bool DebugMode { 
         	get {
-        		#if DEBUG
-        		return true;
-        		#endif
         		return debug;
         	}
         	set { debug = value; }
