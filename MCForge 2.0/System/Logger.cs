@@ -124,10 +124,25 @@ namespace MCForge.Utilities {
     /// Log type for the specified message
     /// </summary>
     public enum LogType {
+    	/// <summary>
+    	/// The normal messages
+    	/// </summary>
         Normal,
+        /// <summary>
+        /// Error messages
+        /// </summary>
         Error,
+        /// <summary>
+        /// Debug messages (only appears if the server is in debugging mode)
+        /// </summary>
         Debug,
+        /// <summary>
+        /// Warning messages
+        /// </summary>
         Warning,
+        /// <summary>
+        /// Critical messages
+        /// </summary>
         Critical,
 
     }

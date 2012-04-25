@@ -15,6 +15,7 @@ permissions and limitations under the Licenses.
 using System;
 using MCForge.Entity;
 using System.Collections.Generic;
+using MCForge.Utilities;
 
 namespace MCForge.API.PlayerEvent
 {
@@ -60,6 +61,7 @@ namespace MCForge.API.PlayerEvent
 		/// <param name="p">The player that caused the event.</param>
 		/// <param name="reason">The reason for disconnect.</param>
 		internal static void Call(Player p, string reason) {
+			Logger.Log("Calling OnPlayerDisconnect event", LogType.Debug);
 			//Event was called from the code.
 			//Do we keep or discard the event?
 			_eventQueue.ForEach(opc => {
@@ -81,6 +83,7 @@ namespace MCForge.API.PlayerEvent
 		/// <param name="target">The player to watch for. (null for any players)</param>
 		/// <returns>The new OnPlayerDisconnect event</returns>
 		public static OnPlayerDisconnect Register(OnCall callback, Player target) {
+			Logger.Log("OnPlayerDisconnect registered to the method " + callback.Method.Name, LogType.Debug);
 			//We add it to the list here
 			OnPlayerDisconnect pe = _eventQueue.Find(match => match.Player == null || match.Player.Username == target.Username);
 			if (pe != null)
@@ -95,14 +98,14 @@ namespace MCForge.API.PlayerEvent
 		}
 
 		/// <summary>
-		/// Unregisters the sxpecified event
+		/// Unregisters the specific event
 		/// </summary>
 		/// <param name="pe">The event to unregister</param>
 		public static void Unregister(OnPlayerDisconnect pe) {
 			pe.Unregister();
 		}
 		/// <summary>
-		/// Unregisters the sxpecified event
+		/// Unregisters the specific event
 		/// </summary>
 		/// <param name="pe">The event to unregister</param>
 		public override void Unregister() {

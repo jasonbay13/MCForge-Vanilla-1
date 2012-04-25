@@ -34,7 +34,7 @@ namespace Plugins {
             }
         }
 
-        public void OnLoad() {
+        public void OnLoad(string[] args) {
             pList = new Dictionary<Player, string>();
 
 

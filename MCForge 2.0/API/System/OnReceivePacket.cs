@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge.Entity;
+using MCForge.Utilities;
 
 
 namespace MCForge.API.System {
@@ -39,6 +40,7 @@ namespace MCForge.API.System {
         /// Calls every event
         /// </summary>
         public void Call() {
+        	Logger.Log("Calling OnReceivePacket", LogType.Debug);
             ToCall.ForEach(method => {
                 method(this);
             });

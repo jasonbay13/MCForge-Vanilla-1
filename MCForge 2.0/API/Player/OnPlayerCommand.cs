@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MCForge.Entity;
+using MCForge.Utilities;
 
 namespace MCForge.API.PlayerEvent
 {
@@ -69,6 +70,7 @@ namespace MCForge.API.PlayerEvent
 		/// <param name="args">The arguments the player gave for the command.</param>
 		/// <returns> A boolean value specifying whether or not to cancel the event.</returns>
 		internal static bool Call(Player p, string cmd, string[] args) {
+			Logger.Log("Calling OnPlayerCommand event", LogType.Debug);
 			//Event was called from the code.
 			List<OnPlayerCommand> opcList = new List<OnPlayerCommand>();
 			//Do we keep or discard the event?
@@ -94,6 +96,7 @@ namespace MCForge.API.PlayerEvent
 		/// <param name="target">The player to watch for. (null for any players)</param>
 		/// <returns>The OnPlayerCommand event</returns>
 		public static OnPlayerCommand Register(OnCall callback, Player target) {
+			Logger.Log("OnPlayerCommand registered to the method " + callback.Method.Name, LogType.Debug);
 			//We add it to the list here
 			OnPlayerCommand pe = _eventQueue.Find(match => (match.Player == null ? target == null : target != null && target.Username == match.Player.Username));
 			if (pe != null)
@@ -108,14 +111,14 @@ namespace MCForge.API.PlayerEvent
 		}
 
 		/// <summary>
-		/// Unregisters the sxpecified event
+		/// Unregisters the specific event
 		/// </summary>
 		/// <param name="pe">The event to unregister</param>
 		public static void Unregister(OnPlayerCommand pe) {
 			pe.Unregister();
 		}
 		/// <summary>
-		/// Unregisters the sxpecified event
+		/// Unregisters the specific event
 		/// </summary>
 		/// <param name="pe">The event to unregister</param>
 		public override void Unregister() {

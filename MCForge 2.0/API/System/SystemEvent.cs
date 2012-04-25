@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MCForge.Utilities;
 
 namespace MCForge.API.System
 {
@@ -36,6 +37,7 @@ namespace MCForge.API.System
 		/// Prevent default processing until event is unregistered. (or Allow() is called)
 		/// </summary>
 		public void Cancel() {
+			Logger.Log("Event Canceled", LogType.Debug);
 			_canceled = true;
 		}
 
@@ -43,6 +45,7 @@ namespace MCForge.API.System
 		/// Allow default processing. (until Cancel() is called)
 		/// </summary>
 		public void Allow() {
+			Logger.Log("Event Uncanceled", LogType.Debug);
 			_canceled = false;
 		}
         

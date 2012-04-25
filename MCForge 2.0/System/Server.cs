@@ -71,7 +71,16 @@ namespace MCForge.Core {
         private static int GroupsaveIntervalCurrent = 0;
         private static int PingInterval = 10;
         private static int PintIntervalCurrent = 0;
-
+        static bool debug = false;
+        public static bool DebugMode { 
+        	get {
+        		#if DEBUG
+        		return true;
+        		#endif
+        		return debug;
+        	}
+        	set { debug = value; }
+        }
         public struct TempBan { public string name; public DateTime allowed; }
         public static List<TempBan> tempbans = new List<TempBan>();
         public static DateTime StartTime = DateTime.Now;
@@ -167,28 +176,32 @@ namespace MCForge.Core {
         public delegate void ForeachPlayerDelegate(Player p);
 
         public static void Init() {
+        	Logger.Log("Debug mode started", LogType.Debug);
+        	//TODO Add debug messages
             //TODO load the level if it exists
             Block.InIt();
-
             Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
+            Logger.Log("Starting update timer", LogType.Debug);
             UpdateTimer.Start();
-
+            Logger.Log("Log timer started", LogType.Debug);
             Groups.PlayerGroup.InitDefaultGroups();
-
+            Logger.Log("Loading DLL's", LogType.Debug);
             LoadAllDlls.Init();
-
+            Logger.Log("Finished loading DLL's", LogType.Debug);
+            Logger.Log("Sending Heartbeat..", LogType.Debug);
             Heartbeat.sendHeartbeat();
 
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
-
+            
             CreateCoreFiles();
-
+            Logger.Log("Loading Bans", LogType.Debug);
+            Logger.Log("IPBANS", LogType.Debug);
             IPBans = new List<string>(File.ReadAllLines("bans/IPBans.txt"));
+            Logger.Log("IPBANS", LogType.Debug);
             UsernameBans = new List<string>(File.ReadAllLines("bans/NameBans.txt"));
-
             StartListening();
             Started = true;
             Log("[Important]: Server Started.", ConsoleColor.Black, ConsoleColor.White);
@@ -340,6 +353,8 @@ namespace MCForge.Core {
         }
 
         public static void OnLog(object sender, LogEventArgs args) {
+        	if (!DebugMode && args.LogType == LogType.Debug)
+        		return;
             var tColor = ColorUtils.ToConsoleColor(args.TextColor);
             var bColor = ColorUtils.ToConsoleColor(args.BackgroundColor);
             Console.ForegroundColor = tColor;

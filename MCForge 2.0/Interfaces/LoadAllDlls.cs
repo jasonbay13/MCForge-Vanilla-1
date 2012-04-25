@@ -49,12 +49,13 @@ namespace MCForge.Interface {
             }
             catch { return null; }
         }
-        internal static void InitCommands() {
-            string path = Directory.GetCurrentDirectory();
-            string[] DLLFiles = Directory.GetFiles(path, "*.DLL");
-
-            foreach (string s in DLLFiles) {
-                Assembly DLLAssembly = LoadFile(s); //Prevents the dll from being in use inside windows
+		/// <summary>
+		/// Load a DLL
+		/// </summary>
+		/// <param name="s">The filepath of the DLL</param>
+		public static void LoadDLL(string s, string[] args)
+		{
+			 Assembly DLLAssembly = LoadFile(s); //Prevents the dll from being in use inside windows
                 try
                 {
                     foreach (Type ClassType in DLLAssembly.GetTypes())
@@ -77,7 +78,7 @@ namespace MCForge.Interface {
                                     if (typeInterface != null)
                                     {
                                         IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                        instance.OnLoad();
+                                        instance.OnLoad(args);
                                         PluginManager.AddReference(instance);
                                         Server.Log("[Plugin]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
                                     }
@@ -87,6 +88,24 @@ namespace MCForge.Interface {
                     }
                 }
                 catch { } //Stops loading bad DLL files
+		}
+        internal static void InitCommands() {
+            string path = Directory.GetCurrentDirectory();
+            string[] DLLFiles = Directory.GetFiles(path, "*.dll");
+
+            foreach (string s in DLLFiles)
+            	LoadDLL(s, new string[] { "-normal" });
+            if (Directory.Exists("plugins"))
+            {
+            	DLLFiles = Directory.GetFiles("plugins", "*.dll");
+            	foreach (string s in DLLFiles)
+            		LoadDLL(s, new string[] { "-normal" });
+            }
+            if (Directory.Exists("commands"))
+            {
+            	DLLFiles = Directory.GetFiles("commands", "*.dll");
+            	foreach (string s in DLLFiles)
+            		LoadDLL(s, new string[] { "-normal" });
             }
         }
     }

@@ -1,9 +1,24 @@
-﻿using System;
+﻿/*
+Copyright 2011 MCForge
+Dual-licensed under the Educational Community License, Version 2.0 and
+the GNU General Public License, Version 3 (the "Licenses"); you may
+not use this file except in compliance with the Licenses. You may
+obtain a copy of the Licenses at
+http://www.opensource.org/licenses/ecl2.php
+http://www.gnu.org/licenses/gpl-3.0.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the Licenses are distributed on an "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the Licenses for the specific language governing
+permissions and limitations under the Licenses.
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge.Entity;
 using MCForge.World;
+using MCForge.Utilities;
 
 namespace MCForge.API.PlayerEvent
 {
@@ -76,6 +91,7 @@ namespace MCForge.API.PlayerEvent
 		/// <param name="holding">What the player was holding at the time.</param>
 		/// <returns> A boolean value specifying whether or not to cancel the event.</returns>
 		internal static bool Call(ushort x, ushort y, ushort z, ActionType action, Player p, byte holding) {
+			Logger.Log("Calling OnPlayerBlockChange event", LogType.Debug);
 			//Event was called from the code.
 			List<OnPlayerBlockChange> opbcList = new List<OnPlayerBlockChange>();
 			//Do we keep or discard the event?
@@ -105,6 +121,7 @@ namespace MCForge.API.PlayerEvent
 		/// <param name="datapass">The data to return when this event fires.</param>
 		/// <returns></returns>
 		public static OnPlayerBlockChange Register(OnCall callback, Player target, object datapass) {
+			Logger.Log("OnPlayerBlockChange registered to the method " + callback.Method.Name, LogType.Debug);
 			//We add it to the list here
 			OnPlayerBlockChange pe = _eventQueue.Find(match => (match.Player == null ? target == null : target != null && target.Username == match.Player.Username));
 			if (pe != null)
@@ -119,14 +136,14 @@ namespace MCForge.API.PlayerEvent
 		}
 
 		/// <summary>
-		/// Unregisters the sxpecified event
+		/// Unregisters the specific event
 		/// </summary>
 		/// <param name="pe">The event to unregister</param>
 		public static void Unregister(OnPlayerBlockChange pe) {
 			pe.Unregister();
 		}
 		/// <summary>
-		/// Unregisters the sxpecified event
+		/// Unregisters the specific event
 		/// </summary>
 		/// <param name="pe">The event to unregister</param>
 		public override void Unregister() {

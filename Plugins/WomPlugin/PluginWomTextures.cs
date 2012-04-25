@@ -51,7 +51,7 @@ namespace Plugins.WomPlugin {
         }
 
         private WomSettings WomSettings { get; set; }
-        public void OnLoad() {
+        public void OnLoad(string[] args1) {
             WomSettings = new WomSettings();
             WomSettings.OnLoad();
             OnReceivePacket.Register(OnData);

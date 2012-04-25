@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MCForge.Entity;
+using MCForge.Utilities;
 
 namespace MCForge.API.PlayerEvent
 {
@@ -70,6 +71,7 @@ namespace MCForge.API.PlayerEvent
 		/// <param name="msg">The message sent by the player.</param>
 		/// <returns>a new (or existing) event with the modified string.</returns>
 		internal static OnPlayerChat Call(Player p, string msg) {
+			Logger.Log("Calling OnPlayerChat event", LogType.Debug);
 			//Event was called from the code.
 			List<OnPlayerChat> opcList = new List<OnPlayerChat>();
 			//Do we keep or discard the event?
@@ -103,6 +105,7 @@ namespace MCForge.API.PlayerEvent
 		/// <param name="target">The player to watch for. (null for any players)</param>
 		/// <returns>the OnPlayerChat event</returns>
 		public static OnPlayerChat Register(OnCall callback, Player target) {
+			Logger.Log("OnPlayerChat registered to the method " + callback.Method.Name, LogType.Debug);
 			//We add it to the list here
 			OnPlayerChat pe = _eventQueue.Find(match => (match.Player == null ? target == null : target != null && target.Username == match.Player.Username));
 			if (pe != null)
@@ -117,14 +120,14 @@ namespace MCForge.API.PlayerEvent
 		}
 
 		/// <summary>
-		/// Unregisters the sxpecified event
+		/// Unregisters the specific event
 		/// </summary>
 		/// <param name="pe">The event to unregister</param>
 		public static void Unregister(OnPlayerChat pe) {
 			pe.Unregister();
 		}
 		/// <summary>
-		/// Unregisters the sxpecified event
+		/// Unregisters the specific event
 		/// </summary>
 		/// <param name="pe">The event to unregister</param>
 		public override void Unregister() {

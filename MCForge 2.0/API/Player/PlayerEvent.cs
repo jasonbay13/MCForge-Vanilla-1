@@ -14,6 +14,7 @@ permissions and limitations under the Licenses.
 */
 using System.Collections.Generic;
 using MCForge.Core;
+using MCForge.Utilities;
 using MCForge.Entity;
 
 namespace MCForge.API.PlayerEvent
@@ -44,6 +45,7 @@ namespace MCForge.API.PlayerEvent
 		/// Prevent default processing until event is unregistered. (or Allow() is called)
 		/// </summary>
 		public void Cancel() {
+			Logger.Log("Event Canceled", LogType.Debug);
 			_canceled = true;
 		}
 
@@ -51,6 +53,7 @@ namespace MCForge.API.PlayerEvent
 		/// Allow default processing. (until Cancel() is called)
 		/// </summary>
 		public void Allow() {
+			Logger.Log("Event UnCanceled", LogType.Debug);
 			_canceled = false;
 		}
 

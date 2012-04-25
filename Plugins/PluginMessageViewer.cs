@@ -211,7 +211,7 @@ namespace PluginsDLL
         }
 
 
-        public void OnLoad() {
+        public void OnLoad(string[] args) {
             
         }
 

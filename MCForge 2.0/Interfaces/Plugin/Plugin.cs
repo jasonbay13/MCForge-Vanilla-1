@@ -39,7 +39,7 @@ namespace MCForge.Interface.Plugin {
         /// <summary>
         /// When the plugin is first loaded
         /// </summary>
-         void OnLoad();
+        void OnLoad(string[] args);
 
         /// <summary>
         /// When the plugin is unloaded.

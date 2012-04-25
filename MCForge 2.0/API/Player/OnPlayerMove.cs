@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MCForge.Core;
 using MCForge.Entity;
+using MCForge.Utilities;
 
 namespace MCForge.API.PlayerEvent
 {
@@ -41,6 +42,7 @@ namespace MCForge.API.PlayerEvent
 		/// <param name="p">The player that caused the event.</param>
 		/// <param name="oldPos">The old position of the person.</param>
 		internal static bool Call(Player p, Vector3 oldPos) {
+			Logger.Log("Calling OnPlayerMove event", LogType.Debug);
 			//Event was called from the code.
 			List<OnPlayerMove> opcList = new List<OnPlayerMove>();
 			//Do we keep or discard the event?
@@ -81,6 +83,7 @@ namespace MCForge.API.PlayerEvent
 		/// <param name="target">The player to watch for. (null for any players)</param>
 		/// <returns>A reference to the event</returns>
 		public static OnPlayerMove Register(OnCall callback, Player target) {
+			Logger.Log("OnPlayerMove registered to the method " + callback.Method.Name, LogType.Debug);
 			//We add it to the list here
 			OnPlayerMove pe = _eventQueue.Find(match => match.Player == null || match.Player.Username == target.Username);
 			if (pe != null)
@@ -95,14 +98,14 @@ namespace MCForge.API.PlayerEvent
 		}
 
 		/// <summary>
-		/// Unregisters the sxpecified event
+		/// Unregisters the specific event
 		/// </summary>
 		/// <param name="pe">The event to unregister</param>
 		public static void Unregister(OnPlayerMove pe) {
 			pe.Unregister();
 		}
 		/// <summary>
-		/// Unregisters the sxpecified event
+		/// Unregisters the specific event
 		/// </summary>
 		/// <param name="pe">The event to unregister</param>
 		public override void Unregister() {
