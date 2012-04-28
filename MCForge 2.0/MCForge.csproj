@@ -87,6 +87,7 @@
     <Compile Include="API\System\OnReceivePacket.cs" />
     <Compile Include="API\System\OnSettingLoad.cs" />
     <Compile Include="API\System\SystemEvent.cs" />
+    <Compile Include="API\World\OnLevelSave.cs" />
     <Compile Include="API\World\WorldEvent.cs" />
     <Compile Include="Database\Database.cs" />
     <Compile Include="Database\MySQL.cs" />
