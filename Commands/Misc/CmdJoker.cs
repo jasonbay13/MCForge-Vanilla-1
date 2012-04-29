@@ -12,13 +12,12 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
-using System.Threading;
 using System;
 using System.IO;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -38,17 +37,19 @@ namespace CommandDll
             if (args.Length == 1) { who = Player.Find(args[0]); }
             else { who = Player.Find(args[1]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
-            if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("You can't joker a MCForge Developer!"); return; }
+            if (Server.devs.Contains(who.Username)) { p.SendMessage("You can't joker a MCForge Developer!"); return; }
             CheckEmpty();
+
+            who.ExtraData.CreateIfNotExist("Jokered", false);
             if (args.Length == 1) //normal joker
             {
-                if (who.jokered) { who.jokered = false; Player.UniversalChat(who.USERNAME + " is no longer a &aJ&bo&ck&5e&9r"); return; }
-                else { who.jokered = true; Player.UniversalChat(who.USERNAME + " is now a &aJ&bo&ck&5e&9r"); return; }
+                if ((bool)who.ExtraData["Jokered"]) { who.ExtraData["Jokered"] = false; Player.UniversalChat(who.Username + " is no longer a &aJ&bo&ck&5e&9r"); return; }
+                else { who.ExtraData["Jokered"] = true; Player.UniversalChat(who.Username + " is now a &aJ&bo&ck&5e&9r"); return; }
             }
             else //stealth
             {
-                if (who.jokered) { who.jokered = false; p.SendMessage("Successfully stealth unjokered " + who.USERNAME); return; }
-                else { who.jokered = true; p.SendMessage("Successfully stealth jokered " + who.USERNAME); return; }
+                if ((bool)who.ExtraData["Jokered"]) { who.ExtraData["Jokered"] = false; p.SendMessage("Successfully stealth unjokered " + who.Username); return; }
+                else { who.ExtraData["Jokered"] = true; p.SendMessage("Successfully stealth jokered " + who.Username); return; }
             }
 
         }
@@ -56,11 +57,11 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/joker <name> - Causes a player to become a joker!");
-            p.SendMessage("/joker # <name> - Makes the player a joker silently");
+            p.SendMessage("/joker # <name> - Makes the player a joker silently.");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "joker" });
+            Command.AddReference(this, "joker");
         }
         void CheckEmpty()
         {

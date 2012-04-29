@@ -12,34 +12,34 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-
 using System;
-using System.Threading;
-using System.Net;
-using System.Net.Sockets;
 using System.Collections.Generic;
-using System.IO.Compression;
-using System.IO;
-using System.Text.RegularExpressions;
+using System.Net.Sockets;
 using System.Security.Cryptography;
-using System.Windows.Forms;
+using System.Text.RegularExpressions;
+using System.Threading;
 using MCForge.API.PlayerEvent;
 using MCForge.Core;
-using MCForge.World;
-using MCForge.Interface.Command;
 using MCForge.Groups;
+using MCForge.Interface.Command;
 using MCForge.Utilities.Settings;
+using MCForge.World;
+using MCForge.Utilities;
+using MCForge.Utils;
+using System.Linq;
 
 namespace MCForge.Entity {
     /// <summary>
     /// The player class, this contains all player information.
     /// </summary>
-    public partial class Player {
+    public sealed partial class Player {
         #region Variables
-        internal static System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
-        internal static MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-        protected static packet pingPacket = new packet(new byte[1] { (byte)packet.types.SendPing });
-        protected static packet mapSendStartPacket = new packet(new byte[1] { (byte)packet.types.MapStart });
+
+        //TODO: Change all o dis
+        internal static readonly System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
+        internal static readonly MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+        protected static readonly packet pingPacket = new packet(new byte[1] { (byte)packet.types.SendPing });
+        protected static readonly packet mapSendStartPacket = new packet(new byte[1] { (byte)packet.types.MapStart });
         private static byte ForceTpCounter = 0;
 
         protected static packet MOTD_NonAdmin = new packet();
@@ -56,136 +56,74 @@ namespace MCForge.Entity {
             }
         }
 
-        protected Socket socket;
-
+        public Socket Socket { get; protected set; }
+        public TcpClient Client { get; protected set; }
         protected packet.types lastPacket = packet.types.SendPing;
 
         /// <summary>
         /// The player's money.
         /// </summary>
-        public int money = 0;
+        //public int money = 0;
+
         /// <summary>
         /// Checks if the player is the server owner.
         /// </summary>
-        public bool isOwner { get { if (USERNAME == Server.owner) { return true; } else { return false; } } }
+        public bool IsOwner { get { return Username == Server.owner; } }
+        
         /// <summary>
-        /// The number of times the player has tried to use /pass.
-        /// </summary>
-        public int passtries = 0;
-        bool _verified = false;
-        /// <summary>
-        /// Has the player used password verification?
-        /// </summary>
-        public bool verified { get { if (!Server.Verifying) { return true; } else { return _verified; }; } set { _verified = value; } }
-        /// <summary>
-        /// The player's real username
-        /// </summary>
-        public string USERNAME;
-        /// <summary>
-        /// Last command the player used.
-        /// </summary>
-        public string lastcmd;
-        /// <summary>
-        /// Has the player voted?
-        /// </summary>
-        public bool voted;
-        /// <summary>
-        /// Is the player being kicked ?
-        /// </summary>
-        public bool beingkicked;
-        /// <summary>
-        /// Has the player read the rules?
-        /// </summary>
-        public bool readrules = false;
-        /// <summary>
-        /// Is the player muted
-        /// </summary>
-        public bool muted = false;
-        /// <summary>
-        /// Does the player have voice status
-        /// </summary>
-        public bool voiced = false;
-        /// <summary>
-        /// Derermines if the player is jokered
-        /// </summary>
-        public bool jokered = false;
-        /// <summary>
-        /// Determines if the player has opchat on. All messages will be sent to ops
-        /// </summary>
-        public bool opchat = false;
-        /// <summary>
-        /// Determines if the player has adminchat on. All messages will be sent to admins
-        /// </summary>
-        public bool adminchat = false;
-        /// <summary>
-        /// Determines if the player is in /whisper mode
-        /// </summary>
-        public bool whispering = false;
-        /// <summary>
-        /// The player to whisper to
-        /// </summary>
-        public Player whisperto;
-
-        /// <summary>
-        /// Appears in front of player's name if he is voiced
-        /// </summary>
-        public string voicestring = "";
-        /// <summary>
-        /// Used for player's LOWERCASE username.
-        /// </summary>
-        protected string _username; //Lowercase Username
-        /// <summary>
-        /// This is the player's LOWERCASE username, use this for comparison instead of calling USERNAME.ToLower()
+        /// This is the player's username
         /// </summary>       
-        public string username //Lowercase Username feild
+        public string Username
         {
-            get {
-                if (_username == null) _username = USERNAME.ToLower();
-                return _username;
-            }
+            get;
+            set;
         }
         /// <summary>
         /// This is the player's IP Address
         /// </summary>
-        public string ip;
+        public string Ip;
         /// <summary>
         /// The player's stored message (For appending)
         /// </summary>
-        public string storedMessage = "";
+        private string _storedMessage = "";
 
-        protected byte[] buffer = new byte[0];
-        protected byte[] tempBuffer = new byte[0xFF];
-        protected string tempString = null;
-        protected byte tempByte = 0xFF;
+        private byte[] buffer = new byte[0];
+        private byte[] tempBuffer = new byte[0xFFF];
 
         /// <summary>
         /// True if the player is currently loading a map
         /// </summary>
-        public bool isLoading = true;
-        /// <summary>
-        /// True if the player is Online (false if the player has disconnected)
-        /// </summary>
-        public bool isOnline = true;
+        public bool IsLoading { get; set; }
         /// <summary>
         /// True if the player has completed the login process
         /// </summary>
-        public bool isLoggedIn = false;
+        public bool IsLoggedIn { get; set; }
+
         /// <summary>
-        /// True if player is using static commands
+        /// Get or set if the player is currently being kicked
         /// </summary>
-        public bool staticCommands = false;
+        public bool IsBeingKicked { get; set; }
+
+        private Level _level;
         /// <summary>
-        /// True is the player is flying
+        /// This is the players current level
+        /// When the value of the level is changed, the user is sent the new map.
         /// </summary>
-        public bool isFlying = false;
-        /// <summary>
-        /// This players current level
-        /// </summary>
-        public Level level = Server.Mainlevel;
+        public Level Level {
+            get {
+                if (_level == null)
+                    _level = Server.Mainlevel;
+                return _level;
+            }
+            set {
+                _level = value;
+                SendMap();
+            }
+        }
         /// <summary>
         /// The players MC Id, this changes each time the player logs in
         /// </summary>
-        public byte id = 255;
+        public byte id { get; set; }
         /// <summary>
         /// The players current position
         /// </summary>
@@ -197,46 +135,39 @@ namespace MCForge.Entity {
         /// <summary>
         /// The players current rotation
         /// </summary>
-        public byte[] Rot;
+        public byte[] Rot { get; set; }
         /// <summary>
         /// The players last known rotation
         /// </summary>
-        public byte[] oldRot;
+        public byte[] oldRot { get; set; }
         /// <summary>
         /// The players last known click
         /// </summary>
-        public Vector3 lastClick;
+        public Vector3 LastClick;
         /// <summary>
-        /// The player's COLOR
+        /// Get or set if the player is hidden from other players
         /// </summary>
-        public string color = Colors.navy;
-        /// <summary>
-        /// The player's TITLE
-        /// </summary>
-        public string title = "";
-        /// <summary>
-        /// The player's TITLE COLOR
-        /// </summary>
-        public string titleColor = "";
-        /// <summary>
-        /// The player's PREFIX
-        /// </summary>
-        public string prefix = "";
-        /// <summary>
-        /// True if this player is hidden
-        /// </summary>
-        public bool isHidden = false;
+        public bool IsHidden { get; set; }
 
         /// <summary>
         /// True if this player is an admin
         /// </summary>
-        public bool isAdmin = true;
+        public bool IsAdmin { get; set; }
+
+        /// <summary>
+        /// Get or set if the player is verified in the AdminPen
+        /// </summary>
+        public bool IsVerified { get; set; }
+
         /// <summary>
         /// Holds replacement messages for profan filter
         /// </summary>
-        public static List<string> replacement = new List<string>();
+        public static readonly List<string> replacement = new List<string>();
 
-        object PassBackData;
+        /// <summary>
+        /// Dictionary for housing extra data, great for giving player objects to pass
+        /// </summary>
+        public readonly Dictionary<object, object> ExtraData = new Dictionary<object, object>();
         /// <summary>
         /// This delegate is used for when a command wants to be activated the first time a player places a block
         /// </summary>
@@ -255,13 +186,15 @@ namespace MCForge.Entity {
         /// <param name="message">The string the player sent</param>
         /// <param name="PassBack">A passback object that can be used for a command to send data back to itself for use</param>
         public delegate void NextChatDelegate(Player p, string message, object PassBack);
-        protected BlockChangeDelegate blockChange;
-        protected NextChatDelegate nextChat;
+        private BlockChangeDelegate blockChange;
+        private NextChatDelegate nextChat;
 
         /// <summary>
         /// The current Group of the player
         /// </summary>
         public PlayerGroup group = PlayerGroup.Find(ServerSettings.GetSetting("defaultgroup"));
+
+        private Random playerRandom;
 
 
         #endregion
@@ -270,17 +203,19 @@ namespace MCForge.Entity {
             CheckMotdPackets();
             try {
 
-                socket = TcpClient.Client;
-
-                ip = socket.RemoteEndPoint.ToString().Split(':')[0];
-                Server.Log("[System]: " + ip + " connected", ConsoleColor.Gray, ConsoleColor.Black);
+                Socket = TcpClient.Client;
+                Client = TcpClient;
+                Server.Connections.Add(this);
+                Ip = Socket.RemoteEndPoint.ToString().Split(':')[0];
+                Server.Log("[System]: " + Ip + " connected", ConsoleColor.Gray, ConsoleColor.Black);
 
                 CheckMultipleConnections();
                 if (CheckIfBanned()) return;
 
-                socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
+                Socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
 
-                Server.Connections.Add(this);
+                playerRandom = new Random();
+
             }
             catch (Exception e) {
                 SKick("There has been an Error.");
@@ -299,14 +234,13 @@ namespace MCForge.Entity {
             }
 
             string name = args[0].ToLower().Trim();
-            OnPlayerCommand c = new OnPlayerCommand(this, name, args);
-            c.Call();
-            if (c.IsCanceled)
+            bool canceled = OnPlayerCommand.Call(this, name, args);
+            if (canceled) // If any event canceled us
                 return;
             if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
-                    if (!Server.agreed.Contains(USERNAME) && name != "rules" && name != "agree" && name != "disagree") {
+                    if (!Server.agreed.Contains(Username) && group.permission < 80 && name != "rules" && name != "agree" && name != "disagree") {
                         SendMessage("You need to /agree to the /rules before you can use commands!"); return;
                     }
                     if (!group.CanExecute(cmd)) {
@@ -315,31 +249,30 @@ namespace MCForge.Entity {
                     }
                     try { cmd.Use(this, sendArgs); } //Just so it doesn't crash the server if custom command makers release broken commands!
                     catch (Exception ex) {
-                        Server.Log("[Error] An error occured when " + USERNAME + " tried to use " + name + "!", ConsoleColor.Red, ConsoleColor.Black);
+                        Server.Log("[Error] An error occured when " + Username + " tried to use " + name + "!", ConsoleColor.Red, ConsoleColor.Black);
                         Server.Log(ex);
                     }
-                    lastcmd = name;
+                    if (ExtraData.ContainsKey("LastCmd"))
+                        ExtraData["LastCmd"] = name;
+                    else
+                        ExtraData.Add("LastCmd", name);
                 });
             }
             else {
                 SendMessage("Unknown command \"" + name + "\"!");
             }
 
-            foreach (string s in Command.Commands.Keys) {
-                Console.WriteLine(args[0]);
-                Console.WriteLine("'" + s + "'");
-            }
         }
         #endregion
+
 
         internal static void GlobalUpdate() {
             ForceTpCounter++;
 
-			Server.ForeachPlayer(delegate(Player p)
-			{
-				if (ForceTpCounter == 100) { if (!p.isHidden) p.UpdatePosition(true); }
-				else { if (!p.isHidden) p.UpdatePosition(false); }		
-			});
+            Server.ForeachPlayer(delegate(Player p) {
+                if (ForceTpCounter == 100) { if (!p.IsHidden) p.UpdatePosition(true); }
+                else { if (!p.IsHidden) p.UpdatePosition(false); }
+            });
         }
 
         #region PluginStuff
@@ -350,7 +283,9 @@ namespace MCForge.Entity {
         /// <param name="data">A passback object that can be used for a command to send data back to itself for use</param>
         [Obsolete("Please use OnPlayerBlockChange event (will be removed before release)")]
         public void CatchNextBlockchange(BlockChangeDelegate change, object data) {
-            PassBackData = data;
+            if (!ExtraData.ContainsKey("PassBackData"))
+                ExtraData.Add("PassBackData", null);
+            ExtraData["PassBackData"] = data;
             nextChat = null;
             blockChange = change;
         }
@@ -373,15 +308,18 @@ namespace MCForge.Entity {
         /// <param name="y"></param>
         /// <param name="type"></param>
         public void Click(ushort x, ushort z, ushort y, byte type) {
-            OnPlayerBlockChange b = new OnPlayerBlockChange(x, y, z, ActionType.Place, this, type);
-            b.Call();
+            bool canceled = OnPlayerBlockChange.Call(x, y, z, ActionType.Place, this, type);
+            if (canceled) // If any event canceled us
+                return;
             if (blockChange != null) {
                 bool placing = true;
                 BlockChangeDelegate tempBlockChange = blockChange;
-                object tempPassBack = PassBackData;
+                if (!ExtraData.ContainsKey("PassBackData"))
+                    ExtraData.Add("PassBackData", null);
+                object tempPassBack = ExtraData["PassBackData"];
 
                 blockChange = null;
-                PassBackData = null;
+                ExtraData["PassBackData"] = null;
 
                 ThreadPool.QueueUserWorkItem(delegate { tempBlockChange.Invoke(this, x, z, y, type, placing, tempPassBack); });
                 return;
@@ -425,60 +363,63 @@ namespace MCForge.Entity {
                         lines[lines.Count - 1] = lines[lines.Count - 1].
                             Substring(0, lines[lines.Count - 1].Length - 1);
                         message = message.Substring(1);
-                       
+
                     }
                 }
             } return lines;
         }
-        
-        protected byte FreeId()
-		{
+
+        protected byte FreeId() {
             List<byte> usedIds = new List<byte>();
 
-			Server.ForeachPlayer(delegate(Player p)
-			{
-				usedIds.Add(p.id);
-			});
+            Server.ForeachPlayer(p => usedIds.Add(p.id));
 
             for (byte i = 0; i < ServerSettings.GetSettingInt("maxplayers"); ++i) {
                 if (usedIds.Contains(i)) continue;
                 return i;
             }
 
-            Server.Log("Too many players O_O", ConsoleColor.Red, ConsoleColor.Black);
+            Logger.Log("Too many players O_O");
             return 254;
         }
-        protected void UpgradeConnectionToPlayer()
-		{
-			Server.UpgradeConnectionToPlayer(this);
-            
+        protected void UpgradeConnectionToPlayer() {
+            Server.UpgradeConnectionToPlayer(this);
+
             //TODO Update form list
         }
 
         #region Verification Stuffs
         protected void CheckMultipleConnections() {
+
+            //Not a good idea, wom uses 2 connections when getting textures
+            if (Server.Connections.Count < 2)
+                return;
             foreach (Player p in Server.Connections.ToArray()) {
-                if (p.ip == ip && p != this) {
-                    p.Kick("Only one half open connection is allowed per IP address.");
+                if (p.Ip == Ip && p != this) {
+                    //p.Kick("Only one half open connection is allowed per IP address.");
                 }
             }
         }
         protected static void CheckDuplicatePlayers(string username) {
-			Server.ForeachPlayer(delegate(Player p)
-			{
-				if (p.username == username)
-				{
-					p.Kick("You have logged in elsewhere!");
-				}
-			});
+            Server.ForeachPlayer(delegate(Player p) {
+                if (p.Username.ToLower() == username.ToLower()) {
+                    p.Kick("You have logged in elsewhere!");
+                }
+            });
         }
         protected bool CheckIfBanned() {
-            if (Server.BannedIP.Contains(ip)) { Kick("You're Banned!"); return true; }
+            if (Server.IPBans.Contains(Ip)) {
+                Kick("You're Banned!");
+                return true;
+            }
             return false;
         }
         protected bool VerifyAccount(string name, string verify) {
-            if (!ServerSettings.GetSettingBoolean("offline") && ip != "127.0.0.1") {
-                if (Server.PlayerCount >= ServerSettings.GetSettingInt("maxplayers")) { SKick("Server is full, please try again later!"); return false; }
+            if (!ServerSettings.GetSettingBoolean("offline") && Ip != "127.0.0.1") {
+                if (Server.PlayerCount >= ServerSettings.GetSettingInt("maxplayers")) {
+                    SKick("Server is full, please try again later!");
+                    return false;
+                }
 
                 if (verify == null || verify == "" || verify == "--" || (verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0') && verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0'))) {
                     SKick("Account could not be verified, try again.");
@@ -486,7 +427,11 @@ namespace MCForge.Entity {
                     return false;
                 }
             }
-            if (name.Length > 16 || !ValidName(name)) { SKick("Illegal name!"); return false; } //Illegal Name Kick
+            if (name.Length > 16 || !ValidName(name)) {
+                SKick("Illegal name!");
+                return false;
+            }
+
             return true;
         }
         /// <summary>
@@ -495,7 +440,7 @@ namespace MCForge.Entity {
         /// <param name="name">the name to check</param>
         /// <returns>returns true if name is valid</returns>
         public static bool ValidName(string name) {
-            string allowedchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890._";
+            const string allowedchars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890._";
             foreach (char ch in name) { if (allowedchars.IndexOf(ch) == -1) { return false; } } return true;
         }
 
@@ -505,21 +450,14 @@ namespace MCForge.Entity {
         /// <param name="name">The player name to find</param>
         /// <remarks>Can be a partial name</remarks>
         public static Player Find(string name) {
-            List<Player> players = new List<Player>();
-
-			Server.ForeachPlayer(delegate(Player p)
-			{
-                if (p.username.StartsWith(name.ToLower()))
-                    players.Add(p);
-			});
-
-            if (players.Count == 1)
-                return players[0];
+            foreach (var p in Server.Players)
+                if (p.Username.ToLower().StartsWith(name.ToLower()))
+                    return p;
             return null;
         }
         #endregion
 
     }
 
-    
+
 }

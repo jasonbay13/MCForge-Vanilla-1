@@ -12,17 +12,12 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 using MCForge.Utilities.Settings;
-
+using MCForge.Utils;
+using System.Threading;
 namespace CommandDll
 {
     public class CmdTeleport : ICommand
@@ -44,13 +39,13 @@ namespace CommandDll
             }
             else if (args.Length == 0)
             {
-                Vector3 meep = new Vector3((short)(0.5 + p.level.SpawnPos.x * 32), (short)(0.5 + p.level.SpawnPos.z * 32), (short)(1 + p.level.SpawnPos.y * 32));
-                p.SendToPos(meep, p.level.SpawnRot);
+                Vector3 meep = new Vector3((short)(0.5 + p.Level.SpawnPos.x * 32), (short)(0.5 + p.Level.SpawnPos.z * 32), (short)(1 + p.Level.SpawnPos.y * 32));
+                p.SendToPos(meep, p.Level.SpawnRot);
             }
             else if (args.Length == 1)
             {
                 Player who = Player.Find(args[0]);
-                if (who == null || who.isHidden)
+                if (who == null || who.IsHidden)
                 {
                     p.SendMessage("Player: " + args[0] + " not found!");
                     return;
@@ -67,13 +62,15 @@ namespace CommandDll
                 }
                 else
                 {
-                    if (p.level != who.level)
+                    if (p.Level != who.Level)
                     {
                         //Need goto here
-                        if (who.isLoading)
+                        if (who.IsLoading)
                         {
-                            p.SendMessage("Waiting for " + who.color + who.USERNAME + Server.DefaultColor + " to spawn...");
-                            while (who.isLoading) { }
+                            p.SendMessage("Waiting for " + (string)who.ExtraData.GetIfExist("Color") + who.Username + Server.DefaultColor + " to spawn...");
+                            while (who.IsLoading) 
+                                Thread.Sleep(5);
+                            
                         }
                     }
                 }
@@ -106,18 +103,20 @@ namespace CommandDll
                 }
                 else
                 {
-                    if (one.level != two.level)
+                    if (one.Level != two.Level)
                     {
                         //Need goto here
-                        if (two.isLoading)
+                        if (two.IsLoading)
                         {
-                            p.SendMessage("Waiting for " + two.color + two.USERNAME + Server.DefaultColor + " to spawn...");
-                            while (two.isLoading) { }
+                            p.SendMessage("Waiting for " + (string)two.ExtraData.GetIfExist("Color") + two.Username + Server.DefaultColor + " to spawn...");
+                            while (two.IsLoading) {
+                                Thread.Sleep(5);
+                            }
                         }
                     }
                 }
                 one.SendToPos(two.Pos, two.Rot);
-                p.SendMessage(one.USERNAME + " has been succesfully teleported to " + two.USERNAME + "!");
+                p.SendMessage(one.Username + " has been succesfully teleported to " + two.Username + "!");
                 return;
             }
         }

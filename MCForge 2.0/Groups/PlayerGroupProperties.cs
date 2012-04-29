@@ -6,6 +6,7 @@ using System.IO;
 using MCForge.Core;
 using System.Xml;
 using MCForge.Utilities.Settings;
+using System.Xml.XPath;
 
 namespace MCForge.Groups
 {
@@ -50,48 +51,41 @@ namespace MCForge.Groups
 
         public static void Load()
         {
-            using (XmlReader reader = XmlReader.Create(ServerSettings.GetSetting("configpath") + "groups.xml"))
-            {
-                PlayerGroup group = new PlayerGroup();
 
-                while (reader.Read())
-                {
-                    if (reader.IsStartElement())
-                    {
-                        switch (reader.Name.ToLower())
-                        {                         
-                            case "name":
-                                group.name = reader.ReadString();
-                                Server.Log("[Group] Name: " + group.name);
-                                break;
-                            case "permission":
-                                try { group.permission = byte.Parse(reader.ReadString()); }
-                                catch { }
-                                Server.Log("[Group] Permission: " + group.permission);
-                                break;
-                            case "color":
-                                group.colour = '&' + reader.ReadString();
-                                Server.Log("[Group] Color: " + group.colour);
-                                break;
-                            case "file":
-                                group.file = reader.ReadString();
-                                Server.Log("[Group] File: " + group.file);
-                                break;
-                            case "maxblockchanges":
-                                try { group.maxBlockChange = int.Parse(reader.ReadString()); }
-                                catch { }
-                                Server.Log("[Group] Max Block Changes: " + group.maxBlockChange);
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        try { group.add(); group = new PlayerGroup(); }
-                        catch { }
-                        break;
-                    }
-                }
-            }
-        }
+
+			try {
+				PlayerGroup group = new PlayerGroup();
+				using (XmlReader reader = XmlReader.Create(ServerSettings.GetSetting("configpath") + "groups.xml"))
+					while (reader.Read()) {
+						if (reader.IsStartElement()) {
+							switch (reader.Name.ToLower()) {
+								case "name":
+									group.name = reader.ReadString();
+									Server.Log("[Group] Name: " + group.name);
+									break;
+								case "permission":
+									try { group.permission = byte.Parse(reader.ReadString()); } catch { }
+									Server.Log("[Group] Permission: " + group.permission);
+									break;
+								case "color":
+									group.colour = '&' + reader.ReadString();
+									Server.Log("[Group] Color: " + group.colour);
+									break;
+								case "file":
+									group.file = reader.ReadString();
+									Server.Log("[Group] File: " + group.file);
+									break;
+								case "maxblockchanges":
+									try { group.maxBlockChange = int.Parse(reader.ReadString()); } catch { }
+									Server.Log("[Group] Max Block Changes: " + group.maxBlockChange);
+									break;
+							}
+						} else {
+							try { group.add(); group = new PlayerGroup(); } catch { }
+							break;
+						}
+					}
+			} catch {}
+        } 
     }
 }

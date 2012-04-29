@@ -88,15 +88,16 @@ namespace MCForge.Core
                     (byte)ServerSettings.GetSettingInt("maxplayers"),
                     ServerSettings.Version);
             }
-            catch
+            catch (Exception e)
             {
                 output[i] = "Error when sending heartbeat";
+				Server.Log(e);
             }
             if (output[i] == "bad heartbeat! (salt is too long)")
             {
                 //saltlength is not limited by salt.Length
                 //an approxitmately maximum is UrlEncode(salt).Length==60 (sometimes 66 is accepted and next time 62 is too long)
-                ServerSettings.Salt = ServerSettings.GenerateSalt();
+                ServerSettings.GenerateSalt();
                 output = sendHeartbeat(); //loops till output[i] claims not about salt is too long anymore
             }
             else

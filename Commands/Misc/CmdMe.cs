@@ -12,11 +12,10 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
-
+using MCForge.Entity;
+using MCForge.Interface.Command;
+using MCForge.Utils;
 namespace CommandDll
 {
     public class CmdMe : ICommand
@@ -30,22 +29,31 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            if (Server.voting) { p.SendMessage("Cannot use /me while voting is in progress!"); return; }
-            if (p.muted) { p.SendMessage("Cannot use /me while muted!"); return; }
-            if (args.Length == 0) { p.SendMessage("You!"); return; }
+            p.ExtraData.CreateIfNotExist("Muted", false);
+
+            if (Server.voting) { 
+                p.SendMessage("Cannot use /me while voting is in progress!"); 
+                return; 
+            }
+            if ((bool)p.ExtraData["Muted"]) {
+                p.SendMessage("Cannot use /me while muted!"); 
+                return; 
+            }
+            if (args.Length == 0) { 
+                p.SendMessage("You!"); 
+                return; 
+            }
             string message = null;
             foreach (string s in args) { message += s + " "; }
-            Player.UniversalChat("*" + p.USERNAME + " " + message);
+            Player.UniversalChat("*" + p.Username + " " + message);
         }
-
         public void Help(Player p)
         {
-            p.SendMessage("/me - You");
+            p.SendMessage("What do you need help with, m'boy? Are you stuck down a well?");
         }
-
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "me" });
+            Command.AddReference(this, "me");
         }
     }
 }

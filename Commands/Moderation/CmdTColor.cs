@@ -12,10 +12,10 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -33,11 +33,14 @@ namespace CommandDll
             if (args.Length == 0 || args.Length > 2) { Help(p); return; }
             Player who;
             string titleColor;
+
+            p.ExtraData.CreateIfNotExist("TitleColor", Server.DefaultColor);
+
             if (args.Length == 1)
             {
                 who = p;
                 titleColor = args[0] == "del" ? "del" : Colors.Parse(args[0]);
-                if (p.titleColor == titleColor) { p.SendMessage("Your title is already that color!"); return; }
+                if ((string)p.ExtraData.GetIfExist("TitleColor") == titleColor) { p.SendMessage("Your title is already that color!"); return; }
             }
             else
             {
@@ -45,24 +48,27 @@ namespace CommandDll
                 if (who == null) { p.SendMessage("Could not find player."); return; }
                 if (p.group.permission <= who.group.permission) { p.SendMessage("You can't change the title color of someone of equal or higher rank!"); return; }
                 //devs should be able to change their own color
-                if (Server.devs.Contains(who.USERNAME) && !Server.devs.Contains(p.USERNAME)) { p.SendMessage("You can't change a dev's title color!"); return; }
+                if (Server.devs.Contains(who.Username) && !Server.devs.Contains(p.Username)) { p.SendMessage("You can't change a dev's title color!"); return; }
                 titleColor = args[1] == "del" ? "del" : Colors.Parse(args[1]);
-                if (who.titleColor == titleColor) { p.SendMessage("Their title is already that color!"); return; }
+                if ((string)who.ExtraData.GetIfExist("Color") == titleColor) { p.SendMessage("Their title is already that color!"); return; }
             }
             if (titleColor == "") { p.SendMessage("Could not find color."); return; }
 
             string message = "";
+
+            who.ExtraData.CreateIfNotExist("TitleColor", Server.DefaultColor);
+
             if (titleColor == "del")
             {
-                who.titleColor = "";
+                who.ExtraData["TitleColor"] = "";
                 message = "was removed.";
             }
             else
             {
-                who.titleColor = titleColor;
-                message = "was set to " + titleColor + Colors.Name(titleColor) + who.color + ".";
+                who.ExtraData["TitleColor"] = titleColor;
+                message = "was set to " + titleColor + Colors.Name(titleColor) + (string)who.ExtraData.GetIfExist("Color") ?? "" + ".";
             }
-            Player.UniversalChat(who.color + "*" + who.USERNAME + (who.USERNAME.EndsWith("s") || who.USERNAME.EndsWith("x") ? "'" : "'s") + " title color " + message);
+            Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + "*" + who.Username + (who.Username.EndsWith("s") || who.Username.EndsWith("x") ? "'" : "'s") + " title color " + message);
 
             who.SetPrefix();
             //TODO Save to database.
@@ -70,14 +76,15 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/tcolor [player] <color> - Changes the title color.");
-            p.SendMessage("&0black &1navy &2green &3teal &4maroon &5purple &6gold &7silver");
+            p.SendMessage("/titlecolor <color> - Change your own title color.");
+            p.SendMessage("/titlecolor [player] <color> - Changes [player]'s title color.");
+            p.SendMessage("Available colors: &0black &1navy &2green &3teal &4maroon &5purple &6gold &7silver");
             p.SendMessage("&8gray &9blue &alime &baqua &cred &dpink &eyellow &fwhite");
+            p.SendMessage("Shortcut: /tcolor");
         }
-
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "tcolor" });
+            Command.AddReference(this, new string[] { "tcolor", "titlecolor" });
         }
     }
 }

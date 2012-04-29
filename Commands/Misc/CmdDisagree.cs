@@ -15,6 +15,7 @@ permissions and limitations under the Licenses.
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 namespace CommandDll
 {
     public class CmdDisagree : ICommand
@@ -28,8 +29,9 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            if (Server.agreed.Contains(p.USERNAME)) { p.SendMessage("You have already agreed to the rules!"); return; }
-            if (!p.readrules) { p.SendMessage("You need to read the /rules before you can disagree!"); return; }
+            p.ExtraData.CreateIfNotExist("ReadRules", false);
+            if (Server.agreed.Contains(p.Username)) { p.SendMessage("You have already agreed to the rules!"); return; }
+            if (!(bool)p.ExtraData["ReadRules"]) { p.SendMessage("You need to read the /rules before you can disagree!"); return; }
             p.Kick("Kicked for disagreeing to the rules!");
         }
 
@@ -40,7 +42,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "disagree" });
+            Command.AddReference(this, "disagree");
         }
     }
 }

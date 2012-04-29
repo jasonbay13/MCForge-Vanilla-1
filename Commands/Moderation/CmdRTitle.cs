@@ -12,11 +12,10 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
-
+using MCForge.Entity;
+using MCForge.Interface.Command;
+using MCForge.Utils;
 namespace CommandDll
 {
     public class CmdRTitle : ICommand
@@ -31,14 +30,17 @@ namespace CommandDll
         public void Use(Player p, string[] args)
         {
             string message = "";
+
+            p.ExtraData.CreateIfNotExist("Title", "");
+
             if (args.Length == 0)
             {
-                if (p.title == "")
+                if (p.ExtraData["Title"] == "")
                 {
                     Help(p);
                     return;
                 }
-                message = p.title;
+                message = (string)p.ExtraData["Title"];
             }
             else
             {
@@ -53,12 +55,16 @@ namespace CommandDll
                 who = Player.Find(message.Split(' ')[0]);
                 if (who == null) { p.SendMessage("Could not find player."); return; }
                 if (p.group.permission <= who.group.permission) { p.SendMessage("You can't change the title of someone of equal or higher rank!"); return; }
-                if (Server.devs.Contains(who.USERNAME) && !Server.devs.Contains(p.USERNAME)) { p.SendMessage("You can't change a dev's title!"); return; }
+                if (Server.devs.Contains(who.Username) && !Server.devs.Contains(p.Username)) { p.SendMessage("You can't change a dev's title!"); return; }
                 message = message.Substring(message.IndexOf(' ') + 1);
             }
             else
                 who = p;
-            if (message != who.title)
+
+            who.ExtraData.CreateIfNotExist("Title", "");
+            who.ExtraData.CreateIfNotExist("TitleColor", Server.DefaultColor);
+
+            if (message != who.ExtraData["Title"])
                 message = message.Substring(0, message.Length - 1);
             max = (19 - message.Length) / 2;
             int temp = message.Length / max;
@@ -82,24 +88,25 @@ namespace CommandDll
                 if (i > max - 1)
                     break;
             }
-            who.titleColor = "&c";
-            who.title = message;
+            who.ExtraData["TitleColor"] = "&c";
+            who.ExtraData["Title"] = message;
             who.SetPrefix();
-            Player.UniversalChat(who.color + who.USERNAME + Server.DefaultColor + " had thier title set to &b[" + who.titleColor + who.title + "&b]");
+            Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") + who.Username + Server.DefaultColor + " had thier title set to &b[&c" + message + "&b]");
             //TODO Save to database.
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/rtitle - Rainbows your current title.");
-            p.SendMessage("/rtitle <title> - Gives you a rainbow title.");
-            p.SendMessage("/rtitle <player> <title> - Gives <player> a rainbow title.");
+            p.SendMessage("/rainbowtitle - Rainbows your current title.");
+            p.SendMessage("/rainbowtitle <title> - Gives you a rainbow title.");
+            p.SendMessage("/rainbowtitle [player] <title> - Gives [player] a rainbow title.");
             p.SendMessage("Note: Rainbow titles can only be up to 15 letters long.");
+            p.SendMessage("Shortcut: /rtitle");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "rtitle" });
+            Command.AddReference(this, new string[2] { "rainbowtitle", "rtitle" });
         }
     }
 }

@@ -12,17 +12,13 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
 using System.Collections.Generic;
-
-namespace CommandDll
-{
-    public class CmdMuted : ICommand
-    {
+using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+using MCForge.Utils;
+namespace CommandDll {
+    public class CmdMuted : ICommand {
         public string Name { get { return "Muted"; } }
         public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Givo"; } }
@@ -30,36 +26,28 @@ namespace CommandDll
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
-        public static List<string> mutedlist = new List<string>();
-
-        public void Use(Player p, string[] args)
-        {
-            mutedlist.Clear();
-
-            if (args.Length > 0) { Help(p); }
-
-			Server.ForeachPlayer(delegate(Player pl)
-			{
-				if (pl.muted)
-				{
-					mutedlist.Add(pl.USERNAME);
-				}
-			});
-            p.SendMessage("Muted: ");
-            foreach (string muted in mutedlist)
-            {
-                p.SendMessage(muted);
+        public void Use(Player p, string[] args) {
+            if (args.Length > 0) {
+                Help(p);
+                return;
             }
+            p.SendMessage("Muted: ");
+            Server.ForeachPlayer(delegate(Player pl) {
+                pl.ExtraData.CreateIfNotExist("Muted", false);
+                if ((bool)pl.ExtraData["Muted"]) {
+                    p.SendMessage(pl.Username);
+                }
+            });
+
+
         }
 
-        public void Help(Player p)
-        {
-            p.SendMessage("/mute - Displays muted players");
+        public void Help(Player p) {
+            p.SendMessage("/muted - Displays muted players");
         }
 
-        public void Initialize()
-        {
-            Command.AddReference(this, new string[1] { "Muted" });
+        public void Initialize() {
+            Command.AddReference(this, "muted");
         }
     }
 }

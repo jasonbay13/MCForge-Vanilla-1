@@ -12,14 +12,10 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 using MCForge.World;
 
 namespace CommandDll
@@ -46,16 +42,16 @@ namespace CommandDll
                 Help(p);
                 return;
             }
-            if (!Blocks.ValidBlockName(args[0 | 1]))
+            if (!Block.ValidBlockName(args[0 | 1]))
             {
                 p.SendMessage("Could not find block specified");
             }
 
-            foreach (byte b in p.level.data)
+            foreach (byte b in p.Level.Data)
             {
                 if (b == type)
                 {
-                    Vector3 meep = p.level.IntToPos(currentBlock);
+                    Vector3 meep = p.Level.IntToPos(currentBlock);
                     pos.pos = meep;
                     stored.Add(pos);
                 }
@@ -63,19 +59,20 @@ namespace CommandDll
             }
 
             //Permissions here.
-            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + Blocks.ByteToName(type));
+            p.SendMessage(stored.Count + " blocks out of " + currentBlock + " are " + ((Block)type).Name);
 
             //Blockqueue here
 
             foreach (Pos _pos in stored)
             {
-                p.level.BlockChange((ushort)(_pos.pos.x), (ushort)(_pos.pos.z), (ushort)(_pos.pos.y), type2);
+                p.Level.BlockChange((ushort)(_pos.pos.x), (ushort)(_pos.pos.z), (ushort)(_pos.pos.y), type2);
             }
             p.SendMessage("&4/replaceall finished!");
         }
         public void Help(Player p)
         {
-            p.SendMessage("/replaceall [block] [block2] - Replaces all of [block] with [block2] in the map.");
+            p.SendMessage("/replaceall <block> <block2> - Replaces all of <block> with <block2> in the map.");
+            p.SendMessage("Shortcut: /ra");
         }
         public void Initialize()
         {

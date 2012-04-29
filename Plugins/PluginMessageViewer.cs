@@ -14,9 +14,6 @@ permissions and limitations under the Licenses.
 */﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MCForge;
 using System.Timers;
 using MCForge.Interface.Plugin;
 using MCForge.Entity;
@@ -31,7 +28,7 @@ namespace PluginsDLL
         public void ShowMessage(Player p, string message)
         {
             if (_isUnloading) return;
-            int i = viewing.FindIndex(v => { return v.p.USERNAME == p.USERNAME; });
+            int i = viewing.FindIndex(v => { return v.p.id == p.id; });
             if (i >= 0)
             {
                 viewing[i].message = prepare(message);
@@ -41,21 +38,29 @@ namespace PluginsDLL
             {
                 viewing.Add(new Viewer(p, message, 0));
                 viewing[viewing.Count - 1].NeedsUpdate += new Viewer.update(SendMessage);
+                OnPlayerDisconnect.Register(OnDisconnect, p);
                 viewing[viewing.Count - 1].ForceUpdate();
             }
         }
+        private void SendEmptyMessage(Viewer v)
+        {
+            packet pa = new packet();
+            pa.Add(packet.types.Message);
+            pa.Add(v.p.id);
+            pa.Add(".",64);
+        }
         private void SendMessage(Viewer v)
         {
-            for (int i = 0;i< totalHeight - messageHeight; i++)
-                v.p.SendEmptyMessage();
+            for (int i = 0; i < totalHeight-messageHeight; i++)
+                v.p.SendMessage(" ");
             for (int i = v.pos; i < v.pos + messageHeight; i++)
             {
                 if (i < v.message.Length && i >= 0)
                     if (v.message[i] != "")
                         v.p.SendMessage(v.message[i]);
-                    else v.p.SendEmptyMessage();
+                    else v.p.SendMessage(" ");
                 else
-                    v.p.SendEmptyMessage();
+                    v.p.SendMessage(" ");
             }
         }
         private static int width = 62;
@@ -102,27 +107,13 @@ namespace PluginsDLL
         }
         private int indexOfPlayer(Player p)
         {
-            return viewing.FindIndex(v => { return v.p.USERNAME == p.USERNAME; });
-        }
-        public string Name
-        {
-            get { return "MessageViewer"; }
+            return viewing.FindIndex(v => { return v.p.Username == p.Username; });
         }
 
-        public string Author
-        {
-            get { return "ninedrafted"; }
-        }
-
-        public int Version
-        {
-            get { return 1; }
-        }
-
-        public string CUD
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public string Name { get { return "MessageViewer"; } }
+        public string Author { get { return "ninedrafted"; } }
+        public int Version { get { return 1; } }
+        public string CUD { get { return ""; } }
 
         public class Viewer
         {
@@ -169,17 +160,15 @@ namespace PluginsDLL
             if (index >= 0)
             {
                 if (pos >= minPos(viewing[index]) && pos <= maxPos(viewing[index]))
-                {
                     viewing[index].pos = pos;
-                    viewing[index].ForceUpdate();
-                }
                 else if (pos < minPos(viewing[index])) viewing[index].pos = minPos(viewing[index]);
                 else viewing[index].pos = maxPos(viewing[index]);
+                viewing[index].ForceUpdate();
             }
         }
         private int maxPos(Viewer v)
         {
-            return v.message.Length + messageHeight - 1;
+            return v.message.Length - 1;
         }
         private int minPos(Viewer v)
         {
@@ -191,17 +180,21 @@ namespace PluginsDLL
             if (index >= 0)
             {
                 if (viewing[index].pos + move >= minPos(viewing[index]) && viewing[index].pos + move <= maxPos(viewing[index]))
-                {
                     viewing[index].pos = viewing[index].pos + move;
-                    viewing[index].ForceUpdate();
-                }
-                else if (viewing[index].pos + move < minPos(viewing[index])) viewing[index].pos = minPos(viewing[index]);
+                else if (viewing[index].pos + move < minPos(viewing[index]))
+                    viewing[index].pos = minPos(viewing[index]);
                 else viewing[index].pos = maxPos(viewing[index]);
+                viewing[index].ForceUpdate();
             }
         }
         public void ShowNextPage(Player p)
         {
-            moveMessagePos(p, messageHeight);
+            int index = indexOfPlayer(p);
+            if (index >= 0)
+            {
+                if (viewing[index].pos < 0) setMessagePos(viewing[index].p, 0);
+                else moveMessagePos(p, (viewing[index].pos / messageHeight + 1) * messageHeight);
+            }
         }
 
         public void ShowPage(Player p, int page)
@@ -216,7 +209,11 @@ namespace PluginsDLL
 
         public void ShowPreviousPage(Player p)
         {
-            moveMessagePos(p, -messageHeight);
+            int index = indexOfPlayer(p);
+            if (index >= 0)
+            {
+                moveMessagePos(p, (viewing[index].pos / messageHeight - 2) * messageHeight);
+            }
         }
 
         public void ShowPreviousLine(Player p)
@@ -258,25 +255,28 @@ namespace PluginsDLL
                 SendEnd(p);
                 viewing[i].Stop();
                 viewing.RemoveAt(i);
+                //OnPlayerDisconnect.Unregister(OnDisconnect, p); //only one has to be unregistered!
             }
         }
         public void Load()
         {
             _isUnloading = false;
-            OnPlayerDisconnect.Register(OnDisconnect, MCForge.API.Priority.High); //not working yet
         }
         public void OnDisconnect(OnPlayerDisconnect eventargs)
         {
-            Stop(eventargs.GetPlayer());
+            Stop(eventargs.Player);
         }
         bool _isUnloading = false;
-        public void Unload()
+        public void OnUnload()
         {
             _isUnloading = true;
             for (int i = viewing.Count-1; i >=0; i--)
             {
                 Stop(viewing[i].p);
             }
+        }
+        public void OnLoad(string[] args) {
+            
         }
     }
 }

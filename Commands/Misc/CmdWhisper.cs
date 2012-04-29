@@ -12,9 +12,9 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 namespace CommandDll
 {
     public class CmdWhisper : ICommand
@@ -30,19 +30,23 @@ namespace CommandDll
         {
             Player who = Player.Find(args[0]);
             if (who == null) { p.SendMessage("Player not found!"); return; }
-            if (who == p) { p.SendMessage("Cannot talk to yourself!"); return; }
-            if (!p.whispering)
+            if (who == p) { p.SendMessage("Cannot whisper to yourself!"); return; }
+
+            p.ExtraData.CreateIfNotExist("Whispering", false);
+            p.ExtraData.CreateIfNotExist("WhisperTo", null);
+
+            if (!(bool)p.ExtraData["Whispering"])
             {
-                p.SendMessage("All messages will be sent to " + who.USERNAME);
-                p.whispering = true;
-                p.whisperto = who;
+                p.SendMessage("All messages will be sent to " + who.Username);
+                p.ExtraData["Whispering"] = true;
+                p.ExtraData["WhisperTo"] = who;
                 return;
             }
             else
             {
                 p.SendMessage("Whisper mode disabled!");
-                p.whispering = false;
-                p.whisperto = null;
+                p.ExtraData["Whispering"] = false;
+                p.ExtraData["WhisperTo"] = null;
                 return;
             }
         }
@@ -55,7 +59,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "whisper" });
+            Command.AddReference(this, "whisper");
         }
     }
 }

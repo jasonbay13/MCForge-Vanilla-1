@@ -1,13 +1,7 @@
-﻿﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MCForge;
-using PluginsDLL;
-using MCForge.Interface.Command;
+﻿﻿using MCForge.Interface.Command;
 using MCForge.Entity;
-using MCForge.Core;
 using MCForge.Interface.Plugin;
+using MCForge.Utilities;
 
 namespace CommandDll.Information
 {
@@ -41,7 +35,7 @@ namespace CommandDll.Information
 
         public string CUD
         {
-            get { throw new NotImplementedException(); }
+            get { return ""; }
         }
 
         byte _Permission = 0;
@@ -51,12 +45,12 @@ namespace CommandDll.Information
         {
             if (viewer == null)
             {
-                Server.Log("[CmdMessageHandler]: searching IPluginMessageHandler");
-                viewer = (IPluginMessageViewer)PluginManager.getByInterface("IPluginMessageViewer");
+                Logger.Log("[CmdMessageHandler]: searching IPluginMessageHandler");
+                viewer = (IPluginMessageViewer)Plugin.getByInterface("IPluginMessageViewer");
             }
             if (viewer == null)
             {
-                Server.Log("[CmdMessageHandler]: no IPluginMessageHanlder found!");
+                Logger.Log("[CmdMessageHandler]: no IPluginMessageHanlder found!");
             }
             else
             {
@@ -131,7 +125,6 @@ namespace CommandDll.Information
         IPluginMessageViewer viewer;
         public void Initialize()
         {
-            viewer = (IPluginMessageViewer)PluginManager.getByInterface("IPluginMessageViewer");
             Command.AddReference(this, CommandNames);
         }
     }

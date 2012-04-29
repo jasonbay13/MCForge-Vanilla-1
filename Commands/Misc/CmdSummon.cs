@@ -12,17 +12,12 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 using MCForge.World;
-
+using MCForge.Utils;
 namespace CommandDll
 {
     public class CmdSummon : ICommand
@@ -47,19 +42,19 @@ namespace CommandDll
                 {
 					Server.ForeachPlayer(delegate(Player pl)
 					{
-						if (pl.level == p.level && pl != p && p.group.permission > pl.group.permission) //Missing permissions
+						if (pl.Level == p.Level && pl != p && p.group.permission > pl.group.permission) //Missing permissions
 						{
 							pl.SendToPos(p.Pos, p.Rot);
-							pl.SendMessage("You were summoned by " + p.color + p.USERNAME + Server.DefaultColor + ".");
+                            pl.SendMessage("You were summoned by " + (string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + Server.DefaultColor + ".");
 						}
 					});
-                    Player.UniversalChat(p.color + p.USERNAME + Server.DefaultColor + " summoned everyone!");
+                    Player.UniversalChat((string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + Server.DefaultColor + " summoned everyone!");
                     return;
                 }
                 else
                 {
                     Player who = Player.Find(args[0]);
-                    if (who == null || who.isHidden && p.group.permission < who.group.permission)
+                    if (who == null || who.IsHidden && p.group.permission < who.group.permission)
                     {
                         p.SendMessage("Player: " + args[0] + " not found!");
                         return;
@@ -76,13 +71,13 @@ namespace CommandDll
                     }
                     else
                     {
-                        if (p.level != who.level)
+                        if (p.Level != who.Level)
                         {
-                            p.SendMessage(who.USERNAME + " is in a different level. Forcefetching has started!");
-                            Level where = p.level;
+                            p.SendMessage(who.Username + " is in a different level. Forcefetching has started!");
+                            Level where = p.Level;
                             //Need to use goto here
                             Thread.Sleep(1000); //Let them load;   
-                            while (who.isLoading)
+                            while (who.IsLoading)
                             {
                                 Thread.Sleep(250);
                             }

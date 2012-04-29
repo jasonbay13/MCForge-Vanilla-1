@@ -38,10 +38,31 @@ namespace MCForge.Utilities {
 
 
         /// <summary>
-        /// Creates all of the core directories and files
+        /// Creates a directory if it doesn't exist, will log results
         /// </summary>
-        public static void Init() {
+        public static void CreateDirIfNotExist(string directory) {
+            if (Directory.Exists(directory))
+                return;
 
+            Directory.CreateDirectory(directory);
+            Logger.Log(string.Format("[Directory] Created \"{0}\"", directory));
+        }
+
+        /// <summary>
+        /// Creats a file if it doesnt already exist, logs results.
+        /// </summary>
+        /// <param name="fileLoc"></param>
+        public static void CreateFileIfNotExist(string fileLoc, string contents = null) {
+            if (File.Exists(fileLoc))
+                return;
+
+            if (contents == null)
+                File.Create(fileLoc).Close();
+            else
+                using (var filer = File.CreateText(fileLoc))
+                    filer.Write(contents);
+
+            Logger.Log(string.Format("[File] \"{0}\" was created", fileLoc));
         }
     }
 }

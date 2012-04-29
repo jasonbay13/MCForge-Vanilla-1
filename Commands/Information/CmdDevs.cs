@@ -12,16 +12,9 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using MCForge;
-using System.IO;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
@@ -36,19 +29,24 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            string send = Colors.blue + "MCForge Development Team: ";
-            foreach (string dev in Server.devs) { send += Colors.maroon + dev + Colors.lime + ", "; }
-            p.SendMessage(send.Trim().TrimEnd(','));
+            string send = Colors.yellow + "MCForge Development Team: ";
+            for (int i = 0; i < Server.devs.Count; i++) {
+                send += i != Server.devs.Count - 1
+                    ? Colors.navy + Server.devs[i] + Colors.white + ", "
+                    : Colors.navy + Server.devs[i];
+            }
+            p.SendMessage(send);
         }
 
         public void Help(Player p)
         {
             p.SendMessage("/devs - Shows the MCForge Development Team");
+            p.SendMessage("Shortcut: /developers");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "developers", "devs" });
+            Command.AddReference(this, new string[] { "developers", "devs" });
         }
     }
 }

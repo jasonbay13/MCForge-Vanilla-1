@@ -14,12 +14,10 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
+using MCForge.API.PlayerEvent;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 using MCForge.World;
 
 namespace CommandDll
@@ -43,7 +41,7 @@ namespace CommandDll
                 Help(p);
                 return;
             }
-            if (!Blocks.ValidBlockName(args[0 | 1]))
+            if (!Block.ValidBlockName(args[0 | 1]))
             {
                 p.SendMessage("Could not find block specified");
             }
@@ -54,27 +52,30 @@ namespace CommandDll
             cpos.type2 = type2;
 
             p.SendMessage("Place two blocks to determine the edges.");
-            p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
+			OnPlayerBlockChange.Register(CatchBlock, p, cpos);
+			//p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
         }
-        public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
-        {
-            CatchPos cpos = (CatchPos)DataPass;
-            cpos.pos = new Vector3(x, z, y);
-            p.CatchNextBlockchange(CatchBlock2, (object)cpos);
+		//public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass) 
+		public void CatchBlock(OnPlayerBlockChange opbc) {
+
+            CatchPos cpos = (CatchPos)opbc.datapass;
+            cpos.pos = new Vector3(opbc.x, opbc.z, opbc.y);
+			opbc.Unregister();
+			OnPlayerBlockChange.Register(CatchBlock2, opbc.Player, cpos);
+			//p.CatchNextBlockchange(CatchBlock2, (object)cpos);
         }
-        public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
-        {
-            CatchPos FirstBlock = (CatchPos)DataPass;
+        public void CatchBlock2(OnPlayerBlockChange opbc) {
+            CatchPos FirstBlock = (CatchPos)opbc.datapass;
             List<Pos> buffer = new List<Pos>();
 
-            for (ushort xx = Math.Min((ushort)(FirstBlock.pos.x), x); xx <= Math.Max((ushort)(FirstBlock.pos.x), x); ++xx)
+            for (ushort xx = Math.Min((ushort)(FirstBlock.pos.x), opbc.x); xx <= Math.Max((ushort)(FirstBlock.pos.x), opbc.x); ++xx)
             {
-                for (ushort zz = Math.Min((ushort)(FirstBlock.pos.z), z); zz <= Math.Max((ushort)(FirstBlock.pos.z), z); ++zz)
+                for (ushort zz = Math.Min((ushort)(FirstBlock.pos.z), opbc.z); zz <= Math.Max((ushort)(FirstBlock.pos.z), opbc.z); ++zz)
                 {
-                    for (ushort yy = Math.Min((ushort)(FirstBlock.pos.y), y); yy <= Math.Max((ushort)(FirstBlock.pos.y), y); ++yy)
+                    for (ushort yy = Math.Min((ushort)(FirstBlock.pos.y), opbc.y); yy <= Math.Max((ushort)(FirstBlock.pos.y), opbc.y); ++yy)
                     {
                         Vector3 loop = new Vector3(xx, zz, yy);
-                        if (p.level.GetBlock(loop) != FirstBlock.type)
+                        if (opbc.Player.Level.GetBlock(loop) != FirstBlock.type)
                         {
                             BufferAdd(buffer, loop);
                         }
@@ -82,18 +83,19 @@ namespace CommandDll
                 }
             }
             //Group Max Blocks permissions here
-            p.SendMessage(buffer.Count.ToString() + " blocks.");
+            opbc.Player.SendMessage(buffer.Count.ToString() + " blocks.");
 
             //Level Blockqueue .-.
 
             buffer.ForEach(delegate(Pos pos)
             {
-                p.level.BlockChange((ushort)(pos.pos.x), (ushort)(pos.pos.z), (ushort)(pos.pos.y), FirstBlock.type2);
+                opbc.Player.Level.BlockChange((ushort)(pos.pos.x), (ushort)(pos.pos.z), (ushort)(pos.pos.y), FirstBlock.type2);
             });
         }
         public void Help(Player p)
         {
-            p.SendMessage("/replacenot [block] [block2] - Replaces everything but <block> with <block2> inside a selected cuboid.");
+            p.SendMessage("/replacenot <block> <block2> - Replaces everything but <block> with <block2> inside a selected cuboid.");
+            p.SendMessage("Shortcut: /rn");
         }
 
         public void Initialize()

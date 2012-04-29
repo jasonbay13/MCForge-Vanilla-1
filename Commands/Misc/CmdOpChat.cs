@@ -14,6 +14,7 @@ permissions and limitations under the Licenses.
 */
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 namespace CommandDll
 {
     public class CmdOpChat : ICommand
@@ -27,13 +28,22 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            if (!p.opchat) 
-            {
-                p.SendMessage("OpChat activated. All messages will be sent to ops!"); p.opchat = true;
-                if (p.adminchat) { p.SendMessage("AdminChat deactivated!"); p.adminchat = false; }
-                return;          
+            p.ExtraData.CreateIfNotExist("OpChat", true);
+            if (!(bool)p.ExtraData["AdminChat"]) {
+                p.SendMessage("OpChat activated. All messages will be sent to operators!");
+                p.ExtraData["OpChat"] = true;
+
+                p.ExtraData.CreateIfNotExist("AdminChat", false);
+                if ((bool)p.ExtraData["AdminChat"]) {
+                    p.SendMessage("AdminChat deactivated!");
+                    p.ExtraData["AdminChat"] = false;
+                }
+                return;
             }
-            else { p.SendMessage("OpChat off!"); p.opchat = false; return; }
+            else {
+                p.SendMessage("OpChat off!");
+                p.ExtraData["OpChat"] = false;
+            }
         }
 
         public void Help(Player p)
@@ -43,7 +53,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "opchat" });
+            Command.AddReference(this, "opchat");
         }
     }
 }

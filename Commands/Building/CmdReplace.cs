@@ -14,15 +14,11 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
-using MCForge.World;
-using MCForge.API;
 using MCForge.API.PlayerEvent;
+using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+using MCForge.World;
 
 namespace CommandDll
 {
@@ -45,7 +41,7 @@ namespace CommandDll
                 Help(p);
                 return;
             }
-            if (!Blocks.ValidBlockName(args[0 | 1]))
+            if (!Block.ValidBlockName(args[0 | 1]))
             {
                 p.SendMessage("Could not find block specified");
             }
@@ -56,19 +52,28 @@ namespace CommandDll
             cpos.type2 = type2;
 
             p.SendMessage("Place two blocks to determine the edges.");
-            OnPlayerBlockChange.Register(CatchBlock, Priority.Normal, cpos, p);
+            OnPlayerBlockChange.Register(CatchBlock, p, cpos);
             //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
         }
-        public void CatchBlock(OnPlayerBlockChange args)
+        public void CatchBlock(PlayerEvent e)
         {
-            CatchPos cpos = (CatchPos)args.GetData();
-            cpos.pos = new Vector3(args.GetX(), args.GetZ(), args.GetZ());
-            args.Unregister(true);
-            args.GetPlayer().CatchNextBlockchange(CatchBlock2, (object)cpos);
+			OnPlayerBlockChange args = (OnPlayerBlockChange)e;
+			CatchPos cpos = (CatchPos)args.datapass;
+            cpos.pos = new Vector3(args.x, args.y, args.z);
+			args.Unregister();
+			args.Cancel();
+			OnPlayerBlockChange.Register(CatchBlock2, args.Player, cpos);
         }
-        public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
+        public void CatchBlock2(PlayerEvent e)
         {
-            CatchPos FirstBlock = (CatchPos)DataPass;
+			OnPlayerBlockChange bc = (OnPlayerBlockChange)e;
+			Player p = bc.Player;
+			ushort x = bc.x;
+			ushort y = bc.y;
+			ushort z = bc.z;
+			byte NewType = bc.holding;
+			bool placed = (bc.action == ActionType.Place);
+			CatchPos FirstBlock = (CatchPos)bc.datapass;
             unchecked
             {
                 if (FirstBlock.type != (byte)-1)
@@ -85,7 +90,7 @@ namespace CommandDll
                     for (ushort yy = Math.Min((ushort)(FirstBlock.pos.y), y); yy <= Math.Max((ushort)(FirstBlock.pos.y), y); ++yy)
                     {
                         Vector3 loop = new Vector3(xx, zz, yy);
-                        if (p.level.GetBlock(loop) == NewType)
+                        if (p.Level.GetBlock(loop) == NewType)
                         {
                             BufferAdd(buffer, loop);
                         }
@@ -99,12 +104,13 @@ namespace CommandDll
 
             buffer.ForEach(delegate(Pos pos)
             {
-                p.level.BlockChange((ushort)(pos.pos.x), (ushort)(pos.pos.z), (ushort)(pos.pos.y), FirstBlock.type2);
+                p.Level.BlockChange((ushort)(pos.pos.x), (ushort)(pos.pos.z), (ushort)(pos.pos.y), FirstBlock.type2);
             });
         }
         public void Help(Player p)
         {
-            p.SendMessage("/replace [type] [type2] - Replaces type with type2 inside a selected cuboid.");
+            p.SendMessage("/replace <type> <type2> - Replaces <type> with <type2> inside a selected cuboid.");
+            p.SendMessage("Shortcut: /r");
         }
 
         public void Initialize()

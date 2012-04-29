@@ -12,12 +12,11 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
 using System.Threading;
-using System;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -43,19 +42,22 @@ namespace CommandDll
             Player.UniversalChat("The votes are in! %aYes: " + Server.YesVotes + " %cNo: " + Server.NoVotes + Server.DefaultColor + "!");
 			Server.ForeachPlayer(delegate(Player pl)
 			{
-				pl.voted = false;
+                pl.ExtraData.CreateIfNotExist("Voted", false);
+                pl.ExtraData["Voted"] = false;
 			});
             Server.voting = false;
+            ResetVotes();
         }
 
         public void Help(Player p)
         {
             p.SendMessage("/vote <message> - Starts a 15 second vote");
+            p.SendMessage("Shortcut: /vo");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "vote", "vo" });
+            Command.AddReference(this, new[] { "vote", "vo" });
         }
         public void ResetVotes() { Server.YesVotes = 0; Server.NoVotes = 0; }
     }

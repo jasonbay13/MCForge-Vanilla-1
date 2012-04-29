@@ -12,11 +12,9 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MCForge;
+using MCForge.Core;
+using MCForge.Utilities;
 using MCForge.Entity;
 
 namespace MCForge.API.PlayerEvent
@@ -24,70 +22,44 @@ namespace MCForge.API.PlayerEvent
     /// <summary>
     /// An event that is connected to a player
     /// </summary>
-    public abstract class PlayerEvent : Event, Cancelable //We can assume we can cancel most player events..because we can
-    {
-        internal Player p;
-        internal object datapass;
-        bool _canceled;
-        internal bool _unregister;
+	public abstract class PlayerEvent : Event, Cancelable {
+    
+		protected Player _target;
+		/// <summary>
+		/// The player that this event applies to.  If null, applies to all players.
+		/// </summary>
+		public virtual Player Player { get { return _target;} }
+		
+		private static bool _canceled;
+		
+		internal PlayerEvent(Player p) { _target = p; }
+		
+		/// <summary>
+		/// Do we want to prevent the default proccessing?
+		/// </summary>
+		public bool cancel {
+			get { return _canceled; }
+		}
 
-        /// <summary>
-        /// Get the player connected to the event
-        /// </summary>
-        /// <returns>The player</returns>
-        public virtual Player GetPlayer()
-        {
-            return p;
-        }
+		/// <summary>
+		/// Prevent default processing until event is unregistered. (or Allow() is called)
+		/// </summary>
+		public void Cancel() {
+			Logger.Log("Event Canceled", LogType.Debug);
+			_canceled = true;
+		}
 
-        /// <summary>
-        /// Unregister the event
-        /// </summary>
-        /// <param name="value">True will unregister the event, false wont</param>
-        public virtual void Unregister(bool value)
-        {
-            _unregister = value;
-        }
+		/// <summary>
+		/// Allow default processing. (until Cancel() is called)
+		/// </summary>
+		public void Allow() {
+			Logger.Log("Event UnCanceled", LogType.Debug);
+			_canceled = false;
+		}
 
-        /// <summary>
-        /// Check to see if you can cancel the event
-        /// </summary>
-        public abstract bool IsCancelable { get; }
-
-        /// <summary>
-        /// Check to see if the event is canceled
-        /// </summary>
-        public virtual bool IsCanceled { get { return _canceled; } }
-        /// <summary>
-        /// Cancel the event (Make sure the event is Cancelable <seealso cref="IsCancelable"/>
-        /// </summary>
-        /// <param name="value">True will cancel the event, false will un-cancel it</param>
-        public virtual void Cancel(bool value)
-        {
-            if (IsCancelable)
-                _canceled = value;
-        }
-        /// <summary>
-        /// Get the data you passed when registering the event
-        /// </summary>
-        /// <returns>The object in the form of a object type</returns>
-        public virtual object GetData()
-        {
-            return datapass;
-        }
-        /// <summary>
-        /// Create a new instance of the event
-        /// </summary>
-        /// <param name="p">The player connected to the event</param>
-        public PlayerEvent(Player p)
-        {
-            this.p = p;
-        }
-        internal PlayerEvent() { }
-
-        /// <summary>
-        /// Call the event
-        /// </summary>
-        public abstract void Call();
-    }
+		/// <summary>
+		/// Unregisters the event from the queue.
+		/// </summary>
+		public abstract void Unregister();
+	}
 }

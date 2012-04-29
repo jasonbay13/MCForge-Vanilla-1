@@ -58,12 +58,12 @@ namespace CommandDll.Moderation
                     }
                     if (args[0] == "show")
                     {
-                        string[] names = PluginManager.GetNames();
+                        string[] names = Plugin.GetNames();
                         if (names.Length > 0)
                         {
                             for (int i = 1; i < names.Length; i++)
                             {
-                                names[0] += names[0] + ", " + names[i];
+                                names[0] += ", " + names[i];
                             }
                             p.SendMessage("Loaded plugins: " + names[0]);
                         }
@@ -75,7 +75,7 @@ namespace CommandDll.Moderation
                     }
                     if (args[0] == "reload")
                     {
-                        int count = PluginManager.reload();
+                        int count = Plugin.reload();
                         p.SendMessage(count + " plugins loaded.");
                         return;
                     }
@@ -85,21 +85,25 @@ namespace CommandDll.Moderation
                 {
                     if (args[0] == "unload")
                     {
-                        if (PluginManager.unload(args[1]))
+                        if (Plugin.unload(args[1]))
                         {
                             p.SendMessage("Plugin " + args[1] + " unloaded");
                         }
                         else
                         {
-                            p.SendMessage("No plugin " + args[1] + "loaded");
+                            p.SendMessage("No plugin " + args[1] + "unloaded");
                         }
                         return;
                     }
                     if (args[0] == "load")
                     {
-                        int count = PluginManager.reload(args[1]);
-                        p.SendMessage(count + " plugins loaded.");
-                        return;
+                        try
+                        {
+                            int count = Plugin.reload(args[1]);
+                            p.SendMessage(count + " plugins loaded.");
+                            return;
+                        }
+                        catch { p.SendMessage("This plugin cannot be loaded"); return; }
                     }
                 }
             }

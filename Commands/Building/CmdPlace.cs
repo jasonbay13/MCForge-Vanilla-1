@@ -13,10 +13,6 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MCForge;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
@@ -36,7 +32,7 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            byte b = (byte)(Blocks.Types.zero);
+            byte b = Block.BlockList.UNKNOWN;
             ushort x, z, y;
             Vector3 pos = p.Pos;
             try
@@ -47,13 +43,13 @@ namespace CommandDll
                         x = (ushort)(pos.x / 32);
                         z = (ushort)(pos.z / 32);
                         y = (ushort)(pos.y / 32 - 2);
-                        b = (byte)(Blocks.Types.stone);
+                        b = Block.BlockList.STONE;
                         break;
                     case 1:
                         x = (ushort)(pos.x / 32);
                         z = (ushort)(pos.z / 32);
                         y = (ushort)(pos.y / 32 - 1);
-                        b = Blocks.NameToByte(args[0]);
+                        b = Block.NameToBlock(args[0]);
                         break;
                     case 3:
                         x = Convert.ToUInt16(args[0]);
@@ -61,7 +57,7 @@ namespace CommandDll
                         y = Convert.ToUInt16(args[2]);
                         break;
                     case 4:
-                        b = Blocks.NameToByte(args[0]);
+                        b = Block.NameToBlock(args[0]);
                         x = Convert.ToUInt16(args[1]);
                         z = Convert.ToUInt16(args[2]);
                         y = Convert.ToUInt16(args[3]);
@@ -76,21 +72,18 @@ namespace CommandDll
                 p.SendMessage("Invalid parameters.");
                 return;
             }
-            if (b == (byte)(Blocks.Types.zero))
-            {
-                b = (byte)(Blocks.Types.stone);
-            }
             //Need to wait for permissions for cannot place that block type.
-            if (y >= p.level.Size.y)
+            if (y >= p.Level.Size.y)
             {
-                y = (ushort)(p.level.Size.y - 1);
+                y = (ushort)(p.Level.Size.y - 1);
             }
-            p.level.BlockChange(x, z, y, b);
-            p.SendMessage("An " + Blocks.ByteToName(b) + " block was placed at (" + x + ", " + z + ", " + y + ").");
+            p.Level.BlockChange(x, z, y, b);
+            p.SendMessage("An " + ((Block)b).Name + " block was placed at (" + x + ", " + z + ", " + y + ").");
         }
         public void Help(Player p)
         {
             p.SendMessage("/place [block] <x z y> - Places block at your feet or <x z y>");
+            p.SendMessage("Shortcut: /pl");
         }
 
         public void Initialize()

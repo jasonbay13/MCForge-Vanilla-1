@@ -14,14 +14,10 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using MCForge;
-using System.IO;
-using MCForge.Interface.Command;
+using MCForge.API.PlayerEvent;
 using MCForge.Core;
 using MCForge.Entity;
+using MCForge.Interface.Command;
 using MCForge.World;
 
 namespace CommandDll
@@ -33,66 +29,85 @@ namespace CommandDll
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
-        public byte Permission { get { return 30; } }        
-
+        public byte Permission { get { return 30; } }
         public void Use(Player p, string[] args)
         {
             CatchPos cpos = new CatchPos();
-            if (args.Length == 1)
+            if (args.Length != 0)
             {
-                try
+                cpos.ignore = new List<byte>();
+                for (int i = 0; i < args.Length; i++)
                 {
-                    cpos.ignore = Blocks.NameToByte(args[0]);
+                    try
+                    {
+                        cpos.ignore.Add(Block.NameToBlock(args[i]));
+                    }
+                    catch
+                    {
+                        p.SendMessage("Could not find the block '" + args[i] + "'");
+                        return;
+                    }
                 }
-                catch
+                string s = "";
+                for (int i = 0; i < cpos.ignore.Count; i++)
                 {
-                    p.SendMessage("Could not find block specified");
-                    return;
+                    s += ((Block)cpos.ignore[i]).Name;
+                    if (i == cpos.ignore.Count - 2) s += " and ";
+                    else if (i != cpos.ignore.Count - 1) s += ", ";
                 }
-                p.SendMessage("Ignoring " + args[0]);
+                p.SendMessage("Ignoring " + s + ".");
             }
-            else
-                cpos.ignore = (byte)(Blocks.Types.zero); //So it doesn't ignore air.
+            //else
+                //cpos.ignore.Add(Block.NameToByte("unknown")); //So it doesn't ignore air.
             p.SendMessage("Place two blocks to determine the edges.");
-            p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
+            //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
+            OnPlayerBlockChange.Register(CatchBlock, p, cpos);
         }
-        public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
+        //public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
+        public void CatchBlock(OnPlayerBlockChange args)
         {
-            CatchPos cpos = (CatchPos)DataPass;
-            cpos.FirstBlock = new Vector3(x, z, y);
-            p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock2), (object)cpos);
+            args.Cancel();
+            args.Unregister();
+            args.Player.SendBlockChange(args.x, args.z, args.y, args.Player.Level.GetBlock(args.x, args.z, args.y));
+            CatchPos cpos = (CatchPos)args.datapass;
+            cpos.FirstBlock = new Vector3(args.x, args.z, args.y);
+            OnPlayerBlockChange.Register(CatchBlock2, args.Player, cpos);
+            //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock2), (object)cpos);
         }
-        public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
+        //public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
+        public void CatchBlock2(OnPlayerBlockChange args)
         {
-            CatchPos cpos = (CatchPos)DataPass;
+            args.Cancel();
+            args.Unregister();
+            args.Player.SendBlockChange(args.x, args.z, args.y, args.Player.Level.GetBlock(args.x, args.z, args.y));
+            CatchPos cpos = (CatchPos)args.datapass;
             Vector3 FirstBlock = cpos.FirstBlock;
             ushort xx, zz, yy;
             int count = 0;
-            for (xx = Math.Min((ushort)(FirstBlock.x), x); xx <= Math.Max((ushort)(FirstBlock.x), x); ++xx)
-                for (zz = Math.Min((ushort)(FirstBlock.z), z); zz <= Math.Max((ushort)(FirstBlock.z), z); ++zz)
-                    for (yy = Math.Min((ushort)(FirstBlock.y), y); yy <= Math.Max((ushort)(FirstBlock.y), y); ++yy)
+            for (xx = Math.Min((ushort)(FirstBlock.x), args.x); xx <= Math.Max((ushort)(FirstBlock.x), args.x); ++xx)
+                for (zz = Math.Min((ushort)(FirstBlock.z), args.z); zz <= Math.Max((ushort)(FirstBlock.z), args.z); ++zz)
+                    for (yy = Math.Min((ushort)(FirstBlock.y), args.y); yy <= Math.Max((ushort)(FirstBlock.y), args.y); ++yy)
                     {
-                        if (p.level.GetBlock(xx, zz, yy) != cpos.ignore)
+                        if (cpos.ignore == null || !cpos.ignore.Contains(args.Player.Level.GetBlock(xx, zz, yy)))
                         {
                             count++;
                         }
                     }
-            p.SendMessage(count + " blocks are between (" + FirstBlock.x + ", " + FirstBlock.z + ", " + FirstBlock.y + ") and (" + x + ", " + z + ", " + y + ")");
+            args.Player.SendMessage(count + " blocks are between (" + FirstBlock.x + ", " + FirstBlock.z + ", " + FirstBlock.y + ") and (" + args.x + ", " + args.z + ", " + args.y + ")");
         }
 
         public void Help(Player p)
         {
             p.SendMessage("/measure [ignore] - Measures all the blocks between two points.");
             p.SendMessage("[ignore] - Enter a block to ignore them");
+            p.SendMessage("Shortcut: /ms");
         }
-
         public struct CatchPos
         {
             public Vector3 FirstBlock;
-            public byte ignore;
+            public List<byte> ignore;
             public int count;
         }
-
         public void Initialize()
         {
             Command.AddReference(this, new string[2] { "measure", "ms" });

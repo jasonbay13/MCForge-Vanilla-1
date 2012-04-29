@@ -12,15 +12,12 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
-
-namespace CommandDll
-{
-    public class CmdColor : ICommand
-    {
+using MCForge.Entity;
+using MCForge.Interface.Command;
+using MCForge.Utils;
+namespace CommandDll {
+    public class CmdColor : ICommand {
         public string Name { get { return "Color"; } }
         public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "7imekeeper"; } }
@@ -28,25 +25,28 @@ namespace CommandDll
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
 
-        public void Use(Player p, string[] args)
-        {
+        public void Use(Player p, string[] args) {
             if (args.Length == 0 || args.Length > 2) { Help(p); return; }
             Player who;
             string color;
-            if (args.Length == 1)
-            {
+
+            p.ExtraData.CreateIfNotExist("Color", Server.DefaultColor);
+
+            if (args.Length == 1) {
                 who = p;
                 color = args[0] == "del" ? p.group.color : Colors.Parse(args[0]);
-                if (p.color == color) { p.SendMessage("You are already that color!"); return; }
+                if (p.ExtraData["Color"] == color) { p.SendMessage("You are already that color!"); return; }
             }
-            else
-            {
+            else {
                 who = Player.Find(args[0]);
                 if (who == null) { p.SendMessage("Could not find player."); return; }
                 if (p.group.permission <= who.group.permission) { p.SendMessage("You can't change the color of someone of equal or higher rank!"); return; }
-                if (Server.devs.Contains(who.USERNAME) && !Server.devs.Contains(p.USERNAME)) { p.SendMessage("You can't change a dev's color!"); return; }
+                if (Server.devs.Contains(who.Username) && !Server.devs.Contains(p.Username)) { p.SendMessage("You can't change a dev's color!"); return; }
+
+                
+
                 color = args[1] == "del" ? who.group.color : Colors.Parse(args[1]);
-                if (who.color == color) { p.SendMessage("They are already that color!"); return; }
+                if (who.ExtraData["Color"] == color) { p.SendMessage("They are already that color!"); return; }
             }
             if (color == "") { p.SendMessage("Could not find color."); return; }
 
@@ -54,9 +54,10 @@ namespace CommandDll
             if (color == who.group.color)
                 message = "their groups default.";
             else
-                message = color + Colors.Name(color) + who.color + ".";
-            Player.UniversalChat(who.color + "*" + who.USERNAME + (who.USERNAME.EndsWith("s") || who.USERNAME.EndsWith("x") ? "'" : "'s") + " color was changed to " + message);
-            who.color = color;
+                message = color + Colors.Name(color) + who.ExtraData["Color"] + ".";
+            Player.UniversalChat(who.ExtraData["Color"] + "*" + who.Username + (who.Username.EndsWith("s") || who.Username.EndsWith("x") ? "'" : "'s") + " color was changed to " + message);
+            who.ExtraData.CreateIfNotExist("Color", color);
+            who.ExtraData["Color"] = color;
 
             who.GlobalDie();
             who.SendSpawn(who);
@@ -64,16 +65,14 @@ namespace CommandDll
             //TODO Save to database.
         }
 
-        public void Help(Player p)
-        {
+        public void Help(Player p) {
             p.SendMessage("/color [player] <color> - Changes the nick color.");
             p.SendMessage("&0black &1navy &2green &3teal &4maroon &5purple &6gold &7silver");
             p.SendMessage("&8gray &9blue &alime &baqua &cred &dpink &eyellow &fwhite");
         }
 
-        public void Initialize()
-        {
-            Command.AddReference(this, new string[1] { "color" });
+        public void Initialize() {
+            Command.AddReference(this, "color");
         }
     }
 }

@@ -12,8 +12,6 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge;
-using System;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
@@ -21,9 +19,9 @@ using System.IO;
 
 namespace CommandDll
 {
-    public class CmdCrashserver : ICommand
+    public class CmdCrashServer : ICommand
     {
-        public string Name { get { return "Crashserver"; } }
+        public string Name { get { return "CrashServer"; } }
         public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Givo"; } }
         public int Version { get { return 1; } }
@@ -37,14 +35,13 @@ namespace CommandDll
             random = random.Replace(".", "");
             p.Kick("SERVER CRASH ERROR CODE x8" + random.ToUpper());
         }
-
         public void Help(Player p)
         {
             p.SendMessage("/crashserver - Crash the server, they'll never know its you"); 
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "Crashserver" });
+            Command.AddReference(this, "crashserver");
         }
     }
 }

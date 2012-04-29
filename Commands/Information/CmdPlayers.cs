@@ -37,7 +37,7 @@ namespace CommandDll
                 else { send += ": " + Server.DefaultColor; }
                 Server.ForeachPlayer(delegate(Player pl)
                     {
-                        if (pl.group.permission == group.permission) { send +=  pl.USERNAME + "&a, " + Server.DefaultColor; }
+                        if (pl.group.permission == group.permission) { send +=  pl.Username + "&a, " + Server.DefaultColor; }
                     });
                 p.SendMessage(send.Trim().Remove(send.Length - 4, 4));
             }
@@ -46,11 +46,12 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/players - shows the online players");
+            p.SendMessage("Shortcuts: /online, /who");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[2] { "players", "online" });
+            Command.AddReference(this, new string[3] { "players", "online", "who" });
         }
     }
 }

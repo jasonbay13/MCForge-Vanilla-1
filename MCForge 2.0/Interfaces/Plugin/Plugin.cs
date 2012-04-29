@@ -11,7 +11,7 @@ software distributed under the Licenses are distributed on an "AS IS"
 BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
-*/﻿
+*/
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,31 +20,11 @@ using System.IO;
 using System.Reflection;
 using MCForge.Interface.Command;
 using MCForge.Core;
+using MCForge.Utilities;
 
-namespace MCForge.Interface.Plugin
-{
-    /// <summary>
-    /// The command class, used to store commands for players to use
-    /// </summary>
-    public class PluginManager
-    {
-        internal static List<IPlugin> Plugins = new List<IPlugin>();
-
-        /// <summary>
-        /// Gets a plugin by interface.
-        /// </summary>
-        /// <param name="name">The name of the interface</param>
-        /// <returns></returns>
-        public static IPlugin getByInterface(string name)
-        {
-            foreach (IPlugin ip in Plugins)
-            {
-                if (ip.GetType().GetInterface(name) != null)
-                    return ip;
-            }
-            return null;
-        }
-
+namespace MCForge.Interface.Plugin {
+    public class Plugin {
+        private static List<IPlugin> Plugins = new List<IPlugin>();
         /// <summary>
         /// Get the names of all plugins
         /// </summary>
@@ -70,7 +50,11 @@ namespace MCForge.Interface.Plugin
             {
                 if ((ignoreCase && ip.Name.ToLower() == name.ToLower()) || ip.Name == name)
                 {
-                    ip.Unload();
+                    try
+                    {
+                        ip.OnUnload();
+                    }
+                    catch { Logger.Log(ip.Name + " cannot be unloaded", LogType.Warning); }
                     Plugins.Remove(ip);
                     return true;
                 }
@@ -108,9 +92,9 @@ namespace MCForge.Interface.Plugin
                                 IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
                                 if (!isLoaded(instance.Name) && (name == "" || ((ignoreCase && instance.Name.ToLower() == name.ToLower()) || instance.Name == name)))
                                 {
-                                    instance.Load();
-                                    PluginManager.AddReference(instance);
-                                    Server.Log("[Plugin]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
+                                    instance.OnLoad(new string[0]);
+                                    AddReference(instance);
+                                    Logger.Log("[Plugin]: " + instance.Name + " Initialized!", System.Drawing.Color.Magenta, System.Drawing.Color.Black);
                                     ret++;
                                 }
                             }
@@ -135,6 +119,19 @@ namespace MCForge.Interface.Plugin
                 Plugins.Add(plugin);
             }
         }
+        /// <summary>
+        /// Gets a plugin by interface.
+        /// </summary>
+        /// <param name="name">The name of the interface</param>
+        /// <returns></returns>
+        public static IPlugin getByInterface(string name)
+        {
+            foreach (var ip in Plugins)
+            {
+                if (ip.GetType().GetInterface(name) != null)
+                    return ip;
+            }
+            return null;
+        }
     }
-
 }

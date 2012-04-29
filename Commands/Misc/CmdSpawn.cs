@@ -12,15 +12,10 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll
 {
@@ -40,15 +35,13 @@ namespace CommandDll
                 Help(p);
                 return;
             }
-            Vector3 meep = new Vector3((short)(p.level.SpawnPos.x * 32), (short)(p.level.SpawnPos.z * 32 + 51), (short)(p.level.SpawnPos.y * 32));
-            p.SendToPos(meep, p.level.SpawnRot);
+            Vector3 meep = new Vector3((short)(p.Level.SpawnPos.x * 32), (short)(p.Level.SpawnPos.z * 32 + 51), (short)(p.Level.SpawnPos.y * 32));
+            p.SendToPos(meep, p.Level.SpawnRot);
         }
-
         public void Help(Player p)
         {
             p.SendMessage("/spawn - Teleports yourself to the spawn location.");
         }
-
         public void Initialize()
         {
             Command.AddReference(this, "spawn");

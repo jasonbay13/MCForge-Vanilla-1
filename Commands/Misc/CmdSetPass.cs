@@ -1,5 +1,5 @@
 ﻿/*
-Copyright 2012 MCForge
+Copyright 2011 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
 not use this file except in compliance with the Licenses. You may
@@ -13,15 +13,12 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MCForge;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
+using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace CommandDll.Misc
 {
@@ -35,10 +32,9 @@ namespace CommandDll.Misc
         public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
         {
-            if (!p.verified) p.SendMessage("&cYou already have a password set. " + Server.DefaultColor + "You &ccannot change " + Server.DefaultColor + "it unless &cyou verify it with &a/pass [Password]. " + Server.DefaultColor + "If you have &cforgotten " + Server.DefaultColor + "your password, contact the server host and they can &creset it!"); return;
-            if (args[0] == "") Help(p); return;
-            if (p.group.permission < Server.VerifyGroup.permission) p.SendMessage("Only " + Server.VerifyGroup.color + Server.VerifyGroup.name + "s " + Server.DefaultColor + "and above need to verify."); return;
-            #region *
+            if (!p.IsVerified) { p.SendMessage("&cYou already have a password set. " + Server.DefaultColor + "You &ccannot change " + Server.DefaultColor + "it unless &cyou verify it with &a/pass [Password]. " + Server.DefaultColor + "If you have &cforgotten " + Server.DefaultColor + "your password, contact the server host and they can &creset it!"); return; }
+            if (args[0] == "") { Help(p); return; }
+            if (p.group.permission < Server.VerifyGroup.permission) { p.SendMessage("Only " + Server.VerifyGroup.color + Server.VerifyGroup.name + "s " + Server.DefaultColor + "and above need to verify."); return; }
             int number = args[0].Split(' ').Length;
             if (number > 1)
             {
@@ -113,25 +109,24 @@ namespace CommandDll.Misc
                 }
                 try
                 {
-                    if (File.Exists("extra/passwords/" + who.USERNAME + ".xml"))
+                    if (File.Exists("extra/passwords/" + who.Username + ".xml"))
                     {
-                        File.Delete("extra/passwords/" + who.USERNAME + ".xml");
+                        File.Delete("extra/passwords/" + who.Username + ".xml");
                     }
-                    StreamWriter SW = new StreamWriter(File.Create("extra/passwords/" + who.USERNAME + ".xml"));
+                    StreamWriter SW = new StreamWriter(File.Create("extra/passwords/" + who.Username + ".xml"));
                     SW.WriteLine(outStr);
                     SW.Flush();
                     SW.Close();
-                    File.WriteAllText("extra/passwords/" + who.USERNAME + ".xml", outStr);
+                    File.WriteAllText("extra/passwords/" + who.Username + ".xml", outStr);
                 }
                 catch
                 {
                     who.SendMessage("&cFailed to Save Password, &aTry Again Later!");
-                    Server.Log(who.USERNAME + " failed to save password.");
+                    Server.Log(who.Username + " failed to save password.");
                 }
                 return outStr;
 
             }
-            #endregion
         }
         public void Help(Player p)
         {
@@ -139,7 +134,7 @@ namespace CommandDll.Misc
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "setpass" });
+            Command.AddReference(this, "setpass");
         }
     }
 }

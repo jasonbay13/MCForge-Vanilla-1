@@ -14,10 +14,9 @@ permissions and limitations under the Licenses.
 */
 using MCForge.Entity;
 using MCForge.Interface.Command;
-namespace CommandDll
-{
-    public class CmdAdminChat : ICommand
-    {
+using MCForge.Utils;
+namespace CommandDll {
+    public class CmdAdminChat : ICommand {
         public string Name { get { return "AdminChat"; } }
         public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Arrem"; } }
@@ -25,25 +24,31 @@ namespace CommandDll
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
-        public void Use(Player p, string[] args)
-        {
-            if (!p.adminchat) 
-            {
-                p.SendMessage("AdminChat activated. All messages will be sent to admins!"); p.adminchat = true;                
-                if (p.opchat) { p.SendMessage("OpChat deactivated!"); p.opchat = false; }
-                return; 
+        public void Use(Player p, string[] args) {
+            p.ExtraData.CreateIfNotExist("AdminChat", true);
+            if (!(bool)p.ExtraData["AdminChat"]) {
+                p.SendMessage("AdminChat activated. All messages will be sent to admins!");
+                p.ExtraData["AdminChat"] = true;
+
+                p.ExtraData.CreateIfNotExist("OpChat", false);
+                if ((bool)p.ExtraData["OpChat"]) {
+                    p.SendMessage("OpChat deactivated!");
+                    p.ExtraData["OpChat"] = false;
+                }
+                return;
             }
-            else { p.SendMessage("AdminChat off!"); p.adminchat = false; return; }
+            else {
+                p.SendMessage("AdminChat off!");
+                p.ExtraData["AdminChat"] = false;
+            }
         }
 
-        public void Help(Player p)
-        {
+        public void Help(Player p) {
             p.SendMessage("/adminchat - makes all messages sent go to admins");
         }
 
-        public void Initialize()
-        {
-            Command.AddReference(this, new string[1] { "adminchat" });
+        public void Initialize() {
+            Command.AddReference(this, "adminchat");
         }
     }
 }

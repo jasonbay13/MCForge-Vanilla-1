@@ -12,17 +12,9 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using MCForge;
-using System.IO;
-using MCForge.Interface.Command;
 using MCForge.Entity;
-using MCForge.Core;
-
+using MCForge.Interface.Command;
+using MCForge.Utils;
 namespace CommandDll
 {
     public class CmdImpersonate : ICommand
@@ -33,7 +25,6 @@ namespace CommandDll
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
-
         public void Use(Player p, string[] args)
         {
             if (args.Length == 0) { Help(p); return; }
@@ -49,7 +40,7 @@ namespace CommandDll
             if (!newmessage.EndsWith(" ")) { p.SendMessage("Please enter a message"); return; }
             if (who != null)
             {
-                Player.UniversalChat(who.color + who.USERNAME + "%f: " + newmessage);
+                Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + "%f: " + newmessage);
             }
             else
             {
@@ -58,11 +49,12 @@ namespace CommandDll
         }
         public void Help(Player p)
         {
-            p.SendMessage("/impersonate <Player> <Message> - Impersonates <Player>");
+            p.SendMessage("/impersonate <player> <message> - Impersonates <player>.");
+            p.SendMessage("Shortcut: /imp");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "Impersonate" });
+            Command.AddReference(this, new string[] { "impersonate", "imp" });
         }
     }
 }

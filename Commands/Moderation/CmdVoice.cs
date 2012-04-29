@@ -12,16 +12,10 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using MCForge;
-using System.IO;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Interface.Command;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -40,9 +34,12 @@ namespace CommandDll
             if (args.Length == 0) { who = p; }
             else { who = Player.Find(args[0]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
-            if (Server.devs.Contains(who.USERNAME)) { p.SendMessage("Cannot change MCForge Developer's voice status!"); return; }
-            if (who.voiced) { who.voiced = false; who.voicestring = ""; Player.UniversalChat(who.USERNAME + " is no longer voiced!"); return; }
-            else { who.voiced = true; who.voicestring = "+ "; Player.UniversalChat(who.USERNAME + " is now voiced!"); return; }
+            if (Server.devs.Contains(who.Username)) { p.SendMessage("Cannot change MCForge Developer's voice status!"); return; }
+
+            who.ExtraData.CreateIfNotExist("Voiced", false);
+            who.ExtraData.CreateIfNotExist("VoiceString", "");
+            if ((bool)who.ExtraData["Voiced"]) { who.ExtraData["Voiced"] = false; who.ExtraData["VoicedString"] = ""; Player.UniversalChat(who.Username + " is no longer voiced!"); return; }
+            else { who.ExtraData["Voiced"] = true; who.ExtraData["VoicedString"] = "+ "; Player.UniversalChat(who.Username + " is now voiced!"); return; }
         }
 
         public void Help(Player p)
@@ -53,7 +50,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "voice" });
+            Command.AddReference(this, "voice");
         }
     }
 }
