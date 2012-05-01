@@ -48,6 +48,7 @@ namespace MCForge.Interface.Command
 			Player.UniversalChat("Reloading the Command system, please wait.");
 			Command.Commands.Clear();
 			LoadAllDlls.InitCommands();
+            Initialize();
 		}
 
 		public void Help(Player p)
