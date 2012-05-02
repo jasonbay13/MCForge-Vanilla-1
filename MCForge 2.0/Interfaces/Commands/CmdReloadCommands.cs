@@ -13,35 +13,18 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MCForge.Entity;
 
 namespace MCForge.Interface.Command
 {
 	public class CmdReloadCmds : ICommand
 	{
-		string _Name = "Reload Commands";
-		public string Name { get { return _Name; } }
-
-		CommandTypes _Type = CommandTypes.misc;
-		public CommandTypes Type { get { return _Type; } }
-
-		string _Author = "Merlin33069";
-		public string Author { get { return _Author; } }
-
-		int _Version = 1;
-		public int Version { get { return _Version; } }
-
-		string _CUD = "";
-		public string CUD { get { return _CUD; } }
-
-		string[] CommandStrings = new string[2] { "reloadcmds", "reloadcommands" };
-
-        byte _Permission = 120; //Owner
-        public byte Permission { get { return _Permission; } }
+		public string Name { get { return "Reload Commands"; } }
+		public CommandTypes Type { get { return CommandTypes.misc; } }
+		public string Author { get { return "Merlin33069"; } }
+		public int Version { get { return 1; } }
+		public string CUD { get { return ""; } }
+        public byte Permission { get { return 120; } }
 
 		public void Use(Player p, string[] args)
 		{
@@ -52,13 +35,14 @@ namespace MCForge.Interface.Command
 		}
 
 		public void Help(Player p)
-		{
-
+        {
+            p.SendMessage("/reloadcommands - Reloads the command system");
+            p.SendMessage("Shortcuts: /reloadcmds, /rc");
 		}
 
 		public void Initialize()
 		{
-			Command.AddReference(this, CommandStrings);
+            Command.AddReference(this, new string[3] { "reloadcmds", "reloadcommands", "rc" });
 		}
 	}
 }

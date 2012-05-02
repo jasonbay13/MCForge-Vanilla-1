@@ -18,8 +18,11 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
-namespace CommandDll {
-    public class CmdMute : ICommand {
+
+namespace CommandDll 
+{
+    public class CmdMute : ICommand 
+    {
         public string Name { get { return "Mute"; } }
         public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Arrem"; } }
@@ -30,19 +33,17 @@ namespace CommandDll {
         public void Use(Player p, string[] args) {
             if (args.Length == 0) { Help(p); return; }
             Player who = Player.Find(args[0]);
-            int time = 0;
-            if (Server.devs.Contains(who.Username)) {
-                p.SendMessage("Cannot mute a MCForge Developer!");
+            if (who == null) { p.SendMessage("Cannot find player!"); return; }
+            who.ExtraData.CreateIfNotExist("Muted", false); 
+            if (Server.devs.Contains(who.Username)) { p.SendMessage("Cannot mute a MCForge Developer!"); return; }
+            if (who == p) {
+                if ((bool)who.ExtraData["Muted"]) { p.SendMessage("Cannot unmute yourself!"); }
+                else { p.SendMessage("Cannot mute yourself!"); }
                 return;
             }
             if (args.Length == 2) //XMute
             {
-                if (who == null) {
-                    p.SendMessage("Player was not found");
-                    return;
-                }
-
-                who.ExtraData.CreateIfNotExist("Muted", false);
+                int time = 0;
                 if ((bool)who.ExtraData["Muted"]) { who.ExtraData["Muted"] = false; Player.UniversalChat(who.Username + " has been unmuted!"); return; }
                 try { time = Int32.Parse(args[1]) * 1000; }
                 catch { p.SendMessage("Please use a valid number!"); return; }
@@ -71,4 +72,3 @@ namespace CommandDll {
         }
     }
 }
-
