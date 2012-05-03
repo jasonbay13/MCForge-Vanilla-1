@@ -258,10 +258,6 @@ namespace PluginsDLL
                 //OnPlayerDisconnect.Unregister(OnDisconnect, p); //only one has to be unregistered!
             }
         }
-        public void Load()
-        {
-            _isUnloading = false;
-        }
         public void OnDisconnect(OnPlayerDisconnect eventargs)
         {
             Stop(eventargs.Player);
