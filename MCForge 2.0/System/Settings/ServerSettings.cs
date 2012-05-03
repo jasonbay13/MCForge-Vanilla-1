@@ -49,8 +49,8 @@ namespace MCForge.Utilities.Settings {
             if (_initCalled)
                 throw new ArgumentException("\"Settings.Init()\" can only be called once");
 
-            
-			GenerateSalt();
+
+            GenerateSalt();
 
             _initCalled = true;
             Values = new List<SettingNode>{
@@ -238,7 +238,7 @@ namespace MCForge.Utilities.Settings {
             using (var writer = File.CreateText(FileUtils.PropertiesPath + "server.properties")) {
                 foreach (var v in Values) {
 
-                    writer.Write(v.Description == null && v.Key == ""
+                    writer.Write(v.Description == null && v.Key == null
                         ? v.Value + (v != Values.Last() ? "\n" : "")
                         : v.Description == null
                             ? string.Format("{0}={1}" + (v != Values.Last() ? "\n" : ""), v.Key, v.Value)
@@ -264,16 +264,21 @@ namespace MCForge.Utilities.Settings {
                     continue;
 
 
-                if (read[0] == '#' || String.IsNullOrWhiteSpace(read))
-                {
-                    pair = new SettingNode(null, read, null);
-                }
-                else
-                {
+                if (read[0] == '#' && (i + 1 < text.Count()) ? text[i + 1][0] != '#' && !String.IsNullOrWhiteSpace(text[i + 1]) : false) {
+                    i++;
                     var split = text[i].Split('=');
                     pair = new SettingNode(split[0].Trim().ToLower(),
                                            String.Join("=", split, 1, split.Length - 1).Trim(),
-                                           null);
+                                           read.Substring(1));
+                }
+                else {
+                    if (read[0] != '#') {
+                        var split = text[i].Split('=');
+                        pair = new SettingNode(split[0].Trim().ToLower(),
+                                               String.Join("=", split, 1, split.Length - 1).Trim(),
+                                               null);
+                    }
+                    else pair = new SettingNode(null, read, null);
                 }
                 Values.Add(pair);
             }
@@ -341,8 +346,7 @@ namespace MCForge.Utilities.Settings {
         public string Description { get; set; }
 
         public SettingNode(string key, string value, string description) {
-            if (key != null) Key = key.ToLower();
-            else Key = "";
+            Key = key.ToLower();
             Value = value;
             Description = description;
         }
