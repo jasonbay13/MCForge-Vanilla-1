@@ -27,7 +27,7 @@ namespace PluginsDLL {
             if (_isUnloading) return;
             int i = viewing.FindIndex(v => { return v.p.id == p.id; });
             if (i >= 0) {
-                viewing[i].message = prepare(message);
+                viewing[i].message = Prepare(message);
                 viewing[i].MessagePos = 0;
             }
             else {
@@ -69,7 +69,7 @@ namespace PluginsDLL {
             if (t >= 0) i -= i + max - t;
             return line.Substring(0, (o + max + i < line.Length) ? o + max + i : line.Length).TrimEnd();
         }
-        private static string[] prepare(string text) {
+        public static string[] Prepare(string text) {
             //Todo: Colors for multiple lines
             List<string> ret = new List<string>();
             string[] lines = text.Split('\n');
@@ -95,7 +95,7 @@ namespace PluginsDLL {
         public string CUD { get { return ""; } }
 
         public class Viewer {
-            public Viewer(Player p, string message, int messagePos) : this(p, prepare(message), messagePos) { }
+            public Viewer(Player p, string message, int messagePos) : this(p, Prepare(message), messagePos) { }
             private Viewer(Player p, string[] message, int messagePos) {
                 this.p = p;
                 this.message = message;
@@ -191,7 +191,7 @@ namespace PluginsDLL {
         public void AppendText(Player p, string text) {
             int index = indexOfPlayer(p);
             bool update = viewing[index].MessagePos + messageHeight > viewing[index].message.Length;
-            string[] append = prepare(text);
+            string[] append = Prepare(text);
             string[] message = new string[append.Length + viewing[index].message.Length];
             viewing[index].message.CopyTo(message, 0);
             append.CopyTo(message, viewing[index].message.Length);
