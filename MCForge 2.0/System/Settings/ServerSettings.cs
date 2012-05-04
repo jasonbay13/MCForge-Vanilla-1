@@ -49,8 +49,8 @@ namespace MCForge.Utilities.Settings {
             if (_initCalled)
                 throw new ArgumentException("\"Settings.Init()\" can only be called once");
 
-            
-			GenerateSalt();
+
+            GenerateSalt();
 
             _initCalled = true;
             Values = new List<SettingNode>{
