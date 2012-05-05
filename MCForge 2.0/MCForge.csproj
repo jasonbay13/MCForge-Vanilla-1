@@ -51,6 +51,10 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <BaseAddress>4194304</BaseAddress>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data">
       <HintPath>MySql.Data.dll</HintPath>
@@ -95,6 +99,7 @@
     <Compile Include="Database\SQLite.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
+    <Compile Include="Interfaces\Plugin\IPlugin.cs" />
     <Compile Include="Player\PlayerNetworking.cs" />
     <Compile Include="System\FileUtils.cs" />
     <Compile Include="System\Logger.cs" />
@@ -151,7 +156,6 @@
     <Compile Include="Interfaces\LoadAllDlls.cs" />
     <Compile Include="Interfaces\Plugin\Plugin.cs" />
     <Compile Include="Interfaces\Plugin\IPluginMessageViewer.cs" />
-    <Compile Include="Interfaces\Plugin\PluginManager.cs" />
     <Compile Include="Player\Player.cs" />
     <Compile Include="World\Blocks\Block.cs" />
     <Compile Include="World\Blocks\OldMCForgeToNewMCForge.cs" />

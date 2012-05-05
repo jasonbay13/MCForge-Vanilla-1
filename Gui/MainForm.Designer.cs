@@ -51,8 +51,8 @@ namespace MCForge.Gui
             this.mPlayersListBox = new System.Windows.Forms.ListBox();
             this.chatBox = new System.Windows.Forms.TextBox();
             this.chatButtonChange = new System.Windows.Forms.ComboBox();
-            this.coloredTextBox1 = new MCForge.Gui.Components.ColoredTextBox();
-            this.newsFeeder1 = new MCForge.Gui.Components.NewsFeeder();
+            this.coloredTextBox1 = new MCForge.Gui.Components.ColoredTextBox(this.components);
+            this.newsFeeder1 = new MCForge.Gui.Components.NewsFeeder(this.components);
             this.menuStrip1.SuspendLayout();
             this.mPlayerGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -134,6 +134,7 @@ namespace MCForge.Gui
             // 
             // newsFeeder1
             // 
+            this.newsFeeder1.BackColor = System.Drawing.Color.White;
             this.newsFeeder1.Items.Add("1234");
             this.newsFeeder1.Items.Add("1234");
             this.newsFeeder1.Items.Add("12334");
@@ -145,6 +146,7 @@ namespace MCForge.Gui
             this.newsFeeder1.Items.Add("c1c34");
             this.newsFeeder1.Location = new System.Drawing.Point(0, 452);
             this.newsFeeder1.Name = "newsFeeder1";
+            this.newsFeeder1.ReadOnly = true;
             this.newsFeeder1.Size = new System.Drawing.Size(826, 20);
             this.newsFeeder1.TabIndex = 7;
             this.newsFeeder1.Text = "Connecting...";

@@ -36,9 +36,6 @@ namespace Plugins {
 
         public void OnLoad(string[] args) {
             pList = new Dictionary<Player, string>();
-
-
-
         }
 
         public void OnUnload() {
