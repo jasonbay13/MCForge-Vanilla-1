@@ -19,6 +19,9 @@ using System.Text;
 
 namespace MCForge.API
 {
+	/// <summary>
+	/// An event
+	/// </summary>
 	public abstract class Event {
 
 		/// <summary>

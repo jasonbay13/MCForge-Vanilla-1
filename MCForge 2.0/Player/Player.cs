@@ -27,6 +27,8 @@ using MCForge.World;
 using MCForge.Utilities;
 using MCForge.Utils;
 using System.Linq;
+using MCForge.SQL;
+using System.Data;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -78,6 +80,11 @@ namespace MCForge.Entity {
             get;
             set;
         }
+        
+        /// <summary>
+        /// This is the UID for the player in the database
+        /// </summary>
+        internal int UID;
         /// <summary>
         /// This is the player's IP Address
         /// </summary>
@@ -274,6 +281,71 @@ namespace MCForge.Entity {
                 else { if (!p.IsHidden) p.UpdatePosition(false); }
             });
         }
+        
+        #region Extra Data Saving/Loading
+        /// <summary>
+        /// Load all the players extra data from the database
+        /// </summary>
+        public static void LoadAllExtra()
+        {
+        	Server.Players.ForEach(p =>
+        	                       {
+        	                       	p.LoadExtra();
+        	                       });
+        }
+        /// <summary>
+        /// Load the players extra data from the database
+        /// </summary>
+        public void LoadExtra()
+        {
+        	DataTable tbl = Database.fillData("SELECT * WHERE UID=" + UID);
+        	for (int i = 0; i < tbl.Rows.Count; i++)
+        	{
+        		ExtraData.Add(tbl.Rows[i]["key"], tbl.Rows[i]["value"]);
+        	}
+        	tbl.Dispose();
+        }
+        /// <summary>
+        /// Save all the players extra data
+        /// </summary>
+        public static void SaveAllExtra()
+        {
+        	Server.Players.ForEach(p =>
+        	                       {
+        	                       	p.SaveExtra();
+        	                       });
+        }
+        /// <summary>
+        /// Save the players extra data
+        /// </summary>
+        public void SaveExtra()
+        {
+        	List<string> commands = new List<string>();
+        	foreach (object obj in ExtraData.Keys)
+        	{
+        		if (!IsInTable(obj))
+        			commands.Add("INSERT INTO extra (key, value, UID) VALUES ('" + obj.ToString() + "', '" + ExtraData[obj].ToString() + "', " + UID + ")");
+        		else
+        			commands.Add("UPDATE extra SET value='" + ExtraData[obj].ToString() + "' WHERE key='" + obj.ToString() + "' AND UID=" + UID);
+        	}
+        	Database.executeQuery(commands.ToArray());
+        	commands.Clear();
+        }
+        /// <summary>
+        /// Check to see if the key is in the table already
+        /// </summary>
+        /// <param name="key">The key to check</param>
+        /// <returns>If true, then they key is in the table and doesnt need to be added, if false, then the key needs to be added</returns>
+        internal bool IsInTable(object key)
+        {
+        	DataTable temp = Database.fillData("SELECT * WHERE key='" + key.ToString() + "' AND UID=" + UID);
+        	bool return1 = false;
+        	if (temp.Rows.Count >= 1)
+        		return1 = true;
+        	temp.Dispose();
+        	return return1;
+        }
+        #endregion
 
         #region PluginStuff
         /// <summary>

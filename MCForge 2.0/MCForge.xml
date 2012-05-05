@@ -4,6 +4,11 @@
         <name>MCForge</name>
     </assembly>
     <members>
+        <member name="T:MCForge.API.Cancelable">
+            <summary>
+            Can the event be canceled
+            </summary>
+        </member>
         <member name="M:MCForge.API.Cancelable.Cancel">
             <summary>
             Cancel the events of this type.
@@ -22,6 +27,11 @@
         <member name="T:MCForge.API.PlayerEvent.PlayerEvent">
             <summary>
             An event that is connected to a player
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Event">
+            <summary>
+            An event
             </summary>
         </member>
         <member name="F:MCForge.API.Event._pri">
@@ -456,6 +466,26 @@
             High will be called last so it gets the last say
             </summary>
         </member>
+        <member name="F:MCForge.API.Priority.Low">
+            <summary>
+            Low is called first so it can make any needed changes first
+            </summary>
+        </member>
+        <member name="F:MCForge.API.Priority.Normal">
+            <summary>
+            The default setting for Priority.
+            </summary>
+        </member>
+        <member name="F:MCForge.API.Priority.High">
+            <summary>
+            This is called last, this will get the final say on what happens in the event
+            </summary>
+        </member>
+        <member name="F:MCForge.API.Priority.System_Level">
+            <summary>
+            This should only be used for monitoring the result
+            </summary>
+        </member>
         <member name="T:MCForge.API.System.OnCommandLoaded">
             <summary>
             This event is called when a command loads
@@ -722,6 +752,19 @@
             Description of SQL.
             </summary>
         </member>
+        <member name="M:MCForge.SQL.MySQL.executeQuery(System.String)">
+            <summary>
+            execute a query
+            </summary>
+            <param name="queryString">The command to execute</param>
+        </member>
+        <member name="M:MCForge.SQL.MySQL.executeQuery(System.String[])">
+            <summary>
+            Execute more than 1 command at once
+            Use this in a loop or if your going to execute more than 1 thing at a time
+            </summary>
+            <param name="queryString">The commands to execute</param>
+        </member>
         <member name="T:MCForge.SQL.SQLite">
             <summary>
             Description of SQLite.
@@ -940,6 +983,11 @@
             <param name="from">The player sending the message</param>
             <param name="message">The message to be sent</param>
         </member>
+        <member name="F:MCForge.Entity.Player.UID">
+            <summary>
+            This is the UID for the player in the database
+            </summary>
+        </member>
         <member name="F:MCForge.Entity.Player.Ip">
             <summary>
             This is the player's IP Address
@@ -979,6 +1027,33 @@
             <summary>
             The current Group of the player
             </summary>
+        </member>
+        <member name="M:MCForge.Entity.Player.LoadAllExtra">
+            <summary>
+            Load all the players extra data from the database
+            </summary>
+        </member>
+        <member name="M:MCForge.Entity.Player.LoadExtra">
+            <summary>
+            Load the players extra data from the database
+            </summary>
+        </member>
+        <member name="M:MCForge.Entity.Player.SaveAllExtra">
+            <summary>
+            Save all the players extra data
+            </summary>
+        </member>
+        <member name="M:MCForge.Entity.Player.SaveExtra">
+            <summary>
+            Save the players extra data
+            </summary>
+        </member>
+        <member name="M:MCForge.Entity.Player.IsInTable(System.Object)">
+            <summary>
+            Check to see if the key is in the table already
+            </summary>
+            <param name="key">The key to check</param>
+            <returns>If true, then they key is in the table and doesnt need to be added, if false, then the key needs to be added</returns>
         </member>
         <member name="M:MCForge.Entity.Player.CatchNextBlockchange(MCForge.Entity.Player.BlockChangeDelegate,System.Object)">
             <summary>
@@ -1818,6 +1893,24 @@
             <summary>
             6
             </summary>
+        </member>
+        <member name="M:MCForge.World.NoiseUtils.IsOnBounds(System.Double[0:,0:],System.Double,System.Double)">
+            <summary>
+            Is the X and Y in the bounds of the map bigMap
+            </summary>
+            <param name="bigMap">The map to check</param>
+            <param name="x">The X cord.</param>
+            <param name="y">The Y cord.</param>
+            <returns>If true, then the position is out of bounds of the map. Otherwise it is not</returns>
+        </member>
+        <member name="M:MCForge.World.NoiseUtils.IsOnBounds(System.Single[0:,0:],System.Single,System.Single)">
+            <summary>
+            Is the X and Y in the bounds of the map bigMap
+            </summary>
+            <param name="bigMap">The map to check</param>
+            <param name="x">The X cord.</param>
+            <param name="y">The Y cord.</param>
+            <returns>If true, then the position is out of bounds of the map. Otherwise it is not</returns>
         </member>
         <member name="T:MCForge.World.Level">
             <summary>
