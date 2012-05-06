@@ -99,7 +99,7 @@ namespace CommandDll {
                     return;
             }
             p.SendMessage("Place two blocks to determine the corners.");
-            p.OnPlayerBlockChange.Normal+=new Event<Player,PlayerBlockChangeEventArgs>.EventHandler(CatchBlock);
+            p.OnPlayerBlockChange.Normal += new Event<Player, PlayerBlockChangeEventArgs>.EventHandler(CatchBlock);
         }
         public void Help(Player p) {
             p.SendMessage("/cuboid [block] [type] - Creates a cuboid of blocks.");
@@ -119,14 +119,14 @@ namespace CommandDll {
             cpos.block = args.Holding;
             args.Cancel();
             p.OnPlayerBlockChange.Normal -= new Event<Player, PlayerBlockChangeEventArgs>.EventHandler(CatchBlock);
-            p.Datapass = cpos;
+            p.setDatapass(this.Name, cpos);
             p.OnPlayerBlockChange.Normal += new PlayerBlockChange.EventHandler(CatchBlock2);
         }
         public void CatchBlock2(Player p, PlayerBlockChangeEventArgs args) {
-            CatchPos cpos = (CatchPos)p.Datapass;
+            p.OnPlayerBlockChange.Normal -= new Event<Player, PlayerBlockChangeEventArgs>.EventHandler(CatchBlock2);
+            CatchPos cpos = (CatchPos)p.GetDatapass(this.Name);
             Cuboid(cpos, args.Holding, p, args.X, args.Y, args.Z);
             args.Cancel();
-            p.OnPlayerBlockChange.Normal -= new Event<Player, PlayerBlockChangeEventArgs>.EventHandler(CatchBlock2);
         }
         private void Cuboid(CatchPos cpos, byte NewType, Player p, ushort x, ushort y, ushort z) {
             List<Pos> buffer = new List<Pos>();

@@ -4,25 +4,47 @@ using System.Linq;
 using System.Text;
 
 namespace MCForge.API.Events {
+    /// <summary>
+    /// Event class
+    /// </summary>
+    /// <typeparam name="T1">The type of the sender</typeparam>
+    /// <typeparam name="T2">The type of the arguments</typeparam>
     public class Event<T1, T2> where T2 : ICloneable {
+        /// <summary>
+        /// The delgate type of the events
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="args">The arguments</param>
         public delegate void EventHandler(T1 sender, T2 args);
         internal event EventHandler SystemLvl;
         private List<EventHandler> low = new List<EventHandler>();
+        /// <summary>
+        /// Low events
+        /// </summary>
         public event EventHandler Low {
             add { low.Add(value); }
             remove { low.Remove(value); }
         }
         private List<EventHandler> normal = new List<EventHandler>();
+        /// <summary>
+        /// Normal events
+        /// </summary>
         public event EventHandler Normal {
             add { normal.Add(value); }
             remove { normal.Remove(value); }
         }
         private List<EventHandler> high = new List<EventHandler>();
+        /// <summary>
+        /// High events
+        /// </summary>
         public event EventHandler High {
             add { high.Add(value); }
             remove { high.Remove(value); }
         }
         private List<EventHandler> important = new List<EventHandler>();
+        /// <summary>
+        /// Important events
+        /// </summary>
         public event EventHandler Important {
             add { important.Add(value); }
             remove { important.Remove(value); }
@@ -77,6 +99,10 @@ namespace MCForge.API.Events {
             return canceled;
         }
     }
+
+    /// <summary>
+    /// The EventArgs base class
+    /// </summary>
     public abstract class EventArgs : ICloneable{
 
         public abstract object Clone();

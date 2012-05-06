@@ -533,13 +533,53 @@ namespace MCForge.Entity {
         #endregion
 
         #region Events
+        /// <summary>
+        /// Gets called when this player sends a message.
+        /// </summary>
         public PlayerChat OnPlayerChat = new PlayerChat();
+        /// <summary>
+        /// Gets called when this player tries to run a command.
+        /// </summary>
         public PlayerCommand OnPlayerCommand = new PlayerCommand();
+        /// <summary>
+        /// Gets called when this player connects.
+        /// </summary>
         public PlayerConnection OnPlayerConnect = new PlayerConnection();
+        /// <summary>
+        /// Gets called when this player disconnect.
+        /// </summary>
         public PlayerConnection OnPlayerDisconnect = new PlayerConnection();
+        /// <summary>
+        /// Gets called when this player moves.
+        /// </summary>
         public PlayerMove OnPlayerMove = new PlayerMove();
+        /// <summary>
+        /// Gets called when this player changes a block.
+        /// </summary>
         public PlayerBlockChange OnPlayerBlockChange = new PlayerBlockChange();
-        public object Datapass;
+        Dictionary<string,object> datapasses=new Dictionary<string,object>();
+        /// <summary>
+        /// Gets a datapass object and removes it from the list.
+        /// </summary>
+        /// <param name="key">The key to access the datapass object.</param>
+        /// <returns>A datapass object.</returns>
+        public object GetDatapass(string key){
+            if (datapasses.ContainsKey(key)) {
+                object ret = datapasses[key];
+                datapasses.Remove(key);
+                return ret;
+            }
+            else return null;
+        }
+        /// <summary>
+        /// Sets a datapass object according to the key.
+        /// </summary>
+        /// <param name="key">The key to set the datapass object to.</param>
+        /// <param name="data">The datapass object.</param>
+        public void setDatapass(string key, object data){
+            if(datapasses.ContainsKey(key)) datapasses[key]=data;
+            else datapasses.Add(key,data);
+        }
         #endregion
 
     }
