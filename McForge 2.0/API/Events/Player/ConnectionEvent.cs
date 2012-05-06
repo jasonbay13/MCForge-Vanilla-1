@@ -8,17 +8,17 @@ namespace MCForge.API.Events {
     /// <summary>
     /// PlayerConnection event class
     /// </summary>
-    public class PlayerConnection:Event<Player,PlayerConnectionEventArgs> {
+    public class ConnectionEvent : Event<Player, ConnectionEventArgs> {
     }
     /// <summary>
     /// PlayConnectionEventArgs
     /// </summary>
-    public class PlayerConnectionEventArgs : EventArgs, ICloneable {
+    public class ConnectionEventArgs : EventArgs, ICloneable {
         /// <summary>
         /// Creates a new instance
         /// </summary>
         /// <param name="connected">Whether the player is connected or not</param>
-        public PlayerConnectionEventArgs(bool connected) {
+        public ConnectionEventArgs(bool connected) {
             this.Connected = connected;
         }
         /// <summary>
@@ -31,7 +31,7 @@ namespace MCForge.API.Events {
         /// </summary>
         /// <returns>A new instance</returns>
         public override object Clone() {
-            return new PlayerConnectionEventArgs(Connected);
+            return new ConnectionEventArgs(Connected);
         }
     }
 }

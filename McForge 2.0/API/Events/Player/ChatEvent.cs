@@ -6,37 +6,31 @@ using MCForge.Entity;
 
 namespace MCForge.API.Events {
     /// <summary>
-    /// PlayerCommand event class
+    /// PlayerChat event class
     /// </summary>
-    public class PlayerCommand:Event<Player,PlayerCommandEventArgs>{
+    public class ChatEvent :Event<Player,ChatEventArgs> {
     }
     /// <summary>
-    /// PlayerCommandEventArgs
+    /// PlayerChatEventArgs
     /// </summary>
-    public class PlayerCommandEventArgs : EventArgs, ICloneable, ICancelable {
+    public class ChatEventArgs : EventArgs, ICloneable, ICancelable {
         /// <summary>
         /// Creates a new instance
         /// </summary>
-        /// <param name="command">The command (it might does not exist)</param>
-        /// <param name="args">The arguments to be passed to the command</param>
-        public PlayerCommandEventArgs(string command, string[] args) {
-            this.Command = command;
-            this.Args = args;
+        /// <param name="message">The message</param>
+        public ChatEventArgs(string message) {
+            this.Message = message;
         }
         /// <summary>
-        /// The command (it might does not exist)
+        /// The message
         /// </summary>
-        public string Command;
-        /// <summary>
-        /// The arguments to be passed to the command
-        /// </summary>
-        public string[] Args;
+        public string Message;
         /// <summary>
         /// Returns a new instance representing this instance
         /// </summary>
         /// <returns>A new instance</returns>
         public override object Clone() {
-            return new PlayerCommandEventArgs(Command, Args);
+            return new ChatEventArgs(Message);
         }
         private bool canceled = false;
         /// <summary>

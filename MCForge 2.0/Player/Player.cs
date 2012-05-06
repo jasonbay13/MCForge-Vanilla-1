@@ -242,7 +242,8 @@ namespace MCForge.Entity {
             }
 
             string name = args[0].ToLower().Trim();
-            bool canceled = OnPlayerCommand.Call(this, new PlayerCommandEventArgs(name, sendArgs));
+            CommandEventArgs eargs = new CommandEventArgs(name, sendArgs);
+            bool canceled = OnPlayerCommand.Call(this, eargs) | OnAllPlayersCommand.Call(this, eargs);
             if (canceled) // If any event canceled us
                 return;
             if (Command.Commands.ContainsKey(name)) {
@@ -383,7 +384,8 @@ namespace MCForge.Entity {
         public void Click(ushort x, ushort z, ushort y, byte type) {
             HandleBlockchange(x, y, z, (byte)ActionType.Place, type, true);
             return;
-            bool canceled = OnPlayerBlockChange.Call(this,new PlayerBlockChangeEventArgs(x, y, z, ActionType.Place, type));
+            BlockChangeEventArgs eargs=new BlockChangeEventArgs(x, y, z, ActionType.Place, type);
+            bool canceled = OnPlayerBlockChange.Call(this, eargs) | OnAllPlayersBlockChange.Call(this, eargs);
             if (canceled) // If any event canceled us
                 return;
             if (blockChange != null) {
@@ -536,27 +538,51 @@ namespace MCForge.Entity {
         /// <summary>
         /// Gets called when this player sends a message.
         /// </summary>
-        public PlayerChat OnPlayerChat = new PlayerChat();
+        public ChatEvent OnPlayerChat = new ChatEvent();
+        /// <summary>
+        /// Gets called when any player sends a message.
+        /// </summary>
+        public static ChatEvent OnAllPlayersChat = new ChatEvent();
         /// <summary>
         /// Gets called when this player tries to run a command.
         /// </summary>
-        public PlayerCommand OnPlayerCommand = new PlayerCommand();
+        public CommandEvent OnPlayerCommand = new CommandEvent();
+        /// <summary>
+        /// Gets called when any player tries to run a command.
+        /// </summary>
+        public static CommandEvent OnAllPlayersCommand = new CommandEvent();
         /// <summary>
         /// Gets called when this player connects.
         /// </summary>
-        public PlayerConnection OnPlayerConnect = new PlayerConnection();
+        public ConnectionEvent OnPlayerConnect = new ConnectionEvent();
+        /// <summary>
+        /// Gets called when any player connects.
+        /// </summary>
+        public static ConnectionEvent OnAllPlayersConnect = new ConnectionEvent();
         /// <summary>
         /// Gets called when this player disconnect.
         /// </summary>
-        public PlayerConnection OnPlayerDisconnect = new PlayerConnection();
+        public ConnectionEvent OnPlayerDisconnect = new ConnectionEvent();
+        /// <summary>
+        /// Gets called when any player disconnect.
+        /// </summary>
+        public static ConnectionEvent OnAllPlayersDisconnect = new ConnectionEvent();
         /// <summary>
         /// Gets called when this player moves.
         /// </summary>
-        public PlayerMove OnPlayerMove = new PlayerMove();
+        public MoveEvent OnPlayerMove = new MoveEvent();
+        /// <summary>
+        /// Gets called when any player moves.
+        /// </summary>
+        public static MoveEvent OnAllPlayersMove = new MoveEvent();
         /// <summary>
         /// Gets called when this player changes a block.
         /// </summary>
-        public PlayerBlockChange OnPlayerBlockChange = new PlayerBlockChange();
+        public BlockChangeEvent OnPlayerBlockChange = new BlockChangeEvent();
+        /// <summary>
+        /// Gets called when any player changes a block.
+        /// </summary>
+        public static BlockChangeEvent OnAllPlayersBlockChange = new BlockChangeEvent();
         Dictionary<string,object> datapasses=new Dictionary<string,object>();
         /// <summary>
         /// Gets a datapass object and removes it from the list.

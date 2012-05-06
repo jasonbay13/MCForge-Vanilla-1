@@ -79,11 +79,12 @@
     <Compile Include="API\Events\Event.cs" />
     <Compile Include="API\Events\ICancelable.cs" />
     <Compile Include="API\Events\IStoppable.cs" />
-    <Compile Include="API\Events\Player\PlayerBlockChange.cs" />
-    <Compile Include="API\Events\Player\PlayerChat.cs" />
-    <Compile Include="API\Events\Player\PlayerCommand.cs" />
-    <Compile Include="API\Events\Player\PlayerConnection.cs" />
-    <Compile Include="API\Events\Player\PlayerMove.cs" />
+    <Compile Include="API\Events\Player\BlockChangeEvent.cs" />
+    <Compile Include="API\Events\Player\ChatEvent.cs" />
+    <Compile Include="API\Events\Player\CommandEvent.cs" />
+    <Compile Include="API\Events\Player\ConnectionEvent.cs" />
+    <Compile Include="API\Events\Player\MoveEvent.cs" />
+    <Compile Include="API\Events\System\ReceivePacket.cs" />
     <Compile Include="API\Player\OnPlayerBlockChange.cs" />
     <Compile Include="API\Player\OnPlayerChat.cs" />
     <Compile Include="API\Player\OnPlayerCommand.cs">

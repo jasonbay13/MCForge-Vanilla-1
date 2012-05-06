@@ -9,12 +9,12 @@ namespace MCForge.API.Events {
     /// <summary>
     /// PlayerBlockChange event class
     /// </summary>
-    public class PlayerBlockChange : Event<Player, PlayerBlockChangeEventArgs> {
+    public class BlockChangeEvent : Event<Player, BlockChangeEventArgs> {
     }
     /// <summary>
     /// PlayerBlockChangeEventArgs
     /// </summary>
-    public class PlayerBlockChangeEventArgs : EventArgs, ICloneable, ICancelable {
+    public class BlockChangeEventArgs : EventArgs, ICloneable, ICancelable {
         /// <summary>
         /// Creates a new instance
         /// </summary>
@@ -23,7 +23,7 @@ namespace MCForge.API.Events {
         /// <param name="z">The positions Z coordinate</param>
         /// <param name="action">The ActionType action</param>
         /// <param name="holding">The type of the block</param>
-        public PlayerBlockChangeEventArgs(ushort x, ushort y, ushort z, ActionType action, byte holding) : this(action, holding, x, y, z) { }
+        public BlockChangeEventArgs(ushort x, ushort y, ushort z, ActionType action, byte holding) : this(action, holding, x, y, z) { }
         /// <summary>
         /// Creates a new instance
         /// </summary>
@@ -32,7 +32,7 @@ namespace MCForge.API.Events {
         /// <param name="z">The positions Z coordinate</param>
         /// <param name="action">The ActionType action</param>
         /// <param name="holding">The type of the block</param>
-        public PlayerBlockChangeEventArgs(ActionType action, byte holding, ushort x, ushort y, ushort z) {
+        public BlockChangeEventArgs(ActionType action, byte holding, ushort x, ushort y, ushort z) {
             this.Action = action;
             this.Holding = holding;
             this.X = x;
@@ -64,7 +64,7 @@ namespace MCForge.API.Events {
         /// </summary>
         /// <returns>A new instance</returns>
         public override object Clone() {
-            return new PlayerBlockChangeEventArgs(Action, Holding, X, Y, Z);
+            return new BlockChangeEventArgs(Action, Holding, X, Y, Z);
         }
         private bool canceled = false;
         /// <summary>

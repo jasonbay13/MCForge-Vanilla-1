@@ -170,7 +170,8 @@ namespace MCForge.Entity {
                 catch {
                 }
 
-                bool cancel = OnPlayerConnect.Call(this,new PlayerConnectionEventArgs(true));
+                ConnectionEventArgs eargs = new ConnectionEventArgs(true);
+                bool cancel = OnPlayerConnect.Call(this, eargs) | OnAllPlayersConnect.Call(this, eargs);
                 if (cancel) {
                     Kick("Disconnected by event");
                     return;
@@ -246,7 +247,8 @@ namespace MCForge.Entity {
             }
 
             bool placing = (action == 1);
-            bool canceled = OnPlayerBlockChange.Call(this,new PlayerBlockChangeEventArgs(x, y, z, (placing ? ActionType.Place : ActionType.Delete), newType));
+            BlockChangeEventArgs eargs =new BlockChangeEventArgs(x, y, z, (placing ? ActionType.Place : ActionType.Delete), newType);
+            bool canceled = OnPlayerBlockChange.Call(this, eargs) | OnAllPlayersBlockChange.Call(this, eargs);
             if (canceled) {
                 if (!fake)
                     SendBlockChange(x, z, y, Level.GetBlock(x, z, y));
@@ -304,7 +306,8 @@ namespace MCForge.Entity {
             Pos.z = (short)z;
             Rot = new byte[2] { rotx, roty };
             if (!(Pos.x == x && Pos.y == y && Pos.z == z)) {
-                bool cancel = OnPlayerMove.Call(this, new PlayerMoveEventArgs(fromPosition));
+                MoveEventArgs eargs = new MoveEventArgs(fromPosition);
+                bool cancel = OnPlayerMove.Call(this, eargs) | OnAllPlayersMove.Call(this, eargs);
                 if (cancel) {
                     this.SendToPos(Pos, Rot);
                     return;
@@ -333,7 +336,8 @@ namespace MCForge.Entity {
             if (incomingText.Length == 0)
                 return;
 
-            bool canceled = OnPlayerChat.Call(this, new PlayerChatEventArgs(incomingText));
+            ChatEventArgs eargs = new ChatEventArgs(incomingText);
+            bool canceled = OnPlayerChat.Call(this, eargs) | OnAllPlayersChat.Call(this, eargs);
             if (canceled)
                 return;
 
@@ -967,8 +971,9 @@ namespace MCForge.Entity {
             });
         }
         protected void CloseConnection() {
-            OnPlayerDisconnect.Call(this, new PlayerConnectionEventArgs(false));
-
+            ConnectionEventArgs eargs = new ConnectionEventArgs(false);
+            OnPlayerDisconnect.Call(this, eargs);
+            OnAllPlayersDisconnect.Call(this, eargs);
             IsLoggedIn = false;
 
             GlobalDie();

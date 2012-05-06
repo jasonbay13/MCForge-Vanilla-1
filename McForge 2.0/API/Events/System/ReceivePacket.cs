@@ -5,32 +5,17 @@ using System.Text;
 using MCForge.Entity;
 
 namespace MCForge.API.Events {
-    /// <summary>
-    /// PlayerChat event class
-    /// </summary>
-    public class PlayerChat :Event<Player,PlayerChatEventArgs> {
+    public class ReceivePacket:Event<Player,ReceivePacketEventArgs> {
     }
-    /// <summary>
-    /// PlayerChatEventArgs
-    /// </summary>
-    public class PlayerChatEventArgs : EventArgs, ICloneable, ICancelable {
+    public class ReceivePacketEventArgs:EventArgs,ICloneable,ICancelable {
+
         /// <summary>
-        /// Creates a new instance
+        /// Data Recieved
         /// </summary>
-        /// <param name="message">The message</param>
-        public PlayerChatEventArgs(string message) {
-            this.Message = message;
-        }
-        /// <summary>
-        /// The message
-        /// </summary>
-        public string Message;
-        /// <summary>
-        /// Returns a new instance representing this instance
-        /// </summary>
-        /// <returns>A new instance</returns>
+        public byte[] Data { get; set; }
+
         public override object Clone() {
-            return new PlayerChatEventArgs(Message);
+            throw new NotImplementedException();
         }
         private bool canceled = false;
         /// <summary>
