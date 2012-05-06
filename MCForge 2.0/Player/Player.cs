@@ -29,6 +29,7 @@ using MCForge.Utils;
 using System.Linq;
 using MCForge.SQL;
 using System.Data;
+using MCForge.API.Events;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -241,7 +242,7 @@ namespace MCForge.Entity {
             }
 
             string name = args[0].ToLower().Trim();
-            bool canceled = OnPlayerCommand.Call(this, name, args);
+            bool canceled = OnPlayerCommand.Call(this, new PlayerCommandEventArgs(name, sendArgs));
             if (canceled) // If any event canceled us
                 return;
             if (Command.Commands.ContainsKey(name)) {
@@ -380,7 +381,9 @@ namespace MCForge.Entity {
         /// <param name="y"></param>
         /// <param name="type"></param>
         public void Click(ushort x, ushort z, ushort y, byte type) {
-            bool canceled = OnPlayerBlockChange.Call(x, y, z, ActionType.Place, this, type);
+            HandleBlockchange(x, y, z, (byte)ActionType.Place, type, true);
+            return;
+            bool canceled = OnPlayerBlockChange.Call(this,new PlayerBlockChangeEventArgs(x, y, z, ActionType.Place, type));
             if (canceled) // If any event canceled us
                 return;
             if (blockChange != null) {
@@ -527,6 +530,16 @@ namespace MCForge.Entity {
                     return p;
             return null;
         }
+        #endregion
+
+        #region Events
+        public PlayerChat OnPlayerChat = new PlayerChat();
+        public PlayerCommand OnPlayerCommand = new PlayerCommand();
+        public PlayerConnection OnPlayerConnect = new PlayerConnection();
+        public PlayerConnection OnPlayerDisconnect = new PlayerConnection();
+        public PlayerMove OnPlayerMove = new PlayerMove();
+        public PlayerBlockChange OnPlayerBlockChange = new PlayerBlockChange();
+        public object Datapass;
         #endregion
 
     }
