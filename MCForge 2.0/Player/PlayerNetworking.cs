@@ -28,6 +28,7 @@ using MCForge.Utilities.Settings;
 using MCForge.World;
 using System.Drawing;
 using MCForge.Utils;
+using MCForge.API.Events;
 
 namespace MCForge.Entity {
     public partial class Player {
@@ -169,7 +170,7 @@ namespace MCForge.Entity {
                 catch {
                 }
 
-                bool cancel = OnPlayerConnect.Call(this);
+                bool cancel = OnPlayerConnect.Call(this,new PlayerConnectionEventArgs(true));
                 if (cancel) {
                     Kick("Disconnected by event");
                     return;
@@ -225,6 +226,10 @@ namespace MCForge.Entity {
             ushort z = packet.NTHO(message, 4);
             byte action = message[6];
             byte newType = message[7];
+            HandleBlockchange(x, y, z, action, newType, false);
+        }
+        protected void HandleBlockchange(ushort x, ushort y, ushort z, byte action, byte newType, bool fake) {
+            
 
             LastClick = new Vector3(x, y, z);
 
@@ -241,11 +246,16 @@ namespace MCForge.Entity {
             }
 
             bool placing = (action == 1);
-            bool canceled = OnPlayerBlockChange.Call(x, y, z, (placing ? ActionType.Place : ActionType.Delete), this, newType);
-            if (canceled) // If any event canceled us
+            bool canceled = OnPlayerBlockChange.Call(this,new PlayerBlockChangeEventArgs(x, y, z, (placing ? ActionType.Place : ActionType.Delete), newType));
+            if (canceled) {
+                if (!fake)
+                    SendBlockChange(x, z, y, Level.GetBlock(x, z, y));
                 return;
+            }
+            
             if (blockChange != null) {
-                SendBlockChange(x, z, y, currentType);
+                if (fake)
+                    SendBlockChange(x, z, y, currentType);
 
                 BlockChangeDelegate tempBlockChange = blockChange;
                 if (!ExtraData.ContainsKey("PassBackData"))
@@ -288,26 +298,23 @@ namespace MCForge.Entity {
             ushort z = packet.NTHO(message, 5);
             byte rotx = message[7];
             byte roty = message[8];
+            Vector3 fromPosition = Pos;
+            Pos.x = (short)x;
+            Pos.y = (short)y;
+            Pos.z = (short)z;
+            Rot = new byte[2] { rotx, roty };
             if (!(Pos.x == x && Pos.y == y && Pos.z == z)) {
-                bool cancel = OnPlayerMove.Call(this, Pos);
+                bool cancel = OnPlayerMove.Call(this, new PlayerMoveEventArgs(fromPosition));
                 if (cancel) {
                     this.SendToPos(Pos, Rot);
                     return;
                 }
             }
-            Pos.x = (short)x;
-            Pos.y = (short)y;
-            Pos.z = (short)z;
-            Rot = new byte[2] { rotx, roty };
         }
         protected void HandleChat(byte[] message) {
             if (!IsLoggedIn) return;
 
             string incomingText = enc.GetString(message, 1, 64).Trim();
-
-            bool canceled = OnPlayerChat.Call(this, incomingText).cancel; //...wat?
-            if (canceled)
-                return;
 
             byte incomingID = message[0];
             if (incomingID != 0xFF && incomingID != id && incomingID != 0) {
@@ -325,6 +332,11 @@ namespace MCForge.Entity {
 
             if (incomingText.Length == 0)
                 return;
+
+            bool canceled = OnPlayerChat.Call(this, new PlayerChatEventArgs(incomingText));
+            if (canceled)
+                return;
+
             //Fixes crash
             if (incomingText[0] == '/' && incomingText.Length == 1) {
                 SendMessage("You didn't specify a command!");
@@ -955,7 +967,7 @@ namespace MCForge.Entity {
             });
         }
         protected void CloseConnection() {
-            OnPlayerDisconnect.Call(this, lastPacket.ToString());
+            OnPlayerDisconnect.Call(this, new PlayerConnectionEventArgs(false));
 
             IsLoggedIn = false;
 

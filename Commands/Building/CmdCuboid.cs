@@ -19,6 +19,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
+using MCForge.API.Events;
 
 namespace CommandDll {
     public class CmdCuboid : ICommand {
@@ -98,7 +99,7 @@ namespace CommandDll {
                     return;
             }
             p.SendMessage("Place two blocks to determine the corners.");
-            OnPlayerBlockChange.Register(CatchBlock, p, cpos);
+            p.OnPlayerBlockChange.Normal += new Event<Player, PlayerBlockChangeEventArgs>.EventHandler(CatchBlock);
         }
         public void Help(Player p) {
             p.SendMessage("/cuboid [block] [type] - Creates a cuboid of blocks.");
@@ -112,18 +113,20 @@ namespace CommandDll {
             string[] CommandStrings = new string[2] { "cuboid", "z" };
             Command.AddReference(this, CommandStrings);
         }
-        public void CatchBlock(OnPlayerBlockChange args) {
-            CatchPos cpos = (CatchPos)args.datapass;
-            cpos.pos = new Vector3(args.x, args.z, args.y);
+        public void CatchBlock(Player p, PlayerBlockChangeEventArgs args) {
+            CatchPos cpos = new CatchPos();
+            cpos.pos = new Vector3(args.X, args.Z, args.Y);
+            cpos.block = args.Holding;
             args.Cancel();
-            args.Unregister();
-            OnPlayerBlockChange.Register(CatchBlock2, args.Player, cpos);
+            p.OnPlayerBlockChange.Normal -= new Event<Player, PlayerBlockChangeEventArgs>.EventHandler(CatchBlock);
+            p.setDatapass(this.Name, cpos);
+            p.OnPlayerBlockChange.Normal += new PlayerBlockChange.EventHandler(CatchBlock2);
         }
-        public void CatchBlock2(OnPlayerBlockChange args) {
-            CatchPos cpos = (CatchPos)args.datapass;
-            Cuboid(cpos, args.holding, args.Player, args.x, args.y, args.z);
+        public void CatchBlock2(Player p, PlayerBlockChangeEventArgs args) {
+            p.OnPlayerBlockChange.Normal -= new Event<Player, PlayerBlockChangeEventArgs>.EventHandler(CatchBlock2);
+            CatchPos cpos = (CatchPos)p.GetDatapass(this.Name);
+            Cuboid(cpos, args.Holding, p, args.X, args.Y, args.Z);
             args.Cancel();
-            args.Unregister();
         }
         private void Cuboid(CatchPos cpos, byte NewType, Player p, ushort x, ushort y, ushort z) {
             List<Pos> buffer = new List<Pos>();
@@ -133,7 +136,7 @@ namespace CommandDll {
             }
             switch (cpos.cuboidType) {
                 case SolidType.solid:
-                    buffer.Capacity = Math.Abs(cpos.pos.x - x) * Math.Abs(cpos.pos.z - z) * Math.Abs(cpos.pos.y - y);
+                    buffer.Capacity = Math.Max(Math.Abs(cpos.pos.x - x), 1) * Math.Max(Math.Abs(cpos.pos.z - z), 1) * Math.Max(Math.Abs(cpos.pos.y - y), 1);
                     for (xx = Math.Min((ushort)(cpos.pos.x), x); xx <= Math.Max((ushort)(cpos.pos.x), x); ++xx) {
                         for (zz = Math.Min((ushort)(cpos.pos.z), z); zz <= Math.Max((ushort)(cpos.pos.z), z); ++zz) {
                             for (yy = Math.Min((ushort)(cpos.pos.y), y); yy <= Math.Max((ushort)(cpos.pos.y), y); ++yy) {
