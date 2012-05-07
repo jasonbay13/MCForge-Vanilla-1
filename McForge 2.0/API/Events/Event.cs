@@ -9,7 +9,7 @@ namespace MCForge.API.Events {
     /// </summary>
     /// <typeparam name="T1">The type of the sender</typeparam>
     /// <typeparam name="T2">The type of the arguments</typeparam>
-    public class Event<T1, T2> where T2 : ICloneable {
+    public class Event<T1, T2> where T2 : EventArgs {
         /// <summary>
         /// The delgate type of the events
         /// </summary>
@@ -62,34 +62,30 @@ namespace MCForge.API.Events {
             bool stoppable = args.GetType().GetInterface("IStoppable") != null;
             EventHandler[] tmp = important.ToArray();
             foreach (EventHandler eh in tmp) {
-                T2 newArgs = (T2)args.Clone();
-                eh.Invoke(sender, newArgs);
-                if (stoppable && !stopped && ((IStoppable)newArgs).Stopped) stopped = true;
-                if (cancelable && !canceled && ((ICancelable)newArgs).Canceled) canceled = true;
+                eh.Invoke(sender, args);
+                if (stoppable && !stopped && ((IStoppable)args).Stopped) stopped = true;
+                if (cancelable && !canceled && ((ICancelable)args).Canceled) canceled = true;
             }
             if (!stopped) {
                 tmp = high.ToArray();
                 foreach (EventHandler eh in tmp) {
-                    T2 newArgs = (T2)args.Clone();
-                    eh.Invoke(sender, newArgs);
-                    if (stoppable && !stopped && ((IStoppable)newArgs).Stopped) stopped = true;
-                    if (cancelable && !canceled && ((ICancelable)newArgs).Canceled) canceled = true;
+                    eh.Invoke(sender, args);
+                    if (stoppable && !stopped && ((IStoppable)args).Stopped) stopped = true;
+                    if (cancelable && !canceled && ((ICancelable)args).Canceled) canceled = true;
                 }
                 if (!stopped) {
                     tmp = normal.ToArray();
                     foreach (EventHandler eh in tmp) {
-                        T2 newArgs = (T2)args.Clone();
-                        eh.Invoke(sender, newArgs);
-                        if (stoppable && !stopped && ((IStoppable)newArgs).Stopped) stopped = true;
-                        if (cancelable && !canceled && ((ICancelable)newArgs).Canceled) canceled = true;
+                        eh.Invoke(sender, args);
+                        if (stoppable && !stopped && ((IStoppable)args).Stopped) stopped = true;
+                        if (cancelable && !canceled && ((ICancelable)args).Canceled) canceled = true;
                     }
                     if (!stopped) {
                         tmp = low.ToArray();
                         foreach (EventHandler eh in tmp) {
-                            T2 newArgs = (T2)args.Clone();
-                            eh.Invoke(sender, newArgs);
-                            if (stoppable && !stopped && ((IStoppable)newArgs).Stopped) stopped = true;
-                            if (cancelable && !canceled && ((ICancelable)newArgs).Canceled) canceled = true;
+                            eh.Invoke(sender, args);
+                            if (stoppable && !stopped && ((IStoppable)args).Stopped) stopped = true;
+                            if (cancelable && !canceled && ((ICancelable)args).Canceled) canceled = true;
                         }
                     }
                 }
@@ -99,12 +95,9 @@ namespace MCForge.API.Events {
             return canceled;
         }
     }
-
     /// <summary>
     /// The EventArgs base class
     /// </summary>
-    public abstract class EventArgs : ICloneable{
-
-        public abstract object Clone();
+    public abstract class EventArgs {
     }
 }

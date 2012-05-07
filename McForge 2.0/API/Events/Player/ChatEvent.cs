@@ -8,12 +8,12 @@ namespace MCForge.API.Events {
     /// <summary>
     /// PlayerChat event class
     /// </summary>
-    public class ChatEvent :Event<Player,ChatEventArgs> {
+    public class ChatEvent : Event<Player, ChatEventArgs> {
     }
     /// <summary>
     /// PlayerChatEventArgs
     /// </summary>
-    public class ChatEventArgs : EventArgs, ICloneable, ICancelable {
+    public class ChatEventArgs : EventArgs, ICancelable {
         /// <summary>
         /// Creates a new instance
         /// </summary>
@@ -24,14 +24,7 @@ namespace MCForge.API.Events {
         /// <summary>
         /// The message
         /// </summary>
-        public string Message;
-        /// <summary>
-        /// Returns a new instance representing this instance
-        /// </summary>
-        /// <returns>A new instance</returns>
-        public override object Clone() {
-            return new ChatEventArgs(Message);
-        }
+        public string Message { get; private set; }
         private bool canceled = false;
         /// <summary>
         /// Whether or not the handling should be canceled

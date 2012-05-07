@@ -13,7 +13,7 @@ namespace MCForge.API.Events {
     /// <summary>
     /// PlayerCommandEventArgs
     /// </summary>
-    public class CommandEventArgs : EventArgs, ICloneable, ICancelable {
+    public class CommandEventArgs : EventArgs, ICancelable {
         /// <summary>
         /// Creates a new instance
         /// </summary>
@@ -26,18 +26,11 @@ namespace MCForge.API.Events {
         /// <summary>
         /// The command (it might does not exist)
         /// </summary>
-        public string Command;
+        public string Command { get; private set; }
         /// <summary>
         /// The arguments to be passed to the command
         /// </summary>
-        public string[] Args;
-        /// <summary>
-        /// Returns a new instance representing this instance
-        /// </summary>
-        /// <returns>A new instance</returns>
-        public override object Clone() {
-            return new CommandEventArgs(Command, Args);
-        }
+        public string[] Args { get; private set; }
         private bool canceled = false;
         /// <summary>
         /// Whether or not the handling should be canceled

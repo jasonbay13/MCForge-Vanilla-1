@@ -610,6 +610,97 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
+        <member name="T:MCForge.API.Events.ConnectionEvent">
+            <summary>
+            PlayerConnection event class
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.ConnectionEventArgs">
+            <summary>
+            PlayConnectionEventArgs
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.ConnectionEventArgs.#ctor(System.Boolean)">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="connected">Whether the player is connected or not</param>
+        </member>
+        <member name="P:MCForge.API.Events.ConnectionEventArgs.Connected">
+            <summary>
+            Whether the player is connected or not
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.BlockChangeEvent">
+            <summary>
+            PlayerBlockChange event class
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.BlockChangeEventArgs">
+            <summary>
+            PlayerBlockChangeEventArgs
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.BlockChangeEventArgs.#ctor(System.UInt16,System.UInt16,System.UInt16,MCForge.API.PlayerEvent.ActionType,System.Byte)">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="x">The positions X coordinate</param>
+            <param name="y">The positions Y coordinate</param>
+            <param name="z">The positions Z coordinate</param>
+            <param name="action">The ActionType action</param>
+            <param name="holding">The type of the block</param>
+        </member>
+        <member name="M:MCForge.API.Events.BlockChangeEventArgs.#ctor(MCForge.API.PlayerEvent.ActionType,System.Byte,System.UInt16,System.UInt16,System.UInt16)">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="x">The positions X coordinate</param>
+            <param name="y">The positions Y coordinate</param>
+            <param name="z">The positions Z coordinate</param>
+            <param name="action">The ActionType action</param>
+            <param name="holding">The type of the block</param>
+        </member>
+        <member name="M:MCForge.API.Events.BlockChangeEventArgs.Cancel">
+            <summary>
+            Cancels the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.BlockChangeEventArgs.Allow">
+            <summary>
+            Allows the handling
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.BlockChangeEventArgs.Action">
+            <summary>
+            What we arre doing with this block
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.BlockChangeEventArgs.Holding">
+            <summary>
+            The block at the coordinates
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.BlockChangeEventArgs.X">
+            <summary>
+            The x coordinate of the block changed.
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.BlockChangeEventArgs.Y">
+            <summary>
+            The y coordinate of the block changed.
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.BlockChangeEventArgs.Z">
+            <summary>
+            The z coordinate of the block changed.
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.BlockChangeEventArgs.Canceled">
+            <summary>
+            Whether or not the handling should be canceled
+            </summary>
+        </member>
         <member name="M:MCForge.Core.PDB.CompareTo(MCForge.Core.PDB)">
             <summary>
             This allows a PDB to be compared to another PDB by looking at the username, and subsequently, it can then be sorted.
@@ -1253,6 +1344,48 @@
             The delegate used for callbacks.  The caller will have this method run when the event fires.
             </summary>
             <param name="e">The Event that fired</param>
+        </member>
+        <member name="T:MCForge.API.Events.CommandEvent">
+            <summary>
+            PlayerCommand event class
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.CommandEventArgs">
+            <summary>
+            PlayerCommandEventArgs
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.CommandEventArgs.#ctor(System.String,System.String[])">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="command">The command (it might does not exist)</param>
+            <param name="args">The arguments to be passed to the command</param>
+        </member>
+        <member name="M:MCForge.API.Events.CommandEventArgs.Cancel">
+            <summary>
+            Cancels the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.CommandEventArgs.Allow">
+            <summary>
+            Allows the handling
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.CommandEventArgs.Command">
+            <summary>
+            The command (it might does not exist)
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.CommandEventArgs.Args">
+            <summary>
+            The arguments to be passed to the command
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.CommandEventArgs.Canceled">
+            <summary>
+            Whether or not the handling should be canceled
+            </summary>
         </member>
         <member name="T:MCForge.API.System.OnCommandUnloaded">
             <summary>
@@ -2242,6 +2375,27 @@
             Description of OnSettingLoad.
             </summary>
         </member>
+        <member name="T:MCForge.API.Events.MoveEvent">
+            <summary>
+            PlayerMove event class
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.MoveEventArgs">
+            <summary>
+            PlayerMoveEventArgs
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.MoveEventArgs.#ctor(MCForge.Core.Vector3)">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="fromPosition">The position where the move started</param>
+        </member>
+        <member name="P:MCForge.API.Events.MoveEventArgs.FromPosition">
+            <summary>
+            The position where the move started
+            </summary>
+        </member>
         <member name="T:MCForge.Utils.StringUtils">
             <summary>
             Set of utils for manipulating strings
@@ -2455,6 +2609,26 @@
             Get or set the color of the background
             </summary>
         </member>
+        <member name="M:MCForge.API.Events.ReceivePacketEventArgs.Cancel">
+            <summary>
+            Cancels the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.ReceivePacketEventArgs.Allow">
+            <summary>
+            Allows the handling
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.ReceivePacketEventArgs.Data">
+            <summary>
+            Data Recieved
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.ReceivePacketEventArgs.Canceled">
+            <summary>
+            Whether or not the handling should be canceled
+            </summary>
+        </member>
         <member name="T:MCForge.Interface.Command.Command">
             <summary>
             The command class, used to store commands for players to use
@@ -2538,6 +2712,42 @@
             </summary>
             <param name="e">The Event that fired</param>
         </member>
+        <member name="T:MCForge.API.Events.ChatEvent">
+            <summary>
+            PlayerChat event class
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.ChatEventArgs">
+            <summary>
+            PlayerChatEventArgs
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.ChatEventArgs.#ctor(System.String)">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="message">The message</param>
+        </member>
+        <member name="M:MCForge.API.Events.ChatEventArgs.Cancel">
+            <summary>
+            Cancels the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.ChatEventArgs.Allow">
+            <summary>
+            Allows the handling
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.ChatEventArgs.Message">
+            <summary>
+            The message
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.ChatEventArgs.Canceled">
+            <summary>
+            Whether or not the handling should be canceled
+            </summary>
+        </member>
         <member name="T:MCForge.World.PerlinNoise">
             <summary>
             Implementation of 3D Perlin Noise after Ken Perlin's reference implementation.
@@ -2575,246 +2785,6 @@
             <summary>
             Description of SQLite.
             </summary>
-        </member>
-        <member name="M:MCForge.API.Events.ReceivePacketEventArgs.Cancel">
-            <summary>
-            Cancels the handling
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.ReceivePacketEventArgs.Allow">
-            <summary>
-            Allows the handling
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.ReceivePacketEventArgs.Data">
-            <summary>
-            Data Recieved
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.ReceivePacketEventArgs.Canceled">
-            <summary>
-            Whether or not the handling should be canceled
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.BlockChangeEvent">
-            <summary>
-            PlayerBlockChange event class
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.BlockChangeEventArgs">
-            <summary>
-            PlayerBlockChangeEventArgs
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.BlockChangeEventArgs.#ctor(System.UInt16,System.UInt16,System.UInt16,MCForge.API.PlayerEvent.ActionType,System.Byte)">
-            <summary>
-            Creates a new instance
-            </summary>
-            <param name="x">The positions X coordinate</param>
-            <param name="y">The positions Y coordinate</param>
-            <param name="z">The positions Z coordinate</param>
-            <param name="action">The ActionType action</param>
-            <param name="holding">The type of the block</param>
-        </member>
-        <member name="M:MCForge.API.Events.BlockChangeEventArgs.#ctor(MCForge.API.PlayerEvent.ActionType,System.Byte,System.UInt16,System.UInt16,System.UInt16)">
-            <summary>
-            Creates a new instance
-            </summary>
-            <param name="x">The positions X coordinate</param>
-            <param name="y">The positions Y coordinate</param>
-            <param name="z">The positions Z coordinate</param>
-            <param name="action">The ActionType action</param>
-            <param name="holding">The type of the block</param>
-        </member>
-        <member name="M:MCForge.API.Events.BlockChangeEventArgs.Clone">
-            <summary>
-            Returns a new instance representing this instance
-            </summary>
-            <returns>A new instance</returns>
-        </member>
-        <member name="M:MCForge.API.Events.BlockChangeEventArgs.Cancel">
-            <summary>
-            Cancels the handling
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.BlockChangeEventArgs.Allow">
-            <summary>
-            Allows the handling
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.BlockChangeEventArgs.Action">
-            <summary>
-            What we arre doing with this block
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.BlockChangeEventArgs.Holding">
-            <summary>
-            The block at the coordinates
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.BlockChangeEventArgs.X">
-            <summary>
-            The x coordinate of the block changed.
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.BlockChangeEventArgs.Y">
-            <summary>
-            The y coordinate of the block changed.
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.BlockChangeEventArgs.Z">
-            <summary>
-            The z coordinate of the block changed.
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.BlockChangeEventArgs.Canceled">
-            <summary>
-            Whether or not the handling should be canceled
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.ChatEvent">
-            <summary>
-            PlayerChat event class
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.ChatEventArgs">
-            <summary>
-            PlayerChatEventArgs
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.ChatEventArgs.#ctor(System.String)">
-            <summary>
-            Creates a new instance
-            </summary>
-            <param name="message">The message</param>
-        </member>
-        <member name="F:MCForge.API.Events.ChatEventArgs.Message">
-            <summary>
-            The message
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.ChatEventArgs.Clone">
-            <summary>
-            Returns a new instance representing this instance
-            </summary>
-            <returns>A new instance</returns>
-        </member>
-        <member name="M:MCForge.API.Events.ChatEventArgs.Cancel">
-            <summary>
-            Cancels the handling
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.ChatEventArgs.Allow">
-            <summary>
-            Allows the handling
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.ChatEventArgs.Canceled">
-            <summary>
-            Whether or not the handling should be canceled
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.CommandEvent">
-            <summary>
-            PlayerCommand event class
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.CommandEventArgs">
-            <summary>
-            PlayerCommandEventArgs
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.CommandEventArgs.#ctor(System.String,System.String[])">
-            <summary>
-            Creates a new instance
-            </summary>
-            <param name="command">The command (it might does not exist)</param>
-            <param name="args">The arguments to be passed to the command</param>
-        </member>
-        <member name="F:MCForge.API.Events.CommandEventArgs.Command">
-            <summary>
-            The command (it might does not exist)
-            </summary>
-        </member>
-        <member name="F:MCForge.API.Events.CommandEventArgs.Args">
-            <summary>
-            The arguments to be passed to the command
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.CommandEventArgs.Clone">
-            <summary>
-            Returns a new instance representing this instance
-            </summary>
-            <returns>A new instance</returns>
-        </member>
-        <member name="M:MCForge.API.Events.CommandEventArgs.Cancel">
-            <summary>
-            Cancels the handling
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.CommandEventArgs.Allow">
-            <summary>
-            Allows the handling
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.CommandEventArgs.Canceled">
-            <summary>
-            Whether or not the handling should be canceled
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.ConnectionEvent">
-            <summary>
-            PlayerConnection event class
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.ConnectionEventArgs">
-            <summary>
-            PlayConnectionEventArgs
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.ConnectionEventArgs.#ctor(System.Boolean)">
-            <summary>
-            Creates a new instance
-            </summary>
-            <param name="connected">Whether the player is connected or not</param>
-        </member>
-        <member name="F:MCForge.API.Events.ConnectionEventArgs.Connected">
-            <summary>
-            Whether the player is connected or not
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.ConnectionEventArgs.Clone">
-            <summary>
-            Returns a new instance representing this instance
-            </summary>
-            <returns>A new instance</returns>
-        </member>
-        <member name="T:MCForge.API.Events.MoveEvent">
-            <summary>
-            PlayerMove event class
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.MoveEventArgs">
-            <summary>
-            PlayerMoveEventArgs
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.MoveEventArgs.#ctor(MCForge.Core.Vector3)">
-            <summary>
-            Creates a new instance
-            </summary>
-            <param name="fromPosition">The position where the move started</param>
-        </member>
-        <member name="F:MCForge.API.Events.MoveEventArgs.FromPosition">
-            <summary>
-            The position where the move started
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.MoveEventArgs.Clone">
-            <summary>
-            Returns a new instance representing this instance
-            </summary>
-            <returns>A new instance</returns>
         </member>
     </members>
 </doc>

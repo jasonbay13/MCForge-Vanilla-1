@@ -13,7 +13,7 @@ namespace MCForge.API.Events {
     /// <summary>
     /// PlayConnectionEventArgs
     /// </summary>
-    public class ConnectionEventArgs : EventArgs, ICloneable {
+    public class ConnectionEventArgs : EventArgs {
         /// <summary>
         /// Creates a new instance
         /// </summary>
@@ -24,14 +24,6 @@ namespace MCForge.API.Events {
         /// <summary>
         /// Whether the player is connected or not
         /// </summary>
-        public bool Connected;
-
-        /// <summary>
-        /// Returns a new instance representing this instance
-        /// </summary>
-        /// <returns>A new instance</returns>
-        public override object Clone() {
-            return new ConnectionEventArgs(Connected);
-        }
+        public bool Connected { get; private set; }
     }
 }

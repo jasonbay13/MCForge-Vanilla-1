@@ -7,16 +7,14 @@ using MCForge.Entity;
 namespace MCForge.API.Events {
     public class ReceivePacket:Event<Player,ReceivePacketEventArgs> {
     }
-    public class ReceivePacketEventArgs:EventArgs,ICloneable,ICancelable {
-
+    public class ReceivePacketEventArgs:EventArgs,ICancelable {
+        public ReceivePacketEventArgs(byte[] data) {
+            this.Data = data;
+        }
         /// <summary>
         /// Data Recieved
         /// </summary>
-        public byte[] Data { get; set; }
-
-        public override object Clone() {
-            throw new NotImplementedException();
-        }
+        public byte[] Data { get; private set; }
         private bool canceled = false;
         /// <summary>
         /// Whether or not the handling should be canceled

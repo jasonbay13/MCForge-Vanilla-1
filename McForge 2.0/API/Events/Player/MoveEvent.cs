@@ -9,12 +9,12 @@ namespace MCForge.API.Events {
     /// <summary>
     /// PlayerMove event class
     /// </summary>
-    public class MoveEvent:Event<Player, MoveEventArgs> {
+    public class MoveEvent : Event<Player, MoveEventArgs> {
     }
     /// <summary>
     /// PlayerMoveEventArgs
     /// </summary>
-    public class MoveEventArgs : EventArgs, ICloneable {
+    public class MoveEventArgs : EventArgs {
         /// <summary>
         /// Creates a new instance
         /// </summary>
@@ -25,14 +25,6 @@ namespace MCForge.API.Events {
         /// <summary>
         /// The position where the move started
         /// </summary>
-        public Vector3 FromPosition;
-        /// <summary>
-        /// Returns a new instance representing this instance
-        /// </summary>
-        /// <returns>A new instance</returns>
-        public override object Clone() {
-            return new MoveEventArgs(FromPosition);
-        }
+        public Vector3 FromPosition { get; private set; }
     }
-
 }

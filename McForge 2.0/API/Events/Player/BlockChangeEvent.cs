@@ -14,7 +14,7 @@ namespace MCForge.API.Events {
     /// <summary>
     /// PlayerBlockChangeEventArgs
     /// </summary>
-    public class BlockChangeEventArgs : EventArgs, ICloneable, ICancelable {
+    public class BlockChangeEventArgs : EventArgs, ICancelable {
         /// <summary>
         /// Creates a new instance
         /// </summary>
@@ -42,30 +42,23 @@ namespace MCForge.API.Events {
         /// <summary>
         /// What we arre doing with this block
         /// </summary>
-        public ActionType Action { get; set; }
+        public ActionType Action { get; private set; }
         /// <summary>
         /// The block at the coordinates
         /// </summary>
-        public byte Holding { get; set; }
+        public byte Holding { get; private set; }
         /// <summary>
         /// The x coordinate of the block changed.
         /// </summary>
-        public ushort X { get; set; }
+        public ushort X { get; private set; }
         /// <summary>
         /// The y coordinate of the block changed.
         /// </summary>
-        public ushort Y { get; set; }
+        public ushort Y { get; private set; }
         /// <summary>
         /// The z coordinate of the block changed.
         /// </summary>
-        public ushort Z { get; set; }
-        /// <summary>
-        /// Returns a new instance representing this instance
-        /// </summary>
-        /// <returns>A new instance</returns>
-        public override object Clone() {
-            return new BlockChangeEventArgs(Action, Holding, X, Y, Z);
-        }
+        public ushort Z { get; private set; }
         private bool canceled = false;
         /// <summary>
         /// Whether or not the handling should be canceled
@@ -86,5 +79,5 @@ namespace MCForge.API.Events {
             canceled = false;
         }
     }
-    
+
 }
