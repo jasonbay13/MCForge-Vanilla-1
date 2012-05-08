@@ -180,6 +180,11 @@ namespace MCForge.Entity {
                 //TODO Database Stuff
 
                 Logger.Log("[System]: " + Ip + " logging in as " + Username + ".", Color.Green, Color.Black);
+                try
+                {
+                    Server.IRC.SendMessage(Username + " joined the game!");
+                }
+                catch { }
                 UniversalChat(Username + " joined the game!");
 
                 CheckDuplicatePlayers(Username);
@@ -549,6 +554,11 @@ namespace MCForge.Entity {
                           Username +
                           ": &f" +
                           incomingText;
+            try
+            {
+                Server.IRC.SendMessage(voiceString + Username + ": " + incomingText);
+            }
+            catch { }
             UniversalChat(msg);
         }
 
@@ -978,6 +988,11 @@ namespace MCForge.Entity {
 
             GlobalDie();
             Logger.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", Color.Gray, Color.Black);
+            try
+            {
+                Server.IRC.SendMessage("[System]: " + Username + " has disconnected");
+            }
+            catch { }
 
             Server.RemovePlayer(this);
             Server.Connections.Remove(this);

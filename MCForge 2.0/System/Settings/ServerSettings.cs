@@ -49,7 +49,7 @@ namespace MCForge.Utilities.Settings {
             if (_initCalled)
                 throw new ArgumentException("\"Settings.Init()\" can only be called once");
 
-
+            Random random = new Random();
             GenerateSalt();
 
             _initCalled = true;
@@ -75,6 +75,12 @@ namespace MCForge.Utilities.Settings {
                 new SettingNode("MySQL-Pooling", "True", null),
                 new SettingNode("MySQL-DBName", "MCForge", "The database name for MySQL"),
                 new SettingNode("SQLite-Filepath", "MCForge.db", "The filepath for the database"),
+                new SettingNode("IRC-Enabled", "false", "If set to true, IRC is enabled."),
+                new SettingNode("IRC-Server", "127.0.0.1", "IRC server to connect to"),
+                new SettingNode("IRC-Port", "6667", "IRC server port"),
+                new SettingNode("IRC-Nickname", "MCForge-" + random.Next(1000, 9999), "IRC nickname"),
+                new SettingNode("IRC-Channel", "#", "IRC channel to connect to"),
+                new SettingNode("IRC-NickServ", "password", "IRC NickServ password (optional when IRC is enabled)"),
                 
                 //TODO: add all of the default settings here
                                                         };

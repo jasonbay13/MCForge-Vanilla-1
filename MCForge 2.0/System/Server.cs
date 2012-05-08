@@ -163,6 +163,11 @@ namespace MCForge.Core {
         public static string URL = "";
 
         /// <summary>
+        /// The IRC client for the server
+        /// </summary>
+        public static IRC IRC = null;
+
+        /// <summary>
         /// This delegate is used when a command or plugin needs to call a method after a certain amount of time
         /// </summary>
         /// <param name="dataPass">This delegate passes the object that was passed to it back to the method that is to be invoked</param>
@@ -202,6 +207,12 @@ namespace MCForge.Core {
             StartListening();
             Started = true;
             Log("[Important]: Server Started.", ConsoleColor.Black, ConsoleColor.White);
+            IRC = new IRC();
+            try
+            {
+                IRC.Start();
+            }
+            catch { }
         }
         
         static void Update() {

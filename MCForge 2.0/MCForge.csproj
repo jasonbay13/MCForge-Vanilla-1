@@ -111,6 +111,7 @@
     <Compile Include="Interfaces\Plugin\IPlugin.cs" />
     <Compile Include="Player\PlayerNetworking.cs" />
     <Compile Include="System\FileUtils.cs" />
+    <Compile Include="System\IRC.cs" />
     <Compile Include="System\Logger.cs" />
     <Compile Include="System\Settings\ExtraSettings.cs" />
     <Compile Include="System\Settings\GroupSettings.cs" />
