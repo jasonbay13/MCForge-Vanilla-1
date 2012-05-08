@@ -21,40 +21,11 @@ namespace CommandDll.Information
 {
     public class CmdMessageHandler : ICommand
     {
-
-        public string Name
-        {
-            get { return "MessageHandler"; }
-        }
-
-        public string[] CommandNames
-        {
-            get { return new string[] { "v" }; }// "stop", "1", "2", "3", "4", "5", "6", "7", "8", "9", "next", "np", "nl", "previous", "prev", "pp", "pl" }; }
-        }
-
-        public CommandTypes Type
-        {
-            get { return CommandTypes.information; }
-        }
-
-        public string Author
-        {
-            get { return "ninedrafted"; }
-        }
-
-        public int Version
-        {
-            get { return 1; }
-        }
-
-        public string CUD
-        {
-            get { return ""; }
-        }
-
-        byte _Permission = 0;
-        public byte Permission { get { return _Permission; } }
-
+        public string Name { get { return "MessageHandler"; } }
+        public CommandTypes Type { get { return CommandTypes.information; } }
+        public string Author { get { return "ninedrafted"; } }
+        public int Version { get { return 1; } } public string CUD { get { return ""; } }
+        public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
         {
             if (viewer == null)
@@ -118,7 +89,6 @@ namespace CommandDll.Information
                 }
             }
         }
-
         //"stop", "1", "2", "3", "4", "5", "6", "7", "8", "9", "next", "np", "nl", "previous", "prev", "pp", "pl" }; }
         public void Help(Player p)
         {
@@ -139,7 +109,7 @@ namespace CommandDll.Information
         IPluginMessageViewer viewer;
         public void Initialize()
         {
-            Command.AddReference(this, CommandNames);
+            Command.AddReference(this, "v"); //new string[] { "stop", "1", "2", "3", "4", "5", "6", "7", "8", "9", "next", "np", "nl", "previous", "prev", "pp", "pl" }
         }
     }
 }
