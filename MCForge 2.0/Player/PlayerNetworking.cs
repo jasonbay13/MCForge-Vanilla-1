@@ -171,7 +171,7 @@ namespace MCForge.Entity {
                 }
 
                 ConnectionEventArgs eargs = new ConnectionEventArgs(true);
-                bool cancel = OnPlayerConnect.Call(this, eargs) | OnAllPlayersConnect.Call(this, eargs);
+                bool cancel = OnPlayerConnect.Call(this, eargs,OnAllPlayersConnect).Canceled;
                 if (cancel) {
                     Kick("Disconnected by event");
                     return;
@@ -253,7 +253,7 @@ namespace MCForge.Entity {
 
             bool placing = (action == 1);
             BlockChangeEventArgs eargs =new BlockChangeEventArgs(x, y, z, (placing ? ActionType.Place : ActionType.Delete), newType);
-            bool canceled = OnPlayerBlockChange.Call(this, eargs) | OnAllPlayersBlockChange.Call(this, eargs);
+            bool canceled = OnPlayerBlockChange.Call(this, eargs, OnAllPlayersBlockChange).Canceled;
             if (canceled) {
                 if (!fake)
                     SendBlockChange(x, z, y, Level.GetBlock(x, z, y));
@@ -312,7 +312,7 @@ namespace MCForge.Entity {
             Rot = new byte[2] { rotx, roty };
             if (!(Pos.x == x && Pos.y == y && Pos.z == z)) {
                 MoveEventArgs eargs = new MoveEventArgs(fromPosition);
-                bool cancel = OnPlayerMove.Call(this, eargs) | OnAllPlayersMove.Call(this, eargs);
+                bool cancel = OnPlayerMove.Call(this, eargs, OnAllPlayersMove).Canceled;
                 if (cancel) {
                     this.SendToPos(Pos, Rot);
                     return;
@@ -342,7 +342,7 @@ namespace MCForge.Entity {
                 return;
 
             ChatEventArgs eargs = new ChatEventArgs(incomingText);
-            bool canceled = OnPlayerChat.Call(this, eargs) | OnAllPlayersChat.Call(this, eargs);
+            bool canceled = OnPlayerChat.Call(this, eargs, OnAllPlayersChat).Canceled;
             if (canceled)
                 return;
 

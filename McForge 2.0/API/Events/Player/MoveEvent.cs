@@ -14,7 +14,7 @@ namespace MCForge.API.Events {
     /// <summary>
     /// PlayerMoveEventArgs
     /// </summary>
-    public class MoveEventArgs : EventArgs {
+    public class MoveEventArgs : EventArgs, ICancelable {
         /// <summary>
         /// Creates a new instance
         /// </summary>
@@ -26,5 +26,24 @@ namespace MCForge.API.Events {
         /// The position where the move started
         /// </summary>
         public Vector3 FromPosition { get; private set; }
+        private bool canceled = false;
+        /// <summary>
+        /// Whether or not the handling should be canceled
+        /// </summary>
+        public bool Canceled {
+            get { return canceled; }
+        }
+        /// <summary>
+        /// Cancels the handling
+        /// </summary>
+        public void Cancel() {
+            canceled = true;
+        }
+        /// <summary>
+        /// Allows the handling
+        /// </summary>
+        public void Allow() {
+            canceled = false;
+        }
     }
 }

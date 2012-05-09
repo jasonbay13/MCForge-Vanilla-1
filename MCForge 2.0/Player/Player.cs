@@ -243,7 +243,7 @@ namespace MCForge.Entity {
 
             string name = args[0].ToLower().Trim();
             CommandEventArgs eargs = new CommandEventArgs(name, sendArgs);
-            bool canceled = OnPlayerCommand.Call(this, eargs) | OnAllPlayersCommand.Call(this, eargs);
+            bool canceled = OnPlayerCommand.Call(this, eargs, OnAllPlayersCommand).Canceled;
             if (canceled) // If any event canceled us
                 return;
             if (Command.Commands.ContainsKey(name)) {
@@ -385,7 +385,7 @@ namespace MCForge.Entity {
             HandleBlockchange(x, y, z, (byte)ActionType.Place, type, true);
             return;
             BlockChangeEventArgs eargs=new BlockChangeEventArgs(x, y, z, ActionType.Place, type);
-            bool canceled = OnPlayerBlockChange.Call(this, eargs) | OnAllPlayersBlockChange.Call(this, eargs);
+            bool canceled = OnPlayerBlockChange.Call(this, eargs, OnAllPlayersBlockChange).Canceled;
             if (canceled) // If any event canceled us
                 return;
             if (blockChange != null) {
