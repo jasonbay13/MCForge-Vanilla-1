@@ -5,5 +5,6 @@ using System.Text;
 
 namespace MCForge.Utilities.Settings {
     class GroupSettings {
+        //should I move PlayerGroupProperties here? - cazzar
     }
 }

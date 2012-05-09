@@ -106,6 +106,7 @@
     <Compile Include="Database\MySQL.cs" />
     <Compile Include="Database\SQL.cs" />
     <Compile Include="Database\SQLite.cs" />
+    <Compile Include="Groups\CommandPermissionOverrides.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
     <Compile Include="Interfaces\Plugin\IPlugin.cs" />
