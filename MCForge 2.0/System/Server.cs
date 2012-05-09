@@ -188,7 +188,6 @@ namespace MCForge.Core {
             Logger.Log("Starting update timer", LogType.Debug);
             UpdateTimer.Start();
             Logger.Log("Log timer started", LogType.Debug);
-            Groups.PlayerGroup.InitDefaultGroups();
             Logger.Log("Loading DLL's", LogType.Debug);
             LoadAllDlls.Init();
             Logger.Log("Finished loading DLL's", LogType.Debug);
@@ -197,7 +196,9 @@ namespace MCForge.Core {
 
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
-            
+
+            Groups.PlayerGroup.Load();
+
             CreateCoreFiles();
             Logger.Log("Loading Bans", LogType.Debug);
             Logger.Log("IPBANS", LogType.Debug);
