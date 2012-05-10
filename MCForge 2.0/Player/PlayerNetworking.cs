@@ -474,6 +474,12 @@ namespace MCForge.Entity {
                     SendMessage("&a<&fTo Ops&a> " + group.color + Username + ": &f" + incomingText);
                 } //So players who aren't op see their messages
                 Logger.Log("<OpChat> <" + Username + "> " + incomingText);
+                try
+                {
+                    if (Server.IRC.opChannel != "#" || Server.IRC.opChannel != "")
+                        Server.IRC.SendUserMessage("<OpChat> <" + Username + "> " + incomingText, Server.IRC.opChannel);
+                }
+                catch { }
                 return;
             }
             if (incomingText[0] == '*') //Rank chat

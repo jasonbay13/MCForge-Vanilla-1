@@ -21,6 +21,7 @@ namespace MCForge.Core
         string password = "";
         int port = -1;
         string channel = "";
+        public string opChannel = "";
         StreamWriter swrite;
         StreamReader sread;
         NetworkStream sstream;
@@ -40,8 +41,9 @@ namespace MCForge.Core
             port = ServerSettings.GetSettingInt("IRC-Port");
             nickname = ServerSettings.GetSetting("IRC-Nickname");
             channel = ServerSettings.GetSetting("IRC-Channel");
+            opChannel = ServerSettings.GetSetting("IRC-OPChannel");
             password = ServerSettings.GetSetting("IRC-NickServ");
-            if (nickname == "" || server == "" || channel == "" || port == -1 || !ServerSettings.GetSettingBoolean("IRC-Enabled"))
+            if (nickname == "" || server == "" || channel == "#" || channel == "" || port == -1 || !ServerSettings.GetSettingBoolean("IRC-Enabled"))
                 return;
             ircControllers = LoadIrcControllers();
             Logger.Log("Connecting to IRC...");
@@ -56,7 +58,7 @@ namespace MCForge.Core
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error connecting to {0}: {1}", server, e);
+                Logger.Log("Error connecting to " + server + ": " + e);
                 return;
             }
 
@@ -72,7 +74,7 @@ namespace MCForge.Core
                 {
                     if ((line = sread.ReadLine()) != null && botOn)
                     {
-                        if (debug) Console.WriteLine(line);
+                        if (debug) Server.Log(line);
                         splitLine = line.Split(' ');
 
                         if (splitLine.Length > 0)
@@ -81,6 +83,11 @@ namespace MCForge.Core
                             {
                                 swrite.WriteLine("JOIN {0}", channel);
                                 swrite.Flush();
+                                if (opChannel != "#" || opChannel != "")
+                                {
+                                    swrite.WriteLine("JOIN {0}", opChannel);
+                                    swrite.Flush();
+                                }
                                 swrite.WriteLine("NS IDENTIFY {0} {1}", nickname, password);
                                 swrite.Flush();
                                 connected = true;
@@ -94,8 +101,8 @@ namespace MCForge.Core
                             }
                         }
                         string replyChannel = "";
-                        if (line.Split(' ')[2] != channel) replyChannel = line.Split('!')[0].Remove(0, 1);
-                        else replyChannel = channel;
+                        if (line.Split(' ')[2] != channel && line.Split(' ')[2] != opChannel) replyChannel = line.Split('!')[0].Remove(0, 1);
+                        else replyChannel = line.Split(' ')[2];
                         line = line.Replace("%", "&");
                         if (GetSpokenLine(line).Equals("!players"))
                         {
@@ -119,12 +126,24 @@ namespace MCForge.Core
                         }
                         else if (line.ToLower().Contains("privmsg") && splitLine[1] != "005")
                         {
-                            try
+                            if (replyChannel != opChannel)
                             {
-                                Player.UniversalChat("[IRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
-                                Server.Log("[IRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
+                                try
+                                {
+                                    Player.UniversalChat("[IRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
+                                    Server.Log("[IRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
+                                }
+                                catch { }
                             }
-                            catch { }
+                            else if (replyChannel == opChannel)
+                            {
+                                try
+                                {
+                                    Player.UniversalChatOps("[OPIRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
+                                    Server.Log("[OPIRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
+                                }
+                                catch { }
+                            }
                         }
                     }
                 }

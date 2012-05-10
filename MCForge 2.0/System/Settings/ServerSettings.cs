@@ -80,6 +80,7 @@ namespace MCForge.Utilities.Settings {
                 new SettingNode("IRC-Port", "6667", "IRC server port"),
                 new SettingNode("IRC-Nickname", "MCForge-" + random.Next(1000, 9999), "IRC nickname"),
                 new SettingNode("IRC-Channel", "#", "IRC channel to connect to"),
+                new SettingNode("IRC-OPChannel", "#", "IRC operator channel to connect to"),
                 new SettingNode("IRC-NickServ", "password", "IRC NickServ password (optional when IRC is enabled)"),
                 
                 //TODO: add all of the default settings here
