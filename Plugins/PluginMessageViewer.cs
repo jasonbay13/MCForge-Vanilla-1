@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Timers;
 using MCForge.Interface.Plugin;
 using MCForge.Entity;
-using MCForge.API.PlayerEvent;
+using MCForge.API.Events;
 using MCForge.Core;
 
 namespace PluginsDLL {
@@ -33,7 +33,7 @@ namespace PluginsDLL {
             else {
                 viewing.Add(new Viewer(p, message, 0));
                 viewing[viewing.Count - 1].NeedsUpdate += new Viewer.update(SendMessage);
-                OnPlayerDisconnect.Register(OnDisconnect, p);
+                p.OnPlayerDisconnect.Normal += new ConnectionEvent.EventHandler(OnDisconnect);
                 viewing[viewing.Count - 1].ForceUpdate();
             }
         }
@@ -204,11 +204,11 @@ namespace PluginsDLL {
                 SendEnd(p);
                 viewing[i].Stop();
                 viewing.RemoveAt(i);
-                //OnPlayerDisconnect.Unregister(OnDisconnect, p); //only one has to be unregistered!
+                p.OnPlayerDisconnect.Normal -= new ConnectionEvent.EventHandler(OnDisconnect);
             }
         }
-        public void OnDisconnect(OnPlayerDisconnect eventargs) {
-            Stop(eventargs.Player);
+        public void OnDisconnect(Player sender, ConnectionEventArgs eventargs) {
+            Stop(sender);
         }
         bool _isUnloading = false;
         public void OnUnload() {

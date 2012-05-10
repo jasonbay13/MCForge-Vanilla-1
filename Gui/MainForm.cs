@@ -26,7 +26,7 @@ using MCForge.Core;
 using MCForge.Interface;
 using MCForge.Utils;
 using MCForge.Entity;
-using MCForge.API.PlayerEvent;
+using MCForge.API.Events;
 using MCForge.Gui.API;
 
 namespace MCForge.Gui {
@@ -37,15 +37,14 @@ namespace MCForge.Gui {
             pluginManager = new MCForgeGuiManager(pluginsToolStripMenuItem);
         }
 
-        private void frmMain_Load(object sender, EventArgs e) {
+        private void frmMain_Load(object sender, System.EventArgs e) {
             new Thread(new ThreadStart(Server.Init)).Start();
             pluginManager.Init();
             pluginManager.AttachItems();
             Logger.OnRecieveLog += (obj, args) => {
                 coloredTextBox1.Write(args.Message + Environment.NewLine);
             };
-
-            OnPlayerConnect.Register(OnConnect, null);
+            Player.OnAllPlayersConnect.Important += new ConnectionEvent.EventHandler(OnConnect);
 
             chatButtonChange.Text = "Chat";
 
@@ -95,20 +94,20 @@ namespace MCForge.Gui {
 
         #region EventHandlers
 
-        void OnConnect(OnPlayerConnect args) {
+        void OnConnect(Player sender, ConnectionEventArgs args) {
             if (mPlayersListBox.InvokeRequired) {
-                mPlayersListBox.Invoke((MethodInvoker)delegate { OnConnect(args); });
+                mPlayersListBox.Invoke((MethodInvoker)delegate { OnConnect(sender, args); });
                 return;
             }
-            mPlayersListBox.Items.Add(args.Player.Username);
+            mPlayersListBox.Items.Add(sender.Username);
         }
 
-        void OnDisconnect(OnPlayerDisconnect args) {
+        void OnDisconnect(Player sender, ConnectionEventArgs args) {
             if (mPlayersListBox.InvokeRequired) {
-                mPlayersListBox.Invoke((MethodInvoker)delegate { OnDisconnect(args);  });
+                mPlayersListBox.Invoke((MethodInvoker)delegate { OnDisconnect(sender, args); });
                 return;
             }
-            mPlayersListBox.Items.Remove(args.Player.Username);
+            mPlayersListBox.Items.Remove(sender.Username);
         }
         #endregion
 

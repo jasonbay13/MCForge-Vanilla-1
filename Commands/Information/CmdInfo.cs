@@ -14,17 +14,15 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Reflection;
-using MCForge.API.PlayerEvent;
+using MCForge.API.Events;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utilities.Settings;
 using MCForge.World;
 using MCForge.Utils;
-namespace CommandDll
-{
-    public class CmdInfo : ICommand
-    {
+namespace CommandDll {
+    public class CmdInfo : ICommand {
         public string Name { get { return "Info"; } }
         public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "jasonbay13"; } }
@@ -32,8 +30,7 @@ namespace CommandDll
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
-        public void Use(Player p, string[] args)
-        {
+        public void Use(Player p, string[] args) {
             if (args.Length != 0) { Help(p); return; }
             p.SendMessage("This server's name is &b" + ServerSettings.GetSetting("servername") + Server.DefaultColor + ".");
             p.SendMessage(Server.Players.Count == 1 ? "There is no one else on the server" : "There are currently " + Server.Players.Count + " players on this server"); //TODO dont include hidden if above current rank
@@ -54,23 +51,20 @@ namespace CommandDll
             p.SendMessage(upTime);
             p.SendMessage("Type \"yes\" to see the devs list.");
 
-            OnPlayerChat.Register((t) =>
-            {
-                p.ExtraData.CreateIfNotExist("LastCmd", "");
-                if (t.message.ToLower() == "yes" && t.Player.ExtraData["LastCmd"] == "info") 
-                    Command.all["devs"].Use(p, new string[0]); 
-                t.Cancel(); 
-                t.Unregister();
-            }, p);
+            p.OnPlayerChat.Normal += (sender, eventargs) => {
+                sender.ExtraData.CreateIfNotExist("LastCmd", "");
+                if (eventargs.Message.ToLower() == "yes" && sender.ExtraData["LastCmd"] == "info")
+                    Command.all["devs"].Use(p, new string[0]);
+                eventargs.Cancel();
+                eventargs.Unregister();
+            };
         }
 
-        public void Help(Player p)
-        {
+        public void Help(Player p) {
             p.SendMessage("/info - Shows the server info.");
         }
 
-        public void Initialize()
-        {
+        public void Initialize() {
             Command.AddReference(this, "info");
         }
     }

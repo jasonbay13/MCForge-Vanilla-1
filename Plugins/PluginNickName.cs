@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge.Interface.Plugin;
-using MCForge.API.PlayerEvent;
+using MCForge.API.Events;
 using MCForge.Entity;
 
 namespace Plugins {
@@ -38,14 +38,23 @@ namespace Plugins {
             pList = new Dictionary<Player, string>();
         }
 
-        public void OnUnload() {
-            
+        public void SetNick(Player p, string nick) {
+            pList.Add(p, nick);
+            p.OnPlayerChat.Normal += new ChatEvent.EventHandler(OnChat);
         }
 
-        void OnChat(OnPlayerChat args) {
-            if (pList.ContainsKey(args.Player)) {
-                var p = Player.Find(pList[args.Player]);
+        public void OnUnload() {
+
+        }
+
+        void OnChat(Player pl, ChatEventArgs args) {
+            if (pList.ContainsKey(pl)) {
+                var p = Player.Find(pList[pl]);
+                args.Username = pList[p];
                 //Player.UniversalChat(p.voicestring + p.color + p.prefix + p.Username + ": &f" + args.message);
+            }
+            else {
+                pl.OnPlayerChat.Normal -= new ChatEvent.EventHandler(OnChat);
             }
         }
     }

@@ -14,17 +14,15 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
-using MCForge.API.PlayerEvent;
+using MCForge.API.Events;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
 using MCForge.Utils;
 
-namespace CommandDll
-{
-    public class CmdMapInfo : ICommand
-    {
+namespace CommandDll {
+    public class CmdMapInfo : ICommand {
         public string Name { get { return "MapInfo"; } }
         public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "jasonbay13"; } }
@@ -32,8 +30,7 @@ namespace CommandDll
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
-        public void Use(Player p, string[] args)
-        {
+        public void Use(Player p, string[] args) {
             Level l = args.Length != 0
                 ? Level.Levels.Find(lev => { return lev.Name.IndexOf(String.Join(" ", args)) != -1; })
                 : p.Level;
@@ -46,43 +43,39 @@ namespace CommandDll
             p.SendMessage(String.Concat(Colors.yellow, "Physics Tick: ", Colors.white, l.PhysicsTick));
             p.SendMessage(String.Concat("To see a list of players currently on ", l.Name, ", type \"yes\"."));
             //OnPlayerChat.Register(plist, MCForge.API.Priority.Normal, l, p);
-            OnPlayerChat.Register(plist, p).datapass = l;
+            p.OnPlayerChat.Normal += new ChatEvent.EventHandler(plist);
+            p.setDatapass("mapinfoLevel", l);
         }
 
-        private void plist(OnPlayerChat eventargs)
-        {
-            eventargs.Unregister();
-            if (eventargs.message.ToLower() != "yes" || eventargs.Player.ExtraData.GetIfExist("LastCmd") != "mapinfo" && eventargs.Player.ExtraData.GetIfExist("LastCmd") != "mi")
+        private void plist(Player sender, ChatEventArgs eventargs) {
+            sender.OnPlayerChat.Normal -= new ChatEvent.EventHandler(plist);
+            if (eventargs.Message.ToLower() != "yes" || sender.ExtraData.GetIfExist("LastCmd") != "mapinfo" && sender.ExtraData.GetIfExist("LastCmd") != "mi")
                 return;
 
             eventargs.Cancel();
-            List<Player> templist = Server.Players.FindAll((p) => { return p.Level == (Level)eventargs.datapass; });
+            Level l = (Level)sender.GetDatapass("mapinfoLevel");
+            List<Player> templist = Server.Players.FindAll((p) => { return p.Level == l; });
 
-            if (templist.Count == 0)
-            {
-                eventargs.Player.SendMessage("No one is on " + ((Level)eventargs.datapass).Name + ".");
+            if (templist.Count == 0) {
+                sender.SendMessage("No one is on " + l.Name + ".");
                 return;
             }
-            if (templist.Count == 1 && eventargs.Player.Level == (Level)eventargs.datapass)
-            {
-                eventargs.Player.SendMessage("No one besides you is on " + ((Level)eventargs.datapass).Name + ".");
+            if (templist.Count == 1 && sender.Level == l) {
+                sender.SendMessage("No one besides you is on " + l.Name + ".");
                 return;
             }
 
-            templist.ForEach((p) =>
-            {
-                eventargs.Player.SendMessage(String.Concat((string)p.ExtraData.GetIfExist("Color"), p.Username));
+            templist.ForEach((p) => {
+                sender.SendMessage(String.Concat((string)p.ExtraData.GetIfExist("Color"), p.Username));
             });
         }
 
-        public void Help(Player p)
-        {
+        public void Help(Player p) {
             p.SendMessage("/mapinfo [mapname] - Shows info of the map your currently on or mapname.");
             p.SendMessage("Shortcut: /mi");
         }
 
-        public void Initialize()
-        {
+        public void Initialize() {
             Command.AddReference(this, new string[] { "mapinfo", "mi" });
         }
     }

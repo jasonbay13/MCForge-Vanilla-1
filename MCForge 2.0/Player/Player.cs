@@ -18,7 +18,6 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
-using MCForge.API.PlayerEvent;
 using MCForge.Core;
 using MCForge.Groups;
 using MCForge.Interface.Command;
