@@ -85,15 +85,6 @@
     <Compile Include="API\Events\Player\ConnectionEvent.cs" />
     <Compile Include="API\Events\Player\MoveEvent.cs" />
     <Compile Include="API\Events\System\ReceivePacket.cs" />
-    <Compile Include="API\Player\OnPlayerBlockChange.cs" />
-    <Compile Include="API\Player\OnPlayerChat.cs" />
-    <Compile Include="API\Player\OnPlayerCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="API\Player\OnPlayerConnect.cs" />
-    <Compile Include="API\Player\OnPlayerDisconnect.cs" />
-    <Compile Include="API\Player\OnPlayerMove.cs" />
-    <Compile Include="API\Player\PlayerEvent.cs" />
     <Compile Include="API\Priority.cs" />
     <Compile Include="API\System\OnCommandLoaded.cs" />
     <Compile Include="API\System\OnCommandUnloaded.cs" />

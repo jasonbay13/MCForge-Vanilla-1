@@ -50,6 +50,13 @@ namespace MCForge.API.Events {
             remove { important.Remove(value); }
         }
         /// <summary>
+        /// Represents all priority levels (for removing only)
+        /// </summary>
+        public event EventHandler All {
+            add { }
+            remove { normal.Remove(value); }
+        }
+        /// <summary>
         /// Invokes an event
         /// </summary>
         /// <param name="sender">The object invoking the event</param>
@@ -84,13 +91,13 @@ namespace MCForge.API.Events {
             bool cancelable = args.GetType().GetInterface("ICancelable") != null;
             bool stopped = false;
             bool stoppable = args.GetType().GetInterface("IStoppable") != null;
-            CallPriorityGroup(important.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+            CallPriorityGroup(important, sender, args, stoppable, ref stopped, cancelable, ref canceled);
             if (!stopped) {
-                CallPriorityGroup(high.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                CallPriorityGroup(high, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                 if (!stopped) {
-                    CallPriorityGroup(normal.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                    CallPriorityGroup(normal, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                     if (!stopped) {
-                        CallPriorityGroup(low.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                        CallPriorityGroup(low, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                     }
                 }
             }
@@ -107,22 +114,22 @@ namespace MCForge.API.Events {
             bool stoppable = args.GetType().GetInterface("IStoppable") != null;
             T2 orig = (T2)((ICloneable)args).Clone();
             T2 ret = default(T2);
-            CallPriorityGroup(important.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+            CallPriorityGroup(important, sender, args, stoppable, ref stopped, cancelable, ref canceled);
             if (!((IEquatable<T2>)orig).Equals(args))
                 ret = (T2)((ICloneable)args).Clone();
             if (!stopped) {
                 args = (T2)((ICloneable)orig).Clone();
-                CallPriorityGroup(high.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                CallPriorityGroup(high, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                 if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args))
                     ret = (T2)((ICloneable)args).Clone();
                 if (!stopped) {
                     args = (T2)((ICloneable)orig).Clone();
-                    CallPriorityGroup(normal.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                    CallPriorityGroup(normal, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                     if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args))
                         ret = (T2)((ICloneable)args).Clone();
                     if (!stopped) {
                         args = (T2)((ICloneable)orig).Clone();
-                        CallPriorityGroup(low.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                        CallPriorityGroup(low, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                         if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args))
                             ret = (T2)((ICloneable)args).Clone();
                     }
@@ -135,22 +142,23 @@ namespace MCForge.API.Events {
             return ret;
         }
 
-        private T2 CallNotCloneable(T1 sender, T2 args, Event<T1,T2> other) {
+        private T2 CallNotCloneable(T1 sender, T2 args, Event<T1, T2> other) {
             bool canceled = false;
             bool cancelable = args.GetType().GetInterface("ICancelable") != null;
             bool stopped = false;
             bool stoppable = args.GetType().GetInterface("IStoppable") != null;
-            CallPriorityGroup(important.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
-            CallPriorityGroup(other.important.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+            EventHandler[] toUnregister;
+            CallPriorityGroup(important, sender, args, stoppable, ref stopped, cancelable, ref canceled);
+            CallPriorityGroup(other.important, sender, args, stoppable, ref stopped, cancelable, ref canceled);
             if (!stopped) {
-                CallPriorityGroup(high.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                CallPriorityGroup(other.high.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                CallPriorityGroup(high, sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                CallPriorityGroup(other.high, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                 if (!stopped) {
-                    CallPriorityGroup(normal.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                    CallPriorityGroup(other.normal.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                    CallPriorityGroup(normal, sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                    CallPriorityGroup(other.normal, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                     if (!stopped) {
-                        CallPriorityGroup(low.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                        CallPriorityGroup(other.low.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                        CallPriorityGroup(low, sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                        CallPriorityGroup(other.low, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                     }
                 }
             }
@@ -160,33 +168,33 @@ namespace MCForge.API.Events {
                 if (SystemLvl != null) SystemLvl(sender, args);
             return args;
         }
-        private T2 CallCloneable(T1 sender, T2 args, Event<T1,T2> other) {
+        private T2 CallCloneable(T1 sender, T2 args, Event<T1, T2> other) {
             bool canceled = false;
             bool cancelable = args.GetType().GetInterface("ICancelable") != null;
             bool stopped = false;
             bool stoppable = args.GetType().GetInterface("IStoppable") != null;
             T2 orig = (T2)((ICloneable)args).Clone();
             T2 ret = default(T2);
-            CallPriorityGroup(important.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
-            CallPriorityGroup(other.important.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+            CallPriorityGroup(important, sender, args, stoppable, ref stopped, cancelable, ref canceled);
+            CallPriorityGroup(other.important, sender, args, stoppable, ref stopped, cancelable, ref canceled);
             if (!((IEquatable<T2>)orig).Equals(args))
                 ret = (T2)((ICloneable)args).Clone();
             if (!stopped) {
                 args = (T2)((ICloneable)orig).Clone();
-                CallPriorityGroup(high.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                CallPriorityGroup(other.high.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                CallPriorityGroup(high, sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                CallPriorityGroup(other.high, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                 if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args))
                     ret = (T2)((ICloneable)args).Clone();
                 if (!stopped) {
                     args = (T2)((ICloneable)orig).Clone();
-                    CallPriorityGroup(normal.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                    CallPriorityGroup(other.normal.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                    CallPriorityGroup(normal, sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                    CallPriorityGroup(other.normal, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                     if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args))
                         ret = (T2)((ICloneable)args).Clone();
                     if (!stopped) {
                         args = (T2)((ICloneable)orig).Clone();
-                        CallPriorityGroup(low.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                        CallPriorityGroup(other.low.ToArray(), sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                        CallPriorityGroup(low, sender, args, stoppable, ref stopped, cancelable, ref canceled);
+                        CallPriorityGroup(other.low, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                         if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args))
                             ret = (T2)((ICloneable)args).Clone();
                     }
@@ -198,11 +206,16 @@ namespace MCForge.API.Events {
                 if (SystemLvl != null) SystemLvl(sender, ret);
             return ret;
         }
-        private T2 CallPriorityGroup(EventHandler[] priorityGroup,T1 sender, T2 args, bool stoppable, ref bool stopped, bool cancelable, ref bool canceled) {
-            foreach (EventHandler eh in priorityGroup) {
+        private T2 CallPriorityGroup(List<EventHandler> priorityGroup, T1 sender, T2 args, bool stoppable, ref bool stopped, bool cancelable, ref bool canceled) {
+
+            foreach (EventHandler eh in priorityGroup.ToArray()) {
                 eh.Invoke(sender, args);
                 if (stoppable && !stopped && ((IStoppable)args).Stopped) stopped = true;
                 if (cancelable && !canceled && ((ICancelable)args).Canceled) canceled = true;
+                if (args.Disable) {
+                    priorityGroup.Remove(eh);
+                    args.Disable = false;
+                }
             }
             return args;
         }
@@ -211,5 +224,15 @@ namespace MCForge.API.Events {
     /// The EventArgs base class
     /// </summary>
     public abstract class EventArgs {
+        /// <summary>
+        /// Gets or sets whether the event should be disabled for this method, or not.
+        /// </summary>
+        public bool Disable = false;
+        /// <summary>
+        /// Unregisters the current invoked eventhandler form this event.
+        /// </summary>
+        public void Unregister() {
+            Disable = true;
+        }
     }
 }

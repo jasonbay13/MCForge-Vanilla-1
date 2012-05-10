@@ -19,7 +19,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using MCForge.API.PlayerEvent;
 using MCForge.API.System;
 using MCForge.Core;
 using MCForge.Groups;
@@ -171,7 +170,7 @@ namespace MCForge.Entity {
                 }
 
                 ConnectionEventArgs eargs = new ConnectionEventArgs(true);
-                bool cancel = OnPlayerConnect.Call(this, eargs,OnAllPlayersConnect).Canceled;
+                bool cancel = OnPlayerConnect.Call(this, eargs, OnAllPlayersConnect).Canceled;
                 if (cancel) {
                     Kick("Disconnected by event");
                     return;
@@ -180,8 +179,7 @@ namespace MCForge.Entity {
                 //TODO Database Stuff
 
                 Logger.Log("[System]: " + Ip + " logging in as " + Username + ".", Color.Green, Color.Black);
-                try
-                {
+                try {
                     Server.IRC.SendMessage(Username + " joined the game!");
                 }
                 catch { }
@@ -235,7 +233,7 @@ namespace MCForge.Entity {
             HandleBlockchange(x, y, z, action, newType, false);
         }
         protected void HandleBlockchange(ushort x, ushort y, ushort z, byte action, byte newType, bool fake) {
-            
+
 
             LastClick = new Vector3(x, y, z);
 
@@ -252,14 +250,14 @@ namespace MCForge.Entity {
             }
 
             bool placing = (action == 1);
-            BlockChangeEventArgs eargs =new BlockChangeEventArgs(x, y, z, (placing ? ActionType.Place : ActionType.Delete), newType);
+            BlockChangeEventArgs eargs = new BlockChangeEventArgs(x, y, z, (placing ? ActionType.Place : ActionType.Delete), newType);
             bool canceled = OnPlayerBlockChange.Call(this, eargs, OnAllPlayersBlockChange).Canceled;
             if (canceled) {
                 if (!fake)
                     SendBlockChange(x, z, y, Level.GetBlock(x, z, y));
                 return;
             }
-            
+
             if (blockChange != null) {
                 if (fake)
                     SendBlockChange(x, z, y, currentType);
@@ -339,11 +337,6 @@ namespace MCForge.Entity {
             }
 
             if (incomingText.Length == 0)
-                return;
-
-            ChatEventArgs eargs = new ChatEventArgs(incomingText);
-            bool canceled = OnPlayerChat.Call(this, eargs, OnAllPlayersChat).Canceled;
-            if (canceled)
                 return;
 
             //Fixes crash
@@ -430,8 +423,14 @@ namespace MCForge.Entity {
                     _storedMessage += incomingText.Replace("<", "|<|");
                     SendMessage("Message appended!");
                     return;
-                }  
+                }
             }
+            ChatEventArgs eargs = new ChatEventArgs(incomingText, Username);
+            bool canceled = OnPlayerChat.Call(this, eargs, OnAllPlayersChat).Canceled;
+            if (canceled || eargs.Message.Length == 0)
+                return;
+            incomingText = eargs.Message;
+            string nickname = eargs.Username;
 
             //TODO: add this to a different plugin, its a mess right here, and i hate it
             if (Server.voting) {
@@ -447,19 +446,19 @@ namespace MCForge.Entity {
                     return;
                 }
                 string vote = incomingText.ToLower();
-                if (vote == "yes" || vote == "y") { 
-                    Server.YesVotes++; 
-                    ExtraData["Voted"] = true; 
-                    SendMessage("Thanks for voting!"); 
-                    return; 
+                if (vote == "yes" || vote == "y") {
+                    Server.YesVotes++;
+                    ExtraData["Voted"] = true;
+                    SendMessage("Thanks for voting!");
+                    return;
                 }
-                else if (vote == "no" || vote == "n") { 
-                    Server.NoVotes++; 
-                    ExtraData["Voted"] = true; 
-                    SendMessage("Thanks for voting!"); 
-                    return; 
+                else if (vote == "no" || vote == "n") {
+                    Server.NoVotes++;
+                    ExtraData["Voted"] = true;
+                    SendMessage("Thanks for voting!");
+                    return;
                 }
-                else { 
+                else {
                     SendMessage("Use either %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + " to vote!");
                 }
 
@@ -474,8 +473,7 @@ namespace MCForge.Entity {
                     SendMessage("&a<&fTo Ops&a> " + group.color + Username + ": &f" + incomingText);
                 } //So players who aren't op see their messages
                 Logger.Log("<OpChat> <" + Username + "> " + incomingText);
-                try
-                {
+                try {
                     if (Server.IRC.opChannel != "#" || Server.IRC.opChannel != "")
                         Server.IRC.SendUserMessage("<OpChat> <" + Username + "> " + incomingText, Server.IRC.opChannel);
                 }
@@ -489,15 +487,15 @@ namespace MCForge.Entity {
                 if (!groupname.EndsWith("ed") && !groupname.EndsWith("s")) {
                     groupname += "s";
                 } //Plural
-                RankChat(this, "&a<&fTo " + groupname + "&a> " + group.color + Username + ": &f" + incomingText);
-                Logger.Log("<" + groupname + " Chat> <" + Username + "> " + incomingText);
+                RankChat(this, "&a<&fTo " + groupname + "&a> " + group.color + nickname + ": &f" + incomingText);
+                Logger.Log("<" + groupname + " Chat> <" + Username + " as " + nickname + "> " + incomingText);
                 return;
             }
             if (incomingText[0] == '!') //Level chat
             {
                 incomingText = incomingText.Trim().TrimStart('!');
-                LevelChat(this, "&a<&f" + Level.Name + "&a> " + Username + ":&f " + incomingText);
-                Logger.Log("<" + Level.Name + " Chat> " + Username + ": " + incomingText);
+                LevelChat(this, "&a<&f" + Level.Name + "&a> " + nickname + ":&f " + incomingText);
+                Logger.Log("<" + Level.Name + " Chat> " + Username + " as " + nickname + ": " + incomingText);
                 return;
             }
 
@@ -518,15 +516,16 @@ namespace MCForge.Entity {
             {
                 ExtraData.CreateIfNotExist("WhisperTo", null);
                 Player to = (Player)ExtraData.GetIfExist("WhisperTo");
-                if (to == null) { 
-                    SendMessage("Player not found!"); 
-                    return; 
+                if (to == null) {
+                    SendMessage("Player not found!");
+                    return;
                 }
-                if (to == this) { 
-                    SendMessage("Trying to talk to yourself huh?"); 
-                    return; 
+                if (to == this) {
+                    SendMessage("Trying to talk to yourself huh?");
+                    return;
                 }
 
+                //no whispering nicknames
                 SendMessage("[>] <" + to.Username + ">&f " + incomingText);
                 to.SendMessage("[<] " + Username + ":&f " + incomingText);
                 return;
@@ -545,23 +544,23 @@ namespace MCForge.Entity {
                     SendMessage("Player not found!");
                     return;
                 }
+                //no whispering nicknames
                 SendMessage("[>] <" + to.Username + ">&f " + incomingText.Trim());
                 to.SendMessage("[<] " + Username + ":&f " + incomingText.Trim());
                 return;
             }
             //TODO: remove to place better
-            Logger.Log("<" + Username + "> " + incomingText);
+            Logger.Log("<" + Username + " as " + nickname + "> " + incomingText);
             var voiceString = (string)ExtraData.GetIfExist("VoiceString") ?? "";
             var mColor = (string)ExtraData.GetIfExist("Color") ?? group.color;
             var mPrefix = (string)ExtraData.GetIfExist("Prefix") ?? "";
             string msg = voiceString +
                           mColor +
                           mPrefix +
-                          Username +
+                          nickname +
                           ": &f" +
                           incomingText;
-            try
-            {
+            try {
                 Server.IRC.SendMessage(voiceString + Username + ": " + incomingText);
             }
             catch { }
@@ -836,7 +835,7 @@ namespace MCForge.Entity {
             int diffR0 = tempRot[0] - tempRot[0];
             int diffR1 = tempRot[1] - tempRot[1];
 
-            if (ForceTp) 
+            if (ForceTp)
                 changed = 4;
             else {
                 //TODO rewrite local pos change code
@@ -994,8 +993,7 @@ namespace MCForge.Entity {
 
             GlobalDie();
             Logger.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", Color.Gray, Color.Black);
-            try
-            {
+            try {
                 Server.IRC.SendMessage("[System]: " + Username + " has disconnected");
             }
             catch { }

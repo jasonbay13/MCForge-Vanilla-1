@@ -14,43 +14,35 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
-using MCForge.API.PlayerEvent;
+using MCForge.API.Events;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
 
-namespace CommandDll
-{
-    public class CmdMeasure : ICommand
-    {
+namespace CommandDll {
+    public class CmdMeasure : ICommand {
         public string Name { get { return "Measure"; } }
         public CommandTypes Type { get { return CommandTypes.information; } }
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 30; } }
-        public void Use(Player p, string[] args)
-        {
+        public void Use(Player p, string[] args) {
             CatchPos cpos = new CatchPos();
-            if (args.Length != 0)
-            {
+            if (args.Length != 0) {
                 cpos.ignore = new List<byte>();
-                for (int i = 0; i < args.Length; i++)
-                {
-                    try
-                    {
+                for (int i = 0; i < args.Length; i++) {
+                    try {
                         cpos.ignore.Add(Block.NameToBlock(args[i]));
                     }
-                    catch
-                    {
+                    catch {
                         p.SendMessage("Could not find the block '" + args[i] + "'");
                         return;
                     }
                 }
                 string s = "";
-                for (int i = 0; i < cpos.ignore.Count; i++)
-                {
+                for (int i = 0; i < cpos.ignore.Count; i++) {
                     s += ((Block)cpos.ignore[i]).Name;
                     if (i == cpos.ignore.Count - 2) s += " and ";
                     else if (i != cpos.ignore.Count - 1) s += ", ";
@@ -58,58 +50,54 @@ namespace CommandDll
                 p.SendMessage("Ignoring " + s + ".");
             }
             //else
-                //cpos.ignore.Add(Block.NameToByte("unknown")); //So it doesn't ignore air.
+            //cpos.ignore.Add(Block.NameToByte("unknown")); //So it doesn't ignore air.
             p.SendMessage("Place two blocks to determine the edges.");
             //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
-            OnPlayerBlockChange.Register(CatchBlock, p, cpos);
+            p.setDatapass("CmdMeasure_cpos", cpos);
+            p.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock);
+
         }
         //public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
-        public void CatchBlock(OnPlayerBlockChange args)
-        {
+        public void CatchBlock(Player sender, BlockChangeEventArgs args) {
             args.Cancel();
             args.Unregister();
-            args.Player.SendBlockChange(args.x, args.z, args.y, args.Player.Level.GetBlock(args.x, args.z, args.y));
-            CatchPos cpos = (CatchPos)args.datapass;
-            cpos.FirstBlock = new Vector3(args.x, args.z, args.y);
-            OnPlayerBlockChange.Register(CatchBlock2, args.Player, cpos);
+            sender.SendBlockChange(args.X, args.Z, args.Y, sender.Level.GetBlock(args.X, args.Z, args.Y));
+            CatchPos cpos = (CatchPos)sender.GetDatapass("CmdMeasure_cpos");
+            cpos.FirstBlock = new Vector3(args.X, args.Z, args.Y);
+            sender.setDatapass("CmdMeasure_cpos", cpos);
+            sender.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock2);
             //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock2), (object)cpos);
         }
         //public void CatchBlock2(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass)
-        public void CatchBlock2(OnPlayerBlockChange args)
-        {
+        public void CatchBlock2(Player sender, BlockChangeEventArgs args) {
             args.Cancel();
             args.Unregister();
-            args.Player.SendBlockChange(args.x, args.z, args.y, args.Player.Level.GetBlock(args.x, args.z, args.y));
-            CatchPos cpos = (CatchPos)args.datapass;
+            sender.SendBlockChange(args.X, args.Z, args.Y, sender.Level.GetBlock(args.X, args.Z, args.Y));
+            CatchPos cpos = (CatchPos)sender.GetDatapass("CmdMeasure_cpos");
             Vector3 FirstBlock = cpos.FirstBlock;
             ushort xx, zz, yy;
             int count = 0;
-            for (xx = Math.Min((ushort)(FirstBlock.x), args.x); xx <= Math.Max((ushort)(FirstBlock.x), args.x); ++xx)
-                for (zz = Math.Min((ushort)(FirstBlock.z), args.z); zz <= Math.Max((ushort)(FirstBlock.z), args.z); ++zz)
-                    for (yy = Math.Min((ushort)(FirstBlock.y), args.y); yy <= Math.Max((ushort)(FirstBlock.y), args.y); ++yy)
-                    {
-                        if (cpos.ignore == null || !cpos.ignore.Contains(args.Player.Level.GetBlock(xx, zz, yy)))
-                        {
+            for (xx = Math.Min((ushort)(FirstBlock.x), args.X); xx <= Math.Max((ushort)(FirstBlock.x), args.X); ++xx)
+                for (zz = Math.Min((ushort)(FirstBlock.z), args.Z); zz <= Math.Max((ushort)(FirstBlock.z), args.Z); ++zz)
+                    for (yy = Math.Min((ushort)(FirstBlock.y), args.Y); yy <= Math.Max((ushort)(FirstBlock.y), args.Y); ++yy) {
+                        if (cpos.ignore == null || !cpos.ignore.Contains(sender.Level.GetBlock(xx, zz, yy))) {
                             count++;
                         }
                     }
-            args.Player.SendMessage(count + " blocks are between (" + FirstBlock.x + ", " + FirstBlock.z + ", " + FirstBlock.y + ") and (" + args.x + ", " + args.z + ", " + args.y + ")");
+            sender.SendMessage(count + " blocks are between (" + FirstBlock.x + ", " + FirstBlock.z + ", " + FirstBlock.y + ") and (" + args.X + ", " + args.Z + ", " + args.Y + ")");
         }
 
-        public void Help(Player p)
-        {
+        public void Help(Player p) {
             p.SendMessage("/measure [ignore] - Measures all the blocks between two points.");
             p.SendMessage("[ignore] - Enter a block to ignore them");
             p.SendMessage("Shortcut: /ms");
         }
-        public struct CatchPos
-        {
+        public struct CatchPos {
             public Vector3 FirstBlock;
             public List<byte> ignore;
             public int count;
         }
-        public void Initialize()
-        {
+        public void Initialize() {
             Command.AddReference(this, new string[2] { "measure", "ms" });
         }
     }

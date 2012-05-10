@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge.Entity;
-using MCForge.API.PlayerEvent;
 
 namespace MCForge.API.Events {
     /// <summary>
@@ -78,6 +77,10 @@ namespace MCForge.API.Events {
         public void Allow() {
             canceled = false;
         }
+    }
+    public enum ActionType : byte {
+        Delete,
+        Place
     }
 
 }
