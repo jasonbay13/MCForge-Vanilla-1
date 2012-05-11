@@ -88,6 +88,11 @@ namespace MCForge.Core {
         public static List<Player> Players = new List<Player>();
         public static int PlayerCount { get { return Players.Count; } }
         /// <summary>
+        /// Get the current list of bots, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
+        /// </summary>
+        public static List<Player> Bots = new List<Player>();
+        public static int BotCount { get { return Bots.Count; } }
+        /// <summary>
         /// The current list of banned IP addresses. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
         /// </summary>
         public static List<string> IPBans;
@@ -269,6 +274,14 @@ namespace MCForge.Core {
             for (int i = 0; i < Players.Count; i++) {
                 if (Players.Count > i)
                     a.Invoke(Players[i]);
+            }
+        }
+        public static void ForeachBot(ForeachPlayerDelegate a)
+        {
+            for (int i = 0; i < Bots.Count; i++)
+            {
+                if (Bots.Count > i)
+                    a.Invoke(Bots[i]);
             }
         }
         internal static void AddConnection(Player p) {

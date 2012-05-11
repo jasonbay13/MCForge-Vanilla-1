@@ -426,9 +426,9 @@ namespace MCForge.Entity {
                 }
             }
             ChatEventArgs eargs = new ChatEventArgs(incomingText, Username);
-            bool canceled = OnPlayerChat.Call(this, eargs, OnAllPlayersChat).Canceled;
+            /*bool canceled = OnPlayerChat.Call(this, eargs, OnAllPlayersChat).Canceled;
             if (canceled || eargs.Message.Length == 0)
-                return;
+                return;*/
             incomingText = eargs.Message;
             string nickname = eargs.Username;
 
