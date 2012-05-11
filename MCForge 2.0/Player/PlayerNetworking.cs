@@ -599,6 +599,7 @@ namespace MCForge.Entity {
             SendPacket(IsAdmin ? MOTD_Admin : MOTD_NonAdmin);
         }
         protected void SendMap() {
+            
             try {
                 SendPacket(mapSendStartPacket); //Send the pre-fab map start packet
 
