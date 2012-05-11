@@ -33,9 +33,12 @@ namespace CommandDll
             if (args.Length < 1)
             {
                 p.SendMessage("You must specify a name!");
+                return;
             }
+            string margs = ArrayToString(args);
+            margs = margs.Replace('%', '&');
             Player TemporaryPlayer = new Player();
-            TemporaryPlayer.Username = ArrayToString(args);
+            TemporaryPlayer.Username = margs;
             TemporaryPlayer.Pos.x = p.Pos.x;
             TemporaryPlayer.Pos.y = p.Pos.y;
             TemporaryPlayer.Pos.z = p.Pos.z;
@@ -46,6 +49,7 @@ namespace CommandDll
             TemporaryPlayer.id = FreeId();
             Server.Bots.Add(TemporaryPlayer);
             SpawnThisBotToOtherPlayers(TemporaryPlayer);
+            p.SendMessage("Spawned " + ArrayToString(args) + Server.DefaultColor + "!");
         }
 
         public void Help(Player p)
