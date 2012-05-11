@@ -1112,6 +1112,11 @@
             Saves all of the levels and groups
             </summary>
         </member>
+        <member name="M:MCForge.Core.Server.HandleBots">
+            <summary>
+            Handles bot AI (Put this somewhere else)
+            </summary>
+        </member>
         <member name="T:MCForge.Core.Server.TimedMethodDelegate">
             <summary>
             This delegate is used when a command or plugin needs to call a method after a certain amount of time

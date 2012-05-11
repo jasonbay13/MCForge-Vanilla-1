@@ -28,6 +28,7 @@ using MCForge.World;
 using System.Drawing;
 using MCForge.Utils;
 using MCForge.API.Events;
+using MCForge.Robot;
 
 namespace MCForge.Entity {
     public partial class Player {
@@ -921,10 +922,10 @@ namespace MCForge.Entity {
 
         protected void SpawnBotsForThisPlayer()
         {
-            Server.ForeachBot(delegate(Player p)
+            Server.ForeachBot(delegate(Bot p)
             {
-                if (p != this && p.Level == Level)
-                    SendSpawn(p);
+                if (p.Player != this && p.Player.Level == Level)
+                    SendSpawn(p.Player);
             });
         }
 

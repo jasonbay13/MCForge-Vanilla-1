@@ -25,6 +25,7 @@ using MCForge.Utilities;
 using MCForge.Utilities.Settings;
 using MCForge.Utils;
 using MCForge.World;
+using MCForge.Robot;
 
 namespace MCForge.Core {
     public static class Server {
@@ -70,7 +71,9 @@ namespace MCForge.Core {
         private static int GroupsaveInterval = 3000;
         private static int GroupsaveIntervalCurrent = 0;
         private static int PingInterval = 10;
-        private static int PintIntervalCurrent = 0;
+        private static int PingIntervalCurrent = 0;
+        private static int BotInterval = 300;
+        private static int BotIntervalCurrent = 0;
         static bool debug = false;
         public static bool DebugMode { 
         	get {
@@ -90,7 +93,7 @@ namespace MCForge.Core {
         /// <summary>
         /// Get the current list of bots, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
         /// </summary>
-        public static List<Player> Bots = new List<Player>();
+        public static List<Bot> Bots = new List<Bot>();
         public static int BotCount { get { return Bots.Count; } }
         /// <summary>
         /// The current list of banned IP addresses. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
@@ -182,6 +185,8 @@ namespace MCForge.Core {
 
         public delegate void ForeachPlayerDelegate(Player p);
 
+        public delegate void ForeachBotDelegate(Bot p);
+
         public static void Init() {
         	Logger.Log("Debug mode started", LogType.Debug);
         	//TODO Add debug messages
@@ -224,13 +229,15 @@ namespace MCForge.Core {
         static void Update() {
             HeartbeatIntervalCurrent++;
             GroupsaveIntervalCurrent++;
-            PintIntervalCurrent++;
+            PingIntervalCurrent++;
+            BotIntervalCurrent++;
 
             Player.GlobalUpdate();
 
             if (HeartbeatIntervalCurrent >= HeartbeatInterval) { Heartbeat.sendHeartbeat(); HeartbeatIntervalCurrent = 0; }
             if (GroupsaveIntervalCurrent >= GroupsaveInterval) { foreach (Groups.PlayerGroup g in Groups.PlayerGroup.groups) { g.SaveGroup(); } GroupsaveIntervalCurrent = 0; }
-            if (PintIntervalCurrent >= PingInterval) { Player.GlobalPing(); }
+            if (PingIntervalCurrent >= PingInterval) { Player.GlobalPing(); }
+            if (BotIntervalCurrent >= BotInterval) { HandleBots(); }
 
             foreach (TimedMethod TM in TimedMethodList.ToArray()) {
                 TM.time--;
@@ -276,7 +283,7 @@ namespace MCForge.Core {
                     a.Invoke(Players[i]);
             }
         }
-        public static void ForeachBot(ForeachPlayerDelegate a)
+        public static void ForeachBot(ForeachBotDelegate a)
         {
             for (int i = 0; i < Bots.Count; i++)
             {
@@ -423,6 +430,14 @@ namespace MCForge.Core {
                 l.SaveToBinary();
             foreach (var g in Groups.PlayerGroup.groups)
                 g.SaveGroup();
+
+        }
+
+        /// <summary>
+        /// Handles bot AI (Put this somewhere else)
+        /// </summary>
+        public static void HandleBots()
+        {
 
         }
     }
