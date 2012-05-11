@@ -304,7 +304,7 @@ namespace MCForge.World {
                  map[(int)x, (int)y + 1] +
                  map[(int)x, (int)y - 1]) / 5;
         }
-
+    	
         public static float GetAverage9(float[,] map, float x, float y) {
             if (IsOnBounds(map, x - 1, y - 1))
                 return 0f;
@@ -339,7 +339,14 @@ namespace MCForge.World {
                    x >= bigMap.GetLength(0) ||
                    y >= bigMap.GetLength(1);
         }
-
+    	
+    	/// <summary>
+    	/// Is the X and Y in the bounds of the map bigMap
+    	/// </summary>
+    	/// <param name="bigMap">The map to check</param>
+    	/// <param name="x">The X cord.</param>
+    	/// <param name="y">The Y cord.</param>
+    	/// <returns>If true, then the position is out of bounds of the map. Otherwise it is not</returns>
         public static bool IsOnBounds(float[,] bigMap, float x, float y) {
             return x <= 0 ||
                    y <= 0 ||

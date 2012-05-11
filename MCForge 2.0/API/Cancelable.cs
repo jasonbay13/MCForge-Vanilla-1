@@ -19,6 +19,9 @@ using System.Text;
 
 namespace MCForge.API
 {
+	/// <summary>
+	/// Can the event be canceled
+	/// </summary>
     public interface Cancelable
     {
 		/// <summary>

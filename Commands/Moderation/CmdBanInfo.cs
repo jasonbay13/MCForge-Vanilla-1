@@ -30,7 +30,7 @@ namespace CommandDll.Moderation
         public void Initialize() { Command.AddReference(this, new string[2] { "baninfo", "baninformation" }); }
         public void Use(Player p, string[] args)
         {
-            string[] lines = File.ReadAllLines("Bans/Ban Info.txt");
+            string[] lines = File.ReadAllLines("bans/BanInfo.txt");
             if (lines.Length < 1) { p.SendMessage("Could not find ban information for \"" + args[0] + "\"."); return; }
             foreach (string line in lines)
             {
@@ -42,7 +42,7 @@ namespace CommandDll.Moderation
                     string time = line.Split('`')[3];
                     string banner = line.Split('`')[4];
                     p.SendMessage(name + " was banned at " + time + " on " + date + " by " + banner + ".");
-                    p.SendMessage("&4Reason: " + MCForge.Core.Server.DefaultColor + reason);
+                    p.SendMessage("&4Reason: &f" + reason);
                     return;
                 }
                 p.SendMessage("Could not find ban information for \"" + args[0] + "\".");

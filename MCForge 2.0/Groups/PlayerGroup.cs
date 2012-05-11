@@ -21,6 +21,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using System.IO;
+using MCForge.Utilities;
 
 namespace MCForge.Groups
 {
@@ -63,10 +64,12 @@ namespace MCForge.Groups
         public byte permission { get; set; }
         /// <summary>
         /// The colour of the group.
+        /// note color == colour
         /// </summary>
 		public string colour { get { return color; } set { color = value;} }
 		/// <summary>
 		/// The color of the group.
+        /// note color == colour
 		/// </summary>
 		public string color { get; set; }
 
@@ -74,7 +77,7 @@ namespace MCForge.Groups
         /// <summary>
         /// The maximum amount of blocks this group can change.
         /// </summary>
-        public int maxBlockChange { get { return _maxblockchange; } set { maxBlockChange = value; } }
+        public int maxBlockChange { get { return _maxblockchange; } set { _maxblockchange = value; } }
 
         string _file;
         /// <summary>
@@ -101,7 +104,7 @@ namespace MCForge.Groups
             name = colour = null;
         }
         /// <summary>
-        /// Adds this instance to the list of groups ONLY use it when you initalised with PlayerGroup().
+        /// Adds this instance to the list of groups ONLY use it when you initialised with PlayerGroup().
         /// </summary>
         /// <remarks></remarks>
         internal void add()
@@ -188,7 +191,12 @@ namespace MCForge.Groups
         /// <returns><c>true</c> if this instance can execute the specified command; otherwise, <c>false</c>.</returns>
         public bool CanExecute(ICommand command)
         {
-            if (command.Permission <= permission)
+            if (CommandPermissionOverrides.overrides.ContainsKey(command))
+                foreach (KeyValuePair<ICommand, byte> cmd in CommandPermissionOverrides.overrides)
+                    if (cmd.Key == command && cmd.Value <= permission)
+                        return true;
+
+            if (command.Permission <= permission && !CommandPermissionOverrides.overrides.ContainsKey(command))
                 return true;
             return false;
         }
@@ -232,7 +240,6 @@ namespace MCForge.Groups
 
                 while ((line = file.ReadLine()) != null)
                 {
-                    Server.Log(this.file + ":" + line);
                     if (!string.IsNullOrEmpty(line))
                         if (!players.Contains(line.ToLower()))
                             players.Add(line.ToLower());
@@ -247,6 +254,11 @@ namespace MCForge.Groups
             return true;
         }
 
+        /// <summary>
+        /// Adds the player to this group.
+        /// </summary>
+        /// <param name="p">The p.</param>
+        /// <remarks></remarks>
         public void AddPlayer(Player p)
         {
             p.group.players.Remove(p.Username.ToLower());
@@ -254,7 +266,23 @@ namespace MCForge.Groups
             players.Add(p.Username.ToLower());
             SaveGroup();
         }
-
+        /// <summary>
+        /// Loads this groups player list.
+        /// </summary>
+        /// <remarks></remarks>
+        public static void Load()
+        {
+            PlayerGroupProperties.Load();
+            CommandPermissionOverrides.Load();
+            if (!(groups.Count > 0))
+            {
+                InitDefaultGroups();
+            }
+            foreach (PlayerGroup g in groups)
+            {
+                Logger.Log("[Group] " + g.name + " Initialized");
+            }
+        }
         /// <summary>
         /// Initializes the default groups.
         /// </summary>
@@ -264,7 +292,7 @@ namespace MCForge.Groups
             //PlayerGroupProperties.Load();
             //foreach (PlayerGroup g in PlayerGroup.groups)
             //{
-            //    Server.Log("[Group] " + g.name + "Initialized");
+            //    Server.Log("[Group] " + g.name + " Initialized");
             //}
             new PlayerGroup((byte)Permission.Guest, "Guest", Colors.white, "guests.txt");
             new PlayerGroup((byte)Permission.Builder, "Builder", Colors.green, "builders.txt");

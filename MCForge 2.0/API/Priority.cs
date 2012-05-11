@@ -26,9 +26,21 @@ namespace MCForge.API
     /// </summary>
     public enum Priority : byte
     {
+    	/// <summary>
+    	/// Low is called first so it can make any needed changes first
+    	/// </summary>
         Low = 0,
+        /// <summary>
+        /// The default setting for Priority.
+        /// </summary>
         Normal = 1,
+        /// <summary>
+        /// This is called last, this will get the final say on what happens in the event
+        /// </summary>
         High = 2,
+        /// <summary>
+        /// This should only be used for monitoring the result
+        /// </summary>
         System_Level = 3
     }
 }

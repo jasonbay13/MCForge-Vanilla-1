@@ -71,7 +71,13 @@ namespace MCForge.Core {
         private static int GroupsaveIntervalCurrent = 0;
         private static int PingInterval = 10;
         private static int PintIntervalCurrent = 0;
-
+        static bool debug = false;
+        public static bool DebugMode { 
+        	get {
+        		return debug;
+        	}
+        	set { debug = value; }
+        }
         public struct TempBan { public string name; public DateTime allowed; }
         public static List<TempBan> tempbans = new List<TempBan>();
         public static DateTime StartTime = DateTime.Now;
@@ -157,6 +163,11 @@ namespace MCForge.Core {
         public static string URL = "";
 
         /// <summary>
+        /// The IRC client for the server
+        /// </summary>
+        public static IRC IRC = null;
+
+        /// <summary>
         /// This delegate is used when a command or plugin needs to call a method after a certain amount of time
         /// </summary>
         /// <param name="dataPass">This delegate passes the object that was passed to it back to the method that is to be invoked</param>
@@ -167,31 +178,42 @@ namespace MCForge.Core {
         public delegate void ForeachPlayerDelegate(Player p);
 
         public static void Init() {
+        	Logger.Log("Debug mode started", LogType.Debug);
+        	//TODO Add debug messages
             //TODO load the level if it exists
             Block.InIt();
-
             Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
+            Logger.Log("Starting update timer", LogType.Debug);
             UpdateTimer.Start();
-
-            Groups.PlayerGroup.InitDefaultGroups();
-
+            Logger.Log("Log timer started", LogType.Debug);
+            Logger.Log("Loading DLL's", LogType.Debug);
             LoadAllDlls.Init();
-
+            Logger.Log("Finished loading DLL's", LogType.Debug);
+            Logger.Log("Sending Heartbeat..", LogType.Debug);
             Heartbeat.sendHeartbeat();
 
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
 
+            Groups.PlayerGroup.Load();
+
             CreateCoreFiles();
-
+            Logger.Log("Loading Bans", LogType.Debug);
+            Logger.Log("IPBANS", LogType.Debug);
             IPBans = new List<string>(File.ReadAllLines("bans/IPBans.txt"));
+            Logger.Log("IPBANS", LogType.Debug);
             UsernameBans = new List<string>(File.ReadAllLines("bans/NameBans.txt"));
-
             StartListening();
             Started = true;
             Log("[Important]: Server Started.", ConsoleColor.Black, ConsoleColor.White);
+            IRC = new IRC();
+            try
+            {
+                IRC.Start();
+            }
+            catch { }
         }
         
         static void Update() {
@@ -229,7 +251,7 @@ namespace MCForge.Core {
             FileUtils.CreateFileIfNotExist("text/news.txt");
             FileUtils.CreateFileIfNotExist("text/jokermessages.txt", "I am a pony" + Environment.NewLine + "Rainbow Dash <3" + Environment.NewLine + "I like trains!");
 
-            FileUtils.CreateFileIfNotExist("bans/IPbans.txt");
+            FileUtils.CreateFileIfNotExist("bans/IPBans.txt");
             FileUtils.CreateFileIfNotExist("bans/NameBans.txt");
             FileUtils.CreateFileIfNotExist("bans/BanInfo.txt");
 
@@ -340,6 +362,8 @@ namespace MCForge.Core {
         }
 
         public static void OnLog(object sender, LogEventArgs args) {
+        	if (!DebugMode && args.LogType == LogType.Debug)
+        		return;
             var tColor = ColorUtils.ToConsoleColor(args.TextColor);
             var bColor = ColorUtils.ToConsoleColor(args.BackgroundColor);
             Console.ForegroundColor = tColor;

@@ -12,6 +12,7 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
+using MCForge.Utils;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
@@ -31,26 +32,18 @@ namespace CommandDll
         {
             if (args.Length == 0) { Help(p); return; }
             string function = args[0].ToLower();
-            switch (function)
-            {
+            p.ExtraData.CreateIfNotExist("Color", p.group.color);
+            switch (function) {
                 #region ==Enter==
                 case "enter":
+                case "join":
                     bool ops = false;
-                    Server.ForeachPlayer(delegate(Player pl)
-                    {
-                        if (pl.group.permission >= Server.reviewnextperm) { ops = true; }
-                    });
+                    Server.ForeachPlayer(delegate(Player pl) { if (pl.group.permission >= Server.reviewnextperm) { ops = true; } });
                     if (!ops) { p.SendMessage("There are no ops online! Please wait for one to come on before asking for review"); return; }
-                    if (Server.reviewlist.Contains(p))
-                    {
-                        p.SendMessage("You're already in the review queue!");
-                        SendPositon(false, p);
-                        return;
-                    }
+                    if (Server.reviewlist.Contains(p)) { p.SendMessage("You're already in the review queue!"); SendPositon(false, p); return; }
                         Server.reviewlist.Add(p);
                         p.SendMessage("You have been added to the review queue!");
-                        Player.UniversalChatOps(p.Username + " has entered the review queue!");
-                        int poss = Server.reviewlist.IndexOf(p);
+                        Player.UniversalChatOps(p.ExtraData["Color"].ToString() + p.Username + " has entered the review queue!");               
                         SendPositon(false, p);
                     break;
                 #endregion
@@ -58,7 +51,11 @@ namespace CommandDll
                 case "view":
                     if (Server.reviewlist.Count == 0) { p.SendMessage("There are no players in the review queue!"); return; }
                     string send = "Players in the review queue: ";
-                    foreach (Player pl in Server.reviewlist) { send += pl.Username + ", "; }
+                    foreach (Player pl in Server.reviewlist) 
+                    {
+                        pl.ExtraData.CreateIfNotExist("Color", pl.group.color);
+                        send += (string)(p.ExtraData["Color"]) + pl.Username + ", "; 
+                    }
                     send = send.Trim().TrimEnd(',');
                     p.SendMessage(send);
                     break;
@@ -67,13 +64,23 @@ namespace CommandDll
                 case "position":
                 case "pos":
                 case "place":
-                    if (!Server.reviewlist.Contains(p))
-                    {
+                    if (!Server.reviewlist.Contains(p)) {
                         p.SendMessage("You're not in the review queue!");
                         p.SendMessage("Use &9/review &benter " + Server.DefaultColor + "to enter the queue!");
                         return;
                     }
                     SendPositon(false, p);
+                    break;
+                #endregion
+                #region ==Remove==
+                case "remove":
+                    if (p.group.permission < Server.reviewnextperm) { p.SendMessage("You can't remove players from review queue!"); return; }
+                    Player who = Player.Find(args[1]);
+                    if (who == null) { p.SendMessage("Cannot find player!"); return; }
+                    if (!Server.reviewlist.Contains(who)) { p.SendMessage(who.Username + " is not in the review queue!"); return; }
+                    Server.reviewlist.Remove(who);
+                    Player.UniversalChat(who.Username + " has been removed from the review queue!");
+                    SendPositon(true);
                     break;
                 #endregion
                 #region ==Leave==
@@ -85,7 +92,7 @@ namespace CommandDll
                         return;
                     }
                     Server.reviewlist.Remove(p);
-                    Player.UniversalChat(p.Username + " has left the queue!");
+                    Player.UniversalChat(p.ExtraData["Color"].ToString() + p.Username + " has left the queue!");
                     p.SendMessage("You have been removed from the review queue!");
                     SendPositon(true);
                     break;
@@ -112,6 +119,7 @@ namespace CommandDll
                     p.SendMessage(p.Username + " has came to review you!");
                     break;
                 #endregion
+                #region ==Clear==
                 case "clear":
                     if (p.group.permission < Server.reviewnextperm) { p.SendMessage("You can't clear the review queue!"); return; }
                     Player.UniversalChat("The review queue has been cleared by " + p.Username + "!");
@@ -121,6 +129,7 @@ namespace CommandDll
                     p.SendMessage("You have specified a wrong option!");
                     Help(p);
                     break;
+                #endregion
             }
         }
         
@@ -130,8 +139,8 @@ namespace CommandDll
             p.SendMessage("/review leave - leave the review queue");
             p.SendMessage("/review view - shows the review queue");
             p.SendMessage("/review position - shows your place in the review queue");
-            if (p.group.permission >= Server.reviewnextperm)
-            {
+            if (p.group.permission >= Server.reviewnextperm) {
+                p.SendMessage("/review remove <player> - removes <player> from the queue");
                 p.SendMessage("/review next - review the next player in the review queue");
                 p.SendMessage("/review clear - clears the review queue");
             }
@@ -143,18 +152,15 @@ namespace CommandDll
         }
         void SendPositon(bool all, Player player = null)
         {
-            if (all)
-            {
-                foreach (Player pl in Server.reviewlist.ToArray())
-                {
+            if (all) {
+                foreach (Player pl in Server.reviewlist.ToArray()) {
                     int position = Server.reviewlist.IndexOf(pl);
                     if (position == 0) { pl.SendMessage("You're next in the review queue!"); continue; }
                     pl.SendMessage(position == 1 ? "There is " + position + " players in front of you!" : "There are " + position + " players in front of you!");
                 }
                 return;
             }
-            else
-            {
+            else {
                 if (!Server.reviewlist.Contains(player)) { return; }
                 int position = Server.reviewlist.IndexOf(player);
                 if (position == 0) { player.SendMessage("You're next in the review queue!"); return; }

@@ -36,7 +36,7 @@ namespace CommandDll.Moderation
             if (args[0] == "#") Stealth = true;
             if (!Stealth)
             {
-                foreach (string line in File.ReadAllLines("Bans/IP Bans.txt"))
+                foreach (string line in File.ReadAllLines("bans/IPbBans.txt"))
                 {
                     if (line == args[0])
                     {
@@ -52,7 +52,7 @@ namespace CommandDll.Moderation
             }
             if (Stealth)
             {
-                foreach (string line in File.ReadAllLines("Bans/IP Bans.txt"))
+                foreach (string line in File.ReadAllLines("bans/IPBans.txt"))
                 {
                     if (line == args[0])
                     {

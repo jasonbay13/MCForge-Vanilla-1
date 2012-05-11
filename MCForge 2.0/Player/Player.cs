@@ -18,7 +18,6 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
-using MCForge.API.PlayerEvent;
 using MCForge.Core;
 using MCForge.Groups;
 using MCForge.Interface.Command;
@@ -27,6 +26,9 @@ using MCForge.World;
 using MCForge.Utilities;
 using MCForge.Utils;
 using System.Linq;
+using MCForge.SQL;
+using System.Data;
+using MCForge.API.Events;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -78,6 +80,11 @@ namespace MCForge.Entity {
             get;
             set;
         }
+        
+        /// <summary>
+        /// This is the UID for the player in the database
+        /// </summary>
+        internal int UID;
         /// <summary>
         /// This is the player's IP Address
         /// </summary>
@@ -234,7 +241,8 @@ namespace MCForge.Entity {
             }
 
             string name = args[0].ToLower().Trim();
-            bool canceled = OnPlayerCommand.Call(this, name, args);
+            CommandEventArgs eargs = new CommandEventArgs(name, sendArgs);
+            bool canceled = OnPlayerCommand.Call(this, eargs, OnAllPlayersCommand).Canceled;
             if (canceled) // If any event canceled us
                 return;
             if (Command.Commands.ContainsKey(name)) {
@@ -274,6 +282,71 @@ namespace MCForge.Entity {
                 else { if (!p.IsHidden) p.UpdatePosition(false); }
             });
         }
+        
+        #region Extra Data Saving/Loading
+        /// <summary>
+        /// Load all the players extra data from the database
+        /// </summary>
+        public static void LoadAllExtra()
+        {
+        	Server.Players.ForEach(p =>
+        	                       {
+        	                       	p.LoadExtra();
+        	                       });
+        }
+        /// <summary>
+        /// Load the players extra data from the database
+        /// </summary>
+        public void LoadExtra()
+        {
+        	DataTable tbl = Database.fillData("SELECT * WHERE UID=" + UID);
+        	for (int i = 0; i < tbl.Rows.Count; i++)
+        	{
+        		ExtraData.Add(tbl.Rows[i]["key"], tbl.Rows[i]["value"]);
+        	}
+        	tbl.Dispose();
+        }
+        /// <summary>
+        /// Save all the players extra data
+        /// </summary>
+        public static void SaveAllExtra()
+        {
+        	Server.Players.ForEach(p =>
+        	                       {
+        	                       	p.SaveExtra();
+        	                       });
+        }
+        /// <summary>
+        /// Save the players extra data
+        /// </summary>
+        public void SaveExtra()
+        {
+        	List<string> commands = new List<string>();
+        	foreach (object obj in ExtraData.Keys)
+        	{
+        		if (!IsInTable(obj))
+        			commands.Add("INSERT INTO extra (key, value, UID) VALUES ('" + obj.ToString() + "', '" + ExtraData[obj].ToString() + "', " + UID + ")");
+        		else
+        			commands.Add("UPDATE extra SET value='" + ExtraData[obj].ToString() + "' WHERE key='" + obj.ToString() + "' AND UID=" + UID);
+        	}
+        	Database.executeQuery(commands.ToArray());
+        	commands.Clear();
+        }
+        /// <summary>
+        /// Check to see if the key is in the table already
+        /// </summary>
+        /// <param name="key">The key to check</param>
+        /// <returns>If true, then they key is in the table and doesnt need to be added, if false, then the key needs to be added</returns>
+        internal bool IsInTable(object key)
+        {
+        	DataTable temp = Database.fillData("SELECT * WHERE key='" + key.ToString() + "' AND UID=" + UID);
+        	bool return1 = false;
+        	if (temp.Rows.Count >= 1)
+        		return1 = true;
+        	temp.Dispose();
+        	return return1;
+        }
+        #endregion
 
         #region PluginStuff
         /// <summary>
@@ -308,7 +381,10 @@ namespace MCForge.Entity {
         /// <param name="y"></param>
         /// <param name="type"></param>
         public void Click(ushort x, ushort z, ushort y, byte type) {
-            bool canceled = OnPlayerBlockChange.Call(x, y, z, ActionType.Place, this, type);
+            HandleBlockchange(x, y, z, (byte)ActionType.Place, type, true);
+            return;
+            BlockChangeEventArgs eargs=new BlockChangeEventArgs(x, y, z, ActionType.Place, type);
+            bool canceled = OnPlayerBlockChange.Call(this, eargs, OnAllPlayersBlockChange).Canceled;
             if (canceled) // If any event canceled us
                 return;
             if (blockChange != null) {
@@ -454,6 +530,80 @@ namespace MCForge.Entity {
                 if (p.Username.ToLower().StartsWith(name.ToLower()))
                     return p;
             return null;
+        }
+        #endregion
+
+        #region Events
+        /// <summary>
+        /// Gets called when this player sends a message.
+        /// </summary>
+        public ChatEvent OnPlayerChat = new ChatEvent();
+        /// <summary>
+        /// Gets called when any player sends a message.
+        /// </summary>
+        public static ChatEvent OnAllPlayersChat = new ChatEvent();
+        /// <summary>
+        /// Gets called when this player tries to run a command.
+        /// </summary>
+        public CommandEvent OnPlayerCommand = new CommandEvent();
+        /// <summary>
+        /// Gets called when any player tries to run a command.
+        /// </summary>
+        public static CommandEvent OnAllPlayersCommand = new CommandEvent();
+        /// <summary>
+        /// Gets called when this player connects.
+        /// </summary>
+        public ConnectionEvent OnPlayerConnect = new ConnectionEvent();
+        /// <summary>
+        /// Gets called when any player connects.
+        /// </summary>
+        public static ConnectionEvent OnAllPlayersConnect = new ConnectionEvent();
+        /// <summary>
+        /// Gets called when this player disconnect.
+        /// </summary>
+        public ConnectionEvent OnPlayerDisconnect = new ConnectionEvent();
+        /// <summary>
+        /// Gets called when any player disconnect.
+        /// </summary>
+        public static ConnectionEvent OnAllPlayersDisconnect = new ConnectionEvent();
+        /// <summary>
+        /// Gets called when this player moves.
+        /// </summary>
+        public MoveEvent OnPlayerMove = new MoveEvent();
+        /// <summary>
+        /// Gets called when any player moves.
+        /// </summary>
+        public static MoveEvent OnAllPlayersMove = new MoveEvent();
+        /// <summary>
+        /// Gets called when this player changes a block.
+        /// </summary>
+        public BlockChangeEvent OnPlayerBlockChange = new BlockChangeEvent();
+        /// <summary>
+        /// Gets called when any player changes a block.
+        /// </summary>
+        public static BlockChangeEvent OnAllPlayersBlockChange = new BlockChangeEvent();
+        Dictionary<string,object> datapasses=new Dictionary<string,object>();
+        /// <summary>
+        /// Gets a datapass object and removes it from the list.
+        /// </summary>
+        /// <param name="key">The key to access the datapass object.</param>
+        /// <returns>A datapass object.</returns>
+        public object GetDatapass(string key){
+            if (datapasses.ContainsKey(key)) {
+                object ret = datapasses[key];
+                datapasses.Remove(key);
+                return ret;
+            }
+            else return null;
+        }
+        /// <summary>
+        /// Sets a datapass object according to the key.
+        /// </summary>
+        /// <param name="key">The key to set the datapass object to.</param>
+        /// <param name="data">The datapass object.</param>
+        public void setDatapass(string key, object data){
+            if(datapasses.ContainsKey(key)) datapasses[key]=data;
+            else datapasses.Add(key,data);
         }
         #endregion
 

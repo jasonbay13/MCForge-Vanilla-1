@@ -39,7 +39,7 @@ namespace CommandDll.Moderation
             {
                 Player who = Player.Find(args[0]);
                 string reason = _reason.Substring(args[0].Length + 1);
-                using (StreamWriter SW = File.AppendText("Bans/Username Bans.txt"))
+                using (StreamWriter SW = File.AppendText("bans/NameBans.txt"))
                 {
                     if (who != null)
                         SW.WriteLine(who.Username);
@@ -48,7 +48,7 @@ namespace CommandDll.Moderation
                     SW.Dispose();
                     SW.Close();
                 }
-                using (StreamWriter SW = File.AppendText("Bans/BanInfo.txt"))
+                using (StreamWriter SW = File.AppendText("bans/BanInfo.txt"))
                 {
                     if (who != null)
                     {
@@ -76,14 +76,14 @@ namespace CommandDll.Moderation
             {
                 Player who = Player.Find(args[1]);
                 string reason = _reason.Substring(args[0].Length + args[1].Length + 2);
-                using (StreamWriter SW = File.AppendText("Bans/UsernameBans.txt"))
+                using (StreamWriter SW = File.AppendText("bans/NameBans.txt"))
                 {
                     if (who != null)
                         SW.WriteLine(who.Username);
                     else
                         SW.WriteLine(args[1]);
                 }
-                using (StreamWriter SW = File.AppendText("Bans/BanInfo.txt"))
+                using (StreamWriter SW = File.AppendText("bans/BanInfo.txt"))
                 {
                     if (who != null)
                     {

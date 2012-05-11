@@ -26,7 +26,7 @@ using System.IO;
 using MCForge.API.System;
 using System.Text.RegularExpressions;
 using System.Net.Sockets;
-using MCForge.API.PlayerEvent;
+using MCForge.API.Events;
 using System.Threading;
 using MCForge.World;
 using MCForge.API;
@@ -51,11 +51,11 @@ namespace Plugins.WomPlugin {
         }
 
         private WomSettings WomSettings { get; set; }
-        public void OnLoad() {
+        public void OnLoad(string[] args1) {
             WomSettings = new WomSettings();
             WomSettings.OnLoad();
             OnReceivePacket.Register(OnData);
-            OnPlayerChat.Register((args) => SendDetailToPlayer(args.Player, "This is a detail, deal &4With &3It"), null);
+            Player.OnAllPlayersChat.Normal += ((sender, args) => SendDetailToPlayer(sender, "This is a detail, deal &4With &3It"));
         }
 
         private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
@@ -68,10 +68,10 @@ namespace Plugins.WomPlugin {
 
             args.Cancel();
             var netStream = new NetworkStream(args.Player.Socket);
-            using(var Reader = new StreamReader(netStream)) //Not used but it likes it...
+            using (var Reader = new StreamReader(netStream)) //Not used but it likes it...
             using (var Writer = new StreamWriter(netStream)) {
                 var line = Encoding.UTF8.GetString(args.Data, 0, args.Data.Length).Split('\n')[0];
-                
+
                 var match = Parser.Match(line);
 
                 if (match.Success) {

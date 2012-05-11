@@ -30,7 +30,7 @@ namespace CommandDll {
             Player who;
             string color;
 
-            p.ExtraData.CreateIfNotExist("Color", Server.DefaultColor);
+            p.ExtraData.CreateIfNotExist("Color", p.group.color);
 
             if (args.Length == 1) {
                 who = p;

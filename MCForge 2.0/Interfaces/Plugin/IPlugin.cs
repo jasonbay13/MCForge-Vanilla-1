@@ -12,11 +12,7 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace MCForge.Interface.Plugin
 {
     public interface IPlugin
@@ -41,12 +37,12 @@ namespace MCForge.Interface.Plugin
         /// <summary>
         /// The initialization of the plugin.
         /// </summary>
-        void Load();
+        void OnLoad(string[] args);
 
         /// <summary>
         /// The unload of a plugin.
         /// </summary>
-        void Unload();
+        void OnUnload();
 
     }
 }
