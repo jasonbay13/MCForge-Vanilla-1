@@ -324,6 +324,15 @@ namespace MCForge.World {
               map[(int)x - 1, (int)y - 1]) / 9;
         }
 
+        /// <summary>
+        /// Determines whether the location [is on bounds] in [the specified big map].
+        /// </summary>
+        /// <param name="bigMap">The big map.</param>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <returns>
+        ///   <c>true</c> if [is on bounds] [the specified big map]; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsOnBounds(double[,] bigMap, double x, double y) {
             return x <= 0 ||
                    y <= 0 ||

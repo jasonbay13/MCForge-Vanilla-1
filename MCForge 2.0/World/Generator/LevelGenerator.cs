@@ -59,24 +59,19 @@ namespace MCForge.World.Generator {
         #endregion
 
         #region Generation
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Init() {
 
-        }
         /// <summary>
-        /// 
+        /// Generates the map.
         /// </summary>
         public void Generate() {
             if (OnProgressArgs != null)
                 OnProgressArgs(this, new GenerationEventArgs("Creating Dimentions...", 10));
 
             NoiseGenerator = new PerlinNoise() {
-                Amplitude = 1f,
-                Frequency = .02f,
-                Octaves = 1,
-                Persistence = 2
+                Amplitude = GenArgs.Amplitude,
+                Frequency = GenArgs.WaveFrequency,
+                Octaves = GenArgs.MoutainOctaves,
+                Persistence = GenArgs.Persistence
             };
 
             NoiseGenerator.InitNoiseFunctions();
@@ -85,6 +80,7 @@ namespace MCForge.World.Generator {
 
             if (GenArgs.PlantMushrooms || GenArgs.PlantFlowers || GenArgs.PlantSaplings)
                 plants = new float[Level.Size.x, Level.Size.z];
+
 
             if (OnProgressArgs != null)
                 OnProgressArgs(this, new GenerationEventArgs("Building...", 20));
@@ -143,29 +139,48 @@ namespace MCForge.World.Generator {
                 Level.SetBlock(x, z, y, block);
         }
 
+
+
         /// <summary>
-        /// 
+        /// Fills the Z layer.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="block"></param>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <param name="block">The block.</param>
         public void FillZ(int x, int y, Block block) {
             for (int z = 0; z < Level.Size.z; z++)
                 Level.SetBlock(x, z, y, block);
         }
 
+
+        /// <summary>
+        /// Fills the plane XY.
+        /// </summary>
+        /// <param name="z">The z.</param>
+        /// <param name="block">The block.</param>
         public void FillPlaneXY(int z, Block block) {
             for (int x = 0; x < Level.Size.x; x++)
                 for (int y = 0; y < Level.Size.y; y++)
                     Level.SetBlock(x, z, y, block);
         }
 
+
+        /// <summary>
+        /// Fills the plane XZ.
+        /// </summary>
+        /// <param name="y">The y.</param>
+        /// <param name="block">The block.</param>
         public void FillPlaneXZ(int y, Block block) {
             for (int x = 0; x < Level.Size.x; x++)
                 for (int z = 0; z < Level.Size.z; z++)
                     Level.SetBlock(x, z, y, block);
         }
 
+        /// <summary>
+        /// Fills the plane ZY.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="block">The block.</param>
         public void FillPlaneZY(int x, Block block) {
             for (int z = 0; z < Level.Size.z; z++)
                 for (int y = 0; y < Level.Size.y; y++)
@@ -195,7 +210,7 @@ namespace MCForge.World.Generator {
         }
 
         /// <summary>
-        /// 
+        /// Applies the filter.
         /// </summary>
         public void ApplyFilter() {
             for (int z = 0; z < Level.Size.z; z++)
@@ -205,9 +220,8 @@ namespace MCForge.World.Generator {
         }
 
         /// <summary>
-        /// 
+        /// Sets the blocks.
         /// </summary>
-        /// 
         public void SetBlocks() {
             DateTime curr = DateTime.Now;
             for (int i = 0; i < overlay.Length - 1; i++) {
@@ -223,6 +237,9 @@ namespace MCForge.World.Generator {
 
         }
 
+        /// <summary>
+        /// Transforms the 2D height map into 3D
+        /// </summary>
         public void Generate3DTerrain() {
 
             if (Level.Size.x != Level.Size.z)
@@ -294,11 +311,21 @@ namespace MCForge.World.Generator {
             }
         }
 
+
+        /// <summary>
+        /// Sets the position of the spawn point.
+        /// </summary>
         public void SetPosition() {
             //TODO: Estimate the best position to place the player
             SetPosition(new Vector3(), new Vector2());
         }
 
+
+        /// <summary>
+        /// Sets the position of the spawn point.
+        /// </summary>
+        /// <param name="manualPosition">The position.</param>
+        /// <param name="angleRot">The angle rotation.</param>
         public void SetPosition(Vector3 manualPosition, Vector2 angleRot) {
             Level.SpawnPos = manualPosition;
             Level.SpawnRot = new byte[2] { (byte)angleRot.x, (byte)angleRot.y };
