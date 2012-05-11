@@ -19,8 +19,10 @@ namespace MCForge.World.Generator {
         private PerlinNoise NoiseGenerator;
         private float[,] map, overlay, plants;
         private Random random;
+
+
         /// <summary>
-        /// 
+        /// Event handler for recieving progress updates
         /// </summary>
         public static EventHandler<GenerationEventArgs> OnProgressArgs;
         #endregion
@@ -28,10 +30,14 @@ namespace MCForge.World.Generator {
         #region Constructors
 
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="LevelGenerator"/> class.
         /// </summary>
-        /// <param name="level"></param>
+        /// <param name="level">The level to generate.</param>
         public LevelGenerator(Level level) {
+
+            if (level.Size.x != level.Size.z)
+                throw new ArgumentException("The x and z must be the same to use advanced level generation");
+
             //Create a standard mountain level
             GenArgs = new GeneratorArgs() {
                 MaxLevelGenerationHeight = level.Size.y / 2,
@@ -45,16 +51,30 @@ namespace MCForge.World.Generator {
             random = new Random((int)GenArgs.Seed);
         }
 
+
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="LevelGenerator"/> class.
         /// </summary>
-        /// <param name="level"></param>
-        /// <param name="args"></param>
+        /// <param name="level">The level.</param>
+        /// <param name="args">The Generator arguments.</param>
         public LevelGenerator(Level level, GeneratorArgs args) {
+
+            if (level.Size.x != level.Size.z)
+                throw new ArgumentException("The x and z must be the same to use advanced level generation");
+
             this.Level = level;
             this.GenArgs = args;
+
+            if (args.MaxLevelGenerationHeight == -1)
+                args.MaxLevelGenerationHeight = level.Size.y;
+
+            if (args.MinDepth == -1)
+                args.MaxLevelGenerationHeight = level.Size.y;
+
             random = new Random((int)args.Seed);
         }
+
+
 
         #endregion
 
@@ -64,6 +84,9 @@ namespace MCForge.World.Generator {
         /// Generates the map.
         /// </summary>
         public void Generate() {
+            if (Level == null)
+                throw new NullReferenceException("Level to generate was null");
+
             if (OnProgressArgs != null)
                 OnProgressArgs(this, new GenerationEventArgs("Creating Dimentions...", 10));
 
@@ -117,23 +140,24 @@ namespace MCForge.World.Generator {
         #endregion
 
         #region Helper methods
+
         /// <summary>
-        /// 
+        /// Fills the X layer.
         /// </summary>
-        /// <param name="y"></param>
-        /// <param name="z"></param>
-        /// <param name="block"></param>
+        /// <param name="y">The y.</param>
+        /// <param name="z">The z.</param>
+        /// <param name="block">The block.</param>
         public void FillX(int y, int z, Block block) {
             for (int x = 0; x < Level.Size.x; x++)
                 Level.SetBlock(x, z, y, block);
         }
 
         /// <summary>
-        /// 
+        /// Fills the Y layer.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="z"></param>
-        /// <param name="block"></param>
+        /// <param name="x">The x.</param>
+        /// <param name="z">The z.</param>
+        /// <param name="block">The block.</param>
         public void FillY(int x, int z, Block block) {
             for (int y = 0; y < Level.Size.y; y++)
                 Level.SetBlock(x, z, y, block);
@@ -231,9 +255,17 @@ namespace MCForge.World.Generator {
                                              GenArgs.MinLevelGenerationHeight - NoiseUtils.NegateEdge(x, z, Level.Size.x, Level.Size.z),
                                              GenArgs.MaxLevelGenerationHeight - NoiseUtils.NegateEdge(x, z, Level.Size.x, Level.Size.z));
 
-                Level.SetBlock(x, z, y, (byte)random.Next(1, 9));
+                if (y >= GenArgs.MaxLevelGenerationHeight / 2)
+                    Level.SetBlock(x, z, y + 1, GenArgs.OverlayLayer);
+
+
+                Level.SetBlock(x, z, y, GenArgs.TopLayer);
+
+                for(int toGround = y - 1; toGround >= GenArgs.MinLevelGenerationHeight; toGround--)
+                    Level.SetBlock(x, z, toGround, GenArgs.BottomLayer);
+
             }
-           // Server.Log((curr.Millisecond - DateTime.Now.Millisecond) + " = total time");
+            // Server.Log((curr.Millisecond - DateTime.Now.Millisecond) + " = total time");
 
         }
 

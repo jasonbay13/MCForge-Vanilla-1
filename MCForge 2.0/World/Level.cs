@@ -102,7 +102,9 @@ namespace MCForge.World {
         /// <param name="size">The size to create the level.</param>
         /// <param name="type">The type of the level you want to create</param>
         /// <param name="name">Name of the level to create</param>
-        /// <returns>returns the level that was created</returns>
+        /// <returns>
+        /// returns the level that was created
+        /// </returns>
         public static Level CreateLevel(Vector3 size, LevelTypes type, string name = "main") {
             Level newlevel = new Level(size) {
                 Name = name
@@ -120,14 +122,7 @@ namespace MCForge.World {
                     newlevel.CreatePixelArtLevel();
                     break;
                 case LevelTypes.Hell:
-                    Generator.LevelGenerator mGen = new Generator.LevelGenerator(newlevel, new Generator.GeneratorArgs() {
-                        MaxLevelGenerationHeight = size.y / 2,
-                        MinLevelGenerationHeight = 0,
-                        TopLayer = Block.BlockList.STONE,
-                        BottomLayer = Block.BlockList.COBBLESTONE,
-                        OverlayLayer = Block.BlockList.LAVA,
-                        Seed = new Random().Next(),
-                    });
+                    Generator.LevelGenerator mGen = new Generator.LevelGenerator(newlevel, Generator.GeneratorTemplate.Hell);
                     mGen.Generate();
                     mGen.SetPosition();
                     break;

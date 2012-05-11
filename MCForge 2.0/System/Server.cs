@@ -182,7 +182,7 @@ namespace MCForge.Core {
         	//TODO Add debug messages
             //TODO load the level if it exists
             Block.InIt();
-            Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Flat);
+            Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Hell);
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
             Logger.Log("Starting update timer", LogType.Debug);

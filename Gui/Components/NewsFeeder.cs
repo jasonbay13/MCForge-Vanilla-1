@@ -25,9 +25,9 @@ namespace MCForge.Gui.Components {
         public void StartRead() {
             Items.Clear();
             Items.Add("Connecting...");
+            try {
+                using (var client = new WebClient()) {
 
-            using (var client = new WebClient()) {
-                try {
                     client.DownloadStringAsync(new Uri("http://headdetect.com/news.txt"), null);
                     client.DownloadStringCompleted += (sender, args) => {
                         Items.Clear();
@@ -36,30 +36,30 @@ namespace MCForge.Gui.Components {
                         Timer.Elapsed += DisplayPosts;
                         Timer.Start();
                     };
-                }
-                catch {
-                    Items.Clear();
-                    Items.Add("Cannot connect to news server");
+
                 }
             }
-
+            catch {
+                Items.Clear();
+                Items.Add("Cannot connect to news server");
+            }
 
         }
 
         void DisplayPosts(object sender, System.Timers.ElapsedEventArgs args) {
-               if (InvokeRequired) {
-                   Invoke((MethodInvoker)delegate {
-                       DisplayPosts(sender, args);
-                   });
-                   return;
-               }
+            if (InvokeRequired) {
+                Invoke((MethodInvoker)delegate {
+                    DisplayPosts(sender, args);
+                });
+                return;
+            }
 
-               int i = SelectedIndex + 1 < Items.Count ? SelectedIndex + 1 : 0;
-               if (((string)Items[i])[0] == '!')
-                   ForeColor = Color.Red;
-               else
-                   ForeColor = DefaultForeColor;
-               SelectedIndex = i;
+            int i = SelectedIndex + 1 < Items.Count ? SelectedIndex + 1 : 0;
+            if (((string)Items[i])[0] == '!')
+                ForeColor = Color.Red;
+            else
+                ForeColor = DefaultForeColor;
+            SelectedIndex = i;
         }
 
         /*

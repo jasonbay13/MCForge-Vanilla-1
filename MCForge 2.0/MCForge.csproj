@@ -177,6 +177,7 @@
     <Compile Include="World\Blocks\DefaultBlocks\Water.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Wood.cs" />
     <Compile Include="World\Generator\GeneratorArgs.cs" />
+    <Compile Include="World\Generator\GeneratorTemplate.cs" />
     <Compile Include="World\Generator\LevelGenerator.cs" />
     <Compile Include="World\Generator\Noise.cs" />
     <Compile Include="World\Level.cs" />
