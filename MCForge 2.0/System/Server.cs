@@ -72,7 +72,7 @@ namespace MCForge.Core {
         private static int GroupsaveIntervalCurrent = 0;
         private static int PingInterval = 10;
         private static int PingIntervalCurrent = 0;
-        private static int BotInterval = 300;
+        private static int BotInterval = 10;
         private static int BotIntervalCurrent = 0;
         static bool debug = false;
         public static bool DebugMode { 
@@ -237,7 +237,7 @@ namespace MCForge.Core {
             if (HeartbeatIntervalCurrent >= HeartbeatInterval) { Heartbeat.sendHeartbeat(); HeartbeatIntervalCurrent = 0; }
             if (GroupsaveIntervalCurrent >= GroupsaveInterval) { foreach (Groups.PlayerGroup g in Groups.PlayerGroup.groups) { g.SaveGroup(); } GroupsaveIntervalCurrent = 0; }
             if (PingIntervalCurrent >= PingInterval) { Player.GlobalPing(); }
-            if (BotIntervalCurrent >= BotInterval) { HandleBots(); }
+            if (BotIntervalCurrent >= BotInterval) { Bot.HandleBots(); }
 
             foreach (TimedMethod TM in TimedMethodList.ToArray()) {
                 TM.time--;
@@ -430,14 +430,6 @@ namespace MCForge.Core {
                 l.SaveToBinary();
             foreach (var g in Groups.PlayerGroup.groups)
                 g.SaveGroup();
-
-        }
-
-        /// <summary>
-        /// Handles bot AI (Put this somewhere else)
-        /// </summary>
-        public static void HandleBots()
-        {
 
         }
     }

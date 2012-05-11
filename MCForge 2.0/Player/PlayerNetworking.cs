@@ -821,7 +821,7 @@ namespace MCForge.Entity {
             });
         }
 
-        protected void UpdatePosition(bool ForceTp) {
+        internal void UpdatePosition(bool ForceTp) {
             byte changed = 0;   //Denotes what has changed (x,y,z, rotation-x, rotation-y)
 
             Vector3 tempOldPos = oldPos;
