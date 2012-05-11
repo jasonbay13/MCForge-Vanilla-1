@@ -30,14 +30,19 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
+            if (args.Length < 1)
+            {
+                p.SendMessage("You must specify a name!");
+            }
             Player TemporaryPlayer = new Player();
-            TemporaryPlayer.Username = "testingbot";
+            TemporaryPlayer.Username = ArrayToString(args);
             TemporaryPlayer.Pos.x = p.Pos.x;
             TemporaryPlayer.Pos.y = p.Pos.y;
             TemporaryPlayer.Pos.z = p.Pos.z;
             TemporaryPlayer.Rot = new byte[2] {0, 0};
             TemporaryPlayer.IsLoading = false;
             TemporaryPlayer.IsLoggedIn = true;
+            TemporaryPlayer.Level = p.Level;
             TemporaryPlayer.id = FreeId();
             Server.Bots.Add(TemporaryPlayer);
             SpawnThisBotToOtherPlayers(TemporaryPlayer);
@@ -70,6 +75,15 @@ namespace CommandDll
                 if (p != z)
                     p.SendSpawn(z);
             });
+        }
+
+        static string ArrayToString(string[] array)
+        {
+            //
+            // Use string Join to concatenate the string elements.
+            //
+            string result = string.Join(" ", array);
+            return result;
         }
 
         public void Initialize()

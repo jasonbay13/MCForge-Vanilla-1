@@ -210,6 +210,7 @@ namespace MCForge.Entity {
 
                 SpawnThisPlayerToOtherPlayers();
                 SpawnOtherPlayersForThisPlayer();
+                SpawnBotsForThisPlayer();
                 SendSpawn(this);
 
                 IsLoading = false;
@@ -904,7 +905,7 @@ namespace MCForge.Entity {
         /// </summary>
         protected void SpawnThisPlayerToOtherPlayers() {
             Server.ForeachPlayer(delegate(Player p) {
-                if (p != this)
+                if (p != this && p.Level == Level)
                     p.SendSpawn(this);
             });
         }
@@ -913,7 +914,16 @@ namespace MCForge.Entity {
         /// </summary>
         protected void SpawnOtherPlayersForThisPlayer() {
             Server.ForeachPlayer(delegate(Player p) {
-                if (p != this)
+                if (p != this && p.Level == Level)
+                    SendSpawn(p);
+            });
+        }
+
+        protected void SpawnBotsForThisPlayer()
+        {
+            Server.ForeachBot(delegate(Player p)
+            {
+                if (p != this && p.Level == Level)
                     SendSpawn(p);
             });
         }
