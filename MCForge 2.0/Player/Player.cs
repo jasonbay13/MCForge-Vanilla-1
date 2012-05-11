@@ -230,6 +230,11 @@ namespace MCForge.Entity {
             }
         }
 
+        public Player()
+        {
+
+        }
+
         #region Special Chat Handlers
         protected void HandleCommand(string[] args) {
             string[] sendArgs = new string[0];

@@ -28,6 +28,7 @@ using MCForge.World;
 using System.Drawing;
 using MCForge.Utils;
 using MCForge.API.Events;
+using MCForge.Robot;
 
 namespace MCForge.Entity {
     public partial class Player {
@@ -210,6 +211,7 @@ namespace MCForge.Entity {
 
                 SpawnThisPlayerToOtherPlayers();
                 SpawnOtherPlayersForThisPlayer();
+                SpawnBotsForThisPlayer();
                 SendSpawn(this);
 
                 IsLoading = false;
@@ -426,9 +428,9 @@ namespace MCForge.Entity {
                 }
             }
             ChatEventArgs eargs = new ChatEventArgs(incomingText, Username);
-            bool canceled = OnPlayerChat.Call(this, eargs, OnAllPlayersChat).Canceled;
+            /*bool canceled = OnPlayerChat.Call(this, eargs, OnAllPlayersChat).Canceled;
             if (canceled || eargs.Message.Length == 0)
-                return;
+                return;*/
             incomingText = eargs.Message;
             string nickname = eargs.Username;
 
@@ -819,7 +821,7 @@ namespace MCForge.Entity {
             });
         }
 
-        protected void UpdatePosition(bool ForceTp) {
+        internal void UpdatePosition(bool ForceTp) {
             byte changed = 0;   //Denotes what has changed (x,y,z, rotation-x, rotation-y)
 
             Vector3 tempOldPos = oldPos;
@@ -904,7 +906,7 @@ namespace MCForge.Entity {
         /// </summary>
         protected void SpawnThisPlayerToOtherPlayers() {
             Server.ForeachPlayer(delegate(Player p) {
-                if (p != this)
+                if (p != this && p.Level == Level)
                     p.SendSpawn(this);
             });
         }
@@ -913,8 +915,17 @@ namespace MCForge.Entity {
         /// </summary>
         protected void SpawnOtherPlayersForThisPlayer() {
             Server.ForeachPlayer(delegate(Player p) {
-                if (p != this)
+                if (p != this && p.Level == Level)
                     SendSpawn(p);
+            });
+        }
+
+        protected void SpawnBotsForThisPlayer()
+        {
+            Server.ForeachBot(delegate(Bot p)
+            {
+                if (p.Player != this && p.Player.Level == Level)
+                    SendSpawn(p.Player);
             });
         }
 

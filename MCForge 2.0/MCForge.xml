@@ -585,6 +585,11 @@
             Important events
             </summary>
         </member>
+        <member name="E:MCForge.API.Events.Event`2.All">
+            <summary>
+            Represents all priority levels (for removing only)
+            </summary>
+        </member>
         <member name="T:MCForge.API.Events.Event`2.EventHandler">
             <summary>
             The delgate type of the events
@@ -602,7 +607,17 @@
             The EventArgs base class
             </summary>
         </member>
-        <member name="M:MCForge.API.Events.BlockChangeEventArgs.#ctor(System.UInt16,System.UInt16,System.UInt16,MCForge.API.PlayerEvent.ActionType,System.Byte)">
+        <member name="F:MCForge.API.Events.EventArgs.Disable">
+            <summary>
+            Gets or sets whether the event should be disabled for this method, or not.
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.EventArgs.Unregister">
+            <summary>
+            Unregisters the current invoked eventhandler form this event.
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.BlockChangeEventArgs.#ctor(System.UInt16,System.UInt16,System.UInt16,MCForge.API.Events.ActionType,System.Byte)">
             <summary>
             Creates a new instance
             </summary>
@@ -612,7 +627,7 @@
             <param name="action">The ActionType action</param>
             <param name="holding">The type of the block</param>
         </member>
-        <member name="M:MCForge.API.Events.BlockChangeEventArgs.#ctor(MCForge.API.PlayerEvent.ActionType,System.Byte,System.UInt16,System.UInt16,System.UInt16)">
+        <member name="M:MCForge.API.Events.BlockChangeEventArgs.#ctor(MCForge.API.Events.ActionType,System.Byte,System.UInt16,System.UInt16,System.UInt16)">
             <summary>
             Creates a new instance
             </summary>
@@ -666,106 +681,6 @@
             <summary>
             Description of SQL.
             </summary>
-        </member>
-        <member name="T:MCForge.API.PlayerEvent.OnPlayerCommand">
-            <summary>
-            The OnPlayerCommand event is used to catch whenever a player uses a command.
-            The command need not be valid.
-            </summary>
-        </member>
-        <member name="T:MCForge.API.PlayerEvent.PlayerEvent">
-            <summary>
-            An event that is connected to a player
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.Cancel">
-            <summary>
-            Prevent default processing until event is unregistered. (or Allow() is called)
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.Allow">
-            <summary>
-            Allow default processing. (until Cancel() is called)
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.PlayerEvent.Unregister">
-            <summary>
-            Unregisters the event from the queue.
-            </summary>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.PlayerEvent.Player">
-            <summary>
-            The player that this event applies to.  If null, applies to all players.
-            </summary>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.PlayerEvent.cancel">
-            <summary>
-            Do we want to prevent the default proccessing?
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerCommand.#ctor(MCForge.API.PlayerEvent.OnPlayerCommand.OnCall,MCForge.Entity.Player)">
-            <summary>
-            Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
-            </summary>
-            <param name="callback">the method used for the delegate to callback upon event fire</param>
-            <param name="target">The target Player we want the event for.</param>
-        </member>
-        <member name="F:MCForge.API.PlayerEvent.OnPlayerCommand._queue">
-            <summary>
-            The queue of delegates to call for the particular tag (One for each event)
-            </summary>
-        </member>
-        <member name="F:MCForge.API.PlayerEvent.OnPlayerCommand._eventQueue">
-            <summary>
-            The list of all events currently active of a PlayerEvent type.
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerCommand.Call(MCForge.Entity.Player,System.String,System.String[])">
-            <summary>
-            This is meant to be called from the code where you mean for the event to happen.
-            
-            In this case, it is called from the command processing code.
-            </summary>
-            <param name="p">The player that caused the event.</param>
-            <param name="cmd">The command the player gave</param>
-            <param name="args">The arguments the player gave for the command.</param>
-            <returns> A boolean value specifying whether or not to cancel the event.</returns>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerCommand.Register(MCForge.API.PlayerEvent.OnPlayerCommand.OnCall,MCForge.Entity.Player)">
-            <summary>
-            Used to register a method to be executed when the event is fired.
-            </summary>
-            <param name="callback">The method to call</param>
-            <param name="target">The player to watch for. (null for any players)</param>
-            <returns>The OnPlayerCommand event</returns>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerCommand.Unregister(MCForge.API.PlayerEvent.OnPlayerCommand)">
-            <summary>
-            Unregisters the specific event
-            </summary>
-            <param name="pe">The event to unregister</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerCommand.Unregister">
-            <summary>
-            Unregisters the specific event
-            </summary>
-            <param name="pe">The event to unregister</param>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.OnPlayerCommand.cmd">
-            <summary>
-            The command that the player tried to use
-            </summary>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.OnPlayerCommand.args">
-            <summary>
-            The arguments given for the command.
-            </summary>
-        </member>
-        <member name="T:MCForge.API.PlayerEvent.OnPlayerCommand.OnCall">
-            <summary>
-            The delegate used for callbacks.  The caller will have this method run when the event fires.
-            </summary>
-            <param name="e">The Event that fired</param>
         </member>
         <member name="M:MCForge.Interface.Command.ICommand.Use(MCForge.Entity.Player,System.String[])">
             <summary>
@@ -1054,6 +969,11 @@
         <member name="F:MCForge.Core.Server.Players">
             <summary>
             Get the current list of online players, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.Bots">
+            <summary>
+            Get the current list of bots, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
             </summary>
         </member>
         <member name="F:MCForge.Core.Server.IPBans">
@@ -1422,65 +1342,6 @@
             The filename to save the group list into. when setting it des not contain the "ranks/" part
             </summary>
         </member>
-        <member name="T:MCForge.API.PlayerEvent.OnPlayerDisconnect">
-            <summary>
-            Called whenever anyone leaves the server.
-            
-            <b>Note: This event CANNOT be canceled.  Cancel() will have no effect.</b>
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.#ctor(MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall,MCForge.Entity.Player)">
-            <summary>
-            Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
-            </summary>
-            <param name="callback">the method used for the delegate to callback upon event fire</param>
-            <param name="target">The target Player we want the event for.</param>
-        </member>
-        <member name="F:MCForge.API.PlayerEvent.OnPlayerDisconnect._queue">
-            <summary>
-            The queue of delegates to call for the particular tag (One for each event)
-            </summary>
-        </member>
-        <member name="F:MCForge.API.PlayerEvent.OnPlayerDisconnect._eventQueue">
-            <summary>
-            The list of all events currently active of a PlayerEvent type.
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Call(MCForge.Entity.Player,System.String)">
-            <summary>
-            This is meant to be called from the code where you mean for the event to happen.
-            
-            In this case, it is called from the command processing code.
-            </summary>
-            <param name="p">The player that caused the event.</param>
-            <param name="reason">The reason for disconnect.</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Register(MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall,MCForge.Entity.Player)">
-            <summary>
-            Used to register a method to be executed when the event is fired.
-            </summary>
-            <param name="callback">The method to call</param>
-            <param name="target">The player to watch for. (null for any players)</param>
-            <returns>The new OnPlayerDisconnect event</returns>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Unregister(MCForge.API.PlayerEvent.OnPlayerDisconnect)">
-            <summary>
-            Unregisters the specific event
-            </summary>
-            <param name="pe">The event to unregister</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerDisconnect.Unregister">
-            <summary>
-            Unregisters the specific event
-            </summary>
-            <param name="pe">The event to unregister</param>
-        </member>
-        <member name="T:MCForge.API.PlayerEvent.OnPlayerDisconnect.OnCall">
-            <summary>
-            The delegate used for callbacks.  The caller will have this method run when the event fires.
-            </summary>
-            <param name="e">The Event that fired</param>
-        </member>
         <member name="T:MCForge.World.Generator.LevelGenerator">
             <summary>
             
@@ -1504,14 +1365,9 @@
             <param name="level"></param>
             <param name="args"></param>
         </member>
-        <member name="M:MCForge.World.Generator.LevelGenerator.Init">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.Generate">
             <summary>
-            
+            Generates the map.
             </summary>
         </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.FillX(System.Int32,System.Int32,MCForge.World.Block)">
@@ -1532,11 +1388,32 @@
         </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.FillZ(System.Int32,System.Int32,MCForge.World.Block)">
             <summary>
-            
+            Fills the Z layer.
             </summary>
-            <param name="x"></param>
-            <param name="y"></param>
-            <param name="block"></param>
+            <param name="x">The x.</param>
+            <param name="y">The y.</param>
+            <param name="block">The block.</param>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.FillPlaneXY(System.Int32,MCForge.World.Block)">
+            <summary>
+            Fills the plane XY.
+            </summary>
+            <param name="z">The z.</param>
+            <param name="block">The block.</param>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.FillPlaneXZ(System.Int32,MCForge.World.Block)">
+            <summary>
+            Fills the plane XZ.
+            </summary>
+            <param name="y">The y.</param>
+            <param name="block">The block.</param>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.FillPlaneZY(System.Int32,MCForge.World.Block)">
+            <summary>
+            Fills the plane ZY.
+            </summary>
+            <param name="x">The x.</param>
+            <param name="block">The block.</param>
         </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.IsOnEdges(System.Int32,System.Int32,System.Int32)">
             <summary>
@@ -1554,14 +1431,18 @@
         </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.ApplyFilter">
             <summary>
-            
+            Applies the filter.
             </summary>
         </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.SetBlocks">
             <summary>
-            
+            Sets the blocks.
             </summary>
-            
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.Generate3DTerrain">
+            <summary>
+            Transforms the 2D height map into 3D
+            </summary>
         </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.GenerateTree(MCForge.World.Generator.LevelGenerator.TreeType,MCForge.Core.Vector3)">
             <summary>
@@ -1569,6 +1450,18 @@
             </summary>
             <param name="type">Type of tree to generate</param>
             <param name="pos">Location to generate the tree</param>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.SetPosition">
+            <summary>
+            Sets the position of the spawn point.
+            </summary>
+        </member>
+        <member name="M:MCForge.World.Generator.LevelGenerator.SetPosition(MCForge.Core.Vector3,MCForge.Core.Vector2)">
+            <summary>
+            Sets the position of the spawn point.
+            </summary>
+            <param name="manualPosition">The position.</param>
+            <param name="angleRot">The angle rotation.</param>
         </member>
         <member name="T:MCForge.World.Generator.LevelGenerator.GenerationEventArgs">
             <summary>
@@ -1637,7 +1530,7 @@
             PlayerChatEventArgs
             </summary>
         </member>
-        <member name="M:MCForge.API.Events.ChatEventArgs.#ctor(System.String)">
+        <member name="M:MCForge.API.Events.ChatEventArgs.#ctor(System.String,System.String)">
             <summary>
             Creates a new instance
             </summary>
@@ -1653,9 +1546,27 @@
             Allows the handling
             </summary>
         </member>
+        <member name="M:MCForge.API.Events.ChatEventArgs.Equals(MCForge.API.Events.ChatEventArgs)">
+            <summary>
+            Compares equality (ICancelable and IStoppable are not part of the comparison)
+            </summary>
+            <param name="other">The value to be compared to.</param>
+            <returns>Whether they are equal or not.</returns>
+        </member>
+        <member name="M:MCForge.API.Events.ChatEventArgs.Clone">
+            <summary>
+            Creates a new instance
+            </summary>
+            <returns>A new instance</returns>
+        </member>
         <member name="P:MCForge.API.Events.ChatEventArgs.Message">
             <summary>
-            The message
+            Gets or sets the message
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.ChatEventArgs.Username">
+            <summary>
+            Gets or sets the Username
             </summary>
         </member>
         <member name="P:MCForge.API.Events.ChatEventArgs.Canceled">
@@ -1803,8 +1714,160 @@
         </member>
         <member name="T:MCForge.World.Generator.GeneratorArgs">
             <summary>
-            
+            Level Generation Arguments
             </summary>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.MinLevelGenerationHeight">
+            <summary>
+            Gets or sets the min height of the level generation.
+            </summary>
+            <value>
+            The height of the min level generation.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.MaxLevelGenerationHeight">
+            <summary>
+            Gets or sets the max height of the level generation.
+            </summary>
+            <value>
+            The height of the max level generation.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.Seed">
+            <summary>
+            Gets or sets the seed.
+            </summary>
+            <value>
+            The seed.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.MaxDepth">
+            <summary>
+            Gets or sets the max depth.
+            </summary>
+            <value>
+            The max depth.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.MinDepth">
+            <summary>
+            Gets or sets the min depth.
+            </summary>
+            <value>
+            The min depth.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.OverlayLayer">
+            <summary>
+            Gets or sets the block overlay layer.
+            </summary>
+            <value>
+            The overlay layer.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.TopLayer">
+            <summary>
+            Gets or sets the top layer of block.
+            </summary>
+            <value>
+            The top layer.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.BottomLayer">
+            <summary>
+            Gets or sets the bottom layer.
+            </summary>
+            <value>
+            The bottom layer.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.LiquidBlock">
+            <summary>
+            Gets or sets the liquid block.
+            </summary>
+            <value>
+            The liquid block.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.LiquidLine">
+            <summary>
+            Gets or sets the liquid line.
+            </summary>
+            <value>
+            The liquid line.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.UseNewNoise">
+            <summary>
+            Gets or sets a value indicating whether [use new noise].
+            </summary>
+            <value>
+              <c>true</c> if [use new noise]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.PlantTrees">
+            <summary>
+            Gets or sets a value indicating whether to [plant trees].
+            </summary>
+            <value>
+              <c>true</c> if [plant trees]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.PlantSaplings">
+            <summary>
+            Gets or sets a value indicating whether [plant saplings].
+            </summary>
+            <value>
+              <c>true</c> if [plant saplings]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.PlantFlowers">
+            <summary>
+            Gets or sets a value indicating whether [plant flowers].
+            </summary>
+            <value>
+              <c>true</c> if [plant flowers]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.PlantMushrooms">
+            <summary>
+            Gets or sets a value indicating whether [plant mushrooms].
+            </summary>
+            <value>
+              <c>true</c> if [plant mushrooms]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.Amplitude">
+            <summary>
+            Gets or sets the amplitude.
+            </summary>
+            <value>
+            The amplitude.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.WaveFrequency">
+            <summary>
+            Gets or sets the wave frequency.
+            </summary>
+            <value>
+            The wave frequency.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.MoutainOctaves">
+            <summary>
+            Gets or sets the moutain octaves.
+            </summary>
+            <value>
+            The moutain octaves.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.Persistence">
+            <summary>
+            Gets or sets the persistence.
+            </summary>
+            <value>
+            The persistence.
+            </value>
         </member>
         <member name="T:MCForge.API.Events.CommandEvent">
             <summary>
@@ -1860,12 +1923,14 @@
         </member>
         <member name="M:MCForge.World.NoiseUtils.IsOnBounds(System.Double[0:,0:],System.Double,System.Double)">
             <summary>
-            Is the X and Y in the bounds of the map bigMap
+            Determines whether the location [is on bounds] in [the specified big map].
             </summary>
-            <param name="bigMap">The map to check</param>
-            <param name="x">The X cord.</param>
-            <param name="y">The Y cord.</param>
-            <returns>If true, then the position is out of bounds of the map. Otherwise it is not</returns>
+            <param name="bigMap">The big map.</param>
+            <param name="x">The x.</param>
+            <param name="y">The y.</param>
+            <returns>
+              <c>true</c> if [is on bounds] [the specified big map]; otherwise, <c>false</c>.
+            </returns>
         </member>
         <member name="M:MCForge.World.NoiseUtils.IsOnBounds(System.Single[0:,0:],System.Single,System.Single)">
             <summary>
@@ -2304,64 +2369,6 @@
             </summary>
             <param name="e">The Event that fired</param>
         </member>
-        <member name="T:MCForge.API.PlayerEvent.OnPlayerConnect">
-            <summary>
-            The OnPlayerConnect event is executed everytime a player connects to the server
-            This event can be canceled
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.#ctor(MCForge.API.PlayerEvent.OnPlayerConnect.OnCall,MCForge.Entity.Player)">
-            <summary>
-            Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
-            </summary>
-            <param name="callback">the method used for the delegate to callback upon event fire</param>
-            <param name="target">The target Player we want the event for.</param>
-        </member>
-        <member name="F:MCForge.API.PlayerEvent.OnPlayerConnect._queue">
-            <summary>
-            The queue of delegates to call for the particular tag (One for each event)
-            </summary>
-        </member>
-        <member name="F:MCForge.API.PlayerEvent.OnPlayerConnect._eventQueue">
-            <summary>
-            The list of all events currently active of a PlayerEvent type.
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Call(MCForge.Entity.Player)">
-            <summary>
-            This is meant to be called from the code where you mean for the event to happen.
-            
-            In this case, it is called from the command processing code.
-            </summary>
-            <param name="p">The player that caused the event.</param>
-            <returns> A boolean value specifying whether or not to cancel the event.</returns>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Register(MCForge.API.PlayerEvent.OnPlayerConnect.OnCall,MCForge.Entity.Player)">
-            <summary>
-            Used to register a method to be executed when the event is fired.
-            </summary>
-            <param name="callback">The method to call</param>
-            <param name="target">The player to watch for. (null for any players)</param>
-            <returns>the new OnPlayerConnect event</returns>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Unregister(MCForge.API.PlayerEvent.OnPlayerConnect)">
-            <summary>
-            Unregisters the specific event
-            </summary>
-            <param name="pe">The event to unregister</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerConnect.Unregister">
-            <summary>
-            Unregisters the specific event
-            </summary>
-            <param name="pe">The event to unregister</param>
-        </member>
-        <member name="T:MCForge.API.PlayerEvent.OnPlayerConnect.OnCall">
-            <summary>
-            The delegate used for callbacks.  The caller will have this method run when the event fires.
-            </summary>
-            <param name="e">The Event that fired</param>
-        </member>
         <member name="M:MCForge.Core.PDB.CompareTo(MCForge.Core.PDB)">
             <summary>
             This allows a PDB to be compared to another PDB by looking at the username, and subsequently, it can then be sorted.
@@ -2441,157 +2448,6 @@
             </summary>
         </member>
         <member name="T:MCForge.API.System.OnCommandUnloaded.OnCall">
-            <summary>
-            The delegate used for callbacks.  The caller will have this method run when the event fires.
-            </summary>
-            <param name="e">The Event that fired</param>
-        </member>
-        <member name="T:MCForge.API.PlayerEvent.OnPlayerChat">
-            <summary>
-            The OnPlayerChat event is excuted everytime a player chats on the server
-            This event can be canceled.
-            This event can also modify what the user says. by changing the message.
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.#ctor(MCForge.API.PlayerEvent.OnPlayerChat.OnCall,MCForge.Entity.Player)">
-            <summary>
-            Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
-            </summary>
-            <param name="callback">the method used for the delegate to callback upon event fire</param>
-            <param name="target">The target Player we want the event for.</param>
-        </member>
-        <member name="F:MCForge.API.PlayerEvent.OnPlayerChat._queue">
-            <summary>
-            The queue of delegates to call for the particular tag (One for each event)
-            </summary>
-        </member>
-        <member name="F:MCForge.API.PlayerEvent.OnPlayerChat._eventQueue">
-            <summary>
-            The list of all events currently active of a PlayerEvent type.
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Call(MCForge.Entity.Player,System.String)">
-            <summary>
-            This is meant to be called from the code where you mean for the event to happen.
-            
-            In this case, it is called from the chat processing code.
-            </summary>
-            <param name="p">The player that caused the event.</param>
-            <param name="msg">The message sent by the player.</param>
-            <returns>a new (or existing) event with the modified string.</returns>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Register(MCForge.API.PlayerEvent.OnPlayerChat.OnCall,MCForge.Entity.Player)">
-            <summary>
-            Used to register a method to be executed when the event is fired.
-            </summary>
-            <param name="callback">The method to call</param>
-            <param name="target">The player to watch for. (null for any players)</param>
-            <returns>the OnPlayerChat event</returns>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Unregister(MCForge.API.PlayerEvent.OnPlayerChat)">
-            <summary>
-            Unregisters the specific event
-            </summary>
-            <param name="pe">The event to unregister</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerChat.Unregister">
-            <summary>
-            Unregisters the specific event
-            </summary>
-            <param name="pe">The event to unregister</param>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.OnPlayerChat.message">
-            <summary>
-            The messsage sent by the player
-            </summary>
-        </member>
-        <member name="T:MCForge.API.PlayerEvent.OnPlayerChat.OnCall">
-            <summary>
-            The delegate used for callbacks.  The caller will have this method run when the event fires.
-            </summary>
-            <param name="e">The Event that fired</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerBlockChange.#ctor(MCForge.API.PlayerEvent.OnPlayerBlockChange.OnCall,MCForge.Entity.Player,System.Object)">
-            <summary>
-            Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
-            </summary>
-            <param name="callback">the method used for the delegate to callback upon event fire</param>
-            <param name="target">The target Player we want the event for.</param>
-            <param name="datapass">The data we want to pass between events.</param>
-        </member>
-        <member name="F:MCForge.API.PlayerEvent.OnPlayerBlockChange._queue">
-            <summary>
-            The queue of delegates to call for the particular tag (One for each event)
-            </summary>
-        </member>
-        <member name="F:MCForge.API.PlayerEvent.OnPlayerBlockChange._eventQueue">
-            <summary>
-            The list of all events currently active of a PlayerEvent type.
-            </summary>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerBlockChange.Call(System.UInt16,System.UInt16,System.UInt16,MCForge.API.PlayerEvent.ActionType,MCForge.Entity.Player,System.Byte)">
-            <summary>
-            This is meant to be called from the code where you mean for the event to happen.
-            
-            In this case, it is called from the command processing code.
-            </summary>
-            <param name="p">The player that caused the event.</param>
-            <param name="action">The action of the player.  Destroyed, or placed?</param>
-            <param name="holding">What the player was holding at the time.</param>
-            <returns> A boolean value specifying whether or not to cancel the event.</returns>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerBlockChange.Register(MCForge.API.PlayerEvent.OnPlayerBlockChange.OnCall,MCForge.Entity.Player,System.Object)">
-            <summary>
-            Used to register a method to be executed when the event is fired.
-            </summary>
-            <param name="callback">The method to call</param>
-            <param name="target">The player to watch for. (null for any players)</param>
-            <param name="datapass">The data to return when this event fires.</param>
-            <returns></returns>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerBlockChange.Unregister(MCForge.API.PlayerEvent.OnPlayerBlockChange)">
-            <summary>
-            Unregisters the specific event
-            </summary>
-            <param name="pe">The event to unregister</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerBlockChange.Unregister">
-            <summary>
-            Unregisters the specific event
-            </summary>
-            <param name="pe">The event to unregister</param>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.OnPlayerBlockChange.action">
-            <summary>
-            What we arre doing with this block
-            </summary>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.OnPlayerBlockChange.holding">
-            <summary>
-            The block at the coordinates
-            </summary>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.OnPlayerBlockChange.x">
-            <summary>
-            The x coordinate of the block changed.
-            </summary>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.OnPlayerBlockChange.y">
-            <summary>
-            The y coordinate of the block changed.
-            </summary>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.OnPlayerBlockChange.z">
-            <summary>
-            The z coordinate of the block changed.
-            </summary>
-        </member>
-        <member name="P:MCForge.API.PlayerEvent.OnPlayerBlockChange.args">
-            <summary>
-            The arguments given for the command.
-            </summary>
-        </member>
-        <member name="T:MCForge.API.PlayerEvent.OnPlayerBlockChange.OnCall">
             <summary>
             The delegate used for callbacks.  The caller will have this method run when the event fires.
             </summary>
@@ -2825,57 +2681,20 @@
             Get or set the color of the background
             </summary>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerMove.#ctor(MCForge.API.PlayerEvent.OnPlayerMove.OnCall,MCForge.Entity.Player)">
+        <member name="M:MCForge.Robot.Bot.#ctor">
             <summary>
-            Creates a new event.  This is NOT meant to be used by user-code, only internally by events.
-            </summary>
-            <param name="callback">the method used for the delegate to callback upon event fire</param>
-            <param name="target">The target Player we want the event for.</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerMove.Call(MCForge.Entity.Player,MCForge.Core.Vector3)">
-            <summary>
-            This is meant to be called from the code where you mean for the event to happen.
-            
-            In this case, it is called from the command processing code.
-            </summary>
-            <param name="p">The player that caused the event.</param>
-            <param name="oldPos">The old position of the person.</param>
-        </member>
-        <member name="F:MCForge.API.PlayerEvent.OnPlayerMove._queue">
-            <summary>
-            The queue of delegates to call for the particular tag (One for each event)
+            A robot (entity) that appears in the world.
             </summary>
         </member>
-        <member name="F:MCForge.API.PlayerEvent.OnPlayerMove._eventQueue">
+        <member name="M:MCForge.Robot.Bot.HandleBots">
             <summary>
-            The list of all events currently active of a PlayerEvent type.
+            Handles bot AI
             </summary>
         </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerMove.Register(MCForge.API.PlayerEvent.OnPlayerMove.OnCall,MCForge.Entity.Player)">
+        <member name="P:MCForge.Robot.Bot.Player">
             <summary>
-            Used to register a method to be executed when the event is fired.
+            Player which is assigned to the bot
             </summary>
-            <param name="callback">The method to call</param>
-            <param name="target">The player to watch for. (null for any players)</param>
-            <returns>A reference to the event</returns>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerMove.Unregister(MCForge.API.PlayerEvent.OnPlayerMove)">
-            <summary>
-            Unregisters the specific event
-            </summary>
-            <param name="pe">The event to unregister</param>
-        </member>
-        <member name="M:MCForge.API.PlayerEvent.OnPlayerMove.Unregister">
-            <summary>
-            Unregisters the specific event
-            </summary>
-            <param name="pe">The event to unregister</param>
-        </member>
-        <member name="T:MCForge.API.PlayerEvent.OnPlayerMove.OnCall">
-            <summary>
-            The delegate used for callbacks.  The caller will have this method run when the event fires.
-            </summary>
-            <param name="e">The Event that fired</param>
         </member>
     </members>
 </doc>
