@@ -78,7 +78,7 @@ namespace MCForge.Robot
                     }
                     #endregion
                     Vector3 TemporaryLocation = new Vector3(0, 0, 0);
-                    if (HitAPlayer) //TODO - Gravity, stop walking through blocks
+                    if (HitAPlayer)
                     {
                         if (ClosestLocation.x < Bot.Player.Pos.x)
                             TemporaryLocation.x = (short)(Bot.Player.Pos.x - 13); //Around running speed of normal client, 16-18 for WoM
@@ -90,6 +90,12 @@ namespace MCForge.Robot
                             TemporaryLocation.z = (short)(Bot.Player.Pos.z + 13);
 
                         TemporaryLocation.y = Bot.Player.Pos.y;
+                        if (Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 64) / 32) == Block.BlockList.AIR ||
+                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 64) / 32) == Block.BlockList.WATER ||
+                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 64) / 32) == Block.BlockList.LAVA ||
+                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 64) / 32) == Block.BlockList.ACTIVE_LAVA ||
+                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 64) / 32) == Block.BlockList.ACTIVE_WATER)
+                            TemporaryLocation.y = (short)(Bot.Player.Pos.y - 21); //Gravity, 21 is a nice value, doesn't float too much and doesnt fall too far.
 
                         if (
                                 (Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.AIR ||
@@ -104,7 +110,7 @@ namespace MCForge.Robot
                                 Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.ACTIVE_LAVA ||
                                 Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.ACTIVE_WATER)
                             )
-                            Bot.Player.Pos = TemporaryLocation;
+                            Bot.Player.Pos = TemporaryLocation; //Make sure the bot doesnt walk through walls
 
                         Bot.Player.UpdatePosition(false);
                     }

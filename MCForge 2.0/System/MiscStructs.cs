@@ -103,16 +103,10 @@ namespace MCForge.Core {
             return !(a.x == b.x && a.y == b.y && a.z == b.z);
         }
         public static bool operator >(Vector3 a, Vector3 b){
-            if (a.x + a.y + a.z > b.x + b.y + b.z)
-                return true;
-            else
-                return false;
+            return a.x * a.x + a.y * a.y + a.z * a.z > b.x * b.x + b.y * b.y + b.z * b.z;
         }
         public static bool operator <(Vector3 a, Vector3 b) {
-            if (a.x + a.y + a.z < b.x + b.y + b.z)
-                return true;
-            else
-                return false;
+            return a.x * a.x + a.y * a.y + a.z * a.z < b.x * b.x + b.y * b.y + b.z * b.z;
         }
         public override bool Equals(object obj) {
             return base.Equals(obj);
