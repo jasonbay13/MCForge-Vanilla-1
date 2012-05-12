@@ -21,9 +21,9 @@ using System.Collections.Generic;
 using System;
 namespace CommandDll
 {
-    public class CmdBotAdd : ICommand
+    public class CmdBotRemove : ICommand
     {
-        public string Name { get { return "BotAdd"; } }
+        public string Name { get { return "BotRemove"; } }
         public CommandTypes Type { get { return CommandTypes.misc; } }
         public string Author { get { return "Snowl"; } }
         public int Version { get { return 1; } }
@@ -37,21 +37,42 @@ namespace CommandDll
                 p.SendMessage("You must specify a name!");
                 return;
             }
-            Random Random = new Random();
             string margs = ArrayToString(args);
             margs = margs.Replace('%', '&');
-            Bot TemporaryPlayer = new Bot(margs, p.Pos, p.Rot, p.Level, false);
-            TemporaryPlayer.Player.Level.ExtraData.Add("Bot" + Random.Next(0, 9999999), margs + " " + TemporaryPlayer.FollowPlayers +  //TODO - Random INT so the dictionary doesnt clash - this should be fixed
-                " " + TemporaryPlayer.Player.Pos.x + " " + TemporaryPlayer.Player.Pos.y + " " + TemporaryPlayer.Player.Pos.z + " "
-                + TemporaryPlayer.Player.Rot[0] + " " + TemporaryPlayer.Player.Rot[1]); //Add bot to level metadata
-                                                                                        //This enables cross server bot transfer
-                                                                                        //And returns when level is loaded
-            p.SendMessage("Spawned " + ArrayToString(args) + Server.DefaultColor + "!");
+            bool hitBot = false;
+            foreach (Bot b in Server.Bots.ToArray())
+            {
+                if (b.Player.Username.ToLower() == margs.ToLower() &&
+                    b.Player.Level == p.Level)
+                {
+                    hitBot = true;
+                    b.Player.GlobalDie();
+                    Server.Bots.Remove(b);
+                }
+            }
+            List<string> tempArray = new List<string>();
+            foreach (var b in p.Level.ExtraData)
+            {
+                Server.Log(b.Value.ToLower() + " " + margs);
+                if (b.Value.ToLower().Split(' ')[0].Equals(margs.ToLower()))
+                {
+                    tempArray.Add(b.Key);
+                }
+            }
+            foreach (string s in tempArray)
+            {
+                hitBot = true;
+                p.Level.ExtraData.Remove(s);
+            }
+            if (hitBot)
+                p.SendMessage("Removed " + ArrayToString(args) + Server.DefaultColor + "!");
+            else
+                p.SendMessage("Could not find " + ArrayToString(args) + Server.DefaultColor + "!");
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/botadd [name] - creates a bot where you are standing.");
+            p.SendMessage("/botremove [name] - removes bot from the level you are in");
         }
 
         static string ArrayToString(string[] array)
@@ -65,7 +86,7 @@ namespace CommandDll
 
         public void Initialize()
         {
-            Command.AddReference(this, "botadd");
+            Command.AddReference(this, "botremove");
         }
     }
 }

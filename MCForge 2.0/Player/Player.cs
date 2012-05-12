@@ -450,19 +450,22 @@ namespace MCForge.Entity {
             } return lines;
         }
 
-        protected byte FreeId() {
+        protected byte FreeId()
+        {
             List<byte> usedIds = new List<byte>();
 
             Server.ForeachPlayer(p => usedIds.Add(p.id));
+            Server.ForeachBot(p => usedIds.Add(p.Player.id));
 
-            for (byte i = 0; i < ServerSettings.GetSettingInt("maxplayers"); ++i) {
+            for (byte i = 1; i < ServerSettings.GetSettingInt("maxplayers"); ++i)
+            {
                 if (usedIds.Contains(i)) continue;
                 return i;
             }
 
-            Logger.Log("Too many players O_O");
             return 254;
         }
+
         protected void UpgradeConnectionToPlayer() {
             Server.UpgradeConnectionToPlayer(this);
 

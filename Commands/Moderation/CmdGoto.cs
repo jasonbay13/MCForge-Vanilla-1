@@ -35,6 +35,7 @@ namespace CommandDll
             {
                 //TODO Need to despawn here
                 #region Send and Spawn
+                p.GlobalDie();
                 p.IsLoading = true;
                 p.Level = tempLevel;
                 short x = (short)((0.5 + tempLevel.SpawnPos.x) * 32);
@@ -46,6 +47,9 @@ namespace CommandDll
                 p.oldRot = p.Rot;
                 p.SendSpawn(p);
                 p.IsLoading = false;
+                p.SpawnOtherPlayersForThisPlayer();
+                p.SpawnThisPlayerToOtherPlayers();
+                p.SpawnBotsForThisPlayer();
                 #endregion
                 //TODO Need to respawn here
                 Player.UniversalChat(p.Username + " went to " + args[0] + "!");

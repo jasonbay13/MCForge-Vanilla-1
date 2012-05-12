@@ -37,8 +37,12 @@ namespace CommandDll
             }
             else
             {
-                Level.FindLevel(args[0]).SaveToBinary();
-                Player.UniversalChat("Saved " + args[0]);
+                try
+                {
+                    Level.FindLevel(args[0]).SaveToBinary();
+                    Player.UniversalChat("Saved " + args[0]);
+                }
+                catch { p.SendMessage("This level does not exist!"); }
             }
         }
 

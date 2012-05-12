@@ -20,6 +20,7 @@ using System.IO;
 using System.IO.Compression;
 using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Robot;
 using MCForge.World.Blocks;
 
 namespace MCForge.World {
@@ -263,6 +264,7 @@ namespace MCForge.World {
                     }
                 }
                 Binary.Dispose();
+                finalLevel.HandleMetaData();
                 return finalLevel;
             }
             catch (Exception e) { Server.Log(e.Message); Server.Log(e.StackTrace); } return null;
@@ -510,10 +512,11 @@ namespace MCForge.World {
         public static Level FindLevel(string LevelName) {
             try {
                 return Levels.Find(e => {
-                    return e.Name == LevelName;
+                    Console.WriteLine(e.Name.ToLower() + " " +  LevelName.ToLower() + " " + e.Name.ToLower() == LevelName.ToLower());
+                    return e.Name.ToLower() == LevelName.ToLower();
                 });
             }
-            catch { }
+            catch (Exception e) { Server.Log(e.Message); }
             return null;
         }
 
@@ -526,6 +529,34 @@ namespace MCForge.World {
                 return;
 
             Levels.Add(level);
+        }
+
+        /// <summary>
+        /// Handles the extra data for the level
+        /// </summary>
+        public void HandleMetaData()
+        {
+            if (ExtraData.Count > 0)
+            {
+                try
+                {
+                    foreach (var pair in ExtraData)
+                    {
+                        if (pair.Key.StartsWith("Bot")) //Load bots
+                        {
+                            string[] StringSplit = pair.Value.Split(' ');
+                            if (StringSplit.Length == 7)
+                            {
+                                Bot TemporaryBot = new Bot(StringSplit[0],
+                                    new Vector3(Convert.ToUInt16(StringSplit[2]), Convert.ToUInt16(StringSplit[3]), Convert.ToUInt16(StringSplit[4])),
+                                    new byte[] { Convert.ToByte(StringSplit[5]), Convert.ToByte(StringSplit[6]) }, this,
+                                    Convert.ToBoolean(StringSplit[1]));
+                            }
+                        }
+                    }
+                }
+                catch (Exception e) { Server.Log(e.Message); Server.Log(e.StackTrace); }
+            }
         }
     }
 }

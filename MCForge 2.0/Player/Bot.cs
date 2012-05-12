@@ -38,8 +38,18 @@ namespace MCForge.Robot
         /// <summary>
         /// A robot (entity) that appears in the world.
         /// </summary>
-        public Bot()
+        public Bot(string Username, Vector3 Position, byte[] Rotation, Level level, bool FollowPlayers)
         {
+            Player = new Player();
+            Player.Username = Username;
+            Player.Pos.x = Position.x;
+            Player.Pos.y = Position.y;
+            Player.Pos.z = Position.z;
+            Player.Rot = Rotation;
+            Player.Level = level;
+            Player.id = FreeId();
+            Server.Bots.Add(this);
+            SpawnThisBotToOtherPlayers(this);
         }
 
         /// <summary>
@@ -50,9 +60,37 @@ namespace MCForge.Robot
             foreach (Bot Bot in Server.Bots)
             {
                 Random Random = new Random();
-                //Bot.Player.Pos.x = (short)(Bot.Player.Pos.x + 14); //Around running speed of normal client, 16-18 for WoM
-                Bot.Player.UpdatePosition(false);
+                if (Bot.Movement && Bot.FollowPlayers)
+                {
+                    Bot.Player.Pos.x = (short)(Bot.Player.Pos.x + 14); //Around running speed of normal client, 16-18 for WoM
+                    Bot.Player.UpdatePosition(false);
+                }
             }
+        }
+
+        protected byte FreeId()
+        {
+            List<byte> usedIds = new List<byte>();
+
+            Server.ForeachPlayer(p => usedIds.Add(p.id));
+            Server.ForeachBot(p => usedIds.Add(p.Player.id));
+
+            for (byte i = 1; i < ServerSettings.GetSettingInt("maxplayers"); ++i)
+            {
+                if (usedIds.Contains(i)) continue;
+                return i;
+            }
+
+            return 254;
+        }
+
+        protected void SpawnThisBotToOtherPlayers(Bot z)
+        {
+            Server.ForeachPlayer(delegate(Player p)
+            {
+                if (p != z.Player && p.Level == z.Player.Level)
+                    p.SendSpawn(z.Player);
+            });
         }
 
     }

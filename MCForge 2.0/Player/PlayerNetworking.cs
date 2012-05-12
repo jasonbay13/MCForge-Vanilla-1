@@ -904,7 +904,8 @@ namespace MCForge.Entity {
         /// <summary>
         /// Spawns this player to all other players in the server.
         /// </summary>
-        protected void SpawnThisPlayerToOtherPlayers() {
+        public void SpawnThisPlayerToOtherPlayers()
+        {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p != this && p.Level == Level)
                     p.SendSpawn(this);
@@ -913,18 +914,22 @@ namespace MCForge.Entity {
         /// <summary>
         /// Spawns all other players of the server to this player.
         /// </summary>
-        protected void SpawnOtherPlayersForThisPlayer() {
+        public void SpawnOtherPlayersForThisPlayer()
+        {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p != this && p.Level == Level)
                     SendSpawn(p);
             });
         }
 
-        protected void SpawnBotsForThisPlayer()
+        /// <summary>
+        /// Spawns all bots to this player
+        /// </summary>
+        public void SpawnBotsForThisPlayer()
         {
             Server.ForeachBot(delegate(Bot p)
             {
-                if (p.Player != this && p.Player.Level == Level)
+                if (p.Player.Level == Level)
                     SendSpawn(p.Player);
             });
         }
@@ -1011,6 +1016,8 @@ namespace MCForge.Entity {
             catch { }
 
             Server.RemovePlayer(this);
+            if (Server.PlayerCount > 0)
+                Player.UniversalChat(Username + " has disconnected");
             Server.Connections.Remove(this);
 
             Socket.Close();

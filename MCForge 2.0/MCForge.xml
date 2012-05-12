@@ -46,7 +46,9 @@
             <param name="size">The size to create the level.</param>
             <param name="type">The type of the level you want to create</param>
             <param name="name">Name of the level to create</param>
-            <returns>returns the level that was created</returns>
+            <returns>
+            returns the level that was created
+            </returns>
         </member>
         <member name="M:MCForge.World.Level.LoadLevel(System.String)">
             <summary>
@@ -167,6 +169,11 @@
             Adds the level to the level list.
             </summary>
             <param name="level">Name of the level.</param>
+        </member>
+        <member name="M:MCForge.World.Level.HandleMetaData">
+            <summary>
+            Handles the extra data for the level
+            </summary>
         </member>
         <member name="P:MCForge.World.Level.Name">
             <summary>
@@ -312,6 +319,21 @@
         <member name="F:MCForge.World.Block.BlockList.LAVA">
             <summary>
             Air Block
+            </summary>
+        </member>
+        <member name="M:MCForge.Robot.Bot.#ctor(System.String,MCForge.Core.Vector3,System.Byte[],MCForge.World.Level,System.Boolean)">
+            <summary>
+            A robot (entity) that appears in the world.
+            </summary>
+        </member>
+        <member name="M:MCForge.Robot.Bot.HandleBots">
+            <summary>
+            Handles bot AI
+            </summary>
+        </member>
+        <member name="P:MCForge.Robot.Bot.Player">
+            <summary>
+            Player which is assigned to the bot
             </summary>
         </member>
         <member name="M:MCForge.Utils.ColorUtils.ToColor(System.ConsoleColor)">
@@ -1349,21 +1371,21 @@
         </member>
         <member name="F:MCForge.World.Generator.LevelGenerator.OnProgressArgs">
             <summary>
-            
+            Event handler for recieving progress updates
             </summary>
         </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.#ctor(MCForge.World.Level)">
             <summary>
-            
+            Initializes a new instance of the <see cref="T:MCForge.World.Generator.LevelGenerator"/> class.
             </summary>
-            <param name="level"></param>
+            <param name="level">The level to generate.</param>
         </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.#ctor(MCForge.World.Level,MCForge.World.Generator.GeneratorArgs)">
             <summary>
-            
+            Initializes a new instance of the <see cref="T:MCForge.World.Generator.LevelGenerator"/> class.
             </summary>
-            <param name="level"></param>
-            <param name="args"></param>
+            <param name="level">The level.</param>
+            <param name="args">The Generator arguments.</param>
         </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.Generate">
             <summary>
@@ -1372,19 +1394,19 @@
         </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.FillX(System.Int32,System.Int32,MCForge.World.Block)">
             <summary>
-            
+            Fills the X layer.
             </summary>
-            <param name="y"></param>
-            <param name="z"></param>
-            <param name="block"></param>
+            <param name="y">The y.</param>
+            <param name="z">The z.</param>
+            <param name="block">The block.</param>
         </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.FillY(System.Int32,System.Int32,MCForge.World.Block)">
             <summary>
-            
+            Fills the Y layer.
             </summary>
-            <param name="x"></param>
-            <param name="z"></param>
-            <param name="block"></param>
+            <param name="x">The x.</param>
+            <param name="z">The z.</param>
+            <param name="block">The block.</param>
         </member>
         <member name="M:MCForge.World.Generator.LevelGenerator.FillZ(System.Int32,System.Int32,MCForge.World.Block)">
             <summary>
@@ -1717,6 +1739,11 @@
             Level Generation Arguments
             </summary>
         </member>
+        <member name="F:MCForge.World.Generator.GeneratorArgs.MAX_SIZE">
+            <summary>
+            A constant for the max size of a map (to be used when the size is unknown)
+            </summary>
+        </member>
         <member name="P:MCForge.World.Generator.GeneratorArgs.MinLevelGenerationHeight">
             <summary>
             Gets or sets the min height of the level generation.
@@ -2020,6 +2047,11 @@
         <member name="M:MCForge.Entity.Player.SpawnOtherPlayersForThisPlayer">
             <summary>
             Spawns all other players of the server to this player.
+            </summary>
+        </member>
+        <member name="M:MCForge.Entity.Player.SpawnBotsForThisPlayer">
+            <summary>
+            Spawns all bots to this player
             </summary>
         </member>
         <member name="M:MCForge.Entity.Player.GlobalDie">
@@ -2453,6 +2485,16 @@
             </summary>
             <param name="e">The Event that fired</param>
         </member>
+        <member name="T:MCForge.World.Generator.GeneratorTemplate">
+            <summary>
+            Templates for <see cref="T:MCForge.World.Generator.GeneratorArgs"/>
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Generator.GeneratorTemplate.Hell">
+            <summary>
+            Hell-ish type level
+            </summary>
+        </member>
         <member name="T:MCForge.Interface.Plugin.IPluginMessageViewer">
             <summary>
             Interface for making a plugin with a message viewer
@@ -2679,21 +2721,6 @@
         <member name="P:MCForge.Utilities.LogEventArgs.BackgroundColor">
             <summary>
             Get or set the color of the background
-            </summary>
-        </member>
-        <member name="M:MCForge.Robot.Bot.#ctor">
-            <summary>
-            A robot (entity) that appears in the world.
-            </summary>
-        </member>
-        <member name="M:MCForge.Robot.Bot.HandleBots">
-            <summary>
-            Handles bot AI
-            </summary>
-        </member>
-        <member name="P:MCForge.Robot.Bot.Player">
-            <summary>
-            Player which is assigned to the bot
             </summary>
         </member>
     </members>
