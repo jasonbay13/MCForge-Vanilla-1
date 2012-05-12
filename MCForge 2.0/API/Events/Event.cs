@@ -200,6 +200,7 @@ namespace MCForge.API.Events {
                     }
                 }
             }
+            if (ret == default(T2)) ret = orig;
             if (canceled)
                 ((ICancelable)ret).Cancel();
             if (!canceled)
