@@ -591,6 +591,30 @@ namespace MCForge.Entity {
         /// Gets called when any player changes a block.
         /// </summary>
         public static BlockChangeEvent OnAllPlayersBlockChange = new BlockChangeEvent();
+        /// <summary>
+        /// Gets called when this player receives a packet.
+        /// </summary>
+        public PacketEvent OnPlayerReceivePacket = new PacketEvent();
+        /// <summary>
+        /// Gets called when any player receives a packet.
+        /// </summary>
+        public static PacketEvent OnAllPlayersReceivePacket = new PacketEvent();
+        /// <summary>
+        /// Gets called when the player receives a packet.
+        /// </summary>
+        public PacketEvent OnPlayerReceiveUnknownPacket = new PacketEvent();
+        /// <summary>
+        /// Gets called when any player receives a packet.
+        /// </summary>
+        public static PacketEvent OnAllPlayersReceiveUnknownPacket = new PacketEvent();
+        /// <summary>
+        /// Gets called when a packet is sent to a player.
+        /// </summary>
+        public static PacketEvent OnPlayerSendPacket = new PacketEvent();
+        /// <summary>
+        /// Gets called when a packet is sent to any player.
+        /// </summary>
+        public static PacketEvent OnAllPlayersSendPacket = new PacketEvent();
         Dictionary<string,object> datapasses=new Dictionary<string,object>();
         /// <summary>
         /// Gets a datapass object and removes it from the list.
@@ -610,7 +634,7 @@ namespace MCForge.Entity {
         /// </summary>
         /// <param name="key">The key to set the datapass object to.</param>
         /// <param name="data">The datapass object.</param>
-        public void setDatapass(string key, object data){
+        public void SetDatapass(string key, object data){
             if(datapasses.ContainsKey(key)) datapasses[key]=data;
             else datapasses.Add(key,data);
         }

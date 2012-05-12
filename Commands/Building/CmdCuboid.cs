@@ -118,7 +118,7 @@ namespace CommandDll {
             cpos.block = args.Holding;
             args.Cancel();
             p.OnPlayerBlockChange.Normal -= new Event<Player, BlockChangeEventArgs>.EventHandler(CatchBlock);
-            p.setDatapass(this.Name, cpos);
+            p.SetDatapass(this.Name, cpos);
             p.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock2);
         }
         public void CatchBlock2(Player p, BlockChangeEventArgs args) {

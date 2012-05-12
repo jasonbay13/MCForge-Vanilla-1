@@ -270,19 +270,24 @@ namespace MCForge.Core {
 		}
 		#endregion
 
-		public void GZip()
-		{
-			using (var ms = new System.IO.MemoryStream())
-			{
+        public void GZip() {
+            using (var ms = new System.IO.MemoryStream()) {
 
-				using (var gs = new GZipStream(ms, CompressionMode.Compress, true))
-					gs.Write(bytes, 0, bytes.Length);
+                using (var gs = new GZipStream(ms, CompressionMode.Compress, true))
+                    gs.Write(bytes, 0, bytes.Length);
 
-				ms.Position = 0;
-				bytes = new byte[ms.Length];
-				ms.Read(bytes, 0, (int)ms.Length);
-			}
-		}
+                ms.Position = 0;
+                bytes = new byte[ms.Length];
+                ms.Read(bytes, 0, (int)ms.Length);
+            }
+
+        }
+
+        public byte[] GetMessage() {
+            byte[] ret = new byte[bytes.Length - 1];
+            Array.Copy(bytes, 1, ret, 0, ret.Length);
+            return ret;
+        }
 
 		#region == Host <> Network ==
 		public static byte[] HTNO(ushort x)
@@ -301,7 +306,7 @@ namespace MCForge.Core {
 		}
 		#endregion
 
-		public enum types
+		public enum types: byte
 		{
 			Message = 13,
 			MOTD = 0,
@@ -320,5 +325,11 @@ namespace MCForge.Core {
 			SendTeleport = 8,
 
 		}
+        
 	}
+    public static class typesHelper {
+        public static string ToString(this packet.types t) {
+            return Enum.GetName(typeof(packet.types), t);
+        }
+    }
 }

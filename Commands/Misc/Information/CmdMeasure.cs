@@ -53,7 +53,7 @@ namespace CommandDll {
             //cpos.ignore.Add(Block.NameToByte("unknown")); //So it doesn't ignore air.
             p.SendMessage("Place two blocks to determine the edges.");
             //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
-            p.setDatapass("CmdMeasure_cpos", cpos);
+            p.SetDatapass("CmdMeasure_cpos", cpos);
             p.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock);
 
         }
@@ -64,7 +64,7 @@ namespace CommandDll {
             sender.SendBlockChange(args.X, args.Z, args.Y, sender.Level.GetBlock(args.X, args.Z, args.Y));
             CatchPos cpos = (CatchPos)sender.GetDatapass("CmdMeasure_cpos");
             cpos.FirstBlock = new Vector3(args.X, args.Z, args.Y);
-            sender.setDatapass("CmdMeasure_cpos", cpos);
+            sender.SetDatapass("CmdMeasure_cpos", cpos);
             sender.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock2);
             //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock2), (object)cpos);
         }

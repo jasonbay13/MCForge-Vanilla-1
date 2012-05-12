@@ -338,14 +338,17 @@ namespace MCForge.World {
         /// <param name="z">Location of z</param>
         /// <param name="y">Location of y</param>
         /// <param name="block">Block to set</param>
-        public void BlockChange(ushort x, ushort z, ushort y, byte block) {
+        /// <param name="p">A player who doesn't need the update.</param>
+        public void BlockChange(ushort x, ushort z, ushort y, byte block, Player p = null) {
             if (y == Size.y) return;
             byte currentType = GetBlock(x, z, y);
 
             if (block == currentType) return;
 
             SetBlock(x, z, y, block);
-            Player.GlobalBlockchange(this, x, z, y, block);
+            if (p == null)
+                Player.GlobalBlockchange(this, x, z, y, block);
+            else p.SendBlockchangeToOthers(this, x, z, y, block);
 
             //TODO Special stuff for block changing
         }

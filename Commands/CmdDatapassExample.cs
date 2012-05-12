@@ -40,7 +40,7 @@ namespace CommandDll {
             args.Unregister();
             Vector3 FirstBlock = new Vector3(args.X, args.Z, args.Y);
             sender.SendMessage("Please place another block...");
-            sender.setDatapass("CmdDatapassExample_FirstBlock", FirstBlock);
+            sender.SetDatapass("CmdDatapassExample_FirstBlock", FirstBlock);
             sender.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock2);
         }
         public void CatchBlock2(Player sender, BlockChangeEventArgs args) {
