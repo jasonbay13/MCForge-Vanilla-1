@@ -25,7 +25,7 @@ namespace MCForge.Robot
 
         ushort[] FoundPlayerPosition = new ushort[3] { 0, 0, 0 };
         byte[] FoundPlayerRotation = new byte[2] { 0, 0 };
-        bool Movement = false;
+        bool Movement = true;
         public int Speed = 24;
         bool Jumping = false;
         int CurrentJump = 0;
@@ -50,6 +50,7 @@ namespace MCForge.Robot
             Player.id = FreeId();
             Server.Bots.Add(this);
             SpawnThisBotToOtherPlayers(this);
+            this.FollowPlayers = FollowPlayers;
         }
 
         /// <summary>
@@ -59,11 +60,54 @@ namespace MCForge.Robot
         {
             foreach (Bot Bot in Server.Bots)
             {
-                Random Random = new Random();
                 if (Bot.Movement && Bot.FollowPlayers)
                 {
-                    Bot.Player.Pos.x = (short)(Bot.Player.Pos.x + 14); //Around running speed of normal client, 16-18 for WoM
-                    Bot.Player.UpdatePosition(false);
+                    #region Find Closest Player
+                    bool HitAPlayer = false;
+                    Vector3 ClosestLocation = new Vector3(0, 0, 0);
+                    foreach (Player p in Server.Players)
+                    {
+                        if (p.Level == Bot.Player.Level)
+                        {
+                            HitAPlayer = true;
+                            if (Vector3.MinusAbs(p.Pos, Bot.Player.Pos) > ClosestLocation)
+                            {
+                                ClosestLocation = p.Pos;
+                            }
+                        }
+                    }
+                    #endregion
+                    Vector3 TemporaryLocation = new Vector3(0, 0, 0);
+                    if (HitAPlayer) //TODO - Gravity, stop walking through blocks
+                    {
+                        if (ClosestLocation.x < Bot.Player.Pos.x)
+                            TemporaryLocation.x = (short)(Bot.Player.Pos.x - 13); //Around running speed of normal client, 16-18 for WoM
+                        else if (ClosestLocation.x >= Bot.Player.Pos.x)
+                            TemporaryLocation.x = (short)(Bot.Player.Pos.x + 13);
+                        if (ClosestLocation.z < Bot.Player.Pos.z)
+                            TemporaryLocation.z = (short)(Bot.Player.Pos.z - 13);
+                        else if (ClosestLocation.z >= Bot.Player.Pos.z)
+                            TemporaryLocation.z = (short)(Bot.Player.Pos.z + 13);
+
+                        TemporaryLocation.y = Bot.Player.Pos.y;
+
+                        if (
+                                (Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.AIR ||
+                                Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.WATER ||
+                                Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.LAVA ||
+                                Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.ACTIVE_LAVA ||
+                                Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.ACTIVE_WATER) 
+                            &&
+                                (Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.AIR ||
+                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.WATER ||
+                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.LAVA ||
+                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.ACTIVE_LAVA ||
+                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.ACTIVE_WATER)
+                            )
+                            Bot.Player.Pos = TemporaryLocation;
+
+                        Bot.Player.UpdatePosition(false);
+                    }
                 }
             }
         }
