@@ -512,7 +512,6 @@ namespace MCForge.World {
         public static Level FindLevel(string LevelName) {
             try {
                 return Levels.Find(e => {
-                    Console.WriteLine(e.Name.ToLower() + " " +  LevelName.ToLower() + " " + e.Name.ToLower() == LevelName.ToLower());
                     return e.Name.ToLower() == LevelName.ToLower();
                 });
             }

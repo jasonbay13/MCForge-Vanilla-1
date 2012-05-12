@@ -463,6 +463,7 @@ namespace MCForge.Entity {
                 return i;
             }
 
+            Logger.Log("Too many players O_O");
             return 254;
         }
 
