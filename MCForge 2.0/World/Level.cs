@@ -544,10 +544,13 @@ namespace MCForge.World {
                         if (pair.Key.StartsWith("Bot")) //Load bots
                         {
                             string[] StringSplit = pair.Value.Split(' ');
-                            if (StringSplit.Length == 7)
+                            if (StringSplit.Length == 7) //On load from metadata z and y are switched
                             {
+                                ushort x = Convert.ToUInt16(StringSplit[2]);
+                                ushort z = Convert.ToUInt16(StringSplit[3]);
+                                ushort y = Convert.ToUInt16(StringSplit[4]);
                                 Bot TemporaryBot = new Bot(StringSplit[0],
-                                    new Vector3(Convert.ToUInt16(StringSplit[2]), Convert.ToUInt16(StringSplit[3]), Convert.ToUInt16(StringSplit[4])),
+                                    new Vector3( x, y, z ),
                                     new byte[] { Convert.ToByte(StringSplit[5]), Convert.ToByte(StringSplit[6]) }, this,
                                     Convert.ToBoolean(StringSplit[1]));
                             }
