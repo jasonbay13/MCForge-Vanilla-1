@@ -67,6 +67,7 @@ namespace MCForge.Utilities.Settings {
                 new SettingNode("DefaultGroup", "guest", "The name of the default group, if it doesn't exist it will cause problems"),
                 new SettingNode("Offline", "false", "if set to true, it will skip authintication, causing a major security flaw"),
                 new SettingNode("AllowHigherRankTp", "true", "Allow players of a lower rank to teleport to a user of a higher rank"),
+                new SettingNode("Main-Level", "main", "The name of the main level. If tihs is empty or doesn't exist, it will generate a flat level."),
                 new SettingNode("DatabaseType", "sqlite", "The type of database you want to use (mysql/sqlite)"),
                 new SettingNode("MySQL-IP", "127.0.0.1", "The IP of the sql (mysql/sqlite) database"),
                 new SettingNode("MySQL-Port", "3306", "The port for the mysql database (sqlite does not need a port, leave this blank)"),

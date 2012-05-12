@@ -192,7 +192,6 @@ namespace MCForge.Core {
         	//TODO Add debug messages
             //TODO load the level if it exists
             Block.InIt();
-            Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Hell);
             UpdateTimer = new System.Timers.Timer(100);
             UpdateTimer.Elapsed += delegate { Update(); };
             Logger.Log("Starting update timer", LogType.Debug);
@@ -210,6 +209,11 @@ namespace MCForge.Core {
             Groups.PlayerGroup.Load();
 
             CreateCoreFiles();
+
+            Mainlevel = Level.LoadLevel(ServerSettings.GetSetting("Main-Level"));
+            if (Mainlevel == null)
+                Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Hell);
+
             Logger.Log("Loading Bans", LogType.Debug);
             Logger.Log("IPBANS", LogType.Debug);
             IPBans = new List<string>(File.ReadAllLines("bans/IPBans.txt"));

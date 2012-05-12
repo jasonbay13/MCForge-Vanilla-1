@@ -33,7 +33,6 @@ namespace CommandDll
             Level tempLevel = Level.FindLevel(args[0]);
             if (tempLevel != null)
             {
-                //TODO Need to despawn here
                 #region Send and Spawn
                 p.GlobalDie();
                 p.IsLoading = true;
@@ -51,7 +50,6 @@ namespace CommandDll
                 p.SpawnThisPlayerToOtherPlayers();
                 p.SpawnBotsForThisPlayer();
                 #endregion
-                //TODO Need to respawn here
                 Player.UniversalChat(p.Username + " went to " + args[0] + "!");
             }
             else

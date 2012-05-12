@@ -166,7 +166,12 @@ namespace MCForge.World {
             Level finalLevel = new Level(new Vector3(32, 32, 32));
             finalLevel.Name = levelName;
             try {
-                var Binary = new BinaryReader(File.Open(Name, FileMode.Open));
+                BinaryReader Binary = null;
+                try
+                {
+                    Binary = new BinaryReader(File.Open(Name, FileMode.Open));
+                }
+                catch { return null; }
 
                 using (Binary) {
                     long v = Binary.ReadInt64();
