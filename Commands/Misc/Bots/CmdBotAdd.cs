@@ -40,7 +40,7 @@ namespace CommandDll
             Random Random = new Random();
             string margs = ArrayToString(args);
             margs = margs.Replace('%', '&');
-            Bot TemporaryPlayer = new Bot(margs, p.Pos, p.Rot, p.Level, false);
+            Bot TemporaryPlayer = new Bot(margs, p.Pos, p.Rot, p.Level, true);
             TemporaryPlayer.Player.Level.ExtraData.Add("Bot" + Random.Next(0, 9999999), margs + " " + TemporaryPlayer.FollowPlayers +  //TODO - Random INT so the dictionary doesnt clash - this should be fixed
                 " " + TemporaryPlayer.Player.Pos.x + " " + TemporaryPlayer.Player.Pos.y + " " + TemporaryPlayer.Player.Pos.z + " "
                 + TemporaryPlayer.Player.Rot[0] + " " + TemporaryPlayer.Player.Rot[1]); //Add bot to level metadata
@@ -56,9 +56,6 @@ namespace CommandDll
 
         static string ArrayToString(string[] array)
         {
-            //
-            // Use string Join to concatenate the string elements.
-            //
             string result = string.Join(" ", array);
             return result;
         }

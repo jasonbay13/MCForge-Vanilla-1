@@ -75,6 +75,12 @@ namespace MCForge.Core {
             z = (short)Z;
         }
 
+        public static Vector3 MinusAbs(Vector3 a, Vector3 b){ //Get positive int
+            return new Vector3((short)Math.Abs(a.x - b.x), (short)Math.Abs(a.z - b.z), (short)Math.Abs(a.y - b.y));
+        }
+        public static Vector3 MinusY(Vector3 a, int b){
+            return new Vector3(a.x, a.z, (short)(a.y - b));
+        }
         public static Vector3 operator -(Vector3 a, Vector3 b) {
             return new Vector3((short)(a.x - b.x), (short)(a.z - b.z), (short)(a.y - b.y));
         }
@@ -87,11 +93,26 @@ namespace MCForge.Core {
         public static Vector3 operator /(Vector3 a, Vector3 b) {
             return new Vector3((short)(a.x / b.x), (short)(a.z / b.z), (short)(a.y / b.y));
         }
+        public static Vector3 operator /(Vector3 a, int b){
+            return new Vector3((short)(a.x / b), (short)(a.z / b), (short)(a.y / b));
+        }
         public static bool operator ==(Vector3 a, Vector3 b) {
             return (a.x == b.x && a.y == b.y && a.z == b.z);
         }
         public static bool operator !=(Vector3 a, Vector3 b) {
             return !(a.x == b.x && a.y == b.y && a.z == b.z);
+        }
+        public static bool operator >(Vector3 a, Vector3 b){
+            if (a.x + a.y + a.z > b.x + b.y + b.z)
+                return true;
+            else
+                return false;
+        }
+        public static bool operator <(Vector3 a, Vector3 b) {
+            if (a.x + a.y + a.z < b.x + b.y + b.z)
+                return true;
+            else
+                return false;
         }
         public override bool Equals(object obj) {
             return base.Equals(obj);
