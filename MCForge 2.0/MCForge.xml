@@ -321,7 +321,7 @@
             Air Block
             </summary>
         </member>
-        <member name="M:MCForge.Robot.Bot.#ctor(System.String,MCForge.Core.Vector3,System.Byte[],MCForge.World.Level,System.Boolean)">
+        <member name="M:MCForge.Robot.Bot.#ctor(System.String,MCForge.Core.Vector3,System.Byte[],MCForge.World.Level,System.Boolean,System.Boolean)">
             <summary>
             A robot (entity) that appears in the world.
             </summary>

@@ -46,8 +46,7 @@
     <Compile Include="Building\CmdReplace.cs" />
     <Compile Include="Building\CmdReplaceAll.cs" />
     <Compile Include="Building\CmdReplaceNot.cs" />
-    <Compile Include="Misc\Bots\CmdBotRemove.cs" />
-    <Compile Include="Misc\Bots\CmdBotAdd.cs" />
+    <Compile Include="Misc\Bots\CmdBot.cs" />
     <Compile Include="Moderation\CmdUnload.cs" />
     <Compile Include="Misc\Information\CmdMapInfo.cs" />
     <Compile Include="Misc\Information\CmdInfo.cs" />

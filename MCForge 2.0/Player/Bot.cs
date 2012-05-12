@@ -22,6 +22,7 @@ namespace MCForge.Robot
     public sealed partial class Bot
     {
         public bool FollowPlayers = false;
+        public bool BreakBlocks = false;
 
         ushort[] FoundPlayerPosition = new ushort[3] { 0, 0, 0 };
         byte[] FoundPlayerRotation = new byte[2] { 0, 0 };
@@ -38,7 +39,7 @@ namespace MCForge.Robot
         /// <summary>
         /// A robot (entity) that appears in the world.
         /// </summary>
-        public Bot(string Username, Vector3 Position, byte[] Rotation, Level level, bool FollowPlayers)
+        public Bot(string Username, Vector3 Position, byte[] Rotation, Level level, bool FollowPlayers, bool BreakBlocks)
         {
             Player = new Player();
             Player.Username = Username;
@@ -51,6 +52,7 @@ namespace MCForge.Robot
             Server.Bots.Add(this);
             SpawnThisBotToOtherPlayers(this);
             this.FollowPlayers = FollowPlayers;
+            this.BreakBlocks = BreakBlocks;
         }
 
         /// <summary>
@@ -60,6 +62,7 @@ namespace MCForge.Robot
         {
             foreach (Bot Bot in Server.Bots)
             {
+                Random Random = new Random();
                 if (Bot.Movement && Bot.FollowPlayers)
                 {
                     #region Find Closest Player
@@ -102,7 +105,7 @@ namespace MCForge.Robot
                                 Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.WATER ||
                                 Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.LAVA ||
                                 Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.ACTIVE_LAVA ||
-                                Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.ACTIVE_WATER) 
+                                Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.ACTIVE_WATER)
                             &&
                                 (Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.AIR ||
                                 Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.WATER ||
@@ -110,7 +113,16 @@ namespace MCForge.Robot
                                 Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.ACTIVE_LAVA ||
                                 Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.ACTIVE_WATER)
                             )
+                        {
                             Bot.Player.Pos = TemporaryLocation; //Make sure the bot doesnt walk through walls
+                        }
+                        else if (Bot.BreakBlocks) //Can't go through dat wall, try and break it
+                        {
+                            if (Random.Next(0, 15) == 7)
+                                Bot.Player.Level.BlockChange(Convert.ToUInt16(TemporaryLocation.x / 32), Convert.ToUInt16(TemporaryLocation.z / 32), Convert.ToUInt16(TemporaryLocation.y / 32), Block.BlockList.AIR);
+                            if (Random.Next(0, 15) == 7)
+                                Bot.Player.Level.BlockChange(Convert.ToUInt16(TemporaryLocation.x / 32), Convert.ToUInt16(TemporaryLocation.z / 32), Convert.ToUInt16((TemporaryLocation.y - 32) / 32), Block.BlockList.AIR);
+                        }
 
                         Bot.Player.UpdatePosition(false);
                     }
