@@ -301,6 +301,7 @@ namespace MCForge.Entity {
 			List<string> commands = new List<string>();
 			commands.Add("UPDATE _players SET money=" + money + ", lastlogin='" + LastLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', firstlogin='" + FirstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE UID=" + UID);
 			//TODO Add more commands...to save more stuff..
+			DataSaved.Call(this, new DataSavedEventArgs(UID));
 			Database.executeQuery(commands.ToArray());
 		}
 		
@@ -647,6 +648,10 @@ namespace MCForge.Entity {
         /// Gets called when a packet is sent to a player.
         /// </summary>
         public static PacketEvent OnPlayerSendPacket = new PacketEvent();
+        /// <summary>
+        /// Gets called when data is saved to the database
+        /// </summary>
+        public static DataSavedEvent DataSaved = new DataSavedEvent();
         /// <summary>
         /// Gets called when a packet is sent to any player.
         /// </summary>

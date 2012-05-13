@@ -83,6 +83,7 @@
     <Compile Include="API\Events\Player\ChatEvent.cs" />
     <Compile Include="API\Events\Player\CommandEvent.cs" />
     <Compile Include="API\Events\Player\ConnectionEvent.cs" />
+    <Compile Include="API\Events\Player\DataSavedEvent.cs" />
     <Compile Include="API\Events\Player\MoveEvent.cs" />
     <Compile Include="API\Events\Player\PacketEvent.cs" />
     <Compile Include="API\Events\System\CommandLoadEvent.cs" />
