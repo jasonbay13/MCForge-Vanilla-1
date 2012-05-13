@@ -18,11 +18,12 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
 using MCForge.Utils;
+using MCForge.Utilities;
 
 namespace CommandDll {
     public class CmdClick : ICommand {
         public string Name { get { return "Click"; } }
-        public CommandTypes Type { get { return CommandTypes.building; } }
+        public CommandTypes Type { get { return CommandTypes.Building; } }
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -64,7 +65,7 @@ namespace CommandDll {
                     }
                 }
                 catch (Exception e) {
-                    Server.Log(e);
+                    Logger.LogError(e);
                     return;
                 }
             }

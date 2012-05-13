@@ -28,7 +28,7 @@ namespace CommandDll.Moderation
     {
 
         public string Name { get { return "Patrol"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Nerketur"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -43,14 +43,14 @@ namespace CommandDll.Moderation
                 if (wanted == null)
                     p.SendMessage("Spcified group doesn't exist.  Using all groups below you...");
             }
-            if (wanted != null && wanted.permission >= p.group.permission)
+            if (wanted != null && wanted.Permission >= p.Group.Permission)
             {
                 wanted = null;
                 p.SendMessage("Sorry, you can only patrol groups of a lower rank.  Using all groups below you...");
             }
             p.SendMessage("Finding a person " + (wanted == null ? "under you" : "of the specified rank") + " to patrol...");
             ICommand gotoCmd = Command.Find("goto"); //If goto exists, we can use it to go to the new level before teleporting.
-            List<Player> allUnder = Server.Players.FindAll(plr => (wanted == null ? true : plr.group.permission == wanted.permission) && plr.group.permission < p.group.permission && (gotoCmd == null ? p.Level == plr.Level : true));
+            List<Player> allUnder = Server.Players.FindAll(plr => (wanted == null ? true : plr.Group.Permission == wanted.Permission) && plr.Group.Permission < p.Group.Permission && (gotoCmd == null ? p.Level == plr.Level : true));
             if (allUnder.Count == 0)
             {
                 p.SendMessage("There are no people " + (wanted == null ? "under your" : "of the specified") + " rank that are " + (gotoCmd == null ? "in your level." : "currently online."));

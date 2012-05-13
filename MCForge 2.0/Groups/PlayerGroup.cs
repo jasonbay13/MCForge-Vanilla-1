@@ -22,6 +22,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using System.IO;
 using MCForge.Utilities;
+using System.Drawing;
 
 namespace MCForge.Groups
 {
@@ -29,13 +30,42 @@ namespace MCForge.Groups
     /// All the default permission values
     /// </summary>
     /// <remarks></remarks>
-    public enum Permission : byte
+    public enum PermissionLevel : byte
     {
+        /// <summary>
+        /// Guest permission
+        /// <value>0</value>
+        /// </summary>
         Guest = 0,
+
+        /// <summary>
+        /// Builder permission
+        /// <value>30</value>
+        /// </summary>
         Builder = 30,
+
+        /// <summary>
+        /// Advanced Builder permission
+        /// <value>50</value>
+        /// </summary>
         AdvBuilder = 50,
+
+        /// <summary>
+        /// Operator permission
+        /// <value>80</value>
+        /// </summary>
         Operator = 80,
+
+        /// <summary>
+        /// Super Operator permission
+        /// <value>100</value>
+        /// </summary>
         SuperOP = 100,
+
+        /// <summary>
+        /// Owner permission
+        /// <value>120</value>
+        /// </summary>
         Owner = 120
     }
     /// <summary>
@@ -47,43 +77,43 @@ namespace MCForge.Groups
         /// <summary>
         /// A list of all the available groups 
         /// </summary>
-        public static List<PlayerGroup> groups = new List<PlayerGroup>();
+        public static List<PlayerGroup> Groups = new List<PlayerGroup>();
 
 
         /// <summary>
         /// A list of all the players in the group (includes offline players)
         /// </summary>
-        public List<string> players = new List<string>();
+        public List<string> Players = new List<string>();
         /// <summary>
         /// The name of the group
         /// </summary>
-        public string name { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// The permission level of the group.
         /// </summary>
-        public byte permission { get; set; }
+        public byte Permission { get; set; }
         /// <summary>
         /// The colour of the group.
         /// note color == colour
         /// </summary>
-		public string colour { get { return color; } set { color = value;} }
+		public string Colour { get { return Color; } set { Color = value;} }
 		/// <summary>
 		/// The color of the group.
         /// note color == colour
 		/// </summary>
-		public string color { get; set; }
+		public string Color { get; set; }
 
         int _maxblockchange = 100;
         /// <summary>
         /// The maximum amount of blocks this group can change.
         /// </summary>
-        public int maxBlockChange { get { return _maxblockchange; } set { _maxblockchange = value; } }
+        public int MaxBlockChange { get { return _maxblockchange; } set { _maxblockchange = value; } }
 
         string _file;
         /// <summary>
         /// The filename to save the group list into. when setting it des not contain the "ranks/" part
         /// </summary>
-        public string file
+        public string File
         {
             get
             {
@@ -101,7 +131,7 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         internal PlayerGroup()
         {
-            name = colour = null;
+            Name = Colour = null;
         }
         /// <summary>
         /// Adds this instance to the list of groups ONLY use it when you initialised with PlayerGroup().
@@ -109,18 +139,18 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         internal void add()
         {
-            if (name != null && colour != null)
+            if (Name != null && Colour != null)
             {
-                foreach (PlayerGroup g in groups.ToArray())
+                foreach (PlayerGroup g in Groups.ToArray())
                 {
-                    if (name.ToLower() == g.name.ToLower())
+                    if (Name.ToLower() == g.Name.ToLower())
                     {
                         throw new ArgumentException("Cannot have 2 groups of the same name");
                     }
                 }
 
                 LoadGroup();
-                groups.Add(this);
+                Groups.Add(this);
             }
             else
             {
@@ -138,9 +168,9 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         public PlayerGroup(int perm, string name, string colour, string file)
         {
-            foreach (PlayerGroup g in groups.ToArray())
+            foreach (PlayerGroup g in Groups.ToArray())
             {
-                if (name.ToLower() == g.name.ToLower())
+                if (name.ToLower() == g.Name.ToLower())
                 {
                     throw new ArgumentException("Cannot have 2 groups of the same name");
                 }
@@ -149,25 +179,25 @@ namespace MCForge.Groups
             string file1 = "ranks/" + file;
             if (!Directory.Exists(Path.GetDirectoryName(file1)))
                 Directory.CreateDirectory(Path.GetDirectoryName(file1));
-            if (!File.Exists(file1))
+            if (!System.IO.File.Exists(file1))
             {
-                File.Create(file1).Close();
-                Server.Log("[Groups] " + file + " was created", ConsoleColor.DarkGreen, ConsoleColor.Black);
+                System.IO.File.Create(file1).Close();
+                Logger.Log("[Groups] " + file + " was created", System.Drawing.Color.DarkGreen, System.Drawing.Color.Black);
             }
             try
             {
-                permission = byte.Parse(perm.ToString());
+                Permission = byte.Parse(perm.ToString());
             }
             catch
             {
                 throw new ArgumentException("Permission has to be above 0 and below 255");
             }
-            this.name = name;
-            this.colour = colour;
-            this.file = file;
+            this.Name = name;
+            this.Colour = colour;
+            this.File = file;
 
             LoadGroup();
-            groups.Add(this);
+            Groups.Add(this);
         }
 
         /// <summary>
@@ -179,7 +209,7 @@ namespace MCForge.Groups
         {
 			Server.ForeachPlayer(delegate(Player p)
 			{
-				if (p.group == this)
+				if (p.Group == this)
 					p.SendMessage(message);
 			});
         }
@@ -193,10 +223,10 @@ namespace MCForge.Groups
         {
             if (CommandPermissionOverrides.overrides.ContainsKey(command))
                 foreach (KeyValuePair<ICommand, byte> cmd in CommandPermissionOverrides.overrides)
-                    if (cmd.Key == command && cmd.Value <= permission)
+                    if (cmd.Key == command && cmd.Value <= Permission)
                         return true;
 
-            if (command.Permission <= permission && !CommandPermissionOverrides.overrides.ContainsKey(command))
+            if (command.Permission <= Permission && !CommandPermissionOverrides.overrides.ContainsKey(command))
                 return true;
             return false;
         }
@@ -210,11 +240,11 @@ namespace MCForge.Groups
         {
             try
             {
-                if (!Directory.Exists(Path.GetDirectoryName(file)))
-                    Directory.CreateDirectory(Path.GetDirectoryName(file));
+                if (!Directory.Exists(Path.GetDirectoryName(File)))
+                    Directory.CreateDirectory(Path.GetDirectoryName(File));
 
-                TextWriter o = new StreamWriter(file);
-                foreach (string s in players.ToArray())
+                TextWriter o = new StreamWriter(File);
+                foreach (string s in Players.ToArray())
                     o.WriteLine(s.ToLower());
                 o.Flush();
                 o.Close();
@@ -236,13 +266,13 @@ namespace MCForge.Groups
             try
             {
                 string line;
-                TextReader file = new StreamReader(this.file);
+                TextReader file = new StreamReader(this.File);
 
                 while ((line = file.ReadLine()) != null)
                 {
                     if (!string.IsNullOrEmpty(line))
-                        if (!players.Contains(line.ToLower()))
-                            players.Add(line.ToLower());
+                        if (!Players.Contains(line.ToLower()))
+                            Players.Add(line.ToLower());
                 }
                 file.Close();
                 file.Dispose();
@@ -261,9 +291,9 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         public void AddPlayer(Player p)
         {
-            p.group.players.Remove(p.Username.ToLower());
-            p.group = this;
-            players.Add(p.Username.ToLower());
+            p.Group.Players.Remove(p.Username.ToLower());
+            p.Group = this;
+            Players.Add(p.Username.ToLower());
             SaveGroup();
         }
         /// <summary>
@@ -274,13 +304,13 @@ namespace MCForge.Groups
         {
             PlayerGroupProperties.Load();
             CommandPermissionOverrides.Load();
-            if (!(groups.Count > 0))
+            if (!(Groups.Count > 0))
             {
                 InitDefaultGroups();
             }
-            foreach (PlayerGroup g in groups)
+            foreach (PlayerGroup g in Groups)
             {
-                Logger.Log("[Group] " + g.name + " Initialized");
+                Logger.Log("[Group] " + g.Name + " Initialized");
             }
         }
         /// <summary>
@@ -292,14 +322,14 @@ namespace MCForge.Groups
             //PlayerGroupProperties.Load();
             //foreach (PlayerGroup g in PlayerGroup.groups)
             //{
-            //    Server.Log("[Group] " + g.name + " Initialized");
+            //    Logger.Log("[Group] " + g.name + " Initialized");
             //}
-            new PlayerGroup((byte)Permission.Guest, "Guest", Colors.white, "guests.txt");
-            new PlayerGroup((byte)Permission.Builder, "Builder", Colors.green, "builders.txt");
-            new PlayerGroup((byte)Permission.AdvBuilder, "AdvBuilder", Colors.lime, "advbuilders.txt");
-            new PlayerGroup((byte)Permission.Operator, "Operator", Colors.purple, "ops.txt");
-            new PlayerGroup((byte)Permission.SuperOP, "SuperOp", Colors.maroon, "superops.txt");
-            new PlayerGroup((byte)Permission.Owner, "Owner", Colors.blue, "owners.txt");
+            new PlayerGroup((byte)PermissionLevel.Guest, "Guest", Colors.white, "guests.txt");
+            new PlayerGroup((byte)PermissionLevel.Builder, "Builder", Colors.green, "builders.txt");
+            new PlayerGroup((byte)PermissionLevel.AdvBuilder, "AdvBuilder", Colors.lime, "advbuilders.txt");
+            new PlayerGroup((byte)PermissionLevel.Operator, "Operator", Colors.purple, "ops.txt");
+            new PlayerGroup((byte)PermissionLevel.SuperOP, "SuperOp", Colors.maroon, "superops.txt");
+            new PlayerGroup((byte)PermissionLevel.Owner, "Owner", Colors.blue, "owners.txt");
             PlayerGroupProperties.Save();
         }
 
@@ -311,9 +341,9 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         public static bool Exists(string name)
         {
-            foreach (PlayerGroup g in PlayerGroup.groups)
+            foreach (PlayerGroup g in PlayerGroup.Groups)
             {
-                if (g.name.ToLower() == name.ToLower())
+                if (g.Name.ToLower() == name.ToLower())
                     return true;
             }
             return false;
@@ -328,9 +358,9 @@ namespace MCForge.Groups
             else if (name == "op" && !Exists(name)) name = "operator";
             else if (name == "admin" && !Exists(name)) name = "superop";
 
-            foreach (PlayerGroup g in PlayerGroup.groups)
+            foreach (PlayerGroup g in PlayerGroup.Groups)
             {
-                if (g.name.ToLower() == name.ToLower())
+                if (g.Name.ToLower() == name.ToLower())
                     return g;
             }
 

@@ -25,7 +25,7 @@ using MCForge.Utils;
 namespace CommandDll.Misc {
     class CmdPass : ICommand {
         public string Name { get { return "Pass"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Sinjai"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -36,7 +36,7 @@ namespace CommandDll.Misc {
             p.ExtraData.CreateIfNotExist("PassTries", 0);
             if (p.IsVerified) { p.SendMessage("You already verified!"); return; }
             if (!Server.Verifying) { p.SendMessage("You don't need to verify!"); return; }
-            if (p.group.permission < Server.VerifyGroup.permission) { p.SendMessage("Only " + Server.VerifyGroup.color + Server.VerifyGroup.name + "s " + Server.DefaultColor + "and above need to verify."); return; }
+            if (p.Group.Permission < Server.VerifyGroup.Permission) { p.SendMessage("Only " + Server.VerifyGroup.Color + Server.VerifyGroup.Name + "s " + Server.DefaultColor + "and above need to verify."); return; }
             if ((int)p.ExtraData["PassTries"] >= 3) { p.Kick("Did you really think you could keep on guessing?"); return; }
             int foundone = 0;
             if (args[0] == "") { Help(p); return; }

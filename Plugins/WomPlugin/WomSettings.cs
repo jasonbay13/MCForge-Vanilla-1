@@ -6,6 +6,8 @@ using MCForge.Utilities.Settings;
 using System.IO;
 using MCForge.World;
 using MCForge.Core;
+using MCForge.Utilities;
+using System.Drawing;
 
 namespace Plugins.WomPlugin {
     class WomSettings : ExtraSettings {
@@ -50,12 +52,12 @@ namespace Plugins.WomPlugin {
                 return;
             var lines = File.ReadAllLines(path);
             if (lines.Count() != 2) {
-                Server.Log(String.Format("{0} was formatted incorrectly, this file will not be loaded", path), ConsoleColor.Red, ConsoleColor.Black);
+                Logger.Log(String.Format("{0} was formatted incorrectly, this file will not be loaded", path), Color.Red, Color.Black);
                 return;
             }
             //var level = Level.FindLevel(lines[0].Split('=')[1].Trim());
             //if(level == null){
-            //    Server.Log(String.Format("{0} was formatted incorrectly (level not found), this file will not be loaded", path), ConsoleColor.Red, ConsoleColor.Black);
+            //    Logger.Log(String.Format("{0} was formatted incorrectly (level not found), this file will not be loaded", path), ConsoleColor.Red, ConsoleColor.Black);
             //    return;
             //}
             // LevelsWithTextures.Add(

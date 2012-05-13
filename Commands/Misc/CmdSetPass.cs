@@ -19,13 +19,14 @@ using System.Text;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utilities;
 
 namespace CommandDll.Misc
 {
     class CmdSetPass : ICommand
     {
         public string Name { get { return "SetPass"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Sinjai"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -34,7 +35,7 @@ namespace CommandDll.Misc
         {
             if (!p.IsVerified) { p.SendMessage("&cYou already have a password set. " + Server.DefaultColor + "You &ccannot change " + Server.DefaultColor + "it unless &cyou verify it with &a/pass [Password]. " + Server.DefaultColor + "If you have &cforgotten " + Server.DefaultColor + "your password, contact the server host and they can &creset it!"); return; }
             if (args[0] == "") { Help(p); return; }
-            if (p.group.permission < Server.VerifyGroup.permission) { p.SendMessage("Only " + Server.VerifyGroup.color + Server.VerifyGroup.name + "s " + Server.DefaultColor + "and above need to verify."); return; }
+            if (p.Group.Permission < Server.VerifyGroup.Permission) { p.SendMessage("Only " + Server.VerifyGroup.Color + Server.VerifyGroup.Name + "s " + Server.DefaultColor + "and above need to verify."); return; }
             int number = args[0].Split(' ').Length;
             if (number > 1)
             {
@@ -122,7 +123,7 @@ namespace CommandDll.Misc
                 catch
                 {
                     who.SendMessage("&cFailed to Save Password, &aTry Again Later!");
-                    Server.Log(who.Username + " failed to save password.");
+                    Logger.Log(who.Username + " failed to save password.");
                 }
                 return outStr;
 

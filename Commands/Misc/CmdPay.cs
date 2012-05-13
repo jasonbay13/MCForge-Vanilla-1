@@ -20,7 +20,7 @@ using MCForge.Utils;
 namespace CommandDll.Misc {
     class CmdPay : ICommand {
         public string Name { get { return "Pay"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Sinjai"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

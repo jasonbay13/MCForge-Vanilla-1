@@ -23,7 +23,7 @@ namespace CommandDll
     public class CmdViewranks : ICommand
     {
         public string Name { get { return "Viewranks"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -35,8 +35,8 @@ namespace CommandDll
             if (group == null) { p.SendMessage("The rank \"" + args[0] + "\" doesn't exist!"); return; }
             try
             {
-                string[] players = File.ReadAllLines(group.file);
-                string send = "People with the rank " + group.color + group.name + Server.DefaultColor + ": ";
+                string[] players = File.ReadAllLines(group.File);
+                string send = "People with the rank " + group.Color + group.Name + Server.DefaultColor + ": ";
                 foreach (string player in players) { send += player + "&a, " + Server.DefaultColor; }         
                 p.SendMessage(send.Remove(send.Length - 4, 4));
             }

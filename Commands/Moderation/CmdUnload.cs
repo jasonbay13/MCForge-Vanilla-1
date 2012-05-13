@@ -21,7 +21,7 @@ namespace CommandDll
     public class CmdUnload : ICommand
     {
         public string Name { get { return "Unload"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Snowl"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

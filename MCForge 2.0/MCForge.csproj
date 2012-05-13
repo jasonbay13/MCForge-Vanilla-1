@@ -82,6 +82,7 @@
     <Compile Include="API\Events\Player\BlockChangeEvent.cs" />
     <Compile Include="API\Events\Player\ChatEvent.cs" />
     <Compile Include="API\Events\Player\CommandEvent.cs" />
+    <Compile Include="API\Events\Player\CommandEndEvent.cs" />
     <Compile Include="API\Events\Player\ConnectionEvent.cs" />
     <Compile Include="API\Events\Player\DataSavedEvent.cs" />
     <Compile Include="API\Events\Player\MoveEvent.cs" />
@@ -216,6 +217,7 @@
     <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="README.txt" />
     <Content Include="MCForge.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -21,7 +21,7 @@ namespace CommandDll.Moderation
     public class CmdWhois : ICommand
     {
         public string Name { get { return "Whois"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Nerketur"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -45,7 +45,7 @@ namespace CommandDll.Moderation
                 {
                     p.SendMessage(found.Username + " is on " + found.Level.Name);
                     p.SendMessage(/*found.title + " " + */found.Username + " has:");
-                    p.SendMessage("> the rank of " + found.group.color + found.group.name);
+                    p.SendMessage("> the rank of " + found.Group.Color + found.Group.Name);
                     //p.SendMessage("> modified " + found.allmodified + " blocks and " + found.modified + " were changed since logging in.");
                     //p.SendMessage("> time spent on server: " + found.totalTimeOnline);
                     //p.SendMessage("> been logged in for " + found.timeLoggedOn);

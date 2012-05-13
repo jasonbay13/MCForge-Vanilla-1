@@ -22,7 +22,7 @@ namespace CommandDll
     public class CmdTitle : ICommand
     {
         public string Name { get { return "Title"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "7imekeeper"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

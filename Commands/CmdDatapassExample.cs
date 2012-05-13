@@ -14,7 +14,7 @@ namespace CommandDll {
         string _Name = "DataPassExample";
         public string Name { get { return _Name; } }
 
-        CommandTypes _Type = CommandTypes.misc;
+        CommandTypes _Type = CommandTypes.Misc;
         public CommandTypes Type { get { return _Type; } }
 
         string _Author = "Merlin33069";
@@ -40,7 +40,7 @@ namespace CommandDll {
             args.Unregister();
             Vector3 FirstBlock = new Vector3(args.X, args.Z, args.Y);
             sender.SendMessage("Please place another block...");
-            sender.SetDatapass("CmdDatapassExample_FirstBlock", FirstBlock);
+            sender.setDatapass("CmdDatapassExample_FirstBlock", FirstBlock);
             sender.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock2);
         }
         public void CatchBlock2(Player sender, BlockChangeEventArgs args) {

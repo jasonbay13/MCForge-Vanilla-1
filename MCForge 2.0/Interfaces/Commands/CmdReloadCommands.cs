@@ -20,7 +20,7 @@ namespace MCForge.Interface.Command
 	public class CmdReloadCmds : ICommand
 	{
 		public string Name { get { return "Reload Commands"; } }
-		public CommandTypes Type { get { return CommandTypes.misc; } }
+		public CommandTypes Type { get { return CommandTypes.Misc; } }
 		public string Author { get { return "Merlin33069"; } }
 		public int Version { get { return 1; } }
 		public string CUD { get { return ""; } }

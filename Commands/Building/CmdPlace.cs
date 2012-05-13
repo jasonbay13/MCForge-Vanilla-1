@@ -23,7 +23,7 @@ namespace CommandDll
     public class CmdPlace : ICommand
     {
         public string Name { get { return "Place"; } }
-        public CommandTypes Type { get { return CommandTypes.building; } }
+        public CommandTypes Type { get { return CommandTypes.Building; } }
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

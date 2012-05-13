@@ -24,7 +24,7 @@ using System;
 namespace CommandDll {
     public class CmdMode : ICommand {
         public string Name { get { return "Mode"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -48,7 +48,7 @@ namespace CommandDll {
                     p.SendMessage("Cannot use air mode!");
                     return;
                 }
-                if (b.Permission > p.group.permission) {
+                if (b.Permission > p.Group.Permission) {
                     p.SendMessage("Cannot place " + StringUtils.TitleCase(b.Name) + "!");
                     return;
                 }
@@ -71,7 +71,7 @@ namespace CommandDll {
                         p.SendMessage("Cannot use air mode!");
                         return; 
                     }
-                    if (b.Permission > p.group.permission) { 
+                    if (b.Permission > p.Group.Permission) { 
                         p.SendMessage("Cannot place " + StringUtils.TitleCase(b.Name) + "!");
                         return; 
                     }

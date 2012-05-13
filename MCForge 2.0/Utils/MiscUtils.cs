@@ -7,13 +7,32 @@ using MCForge.SQL;
 using MCForge.Entity;
 
 namespace MCForge.Utils {
+<<<<<<< HEAD
 	public static class MiscUtils {
+
+	    
+        /// <summary>
+        /// Gets the object if it exist.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="dict">The dict.</param>
+        /// <param name="key">The key.</param>
+        /// <returns></returns>
 		public static object GetIfExist(this Dictionary<object, object> dict, object key) {
 			if (dict.ContainsKey(key))
 				return dict[key];
 			return null;
 		}
 
+        /// <summary>
+        /// Puts object in list if it does not exist.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="dict">The dict.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
 		public static void CreateIfNotExist(this Dictionary<object, object> dict, object key, object value) {
 			if (!dict.ContainsKey(key))
 				dict.Add(key, value);
@@ -47,6 +66,19 @@ namespace MCForge.Utils {
 			}
 			return ret;
 		}
+
+        /// <summary>
+        /// Changes the value or Creates it if it doesnt exist.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="dict">The dict.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        public static void ChangeOrCreate<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value) {
+            dict.CreateIfNotExist<TKey, TValue>(key, value);
+            dict[key] = value;
+        }
 
 
 	}

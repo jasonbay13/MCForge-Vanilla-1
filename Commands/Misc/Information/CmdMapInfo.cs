@@ -24,7 +24,7 @@ using MCForge.Utils;
 namespace CommandDll {
     public class CmdMapInfo : ICommand {
         public string Name { get { return "MapInfo"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "jasonbay13"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -44,7 +44,7 @@ namespace CommandDll {
             p.SendMessage(String.Concat("To see a list of players currently on ", l.Name, ", type \"yes\"."));
             //OnPlayerChat.Register(plist, MCForge.API.Priority.Normal, l, p);
             p.OnPlayerChat.Normal += new ChatEvent.EventHandler(plist);
-            p.SetDatapass("mapinfoLevel", l);
+            p.setDatapass("mapinfoLevel", l);
         }
 
         private void plist(Player sender, ChatEventArgs eventargs) {

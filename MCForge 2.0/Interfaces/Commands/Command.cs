@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge.Core;
+using MCForge.Utilities;
+using System.Drawing;
 using MCForge.API.Events;
 
 namespace MCForge.Interface.Command
@@ -75,10 +77,25 @@ namespace MCForge.Interface.Command
         public static CommandLoadEvent OnCommandUnload { get { throw new Exception("Not implemented yet"); } }
     }
 	public enum CommandTypes {
-		building,
-		mod,
-		misc,
-		information,
+        /// <summary>
+        /// Build type of command
+        /// </summary>
+		Building,
+
+        /// <summary>
+        /// Mod type of command
+        /// </summary>
+		Mod,
+
+        /// <summary>
+        /// Misc type of command
+        /// </summary>
+		Misc,
+
+        /// <summary>
+        /// Info type of command
+        /// </summary>
+		Information,
 		//fun,
 	}
 }

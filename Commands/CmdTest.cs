@@ -8,7 +8,7 @@ namespace CommandDll {
         string _Name = "test";
         public string Name { get { return _Name; } }
 
-        CommandTypes _Type = CommandTypes.misc;
+        CommandTypes _Type = CommandTypes.Misc;
         public CommandTypes Type { get { return _Type; } }
 
         string _Author = "Merlin33069";
@@ -41,7 +41,7 @@ namespace CommandDll {
             sender.OnPlayerChat.All -= new ChatEvent.EventHandler(CallBack2);
         }
         public void CallBack2(Player sender, ChatEventArgs args) {
-            //Server.Log("Test: " + e.target.Username + " disconnected!");
+            //Logger.Log("Test: " + e.target.Username + " disconnected!");
             args.Message += "  Yeah, and Pikachu ROCKS!";
             sender.OnPlayerChat.All -= new ChatEvent.EventHandler(CallBack2);
         }

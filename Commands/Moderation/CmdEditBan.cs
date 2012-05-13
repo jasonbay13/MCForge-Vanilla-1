@@ -23,7 +23,7 @@ namespace CommandDll.Moderation
     class CmdEditBan : ICommand
     {
         public string Name { get { return "EditBan"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Sinjai"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

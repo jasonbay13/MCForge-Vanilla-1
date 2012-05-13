@@ -17,6 +17,8 @@ using System.Data;
 using MCForge.Core;
 using System.Collections.Generic;
 using MCForge.Utilities.Settings;
+using System.Drawing;
+using MCForge.Utilities;
 
 namespace MCForge.SQL
 {
@@ -41,8 +43,8 @@ namespace MCForge.SQL
 						SQLType = new SQLite();
                         break;
 					default:
-						Server.Log("Database Type not found!", ConsoleColor.Red, ConsoleColor.Gray);
-						Server.Log("Using SQLite", ConsoleColor.Green, ConsoleColor.Gray);
+						Logger.Log("Database Type not found!",Color.Red, Color.Gray);
+						Logger.Log("Using SQLite", Color.Green, Color.Gray);
 						SQLType = new SQLite();
                         break;
 				}

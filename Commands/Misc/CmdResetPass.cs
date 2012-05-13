@@ -23,7 +23,7 @@ using MCForge.Utilities;
 namespace CommandDll.Misc {
     class CmdResetPass : ICommand {
         public string Name { get { return "ResetPass"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Sinjai"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

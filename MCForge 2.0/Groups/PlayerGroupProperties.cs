@@ -28,14 +28,14 @@ namespace MCForge.Groups
                 writer.WriteStartDocument();
                 writer.WriteStartElement("Groups");
 
-                foreach (PlayerGroup group in PlayerGroup.groups.ToArray())
+                foreach (PlayerGroup group in PlayerGroup.Groups.ToArray())
                 {
                     writer.WriteStartElement("Group");
-                    writer.WriteElementString("name", group.name);
-                    writer.WriteElementString("permission", group.permission.ToString());
-                    writer.WriteElementString("color", group.colour.ToString().Remove(0, 1));
-                    writer.WriteElementString("maxblockchanges", group.maxBlockChange.ToString());
-                    writer.WriteElementString("file", group.file);
+                    writer.WriteElementString("name", group.Name);
+                    writer.WriteElementString("permission", group.Permission.ToString());
+                    writer.WriteElementString("color", group.Colour.ToString().Remove(0, 1));
+                    writer.WriteElementString("maxblockchanges", group.MaxBlockChange.ToString());
+                    writer.WriteElementString("file", group.File);
                     //{
                     //    writer.WriteStartElement("players");
                     //    foreach (string s in group.players)
@@ -60,19 +60,19 @@ namespace MCForge.Groups
 						if (reader.IsStartElement()) {
 							switch (reader.Name.ToLower()) {
 								case "name":
-									group.name = reader.ReadString();
+									group.Name = reader.ReadString();
 									break;
 								case "permission":
-									try { group.permission = byte.Parse(reader.ReadString()); } catch { }
+									try { group.Permission = byte.Parse(reader.ReadString()); } catch { }
 									break;
 								case "color":
-									group.colour = '&' + reader.ReadString();
+									group.Colour = '&' + reader.ReadString();
 									break;
 								case "file":
-									group.file = reader.ReadString();
+									group.File = reader.ReadString();
 									break;
 								case "maxblockchanges":
-									try { group.maxBlockChange = int.Parse(reader.ReadString()); } catch { }
+									try { group.MaxBlockChange = int.Parse(reader.ReadString()); } catch { }
 									break;
 							}
 						} else {

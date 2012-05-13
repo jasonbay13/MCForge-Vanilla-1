@@ -5,6 +5,7 @@ using System.Text;
 using System.Globalization;
 using MCForge.Core;
 using System.IO;
+using System.Drawing;
 
 namespace MCForge.Utilities.Settings {
     public abstract class ExtraSettings {
@@ -54,7 +55,7 @@ namespace MCForge.Utilities.Settings {
                 return i;
             }
             catch {
-                Server.Log(String.Format("{0}: integer expected as first value for '{1}'", SettingsName, key), ConsoleColor.Red, ConsoleColor.Black);
+                Logger.Log(String.Format("{0}: integer expected as first value for '{1}'", SettingsName, key), Color.Red, Color.Black);
                 return -1;
             }
         }

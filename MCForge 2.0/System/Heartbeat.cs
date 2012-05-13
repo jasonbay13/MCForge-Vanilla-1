@@ -19,6 +19,8 @@ using System.Text;
 using System.Net;
 using System.IO;
 using MCForge.Utilities.Settings;
+using MCForge.Utilities;
+using System.Drawing;
 
 namespace MCForge.Core
 {
@@ -67,14 +69,6 @@ namespace MCForge.Core
         /// <summary>
         /// Sends all the heartbeats.
         /// </summary>
-        /// <param name="port">The port the server is running on.</param>
-        /// <param name="serverName">Name of the server.</param>
-        /// <param name="Public">If the server is public or not.</param>
-        /// <param name="salt">The server salt salt.</param>
-        /// <param name="onlineUsers">The number of online users.</param>
-        /// <param name="maxUsers">The maximum amount of users.</param>
-        /// <returns></returns>
-        /// <remarks></remarks>
         public static string[] sendHeartbeat()
         {
             string[] output = new string[1]; int i = 0;
@@ -91,7 +85,7 @@ namespace MCForge.Core
             catch (Exception e)
             {
                 output[i] = "Error when sending heartbeat";
-				Server.Log(e);
+                Logger.LogError(e);
             }
             if (output[i] == "bad heartbeat! (salt is too long)")
             {
@@ -102,7 +96,7 @@ namespace MCForge.Core
             }
             else
             {
-                if (Server.URL != output[i]) Server.Log("URL Found/Updated: " + output[i], ConsoleColor.Green, ConsoleColor.Black);
+                if (Server.URL != output[i]) Logger.Log("URL Found/Updated: " + output[i], Color.Green, Color.Black);
                 Server.URL = output[i];
                 writeURL(output[i], "text/heartbeaturl.txt");
             }

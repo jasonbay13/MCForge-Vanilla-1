@@ -24,7 +24,7 @@ namespace CommandDll
     public class CmdBot : ICommand
     {
         public string Name { get { return "BotAI"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Snowl"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -42,8 +42,7 @@ namespace CommandDll
             {
                 List<string> fargs = new List<string>();
                 int l = 0;
-                foreach (string s in args)
-                {
+                foreach (string s in args) {
                     if (l > 0)
                         fargs.Add(s);
                     l++;
@@ -144,12 +143,19 @@ namespace CommandDll
                     p.SendMessage("You need to use \"'s in your command!");
                     return;
                 }
-                foreach (string s in blargs)
-                {
+                foreach (string s in blargs) {
                     s.Replace("\"", "");
                 }
                 string FoundPlayer = blargs[1];
-                string AI = blargs[2].Remove(0, 1);
+                string AI = "";
+                try
+                {
+                    AI = blargs[2].Remove(0, 1);
+                }
+                catch {
+                    p.SendMessage("You need to fill out the entire command!");
+                    return;
+                }
                 bool HitBot = false;
 
                 Bot Bot = null;
@@ -170,13 +176,21 @@ namespace CommandDll
                                 HitBot = true;
                                 Bot = b;
                                 break;
-                            case "jumping":
+                            case "jump":
                                 b.Jumping = !b.Jumping;
                                 HitBot = true;
                                 Bot = b;
                                 break;
                         }
                     }
+                }
+
+                if (HitBot)
+                    p.SendMessage("Changed " + FoundPlayer + "'s AI!");
+                else
+                {
+                    p.SendMessage("Couldn't find " + FoundPlayer + " or change the AI!");
+                    return;
                 }
 
                 List<string> tempArray = new List<string>();
@@ -195,14 +209,6 @@ namespace CommandDll
                 Bot.Player.Level.ExtraData.Add("Bot" + Random.Next(0, 9999999), margs + " " + Bot.FollowPlayers + " " + Bot.BreakBlocks +
                     " " + Bot.Player.Pos.x + " " + Bot.Player.Pos.y + " " + Bot.Player.Pos.z + " "
                     + Bot.Player.Rot[0] + " " + Bot.Player.Rot[1]);
-
-                if (HitBot)
-                    p.SendMessage("Changed " + FoundPlayer + "'s AI!");
-                else
-                {
-                    p.SendMessage("Couldn't find " + FoundPlayer + " or change the AI!");
-                    return;
-                }
             }
         }
 

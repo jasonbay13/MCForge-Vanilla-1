@@ -19,7 +19,7 @@ using MCForge.Utils;
 namespace CommandDll {
     public class CmdColor : ICommand {
         public string Name { get { return "Color"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "7imekeeper"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -30,28 +30,28 @@ namespace CommandDll {
             Player who;
             string color;
 
-            p.ExtraData.CreateIfNotExist("Color", p.group.color);
+            p.ExtraData.CreateIfNotExist("Color", p.Group.Color);
 
             if (args.Length == 1) {
                 who = p;
-                color = args[0] == "del" ? p.group.color : Colors.Parse(args[0]);
+                color = args[0] == "del" ? p.Group.Color : Colors.Parse(args[0]);
                 if (p.ExtraData["Color"] == color) { p.SendMessage("You are already that color!"); return; }
             }
             else {
                 who = Player.Find(args[0]);
                 if (who == null) { p.SendMessage("Could not find player."); return; }
-                if (p.group.permission <= who.group.permission) { p.SendMessage("You can't change the color of someone of equal or higher rank!"); return; }
+                if (p.Group.Permission <= who.Group.Permission) { p.SendMessage("You can't change the color of someone of equal or higher rank!"); return; }
                 if (Server.devs.Contains(who.Username) && !Server.devs.Contains(p.Username)) { p.SendMessage("You can't change a dev's color!"); return; }
 
                 
 
-                color = args[1] == "del" ? who.group.color : Colors.Parse(args[1]);
+                color = args[1] == "del" ? who.Group.Color : Colors.Parse(args[1]);
                 if (who.ExtraData["Color"] == color) { p.SendMessage("They are already that color!"); return; }
             }
             if (color == "") { p.SendMessage("Could not find color."); return; }
 
             string message = "";
-            if (color == who.group.color)
+            if (color == who.Group.Color)
                 message = "their groups default.";
             else
                 message = color + Colors.Name(color) + who.ExtraData["Color"] + ".";

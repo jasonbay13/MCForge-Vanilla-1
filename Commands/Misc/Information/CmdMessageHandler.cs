@@ -22,7 +22,7 @@ namespace CommandDll.Information
     public class CmdMessageHandler : ICommand
     {
         public string Name { get { return "MessageHandler"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "ninedrafted"; } }
         public int Version { get { return 1; } } public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }

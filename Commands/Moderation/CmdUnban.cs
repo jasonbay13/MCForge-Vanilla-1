@@ -22,7 +22,7 @@ using MCForge.Utils;
 namespace CommandDll.Moderation {
     class CmdUnban : ICommand {
         public string Name { get { return "Unban"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Sinjai"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

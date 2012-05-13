@@ -38,6 +38,10 @@ namespace MCForge.Gui.Components {
         private const string TheColorsOfTheRainbow =
           @"{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\colortbl;\red0\green0\blue0;\red255\green255\blue0;\red0\green0\blue139;\red0\green100\blue0;\red0\green139\blue139;\red139\green0\blue139;\red128\green128\blue128;\red255\green215\blue0;\red169\green169\blue169;\red0\green0\blue255;\red0\green128\blue0;\red0\green255\blue255;\red255\green0\blue255;\red255\green255\blue255;\red170\green0\blue170;\red139\green0\blue0;}{\fonttbl{\f0\fnil\fcharset0 Calibri;}}\viewkind4\uc1\pard\f0\fs17";
 
+        /// <summary>
+        /// Writes the specified message.
+        /// </summary>
+        /// <param name="message">The message.</param>
         public void Write(string message) {
             if(InvokeRequired) {
                 Invoke((MethodInvoker)delegate { Write(message);});

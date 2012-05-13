@@ -23,7 +23,7 @@ using MCForge.API.Events;
 namespace CommandDll {
     public class CmdCuboid : ICommand {
         public string Name { get { return "Cuboid"; } }
-        public CommandTypes Type { get { return CommandTypes.building; } }
+        public CommandTypes Type { get { return CommandTypes.Building; } }
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -118,7 +118,7 @@ namespace CommandDll {
             cpos.block = args.Holding;
             args.Cancel();
             p.OnPlayerBlockChange.Normal -= new Event<Player, BlockChangeEventArgs>.EventHandler(CatchBlock);
-            p.SetDatapass(this.Name, cpos);
+            p.setDatapass(this.Name, cpos);
             p.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock2);
         }
         public void CatchBlock2(Player p, BlockChangeEventArgs args) {

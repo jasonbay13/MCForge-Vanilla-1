@@ -17,13 +17,15 @@ using System.IO;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utilities;
+using System.Drawing;
 
 namespace CommandDll
 {
     public class CmdNews : ICommand
     {
         public string Name { get { return "News"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "Givo"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -33,7 +35,7 @@ namespace CommandDll
             if (!File.Exists("text/news.txt"))
             {
                 File.Create("text/news.txt").Close();
-                Server.Log("[File] Created news.txt", ConsoleColor.White, ConsoleColor.Black);
+                Logger.Log("[File] Created news.txt", Color.White, Color.Black);
                 p.SendMessage("No News file was available!");
                 return;
             }

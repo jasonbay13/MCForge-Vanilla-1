@@ -26,7 +26,7 @@ namespace CommandDll.Information
     public class CmdHelp : ICommand
     {
         public string Name { get { return "Help"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "Nerketur"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -47,26 +47,26 @@ namespace CommandDll.Information
             {
                 //Help about a particular command
                 string cmdTypeName = "Unknown";
-                CommandTypes cmdType = CommandTypes.misc;
+                CommandTypes cmdType = CommandTypes.Misc;
 
                 switch (args[0])
                 {
                     case "build":
                         cmdTypeName = "Building";
-                        cmdType = CommandTypes.building;
+                        cmdType = CommandTypes.Building;
                         break;
                     case "mod":
                         cmdTypeName = "Moderation";
-                        cmdType = CommandTypes.mod;
+                        cmdType = CommandTypes.Mod;
                         break;
                     case "information":
                         cmdTypeName = "Informative";
-                        cmdType = CommandTypes.information;
+                        cmdType = CommandTypes.Information;
                         break;
                     case "misc":
                     case "other":
                         cmdTypeName = "Miscellaneous";
-                        cmdType = CommandTypes.misc;
+                        cmdType = CommandTypes.Misc;
                         break;
                     case "colours":
                     case "colors":
@@ -82,11 +82,11 @@ namespace CommandDll.Information
                         p.SendMessage("7 - &7Silver " + Server.DefaultColor + "| f - &fWhite");
                         return;
                     case "ranks":
-                        foreach (PlayerGroup grp in PlayerGroup.groups)
+                        foreach (PlayerGroup grp in PlayerGroup.Groups)
                         {
-                            if (grp.name != "nobody") // Note that -1 means max undo.  Undo anything and everything.
+                            if (grp.Name != "nobody") // Note that -1 means max undo.  Undo anything and everything.
                                 //p.SendMessage(grp.color + grp.name + " - &bCmd: " + grp..maxBlocks + " - &2Undo: " + ((grp.maxUndo != -1) ? grp.maxUndo.ToString() : "max") + " - &cPerm: " + (int)grp.Permission);
-                                p.SendMessage(grp.color + grp.name + " - &cPerm: " + (int)grp.permission);
+                                p.SendMessage(grp.Color + grp.Name + " - &cPerm: " + (int)grp.Permission);
                         }
                         return;
                     default:
@@ -96,9 +96,9 @@ namespace CommandDll.Information
                             cmd.Help(p);
                             //string foundRank = Level.PermissionToName(GrpCommands.allowedCommands.Find(grpComm => grpComm.commandName == cmd.name).lowestRank);
                             //Player.SendMessage(p, "Rank needed: " + getColor(cmd.name) + foundRank);
-                            PlayerGroup cmdGroup = PlayerGroup.groups.Find(grp => grp.permission == cmd.Permission);
-                            string foundRank = cmdGroup.name;
-                            p.SendMessage("Rank needed: " + cmdGroup.color + foundRank);
+                            PlayerGroup cmdGroup = PlayerGroup.Groups.Find(grp => grp.Permission == cmd.Permission);
+                            string foundRank = cmdGroup.Name;
+                            p.SendMessage("Rank needed: " + cmdGroup.Color + foundRank);
                             return;
                         }
                         catch (Exception) { }
@@ -122,7 +122,7 @@ namespace CommandDll.Information
                 p.SendMessage(cmdTypeName + " commands you may use:");
                 //First get them all, just names, in a list.
                 List<string> cmdList = new List<string>();
-                foreach (KeyValuePair<string, ICommand> c in Command.all.ToList().FindAll(match => (match.Value.Permission <= p.group.permission) && (match.Value.Type == cmdType)))
+                foreach (KeyValuePair<string, ICommand> c in Command.all.ToList().FindAll(match => (match.Value.Permission <= p.Group.Permission) && (match.Value.Type == cmdType)))
                 {
                     cmdList.Add(c.Key);
                 }
@@ -135,7 +135,7 @@ namespace CommandDll.Information
                 }
                 foreach (string c in cmdList)
                 {
-                    sb.Append(", ").Append(PlayerGroup.groups.Find(grp => grp.permission == Command.Find(c).Permission).color).Append(c);
+                    sb.Append(", ").Append(PlayerGroup.Groups.Find(grp => grp.Permission == Command.Find(c).Permission).Color).Append(c);
                     count = (count + 1) % 5; // 5 commands per line.
                     if (count == 0)
                     {

@@ -122,7 +122,7 @@ namespace MCForge.Core {
                 /*else
                 {
                     Player.UniversalChat(Colors.lime + "[Console] " + Colors.yellow + input);
-                    Server.Log("[Console] " + input);
+                    Logger.Log("[Console] " + input);
                 }*/
 
             }

@@ -22,7 +22,7 @@ namespace CommandDll
     public class CmdPlayers : ICommand
     {
         public string Name { get { return "Players"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -30,14 +30,14 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            foreach (PlayerGroup group in PlayerGroup.groups)
+            foreach (PlayerGroup group in PlayerGroup.Groups)
             {
-                string send = group.color + group.name;
+                string send = group.Color + group.Name;
                 if (!send.EndsWith("ed") && !send.EndsWith("s")) { send += "s: " + Server.DefaultColor; } //Plural
                 else { send += ": " + Server.DefaultColor; }
                 Server.ForeachPlayer(delegate(Player pl)
                     {
-                        if (pl.group.permission == group.permission) { send +=  pl.Username + "&a, " + Server.DefaultColor; }
+                        if (pl.Group.Permission == group.Permission) { send +=  pl.Username + "&a, " + Server.DefaultColor; }
                     });
                 p.SendMessage(send.Trim().Remove(send.Length - 4, 4));
             }

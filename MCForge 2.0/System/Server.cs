@@ -221,7 +221,7 @@ namespace MCForge.Core {
             UsernameBans = new List<string>(File.ReadAllLines("bans/NameBans.txt"));
             StartListening();
             Started = true;
-            Log("[Important]: Server Started.", ConsoleColor.Black, ConsoleColor.White);
+            Logger.Log("[Important]: Server Started.", Color.Black, Color.White);
             IRC = new IRC();
             try
             {
@@ -239,7 +239,7 @@ namespace MCForge.Core {
             Player.GlobalUpdate();
 
             if (HeartbeatIntervalCurrent >= HeartbeatInterval) { Heartbeat.sendHeartbeat(); HeartbeatIntervalCurrent = 0; }
-            if (GroupsaveIntervalCurrent >= GroupsaveInterval) { foreach (Groups.PlayerGroup g in Groups.PlayerGroup.groups) { g.SaveGroup(); } GroupsaveIntervalCurrent = 0; }
+            if (GroupsaveIntervalCurrent >= GroupsaveInterval) { foreach (Groups.PlayerGroup g in Groups.PlayerGroup.Groups) { g.SaveGroup(); } GroupsaveIntervalCurrent = 0; }
             if (PingIntervalCurrent >= PingInterval) { Player.GlobalPing(); }
             if (BotIntervalCurrent >= BotInterval) { Bot.HandleBots(); }
 
@@ -329,11 +329,11 @@ namespace MCForge.Core {
                     break;
                 }
                 catch (SocketException E) {
-                    Server.Log(E);
+                    Logger.LogError(E);
                     break;
                 }
                 catch (Exception E) {
-                    Server.Log(E);
+                    Logger.LogError(E);
                     continue;
                 }
             }
@@ -432,7 +432,7 @@ namespace MCForge.Core {
         public static void SaveAll() {
             foreach (var l in Level.Levels)
                 l.SaveToBinary();
-            foreach (var g in Groups.PlayerGroup.groups)
+            foreach (var g in Groups.PlayerGroup.Groups)
                 g.SaveGroup();
 
         }

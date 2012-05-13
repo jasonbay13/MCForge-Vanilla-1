@@ -22,7 +22,7 @@ namespace CommandDll
     public class CmdTColor : ICommand
     {
         public string Name { get { return "TColor"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "7imekeeper"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -46,7 +46,7 @@ namespace CommandDll
             {
                 who = Player.Find(args[0]);
                 if (who == null) { p.SendMessage("Could not find player."); return; }
-                if (p.group.permission <= who.group.permission) { p.SendMessage("You can't change the title color of someone of equal or higher rank!"); return; }
+                if (p.Group.Permission <= who.Group.Permission) { p.SendMessage("You can't change the title color of someone of equal or higher rank!"); return; }
                 //devs should be able to change their own color
                 if (Server.devs.Contains(who.Username) && !Server.devs.Contains(p.Username)) { p.SendMessage("You can't change a dev's title color!"); return; }
                 titleColor = args[1] == "del" ? "del" : Colors.Parse(args[1]);

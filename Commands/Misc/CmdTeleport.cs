@@ -23,7 +23,7 @@ namespace CommandDll
     public class CmdTeleport : ICommand
     {
         public string Name { get { return "Teleport"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -55,7 +55,7 @@ namespace CommandDll
                     p.SendMessage("Why are you trying to teleport yourself to yourself?");
                     return;
                 }
-                else if (!ServerSettings.GetSettingBoolean("AllowHigherRankTp") && p.group.permission < who.group.permission)
+                else if (!ServerSettings.GetSettingBoolean("AllowHigherRankTp") && p.Group.Permission < who.Group.Permission)
                 {
                     p.SendMessage("You cannot teleport to a player of higher rank!");
                     return;
@@ -97,7 +97,7 @@ namespace CommandDll
                     p.SendMessage("Why not just use /summon " + args[0] + "?");
                     return;
                 }
-                else if (p.group.permission < one.group.permission)
+                else if (p.Group.Permission < one.Group.Permission)
                 {
                     p.SendMessage("You cannot force a player of higher rank to tp to another player!");
                 }

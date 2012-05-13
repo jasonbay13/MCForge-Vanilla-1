@@ -23,7 +23,7 @@ using MCForge.World;
 namespace CommandDll {
     public class CmdReplace : ICommand {
         public string Name { get { return "Replace"; } }
-        public CommandTypes Type { get { return CommandTypes.building; } }
+        public CommandTypes Type { get { return CommandTypes.Building; } }
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -47,7 +47,7 @@ namespace CommandDll {
             cpos.type2 = type2;
 
             p.SendMessage("Place two blocks to determine the edges.");
-            p.SetDatapass("CmdReplace_cpos", cpos);
+            p.setDatapass("CmdReplace_cpos", cpos);
             p.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock);
             //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
         }
@@ -56,7 +56,7 @@ namespace CommandDll {
             cpos.pos = new Vector3(args.X, args.Y, args.Z);
             args.Unregister();
             args.Cancel();
-            sender.SetDatapass("CmdReplace_cpos", cpos);
+            sender.setDatapass("CmdReplace_cpos", cpos);
             sender.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock2);
         }
         public void CatchBlock2(Player sender, BlockChangeEventArgs args) {
