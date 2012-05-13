@@ -857,7 +857,6 @@ namespace MCForge.Entity {
                 return; //No changes
             }
             bool teleport = ForceTp || (Math.Abs(diffX) > 100 || Math.Abs(diffY) > 100 || Math.Abs(diffZ) > 100);
-
             packet pa = new packet();
             if (teleport) {
                 pa.Add(packet.types.SendTeleport);

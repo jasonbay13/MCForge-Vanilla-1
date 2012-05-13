@@ -51,14 +51,13 @@ namespace MCForge.Utils {
         /// <param name="key">The key to locate the value</param>
         public static void Save(this Dictionary<object, object> dict, Player p, object key) {
             var cleanedMessage = key.ToString().MySqlEscape();
-			if (dict.ContainsKey(key))
-			{
-				if (!p.IsInTable(key))
-					Database.executeQuery("INSERT INTO extra (key, value, UID) VALUES ('" + key.ToString() + "', '" + dict[key].ToString() + "', " + p.UID + ")");
-				else
-					Database.executeQuery("UPDATE extra SET value='" + dict[key].ToString() + "' WHERE key='" + key.ToString() + "' AND UID=" + p.UID);
-			}
-		}
+            if (dict.ContainsKey(key)) {
+                if (!p.IsInTable(key))
+                    Database.executeQuery("INSERT INTO extra (key, value, UID) VALUES ('" + key.ToString() + "', '" + dict[key].ToString() + "', " + p.UID + ")");
+                else
+                    Database.executeQuery("UPDATE extra SET value='" + dict[key].ToString() + "' WHERE key='" + key.ToString() + "' AND UID=" + p.UID);
+            }
+        }
 
         /// <summary>
         /// Convert the list into a string

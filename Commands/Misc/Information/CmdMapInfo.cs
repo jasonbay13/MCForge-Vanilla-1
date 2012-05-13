@@ -49,7 +49,7 @@ namespace CommandDll {
 
         private void plist(Player sender, ChatEventArgs eventargs) {
             sender.OnPlayerChat.Normal -= new ChatEvent.EventHandler(plist);
-            if (eventargs.Message.ToLower() != "yes" || sender.ExtraData.GetIfExist("LastCmd") != "mapinfo" && sender.ExtraData.GetIfExist("LastCmd") != "mi")
+            if (eventargs.Message.ToLower() != "yes" || sender.ExtraData.GetIfExist<object, object>("LastCmd") != "mapinfo" && sender.ExtraData.GetIfExist("LastCmd") != "mi")
                 return;
 
             eventargs.Cancel();
