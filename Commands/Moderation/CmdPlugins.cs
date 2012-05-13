@@ -17,7 +17,7 @@ namespace CommandDll.Moderation
 
         public CommandTypes Type
         {
-            get { return CommandTypes.mod; }
+            get { return CommandTypes.Mod; }
         }
 
         public string Author

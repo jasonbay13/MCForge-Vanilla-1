@@ -22,7 +22,7 @@ namespace CommandDll.Misc
     class CmdRob : ICommand
     {
         public string Name { get { return "Rob"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Sinjai"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -32,7 +32,7 @@ namespace CommandDll.Misc
             if (args.Length != 2) { Help(p); return; }
             Player who = Player.Find(args[0]);
 
-            if (p.group.permission < who.group.permission) { 
+            if (p.Group.Permission < who.Group.Permission) { 
                 p.SendMessage("You cannot rob your superiors!"); 
                 return; 
             }

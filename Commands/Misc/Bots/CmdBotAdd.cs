@@ -23,7 +23,7 @@ namespace CommandDll
     public class CmdBotAdd : ICommand
     {
         public string Name { get { return "BotAdd"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Snowl"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

@@ -74,7 +74,7 @@ namespace MCForge.Core
                 {
                     if ((line = sread.ReadLine()) != null && botOn)
                     {
-                        if (debug) Server.Log(line);
+                        if (debug) Logger.Log(line);
                         splitLine = line.Split(' ');
 
                         if (splitLine.Length > 0)
@@ -131,7 +131,7 @@ namespace MCForge.Core
                                 try
                                 {
                                     Player.UniversalChat("[IRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
-                                    Server.Log("[IRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
+                                    Logger.Log("[IRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
                                 }
                                 catch { }
                             }
@@ -140,7 +140,7 @@ namespace MCForge.Core
                                 try
                                 {
                                     Player.UniversalChatOps("[OPIRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
-                                    Server.Log("[OPIRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
+                                    Logger.Log("[OPIRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
                                 }
                                 catch { }
                             }

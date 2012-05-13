@@ -22,7 +22,7 @@ namespace CommandDll
     public class CmdReview : ICommand
     {
         public string Name { get { return "Review"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -32,13 +32,13 @@ namespace CommandDll
         {
             if (args.Length == 0) { Help(p); return; }
             string function = args[0].ToLower();
-            p.ExtraData.CreateIfNotExist("Color", p.group.color);
+            p.ExtraData.CreateIfNotExist("Color", p.Group.Color);
             switch (function) {
                 #region ==Enter==
                 case "enter":
                 case "join":
                     bool ops = false;
-                    Server.ForeachPlayer(delegate(Player pl) { if (pl.group.permission >= Server.reviewnextperm) { ops = true; } });
+                    Server.ForeachPlayer(delegate(Player pl) { if (pl.Group.Permission >= Server.reviewnextperm) { ops = true; } });
                     if (!ops) { p.SendMessage("There are no ops online! Please wait for one to come on before asking for review"); return; }
                     if (Server.reviewlist.Contains(p)) { p.SendMessage("You're already in the review queue!"); SendPositon(false, p); return; }
                         Server.reviewlist.Add(p);
@@ -53,7 +53,7 @@ namespace CommandDll
                     string send = "Players in the review queue: ";
                     foreach (Player pl in Server.reviewlist) 
                     {
-                        pl.ExtraData.CreateIfNotExist("Color", pl.group.color);
+                        pl.ExtraData.CreateIfNotExist("Color", pl.Group.Color);
                         send += (string)(p.ExtraData["Color"]) + pl.Username + ", "; 
                     }
                     send = send.Trim().TrimEnd(',');
@@ -74,7 +74,7 @@ namespace CommandDll
                 #endregion
                 #region ==Remove==
                 case "remove":
-                    if (p.group.permission < Server.reviewnextperm) { p.SendMessage("You can't remove players from review queue!"); return; }
+                    if (p.Group.Permission < Server.reviewnextperm) { p.SendMessage("You can't remove players from review queue!"); return; }
                     Player who = Player.Find(args[1]);
                     if (who == null) { p.SendMessage("Cannot find player!"); return; }
                     if (!Server.reviewlist.Contains(who)) { p.SendMessage(who.Username + " is not in the review queue!"); return; }
@@ -99,7 +99,7 @@ namespace CommandDll
                 #endregion
                 #region ==Next==
                 case "next":
-                    if (p.group.permission < Server.reviewnextperm) 
+                    if (p.Group.Permission < Server.reviewnextperm) 
                     { 
                         p.SendMessage("You can't use &9/review &bnext" + Server.DefaultColor + "!"); 
                         p.SendMessage("Use &9/review &benter " + Server.DefaultColor + "to enter the queue!");
@@ -115,13 +115,13 @@ namespace CommandDll
                     cmd.Use(p, meep);
                     Server.reviewlist.Remove(rev);
                     p.SendMessage("You are reviewing " + rev.Username + "!");
-                    p.SendMessage("Rank: " + rev.group.name);
+                    p.SendMessage("Rank: " + rev.Group.Name);
                     p.SendMessage(p.Username + " has came to review you!");
                     break;
                 #endregion
                 #region ==Clear==
                 case "clear":
-                    if (p.group.permission < Server.reviewnextperm) { p.SendMessage("You can't clear the review queue!"); return; }
+                    if (p.Group.Permission < Server.reviewnextperm) { p.SendMessage("You can't clear the review queue!"); return; }
                     Player.UniversalChat("The review queue has been cleared by " + p.Username + "!");
                     Server.reviewlist.Clear();
                     break;
@@ -139,7 +139,7 @@ namespace CommandDll
             p.SendMessage("/review leave - leave the review queue");
             p.SendMessage("/review view - shows the review queue");
             p.SendMessage("/review position - shows your place in the review queue");
-            if (p.group.permission >= Server.reviewnextperm) {
+            if (p.Group.Permission >= Server.reviewnextperm) {
                 p.SendMessage("/review remove <player> - removes <player> from the queue");
                 p.SendMessage("/review next - review the next player in the review queue");
                 p.SendMessage("/review clear - clears the review queue");

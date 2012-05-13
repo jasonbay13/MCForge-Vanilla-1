@@ -51,24 +51,24 @@ namespace MCForge.Groups
 
                 if (linesplit.Length < 2)
                 {
-                    Server.Log("Line: \"" + line + "is not recognised");//, LogType.Error);
+                    Logger.Log("Line: \"" + line + "is not recognised");//, LogType.Error);
                 }
 
                 ICommand cmd = null;
                 cmd = FindCommandByName(linesplit[0]);
                 if (cmd == null)
                 {
-                    Server.Log("Command \"" + linesplit[0] + "\" could not be found");//, LogType.Error);
+                    Logger.Log("Command \"" + linesplit[0] + "\" could not be found");//, LogType.Error);
                     continue;
                 }
 
                 byte perm;
 
                 try { perm = byte.Parse(linesplit[1]); }
-                catch { Server.Log("Permission cannot be greater then 128 (is " + linesplit[1] + ")");//, LogType.Error);
+                catch { Logger.Log("Permission cannot be greater then 128 (is " + linesplit[1] + ")");//, LogType.Error);
                     continue; }
 
-                Server.Log(cmd.Name);
+                Logger.Log(cmd.Name);
                 if (!overrides.ContainsKey(cmd))
                     overrides.Add(cmd, perm);
             }

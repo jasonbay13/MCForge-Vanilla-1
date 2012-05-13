@@ -24,7 +24,7 @@ namespace CommandDll.Moderation
     class CmdBan : ICommand
     {
         public string Name { get { return "Ban"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Sinjai"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

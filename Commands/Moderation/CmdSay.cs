@@ -21,7 +21,7 @@ namespace CommandDll
     public class CmdSay : ICommand
     {
         public string Name { get { return "Say"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

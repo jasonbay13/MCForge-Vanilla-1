@@ -22,7 +22,7 @@ namespace CommandDll
     public class CmdTempban : ICommand
     {
         public string Name { get { return "Tempban"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

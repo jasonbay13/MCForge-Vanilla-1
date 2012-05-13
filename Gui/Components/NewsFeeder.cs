@@ -23,6 +23,13 @@ namespace MCForge.Gui.Components {
 
 
         public void StartRead() {
+            WebRequest request = WebRequest.Create("http://headdetect.com/news.txt");
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            if (response == null || response.StatusCode != HttpStatusCode.OK) {
+                Items.Clear();
+                Items.Add("Cannot connect to news server");
+                return;
+            }
             Items.Clear();
             Items.Add("Connecting...");
             try {

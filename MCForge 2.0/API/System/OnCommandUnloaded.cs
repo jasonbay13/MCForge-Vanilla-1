@@ -90,7 +90,6 @@ namespace MCForge.API.System
 		/// <summary>
 		/// Unregisters the specific event
 		/// </summary>
-		/// <param name="pe">The event to unregister</param>
 		public override void Unregister() {
 			_eventQueue.Remove(this);
 		}

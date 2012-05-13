@@ -21,7 +21,7 @@ namespace CommandDll
     public class CmdDemote : ICommand
     {
         public string Name { get { return "Demote"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -33,15 +33,15 @@ namespace CommandDll
             Player who = Player.Find(args[0]);
             if (who == null) { p.SendMessage("Cannot find player!"); return; }
             if (who == p) { p.SendMessage("Cannot demote yourself!"); return; }
-            if (who.group == PlayerGroup.groups[0]) { p.SendMessage(who.Username + " is already the lowest rank!"); return; }
-            PlayerGroup current = who.group;
+            if (who.Group == PlayerGroup.Groups[0]) { p.SendMessage(who.Username + " is already the lowest rank!"); return; }
+            PlayerGroup current = who.Group;
             PlayerGroup previous = null;
             //bool next = false; // unused
-            foreach (PlayerGroup rank in PlayerGroup.groups)
+            foreach (PlayerGroup rank in PlayerGroup.Groups)
             {             
                 if (current == rank) 
                 {
-                    string[] info = new string[2] { who.Username, previous.name };
+                    string[] info = new string[2] { who.Username, previous.Name };
                     Command.Find("setrank").Use(p, info);
                     break;
                 }

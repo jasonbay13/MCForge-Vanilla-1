@@ -42,7 +42,7 @@ namespace MCForge.Gui {
             pluginManager.Init();
             pluginManager.AttachItems();
             Logger.OnRecieveLog += (obj, args) => {
-                coloredTextBox1.Write(args.Message + Environment.NewLine);
+                coloredTextBox1.Write(args.Message);
             };
             Player.OnAllPlayersConnect.Important += new ConnectionEvent.EventHandler(OnConnect);
 

@@ -33,7 +33,7 @@ using MCForge.Robot;
 namespace MCForge.Entity {
     public partial class Player {
         #region Incoming Data
-        protected static void Incoming(IAsyncResult result) {
+        private  static void Incoming(IAsyncResult result) {
             while (!Server.Started)
                 Thread.Sleep(100);
 
@@ -85,7 +85,7 @@ namespace MCForge.Entity {
                 return;
             }
         }
-        protected byte[] HandlePacket(byte[] buffer) {
+        private  byte[] HandlePacket(byte[] buffer) {
 
             try {
                 int length = 0; byte msg = buffer[0];
@@ -139,7 +139,7 @@ namespace MCForge.Entity {
             return buffer;
         }
 
-        protected void HandleLogin(byte[] message) {
+        private  void HandleLogin(byte[] message) {
             try {
                 if (IsLoggedIn) return;
                 byte version = message[0];
@@ -187,9 +187,9 @@ namespace MCForge.Entity {
                 UniversalChat(Username + " joined the game!");
 
                 CheckDuplicatePlayers(Username);
-                foreach (PlayerGroup g in PlayerGroup.groups)
-                    if (g.players.Contains(Username.ToLower()))
-                        group = g;
+                foreach (PlayerGroup g in PlayerGroup.Groups)
+                    if (g.Players.Contains(Username.ToLower()))
+                        Group = g;
 
                 SendMotd();
                 IsLoading = true;
@@ -224,7 +224,7 @@ namespace MCForge.Entity {
                 Logger.LogError(e);
             }
         }
-        protected void HandleBlockchange(byte[] message) {
+        private  void HandleBlockchange(byte[] message) {
             if (!IsLoggedIn) return;
 
             ushort x = packet.NTHO(message, 0);
@@ -234,7 +234,7 @@ namespace MCForge.Entity {
             byte newType = message[7];
             HandleBlockchange(x, y, z, action, newType, false);
         }
-        protected void HandleBlockchange(ushort x, ushort y, ushort z, byte action, byte newType, bool fake) {
+        private  void HandleBlockchange(ushort x, ushort y, ushort z, byte action, byte newType, bool fake) {
 
 
             LastClick = new Vector3(x, y, z);
@@ -288,7 +288,7 @@ namespace MCForge.Entity {
                 Level.BlockChange(x, z, y, newType);
             }
         }
-        protected void HandleIncomingPos(byte[] message) {
+        private  void HandleIncomingPos(byte[] message) {
             if (!IsLoggedIn)
                 return;
 
@@ -319,7 +319,7 @@ namespace MCForge.Entity {
                 }
             }
         }
-        protected void HandleChat(byte[] message) {
+        private  void HandleChat(byte[] message) {
             if (!IsLoggedIn) return;
 
             string incomingText = enc.GetString(message, 1, 64).Trim();
@@ -470,9 +470,9 @@ namespace MCForge.Entity {
             if (incomingText[0] == '#' || (bool)ExtraData.GetIfExist("OpChat")) //Opchat ouo
             {
                 incomingText = incomingText.Trim().TrimStart('#');
-                UniversalChatOps("&a<&fTo Ops&a> " + group.color + Username + ": &f" + incomingText);
-                if (group.permission < Server.opchatperm) {
-                    SendMessage("&a<&fTo Ops&a> " + group.color + Username + ": &f" + incomingText);
+                UniversalChatOps("&a<&fTo Ops&a> " + Group.Color + Username + ": &f" + incomingText);
+                if (Group.Permission < Server.opchatperm) {
+                    SendMessage("&a<&fTo Ops&a> " + Group.Color + Username + ": &f" + incomingText);
                 } //So players who aren't op see their messages
                 Logger.Log("<OpChat> <" + Username + "> " + incomingText);
                 try {
@@ -484,12 +484,12 @@ namespace MCForge.Entity {
             }
             if (incomingText[0] == '*') //Rank chat
             {
-                string groupname = group.name;
+                string groupname = Group.Name;
                 incomingText = incomingText.Trim().TrimStart('*');
                 if (!groupname.EndsWith("ed") && !groupname.EndsWith("s")) {
                     groupname += "s";
                 } //Plural
-                RankChat(this, "&a<&fTo " + groupname + "&a> " + group.color + nickname + ": &f" + incomingText);
+                RankChat(this, "&a<&fTo " + groupname + "&a> " + Group.Color + nickname + ": &f" + incomingText);
                 Logger.Log("<" + groupname + " Chat> <" + Username + " as " + nickname + "> " + incomingText);
                 return;
             }
@@ -505,9 +505,9 @@ namespace MCForge.Entity {
             if (incomingText[0] == '+' || (bool)ExtraData.GetIfExist("AdminChat")) //Admin chat
             {
                 incomingText = incomingText.TrimStart().TrimStart('+');
-                UniversalChatAdmins("&a<&fTo Admins&a> " + group.color + Username + ": &f" + incomingText);
-                if (group.permission < Server.adminchatperm) {
-                    SendMessage("&a<&fTo Admins&a> " + group.color + Username + ": &f" + incomingText);
+                UniversalChatAdmins("&a<&fTo Admins&a> " + Group.Color + Username + ": &f" + incomingText);
+                if (Group.Permission < Server.adminchatperm) {
+                    SendMessage("&a<&fTo Admins&a> " + Group.Color + Username + ": &f" + incomingText);
                 }
                 Logger.Log("<AdminChat> <" + Username + "> " + incomingText);
                 return;
@@ -554,7 +554,7 @@ namespace MCForge.Entity {
             //TODO: remove to place better
             Logger.Log("<" + Username + " as " + nickname + "> " + incomingText);
             var voiceString = (string)ExtraData.GetIfExist("VoiceString") ?? "";
-            var mColor = (string)ExtraData.GetIfExist("Color") ?? group.color;
+            var mColor = (string)ExtraData.GetIfExist("Color") ?? Group.Color;
             var mPrefix = (string)ExtraData.GetIfExist("Prefix") ?? "";
             string msg = voiceString +
                           mColor +
@@ -579,7 +579,7 @@ namespace MCForge.Entity {
 
         #endregion
         #region Outgoing Packets
-        protected void SendPacket(packet pa) {
+        private  void SendPacket(packet pa) {
             try {
                 lastPacket = (packet.types)pa.bytes[0];
             }
@@ -596,7 +596,7 @@ namespace MCForge.Entity {
             }
             CloseConnection();
         }
-        protected void SendMessage(byte PlayerID, string message) {
+        private  void SendMessage(byte PlayerID, string message) {
             packet pa = new packet();
 
 
@@ -629,10 +629,10 @@ namespace MCForge.Entity {
             }
 
         }
-        protected void SendMotd() {
+        private  void SendMotd() {
             SendPacket(IsAdmin ? MOTD_Admin : MOTD_NonAdmin);
         }
-        protected void SendMap() {
+        private  void SendMap() {
             
             try {
                 SendPacket(mapSendStartPacket); //Send the pre-fab map start packet
@@ -720,14 +720,14 @@ namespace MCForge.Entity {
 
             SendPacket(pa);
         }
-        protected void SendKick(string message) {
+        private  void SendKick(string message) {
 
             packet pa = new packet();
             pa.Add(packet.types.SendKick);
             pa.Add(message, 64);
             SendPacket(pa);
         }
-        protected void SMPKick(string a) {
+        private  void SMPKick(string a) {
             //Read first, then kick
             var Stream = Client.GetStream();
             var Reader = new BinaryReader(Stream);
@@ -753,7 +753,7 @@ namespace MCForge.Entity {
 
 
         }
-        protected void SendPing() {
+        private  void SendPing() {
             SendPacket(pingPacket);
         }
 
@@ -904,7 +904,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// Spawns this player to all other players in the server.
         /// </summary>
-        protected void SpawnThisPlayerToOtherPlayers() {
+        private  void SpawnThisPlayerToOtherPlayers() {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p != this && p.Level == Level)
                     p.SendSpawn(this);
@@ -913,14 +913,14 @@ namespace MCForge.Entity {
         /// <summary>
         /// Spawns all other players of the server to this player.
         /// </summary>
-        protected void SpawnOtherPlayersForThisPlayer() {
+        private  void SpawnOtherPlayersForThisPlayer() {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p != this && p.Level == Level)
                     SendSpawn(p);
             });
         }
 
-        protected void SpawnBotsForThisPlayer()
+        private  void SpawnBotsForThisPlayer()
         {
             Server.ForeachBot(delegate(Bot p)
             {
@@ -959,7 +959,7 @@ namespace MCForge.Entity {
         /// <param name="message">The message to send</param>
         public static void UniversalChatOps(string message) {
             Server.ForeachPlayer(p => {
-                if (p.group.permission >= Server.opchatperm) {
+                if (p.Group.Permission >= Server.opchatperm) {
                     p.SendMessage(message);
                 }
             });
@@ -970,7 +970,7 @@ namespace MCForge.Entity {
         /// <param name="message">The message to be sent</param>
         public static void UniversalChatAdmins(string message) {
             Server.ForeachPlayer(p => {
-                if (p.group.permission >= Server.adminchatperm) {
+                if (p.Group.Permission >= Server.adminchatperm) {
                     p.SendMessage(message);
                 }
             });
@@ -982,7 +982,7 @@ namespace MCForge.Entity {
         /// <param name="message">The message to send</param>
         public static void RankChat(Player from, string message) {
             Server.ForeachPlayer(delegate(Player p) {
-                if (p.group.permission == from.group.permission) {
+                if (p.Group.Permission == from.Group.Permission) {
                     p.SendMessage(message);
                 }
             });
@@ -997,7 +997,7 @@ namespace MCForge.Entity {
                 if (p.Level == from.Level) { p.SendMessage(message); }
             });
         }
-        protected void CloseConnection() {
+        private  void CloseConnection() {
             ConnectionEventArgs eargs = new ConnectionEventArgs(false);
             OnPlayerDisconnect.Call(this, eargs);
             OnAllPlayersDisconnect.Call(this, eargs);

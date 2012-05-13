@@ -23,7 +23,7 @@ using MCForge.World;
 namespace CommandDll {
     public class CmdReplace : ICommand {
         public string Name { get { return "Replace"; } }
-        public CommandTypes Type { get { return CommandTypes.building; } }
+        public CommandTypes Type { get { return CommandTypes.Building; } }
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

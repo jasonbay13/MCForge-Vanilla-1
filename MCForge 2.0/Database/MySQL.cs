@@ -11,6 +11,7 @@ using MCForge.Core;
 using MCForge.Utilities.Settings;
 using MySql.Data.Types;
 using MySql.Data.MySqlClient;
+using MCForge.Utilities;
 
 namespace MCForge.SQL
 {
@@ -45,7 +46,7 @@ namespace MCForge.SQL
 			}
 			catch (Exception e)
 			{
-				Server.Log(e);
+                Logger.LogError(e);
 			}
 		}
 		/// <summary>
@@ -69,7 +70,7 @@ namespace MCForge.SQL
 			}
 			catch (Exception e)
 			{
-				Server.Log(e);
+                Logger.LogError(e);
 			}
 		}
 	}

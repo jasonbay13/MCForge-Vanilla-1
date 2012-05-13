@@ -26,7 +26,7 @@ namespace CommandDll.Moderation
     public class CmdKick : ICommand
     {
         public string Name { get { return "Kick"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Nerketur"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

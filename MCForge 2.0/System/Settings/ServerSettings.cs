@@ -20,6 +20,7 @@ using System.IO;
 using System.Linq;
 using MCForge.Core;
 using System.Security.Cryptography;
+using System.Drawing;
 
 namespace MCForge.Utilities.Settings {
     /// <summary>
@@ -145,7 +146,7 @@ namespace MCForge.Utilities.Settings {
                 return i;
             }
             catch {
-                Server.Log("ServerSettings: integer expected as first value for '" + key + "'", ConsoleColor.Red, ConsoleColor.Black);
+                Logger.Log("ServerSettings: integer expected as first value for '" + key + "'", Color.Red, Color.Black);
                 return -1;
             }
         }

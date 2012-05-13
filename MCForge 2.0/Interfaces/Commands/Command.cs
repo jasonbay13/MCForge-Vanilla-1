@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge.Core;
+using MCForge.Utilities;
+using System.Drawing;
 
 namespace MCForge.Interface.Command
 {
@@ -54,12 +56,17 @@ namespace MCForge.Interface.Command
 		{
 			if (Commands.ContainsKey(reference))
 			{
-				Server.Log("[ERROR]: Command " + command.Name + " tried to add a referance that already existed! (" + reference + ")", ConsoleColor.White, ConsoleColor.Red);
+				Logger.Log("[ERROR]: Command " + command.Name + " tried to add a referance that already existed! (" + reference + ")", Color.White, Color.Red);
 				return;
 			}
 			Commands.Add(reference.ToLower(), command);
 		}
 
+        /// <summary>
+        /// Finds the specified command
+        /// </summary>
+        /// <param name="p">The name of the command.</param>
+        /// <returns></returns>
 		public static ICommand Find(string p) {
 			try {
 				KeyValuePair<string, ICommand> firstCmd = Commands.First((entry) => entry.Key == p);
@@ -69,11 +76,30 @@ namespace MCForge.Interface.Command
 			}
 		}
 	}
+
+    /// <summary>
+    /// Types of commands
+    /// </summary>
 	public enum CommandTypes {
-		building,
-		mod,
-		misc,
-		information,
+        /// <summary>
+        /// Build type of command
+        /// </summary>
+		Building,
+
+        /// <summary>
+        /// Mod type of command
+        /// </summary>
+		Mod,
+
+        /// <summary>
+        /// Misc type of command
+        /// </summary>
+		Misc,
+
+        /// <summary>
+        /// Info type of command
+        /// </summary>
+		Information,
 		//fun,
 	}
 }

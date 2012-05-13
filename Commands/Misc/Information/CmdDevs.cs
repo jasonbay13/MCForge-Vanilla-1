@@ -21,7 +21,7 @@ namespace CommandDll
     public class CmdDevs : ICommand
     {
         public string Name { get { return "Developers"; } }
-        public CommandTypes Type { get { return CommandTypes.information; } }
+        public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

@@ -21,6 +21,9 @@ using MCForge.Entity;
 
 namespace MCForge.Interface.Command
 {
+    /// <summary>
+    /// Interface for Commands
+    /// </summary>
 	public interface ICommand
 	{
 		/// <summary>

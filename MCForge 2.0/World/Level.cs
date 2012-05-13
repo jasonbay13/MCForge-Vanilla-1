@@ -21,6 +21,8 @@ using System.IO.Compression;
 using MCForge.Entity;
 using MCForge.Core;
 using MCForge.World.Blocks;
+using MCForge.Utilities;
+using System.Drawing;
 
 namespace MCForge.World {
     /// <summary>
@@ -171,7 +173,7 @@ namespace MCForge.World {
                     long v = Binary.ReadInt64();
                     if (v != 28542713840690029) //The magic number
                     {
-                        Server.Log("Not a new MCForge Level! Attemping to load old MCForge level format!", ConsoleColor.Red, ConsoleColor.Black);
+                        Logger.Log("Not a new MCForge Level! Attemping to load old MCForge level format!", Color.Red, Color.Black);
                         Binary.Dispose();
                         FileStream fs = File.OpenRead(Name);
                         try {
@@ -265,7 +267,7 @@ namespace MCForge.World {
                 Binary.Dispose();
                 return finalLevel;
             }
-            catch (Exception e) { Server.Log(e.Message); Server.Log(e.StackTrace); } return null;
+            catch (Exception e) { Logger.Log(e.Message); Logger.Log(e.StackTrace); } return null;
         }
 
 
@@ -393,7 +395,7 @@ namespace MCForge.World {
                 return Data[pos];
             }
             catch (Exception e) {
-                Server.Log(e);
+                Logger.LogError(e);
                 return Block.BlockList.UNKNOWN; //Unknown Block
             }
         }

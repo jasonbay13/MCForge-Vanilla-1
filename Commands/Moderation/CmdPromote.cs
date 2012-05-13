@@ -21,7 +21,7 @@ namespace CommandDll
     public class CmdPromote : ICommand
     {
         public string Name { get { return "Promote"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -33,14 +33,14 @@ namespace CommandDll
             Player who = Player.Find(args[0]);
             if (who == null) { p.SendMessage("Cannot find player!"); return; }
             if (who == p) { p.SendMessage("Cannot demote yourself!"); return; }
-            PlayerGroup current = who.group;
+            PlayerGroup current = who.Group;
             bool next = false;
-            foreach (PlayerGroup rank in PlayerGroup.groups)
+            foreach (PlayerGroup rank in PlayerGroup.Groups)
             {
                 if (rank == current) { next = true; continue; }
                 if (next) 
                 {
-                    string[] info = new string[2] { who.Username, rank.name };
+                    string[] info = new string[2] { who.Username, rank.Name };
                     Command.Find("setrank").Use(p, info);
                     break;
                 }

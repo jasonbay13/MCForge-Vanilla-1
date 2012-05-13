@@ -6,11 +6,26 @@ using MCForge.World.Blocks;
 
 namespace MCForge.World.Physics
 {
+    /// <summary>
+    /// Create a custom block with physics
+    /// </summary>
     public abstract class PhysicsBlock : Block
     {
-        protected static Thread tick;
-        protected static List<PhysicsBlock> blocks = new List<PhysicsBlock>();
+        /// <summary>
+        /// The physics time.
+        /// </summary>
+        protected static Thread TimerTick;
+
+        /// <summary>
+        /// A list of blocks
+        /// </summary>
+        protected static List<PhysicsBlock> Blocks = new List<PhysicsBlock>();
+
+        /// <summary>
+        /// The on tick method
+        /// </summary>
         public abstract void Tick();
+
         int _x;
         int _y;
         int _z;
@@ -18,33 +33,68 @@ namespace MCForge.World.Physics
         public virtual Level l { get { return _l; } }
         //TODO
         //Check to see if the new value is out of bound or not.
+        /// <summary>
+        /// Gets or sets the X.
+        /// </summary>
+        /// <value>
+        /// The X.
+        /// </value>
         public virtual int X { get { return _x; } set { _x = value; } }
+        /// <summary>
+        /// Gets or sets the Y.
+        /// </summary>
+        /// <value>
+        /// The Y.
+        /// </value>
         public virtual int Y { get { return _y; } set { _y = value; } }
+        /// <summary>
+        /// Gets or sets the Z.
+        /// </summary>
+        /// <value>
+        /// The Z.
+        /// </value>
         public virtual int Z { get { return _z; } set { _z = value; } }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PhysicsBlock"/> class.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <param name="z">The z.</param>
+        /// <param name="l">The l.</param>
         public PhysicsBlock(int x, int y, int z, Level l) { this.X = x; this.Y = y; this.Z = z; this._l = l; }
+        /// <summary>
+        /// Removes this instance.
+        /// </summary>
         public void Remove()
         {
-            blocks.Remove(this);
+            Blocks.Remove(this);
         }
+        /// <summary>
+        /// Adds the block.
+        /// </summary>
+        /// <param name="block">The block.</param>
         public void AddBlock(PhysicsBlock block)
         {
-            blocks.Add(block);
+            Blocks.Add(block);
         }
-        public static void InIt()
+        /// <summary>
+        /// Initializes physics block class
+        /// </summary>
+        public static new void InIt()
         {
-            tick = new Thread(new ParameterizedThreadStart(delegate
+            TimerTick = new Thread(new ParameterizedThreadStart(delegate
                 {
                     while (true)
                     {
                         Level.Levels.ForEach(l =>
                         {
-                            blocks.ForEach(b => { if (b.l == l) b.Tick(); });
+                            Blocks.ForEach(b => { if (b.l == l) b.Tick(); });
                             Thread.Sleep(l.PhysicsTick);
                         });
                         Thread.Sleep(5);
                     }
                 }));
-            tick.Start();
+            TimerTick.Start();
         }
     }
 }

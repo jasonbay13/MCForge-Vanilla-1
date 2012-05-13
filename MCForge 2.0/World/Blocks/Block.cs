@@ -5,6 +5,7 @@ using System.Text;
 using MCForge.Core;
 using MCForge.World.Blocks;
 using MCForge.World.Physics;
+using MCForge.Utilities;
 
 namespace MCForge.World {
     public abstract class Block {
@@ -88,7 +89,7 @@ namespace MCForge.World {
 
         internal static void InIt() //Possibly get rid of this...we might not need it.
         {
-            Server.Log("Loading blocks...");
+            Logger.Log("Loading blocks...");
             //get all custom block info and load it
         }
 

@@ -21,7 +21,7 @@ namespace CommandDll
     public class CmdRTitle : ICommand
     {
         public string Name { get { return "RTitle"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "7imekeeper"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -54,7 +54,7 @@ namespace CommandDll
             {
                 who = Player.Find(message.Split(' ')[0]);
                 if (who == null) { p.SendMessage("Could not find player."); return; }
-                if (p.group.permission <= who.group.permission) { p.SendMessage("You can't change the title of someone of equal or higher rank!"); return; }
+                if (p.Group.Permission <= who.Group.Permission) { p.SendMessage("You can't change the title of someone of equal or higher rank!"); return; }
                 if (Server.devs.Contains(who.Username) && !Server.devs.Contains(p.Username)) { p.SendMessage("You can't change a dev's title!"); return; }
                 message = message.Substring(message.IndexOf(' ') + 1);
             }

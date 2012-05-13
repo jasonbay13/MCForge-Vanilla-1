@@ -265,7 +265,7 @@ namespace MCForge.World.Generator {
                     Level.SetBlock(x, z, toGround, GenArgs.BottomLayer);
 
             }
-            // Server.Log((curr.Millisecond - DateTime.Now.Millisecond) + " = total time");
+            // Logger.Log((curr.Millisecond - DateTime.Now.Millisecond) + " = total time");
 
         }
 

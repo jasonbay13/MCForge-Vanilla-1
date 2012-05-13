@@ -23,7 +23,7 @@ namespace CommandDll
     public class CmdSummon : ICommand
     {
         public string Name { get { return "Summon"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -42,7 +42,7 @@ namespace CommandDll
                 {
 					Server.ForeachPlayer(delegate(Player pl)
 					{
-						if (pl.Level == p.Level && pl != p && p.group.permission > pl.group.permission) //Missing permissions
+						if (pl.Level == p.Level && pl != p && p.Group.Permission > pl.Group.Permission) //Missing permissions
 						{
 							pl.SendToPos(p.Pos, p.Rot);
                             pl.SendMessage("You were summoned by " + (string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + Server.DefaultColor + ".");
@@ -54,7 +54,7 @@ namespace CommandDll
                 else
                 {
                     Player who = Player.Find(args[0]);
-                    if (who == null || who.IsHidden && p.group.permission < who.group.permission)
+                    if (who == null || who.IsHidden && p.Group.Permission < who.Group.Permission)
                     {
                         p.SendMessage("Player: " + args[0] + " not found!");
                         return;
@@ -64,7 +64,7 @@ namespace CommandDll
                         p.SendMessage("Why are you trying to summon yourself?");
                         return;
                     }
-                    else if (p.group.permission < who.group.permission)
+                    else if (p.Group.Permission < who.Group.Permission)
                     {
                         p.SendMessage("You cannot summon someone ranked higher thank you!");
                         return;

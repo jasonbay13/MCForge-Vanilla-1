@@ -22,7 +22,7 @@ namespace CommandDll
     public class CmdGoto : ICommand
     {
         public string Name { get { return "Goto"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Snowl"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

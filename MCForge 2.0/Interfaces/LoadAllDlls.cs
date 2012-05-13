@@ -21,11 +21,13 @@ using System.Reflection;
 using MCForge.Interface.Plugin;
 using MCForge.Interface.Command;
 using MCForge.Core;
+using MCForge.Utilities;
+using System.Drawing;
 
 namespace MCForge.Interface {
     public static class LoadAllDlls {
         public static void Init() {
-            Server.Log("[System]: Initializing Commands", ConsoleColor.Green, ConsoleColor.Black);
+            Logger.Log("[System]: Initializing Commands", Color.Green, Color.Black);
             InitCommands();
 
         }
@@ -70,7 +72,7 @@ namespace MCForge.Interface {
                                 {
                                     ICommand instance = (ICommand)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
                                     instance.Initialize();
-                                    Server.Log("[Command]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
+                                    Logger.Log("[Command]: " + instance.Name + " Initialized!", Color.Magenta, Color.Black);
                                 }
                                 else
                                 {
@@ -80,7 +82,7 @@ namespace MCForge.Interface {
                                         IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
                                         instance.OnLoad(args);
                                         Plugin.Plugin.AddReference(instance);
-                                        Server.Log("[Plugin]: " + instance.Name + " Initialized!", ConsoleColor.Magenta, ConsoleColor.Black);
+                                        Logger.Log("[Plugin]: " + instance.Name + " Initialized!", Color.Magenta, Color.Black);
                                     }
                                 }
                             }
@@ -95,15 +97,9 @@ namespace MCForge.Interface {
 
             foreach (string s in DLLFiles)
             	LoadDLL(s, new string[] { "-normal" });
-            if (Directory.Exists("plugins"))
+            if (Directory.Exists("dlls"))
             {
-            	DLLFiles = Directory.GetFiles("plugins", "*.dll");
-            	foreach (string s in DLLFiles)
-            		LoadDLL(s, new string[] { "-normal" });
-            }
-            if (Directory.Exists("commands"))
-            {
-            	DLLFiles = Directory.GetFiles("commands", "*.dll");
+            	DLLFiles = Directory.GetFiles("dlls", "*.dll");
             	foreach (string s in DLLFiles)
             		LoadDLL(s, new string[] { "-normal" });
             }

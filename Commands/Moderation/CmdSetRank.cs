@@ -23,7 +23,7 @@ namespace CommandDll
     public class CmdSetRank : ICommand
     {
         public string Name { get { return "SetRank"; } }
-        public CommandTypes Type { get { return CommandTypes.mod; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "cazzar"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
@@ -50,23 +50,23 @@ namespace CommandDll
                 return;
             }
 
-            if (who.group.permission >= p.group.permission)
+            if (who.Group.Permission >= p.Group.Permission)
             {
                 p.SendMessage("You cannot change the rank of someone of an equal or greater rank!");
                 return;
             }
-            if (group.permission >= p.group.permission)
+            if (group.Permission >= p.Group.Permission)
             {
                 p.SendMessage("You cannot promote someone to an equal or greater rank!");
                 return;
             }
-            if (who.group == group)
+            if (who.Group == group)
             {
-                p.SendMessage(group.colour + who.Username + Server.DefaultColor + " is already that rank");
+                p.SendMessage(group.Colour + who.Username + Server.DefaultColor + " is already that rank");
                 return;
             }
             group.AddPlayer(who);
-            Player.UniversalChat(group.colour + who.Username + Server.DefaultColor + " had their rank set to " + group.colour + group.name);
+            Player.UniversalChat(group.Colour + who.Username + Server.DefaultColor + " had their rank set to " + group.Colour + group.Name);
 
         }
 

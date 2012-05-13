@@ -29,6 +29,7 @@ using System.Linq;
 using MCForge.SQL;
 using System.Data;
 using MCForge.API.Events;
+using System.Drawing;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -40,13 +41,13 @@ namespace MCForge.Entity {
         //TODO: Change all o dis
         internal static readonly System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
         internal static readonly MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-        protected static readonly packet pingPacket = new packet(new byte[1] { (byte)packet.types.SendPing });
-        protected static readonly packet mapSendStartPacket = new packet(new byte[1] { (byte)packet.types.MapStart });
+        private  static readonly packet pingPacket = new packet(new byte[1] { (byte)packet.types.SendPing });
+        private  static readonly packet mapSendStartPacket = new packet(new byte[1] { (byte)packet.types.MapStart });
         private static byte ForceTpCounter = 0;
 
-        protected static packet MOTD_NonAdmin = new packet();
-        protected static packet MOTD_Admin = new packet();
-        protected static void CheckMotdPackets() {
+        private  static packet MOTD_NonAdmin = new packet();
+        private  static packet MOTD_Admin = new packet();
+        private  static void CheckMotdPackets() {
             if (MOTD_NonAdmin.bytes == null) {
                 MOTD_NonAdmin.Add(packet.types.MOTD);
                 MOTD_NonAdmin.Add(ServerSettings.Version);
@@ -58,9 +59,9 @@ namespace MCForge.Entity {
             }
         }
 
-        public Socket Socket { get; protected set; }
-        public TcpClient Client { get; protected set; }
-        protected packet.types lastPacket = packet.types.SendPing;
+        public Socket Socket { get; private  set; }
+        public TcpClient Client { get; private  set; }
+        private  packet.types lastPacket = packet.types.SendPing;
 
         /// <summary>
         /// The player's money.
@@ -84,7 +85,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// This is the UID for the player in the database
         /// </summary>
-        internal int UID;
+        internal int UID = 0;
         /// <summary>
         /// This is the player's IP Address
         /// </summary>
@@ -199,7 +200,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// The current Group of the player
         /// </summary>
-        public PlayerGroup group = PlayerGroup.Find(ServerSettings.GetSetting("defaultgroup"));
+        public PlayerGroup Group = PlayerGroup.Find(ServerSettings.GetSetting("defaultgroup"));
 
         private Random playerRandom;
 
@@ -214,7 +215,7 @@ namespace MCForge.Entity {
                 Client = TcpClient;
                 Server.Connections.Add(this);
                 Ip = Socket.RemoteEndPoint.ToString().Split(':')[0];
-                Server.Log("[System]: " + Ip + " connected", ConsoleColor.Gray, ConsoleColor.Black);
+                Logger.Log("[System]: " + Ip + " connected", Color.Gray, Color.Black);
 
                 CheckMultipleConnections();
                 if (CheckIfBanned()) return;
@@ -226,7 +227,7 @@ namespace MCForge.Entity {
             }
             catch (Exception e) {
                 SKick("There has been an Error.");
-                Server.Log(e);
+                Logger.LogError(e);
             }
         }
 
@@ -236,7 +237,7 @@ namespace MCForge.Entity {
         }
 
         #region Special Chat Handlers
-        protected void HandleCommand(string[] args) {
+        private  void HandleCommand(string[] args) {
             string[] sendArgs = new string[0];
             if (args.Length > 1) {
                 sendArgs = new string[args.Length - 1];
@@ -253,17 +254,20 @@ namespace MCForge.Entity {
             if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
-                    if (!Server.agreed.Contains(Username) && group.permission < 80 && name != "rules" && name != "agree" && name != "disagree") {
+                    if (!Server.agreed.Contains(Username) && Group.Permission < 80 && name != "rules" && name != "agree" && name != "disagree") {
                         SendMessage("You need to /agree to the /rules before you can use commands!"); return;
                     }
-                    if (!group.CanExecute(cmd)) {
+                    if (!Group.CanExecute(cmd)) {
                         SendMessage(Colors.red + "You cannot use /" + name + "!");
                         return;
                     }
-                    try { cmd.Use(this, sendArgs); } //Just so it doesn't crash the server if custom command makers release broken commands!
+                    try { 
+                        cmd.Use(this, sendArgs);
+                        OnCommandEnd.Call(this, new CommandEndEventArgs(cmd, sendArgs), OnAllCommandEnd);
+                    } //Just so it doesn't crash the server if custom command makers release broken commands!
                     catch (Exception ex) {
-                        Server.Log("[Error] An error occured when " + Username + " tried to use " + name + "!", ConsoleColor.Red, ConsoleColor.Black);
-                        Server.Log(ex);
+                        Logger.Log("[Error] An error occured when " + Username + " tried to use " + name + "!", Color.Red, Color.Black);
+                        Logger.LogError(ex);
                     }
                     if (ExtraData.ContainsKey("LastCmd"))
                         ExtraData["LastCmd"] = name;
@@ -387,7 +391,6 @@ namespace MCForge.Entity {
         /// <param name="type"></param>
         public void Click(ushort x, ushort z, ushort y, byte type) {
             HandleBlockchange(x, y, z, (byte)ActionType.Place, type, true);
-            return;
             BlockChangeEventArgs eargs=new BlockChangeEventArgs(x, y, z, ActionType.Place, type);
             bool canceled = OnPlayerBlockChange.Call(this, eargs, OnAllPlayersBlockChange).Canceled;
             if (canceled) // If any event canceled us
@@ -408,7 +411,7 @@ namespace MCForge.Entity {
         }
         #endregion
 
-        protected static List<string> LineWrapping(string message) {
+        private  static List<string> LineWrapping(string message) {
             List<string> lines = new List<string>();
             message = Regex.Replace(message, @"(&[0-9a-f])+(&[0-9a-f])", "$2");
             message = Regex.Replace(message, @"(&[0-9a-f])+$", "");
@@ -450,7 +453,7 @@ namespace MCForge.Entity {
             } return lines;
         }
 
-        protected byte FreeId() {
+        private  byte FreeId() {
             List<byte> usedIds = new List<byte>();
 
             Server.ForeachPlayer(p => usedIds.Add(p.id));
@@ -463,14 +466,14 @@ namespace MCForge.Entity {
             Logger.Log("Too many players O_O");
             return 254;
         }
-        protected void UpgradeConnectionToPlayer() {
+        private  void UpgradeConnectionToPlayer() {
             Server.UpgradeConnectionToPlayer(this);
 
             //TODO Update form list
         }
 
         #region Verification Stuffs
-        protected void CheckMultipleConnections() {
+        private  void CheckMultipleConnections() {
 
             //Not a good idea, wom uses 2 connections when getting textures
             if (Server.Connections.Count < 2)
@@ -481,21 +484,21 @@ namespace MCForge.Entity {
                 }
             }
         }
-        protected static void CheckDuplicatePlayers(string username) {
+        private static void CheckDuplicatePlayers(string username) {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p.Username.ToLower() == username.ToLower()) {
                     p.Kick("You have logged in elsewhere!");
                 }
             });
         }
-        protected bool CheckIfBanned() {
+        private  bool CheckIfBanned() {
             if (Server.IPBans.Contains(Ip)) {
                 Kick("You're Banned!");
                 return true;
             }
             return false;
         }
-        protected bool VerifyAccount(string name, string verify) {
+        private  bool VerifyAccount(string name, string verify) {
             if (!ServerSettings.GetSettingBoolean("offline") && Ip != "127.0.0.1") {
                 if (Server.PlayerCount >= ServerSettings.GetSettingInt("maxplayers")) {
                     SKick("Server is full, please try again later!");
@@ -504,7 +507,7 @@ namespace MCForge.Entity {
 
                 if (verify == null || verify == "" || verify == "--" || (verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0') && verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0'))) {
                     SKick("Account could not be verified, try again.");
-                    //Server.Log("'" + verify + "' != '" + BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.salt + name))).Replace("-", "").ToLower().TrimStart('0') + "'");
+                    //Logger.Log("'" + verify + "' != '" + BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.salt + name))).Replace("-", "").ToLower().TrimStart('0') + "'");
                     return false;
                 }
             }
@@ -587,19 +590,29 @@ namespace MCForge.Entity {
         /// Gets called when any player changes a block.
         /// </summary>
         public static BlockChangeEvent OnAllPlayersBlockChange = new BlockChangeEvent();
-        Dictionary<string,object> datapasses=new Dictionary<string,object>();
+
+        /// <summary>
+        /// Gets called when the command this player called has just ended.
+        /// </summary>
+        public CommandEndEvent OnCommandEnd = new CommandEndEvent();
+
+        /// <summary>
+        /// Gets called when a command a player called has just ended.
+        /// </summary>
+        public static CommandEndEvent OnAllCommandEnd = new CommandEndEvent();
+
+
+        private readonly Dictionary<string,object> DataPasses=new Dictionary<string,object>();
+
+        //I don't see why we cant use ExtraData... a string is an object....
+
         /// <summary>
         /// Gets a datapass object and removes it from the list.
         /// </summary>
         /// <param name="key">The key to access the datapass object.</param>
         /// <returns>A datapass object.</returns>
         public object GetDatapass(string key){
-            if (datapasses.ContainsKey(key)) {
-                object ret = datapasses[key];
-                datapasses.Remove(key);
-                return ret;
-            }
-            else return null;
+            return DataPasses.GetIfExist<string, object>(key);
         }
         /// <summary>
         /// Sets a datapass object according to the key.
@@ -607,8 +620,7 @@ namespace MCForge.Entity {
         /// <param name="key">The key to set the datapass object to.</param>
         /// <param name="data">The datapass object.</param>
         public void setDatapass(string key, object data){
-            if(datapasses.ContainsKey(key)) datapasses[key]=data;
-            else datapasses.Add(key,data);
+            DataPasses.ChangeOrCreate<string, object>(key, data);
         }
         #endregion
 

@@ -24,7 +24,7 @@ namespace MCForge.Core
 	{
 		public static List<PDB> DB = new List<PDB>();
 
-		string username;
+		string username = null;
 
 		/// <summary>
 		/// This allows a PDB to be compared to another PDB by looking at the username, and subsequently, it can then be sorted.
@@ -41,7 +41,7 @@ namespace MCForge.Core
 	{
 		public static List<GDB> DB = new List<GDB>();
 
-		byte id;
+		byte id = 0;
 
 		public int CompareTo(GDB gdb)
 		{

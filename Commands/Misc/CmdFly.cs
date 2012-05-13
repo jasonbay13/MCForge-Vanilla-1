@@ -25,7 +25,7 @@ namespace CommandDll
     public class CmdFly : ICommand
     {
         public string Name { get { return "Fly"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
