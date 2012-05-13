@@ -1848,6 +1848,13 @@
             <returns>An object casted to the specified type, or null if not found</returns>
             <remarks>Must have a nullable type interface</remarks>
         </member>
+        <member name="M:MCForge.Utils.MiscUtils.MySqlEscape(System.String)">
+            <summary>
+            Cleans a string for input into a database
+            </summary>
+            <param name="stringToClean">The string to clean.</param>
+            <returns>A cleaned string</returns>
+        </member>
         <member name="T:MCForge.API.Events.BlockChangeEvent">
             <summary>
             PlayerBlockChange event class
