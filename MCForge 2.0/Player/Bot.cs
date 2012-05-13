@@ -34,7 +34,7 @@ namespace MCForge.Robot
         /// <summary>
         /// A robot (entity) that appears in the world.
         /// </summary>
-        public Bot(string Username, Vector3 Position, byte[] Rotation, Level level, bool FollowPlayers, bool BreakBlocks)
+        public Bot(string Username, Vector3 Position, byte[] Rotation, Level level, bool FollowPlayers, bool BreakBlocks, bool Jumping)
         {
             Player = new Player();
             Player.Username = Username;
@@ -48,6 +48,7 @@ namespace MCForge.Robot
             SpawnThisBotToOtherPlayers(this);
             this.FollowPlayers = FollowPlayers;
             this.BreakBlocks = BreakBlocks;
+            this.Jumping = Jumping;
         }
 
         /// <summary>

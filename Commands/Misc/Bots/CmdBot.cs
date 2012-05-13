@@ -50,7 +50,7 @@ namespace CommandDll
                 }
                 string margs = ArrayToString(fargs.ToArray());
                 margs = margs.Replace('%', '&');
-                Bot TemporaryPlayer = new Bot(margs, p.Pos, p.Rot, p.Level, false, false);
+                Bot TemporaryPlayer = new Bot(margs, p.Pos, p.Rot, p.Level, false, false, false);
                 TemporaryPlayer.Player.Level.ExtraData.Add("Bot" + Random.Next(0, 9999999), margs + " " + TemporaryPlayer.FollowPlayers + " " + TemporaryPlayer.BreakBlocks + " " + TemporaryPlayer.Jumping +
                     " " + TemporaryPlayer.Player.Pos.x + " " + TemporaryPlayer.Player.Pos.y + " " + TemporaryPlayer.Player.Pos.z + " "
                     + TemporaryPlayer.Player.Rot[0] + " " + TemporaryPlayer.Player.Rot[1]); //Add bot to level metadata
