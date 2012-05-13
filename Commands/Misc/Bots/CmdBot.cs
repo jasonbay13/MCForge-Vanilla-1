@@ -99,6 +99,33 @@ namespace CommandDll
                 else
                     p.SendMessage("Could not find " + ArrayToString(fargs.ToArray()) + Server.DefaultColor + "!");
             }
+            else if (args[0].ToLower() == "summon")
+            {
+                List<string> fargs = new List<string>();
+                int l = 0;
+                foreach (string s in args)
+                {
+                    if (l > 0)
+                        fargs.Add(s);
+                    l++;
+                }
+                string margs = ArrayToString(fargs.ToArray());
+                margs = margs.Replace('%', '&');
+                bool hitBot = false;
+                foreach (Bot b in Server.Bots.ToArray())
+                {
+                    if (b.Player.Username.ToLower() == margs.ToLower() &&
+                        b.Player.Level == p.Level)
+                    {
+                        hitBot = true;
+                        b.Player.Pos = p.Pos;
+                    }
+                }
+                if (hitBot)
+                    p.SendMessage("Summoned " + ArrayToString(fargs.ToArray()) + Server.DefaultColor + "!");
+                else
+                    p.SendMessage("Could not find " + ArrayToString(fargs.ToArray()) + Server.DefaultColor + "!");
+            }
             else if (args[0].ToLower() == "ai")
             {
                 List<string> fargs = new List<string>();

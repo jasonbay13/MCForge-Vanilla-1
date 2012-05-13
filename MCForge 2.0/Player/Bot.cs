@@ -23,13 +23,7 @@ namespace MCForge.Robot
     {
         public bool FollowPlayers = false;
         public bool BreakBlocks = false;
-
-        ushort[] FoundPlayerPosition = new ushort[3] { 0, 0, 0 };
-        byte[] FoundPlayerRotation = new byte[2] { 0, 0 };
         bool Movement = true;
-        public int Speed = 24;
-        bool Jumping = false;
-        int CurrentJump = 0;
 
         /// <summary>
         /// Player which is assigned to the bot
@@ -63,69 +57,72 @@ namespace MCForge.Robot
             foreach (Bot Bot in Server.Bots)
             {
                 Random Random = new Random();
-                if (Bot.Movement && Bot.FollowPlayers)
+                bool PlayerAbove = false;
+                bool PlayerBelow = false;
+                if (Bot.Movement)
                 {
-                    #region Find Closest Player
-                    bool HitAPlayer = false;
-                    Vector3 ClosestLocation = new Vector3(0, 0, 0);
-                    foreach (Player p in Server.Players)
+                    Vector3 TemporaryLocation = new Vector3(Bot.Player.Pos.x, Bot.Player.Pos.z, Bot.Player.Pos.y);
+                    if (Bot.FollowPlayers) //TODO - Fix jumping (you can jump infinately), fix bot locking on target (locks on one target only)
                     {
-                        if (p.Level == Bot.Player.Level)
+                        #region Find Closest Player
+                        bool HitAPlayer = false;
+                        Vector3 ClosestLocation = new Vector3(0, 0, 0);
+                        foreach (Player p in Server.Players)
                         {
-                            HitAPlayer = true;
-                            if (Vector3.MinusAbs(p.Pos, Bot.Player.Pos) > ClosestLocation)
+                            if (p.Level == Bot.Player.Level)
                             {
-                                ClosestLocation = p.Pos;
+                                HitAPlayer = true;
+                                if (Vector3.MinusAbs(p.Pos, Bot.Player.Pos) > ClosestLocation)
+                                {
+                                    ClosestLocation = p.Pos;
+                                }
                             }
                         }
+                        #endregion
+                        if (HitAPlayer)
+                        {
+                            if (ClosestLocation.x < Bot.Player.Pos.x)
+                                TemporaryLocation.x = (short)(Bot.Player.Pos.x - 13); //Around running speed of normal client, 16-18 for WoM
+                            else if (ClosestLocation.x >= Bot.Player.Pos.x)
+                                TemporaryLocation.x = (short)(Bot.Player.Pos.x + 13);
+                            if (ClosestLocation.z < Bot.Player.Pos.z)
+                                TemporaryLocation.z = (short)(Bot.Player.Pos.z - 13);
+                            else if (ClosestLocation.z >= Bot.Player.Pos.z)
+                                TemporaryLocation.z = (short)(Bot.Player.Pos.z + 13);
+                            if (ClosestLocation.y > Bot.Player.Pos.y)
+                                PlayerAbove = true;
+                            else if (ClosestLocation.y < Bot.Player.Pos.y)
+                                PlayerBelow = true;
+                        }
                     }
-                    #endregion
-                    Vector3 TemporaryLocation = new Vector3(0, 0, 0);
-                    if (HitAPlayer)
+
+                    bool ShouldBreakBlock = true;
+
+                    if (Block.CanWalkThrough(Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 64) / 32)))
+                        TemporaryLocation.y = (short)(Bot.Player.Pos.y - 21); //Gravity, 21 is a nice value, doesn't float too much and doesnt fall too far.
+
+                    if (Block.CanWalkThrough(Bot.Player.Level.GetBlock(TemporaryLocation / 32)) &&
+                        Block.CanWalkThrough(Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32)))
                     {
-                        if (ClosestLocation.x < Bot.Player.Pos.x)
-                            TemporaryLocation.x = (short)(Bot.Player.Pos.x - 13); //Around running speed of normal client, 16-18 for WoM
-                        else if (ClosestLocation.x >= Bot.Player.Pos.x)
-                            TemporaryLocation.x = (short)(Bot.Player.Pos.x + 13);
-                        if (ClosestLocation.z < Bot.Player.Pos.z)
-                            TemporaryLocation.z = (short)(Bot.Player.Pos.z - 13);
-                        else if (ClosestLocation.z >= Bot.Player.Pos.z)
-                            TemporaryLocation.z = (short)(Bot.Player.Pos.z + 13);
-
-                        TemporaryLocation.y = Bot.Player.Pos.y;
-                        if (Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 64) / 32) == Block.BlockList.AIR ||
-                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 64) / 32) == Block.BlockList.WATER ||
-                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 64) / 32) == Block.BlockList.LAVA ||
-                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 64) / 32) == Block.BlockList.ACTIVE_LAVA ||
-                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 64) / 32) == Block.BlockList.ACTIVE_WATER)
-                            TemporaryLocation.y = (short)(Bot.Player.Pos.y - 21); //Gravity, 21 is a nice value, doesn't float too much and doesnt fall too far.
-
-                        if (
-                                (Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.AIR ||
-                                Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.WATER ||
-                                Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.LAVA ||
-                                Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.ACTIVE_LAVA ||
-                                Bot.Player.Level.GetBlock(TemporaryLocation / 32) == Block.BlockList.ACTIVE_WATER)
-                            &&
-                                (Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.AIR ||
-                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.WATER ||
-                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.LAVA ||
-                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.ACTIVE_LAVA ||
-                                Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32) == Block.BlockList.ACTIVE_WATER)
-                            )
-                        {
-                            Bot.Player.Pos = TemporaryLocation; //Make sure the bot doesnt walk through walls
-                        }
-                        else if (Bot.BreakBlocks) //Can't go through dat wall, try and break it
-                        {
-                            if (Random.Next(0, 15) == 7)
-                                Bot.Player.Level.BlockChange(Convert.ToUInt16(TemporaryLocation.x / 32), Convert.ToUInt16(TemporaryLocation.z / 32), Convert.ToUInt16(TemporaryLocation.y / 32), Block.BlockList.AIR);
-                            if (Random.Next(0, 15) == 7)
-                                Bot.Player.Level.BlockChange(Convert.ToUInt16(TemporaryLocation.x / 32), Convert.ToUInt16(TemporaryLocation.z / 32), Convert.ToUInt16((TemporaryLocation.y - 32) / 32), Block.BlockList.AIR);
-                        }
-
-                        Bot.Player.UpdatePosition(false);
+                        Bot.Player.Pos = TemporaryLocation; //Make sure the bot doesnt walk through walls
                     }
+                    else if (false) //Jumping
+                    {
+                            Bot.Player.Pos.y = (short)(Bot.Player.Pos.y + 21);
+                            if (Block.CanWalkThrough(Bot.Player.Level.GetBlock(TemporaryLocation / 32)) &&
+                                Block.CanWalkThrough(Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32)))
+                                ShouldBreakBlock = false;
+                            TemporaryLocation.y = (short)(Bot.Player.Pos.y - 21); 
+                    }
+                    if (Bot.BreakBlocks && ShouldBreakBlock) //Can't go through dat wall, try and break it
+                    {
+                        if (Random.Next(1, 5) == 3)
+                            Bot.Player.Level.BlockChange(Convert.ToUInt16(TemporaryLocation.x / 32), Convert.ToUInt16(TemporaryLocation.z / 32), Convert.ToUInt16(TemporaryLocation.y / 32), Block.BlockList.AIR);
+                        if (Random.Next(1, 5) == 3)
+                            Bot.Player.Level.BlockChange(Convert.ToUInt16(TemporaryLocation.x / 32), Convert.ToUInt16(TemporaryLocation.z / 32), Convert.ToUInt16((TemporaryLocation.y - 32) / 32), Block.BlockList.AIR);
+                    }
+
+                    Bot.Player.UpdatePosition(false);
                 }
             }
         }
