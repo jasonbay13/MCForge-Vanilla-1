@@ -45,7 +45,40 @@ namespace MCForge.Utils {
             dict.CreateIfNotExist<TKey, TValue>(key, value);
             dict[key] = value;
         }
-
+        /// <summary>
+        /// Converts List&lt;string&gt; to a multiple lines hex string.
+        /// </summary>
+        /// <param name="list">The list to convert</param>
+        /// <returns>A multiple lines hex string</returns>
+        public static string ToHexString(this List<string> list) {
+            string ret = "";
+            foreach (string item in list) {
+                byte[] b = ASCIIEncoding.ASCII.GetBytes(item);
+                for (int i = 0; i < b.Length; i++) {
+                    ret += Convert.ToString(b[i], 16);
+                }
+                ret += "\n";
+            }
+            return ret;
+        }
+        /// <summary>
+        /// Converts a multiple line hex string to a List&lt;string&gt;. 
+        /// </summary>
+        /// <param name="list">The multiple line hex string</param>
+        /// <returns>A List&lt;string&gt;</returns>
+        public static List<string> ToListFromHexString(this string list) {
+            string[] lines = list.Split('\n');
+            List<string> ret = new List<string>();
+            for (int i = 0; i < lines.Length; i++) {
+                if (lines[i].Length % 2 != 0) break;
+                string tmp = "";
+                for (int ii = 0; ii < lines[i].Length; ii += 2) {
+                    tmp += (char)Convert.ToByte(lines[i].Substring(ii, 2), 16);
+                }
+                ret.Add(tmp);
+            }
+            return ret;
+        }
 
 
     }

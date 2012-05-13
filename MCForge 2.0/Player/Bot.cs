@@ -17,6 +17,7 @@ using System.Data;
 using MCForge.Entity;
 using MCForge.API.Events;
 
+//This namespace should get it's own directory
 namespace MCForge.Robot
 {
     public sealed partial class Bot
