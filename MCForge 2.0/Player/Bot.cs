@@ -59,7 +59,6 @@ namespace MCForge.Robot
             foreach (Bot Bot in Server.Bots)
             {
                 Random Random = new Random();
-                bool PlayerAbove = false;
                 bool PlayerBelow = false;
                 if (Bot.Movement)
                 {
@@ -91,16 +90,14 @@ namespace MCForge.Robot
                                 TemporaryLocation.z = (short)(Bot.Player.Pos.z - 13);
                             else if (ClosestLocation.z >= Bot.Player.Pos.z)
                                 TemporaryLocation.z = (short)(Bot.Player.Pos.z + 13);
-                            if (ClosestLocation.y > Bot.Player.Pos.y)
-                                PlayerAbove = true;
-                            else if (ClosestLocation.y < Bot.Player.Pos.y)
+                            if (ClosestLocation.y < Bot.Player.Pos.y)
                                 PlayerBelow = true;
                         }
                     }
 
                     bool ShouldBreakBlock = true;
 
-                    if (Block.CanWalkThrough(Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 64) / 32)))
+                    if (Block.CanWalkThrough(Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 64) / 32)) && Bot.Player.Pos.y / 32 > 1)
                         TemporaryLocation.y = (short)(Bot.Player.Pos.y - 21); //Gravity, 21 is a nice value, doesn't float too much and doesnt fall too far.
 
                     if (Block.CanWalkThrough(Bot.Player.Level.GetBlock(TemporaryLocation / 32)) &&
@@ -119,10 +116,19 @@ namespace MCForge.Robot
                     }
                     if (Bot.BreakBlocks && ShouldBreakBlock) //Can't go through dat wall, try and break it
                     {
-                        if (Random.Next(1, 5) == 3)
+                        if (Random.Next(1, 5) == 3 && !Block.IsOPBlock(Bot.Player.Level.GetBlock(TemporaryLocation / 32)))
                             Bot.Player.Level.BlockChange(Convert.ToUInt16(TemporaryLocation.x / 32), Convert.ToUInt16(TemporaryLocation.z / 32), Convert.ToUInt16(TemporaryLocation.y / 32), Block.BlockList.AIR);
-                        if (Random.Next(1, 5) == 3)
+                        if (Random.Next(1, 5) == 3 && !Block.IsOPBlock(Bot.Player.Level.GetBlock(new Vector3(Convert.ToUInt16(TemporaryLocation.x / 32), Convert.ToUInt16(TemporaryLocation.z / 32), Convert.ToUInt16((TemporaryLocation.y - 32) / 32)))))
                             Bot.Player.Level.BlockChange(Convert.ToUInt16(TemporaryLocation.x / 32), Convert.ToUInt16(TemporaryLocation.z / 32), Convert.ToUInt16((TemporaryLocation.y - 32) / 32), Block.BlockList.AIR);
+                        if (PlayerBelow)
+                        {
+                            try
+                            {
+                                if (Random.Next(1, 5) == 3 && !Block.IsOPBlock(Bot.Player.Level.GetBlock(new Vector3(Convert.ToUInt16(TemporaryLocation.x / 32), Convert.ToUInt16(TemporaryLocation.z / 32), Convert.ToUInt16((TemporaryLocation.y - 64) / 32)))))
+                                    Bot.Player.Level.BlockChange(Convert.ToUInt16(TemporaryLocation.x / 32), Convert.ToUInt16(TemporaryLocation.z / 32), Convert.ToUInt16((TemporaryLocation.y - 64) / 32), Block.BlockList.AIR);
+                            }
+                            catch { }
+                        }
                     }
 
                     Bot.Player.UpdatePosition(false);

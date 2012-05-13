@@ -154,6 +154,14 @@ namespace MCForge.World {
                 return false;
         }
 
+        public static bool IsOPBlock(byte blockToCheck)
+        {
+            if (blockToCheck == Block.BlockList.BEDROCK)
+                return true;
+            else
+                return false;
+        }
+
         /// <summary>
         /// List of blocks (in the form of a byte)
         /// </summary>
