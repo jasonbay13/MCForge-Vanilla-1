@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MCForge.Utilities.Settings;
 using System.IO;
 using MCForge.World;
 using MCForge.Core;
-using MCForge.Utilities;
+using MCForge.Utils;
 using System.Drawing;
+using MCForge.Utils.Settings;
 
 namespace Plugins.WomPlugin {
     class WomSettings : ExtraSettings {
-        private readonly List<MCForge.Utilities.Settings.SettingNode> _cgfvalues = new List<MCForge.Utilities.Settings.SettingNode>() {
+        private readonly List<SettingNode> _cgfvalues = new List<MCForge.Utils.Settings.SettingNode>() {
             new SettingNode("server.name", ServerSettings.GetSetting("ServerName"), null),
             new SettingNode("server.detail", ServerSettings.GetSetting("motd"), null),
             new SettingNode("detail.user", "User line", null),
@@ -24,7 +24,7 @@ namespace Plugins.WomPlugin {
             new SettingNode("environment.side", "7c0fdebeb6637929b9b3170680fa7a79b656c3f7", null),
             new SettingNode("server.sendwomid","true", null),
         };
-        private readonly List<MCForge.Utilities.Settings.SettingNode> _values = new List<MCForge.Utilities.Settings.SettingNode>() {
+        private readonly List<SettingNode> _values = new List<SettingNode>() {
             new SettingNode("LevelName", "main", null),
             new SettingNode("ConfigPath", ServerSettings.GetSetting("configpath") + "main.cgf", null),
         };
@@ -75,7 +75,7 @@ namespace Plugins.WomPlugin {
         public override void Save() {
 
         }
-        public override List<MCForge.Utilities.Settings.SettingNode> Values {
+        public override List<MCForge.Utils.Settings.SettingNode> Values {
             get { return _values; }
         }
 

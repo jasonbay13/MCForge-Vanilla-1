@@ -13,7 +13,7 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using MCForge.Utilities;
+using MCForge.Utils;
 using System.Linq;
 using System.Collections.Generic;
 using MCForge.Interface.Command;

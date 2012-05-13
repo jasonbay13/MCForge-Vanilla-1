@@ -22,8 +22,7 @@ using System.Threading;
 using MCForge.API.System;
 using MCForge.Core;
 using MCForge.Groups;
-using MCForge.Utilities;
-using MCForge.Utilities.Settings;
+using MCForge.Utils.Settings;
 using MCForge.World;
 using System.Drawing;
 using MCForge.Utils;
@@ -33,7 +32,7 @@ using MCForge.Robot;
 namespace MCForge.Entity {
     public partial class Player {
         #region Incoming Data
-        private  static void Incoming(IAsyncResult result) {
+        private static void Incoming(IAsyncResult result) {
             while (!Server.Started)
                 Thread.Sleep(100);
 
@@ -86,7 +85,7 @@ namespace MCForge.Entity {
                 return;
             }
         }
-        private  byte[] HandlePacket(byte[] buffer) {
+        private byte[] HandlePacket(byte[] buffer) {
 
             try {
                 int length = 0; byte msg = buffer[0];
@@ -144,7 +143,7 @@ namespace MCForge.Entity {
             return buffer;
         }
 
-        private  void HandleLogin(byte[] message) {
+        private void HandleLogin(byte[] message) {
             try {
                 if (IsLoggedIn) return;
                 byte version = message[0];
@@ -229,7 +228,7 @@ namespace MCForge.Entity {
                 Logger.LogError(e);
             }
         }
-        private  void HandleBlockchange(byte[] message) {
+        private void HandleBlockchange(byte[] message) {
             if (!IsLoggedIn) return;
 
             ushort x = packet.NTHO(message, 0);
@@ -239,7 +238,7 @@ namespace MCForge.Entity {
             byte newType = message[7];
             HandleBlockchange(x, y, z, action, newType, false);
         }
-        private  void HandleBlockchange(ushort x, ushort y, ushort z, byte action, byte newType, bool fake) {
+        private void HandleBlockchange(ushort x, ushort y, ushort z, byte action, byte newType, bool fake) {
 
 
             LastClick = new Vector3(x, y, z);
@@ -290,10 +289,10 @@ namespace MCForge.Entity {
             }
             else //Placing
             {
-                Level.BlockChange(x, z, y, newType, (fake)?null:this);
+                Level.BlockChange(x, z, y, newType, (fake) ? null : this);
             }
         }
-        private  void HandleIncomingPos(byte[] message) {
+        private void HandleIncomingPos(byte[] message) {
             if (!IsLoggedIn)
                 return;
 
@@ -324,7 +323,7 @@ namespace MCForge.Entity {
                 }
             }
         }
-        private  void HandleChat(byte[] message) {
+        private void HandleChat(byte[] message) {
             if (!IsLoggedIn) return;
 
             string incomingText = enc.GetString(message, 1, 64).Trim();
@@ -584,14 +583,10 @@ namespace MCForge.Entity {
 
         #endregion
         #region Outgoing Packets
-        private  void SendPacket(packet pa) {
-		if (!OnPlayerSendPacket.Call(this, new PacketEventArgs(pa.GetMessage(), false,(packet.types)pa.bytes[0]), OnAllPlayersSendPacket).Canceled) {
-            try {
-                lastPacket = (packet.types)pa.bytes[0];
-            }
-            catch (Exception e) { Logger.LogError(e); }
-            for (int i = 0; i < 3; i++) {
+        private void SendPacket(packet pa) {
+            if (!OnPlayerSendPacket.Call(this, new PacketEventArgs(pa.GetMessage(), false, (packet.types)pa.bytes[0]), OnAllPlayersSendPacket).Canceled) {
                 try {
+                    lastPacket = (packet.types)pa.bytes[0];
                     lastPacket = (packet.types)pa.bytes[0];
                 }
                 catch (Exception e) { Logger.LogError(e); }
@@ -608,6 +603,7 @@ namespace MCForge.Entity {
                 CloseConnection();
             }
         }
+
         private void SendMessage(byte PlayerID, string message) {
             packet pa = new packet();
 
@@ -641,11 +637,11 @@ namespace MCForge.Entity {
             }
 
         }
-        private  void SendMotd() {
+        private void SendMotd() {
             SendPacket(IsAdmin ? MOTD_Admin : MOTD_NonAdmin);
         }
-        private  void SendMap() {
-            
+        private void SendMap() {
+
             try {
                 SendPacket(mapSendStartPacket); //Send the pre-fab map start packet
 
@@ -732,14 +728,14 @@ namespace MCForge.Entity {
 
             SendPacket(pa);
         }
-        private  void SendKick(string message) {
+        private void SendKick(string message) {
 
             packet pa = new packet();
             pa.Add(packet.types.SendKick);
             pa.Add(message, 64);
             SendPacket(pa);
         }
-        private  void SMPKick(string a) {
+        private void SMPKick(string a) {
             //Read first, then kick
             var Stream = Client.GetStream();
             var Reader = new BinaryReader(Stream);
@@ -765,7 +761,7 @@ namespace MCForge.Entity {
 
 
         }
-        private  void SendPing() {
+        private void SendPing() {
             SendPacket(pingPacket);
         }
 
@@ -916,8 +912,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// Spawns this player to all other players in the server.
         /// </summary>
-        public void SpawnThisPlayerToOtherPlayers()
-        {
+        public void SpawnThisPlayerToOtherPlayers() {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p != this && p.Level == Level)
                     p.SendSpawn(this);
@@ -926,8 +921,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// Spawns all other players of the server to this player.
         /// </summary>
-        public void SpawnOtherPlayersForThisPlayer()
-        {
+        public void SpawnOtherPlayersForThisPlayer() {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p != this && p.Level == Level)
                     SendSpawn(p);
@@ -937,10 +931,8 @@ namespace MCForge.Entity {
         /// <summary>
         /// Spawns all bots to this player
         /// </summary>
-        public void SpawnBotsForThisPlayer()
-        {
-            Server.ForeachBot(delegate(Bot p)
-            {
+        public void SpawnBotsForThisPlayer() {
+            Server.ForeachBot(delegate(Bot p) {
                 if (p.Player.Level == Level)
                     SendSpawn(p.Player);
             });
@@ -1020,7 +1012,7 @@ namespace MCForge.Entity {
                 if (p.Level == from.Level) { p.SendMessage(message); }
             });
         }
-        private  void CloseConnection() {
+        private void CloseConnection() {
             ConnectionEventArgs eargs = new ConnectionEventArgs(false);
             OnPlayerDisconnect.Call(this, eargs);
             OnAllPlayersDisconnect.Call(this, eargs);

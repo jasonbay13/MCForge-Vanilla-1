@@ -4,10 +4,10 @@ using System.Net.Sockets;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using MCForge.Utilities;
+using MCForge.Utils;
 using MCForge.Core;
 using MCForge.Entity;
-using MCForge.Utilities.Settings;
+using MCForge.Utils.Settings;
 
 namespace MCForge.Core
 {

@@ -5,9 +5,9 @@ using System.Text;
 using System.IO;
 using MCForge.Core;
 using System.Xml;
-using MCForge.Utilities.Settings;
+using MCForge.Utils.Settings;
 using System.Xml.XPath;
-using MCForge.Utilities;
+using MCForge.Utils;
 
 namespace MCForge.Groups
 {

@@ -2,8 +2,9 @@
 
 using System.IO;
 using System.Net;
+using MCForge.Utils;
 
-namespace MCForge.Utilities {
+namespace MCForge.Utils {
 
     //TODO: add xml comments
 

@@ -21,9 +21,8 @@ using System.Threading;
 using MCForge.Core;
 using MCForge.Groups;
 using MCForge.Interface.Command;
-using MCForge.Utilities.Settings;
+using MCForge.Utils.Settings;
 using MCForge.World;
-using MCForge.Utilities;
 using MCForge.Utils;
 using System.Linq;
 using MCForge.SQL;
@@ -685,7 +684,7 @@ namespace MCForge.Entity {
         /// </summary>
         /// <param name="key">The key to set the datapass object to.</param>
         /// <param name="data">The datapass object.</param>
-        public void setDatapass(string key, object data){
+        public void SetDatapass(string key, object data){
             DataPasses.ChangeOrCreate<string, object>(key, data);
         }
         #endregion

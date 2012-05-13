@@ -24,7 +24,7 @@ namespace CommandDll
     public class CmdBot : ICommand
     {
         public string Name { get { return "BotAI"; } }
-        public CommandTypes Type { get { return CommandTypes.misc; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Snowl"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }

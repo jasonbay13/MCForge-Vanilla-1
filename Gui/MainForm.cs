@@ -20,7 +20,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using MCForge.Utilities;
+using MCForge.Utils;
 using System.Threading;
 using MCForge.Core;
 using MCForge.Interface;

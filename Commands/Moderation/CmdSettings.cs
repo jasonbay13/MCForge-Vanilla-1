@@ -15,7 +15,7 @@ permissions and limitations under the Licenses.
 using System;
 using System.Linq;
 using MCForge.Interface.Command;
-using MCForge.Utilities.Settings;
+using MCForge.Utils.Settings;
 using MCForge.Entity;
 
 namespace CommandDll.Moderation

@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge.World;
-using MCForge.Utilities;
+using MCForge.Utils;
 
 namespace MCForge.API.World
 {

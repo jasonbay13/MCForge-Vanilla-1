@@ -13,7 +13,6 @@ namespace MCForge.Utils {
 
         /// <summary>
         /// Change your string's first character to uppercase 
-        /// Specified string is a pointer
         /// </summary>
         /// <param name="StringToChange">The String message to change</param>
         /// <returns>String Version of CapitolizeFirstChar</returns>
@@ -35,8 +34,6 @@ namespace MCForge.Utils {
         /// Change the specified string to title case
         /// EX: String = "foo bar"
         /// Returns "Foo Bar"
-        /// 
-        /// The specified string is a pointer
         /// </summary>
         /// <param name="StringToChange">The string to change</param>
         /// <returns>A string version of TitleCase</returns>

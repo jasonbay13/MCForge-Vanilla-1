@@ -21,7 +21,7 @@ using System.Timers;
 using MCForge.Interface.Plugin;
 using MCForge.Entity;
 using MCForge.Core;
-using MCForge.Utilities.Settings;
+using MCForge.Utils.Settings;
 using System.IO;
 using MCForge.API.System;
 using System.Text.RegularExpressions;

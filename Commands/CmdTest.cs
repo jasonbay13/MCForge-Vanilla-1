@@ -36,7 +36,7 @@ namespace CommandDll {
         }
 
         public void CallBack(Player sender, MoveEventArgs args) {
-            MCForge.Utilities.Logger.Log("Test: " + sender.Username + " moved!");
+            MCForge.Utils.Logger.Log("Test: " + sender.Username + " moved!");
             sender.SendMessage("Hi!");
             sender.OnPlayerChat.All -= new ChatEvent.EventHandler(CallBack2);
         }
