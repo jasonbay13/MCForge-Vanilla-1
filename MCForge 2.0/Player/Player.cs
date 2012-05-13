@@ -297,6 +297,7 @@ namespace MCForge.Entity {
                 else { if (!p.IsHidden) p.UpdatePosition(false); }
             });
         }
+        
         #region Database Saving/Loading
 		
 		public void Save()
@@ -325,12 +326,13 @@ namespace MCForge.Entity {
 				money = int.Parse(playerdb.Rows[0]["money"].ToString());
 			}
 			playerdb.Dispose();
+			LoadExtra();
 		}
 		
 		#endregion
 		
 		#region Extra Data Saving/Loading
-		/*/// <summary>
+		/// <summary>
 		/// Load all the players extra data from the database
 		/// </summary>
 		public static void LoadAllExtra()
@@ -353,32 +355,6 @@ namespace MCForge.Entity {
 			tbl.Dispose();
 		}
 		/// <summary>
-		/// Save all the players extra data
-		/// </summary>
-		public static void SaveAllExtra()
-		{
-			Server.Players.ForEach(p =>
-			                       {
-			                       	p.SaveExtra();
-			                       });
-		}
-		/// <summary>
-		/// Save the players extra data
-		/// </summary>
-		public void SaveExtra()
-		{
-			List<string> commands = new List<string>();
-			foreach (object obj in ExtraData.Keys)
-			{
-				if (!IsInTable(obj))
-					commands.Add("INSERT INTO extra (key, value, UID) VALUES ('" + obj.ToString() + "', '" + ExtraData[obj].ToString() + "', " + UID + ")");
-				else
-					commands.Add("UPDATE extra SET value='" + ExtraData[obj].ToString() + "' WHERE key='" + obj.ToString() + "' AND UID=" + UID);
-			}
-			Database.executeQuery(commands.ToArray());
-			commands.Clear();
-		}
-		/// <summary>
 		/// Check to see if the key is in the table already
 		/// </summary>
 		/// <param name="key">The key to check</param>
@@ -391,7 +367,7 @@ namespace MCForge.Entity {
 				return1 = true;
 			temp.Dispose();
 			return return1;
-		}*/
+		}
 			#endregion
 
         #region PluginStuff
