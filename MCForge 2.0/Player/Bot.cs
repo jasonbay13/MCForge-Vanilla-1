@@ -63,7 +63,7 @@ namespace MCForge.Robot
                 if (Bot.Movement)
                 {
                     Vector3 TemporaryLocation = new Vector3(Bot.Player.Pos.x, Bot.Player.Pos.z, Bot.Player.Pos.y);
-                    if (Bot.FollowPlayers) //TODO - Fix jumping (you can jump infinately), fix bot locking on target (locks on one target only)
+                    if (Bot.FollowPlayers) //TODO - Fix bot locking on target (locks on one target only), fix bot spawning in air
                     {
                         #region Find Closest Player
                         bool HitAPlayer = false;
