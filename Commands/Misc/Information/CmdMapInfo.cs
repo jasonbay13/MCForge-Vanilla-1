@@ -44,7 +44,7 @@ namespace CommandDll {
             p.SendMessage(String.Concat("To see a list of players currently on ", l.Name, ", type \"yes\"."));
             //OnPlayerChat.Register(plist, MCForge.API.Priority.Normal, l, p);
             p.OnPlayerChat.Normal += new ChatEvent.EventHandler(plist);
-            p.SetDatapass("mapinfoLevel", l);
+            p.setDatapass("mapinfoLevel", l);
         }
 
         private void plist(Player sender, ChatEventArgs eventargs) {

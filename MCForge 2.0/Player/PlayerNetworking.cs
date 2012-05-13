@@ -584,28 +584,37 @@ namespace MCForge.Entity {
 
         #endregion
         #region Outgoing Packets
-        private  void SendPacket(packet pa) {
-		if (!OnPlayerSendPacket.Call(this, new PacketEventArgs(pa.GetMessage(), false,(packet.types)pa.bytes[0]), OnAllPlayersSendPacket).Canceled) {
-            try {
-                lastPacket = (packet.types)pa.bytes[0];
-            }
-            catch (Exception e) { Logger.LogError(e); }
-            for (int i = 0; i < 3; i++) {
-                try {
+        private void SendPacket(packet pa)
+        {
+            if (!OnPlayerSendPacket.Call(this, new PacketEventArgs(pa.GetMessage(), false, (packet.types)pa.bytes[0]), OnAllPlayersSendPacket).Canceled)
+            {
+                try
+                {
                     lastPacket = (packet.types)pa.bytes[0];
                 }
                 catch (Exception e) { Logger.LogError(e); }
-                for (int i = 0; i < 3; i++) {
-                    try {
-                        Socket.BeginSend(pa.bytes, 0, pa.bytes.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
+                for (int i = 0; i < 3; i++)
+                {
+                    try
+                    {
+                        lastPacket = (packet.types)pa.bytes[0];
+                    }
+                    catch (Exception e) { Logger.LogError(e); }
+                    for (int z = 0; z < 3; z++)
+                    {
+                        try
+                        {
+                            Socket.BeginSend(pa.bytes, 0, pa.bytes.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
 
-                        return;
+                            return;
+                        }
+                        catch
+                        {
+                            continue;
+                        }
                     }
-                    catch {
-                        continue;
-                    }
+                    CloseConnection();
                 }
-                CloseConnection();
             }
         }
         private void SendMessage(byte PlayerID, string message) {
