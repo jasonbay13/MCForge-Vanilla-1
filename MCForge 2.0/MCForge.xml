@@ -312,6 +312,11 @@
             Whether or not the handling should be canceled
             </summary>
         </member>
+        <member name="T:MCForge.API.Events.DataSavedEventArgs">
+            <summary>
+            PlayerBlockChangeEventArgs
+            </summary>
+        </member>
         <member name="T:MCForge.API.Events.MoveEvent">
             <summary>
             PlayerMove event class
@@ -1144,6 +1149,23 @@
             The current Group of the player
             </summary>
         </member>
+        <member name="M:MCForge.Entity.Player.LoadAllExtra">
+            <summary>
+            Load all the players extra data from the database
+            </summary>
+        </member>
+        <member name="M:MCForge.Entity.Player.LoadExtra">
+            <summary>
+            Load the players extra data from the database
+            </summary>
+        </member>
+        <member name="M:MCForge.Entity.Player.IsInTable(System.Object)">
+            <summary>
+            Check to see if the key is in the table already
+            </summary>
+            <param name="key">The key to check</param>
+            <returns>If true, then they key is in the table and doesnt need to be added, if false, then the key needs to be added</returns>
+        </member>
         <member name="M:MCForge.Entity.Player.CatchNextBlockchange(MCForge.Entity.Player.BlockChangeDelegate,System.Object)">
             <summary>
             This void catches the new blockchange a player does.
@@ -1257,6 +1279,11 @@
         <member name="F:MCForge.Entity.Player.OnPlayerSendPacket">
             <summary>
             Gets called when a packet is sent to a player.
+            </summary>
+        </member>
+        <member name="F:MCForge.Entity.Player.DataSaved">
+            <summary>
+            Gets called when data is saved to the database
             </summary>
         </member>
         <member name="F:MCForge.Entity.Player.OnAllPlayersSendPacket">
