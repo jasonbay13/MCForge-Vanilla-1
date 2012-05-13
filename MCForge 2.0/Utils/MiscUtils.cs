@@ -7,7 +7,6 @@ using MCForge.SQL;
 using MCForge.Entity;
 
 namespace MCForge.Utils {
-<<<<<<< HEAD
 	public static class MiscUtils {
 
 	    
@@ -19,7 +18,7 @@ namespace MCForge.Utils {
         /// <param name="dict">The dict.</param>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-		public static object GetIfExist(this Dictionary<object, object> dict, object key) {
+		public static object GetIfExist<TKey, TValue>(this Dictionary<TKey, TValue> dict,TKey key) {
 			if (dict.ContainsKey(key))
 				return dict[key];
 			return null;
@@ -33,7 +32,7 @@ namespace MCForge.Utils {
         /// <param name="dict">The dict.</param>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-		public static void CreateIfNotExist(this Dictionary<object, object> dict, object key, object value) {
+		public static void CreateIfNotExist<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value) {
 			if (!dict.ContainsKey(key))
 				dict.Add(key, value);
 		}
@@ -54,18 +53,6 @@ namespace MCForge.Utils {
 			}
 		}
 		
-		/// <summary>
-		/// Convert the list into a string
-		/// </summary>
-		/// <param name="list"></param>
-		/// <returns>The string value of the list</returns>
-		public static string ListToString(this List<string> list) {
-			string ret = "";
-			foreach (string item in list) {
-				ret += item + "\n";
-			}
-			return ret;
-		}
 
         /// <summary>
         /// Changes the value or Creates it if it doesnt exist.
