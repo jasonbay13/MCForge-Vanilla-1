@@ -587,10 +587,9 @@ namespace MCForge.Entity {
             if (!OnPlayerSendPacket.Call(this, new PacketEventArgs(pa.GetMessage(), false, (packet.types)pa.bytes[0]), OnAllPlayersSendPacket).Canceled) {
                 try {
                     lastPacket = (packet.types)pa.bytes[0];
-                    lastPacket = (packet.types)pa.bytes[0];
                 }
                 catch (Exception e) { Logger.LogError(e); }
-                for (int i = 0; i < 3; i++) {
+                for (int z = 0; z < 3; z++) {
                     try {
                         Socket.BeginSend(pa.bytes, 0, pa.bytes.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
 
@@ -846,59 +845,45 @@ namespace MCForge.Entity {
             int diffR0 = tempRot[0] - tempRot[0];
             int diffR1 = tempRot[1] - tempRot[1];
 
-            if (ForceTp)
-                changed = 4;
-            else {
-                //TODO rewrite local pos change code
-                if (diffX == 0 && diffY == 0 && diffZ == 0 && diffR0 == 0 && diffR1 == 0) {
-                    return; //No changes
-                }
-                if (Math.Abs(diffX) > 100 || Math.Abs(diffY) > 100 || Math.Abs(diffZ) > 100) {
-                    changed = 4; //Teleport Required
-                }
-                else if (diffR0 == 0 && diffR1 == 0) {
-                    changed = 1; //Pos Update Required
-                }
-                else {
-                    changed += 2; //Rot Update Required
 
-                    if (diffX != 0 || diffY != 0 || diffZ != 0) {
-                        changed += 1;
-                    }
-                }
+            //TODO rewrite local pos change code
+            if (diffX == 0 && diffY == 0 && diffZ == 0 && diffR0 == 0 && diffR1 == 0) {
+                return; //No changes
             }
+            bool teleport = ForceTp || (Math.Abs(diffX) > 100 || Math.Abs(diffY) > 100 || Math.Abs(diffZ) > 100);
 
             packet pa = new packet();
-
-            switch (changed) {
-                case 1: //Pos Change
-                    pa.Add(packet.types.SendPosChange);
-                    pa.Add(id);
-                    pa.Add((sbyte)(diffX));
-                    pa.Add((sbyte)(diffY));
-                    pa.Add((sbyte)(diffZ));
-                    break;
-                case 2: //Rot Change
-                    pa.Add(packet.types.SendRotChange);
-                    pa.Add(id);
-                    pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
-                    break;
-                case 3: //Pos AND Rot Change
+            if (teleport) {
+                pa.Add(packet.types.SendTeleport);
+                pa.Add(id);
+                pa.Add(tempPos.x);
+                pa.Add(tempPos.y);
+                pa.Add(tempPos.z);
+                pa.Add(Rot);
+            }
+            else {
+                bool rotupdate = diffR0 == 0 && diffR1 == 0;
+                bool posupdate = diffX != 0 || diffY != 0 || diffZ != 0;
+                if (rotupdate && posupdate) {
                     pa.Add(packet.types.SendPosANDRotChange);
                     pa.Add(id);
                     pa.Add(diffX);
                     pa.Add(diffY);
                     pa.Add(diffZ);
                     pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
-                    break;
-                case 4: //Teleport Required
-                    pa.Add(packet.types.SendTeleport);
+                }
+                else if (rotupdate) {
+                    pa.Add(packet.types.SendRotChange);
                     pa.Add(id);
-                    pa.Add(tempPos.x);
-                    pa.Add(tempPos.y);
-                    pa.Add(tempPos.z);
-                    pa.Add(Rot);
-                    break;
+                    pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
+                }
+                else if (posupdate) {
+                    pa.Add(packet.types.SendPosChange);
+                    pa.Add(id);
+                    pa.Add((sbyte)(diffX));
+                    pa.Add((sbyte)(diffY));
+                    pa.Add((sbyte)(diffZ));
+                }
             }
 
             Server.ForeachPlayer(delegate(Player p) {

@@ -42,8 +42,7 @@ namespace CommandDll
             {
                 List<string> fargs = new List<string>();
                 int l = 0;
-                foreach (string s in args)
-                {
+                foreach (string s in args) {
                     if (l > 0)
                         fargs.Add(s);
                     l++;
@@ -144,8 +143,7 @@ namespace CommandDll
                     p.SendMessage("You need to use \"'s in your command!");
                     return;
                 }
-                foreach (string s in blargs)
-                {
+                foreach (string s in blargs) {
                     s.Replace("\"", "");
                 }
                 string FoundPlayer = blargs[1];

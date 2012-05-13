@@ -43,8 +43,8 @@ namespace CommandDll
 
             Thread fly = new Thread(new ThreadStart(delegate
                 {
-                Vector3 pos;
-                Vector3 oldpos = new Vector3();
+                    Vector3 pos = p.Pos;
+                    Vector3 oldpos = p.oldPos;
                 List<Vector3> buffer = new List<Vector3>();
                 while ((bool)p.ExtraData["IsFlying"])
                 {

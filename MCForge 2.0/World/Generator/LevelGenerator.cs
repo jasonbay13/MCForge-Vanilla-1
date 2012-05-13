@@ -360,7 +360,7 @@ namespace MCForge.World.Generator {
         /// <param name="angleRot">The angle rotation.</param>
         public void SetPosition(Vector3 manualPosition, Vector2 angleRot) {
             Level.SpawnPos = manualPosition;
-            Level.SpawnRot = new byte[2] { (byte)angleRot.x, (byte)angleRot.y };
+            Level.SpawnRot = new byte[2] { (byte)angleRot.x, (byte)angleRot.z };
         }
         #endregion
 

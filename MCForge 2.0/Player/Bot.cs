@@ -38,9 +38,8 @@ namespace MCForge.Robot
         {
             Player = new Player();
             Player.Username = Username;
-            Player.Pos.x = Position.x;
-            Player.Pos.y = Position.y;
-            Player.Pos.z = Position.z;
+            Player.Pos = Position;
+            Player.oldPos = new Vector3(Position.x, Position.z, Position.y);
             Player.Rot = Rotation;
             Player.Level = level;
             Player.id = FreeId();
@@ -67,31 +66,22 @@ namespace MCForge.Robot
                     {
                         #region Find Closest Player
                         bool HitAPlayer = false;
-                        Vector3 ClosestLocation = new Vector3(0, 0, 0);
+                        Vector3 ClosestLocation = Bot.Player.Level.Size * 32;
                         foreach (Player p in Server.Players)
                         {
                             if (p.Level == Bot.Player.Level)
                             {
                                 HitAPlayer = true;
-                                if (Vector3.MinusAbs(p.Pos, Bot.Player.Pos) > ClosestLocation)
-                                {
-                                    ClosestLocation = p.Pos;
+                                if (p.Pos - Bot.Player.Pos < ClosestLocation - Bot.Player.Pos) {
+                                    ClosestLocation = new Vector3(p.Pos);
                                 }
                             }
                         }
                         #endregion
                         if (HitAPlayer)
                         {
-                            if (ClosestLocation.x < Bot.Player.Pos.x)
-                                TemporaryLocation.x = (short)(Bot.Player.Pos.x - 13); //Around running speed of normal client, 16-18 for WoM
-                            else if (ClosestLocation.x >= Bot.Player.Pos.x)
-                                TemporaryLocation.x = (short)(Bot.Player.Pos.x + 13);
-                            if (ClosestLocation.z < Bot.Player.Pos.z)
-                                TemporaryLocation.z = (short)(Bot.Player.Pos.z - 13);
-                            else if (ClosestLocation.z >= Bot.Player.Pos.z)
-                                TemporaryLocation.z = (short)(Bot.Player.Pos.z + 13);
-                            if (ClosestLocation.y < Bot.Player.Pos.y)
-                                PlayerBelow = true;
+                            TemporaryLocation = new Vector3(Bot.Player.Pos);
+                            TemporaryLocation.Move(13, ClosestLocation);
                         }
                     }
 
@@ -131,7 +121,7 @@ namespace MCForge.Robot
                         }
                     }
 
-                    Bot.Player.UpdatePosition(false);
+                    Bot.Player.UpdatePosition(true); //if false I get kicked.
                 }
             }
         }

@@ -1170,6 +1170,23 @@
             The current Group of the player
             </summary>
         </member>
+        <member name="M:MCForge.Entity.Player.LoadAllExtra">
+            <summary>
+            Load all the players extra data from the database
+            </summary>
+        </member>
+        <member name="M:MCForge.Entity.Player.LoadExtra">
+            <summary>
+            Load the players extra data from the database
+            </summary>
+        </member>
+        <member name="M:MCForge.Entity.Player.IsInTable(System.Object)">
+            <summary>
+            Check to see if the key is in the table already
+            </summary>
+            <param name="key">The key to check</param>
+            <returns>If true, then they key is in the table and doesnt need to be added, if false, then the key needs to be added</returns>
+        </member>
         <member name="M:MCForge.Entity.Player.CatchNextBlockchange(MCForge.Entity.Player.BlockChangeDelegate,System.Object)">
             <summary>
             This void catches the new blockchange a player does.
@@ -1794,6 +1811,21 @@
             <param name="dict">The dict.</param>
             <param name="key">The key.</param>
             <param name="value">The value.</param>
+        </member>
+        <member name="M:MCForge.Utils.MiscUtils.Save(System.Collections.Generic.Dictionary{System.Object,System.Object},MCForge.Entity.Player,System.Object)">
+            <summary>
+            Save data to the database
+            </summary>
+            <param name="dict"></param>
+            <param name="p">The player that has the data</param>
+            <param name="key">The key to locate the value</param>
+        </member>
+        <member name="M:MCForge.Utils.MiscUtils.ListToString(System.Collections.Generic.List{System.String})">
+            <summary>
+            Convert the list into a string
+            </summary>
+            <param name="list"></param>
+            <returns>The string value of the list</returns>
         </member>
         <member name="M:MCForge.Utils.MiscUtils.ChangeOrCreate``2(System.Collections.Generic.Dictionary{``0,``1},``0,``1)">
             <summary>
