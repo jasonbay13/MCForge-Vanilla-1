@@ -23,6 +23,7 @@ namespace MCForge.Robot
     {
         public bool FollowPlayers = false;
         public bool BreakBlocks = false;
+        public bool Jumping = false;
         bool Movement = true;
 
         /// <summary>
@@ -106,13 +107,14 @@ namespace MCForge.Robot
                     {
                         Bot.Player.Pos = TemporaryLocation; //Make sure the bot doesnt walk through walls
                     }
-                    else if (false) //Jumping
+                    else if (Bot.Jumping) //Jumping
                     {
-                            Bot.Player.Pos.y = (short)(Bot.Player.Pos.y + 21);
                             if (Block.CanWalkThrough(Bot.Player.Level.GetBlock(TemporaryLocation / 32)) &&
-                                Block.CanWalkThrough(Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, 32) / 32)))
-                                ShouldBreakBlock = false;
-                            TemporaryLocation.y = (short)(Bot.Player.Pos.y - 21); 
+                                Block.CanWalkThrough(Bot.Player.Level.GetBlock(Vector3.MinusY(TemporaryLocation, -32) / 32)))
+                            {
+                            Bot.Player.Pos.y = (short)(Bot.Player.Pos.y + 21);
+                            ShouldBreakBlock = false;
+                            }
                     }
                     if (Bot.BreakBlocks && ShouldBreakBlock) //Can't go through dat wall, try and break it
                     {

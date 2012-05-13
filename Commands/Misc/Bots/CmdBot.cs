@@ -51,7 +51,7 @@ namespace CommandDll
                 string margs = ArrayToString(fargs.ToArray());
                 margs = margs.Replace('%', '&');
                 Bot TemporaryPlayer = new Bot(margs, p.Pos, p.Rot, p.Level, false, false);
-                TemporaryPlayer.Player.Level.ExtraData.Add("Bot" + Random.Next(0, 9999999), margs + " " + TemporaryPlayer.FollowPlayers + " " + TemporaryPlayer.BreakBlocks +
+                TemporaryPlayer.Player.Level.ExtraData.Add("Bot" + Random.Next(0, 9999999), margs + " " + TemporaryPlayer.FollowPlayers + " " + TemporaryPlayer.BreakBlocks + " " + TemporaryPlayer.Jumping +
                     " " + TemporaryPlayer.Player.Pos.x + " " + TemporaryPlayer.Player.Pos.y + " " + TemporaryPlayer.Player.Pos.z + " "
                     + TemporaryPlayer.Player.Rot[0] + " " + TemporaryPlayer.Player.Rot[1]); //Add bot to level metadata
                                                                                             //This enables cross server bot transfer
@@ -167,6 +167,11 @@ namespace CommandDll
                                 break;
                             case "break":
                                 b.BreakBlocks = !b.BreakBlocks;
+                                HitBot = true;
+                                Bot = b;
+                                break;
+                            case "jumping":
+                                b.Jumping = !b.Jumping;
                                 HitBot = true;
                                 Bot = b;
                                 break;

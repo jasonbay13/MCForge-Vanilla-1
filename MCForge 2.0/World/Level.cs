@@ -552,15 +552,15 @@ namespace MCForge.World {
                         if (pair.Key.StartsWith("Bot")) //Load bots
                         {
                             string[] StringSplit = pair.Value.Split(' ');
-                            if (StringSplit.Length == 8)
+                            if (StringSplit.Length == 9)
                             {
-                                ushort x = Convert.ToUInt16(StringSplit[3]);
-                                ushort y = Convert.ToUInt16(StringSplit[4]);
-                                ushort z = Convert.ToUInt16(StringSplit[5]);
+                                ushort x = Convert.ToUInt16(StringSplit[4]);
+                                ushort y = Convert.ToUInt16(StringSplit[5]);
+                                ushort z = Convert.ToUInt16(StringSplit[6]);
                                 Bot TemporaryBot = new Bot(StringSplit[0],
                                     new Vector3( x, z, y ),
-                                    new byte[] { Convert.ToByte(StringSplit[6]), Convert.ToByte(StringSplit[7]) }, this,
-                                    Convert.ToBoolean(StringSplit[1]), Convert.ToBoolean(StringSplit[2]));
+                                    new byte[] { Convert.ToByte(StringSplit[7]), Convert.ToByte(StringSplit[8]) }, this,
+                                    Convert.ToBoolean(StringSplit[1]), Convert.ToBoolean(StringSplit[2]), Convert.ToBoolean(StringSplit[3]));
                             }
                         }
                     }
