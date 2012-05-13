@@ -22,6 +22,7 @@ using System.Threading;
 using MCForge.API.System;
 using MCForge.Core;
 using MCForge.Groups;
+using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
 using System.Drawing;
@@ -608,7 +609,6 @@ namespace MCForge.Entity {
                 }
             }
         }
-
         private void SendMessage(byte PlayerID, string message) {
             packet pa = new packet();
 
@@ -857,6 +857,7 @@ namespace MCForge.Entity {
                 return; //No changes
             }
             bool teleport = ForceTp || (Math.Abs(diffX) > 100 || Math.Abs(diffY) > 100 || Math.Abs(diffZ) > 100);
+
             packet pa = new packet();
             if (teleport) {
                 pa.Add(packet.types.SendTeleport);

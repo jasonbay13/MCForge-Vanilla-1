@@ -12,8 +12,6 @@ namespace MCForge.Utils {
     /// Misc utils and extentions.
     /// </summary>
     public static class MiscUtils {
-
-
         /// <summary>
         /// Gets the object if it exist.
         /// </summary>
@@ -38,10 +36,23 @@ namespace MCForge.Utils {
         /// <param name="dict">The dict.</param>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        public static void CreateIfNotExist<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value) {
-            if (!dict.ContainsKey(key))
-                dict.Add(key, value);
-        }
+		public static void CreateIfNotExist<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value) {
+			if (!dict.ContainsKey(key))
+				dict.Add(key, value);
+		}
+
+		/// <summary>
+		/// Convert the list into a string
+		/// </summary>
+		/// <param name="list"></param>
+		/// <returns>The string value of the list</returns>
+		public static string ListToString(this List<string> list) {
+			string ret = "";
+			foreach (string item in list) {
+				ret += item + "\n";
+			}
+			return ret;
+		}
 
         /// <summary>
         /// Save data to the database
@@ -51,25 +62,12 @@ namespace MCForge.Utils {
         /// <param name="key">The key to locate the value</param>
         public static void Save(this Dictionary<object, object> dict, Player p, object key) {
             var cleanedMessage = key.ToString().MySqlEscape();
-            if (dict.ContainsKey(key)) {
-                if (!p.IsInTable(key))
-                    Database.executeQuery("INSERT INTO extra (key, value, UID) VALUES ('" + key.ToString() + "', '" + dict[key].ToString() + "', " + p.UID + ")");
+            if (dict.ContainsKey(cleanedMessage)) {
+                if (!p.IsInTable(cleanedMessage))
+                    Database.executeQuery("INSERT INTO extra (key, value, UID) VALUES ('" + cleanedMessage + "', '" + dict[cleanedMessage].ToString() + "', " + p.UID + ")");
                 else
-                    Database.executeQuery("UPDATE extra SET value='" + dict[key].ToString() + "' WHERE key='" + key.ToString() + "' AND UID=" + p.UID);
+                    Database.executeQuery("UPDATE extra SET value='" + dict[cleanedMessage].ToString() + "' WHERE key='" + cleanedMessage + "' AND UID=" + p.UID);
             }
-        }
-
-        /// <summary>
-        /// Convert the list into a string
-        /// </summary>
-        /// <param name="list"></param>
-        /// <returns>The string value of the list</returns>
-        public static string ListToString(this List<string> list) {
-            string ret = "";
-            foreach (string item in list) {
-                ret += item + "\n";
-            }
-            return ret;
         }
 
         /// <summary>
@@ -97,8 +95,6 @@ namespace MCForge.Utils {
         public static TValue Get<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key) {
             return (TValue)dict.GetIfExist<TKey, TValue>(key);
         }
-
-
         /// <summary>
         /// Cleans a string for input into a database
         /// </summary>

@@ -1329,7 +1329,7 @@
             <param name="key">The key to access the datapass object.</param>
             <returns>A datapass object.</returns>
         </member>
-        <member name="M:MCForge.Entity.Player.SetDatapass(System.String,System.Object)">
+        <member name="M:MCForge.Entity.Player.setDatapass(System.String,System.Object)">
             <summary>
             Sets a datapass object according to the key.
             </summary>
@@ -1812,6 +1812,13 @@
             <param name="key">The key.</param>
             <param name="value">The value.</param>
         </member>
+        <member name="M:MCForge.Utils.MiscUtils.ListToString(System.Collections.Generic.List{System.String})">
+            <summary>
+            Convert the list into a string
+            </summary>
+            <param name="list"></param>
+            <returns>The string value of the list</returns>
+        </member>
         <member name="M:MCForge.Utils.MiscUtils.Save(System.Collections.Generic.Dictionary{System.Object,System.Object},MCForge.Entity.Player,System.Object)">
             <summary>
             Save data to the database
@@ -1819,13 +1826,6 @@
             <param name="dict"></param>
             <param name="p">The player that has the data</param>
             <param name="key">The key to locate the value</param>
-        </member>
-        <member name="M:MCForge.Utils.MiscUtils.ListToString(System.Collections.Generic.List{System.String})">
-            <summary>
-            Convert the list into a string
-            </summary>
-            <param name="list"></param>
-            <returns>The string value of the list</returns>
         </member>
         <member name="M:MCForge.Utils.MiscUtils.ChangeOrCreate``2(System.Collections.Generic.Dictionary{``0,``1},``0,``1)">
             <summary>
