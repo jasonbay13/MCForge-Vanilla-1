@@ -14,11 +14,20 @@ namespace MCForge.SQL
 	/// <summary>
 	/// Description of SQL.
 	/// </summary>
-	public abstract class ISQL
+	public abstract class ISQL : IDisposable
 	{
-	public virtual void executeQuery(string queryString) {}
-        public virtual void executeQuery(string[] queryString) {}
-        public virtual void onLoad() { }
-        public virtual DataTable fillData(string queryString) { return null; }
+		protected bool _disposed;
+		public virtual void executeQuery(string queryString) {}
+		public virtual void executeQuery(string[] queryString) {}
+		public virtual void onLoad() { }
+		public virtual DataTable fillData(string queryString) { return null; }
+		public virtual void Dispose()
+		{
+			if (!_disposed)
+			{
+				//TODO Dispose shit here
+				_disposed = true;
+			}
+		}
 	}
 }

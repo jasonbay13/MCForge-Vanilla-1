@@ -12,49 +12,53 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge.Interface.Command;
 using MCForge.Entity;
-using MCForge.Core;
+using MCForge.Interface.Command;
 using MCForge.World;
-using System;
+using MCForge.Core;
 namespace CommandDll
 {
-    public class CmdSave : ICommand
+    public class CmdUnload : ICommand
     {
-        public string Name { get { return "Save"; } }
-        public CommandTypes Type { get { return CommandTypes.Mod; } }
+        public string Name { get { return "Unload"; } }
+        public CommandTypes Type { get { return CommandTypes.mod; } }
         public string Author { get { return "Snowl"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
-        public byte Permission { get { return 80; } }
+        public byte Permission { get { return 0; } }
 
         public void Use(Player p, string[] args)
         {
-            if (args.Length == 0)
+            Level isLoaded = Level.FindLevel(args[0]);
+            if (isLoaded.Name.ToLower() == Server.Mainlevel.Name.ToLower())
             {
-                p.Level.SaveToBinary();
-                Player.UniversalChat("Saved " + p.Level.Name);
+                p.SendMessage("You cannot unload the main level.");
+                return;
+            }
+            if (isLoaded == null)
+            {
+                p.SendMessage(args[0] + " is already unloaded.");
             }
             else
             {
-                try
+                foreach (Player z in Server.Players.ToArray())
                 {
-                    Level.FindLevel(args[0]).SaveToBinary();
-                    Player.UniversalChat("Saved " + args[0]);
+                    if (z.Level == isLoaded)
+                        z.Level = Server.Mainlevel;
                 }
-                catch { p.SendMessage("This level does not exist!"); }
+                Level.Levels.Remove(isLoaded);
+                Player.UniversalChat(args[0] + " has been unloaded.");
             }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/save - Saves the level you are currently on.");
-            p.SendMessage("/save [level] - Saves [level].");
+            p.SendMessage("/unload <level> - Unloads <level>.");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, "save");
+            Command.AddReference(this, "unload");
         }
     }
 }

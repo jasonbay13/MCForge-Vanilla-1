@@ -75,6 +75,12 @@ namespace MCForge.Core {
             z = (short)Z;
         }
 
+        public static Vector3 MinusAbs(Vector3 a, Vector3 b){ //Get positive int
+            return new Vector3((short)Math.Abs(a.x - b.x), (short)Math.Abs(a.z - b.z), (short)Math.Abs(a.y - b.y));
+        }
+        public static Vector3 MinusY(Vector3 a, int b){
+            return new Vector3(a.x, a.z, (short)(a.y - b));
+        }
         public static Vector3 operator -(Vector3 a, Vector3 b) {
             return new Vector3((short)(a.x - b.x), (short)(a.z - b.z), (short)(a.y - b.y));
         }
@@ -87,11 +93,20 @@ namespace MCForge.Core {
         public static Vector3 operator /(Vector3 a, Vector3 b) {
             return new Vector3((short)(a.x / b.x), (short)(a.z / b.z), (short)(a.y / b.y));
         }
+        public static Vector3 operator /(Vector3 a, int b){
+            return new Vector3((short)(a.x / b), (short)(a.z / b), (short)(a.y / b));
+        }
         public static bool operator ==(Vector3 a, Vector3 b) {
             return (a.x == b.x && a.y == b.y && a.z == b.z);
         }
         public static bool operator !=(Vector3 a, Vector3 b) {
             return !(a.x == b.x && a.y == b.y && a.z == b.z);
+        }
+        public static bool operator >(Vector3 a, Vector3 b){
+            return a.x * a.x + a.y * a.y + a.z * a.z > b.x * b.x + b.y * b.y + b.z * b.z;
+        }
+        public static bool operator <(Vector3 a, Vector3 b) {
+            return a.x * a.x + a.y * a.y + a.z * a.z < b.x * b.x + b.y * b.y + b.z * b.z;
         }
         public override bool Equals(object obj) {
             return base.Equals(obj);
@@ -255,19 +270,24 @@ namespace MCForge.Core {
 		}
 		#endregion
 
-		public void GZip()
-		{
-			using (var ms = new System.IO.MemoryStream())
-			{
+        public void GZip() {
+            using (var ms = new System.IO.MemoryStream()) {
 
-				using (var gs = new GZipStream(ms, CompressionMode.Compress, true))
-					gs.Write(bytes, 0, bytes.Length);
+                using (var gs = new GZipStream(ms, CompressionMode.Compress, true))
+                    gs.Write(bytes, 0, bytes.Length);
 
-				ms.Position = 0;
-				bytes = new byte[ms.Length];
-				ms.Read(bytes, 0, (int)ms.Length);
-			}
-		}
+                ms.Position = 0;
+                bytes = new byte[ms.Length];
+                ms.Read(bytes, 0, (int)ms.Length);
+            }
+
+        }
+
+        public byte[] GetMessage() {
+            byte[] ret = new byte[bytes.Length - 1];
+            Array.Copy(bytes, 1, ret, 0, ret.Length);
+            return ret;
+        }
 
 		#region == Host <> Network ==
 		public static byte[] HTNO(ushort x)
@@ -286,7 +306,7 @@ namespace MCForge.Core {
 		}
 		#endregion
 
-		public enum types
+		public enum types: byte
 		{
 			Message = 13,
 			MOTD = 0,
@@ -305,5 +325,11 @@ namespace MCForge.Core {
 			SendTeleport = 8,
 
 		}
+        
 	}
+    public static class typesHelper {
+        public static string ToString(this packet.types t) {
+            return Enum.GetName(typeof(packet.types), t);
+        }
+    }
 }

@@ -20,6 +20,7 @@ using System.IO;
 using System.IO.Compression;
 using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Robot;
 using MCForge.World.Blocks;
 using MCForge.Utilities;
 using System.Drawing;
@@ -167,7 +168,12 @@ namespace MCForge.World {
             Level finalLevel = new Level(new Vector3(32, 32, 32));
             finalLevel.Name = levelName;
             try {
-                var Binary = new BinaryReader(File.Open(Name, FileMode.Open));
+                BinaryReader Binary = null;
+                try
+                {
+                    Binary = new BinaryReader(File.Open(Name, FileMode.Open));
+                }
+                catch { return null; }
 
                 using (Binary) {
                     long v = Binary.ReadInt64();
@@ -265,6 +271,7 @@ namespace MCForge.World {
                     }
                 }
                 Binary.Dispose();
+                finalLevel.HandleMetaData();
                 return finalLevel;
             }
             catch (Exception e) { Logger.Log(e.Message); Logger.Log(e.StackTrace); } return null;
@@ -333,14 +340,17 @@ namespace MCForge.World {
         /// <param name="z">Location of z</param>
         /// <param name="y">Location of y</param>
         /// <param name="block">Block to set</param>
-        public void BlockChange(ushort x, ushort z, ushort y, byte block) {
+        /// <param name="p">A player who doesn't need the update.</param>
+        public void BlockChange(ushort x, ushort z, ushort y, byte block, Player p = null) {
             if (y == Size.y) return;
             byte currentType = GetBlock(x, z, y);
 
             if (block == currentType) return;
 
             SetBlock(x, z, y, block);
-            Player.GlobalBlockchange(this, x, z, y, block);
+            if (p == null)
+                Player.GlobalBlockchange(this, x, z, y, block);
+            else p.SendBlockchangeToOthers(this, x, z, y, block);
 
             //TODO Special stuff for block changing
         }
@@ -512,10 +522,10 @@ namespace MCForge.World {
         public static Level FindLevel(string LevelName) {
             try {
                 return Levels.Find(e => {
-                    return e.Name == LevelName;
+                    return e.Name.ToLower() == LevelName.ToLower();
                 });
             }
-            catch { }
+            catch (Exception e) { Server.Log(e.Message); }
             return null;
         }
 
@@ -528,6 +538,37 @@ namespace MCForge.World {
                 return;
 
             Levels.Add(level);
+        }
+
+        /// <summary>
+        /// Handles the extra data for the level
+        /// </summary>
+        public void HandleMetaData()
+        {
+            if (ExtraData.Count > 0)
+            {
+                try
+                {
+                    foreach (var pair in ExtraData)
+                    {
+                        if (pair.Key.StartsWith("Bot")) //Load bots
+                        {
+                            string[] StringSplit = pair.Value.Split(' ');
+                            if (StringSplit.Length == 9)
+                            {
+                                ushort x = Convert.ToUInt16(StringSplit[4]);
+                                ushort y = Convert.ToUInt16(StringSplit[5]);
+                                ushort z = Convert.ToUInt16(StringSplit[6]);
+                                Bot TemporaryBot = new Bot(StringSplit[0],
+                                    new Vector3( x, z, y ),
+                                    new byte[] { Convert.ToByte(StringSplit[7]), Convert.ToByte(StringSplit[8]) }, this,
+                                    Convert.ToBoolean(StringSplit[1]), Convert.ToBoolean(StringSplit[2]), Convert.ToBoolean(StringSplit[3]));
+                            }
+                        }
+                    }
+                }
+                catch (Exception e) { Server.Log(e.Message); Server.Log(e.StackTrace); }
+            }
         }
     }
 }

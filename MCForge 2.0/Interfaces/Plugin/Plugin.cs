@@ -21,6 +21,9 @@ using System.Reflection;
 using MCForge.Interface.Command;
 using MCForge.Core;
 using MCForge.Utilities;
+using MCForge.Utilities.Settings;
+using MCForge.API.Events;
+
 
 namespace MCForge.Interface.Plugin {
     public class Plugin {
@@ -50,13 +53,14 @@ namespace MCForge.Interface.Plugin {
             {
                 if ((ignoreCase && ip.Name.ToLower() == name.ToLower()) || ip.Name == name)
                 {
-                    try
-                    {
-                        ip.OnUnload();
+                    if (!Plugin.OnPluginUnload.Call(ip, new PluginLoadEventArgs(false)).Canceled) {
+                        try {
+                            ip.OnUnload();
+                        }
+                        catch { Logger.Log(ip.Name + " cannot be unloaded", LogType.Warning); }
+                        Plugins.Remove(ip);
+                        return true;
                     }
-                    catch { Logger.Log(ip.Name + " cannot be unloaded", LogType.Warning); }
-                    Plugins.Remove(ip);
-                    return true;
                 }
             }
             return false;
@@ -71,31 +75,36 @@ namespace MCForge.Interface.Plugin {
             }
             return false;
         }
-
-        public static int reload(string name="", bool ignoreCase=true)
-        {
-			string path = Directory.GetCurrentDirectory();
-			string[] DLLFiles = Directory.GetFiles(path, "*.DLL");
+        /// <summary>
+        /// Reload one or all unloaded plugins.
+        /// </summary>
+        /// <param name="name">The name of the plugin to load, or an empty string to load all plugins</param>
+        /// <param name="ignoreCase">Whether the case of the name gets ignored or not</param>
+        /// <returns></returns>
+        public static int reload(string name = "", bool ignoreCase = true) {
+            List<string> paths = new List<string>();
+            paths.Add(Directory.GetCurrentDirectory());
+            if (ServerSettings.HasKey("PluginsPath"))
+                paths.Add(ServerSettings.GetSetting("PluginsPath"));
             int ret = 0;
-            foreach (string s in DLLFiles)
-            {
-                Assembly DLLAssembly = LoadAllDlls.LoadFile(s); //Prevents the dll from being in use inside windows
-                foreach (Type ClassType in DLLAssembly.GetTypes())
-                {
-                    if (ClassType.IsPublic)
-                    {
-                        if (!ClassType.IsAbstract)
-                        {
-                            Type typeInterface = ClassType.GetInterface("IPlugin", true);
-                            if (typeInterface != null)
-                            {
-                                IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                if (!isLoaded(instance.Name) && (name == "" || ((ignoreCase && instance.Name.ToLower() == name.ToLower()) || instance.Name == name)))
-                                {
-                                    instance.OnLoad(new string[0]);
-                                    AddReference(instance);
-                                    Logger.Log("[Plugin]: " + instance.Name + " Initialized!", System.Drawing.Color.Magenta, System.Drawing.Color.Black);
-                                    ret++;
+            foreach (string path in paths) {
+                string[] DLLFiles = Directory.GetFiles(path, "*.DLL");
+                foreach (string s in DLLFiles) {
+                    Assembly DLLAssembly = LoadAllDlls.LoadFile(s); //Prevents the dll from being in use inside windows
+                    foreach (Type ClassType in DLLAssembly.GetTypes()) {
+                        if (ClassType.IsPublic) {
+                            if (!ClassType.IsAbstract) {
+                                Type typeInterface = ClassType.GetInterface("IPlugin", true);
+                                if (typeInterface != null) {
+                                    IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
+                                    if (!isLoaded(instance.Name) && (name == "" || ((ignoreCase && instance.Name.ToLower() == name.ToLower()) || instance.Name == name))) {
+                                        if (!Plugin.OnPluginLoad.Call(instance, new PluginLoadEventArgs(true)).Canceled) {
+                                            instance.OnLoad(new string[] { "-reload" });
+                                            AddReference(instance);
+                                            Logger.Log("[Plugin]: " + instance.Name + " Initialized!", System.Drawing.Color.Magenta, System.Drawing.Color.Black);
+                                            ret++;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -133,5 +142,13 @@ namespace MCForge.Interface.Plugin {
             }
             return null;
         }
+        /// <summary>
+        /// Gets called when a plugin gets loaded.
+        /// </summary>
+        public static PluginLoadEvent OnPluginLoad = new PluginLoadEvent();
+        /// <summary>
+        /// Gets called when a plugin gets unloaded.
+        /// </summary>
+        public static PluginLoadEvent OnPluginUnload = new PluginLoadEvent();
     }
 }

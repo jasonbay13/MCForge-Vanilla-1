@@ -23,12 +23,15 @@ using MCForge.Interface.Command;
 using MCForge.Core;
 using MCForge.Utilities;
 using System.Drawing;
+using MCForge.API.Events;
+using MCForge.Utilities;
+using MCForge.Utilities.Settings;
 
 namespace MCForge.Interface {
     public static class LoadAllDlls {
         public static void Init() {
-            Logger.Log("[System]: Initializing Commands", Color.Green, Color.Black);
-            InitCommands();
+            Logger.Log("[System]: Initializing Commands");
+            InitCommandsAndPlugins();
 
         }
         public static Assembly LoadFile(string file) {
@@ -55,6 +58,7 @@ namespace MCForge.Interface {
 		/// Load a DLL
 		/// </summary>
 		/// <param name="s">The filepath of the DLL</param>
+        /// <param name="args">The args to passed to the plugin OnLoad method.</param>
 		public static void LoadDLL(string s, string[] args)
 		{
 			 Assembly DLLAssembly = LoadFile(s); //Prevents the dll from being in use inside windows
@@ -71,8 +75,10 @@ namespace MCForge.Interface {
                                 if (typeInterface != null)
                                 {
                                     ICommand instance = (ICommand)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                    instance.Initialize();
-                                    Logger.Log("[Command]: " + instance.Name + " Initialized!", Color.Magenta, Color.Black);
+                                    if (!Command.Command.OnCommandLoad.Call(instance, new CommandLoadEventArgs(true)).Canceled) {
+                                        instance.Initialize();
+                                        Logger.Log("[Command]: " + instance.Name + " Initialized!");
+                                    }
                                 }
                                 else
                                 {
@@ -80,9 +86,11 @@ namespace MCForge.Interface {
                                     if (typeInterface != null)
                                     {
                                         IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                        instance.OnLoad(args);
-                                        Plugin.Plugin.AddReference(instance);
-                                        Logger.Log("[Plugin]: " + instance.Name + " Initialized!", Color.Magenta, Color.Black);
+                                        if (!Plugin.Plugin.OnPluginLoad.Call(instance, new PluginLoadEventArgs(true)).Canceled) {
+                                            instance.OnLoad(args);
+                                            Plugin.Plugin.AddReference(instance);
+                                            Logger.Log("[Plugin]: " + instance.Name + " Initialized!");
+                                        }
                                     }
                                 }
                             }
@@ -91,18 +99,28 @@ namespace MCForge.Interface {
                 }
                 catch { } //Stops loading bad DLL files
 		}
-        internal static void InitCommands() {
+        internal static void InitCommandsAndPlugins() {
             string path = Directory.GetCurrentDirectory();
             string[] DLLFiles = Directory.GetFiles(path, "*.dll");
-
             foreach (string s in DLLFiles)
             	LoadDLL(s, new string[] { "-normal" });
-            if (Directory.Exists("dlls"))
-            {
-            	DLLFiles = Directory.GetFiles("dlls", "*.dll");
-            	foreach (string s in DLLFiles)
-            		LoadDLL(s, new string[] { "-normal" });
+            if (ServerSettings.HasKey("PluginsPath")) {
+                string pluginspath = ServerSettings.GetSetting("PluginsPath");
+                if (Directory.Exists(pluginspath)) {
+                    DLLFiles = Directory.GetFiles(pluginspath, "*.dll");
+                    foreach (string s in DLLFiles)
+                        LoadDLL(s, new string[] { "-normal" });
+                }
+            }
+            if (ServerSettings.HasKey("CommandsPath")) {
+                string commandspath = ServerSettings.GetSetting("CommandsPath");
+                if (Directory.Exists(commandspath)) {
+                    DLLFiles = Directory.GetFiles(commandspath, "*.dll");
+                    foreach (string s in DLLFiles)
+                        LoadDLL(s, new string[] { "-normal" });
+                }
             }
         }
+        
     }
 }

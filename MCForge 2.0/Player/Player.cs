@@ -85,7 +85,13 @@ namespace MCForge.Entity {
         /// <summary>
         /// This is the UID for the player in the database
         /// </summary>
-        internal int UID = 0;
+        internal long UID = 0;
+        
+        public DateTime FirstLogin;
+        
+        public DateTime LastLogin;
+        
+        public int money;
         /// <summary>
         /// This is the player's IP Address
         /// </summary>
@@ -291,71 +297,102 @@ namespace MCForge.Entity {
                 else { if (!p.IsHidden) p.UpdatePosition(false); }
             });
         }
-        
-        #region Extra Data Saving/Loading
-        /// <summary>
-        /// Load all the players extra data from the database
-        /// </summary>
-        public static void LoadAllExtra()
-        {
-        	Server.Players.ForEach(p =>
-        	                       {
-        	                       	p.LoadExtra();
-        	                       });
-        }
-        /// <summary>
-        /// Load the players extra data from the database
-        /// </summary>
-        public void LoadExtra()
-        {
-        	DataTable tbl = Database.fillData("SELECT * WHERE UID=" + UID);
-        	for (int i = 0; i < tbl.Rows.Count; i++)
-        	{
-        		ExtraData.Add(tbl.Rows[i]["key"], tbl.Rows[i]["value"]);
-        	}
-        	tbl.Dispose();
-        }
-        /// <summary>
-        /// Save all the players extra data
-        /// </summary>
-        public static void SaveAllExtra()
-        {
-        	Server.Players.ForEach(p =>
-        	                       {
-        	                       	p.SaveExtra();
-        	                       });
-        }
-        /// <summary>
-        /// Save the players extra data
-        /// </summary>
-        public void SaveExtra()
-        {
-        	List<string> commands = new List<string>();
-        	foreach (object obj in ExtraData.Keys)
-        	{
-        		if (!IsInTable(obj))
-        			commands.Add("INSERT INTO extra (key, value, UID) VALUES ('" + obj.ToString() + "', '" + ExtraData[obj].ToString() + "', " + UID + ")");
-        		else
-        			commands.Add("UPDATE extra SET value='" + ExtraData[obj].ToString() + "' WHERE key='" + obj.ToString() + "' AND UID=" + UID);
-        	}
-        	Database.executeQuery(commands.ToArray());
-        	commands.Clear();
-        }
-        /// <summary>
-        /// Check to see if the key is in the table already
-        /// </summary>
-        /// <param name="key">The key to check</param>
-        /// <returns>If true, then they key is in the table and doesnt need to be added, if false, then the key needs to be added</returns>
-        internal bool IsInTable(object key)
-        {
-        	DataTable temp = Database.fillData("SELECT * WHERE key='" + key.ToString() + "' AND UID=" + UID);
-        	bool return1 = false;
-        	if (temp.Rows.Count >= 1)
-        		return1 = true;
-        	temp.Dispose();
-        	return return1;
-        }
-        #endregion
+        #region Database Saving/Loading
+		
+		public void Save()
+		{
+			Logger.Log("Saving " + Username + " to the database", LogType.Debug);
+			List<string> commands = new List<string>();
+			commands.Add("UPDATE _players SET money=" + money + ", lastlogin='" + LastLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', firstlogin='" + FirstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE UID=" + UID);
+			//TODO Add more commands...to save more stuff..
+			DataSaved.Call(this, new DataSavedEventArgs(UID));
+			Database.executeQuery(commands.ToArray());
+		}
+		
+		public void Load()
+		{
+			Logger.Log("Loading " + Username + " from the database", LogType.Debug);
+			DataTable playerdb = Database.fillData("SELECT * FROM _players WHERE Name='" + Username + "'");
+			if (playerdb.Rows.Count == 0)
+			{
+				//TODO Insert row
+			}
+			else
+			{
+				UID = int.Parse(playerdb.Rows[0]["UID"].ToString());
+				FirstLogin = DateTime.Parse(playerdb.Rows[0]["firstlogin"].ToString());
+				LastLogin = DateTime.Now;
+				money = int.Parse(playerdb.Rows[0]["money"].ToString());
+			}
+			playerdb.Dispose();
+		}
+		
+		#endregion
+		
+		#region Extra Data Saving/Loading
+		/*/// <summary>
+		/// Load all the players extra data from the database
+		/// </summary>
+		public static void LoadAllExtra()
+		{
+			Server.Players.ForEach(p =>
+			                       {
+			                       	p.LoadExtra();
+			                       });
+		}
+		/// <summary>
+		/// Load the players extra data from the database
+		/// </summary>
+		public void LoadExtra()
+		{
+			DataTable tbl = Database.fillData("SELECT * WHERE UID=" + UID);
+			for (int i = 0; i < tbl.Rows.Count; i++)
+			{
+				ExtraData.Add(tbl.Rows[i]["key"], tbl.Rows[i]["value"]);
+			}
+			tbl.Dispose();
+		}
+		/// <summary>
+		/// Save all the players extra data
+		/// </summary>
+		public static void SaveAllExtra()
+		{
+			Server.Players.ForEach(p =>
+			                       {
+			                       	p.SaveExtra();
+			                       });
+		}
+		/// <summary>
+		/// Save the players extra data
+		/// </summary>
+		public void SaveExtra()
+		{
+			List<string> commands = new List<string>();
+			foreach (object obj in ExtraData.Keys)
+			{
+				if (!IsInTable(obj))
+					commands.Add("INSERT INTO extra (key, value, UID) VALUES ('" + obj.ToString() + "', '" + ExtraData[obj].ToString() + "', " + UID + ")");
+				else
+					commands.Add("UPDATE extra SET value='" + ExtraData[obj].ToString() + "' WHERE key='" + obj.ToString() + "' AND UID=" + UID);
+			}
+			Database.executeQuery(commands.ToArray());
+			commands.Clear();
+		}
+		/// <summary>
+		/// Check to see if the key is in the table already
+		/// </summary>
+		/// <param name="key">The key to check</param>
+		/// <returns>If true, then they key is in the table and doesnt need to be added, if false, then the key needs to be added</returns>
+		internal bool IsInTable(object key)
+		{
+			DataTable temp = Database.fillData("SELECT * WHERE key='" + key.ToString() + "' AND UID=" + UID);
+			bool return1 = false;
+			if (temp.Rows.Count >= 1)
+				return1 = true;
+			temp.Dispose();
+			return return1;
+		}*/
+			#endregion
 
         #region PluginStuff
         /// <summary>
@@ -457,8 +494,10 @@ namespace MCForge.Entity {
             List<byte> usedIds = new List<byte>();
 
             Server.ForeachPlayer(p => usedIds.Add(p.id));
+            Server.ForeachBot(p => usedIds.Add(p.Player.id));
 
-            for (byte i = 0; i < ServerSettings.GetSettingInt("maxplayers"); ++i) {
+            for (byte i = 1; i < ServerSettings.GetSettingInt("maxplayers"); ++i)
+            {
                 if (usedIds.Contains(i)) continue;
                 return i;
             }
@@ -466,7 +505,7 @@ namespace MCForge.Entity {
             Logger.Log("Too many players O_O");
             return 254;
         }
-        private  void UpgradeConnectionToPlayer() {
+        private void UpgradeConnectionToPlayer() {
             Server.UpgradeConnectionToPlayer(this);
 
             //TODO Update form list
@@ -590,7 +629,6 @@ namespace MCForge.Entity {
         /// Gets called when any player changes a block.
         /// </summary>
         public static BlockChangeEvent OnAllPlayersBlockChange = new BlockChangeEvent();
-
         /// <summary>
         /// Gets called when the command this player called has just ended.
         /// </summary>
@@ -605,7 +643,35 @@ namespace MCForge.Entity {
         private readonly Dictionary<string,object> DataPasses=new Dictionary<string,object>();
 
         //I don't see why we cant use ExtraData... a string is an object....
-
+        /// <summary>
+        /// Gets called when this player receives a packet.
+        /// </summary>
+        public PacketEvent OnPlayerReceivePacket = new PacketEvent();
+        /// <summary>
+        /// Gets called when any player receives a packet.
+        /// </summary>
+        public static PacketEvent OnAllPlayersReceivePacket = new PacketEvent();
+        /// <summary>
+        /// Gets called when the player receives a packet.
+        /// </summary>
+        public PacketEvent OnPlayerReceiveUnknownPacket = new PacketEvent();
+        /// <summary>
+        /// Gets called when any player receives a packet.
+        /// </summary>
+        public static PacketEvent OnAllPlayersReceiveUnknownPacket = new PacketEvent();
+        /// <summary>
+        /// Gets called when a packet is sent to a player.
+        /// </summary>
+        public static PacketEvent OnPlayerSendPacket = new PacketEvent();
+        /// <summary>
+        /// Gets called when data is saved to the database
+        /// </summary>
+        public static DataSavedEvent DataSaved = new DataSavedEvent();
+        /// <summary>
+        /// Gets called when a packet is sent to any player.
+        /// </summary>
+        public static PacketEvent OnAllPlayersSendPacket = new PacketEvent();
+        Dictionary<string,object> datapasses=new Dictionary<string,object>();
         /// <summary>
         /// Gets a datapass object and removes it from the list.
         /// </summary>

@@ -143,6 +143,26 @@ namespace MCForge.World {
             return (blockToCheck < 50);
         }
 
+        public static bool CanWalkThrough(byte blockToCheck)
+        {
+            if (blockToCheck == Block.BlockList.AIR ||
+                blockToCheck == Block.BlockList.WATER ||
+                blockToCheck == Block.BlockList.LAVA ||
+                blockToCheck == Block.BlockList.ACTIVE_LAVA ||
+                blockToCheck == Block.BlockList.ACTIVE_WATER)
+                return true;
+            else
+                return false;
+        }
+
+        public static bool IsOPBlock(byte blockToCheck)
+        {
+            if (blockToCheck == Block.BlockList.BEDROCK)
+                return true;
+            else
+                return false;
+        }
+
         /// <summary>
         /// List of blocks (in the form of a byte)
         /// </summary>

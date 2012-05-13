@@ -30,7 +30,7 @@ namespace MCForge.Interface.Command
 		{
 			Player.UniversalChat("Reloading the Command system, please wait.");
 			Command.Commands.Clear();
-			LoadAllDlls.InitCommands();
+			LoadAllDlls.InitCommandsAndPlugins();
             Initialize();
 		}
 

@@ -177,29 +177,35 @@ namespace MCForge.API.Events {
             T2 ret = default(T2);
             CallPriorityGroup(important, sender, args, stoppable, ref stopped, cancelable, ref canceled);
             CallPriorityGroup(other.important, sender, args, stoppable, ref stopped, cancelable, ref canceled);
-            if (!((IEquatable<T2>)orig).Equals(args))
+            if (!((IEquatable<T2>)orig).Equals(args)) {
                 ret = (T2)((ICloneable)args).Clone();
+                args = (T2)((ICloneable)args).Clone();
+            }
             if (!stopped) {
-                args = (T2)((ICloneable)orig).Clone();
                 CallPriorityGroup(high, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                 CallPriorityGroup(other.high, sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args))
+                if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args)) {
                     ret = (T2)((ICloneable)args).Clone();
+                    args = (T2)((ICloneable)args).Clone();
+                }
                 if (!stopped) {
-                    args = (T2)((ICloneable)orig).Clone();
                     CallPriorityGroup(normal, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                     CallPriorityGroup(other.normal, sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                    if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args))
+                    if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args)) {
                         ret = (T2)((ICloneable)args).Clone();
+                        args = (T2)((ICloneable)args).Clone();
+                    }
                     if (!stopped) {
-                        args = (T2)((ICloneable)orig).Clone();
                         CallPriorityGroup(low, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                         CallPriorityGroup(other.low, sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                        if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args))
+                        if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args)) {
                             ret = (T2)((ICloneable)args).Clone();
+                            args = (T2)((ICloneable)args).Clone();
+                        }
                     }
                 }
             }
+            if (ret == default(T2)) ret = orig;
             if (canceled)
                 ((ICancelable)ret).Cancel();
             if (!canceled)

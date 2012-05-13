@@ -39,7 +39,7 @@ namespace MCForge.Entity {
 
             Player p = (Player)result.AsyncState;
 
-            //Why is this here? this is a terrible spot for this
+            //Why is this here? this is a terrible spot for this!
             try {
                 if (Server.reviewlist.Contains(p)) {
                     Server.reviewlist.Remove(p);
@@ -64,6 +64,7 @@ namespace MCForge.Entity {
                     if (!p.IsBeingKicked) {
                         var color = (string)p.ExtraData.GetIfExist("Color");
                         UniversalChat(color ?? "" + p.Username + Server.DefaultColor + " has disconnected.");
+                        p.GlobalDie();
                     }
                     return;
                 }
@@ -98,7 +99,8 @@ namespace MCForge.Entity {
                     case 13: length = 65; break; // chat
                     default: {
                             OnReceivePacket args = new OnReceivePacket(this, buffer);
-                            if (args.IsCanceled)
+                            bool cancel = OnPlayerReceiveUnknownPacket.Call(this, new PacketEventArgs(buffer, true, (packet.types)msg), OnAllPlayersReceiveUnknownPacket).Canceled;
+                            if (args.IsCanceled || cancel)
                                 return new byte[1];
                             Kick("Unhandled message id \"" + msg + "\"!");
                             return new byte[0];
@@ -113,15 +115,18 @@ namespace MCForge.Entity {
                     Buffer.BlockCopy(buffer, length + 1, tempbuffer, 0, buffer.Length - length - 1);
 
                     buffer = tempbuffer;
-
-                    ThreadPool.QueueUserWorkItem(delegate {
-                        switch (msg) {
-                            case 0: HandleLogin(message); break;
-                            case 5: HandleBlockchange(message); break;
-                            case 8: HandleIncomingPos(message); break;
-                            case 13: HandleChat(message); break;
-                        }
-                    });
+                    if (message[0] != 255)
+                        message = message;
+                    if (!OnPlayerReceivePacket.Call(this, new PacketEventArgs(message, true, (packet.types)msg), OnAllPlayersReceivePacket).Canceled) {
+                        ThreadPool.QueueUserWorkItem(delegate {
+                            switch (msg) {
+                                case 0: HandleLogin(message); break;
+                                case 5: HandleBlockchange(message); break;
+                                case 8: HandleIncomingPos(message); break;
+                                case 13: HandleChat(message); break;
+                            }
+                        });
+                    }
 
                     if (buffer.Length > 0)
                         buffer = HandlePacket(buffer);
@@ -133,7 +138,7 @@ namespace MCForge.Entity {
             }
             catch (Exception e) {
                 Kick("CONNECTION ERROR: (0x03)");
-                Logger.Log("[ERROR]: PLAYER MESSAGE RECIEVE ERROR (0x03)", Color.Red, Color.Black);
+                Logger.Log("[ERROR]: PLAYER MESSAGE RECEIVE ERROR (0x03)", Color.Red, Color.Black);
                 Logger.LogError(e);
             }
             return buffer;
@@ -281,11 +286,11 @@ namespace MCForge.Entity {
 
             if (action == 0) //Deleting
             {
-                Level.BlockChange(x, z, y, 0);
+                Level.BlockChange(x, z, y, 0, (fake) ? null : this);
             }
             else //Placing
             {
-                Level.BlockChange(x, z, y, newType);
+                Level.BlockChange(x, z, y, newType, (fake)?null:this);
             }
         }
         private  void HandleIncomingPos(byte[] message) {
@@ -428,9 +433,9 @@ namespace MCForge.Entity {
                 }
             }
             ChatEventArgs eargs = new ChatEventArgs(incomingText, Username);
-            /*bool canceled = OnPlayerChat.Call(this, eargs, OnAllPlayersChat).Canceled;
-            if (canceled || eargs.Message.Length == 0)
-                return;*/
+            bool canceled = OnPlayerChat.Call(this, eargs, OnAllPlayersChat).Canceled;
+            if (canceled || eargs.Message == null || eargs.Message.Length == 0)
+                return;
             incomingText = eargs.Message;
             string nickname = eargs.Username;
 
@@ -580,23 +585,30 @@ namespace MCForge.Entity {
         #endregion
         #region Outgoing Packets
         private  void SendPacket(packet pa) {
+		if (!OnPlayerSendPacket.Call(this, new PacketEventArgs(pa.GetMessage(), false,(packet.types)pa.bytes[0]), OnAllPlayersSendPacket).Canceled) {
             try {
                 lastPacket = (packet.types)pa.bytes[0];
             }
             catch (Exception e) { Logger.LogError(e); }
             for (int i = 0; i < 3; i++) {
                 try {
-                    Socket.BeginSend(pa.bytes, 0, pa.bytes.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
+                    lastPacket = (packet.types)pa.bytes[0];
+                }
+                catch (Exception e) { Logger.LogError(e); }
+                for (int i = 0; i < 3; i++) {
+                    try {
+                        Socket.BeginSend(pa.bytes, 0, pa.bytes.Length, SocketFlags.None, delegate(IAsyncResult result) { }, null);
 
-                    return;
+                        return;
+                    }
+                    catch {
+                        continue;
+                    }
                 }
-                catch {
-                    continue;
-                }
+                CloseConnection();
             }
-            CloseConnection();
         }
-        private  void SendMessage(byte PlayerID, string message) {
+        private void SendMessage(byte PlayerID, string message) {
             packet pa = new packet();
 
 
@@ -904,7 +916,8 @@ namespace MCForge.Entity {
         /// <summary>
         /// Spawns this player to all other players in the server.
         /// </summary>
-        private  void SpawnThisPlayerToOtherPlayers() {
+        public void SpawnThisPlayerToOtherPlayers()
+        {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p != this && p.Level == Level)
                     p.SendSpawn(this);
@@ -913,22 +926,32 @@ namespace MCForge.Entity {
         /// <summary>
         /// Spawns all other players of the server to this player.
         /// </summary>
-        private  void SpawnOtherPlayersForThisPlayer() {
+        public void SpawnOtherPlayersForThisPlayer()
+        {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p != this && p.Level == Level)
                     SendSpawn(p);
             });
         }
 
-        private  void SpawnBotsForThisPlayer()
+        /// <summary>
+        /// Spawns all bots to this player
+        /// </summary>
+        public void SpawnBotsForThisPlayer()
         {
             Server.ForeachBot(delegate(Bot p)
             {
-                if (p.Player != this && p.Player.Level == Level)
+                if (p.Player.Level == Level)
                     SendSpawn(p.Player);
             });
         }
-
+        internal void SendBlockchangeToOthers(Level l, ushort x, ushort z, ushort y, byte block) {
+            Server.ForeachPlayer(delegate(Player p) {
+                if (p == this) return;
+                if (p.Level == l)
+                    p.SendBlockChange(x, z, y, block);
+            });
+        }
         internal static void GlobalBlockchange(Level l, ushort x, ushort z, ushort y, byte block) {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p.Level == l)
@@ -1011,6 +1034,8 @@ namespace MCForge.Entity {
             catch { }
 
             Server.RemovePlayer(this);
+            if (Server.PlayerCount > 0)
+                Player.UniversalChat(Username + " has disconnected");
             Server.Connections.Remove(this);
 
             Socket.Close();

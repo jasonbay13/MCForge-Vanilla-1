@@ -15,6 +15,7 @@ permissions and limitations under the Licenses.
 using System;
 using System.Data;
 using MCForge.Core;
+using System.Collections.Generic;
 using MCForge.Utilities.Settings;
 using System.Drawing;
 using MCForge.Utilities;
@@ -27,6 +28,7 @@ namespace MCForge.SQL
 	public static class Database
 	{
 		static ISQL SQLType;
+		//TODO Add Queue option..
 		public static ISQL SQL { get { return SQLType; } }
 		internal static void init()
 		{
@@ -48,6 +50,10 @@ namespace MCForge.SQL
 				}
 				SQLType.onLoad();
 			}
+		}
+		public static void Dispose()
+		{
+			SQLType.Dispose();
 		}
 		public static void executeQuery(string queryString)
 		{

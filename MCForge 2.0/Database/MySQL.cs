@@ -18,12 +18,15 @@ namespace MCForge.SQL
 	/// <summary>
 	/// Description of MySQL.
 	/// </summary>
-	internal class MySQL : ISQL
+	internal class MySQL : ISQL, IDisposable
 	{
 		public string connString = "";
+		protected MySqlConnection conn;
+		protected bool _closed = true;
 		public override void onLoad()
 		{
 			connString = string.Format("Data Source={0};Port={1};User ID={2};Password={3};Pooling={4}", ServerSettings.GetSetting("MySQL-IP"), ServerSettings.GetSetting("MySQL-Port"), ServerSettings.GetSetting("MySQL-Username"), ServerSettings.GetSetting("MySQL-Password"), ServerSettings.GetSetting("MySQL-Pooling"));
+			Open();
 			executeQuery("CREATE DATABASE if not exists '" + ServerSettings.GetSetting("MySQL-DBName") + "'");
 		}
 		/// <summary>
@@ -33,16 +36,10 @@ namespace MCForge.SQL
 		public override void executeQuery(string queryString)
 		{
 			try {
-				using (var conn = new MySqlConnection(connString))
-				{
-					conn.Open();
-					if (queryString.IndexOf("CREATE DATABASE") != -1)
-						conn.ChangeDatabase(ServerSettings.GetSetting("MySQL-DBName"));
-					MySqlCommand cmd = new MySqlCommand(queryString, conn);
-					cmd.ExecuteNonQuery();
-					conn.Clone();
-					conn.Dispose();
-				}
+				if (queryString.IndexOf("CREATE DATABASE") != -1)
+					conn.ChangeDatabase(ServerSettings.GetSetting("MySQL-DBName"));
+				MySqlCommand cmd = new MySqlCommand(queryString, conn);
+				cmd.ExecuteNonQuery();
 			}
 			catch (Exception e)
 			{
@@ -57,20 +54,44 @@ namespace MCForge.SQL
 		public override void executeQuery(string[] queryString)
 		{
 			try {
-				using (var conn = new MySqlConnection(connString))
-				{
-					conn.Open();
-					for (int i = 0; i < queryString.Length; i++) {
-						using (MySqlCommand cmd = new MySqlCommand(queryString[i], conn))
-							cmd.ExecuteNonQuery();
-					}
-					conn.Clone();
-					conn.Dispose();
+				for (int i = 0; i < queryString.Length; i++) {
+					using (MySqlCommand cmd = new MySqlCommand(queryString[i], conn))
+						cmd.ExecuteNonQuery();
 				}
 			}
 			catch (Exception e)
 			{
                 Logger.LogError(e);
+			}
+		}
+		
+		public void Open()
+		{
+			if (_closed)
+			{
+				conn = new MySqlConnection(connString);
+				conn.Open();
+				_closed = false;
+			}
+		}
+		
+		public void Close(bool dispose)
+		{
+			if (!_closed)
+			{
+				conn.Close();
+				if (dispose)
+					conn.Dispose();
+				_closed = true;
+			}
+		}
+		
+		public override void Dispose()
+		{
+			if (!_disposed)
+			{
+				Close(true);
+				base.Dispose();
 			}
 		}
 	}
