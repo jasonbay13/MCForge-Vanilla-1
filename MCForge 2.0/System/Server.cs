@@ -26,6 +26,7 @@ using MCForge.Utils.Settings;
 using MCForge.Utils;
 using MCForge.World;
 using MCForge.Robot;
+using MCForge.SQL;
 
 namespace MCForge.Core {
     public static class Server {
@@ -207,6 +208,8 @@ namespace MCForge.Core {
             reload.Initialize();
 
             Groups.PlayerGroup.Load();
+            
+            Database.init();
 
             CreateCoreFiles();
 

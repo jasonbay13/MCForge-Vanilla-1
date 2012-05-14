@@ -78,6 +78,8 @@ namespace MCForge.Utils.Settings {
                 new SettingNode("MySQL-DBName", "MCForge", "The database name for MySQL"),
                 new SettingNode("SQLite-Filepath", "_mcforge.db", "The filepath for the database"),
                 new SettingNode("SQLite-Pooling", "True", null),
+                new SettingNode("Database-Queuing", "False", null),
+                new SettingNode("Database-Flush_Interval", "20", null),
                 new SettingNode("IRC-Enabled", "false", "If set to true, IRC is enabled."),
                 new SettingNode("IRC-Server", "127.0.0.1", "IRC server to connect to"),
                 new SettingNode("IRC-Port", "6667", "IRC server port"),

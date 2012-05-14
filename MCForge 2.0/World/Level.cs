@@ -351,6 +351,8 @@ namespace MCForge.World {
             if (p == null)
                 Player.GlobalBlockchange(this, x, z, y, block);
             else p.SendBlockchangeToOthers(this, x, z, y, block);
+            
+            
 
             //TODO Special stuff for block changing
         }
