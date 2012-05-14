@@ -1010,15 +1010,19 @@ namespace MCForge.Entity {
             IsLoggedIn = false;
 
             GlobalDie();
-            Logger.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", Color.Gray, Color.Black);
-            try {
-                Server.IRC.SendMessage("[System]: " + Username + " has disconnected");
-            }
-            catch { }
-
             Server.RemovePlayer(this);
-            if (Server.PlayerCount > 0)
-                Player.UniversalChat(Username + " has disconnected");
+            if (!IsBot)
+            {
+                Logger.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", Color.Gray, Color.Black);
+                try
+                {
+                    Server.IRC.SendMessage("[System]: " + Username + " has disconnected");
+                }
+                catch { }
+
+                if (Server.PlayerCount > 0)
+                    Player.UniversalChat(Username + " has disconnected");
+            }
             Server.Connections.Remove(this);
 
             Socket.Close();

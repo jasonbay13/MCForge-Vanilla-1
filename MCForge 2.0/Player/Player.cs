@@ -62,6 +62,8 @@ namespace MCForge.Entity {
         public TcpClient Client { get; private  set; }
         private  packet.types lastPacket = packet.types.SendPing;
 
+        public bool IsBot = false;
+
         /// <summary>
         /// The player's money.
         /// </summary>
