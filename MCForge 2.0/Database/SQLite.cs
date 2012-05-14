@@ -10,7 +10,7 @@ using System;
 using System.Windows.Forms;
 using System.Data;
 using System.Data.SQLite;
-using MCForge.Utilities.Settings;
+using MCForge.Utils.Settings;
 
 namespace MCForge.SQL
 {
