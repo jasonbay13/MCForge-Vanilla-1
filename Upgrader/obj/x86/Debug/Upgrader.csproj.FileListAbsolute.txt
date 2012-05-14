@@ -3,3 +3,8 @@ C:\Users\Eddie\Desktop\MCForge-Vanilla\Upgrader\bin\Debug\Upgrader.dll
 C:\Users\Eddie\Desktop\MCForge-Vanilla\Upgrader\bin\Debug\Upgrader.pdb
 C:\Users\Eddie\Desktop\MCForge-Vanilla\Upgrader\obj\x86\Debug\Upgrader.dll
 C:\Users\Eddie\Desktop\MCForge-Vanilla\Upgrader\obj\x86\Debug\Upgrader.pdb
+C:\Users\David\MCforge\MCForge-Vanilla\Upgrader\bin\Debug\Upgrader.dll
+C:\Users\David\MCforge\MCForge-Vanilla\Upgrader\bin\Debug\Upgrader.pdb
+C:\Users\David\MCforge\MCForge-Vanilla\Upgrader\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\David\MCforge\MCForge-Vanilla\Upgrader\obj\x86\Debug\Upgrader.dll
+C:\Users\David\MCforge\MCForge-Vanilla\Upgrader\obj\x86\Debug\Upgrader.pdb
