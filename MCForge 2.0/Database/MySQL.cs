@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Data;
 using MCForge.Core;
 using MCForge.Utilities.Settings;
 using MySql.Data.Types;
@@ -18,7 +19,7 @@ namespace MCForge.SQL
 	/// <summary>
 	/// Description of MySQL.
 	/// </summary>
-	internal class MySQL : ISQL, IDisposable
+	internal class MySQL : ISQL
 	{
 		public string connString = "";
 		protected MySqlConnection conn;
@@ -27,8 +28,12 @@ namespace MCForge.SQL
 		{
 			connString = string.Format("Data Source={0};Port={1};User ID={2};Password={3};Pooling={4}", ServerSettings.GetSetting("MySQL-IP"), ServerSettings.GetSetting("MySQL-Port"), ServerSettings.GetSetting("MySQL-Username"), ServerSettings.GetSetting("MySQL-Password"), ServerSettings.GetSetting("MySQL-Pooling"));
 			Open();
-			executeQuery("CREATE DATABASE if not exists '" + ServerSettings.GetSetting("MySQL-DBName") + "'");
-		}
+			string[] commands = new string[3];
+			commands[0] = "CREATE DATABASE if not exists '" + ServerSettings.GetSetting("MySQL-DBName") + "'";
+			commands[1] = "CREATE TABLE if not exists _players (UID MEDIUMINT not null auto_increment, Name VARCHAR(20), IP VARCHAR(20), firstlogin DATETIME, lastlogin DATETIME, money MEDIUMINT, totallogin MEDIUMINT, PRIMARY KEY (UID));";
+			commands[2] = "CREATE TABLE if not exists extra (key VARCHAR(1000), value VARCHAR(1000), UID MEDIUMINT);";
+			executeQuery(commands);
+		} 
 		/// <summary>
 		/// execute a query
 		/// </summary>
@@ -63,6 +68,15 @@ namespace MCForge.SQL
 			{
                 Logger.LogError(e);
 			}
+		}
+		
+		public override DataTable fillData(string queryString)
+		{
+			DataTable db = new DataTable("toReturn");
+			using (MySqlDataAdapter da = new MySqlDataAdapter(queryString, conn)) {
+				da.Fill(db);
+			}
+			return db;
 		}
 		
 		public void Open()

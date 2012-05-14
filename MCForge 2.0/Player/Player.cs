@@ -300,6 +300,7 @@ namespace MCForge.Entity {
         
         #region Database Saving/Loading
 		
+        
 		public void Save()
 		{
 			Logger.Log("Saving " + Username + " to the database", LogType.Debug);
@@ -316,7 +317,14 @@ namespace MCForge.Entity {
 			DataTable playerdb = Database.fillData("SELECT * FROM _players WHERE Name='" + Username + "'");
 			if (playerdb.Rows.Count == 0)
 			{
-				//TODO Insert row
+				FirstLogin = DateTime.Now;
+				LastLogin = DateTime.Now;
+				money = 0;
+				Database.fillData("INSERT INTO _players (Name, IP, firstlogin, lastlogin, money) VALUES ('" + Username + "', '" + Ip + "', '" + FirstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + LastLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', 0)");
+				DataTable temp = Database.fillData("SELECT * FROM _players WHERE Name='" + Username + "'");
+				if (temp.Rows.Count != 0)
+					UID = int.Parse(temp.Rows[0]["UID"].ToString());
+				temp.Dispose();
 			}
 			else
 			{
@@ -347,7 +355,7 @@ namespace MCForge.Entity {
 		/// </summary>
 		public void LoadExtra()
 		{
-			DataTable tbl = Database.fillData("SELECT * WHERE UID=" + UID);
+			DataTable tbl = Database.fillData("SELECT * FROM extra WHERE UID=" + UID);
 			for (int i = 0; i < tbl.Rows.Count; i++)
 			{
 				ExtraData.Add(tbl.Rows[i]["key"], tbl.Rows[i]["value"]);
@@ -361,7 +369,7 @@ namespace MCForge.Entity {
 		/// <returns>If true, then they key is in the table and doesnt need to be added, if false, then the key needs to be added</returns>
 		internal bool IsInTable(object key)
 		{
-			DataTable temp = Database.fillData("SELECT * WHERE key='" + key.ToString() + "' AND UID=" + UID);
+			DataTable temp = Database.fillData("SELECT * FROM extra WHERE key='" + key.ToString() + "' AND UID=" + UID);
 			bool return1 = false;
 			if (temp.Rows.Count >= 1)
 				return1 = true;

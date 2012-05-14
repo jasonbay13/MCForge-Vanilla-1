@@ -7,7 +7,6 @@ using MCForge.SQL;
 using MCForge.Entity;
 
 namespace MCForge.Utils {
-<<<<<<< HEAD
 	public static class MiscUtils {
 
 	    
