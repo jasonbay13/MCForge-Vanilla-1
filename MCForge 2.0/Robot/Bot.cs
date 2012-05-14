@@ -38,6 +38,7 @@ namespace MCForge.Robot
         public Bot(string Username, Vector3 Position, byte[] Rotation, Level level, bool FollowPlayers, bool BreakBlocks, bool Jumping)
         {
             Player = new Player();
+            Player.IsBot = true;
             Player.Username = Username;
             Player.Pos = Position;
             Player.oldPos = new Vector3(Position.x, Position.z, Position.y);

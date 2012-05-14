@@ -62,6 +62,8 @@ namespace MCForge.Entity {
         public TcpClient Client { get; private  set; }
         private  packet.types lastPacket = packet.types.SendPing;
 
+        public bool IsBot = false;
+
         /// <summary>
         /// The player's money.
         /// </summary>
@@ -492,6 +494,28 @@ namespace MCForge.Entity {
             Server.UpgradeConnectionToPlayer(this);
 
             //TODO Update form list
+        }
+
+        /// <summary>
+        /// Rainbows some text
+        /// </summary>
+        /// <param name="strin">The string input</param>
+        /// <returns>Outputs some colorful RAIIIIIINBBBBBBOWWWWWWW text</returns>
+        public string Rainbow(string strin)
+        {
+            string rainbowString = "4c6eb3912ad5";
+            string rainbow = "";
+            int loop = 0;
+
+            for (int i = 0; i < strin.Length; i++)
+            {
+                rainbow = rainbow + "&" + rainbowString[loop].ToString() + strin[i].ToString();
+                if (loop == rainbowString.Length - 1)
+                    loop = 0;
+                else
+                    loop++;
+            }
+            return rainbow;
         }
 
         #region Verification Stuffs
