@@ -48,7 +48,7 @@ namespace CommandDll {
 
             p.SendMessage("Place two blocks to determine the edges.");
             p.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock);
-            p.setDatapass("CmdReplaceNot_cpos", cpos);
+            p.SetDatapass("CmdReplaceNot_cpos", cpos);
             //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock), (object)cpos);
         }
         //public void CatchBlock(Player p, ushort x, ushort z, ushort y, byte NewType, bool placed, object DataPass) 
@@ -57,7 +57,7 @@ namespace CommandDll {
             CatchPos cpos = (CatchPos)sender.GetDatapass("CmdReplaceNot_cpos");
             cpos.pos = new Vector3(args.X, args.Z, args.Y);
             args.Unregister();
-            sender.setDatapass("CmdReplaceNot_cpos", cpos);
+            sender.SetDatapass("CmdReplaceNot_cpos", cpos);
             sender.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock2);
             //p.CatchNextBlockchange(CatchBlock2, (object)cpos);
         }

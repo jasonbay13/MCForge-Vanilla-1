@@ -40,7 +40,7 @@ namespace CommandDll
             Random Random = new Random();
             string margs = ArrayToString(args);
             margs = margs.Replace('%', '&');
-            Bot TemporaryPlayer = new Bot(margs, p.Pos, p.Rot, p.Level, true);
+            Bot TemporaryPlayer = new Bot(margs, p.Pos, p.Rot, p.Level, true, true, true);
             TemporaryPlayer.Player.Level.ExtraData.Add("Bot" + Random.Next(0, 9999999), margs + " " + TemporaryPlayer.FollowPlayers +  //TODO - Random INT so the dictionary doesnt clash - this should be fixed
                 " " + TemporaryPlayer.Player.Pos.x + " " + TemporaryPlayer.Player.Pos.y + " " + TemporaryPlayer.Player.Pos.z + " "
                 + TemporaryPlayer.Player.Rot[0] + " " + TemporaryPlayer.Player.Rot[1]); //Add bot to level metadata

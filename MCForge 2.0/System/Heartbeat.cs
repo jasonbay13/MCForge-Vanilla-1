@@ -18,8 +18,8 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
-using MCForge.Utilities.Settings;
-using MCForge.Utilities;
+using MCForge.Utils.Settings;
+using MCForge.Utils;
 using System.Drawing;
 
 namespace MCForge.Core

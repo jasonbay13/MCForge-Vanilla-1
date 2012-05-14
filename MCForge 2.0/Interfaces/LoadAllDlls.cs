@@ -21,11 +21,11 @@ using System.Reflection;
 using MCForge.Interface.Plugin;
 using MCForge.Interface.Command;
 using MCForge.Core;
-using MCForge.Utilities;
+using MCForge.Utils;
 using System.Drawing;
 using MCForge.API.Events;
-using MCForge.Utilities;
-using MCForge.Utilities.Settings;
+using MCForge.Utils;
+using MCForge.Utils.Settings;
 
 namespace MCForge.Interface {
     public static class LoadAllDlls {

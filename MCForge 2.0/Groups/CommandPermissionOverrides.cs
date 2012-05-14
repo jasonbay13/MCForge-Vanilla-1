@@ -17,8 +17,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge.Interface.Command;
-using MCForge.Utilities.Settings;
-using MCForge.Utilities;
+using MCForge.Utils.Settings;
+using MCForge.Utils;
 using System.IO;
 using MCForge.Core;
 

@@ -44,12 +44,12 @@ namespace CommandDll {
             p.SendMessage(String.Concat("To see a list of players currently on ", l.Name, ", type \"yes\"."));
             //OnPlayerChat.Register(plist, MCForge.API.Priority.Normal, l, p);
             p.OnPlayerChat.Normal += new ChatEvent.EventHandler(plist);
-            p.setDatapass("mapinfoLevel", l);
+            p.SetDatapass("mapinfoLevel", l);
         }
 
         private void plist(Player sender, ChatEventArgs eventargs) {
             sender.OnPlayerChat.Normal -= new ChatEvent.EventHandler(plist);
-            if (eventargs.Message.ToLower() != "yes" || sender.ExtraData.GetIfExist("LastCmd") != "mapinfo" && sender.ExtraData.GetIfExist("LastCmd") != "mi")
+            if (eventargs.Message.ToLower() != "yes" || sender.ExtraData.GetIfExist<object, object>("LastCmd") != "mapinfo" && sender.ExtraData.GetIfExist("LastCmd") != "mi")
                 return;
 
             eventargs.Cancel();

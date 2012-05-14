@@ -8,7 +8,7 @@
  */
 using System;
 using MCForge.World;
-using MCForge.Utilities;
+using MCForge.Utils;
 using System.Collections.Generic;
 using System.Linq;
 

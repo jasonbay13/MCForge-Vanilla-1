@@ -16,9 +16,9 @@ using System;
 using System.Data;
 using MCForge.Core;
 using System.Collections.Generic;
-using MCForge.Utilities.Settings;
+using MCForge.Utils.Settings;
 using System.Drawing;
-using MCForge.Utilities;
+using MCForge.Utils;
 
 namespace MCForge.SQL
 {

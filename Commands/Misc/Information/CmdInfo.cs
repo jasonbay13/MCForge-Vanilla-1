@@ -18,7 +18,7 @@ using MCForge.API.Events;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-using MCForge.Utilities.Settings;
+using MCForge.Utils.Settings;
 using MCForge.World;
 using MCForge.Utils;
 namespace CommandDll {

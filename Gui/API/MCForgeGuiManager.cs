@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using MCForge.Interface.Plugin;
-using MCForge.Utilities;
+using MCForge.Utils;
 using System.IO;
 using MCForge.Interface;
 using System.Reflection;

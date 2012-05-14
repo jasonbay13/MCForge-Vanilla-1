@@ -18,7 +18,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
 using MCForge.Utils;
-using MCForge.Utilities;
+using MCForge.Utils;
 
 namespace CommandDll {
     public class CmdClick : ICommand {

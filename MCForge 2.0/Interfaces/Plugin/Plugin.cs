@@ -20,8 +20,8 @@ using System.IO;
 using System.Reflection;
 using MCForge.Interface.Command;
 using MCForge.Core;
-using MCForge.Utilities;
-using MCForge.Utilities.Settings;
+using MCForge.Utils;
+using MCForge.Utils.Settings;
 using MCForge.API.Events;
 
 

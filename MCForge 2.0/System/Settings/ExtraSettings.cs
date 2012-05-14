@@ -7,7 +7,7 @@ using MCForge.Core;
 using System.IO;
 using System.Drawing;
 
-namespace MCForge.Utilities.Settings {
+namespace MCForge.Utils.Settings {
     public abstract class ExtraSettings {
         public abstract string SettingsName { get; }
         public abstract List<SettingNode> Values { get; }

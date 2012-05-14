@@ -18,7 +18,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
-using MCForge.Utilities;
+using MCForge.Utils;
 
 namespace CommandDll.Misc {
     class CmdResetPass : ICommand {

@@ -16,7 +16,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using MCForge.Interface.Command;
-using MCForge.Utilities;
+using MCForge.Utils;
 
 namespace MCForge.API.System
 {

@@ -17,7 +17,7 @@ using System.IO;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-using MCForge.Utilities;
+using MCForge.Utils;
 using System.Drawing;
 
 namespace CommandDll

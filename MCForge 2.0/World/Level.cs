@@ -22,7 +22,7 @@ using MCForge.Entity;
 using MCForge.Core;
 using MCForge.Robot;
 using MCForge.World.Blocks;
-using MCForge.Utilities;
+using MCForge.Utils;
 using System.Drawing;
 
 namespace MCForge.World {

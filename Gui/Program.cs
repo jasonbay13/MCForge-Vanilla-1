@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Threading;
-using MCForge.Utilities.Settings;
-using MCForge.Utilities;
 using MCForge.Utils;
 using MCForge;
+using MCForge.Utils.Settings;
 
 namespace MCForge.Gui {
     class Program {

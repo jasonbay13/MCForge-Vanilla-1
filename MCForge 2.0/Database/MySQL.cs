@@ -9,10 +9,10 @@
 using System;
 using System.Data;
 using MCForge.Core;
-using MCForge.Utilities.Settings;
+using MCForge.Utils.Settings;
 using MySql.Data.Types;
 using MySql.Data.MySqlClient;
-using MCForge.Utilities;
+using MCForge.Utils;
 
 namespace MCForge.SQL
 {

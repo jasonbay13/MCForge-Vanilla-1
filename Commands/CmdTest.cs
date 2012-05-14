@@ -2,7 +2,6 @@
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-
 namespace CommandDll {
     public class CmdTest : ICommand {
         string _Name = "test";
@@ -36,7 +35,7 @@ namespace CommandDll {
         }
 
         public void CallBack(Player sender, MoveEventArgs args) {
-            MCForge.Utilities.Logger.Log("Test: " + sender.Username + " moved!");
+            MCForge.Utils.Logger.Log("Test: " + sender.Username + " moved!");
             sender.SendMessage("Hi!");
             sender.OnPlayerChat.All -= new ChatEvent.EventHandler(CallBack2);
         }

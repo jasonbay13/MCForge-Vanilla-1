@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge.Core;
-using MCForge.Utilities;
+using MCForge.Utils;
 using System.Drawing;
 using MCForge.API.Events;
 

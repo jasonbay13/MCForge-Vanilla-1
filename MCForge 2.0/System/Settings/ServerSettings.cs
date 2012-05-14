@@ -22,7 +22,7 @@ using MCForge.Core;
 using System.Security.Cryptography;
 using System.Drawing;
 
-namespace MCForge.Utilities.Settings {
+namespace MCForge.Utils.Settings {
     /// <summary>
     /// Settings Utility
     /// </summary>

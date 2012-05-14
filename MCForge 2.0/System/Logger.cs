@@ -3,7 +3,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace MCForge.Utilities {
+namespace MCForge.Utils {
     /// <summary>
     /// Logger Utility
     /// </summary>

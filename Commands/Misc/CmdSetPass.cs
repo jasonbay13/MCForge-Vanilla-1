@@ -19,7 +19,7 @@ using System.Text;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-using MCForge.Utilities;
+using MCForge.Utils;
 
 namespace CommandDll.Misc
 {

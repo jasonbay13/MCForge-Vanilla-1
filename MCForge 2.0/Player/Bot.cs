@@ -7,9 +7,9 @@ using System.Threading;
 using MCForge.Core;
 using MCForge.Groups;
 using MCForge.Interface.Command;
-using MCForge.Utilities.Settings;
+using MCForge.Utils.Settings;
 using MCForge.World;
-using MCForge.Utilities;
+using MCForge.Utils;
 using MCForge.Utils;
 using System.Linq;
 using MCForge.SQL;
@@ -17,6 +17,7 @@ using System.Data;
 using MCForge.Entity;
 using MCForge.API.Events;
 
+//This namespace should get it's own directory
 namespace MCForge.Robot
 {
     public sealed partial class Bot
