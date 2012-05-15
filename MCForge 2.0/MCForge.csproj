@@ -62,7 +62,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite">
-      <HintPath>System.Data.SQLite.dll</HintPath>
+      <HintPath>..\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -106,8 +106,8 @@
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
     <Compile Include="Interfaces\Plugin\IPlugin.cs" />
-    <Compile Include="Player\Bot.cs" />
-    <Compile Include="Player\BotMap.cs" />
+    <Compile Include="Robot\Bot.cs" />
+    <Compile Include="Robot\BotMap.cs" />
     <Compile Include="Player\PlayerNetworking.cs" />
     <Compile Include="System\FileUtils.cs" />
     <Compile Include="System\IRC.cs" />

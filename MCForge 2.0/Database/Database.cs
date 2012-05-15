@@ -11,7 +11,7 @@ software distributed under the Licenses are distributed on an "AS IS"
 BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
-*/
+ */
 using System;
 using System.Data;
 using MCForge.Core;
@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using MCForge.Utils.Settings;
 using System.Drawing;
 using MCForge.Utils;
+using System.Threading;
 
 namespace MCForge.SQL
 {
@@ -29,11 +30,30 @@ namespace MCForge.SQL
 	{
 		static ISQL SQLType;
 		//TODO Add Queue option..
+		public static bool queuecommands { get { return bool.Parse(ServerSettings.GetSetting("Database-Queuing")); } }
+		public static int FlushWait
+		{
+			get
+			{
+				try
+				{
+					return int.Parse(ServerSettings.GetSetting("Database-Flush_Interval"));
+				}
+				catch
+				{
+					return 1000;
+				}
+			}
+		}
+		private static Thread _worker;
+		private static bool flushcommands;
+		private static Queue<string> commands = new Queue<string>();
 		public static ISQL SQL { get { return SQLType; } }
 		internal static void init()
 		{
-			if (SQLType != null)
+			if (SQLType == null)
 			{
+				Logger.Log("Starting Database Service", LogType.Debug);
 				switch (ServerSettings.GetSetting("DatabaseType"))
 				{
 					case "mysql":
@@ -41,30 +61,109 @@ namespace MCForge.SQL
 						break;
 					case "sqlite":
 						SQLType = new SQLite();
-                        break;
+						break;
 					default:
 						Logger.Log("Database Type not found!",Color.Red, Color.Gray);
 						Logger.Log("Using SQLite", Color.Green, Color.Gray);
 						SQLType = new SQLite();
-                        break;
+						break;
 				}
 				SQLType.onLoad();
 			}
+			if (_worker == null)
+			{
+				Logger.Log("Database Queuing starting", LogType.Debug);
+				_worker = new Thread(Flush);
+				flushcommands = true;
+				_worker.Start();
+			}
 		}
+		/// <summary>
+		/// Add a sql command to the queue
+		/// </summary>
+		/// <param name="cmd">The command to add</param>
+		public static void QueueCommand(string cmd)
+		{
+			commands.Enqueue(cmd);
+		}
+		
+		/// <summary>
+		/// Add multiple commands to the queue
+		/// </summary>
+		/// <param name="cmds">The array of commands to add</param>
+		public static void QueueCommands(string[] cmds)
+		{
+			for (int i = 0; i < cmds.Length; i++)
+			{
+				QueueCommand(cmds[i]);
+			}
+		}
+		
+		/// <summary>
+		/// Flush all the commands
+		/// This will execute all the commands in the queue and remove them
+		/// </summary>
+		internal static void Flush()
+		{
+			while (flushcommands)
+			{
+				Thread.Sleep(FlushWait);
+				if (commands.Count > 0)
+					executeQuery(commands.Dequeue());
+			}
+		}
+		
+		/// <summary>
+		/// Close the SQL connection and dispose resources
+		/// THIS SHOULD ONLY BE CALLED ONCE
+		/// </summary>
 		public static void Dispose()
 		{
+			flushcommands = false;
+			//Flush remaining commands
+			while (commands.Count > 0)
+				executeQuery(commands.Dequeue());
 			SQLType.Dispose();
 		}
+		
+		/// <summary>
+		/// Execute a command to the sql server
+		/// This wont return any data
+		/// If the server is set to queue all commands, then the commands will be added to queue
+		/// </summary>
+		/// <param name="queryString">The command to execute</param>
 		public static void executeQuery(string queryString)
 		{
-			SQLType.executeQuery(queryString);
+			Logger.Log("Executing " + queryString, LogType.Debug);
+			if (queuecommands)
+				QueueCommand(queryString);
+			else
+				SQLType.executeQuery(queryString);
 		}
+		
+		/// <summary>
+		/// Execute multiple commands to the sql server
+		/// This wont return any data
+		/// If the server is set to queue all commands, then the commands will be added to queue
+		/// </summary>
+		/// <param name="commands">The commands to execute</param>
 		public static void executeQuery(string[] commands)
 		{
-			SQLType.executeQuery(commands);
+			Logger.Log("Executing " + commands.Length + " commands..", LogType.Debug);
+			if (queuecommands)
+				QueueCommands(commands);
+			else
+				SQLType.executeQuery(commands);
 		}
+		
+		/// <summary>
+		/// Execute a command to the sql server and return a datatable of the result
+		/// </summary>
+		/// <param name="queryString">The command to execute</param>
+		/// <returns>The datatable</returns>
 		public static DataTable fillData(string queryString)
 		{
+			Logger.Log("Executing " + queryString + " (FillData)", LogType.Debug);
 			return SQLType.fillData(queryString);
 		}
 	}

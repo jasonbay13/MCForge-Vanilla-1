@@ -68,7 +68,23 @@ namespace MCForge.Utils {
         /// <param name="message">The message to be logged</param>
         /// <param name="logType">The log type</param>
         public static void Log(string message, LogType logType = LogType.Normal) {
-            Log(message, Color.Black, Color.White, logType);
+        	Color one = Color.Black;
+        	switch (logType)
+        	{
+        		case LogType.Critical:
+        			one = Color.DarkRed;
+        			break;
+        		case LogType.Debug:
+        			one = Color.DarkMagenta;
+        			break;
+        		case LogType.Error:
+        			one = Color.Red;
+        			break;
+        		case LogType.Warning:
+        			one = Color.Yellow;
+        			break;
+        	}
+            Log(message, one, Color.White, logType);
         }
 
         /// <summary>

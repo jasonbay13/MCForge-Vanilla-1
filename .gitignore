@@ -5,6 +5,8 @@
 /Commands/obj/
 /Plugins/bin/
 /Plugins/obj/
+/Upgrader/bin/
+/Upgrader/obj/
 *.suo
 *.user
 MCForge 2.0/MCForge.xml

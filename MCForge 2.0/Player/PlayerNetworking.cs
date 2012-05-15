@@ -29,6 +29,7 @@ using System.Drawing;
 using MCForge.Utils;
 using MCForge.API.Events;
 using MCForge.Robot;
+using MCForge.SQL;
 
 namespace MCForge.Entity {
     public partial class Player {
@@ -220,6 +221,9 @@ namespace MCForge.Entity {
                 SendSpawn(this);
 
                 IsLoading = false;
+                
+                //Load from Database
+                Load();
 
                 foreach (string w in ServerSettings.GetSetting("welcomemessage").Split(new string[] { "<br>" }, StringSplitOptions.RemoveEmptyEntries))
                     SendMessage(w);
@@ -283,7 +287,8 @@ namespace MCForge.Entity {
                 });
                 return;
             }
-
+            //Record to database
+            Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Date) VALUES (" + UID + ", " + x + ", " + y + ", " + z + ", '" + Level.Name + "', '" + (action == 0 ? "true" : "false") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "')");
             if (action == 0) //Deleting
             {
                 Level.BlockChange(x, z, y, 0, (fake) ? null : this);
@@ -1010,15 +1015,19 @@ namespace MCForge.Entity {
             IsLoggedIn = false;
 
             GlobalDie();
-            Logger.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", Color.Gray, Color.Black);
-            try {
-                Server.IRC.SendMessage("[System]: " + Username + " has disconnected");
-            }
-            catch { }
-
             Server.RemovePlayer(this);
-            if (Server.PlayerCount > 0)
-                Player.UniversalChat(Username + " has disconnected");
+            if (!IsBot)
+            {
+                Logger.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", Color.Gray, Color.Black);
+                try
+                {
+                    Server.IRC.SendMessage("[System]: " + Username + " has disconnected");
+                }
+                catch { }
+
+                if (Server.PlayerCount > 0)
+                    Player.UniversalChat(Username + " has disconnected");
+            }
             Server.Connections.Remove(this);
 
             Socket.Close();
