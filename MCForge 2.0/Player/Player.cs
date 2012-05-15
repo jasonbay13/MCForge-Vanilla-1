@@ -333,6 +333,7 @@ namespace MCForge.Entity {
 				FirstLogin = DateTime.Parse(playerdb.Rows[0]["firstlogin"].ToString());
 				LastLogin = DateTime.Now;
 				money = int.Parse(playerdb.Rows[0]["money"].ToString());
+				//TODO Add total login and total Blocks
 			}
 			playerdb.Dispose();
 			LoadExtra();

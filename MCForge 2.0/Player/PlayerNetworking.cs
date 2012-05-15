@@ -288,7 +288,7 @@ namespace MCForge.Entity {
                 return;
             }
             //Record to database
-            Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted) VALUES (" + UID + ", " + x + ", " + y + ", " + z + ", '" + Level.Name + "', '" + (action == 0 ? "true" : "false") + "')");
+            Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Date) VALUES (" + UID + ", " + x + ", " + y + ", " + z + ", '" + Level.Name + "', '" + (action == 0 ? "true" : "false") + "', '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "')");
             if (action == 0) //Deleting
             {
                 Level.BlockChange(x, z, y, 0, (fake) ? null : this);
