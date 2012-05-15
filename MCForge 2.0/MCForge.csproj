@@ -194,6 +194,7 @@
     <Compile Include="System\Server.cs" />
     <Compile Include="World\Blocks\Physics\PhysicsBlock.cs" />
     <Compile Include="System\Settings\ServerSettings.cs" />
+    <Compile Include="World\WorldComponents.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

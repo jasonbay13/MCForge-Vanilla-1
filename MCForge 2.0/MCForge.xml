@@ -1329,7 +1329,7 @@
             <param name="key">The key to access the datapass object.</param>
             <returns>A datapass object.</returns>
         </member>
-        <member name="M:MCForge.Entity.Player.setDatapass(System.String,System.Object)">
+        <member name="M:MCForge.Entity.Player.SetDatapass(System.String,System.Object)">
             <summary>
             Sets a datapass object according to the key.
             </summary>

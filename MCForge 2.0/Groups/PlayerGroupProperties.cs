@@ -16,7 +16,7 @@ namespace MCForge.Groups
         static string PropertiesPath = FileUtils.PropertiesPath + "groups.xml";
         public static void Save()
         {
-            if (!Directory.Exists(FileUtils.PropertiesPath)) Directory.CreateDirectory(FileUtils.PropertiesPath);
+           FileUtils.CreateDirIfNotExist(FileUtils.PropertiesPath);
 
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;

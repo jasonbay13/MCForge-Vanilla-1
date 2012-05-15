@@ -356,7 +356,7 @@ namespace MCForge.World {
         }
 
         #region SetBlock And Overloads
-        void SetBlock(Vector3 pos, byte block) {
+        internal void SetBlock(Vector3 pos, byte block) {
             SetBlock(pos.x, pos.z, pos.y, block);
         }
         internal void SetBlock(int x, int z, int y, byte block) {
