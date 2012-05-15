@@ -27,9 +27,9 @@ namespace MCForge.World {
         public void DrawOnLevel(Level mLevel, Vector3 startPos, byte blockOverlay = 1) {
             for (int i = 0; i < components.Length; i++) {
                 var comp = components[i];
-                if (comp.block == 254)
+                if (comp.Block == 254)
                     continue;
-                mLevel.SetBlock(comp.pos + startPos, comp.block == 255 ? blockOverlay : comp.block);
+                mLevel.SetBlock(comp.Pos + startPos, comp.Block == 255 ? blockOverlay : comp.Block);
             }
         }
 
@@ -47,15 +47,29 @@ namespace MCForge.World {
 
     }
 
-    
 
-    internal struct BlockComponent {
-        internal byte block = 0;
-        internal Vector3 pos = default(Vector3);
 
-        internal BlockComponent(byte block, Vector3 mVec){
-            this.block = block;
-            this.pos = mVec;
+    /// <summary>
+    /// A struct containting a Block and position
+    /// </summary>
+    public struct BlockComponent {
+        /// <summary>
+        /// The type of block
+        /// </summary>
+        public byte Block;
+        /// <summary>
+        /// The position
+        /// </summary>
+        public Vector3 Pos;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BlockComponent"/> struct.
+        /// </summary>
+        /// <param name="block">The block.</param>
+        /// <param name="mVec">The position.</param>
+       public BlockComponent(byte block, Vector3 mVec){
+            this.Block = block;
+            this.Pos = mVec;
         }
         
     }
