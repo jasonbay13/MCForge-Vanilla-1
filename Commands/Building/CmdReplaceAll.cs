@@ -17,6 +17,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -51,7 +52,7 @@ namespace CommandDll
             {
                 if (b == type)
                 {
-                    Vector3 meep = p.Level.IntToPos(currentBlock);
+                    Vector3S meep = p.Level.IntToPos(currentBlock);
                     pos.pos = meep;
                     stored.Add(pos);
                 }
@@ -81,7 +82,7 @@ namespace CommandDll
         }
         struct Pos
         {
-            public Vector3 pos;
+            public Vector3S pos;
         }
     }
 }

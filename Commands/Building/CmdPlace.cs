@@ -17,6 +17,7 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
 using MCForge.World;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -34,7 +35,7 @@ namespace CommandDll
         {
             byte b = Block.BlockList.UNKNOWN;
             ushort x, z, y;
-            Vector3 pos = p.Pos;
+            Vector3S pos = p.Pos;
             try
             {
                 switch (args.Length)

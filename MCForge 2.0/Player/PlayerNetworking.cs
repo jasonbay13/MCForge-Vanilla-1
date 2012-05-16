@@ -210,7 +210,7 @@ namespace MCForge.Entity {
                 short y = (short)((1 + Level.SpawnPos.y) * 32);
                 short z = (short)((0.5 + Level.SpawnPos.z) * 32);
 
-                Pos = new Vector3(x, z, y);
+                Pos = new Vector3S(x, z, y);
                 Rot = Level.SpawnRot;
                 oldPos = Pos;
                 oldRot = Rot;
@@ -246,7 +246,7 @@ namespace MCForge.Entity {
         private void HandleBlockchange(ushort x, ushort y, ushort z, byte action, byte newType, bool fake) {
 
 
-            LastClick = new Vector3(x, y, z);
+            LastClick = new Vector3S(x, y, z);
 
             if (newType > 49 || (newType == 7 && !IsAdmin)) {
                 Kick("HACKED CLIENT!");
@@ -315,7 +315,7 @@ namespace MCForge.Entity {
             ushort z = packet.NTHO(message, 5);
             byte rotx = message[7];
             byte roty = message[8];
-            Vector3 fromPosition = Pos;
+            Vector3S fromPosition = Pos;
             Pos.x = (short)x;
             Pos.y = (short)y;
             Pos.z = (short)z;
@@ -817,7 +817,7 @@ namespace MCForge.Entity {
         /// </summary>
         /// <param name="_pos"></param>Vector3 coordinate to send to.
         /// <param name="_rot"></param>Rot to send to.
-        public void SendToPos(Vector3 _pos, byte[] _rot) {
+        public void SendToPos(Vector3S _pos, byte[] _rot) {
             oldPos = Pos; oldRot = Rot;
             _pos.x = (_pos.x < 0) ? (short)32 : (_pos.x > Level.Size.x * 32) ? (short)(Level.Size.x * 32 - 32) : (_pos.x > 32767) ? (short)32730 : _pos.x;
             _pos.z = (_pos.z < 0) ? (short)32 : (_pos.z > Level.Size.z * 32) ? (short)(Level.Size.z * 32 - 32) : (_pos.z > 32767) ? (short)32730 : _pos.z;
@@ -842,8 +842,8 @@ namespace MCForge.Entity {
         internal void UpdatePosition(bool ForceTp) {
             byte changed = 0;   //Denotes what has changed (x,y,z, rotation-x, rotation-y)
 
-            Vector3 tempOldPos = oldPos;
-            Vector3 tempPos = Pos;
+            Vector3S tempOldPos = oldPos;
+            Vector3S tempPos = Pos;
             byte[] tempRot = Rot;
             byte[] tempOldRot = oldRot;
 

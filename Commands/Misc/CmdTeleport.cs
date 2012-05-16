@@ -39,7 +39,7 @@ namespace CommandDll
             }
             else if (args.Length == 0)
             {
-                Vector3 meep = new Vector3((short)(0.5 + p.Level.SpawnPos.x * 32), (short)(0.5 + p.Level.SpawnPos.z * 32), (short)(1 + p.Level.SpawnPos.y * 32));
+                Vector3S meep = new Vector3S((short)(0.5 + p.Level.SpawnPos.x * 32), (short)(0.5 + p.Level.SpawnPos.z * 32), (short)(1 + p.Level.SpawnPos.y * 32));
                 p.SendToPos(meep, p.Level.SpawnRot);
             }
             else if (args.Length == 1)

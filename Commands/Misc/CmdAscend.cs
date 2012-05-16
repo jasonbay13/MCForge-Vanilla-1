@@ -17,6 +17,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -36,7 +37,7 @@ namespace CommandDll
             bool tpd = false;
             while (y < top) { y++;
                 if (p.Level.GetBlock(x, z, y) == Block.BlockList.AIR && p.Level.GetBlock(x, z, (ushort)(y + 1)) == Block.BlockList.AIR && !blocks.Contains(p.Level.GetBlock(x, z, (ushort)(y - 1)))) {
-                    try { p.SendToPos(new Vector3((ushort)(p.Pos.x), (ushort)(p.Pos.z), (ushort)((y + 1) * 32)), p.Rot); }
+                    try { p.SendToPos(new Vector3S((ushort)(p.Pos.x), (ushort)(p.Pos.z), (ushort)((y + 1) * 32)), p.Rot); }
                     catch { p.SendMessage("An error has occured while trying to ascend!"); return; }
                     p.SendMessage("You have ascended!"); tpd = true;
                     break;

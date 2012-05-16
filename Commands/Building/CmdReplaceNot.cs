@@ -19,6 +19,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
+using MCForge.Utils;
 
 namespace CommandDll {
     public class CmdReplaceNot : ICommand {
@@ -55,7 +56,7 @@ namespace CommandDll {
         public void CatchBlock(Player sender, BlockChangeEventArgs args) {
 
             CatchPos cpos = (CatchPos)sender.GetDatapass("CmdReplaceNot_cpos");
-            cpos.pos = new Vector3(args.X, args.Z, args.Y);
+            cpos.pos = new Vector3S(args.X, args.Z, args.Y);
             args.Unregister();
             sender.SetDatapass("CmdReplaceNot_cpos", cpos);
             sender.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock2);
@@ -68,7 +69,7 @@ namespace CommandDll {
             for (ushort xx = Math.Min((ushort)(FirstBlock.pos.x), args.X); xx <= Math.Max((ushort)(FirstBlock.pos.x), args.X); ++xx) {
                 for (ushort zz = Math.Min((ushort)(FirstBlock.pos.z), args.Z); zz <= Math.Max((ushort)(FirstBlock.pos.z), args.Z); ++zz) {
                     for (ushort yy = Math.Min((ushort)(FirstBlock.pos.y), args.Y); yy <= Math.Max((ushort)(FirstBlock.pos.y), args.Y); ++yy) {
-                        Vector3 loop = new Vector3(xx, zz, yy);
+                        Vector3S loop = new Vector3S(xx, zz, yy);
                         if (sender.Level.GetBlock(loop) != FirstBlock.type) {
                             BufferAdd(buffer, loop);
                         }
@@ -93,7 +94,7 @@ namespace CommandDll {
             string[] CommandStrings = new string[2] { "replacenot", "rn" };
             Command.AddReference(this, CommandStrings);
         }
-        void BufferAdd(List<Pos> list, Vector3 type) {
+        void BufferAdd(List<Pos> list, Vector3S type) {
             Pos pos;
             pos.pos = type;
             list.Add(pos);
@@ -101,10 +102,10 @@ namespace CommandDll {
         private struct CatchPos {
             public byte type;
             public byte type2;
-            public Vector3 pos;
+            public Vector3S pos;
         }
         struct Pos {
-            public Vector3 pos;
+            public Vector3S pos;
         }
     }
 }

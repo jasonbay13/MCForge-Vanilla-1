@@ -215,7 +215,7 @@ namespace MCForge.Core {
 
             Mainlevel = Level.LoadLevel(ServerSettings.GetSetting("Main-Level"));
             if (Mainlevel == null)
-                Mainlevel = Level.CreateLevel(new Vector3(256, 256, 64), Level.LevelTypes.Hell);
+                Mainlevel = Level.CreateLevel(new Vector3S(256, 256, 64), Level.LevelTypes.Hell);
 
             Logger.Log("Loading Bans", LogType.Debug);
             Logger.Log("IPBANS", LogType.Debug);

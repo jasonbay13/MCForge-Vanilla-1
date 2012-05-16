@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Utils;
 
 namespace MCForge.API.Events {
     /// <summary>
@@ -19,13 +20,13 @@ namespace MCForge.API.Events {
         /// Creates a new instance
         /// </summary>
         /// <param name="fromPosition">The position where the move started</param>
-        public MoveEventArgs(Vector3 fromPosition) {
+        public MoveEventArgs(Vector3S fromPosition) {
             this.FromPosition = fromPosition;
         }
         /// <summary>
         /// The position where the move started
         /// </summary>
-        public Vector3 FromPosition { get; private set; }
+        public Vector3S FromPosition { get; private set; }
         private bool canceled = false;
         /// <summary>
         /// Whether or not the handling should be canceled

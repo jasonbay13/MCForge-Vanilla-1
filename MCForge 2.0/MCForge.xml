@@ -585,6 +585,53 @@
             Description of Database.
             </summary>
         </member>
+        <member name="M:MCForge.SQL.Database.QueueCommand(System.String)">
+            <summary>
+            Add a sql command to the queue
+            </summary>
+            <param name="cmd">The command to add</param>
+        </member>
+        <member name="M:MCForge.SQL.Database.QueueCommands(System.String[])">
+            <summary>
+            Add multiple commands to the queue
+            </summary>
+            <param name="cmds">The array of commands to add</param>
+        </member>
+        <member name="M:MCForge.SQL.Database.Flush">
+            <summary>
+            Flush all the commands
+            This will execute all the commands in the queue and remove them
+            </summary>
+        </member>
+        <member name="M:MCForge.SQL.Database.Dispose">
+            <summary>
+            Close the SQL connection and dispose resources
+            THIS SHOULD ONLY BE CALLED ONCE
+            </summary>
+        </member>
+        <member name="M:MCForge.SQL.Database.executeQuery(System.String)">
+            <summary>
+            Execute a command to the sql server
+            This wont return any data
+            If the server is set to queue all commands, then the commands will be added to queue
+            </summary>
+            <param name="queryString">The command to execute</param>
+        </member>
+        <member name="M:MCForge.SQL.Database.executeQuery(System.String[])">
+            <summary>
+            Execute multiple commands to the sql server
+            This wont return any data
+            If the server is set to queue all commands, then the commands will be added to queue
+            </summary>
+            <param name="commands">The commands to execute</param>
+        </member>
+        <member name="M:MCForge.SQL.Database.fillData(System.String)">
+            <summary>
+            Execute a command to the sql server and return a datatable of the result
+            </summary>
+            <param name="queryString">The command to execute</param>
+            <returns>The datatable</returns>
+        </member>
         <member name="M:MCForge.Interface.LoadAllDlls.LoadDLL(System.String,System.String[])">
             <summary>
             Load a DLL
@@ -733,6 +780,21 @@
             </summary>
             <param name="pdb">The comparing PDB</param>
             <returns>returns a comparison of the usernames</returns>
+        </member>
+        <member name="M:MCForge.Robot.Bot.#ctor(System.String,MCForge.Utils.Vector3S,System.Byte[],MCForge.World.Level,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            A robot (entity) that appears in the world.
+            </summary>
+        </member>
+        <member name="M:MCForge.Robot.Bot.HandleBots">
+            <summary>
+            Handles bot AI
+            </summary>
+        </member>
+        <member name="P:MCForge.Robot.Bot.Player">
+            <summary>
+            Player which is assigned to the bot
+            </summary>
         </member>
         <member name="T:MCForge.Properties.Resources">
             <summary>
@@ -974,7 +1036,7 @@
             PlayerMoveEventArgs
             </summary>
         </member>
-        <member name="M:MCForge.API.Events.MoveEventArgs.#ctor(MCForge.Core.Vector3)">
+        <member name="M:MCForge.API.Events.MoveEventArgs.#ctor(MCForge.Utils.Vector3S)">
             <summary>
             Creates a new instance
             </summary>
@@ -1029,6 +1091,48 @@
             Gets the argument that was used in the command.
             </summary>
         </member>
+        <member name="M:MCForge.World.WorldComponent.#ctor(MCForge.World.BlockComponent[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:MCForge.World.WorldComponent"/> class.
+            </summary>
+            <param name="xyz">The pieces of the component.</param>
+        </member>
+        <member name="M:MCForge.World.WorldComponent.DrawOnLevel(MCForge.World.Level,MCForge.Utils.Vector3S,System.Byte)">
+            <summary>
+            Draws the on level.
+            </summary>
+            <param name="mLevel">The level to draw on.</param>
+            <param name="startPos">The start pos.</param>
+            <param name="blockOverlay">A block to set the component as. If it is not already set</param>
+            <remarks>if the block in the component is set to 255 a block overlay will be used automaticly, no block change will occur if the block is at 254</remarks>
+        </member>
+        <member name="F:MCForge.World.WorldComponent.LetterA">
+            <summary>
+            A static component for the letter 'A' (capitolized)
+            </summary>
+        </member>
+        <member name="T:MCForge.World.BlockComponent">
+            <summary>
+            A struct containting a Block and position
+            </summary>
+        </member>
+        <member name="F:MCForge.World.BlockComponent.Block">
+            <summary>
+            The type of block
+            </summary>
+        </member>
+        <member name="F:MCForge.World.BlockComponent.Pos">
+            <summary>
+            The position
+            </summary>
+        </member>
+        <member name="M:MCForge.World.BlockComponent.#ctor(System.Byte,MCForge.Utils.Vector3S)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MCForge.World.BlockComponent"/> struct.
+            </summary>
+            <param name="block">The block.</param>
+            <param name="mVec">The position.</param>
+        </member>
         <member name="T:MCForge.Entity.Player">
             <summary>
             The player class, this contains all player information.
@@ -1066,7 +1170,7 @@
             </summary>
             <param name="message">The message to send</param>
         </member>
-        <member name="M:MCForge.Entity.Player.SendToPos(MCForge.Core.Vector3,System.Byte[])">
+        <member name="M:MCForge.Entity.Player.SendToPos(MCForge.Utils.Vector3S,System.Byte[])">
             <summary>
             Sends the specified player to the specified coordinates.
             </summary>
@@ -1202,6 +1306,13 @@
             <param name="z"></param>
             <param name="y"></param>
             <param name="type"></param>
+        </member>
+        <member name="M:MCForge.Entity.Player.Rainbow(System.String)">
+            <summary>
+            Rainbows some text
+            </summary>
+            <param name="strin">The string input</param>
+            <returns>Outputs some colorful RAIIIIIINBBBBBBOWWWWWWW text</returns>
         </member>
         <member name="M:MCForge.Entity.Player.ValidName(System.String)">
             <summary>
@@ -1960,7 +2071,7 @@
             Data to store with in the level
             </summary>
         </member>
-        <member name="M:MCForge.World.Level.CreateLevel(MCForge.Core.Vector3,MCForge.World.Level.LevelTypes,System.String)">
+        <member name="M:MCForge.World.Level.CreateLevel(MCForge.Utils.Vector3S,MCForge.World.Level.LevelTypes,System.String)">
             <summary>
             Create a level with a specified type and a specified size
             </summary>
@@ -2006,7 +2117,52 @@
             <param name="block">Block to set</param>
             <param name="p">A player who doesn't need the update.</param>
         </member>
-        <member name="M:MCForge.World.Level.GetBlock(MCForge.Core.Vector3)">
+        <member name="M:MCForge.World.Level.BlockChange(MCForge.Utils.Vector3D,System.Byte,MCForge.Entity.Player)">
+            <summary>
+            Causes a block change for the level
+            </summary>
+            <param name="vector">Position of the block</param>
+            <param name="block">Block to set</param>
+            <param name="p">A player who doesn't need the update.</param>
+        </member>
+        <member name="M:MCForge.World.Level.BlockChange(MCForge.Utils.Vector3S,System.Byte,MCForge.Entity.Player)">
+            <summary>
+            Causes a block change for the level
+            </summary>
+            <param name="vector">Position of the block</param>
+            <param name="block">Block to set</param>
+            <param name="p">A player who doesn't need the update.</param>
+        </member>
+        <member name="M:MCForge.World.Level.IsInBounds(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Determines whether the position is in bounds of the level.
+            </summary>
+            <param name="x">The x pos.</param>
+            <param name="z">The z pos.</param>
+            <param name="y">The y pos.</param>
+            <returns>
+              <c>true</c> if [is in bounds] [the specified x]; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:MCForge.World.Level.IsInBounds(MCForge.Utils.Vector3S)">
+            <summary>
+            Determines whether the specified vector is in bounds of the level.
+            </summary>
+            <param name="vector">The vector.</param>
+            <returns>
+              <c>true</c> if [is in bounds] [the specified vector]; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:MCForge.World.Level.IsInBounds(MCForge.Utils.Vector3D)">
+            <summary>
+            Determines whether the specified vector is in bounds of the level.
+            </summary>
+            <param name="vector">The vector.</param>
+            <returns>
+              <c>true</c> if [is in bounds] [the specified vector]; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:MCForge.World.Level.GetBlock(MCForge.Utils.Vector3S)">
             <summary>
             get the block (byte) at an xzy pos
             </summary>
@@ -2139,21 +2295,6 @@
         <member name="F:MCForge.World.Level.LevelTypes.Hell">
             <summary>
             Inspired from the Nether
-            </summary>
-        </member>
-        <member name="M:MCForge.Robot.Bot.#ctor(System.String,MCForge.Core.Vector3,System.Byte[],MCForge.World.Level,System.Boolean,System.Boolean,System.Boolean)">
-            <summary>
-            A robot (entity) that appears in the world.
-            </summary>
-        </member>
-        <member name="M:MCForge.Robot.Bot.HandleBots">
-            <summary>
-            Handles bot AI
-            </summary>
-        </member>
-        <member name="P:MCForge.Robot.Bot.Player">
-            <summary>
-            Player which is assigned to the bot
             </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "F:MCForge.Groups.CommandPermissionOverrides.overrides" -->
@@ -2357,7 +2498,7 @@
             Transforms the 2D height map into 3D
             </summary>
         </member>
-        <member name="M:MCForge.World.Generator.LevelGenerator.GenerateTree(MCForge.World.Generator.LevelGenerator.TreeType,MCForge.Core.Vector3)">
+        <member name="M:MCForge.World.Generator.LevelGenerator.GenerateTree(MCForge.World.Generator.LevelGenerator.TreeType,MCForge.Utils.Vector3S)">
             <summary>
             Generate a tree at any location
             </summary>
@@ -2369,7 +2510,7 @@
             Sets the position of the spawn point.
             </summary>
         </member>
-        <member name="M:MCForge.World.Generator.LevelGenerator.SetPosition(MCForge.Core.Vector3,MCForge.Core.Vector2)">
+        <member name="M:MCForge.World.Generator.LevelGenerator.SetPosition(MCForge.Utils.Vector3S,MCForge.Utils.Vector2S)">
             <summary>
             Sets the position of the spawn point.
             </summary>
@@ -3122,6 +3263,158 @@
             <summary>
             PlayerBlockChangeEventArgs
             </summary>
+        </member>
+        <member name="T:MCForge.Utils.MathUtils">
+            <summary>
+            A class full of static methods to help assist common 3D and 2D math algorithms
+            </summary>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.AbsVector(MCForge.Utils.Vector3S)">
+            <summary>
+            Gets a vector where every indices has been Math.Absoluted.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A absoluted Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.AbsVector(MCForge.Utils.Vector3D)">
+            <summary>
+            Gets a vector where every indices has been Math.Absoluted.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A absoluted Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.AbsVector(MCForge.Utils.Vector2S)">
+            <summary>
+            Gets a vector where every indices has been Math.Absoluted.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A absoluted Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.AbsVector(MCForge.Utils.Vector2D)">
+            <summary>
+            Gets a vector where every indices has been Math.Absoluted.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A absoluted Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.SinVector(MCForge.Utils.Vector2S)">
+            <summary>
+            Gets a vector where every indices has been Math.Sined.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A sined Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.SinVector(MCForge.Utils.Vector2D)">
+            <summary>
+            Gets a vector where every indices has been Math.Sined.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A sined Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.SinVector(MCForge.Utils.Vector3D)">
+            <summary>
+            Gets a vector where every indices has been Math.Sined.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A sined Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.SinVector(MCForge.Utils.Vector3S)">
+            <summary>
+            Gets a vector where every indices has been Math.Sined.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A sined Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.CosVector(MCForge.Utils.Vector2S)">
+            <summary>
+            Gets a vector where every indices has been Math.Cosined.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A cosined Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.CosVector(MCForge.Utils.Vector2D)">
+            <summary>
+            Gets a vector where every indices has been Math.Cosined.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A cosined Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.CosVector(MCForge.Utils.Vector3D)">
+            <summary>
+            Gets a vector where every indices has been Math.Cosined.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A cosined Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.CosVector(MCForge.Utils.Vector3S)">
+            <summary>
+            Gets a vector where every indices has been Math.Cosined.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A cosined Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.TanVector(MCForge.Utils.Vector2S)">
+            <summary>
+            Gets a vector where every indices has been Math.Tangented.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A tangified Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.TanVector(MCForge.Utils.Vector2D)">
+            <summary>
+            Gets a vector where every indices has been Math.Tangented.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A tangified Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.TanVector(MCForge.Utils.Vector3D)">
+            <summary>
+            Gets a vector where every indices has been Math.Tangented.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A tangified Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.TanVector(MCForge.Utils.Vector3S)">
+            <summary>
+            Gets a vector where every indices has been Math.Tangented.
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A tangified Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.SignVector(MCForge.Utils.Vector2S)">
+            <summary>
+            Gets a vector where every indices has been signed
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A signed Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.SignVector(MCForge.Utils.Vector2D)">
+            <summary>
+            Gets a vector where every indices has been signed
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A signed Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.SignVector(MCForge.Utils.Vector3D)">
+            <summary>
+            Gets a vector where every indices has been signed
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A signed Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.MathUtils.SignVector(MCForge.Utils.Vector3S)">
+            <summary>
+            Gets a vector where every indices has been signed
+            </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A signed Vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.Vector3S.PathTo(MCForge.Utils.Vector3S)">
+            <summary>
+            Creates a path to another vector
+            </summary>
+            <param name="vectorTo">The vector to.</param>
+            <returns>An enumeration of a path from a vector to a vector</returns>
         </member>
     </members>
 </doc>

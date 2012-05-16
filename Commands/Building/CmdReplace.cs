@@ -19,6 +19,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
+using MCForge.Utils;
 
 namespace CommandDll {
     public class CmdReplace : ICommand {
@@ -53,7 +54,7 @@ namespace CommandDll {
         }
         public void CatchBlock(Player sender, BlockChangeEventArgs args) {
             CatchPos cpos = (CatchPos)sender.GetDatapass("CmdReplace_cpos"); ;
-            cpos.pos = new Vector3(args.X, args.Y, args.Z);
+            cpos.pos = new Vector3S(args.X, args.Y, args.Z);
             args.Unregister();
             args.Cancel();
             sender.SetDatapass("CmdReplace_cpos", cpos);
@@ -76,7 +77,7 @@ namespace CommandDll {
             for (ushort xx = Math.Min((ushort)(FirstBlock.pos.x), x); xx <= Math.Max((ushort)(FirstBlock.pos.x), x); ++xx) {
                 for (ushort zz = Math.Min((ushort)(FirstBlock.pos.z), z); zz <= Math.Max((ushort)(FirstBlock.pos.z), z); ++zz) {
                     for (ushort yy = Math.Min((ushort)(FirstBlock.pos.y), y); yy <= Math.Max((ushort)(FirstBlock.pos.y), y); ++yy) {
-                        Vector3 loop = new Vector3(xx, zz, yy);
+                        Vector3S loop = new Vector3S(xx, zz, yy);
                         if (sender.Level.GetBlock(loop) == NewType) {
                             BufferAdd(buffer, loop);
                         }
@@ -101,7 +102,7 @@ namespace CommandDll {
             string[] CommandStrings = new string[2] { "replace", "r" };
             Command.AddReference(this, CommandStrings);
         }
-        void BufferAdd(List<Pos> list, Vector3 type) {
+        void BufferAdd(List<Pos> list, Vector3S type) {
             Pos pos;
             pos.pos = type;
             list.Add(pos);
@@ -109,10 +110,10 @@ namespace CommandDll {
         private struct CatchPos {
             public byte type;
             public byte type2;
-            public Vector3 pos;
+            public Vector3S pos;
         }
         struct Pos {
-            public Vector3 pos;
+            public Vector3S pos;
         }
     }
 }

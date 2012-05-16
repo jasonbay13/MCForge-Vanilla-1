@@ -18,7 +18,6 @@ using System.Linq;
 using System.Threading;
 using MCForge.Utils.Settings;
 using MCForge.Utils;
-using MCForge.Utils;
 using MCForge.Interface;
 using System.Drawing;
 

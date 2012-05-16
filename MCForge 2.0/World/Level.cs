@@ -71,11 +71,11 @@ namespace MCForge.World {
         /// <summary>
         /// This is the size of the level
         /// </summary>
-        public Vector3 Size;
+        public Vector3S Size;
         /// <summary>
         /// Levels current Spawn position
         /// </summary>
-        public Vector3 SpawnPos;
+        public Vector3S SpawnPos;
         /// <summary>
         /// Levels current Spawn ROT
         /// </summary>
@@ -89,14 +89,14 @@ namespace MCForge.World {
         /// <summary>
         /// Data to store with in the level
         /// </summary>
-        public Dictionary<string, string> ExtraData;
+        public Dictionary<object, object> ExtraData;
 
-        private Level(Vector3 size) {
+        private Level(Vector3S size) {
             Size = size;
             //data = new byte[Size.x, Size.z, Size.y];
             Data = new byte[TotalBlocks];
 
-            ExtraData = new Dictionary<string, string>();
+            ExtraData = new Dictionary<object, object>();
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace MCForge.World {
         /// <returns>
         /// returns the level that was created
         /// </returns>
-        public static Level CreateLevel(Vector3 size, LevelTypes type, string name = "main") {
+        public static Level CreateLevel(Vector3S size, LevelTypes type, string name = "main") {
             Level newlevel = new Level(size) {
                 Name = name
             };
@@ -141,7 +141,7 @@ namespace MCForge.World {
                     for (int y = 0; y <= middle; ++y)
                         Data[x + z * Size.x + y * Size.x * Size.z] = y < middle ? (byte)3 : (byte)2;
 
-            SpawnPos = new Vector3((short)(Size.x / 2), (short)(Size.z / 2), (short)(Size.y));
+            SpawnPos = new Vector3S((short)(Size.x / 2), (short)(Size.z / 2), (short)(Size.y));
             SpawnRot = new byte[2] { 0, 0 };
         }
 
@@ -155,7 +155,7 @@ namespace MCForge.World {
             });
 
             //TODO: ^ make faster
-            SpawnPos = new Vector3((short)(Size.x / 2), (short)(Size.z / 2), (short)(Size.y));
+            SpawnPos = new Vector3S((short)(Size.x / 2), (short)(Size.z / 2), (short)(Size.y));
             SpawnRot = new byte[2] { 0, 0 };
         }
 
@@ -165,12 +165,11 @@ namespace MCForge.World {
         /// <returns>The loaded level</returns>
         public static Level LoadLevel(string levelName) {
             string Name = "levels\\" + levelName + ".lvl";
-            Level finalLevel = new Level(new Vector3(32, 32, 32));
+            Level finalLevel = new Level(new Vector3S(32, 32, 32));
             finalLevel.Name = levelName;
             try {
                 BinaryReader Binary = null;
-                try
-                {
+                try {
                     Binary = new BinaryReader(File.Open(Name, FileMode.Open));
                 }
                 catch { return null; }
@@ -204,9 +203,9 @@ namespace MCForge.World {
                                 rot[0] = header[12]; //SpawnHeading
                                 rot[1] = header[13]; //SpawnYaw
 
-                                finalLevel.Size = new Vector3((short)vars[0], (short)vars[1], (short)vars[2]);
+                                finalLevel.Size = new Vector3S((short)vars[0], (short)vars[1], (short)vars[2]);
 
-                                finalLevel.SpawnPos = new Vector3((short)vars[3], (short)vars[5], (short)vars[4]);
+                                finalLevel.SpawnPos = new Vector3S((short)vars[3], (short)vars[5], (short)vars[4]);
 
                                 finalLevel.SpawnRot = new byte[2] { rot[0], rot[1] };
 
@@ -232,13 +231,13 @@ namespace MCForge.World {
                         int x = Convert.ToInt32(s.Split('@')[0]);
                         int y = Convert.ToInt32(s.Split('@')[1]);
                         int z = Convert.ToInt32(s.Split('@')[2]);
-                        finalLevel.Size = new Vector3((short)x, (short)z, (short)y);
+                        finalLevel.Size = new Vector3S((short)x, (short)z, (short)y);
 
                         s = Binary.ReadString();
                         x = Convert.ToInt32(s.Split('!')[0]);
                         y = Convert.ToInt32(s.Split('!')[1]);
                         z = Convert.ToInt32(s.Split('!')[2]);
-                        finalLevel.SpawnPos = new Vector3((short)x, (short)z, (short)y);
+                        finalLevel.SpawnPos = new Vector3S((short)x, (short)z, (short)y);
 
                         s = Binary.ReadString();
                         int heading = Convert.ToInt32(s.Split('~')[0]);
@@ -295,8 +294,8 @@ namespace MCForge.World {
                 Binary.Write(SpawnRot[0] + "~" + SpawnRot[1]); //Unused
                 Binary.Write(ExtraData.Count);
                 foreach (var pair in ExtraData) {
-                    Binary.Write(pair.Key);
-                    Binary.Write(pair.Value);
+                    Binary.Write(pair.Key.ToString());
+                    Binary.Write(pair.Value.ToString());
                 }
                 Binary.Write(_TotalBlocks);
                 Binary.Write(Compress(Data).Length);
@@ -351,14 +350,69 @@ namespace MCForge.World {
             if (p == null)
                 Player.GlobalBlockchange(this, x, z, y, block);
             else p.SendBlockchangeToOthers(this, x, z, y, block);
-            
-            
+
+
 
             //TODO Special stuff for block changing
         }
 
+        /// <summary>
+        /// Causes a block change for the level
+        /// </summary>
+        /// <param name="vector">Position of the block</param>
+        /// <param name="block">Block to set</param>
+        /// <param name="p">A player who doesn't need the update.</param>
+        public void BlockChange(Vector3D vector, byte block, Player p = null) {
+            BlockChange((ushort)vector.x, (ushort)vector.z, (ushort)vector.y, block, p);
+        }
+
+        /// <summary>
+        /// Causes a block change for the level
+        /// </summary>
+        /// <param name="vector">Position of the block</param>
+        /// <param name="block">Block to set</param>
+        /// <param name="p">A player who doesn't need the update.</param>
+        public void BlockChange(Vector3S vector, byte block, Player p = null) {
+            BlockChange((ushort)vector.x, (ushort)vector.z, (ushort)vector.y, block, p);
+        }
+
+        /// <summary>
+        /// Determines whether the position is in bounds of the level.
+        /// </summary>
+        /// <param name="x">The x pos.</param>
+        /// <param name="z">The z pos.</param>
+        /// <param name="y">The y pos.</param>
+        /// <returns>
+        ///   <c>true</c> if [is in bounds] [the specified x]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsInBounds(int x, int z, int y) {
+            return (x > 0 && x < Size.x && y > 0 && y < Size.y && z > 0 && z < Size.z);
+        }
+
+
+        /// <summary>
+        /// Determines whether the specified vector is in bounds of the level.
+        /// </summary>
+        /// <param name="vector">The vector.</param>
+        /// <returns>
+        ///   <c>true</c> if [is in bounds] [the specified vector]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsInBounds(Vector3S vector) {
+            return IsInBounds(vector.x, vector.z, vector.y);
+        }
+        
+        /// <summary>
+        /// Determines whether the specified vector is in bounds of the level.
+        /// </summary>
+        /// <param name="vector">The vector.</param>
+        /// <returns>
+        ///   <c>true</c> if [is in bounds] [the specified vector]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsInBounds(Vector3D vector) {
+            return IsInBounds((int)vector.x, (int)vector.z, (int)vector.y);
+        }
         #region SetBlock And Overloads
-        internal void SetBlock(Vector3 pos, byte block) {
+        internal void SetBlock(Vector3S pos, byte block) {
             SetBlock(pos.x, pos.z, pos.y, block);
         }
         internal void SetBlock(int x, int z, int y, byte block) {
@@ -374,7 +428,7 @@ namespace MCForge.World {
         /// </summary>
         /// <param name="pos">the pos to check and return</param>
         /// <returns>a byte that represents the blocktype at the given location</returns>
-        public byte GetBlock(Vector3 pos) {
+        public byte GetBlock(Vector3S pos) {
             return GetBlock(pos.x, pos.z, pos.y);
         }
         /// <summary>
@@ -440,12 +494,12 @@ namespace MCForge.World {
         /// </summary>
         /// <param name="pos">The int pos to convert</param>
         /// <returns>a 3 dimensional representation of the block position</returns>
-        public Vector3 IntToPos(int pos) {
+        public Vector3S IntToPos(int pos) {
             short y = (short)(pos / Size.x / Size.z); pos -= y * Size.x * Size.z;
             short z = (short)(pos / Size.x); pos -= z * Size.x;
             short x = (short)pos;
 
-            return new Vector3(x, z, y);
+            return new Vector3S(x, z, y);
         }
         /// <summary>
         /// Return the position (int) relative to a given block position (int) given an offset of xzy
@@ -527,7 +581,7 @@ namespace MCForge.World {
                     return e.Name.ToLower() == LevelName.ToLower();
                 });
             }
-            catch (Exception e) { Server.Log(e.Message); }
+            catch (Exception e) { Logger.LogError(e); }
             return null;
         }
 
@@ -545,31 +599,26 @@ namespace MCForge.World {
         /// <summary>
         /// Handles the extra data for the level
         /// </summary>
-        public void HandleMetaData()
-        {
-            if (ExtraData.Count > 0)
-            {
-                try
-                {
-                    foreach (var pair in ExtraData)
-                    {
-                        if (pair.Key.StartsWith("Bot")) //Load bots
+        public void HandleMetaData() {
+            if (ExtraData.Count > 0) {
+                try {
+                    foreach (var pair in ExtraData) {
+                        if (pair.Key.ToString().StartsWith("Bot")) //Load bots
                         {
-                            string[] StringSplit = pair.Value.Split(' ');
-                            if (StringSplit.Length == 9)
-                            {
+                            string[] StringSplit = pair.Value.ToString().Split(' ');
+                            if (StringSplit.Length == 9) {
                                 ushort x = Convert.ToUInt16(StringSplit[4]);
                                 ushort y = Convert.ToUInt16(StringSplit[5]);
                                 ushort z = Convert.ToUInt16(StringSplit[6]);
                                 Bot TemporaryBot = new Bot(StringSplit[0],
-                                    new Vector3( x, z, y ),
+                                    new Vector3S(x, z, y),
                                     new byte[] { Convert.ToByte(StringSplit[7]), Convert.ToByte(StringSplit[8]) }, this,
                                     Convert.ToBoolean(StringSplit[1]), Convert.ToBoolean(StringSplit[2]), Convert.ToBoolean(StringSplit[3]));
                             }
                         }
                     }
                 }
-                catch (Exception e) { Server.Log(e.Message); Server.Log(e.StackTrace); }
+                catch (Exception e) { Logger.LogError(e); }
             }
         }
     }

@@ -68,7 +68,7 @@ namespace MCForge.Utils {
         /// <param name="message">The message to be logged</param>
         /// <param name="logType">The log type</param>
         public static void Log(string message, LogType logType = LogType.Normal) {
-        	Color one = Color.Black;
+        	Color one = Color.White;
         	switch (logType)
         	{
         		case LogType.Critical:
@@ -84,7 +84,7 @@ namespace MCForge.Utils {
         			one = Color.Yellow;
         			break;
         	}
-            Log(message, one, Color.White, logType);
+            Log(message, one, Color.Black, logType);
         }
 
         /// <summary>
@@ -199,8 +199,8 @@ namespace MCForge.Utils {
         public LogEventArgs(string log, LogType logType) {
             Message = log;
             LogType = logType;
-            TextColor = Color.Black;
-            BackgroundColor = Color.White;
+            TextColor = Color.White;
+            BackgroundColor = Color.Black;
         }
 
         /// <summary>

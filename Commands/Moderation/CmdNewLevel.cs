@@ -16,6 +16,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -30,18 +31,18 @@ namespace CommandDll
 
         public void Use(Player p, string[] args) //TODO Make this more customizeable
         {
-            Vector3 size;
+            Vector3S size;
             string type = "";
             switch (args.Length) // initialize depending on arguments given
             {
                 case 1:
-                    size = new Vector3(64, 64, 32);
+                    size = new Vector3S(64, 64, 32);
                     break;
                 case 4:
-                    size = new Vector3(short.Parse(args[1]), short.Parse(args[2]), short.Parse(args[3]));
+                    size = new Vector3S(short.Parse(args[1]), short.Parse(args[2]), short.Parse(args[3]));
                     break;
                 case 5:
-                    size = new Vector3(short.Parse(args[1]), short.Parse(args[2]), short.Parse(args[3]));
+                    size = new Vector3S(short.Parse(args[1]), short.Parse(args[2]), short.Parse(args[3]));
                     type = args[4];
                     break;
                 default: Help(p); return;
