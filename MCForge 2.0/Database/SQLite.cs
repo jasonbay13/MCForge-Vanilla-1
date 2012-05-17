@@ -88,9 +88,13 @@ namespace MCForge.SQL
 		{
 			if (_closed)
 			{
-				conn = new SQLiteConnection(connString);
-				conn.Open();
-				_closed = false;
+                try
+                {
+                    conn = new SQLiteConnection(connString);
+                    conn.Open();
+                    _closed = false;
+                }
+                catch (Exception e) { Logger.Log(e.Message); Logger.Log(e.StackTrace); }
 			}
 		}
 		
