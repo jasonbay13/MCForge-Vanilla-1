@@ -16,6 +16,7 @@ permissions and limitations under the Licenses.
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -40,7 +41,7 @@ namespace CommandDll
                 short x = (short)((0.5 + tempLevel.SpawnPos.x) * 32);
                 short y = (short)((1 + tempLevel.SpawnPos.y) * 32);
                 short z = (short)((0.5 + tempLevel.SpawnPos.z) * 32);
-                p.Pos = new Vector3(x, z, y);
+                p.Pos = new Vector3S(x, z, y);
                 p.Rot = tempLevel.SpawnRot;
                 p.oldPos = p.Pos;
                 p.oldRot = p.Rot;

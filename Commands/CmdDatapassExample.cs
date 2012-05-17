@@ -8,6 +8,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.API;
 using MCForge.API.Events;
+using MCForge.Utils;
 
 namespace CommandDll {
     public class CmdDataPassExample : ICommand {
@@ -38,15 +39,15 @@ namespace CommandDll {
         }
         public void CatchBlock(Player sender, BlockChangeEventArgs args) {
             args.Unregister();
-            Vector3 FirstBlock = new Vector3(args.X, args.Z, args.Y);
+            Vector3S FirstBlock = new Vector3S(args.X, args.Z, args.Y);
             sender.SendMessage("Please place another block...");
             sender.SetDatapass("CmdDatapassExample_FirstBlock", FirstBlock);
             sender.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock2);
         }
         public void CatchBlock2(Player sender, BlockChangeEventArgs args) {
             args.Unregister();
-            Vector3 FirstBlock = (Vector3)sender.GetDatapass("CmdDatapassExample_FirstBlock");
-            Vector3 SecondBlock = new Vector3(args.X, args.Z, args.Y);
+            Vector3S FirstBlock = (Vector3S)sender.GetDatapass("CmdDatapassExample_FirstBlock");
+            Vector3S SecondBlock = new Vector3S(args.X, args.Z, args.Y);
             sender.SendMessage("This is where we would initiate a Cuboid!");
         }
 

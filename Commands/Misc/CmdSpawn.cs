@@ -16,6 +16,7 @@ using System.Linq;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 
 namespace CommandDll
 {
@@ -35,7 +36,7 @@ namespace CommandDll
                 Help(p);
                 return;
             }
-            Vector3 meep = new Vector3((short)(p.Level.SpawnPos.x * 32), (short)(p.Level.SpawnPos.z * 32 + 51), (short)(p.Level.SpawnPos.y * 32));
+            Vector3S meep = new Vector3S((short)(p.Level.SpawnPos.x * 32), (short)(p.Level.SpawnPos.z * 32 + 51), (short)(p.Level.SpawnPos.y * 32));
             p.SendToPos(meep, p.Level.SpawnRot);
         }
         public void Help(Player p)

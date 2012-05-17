@@ -204,7 +204,7 @@ namespace MCForge.Core
             ircControllers = null;
             List<string> temp = new List<string>();
             System.IO.Directory.CreateDirectory("files");
-            if (!File.Exists("text/irccontrollers.txt")) { FileStream myStream = File.Create("text/irccontrollers.txt", 1, FileOptions.Asynchronous); myStream.Flush(); myStream.Close(); myStream.Dispose(); }
+            if (!File.Exists("text/irccontrollers.txt")) { File.Create("text/irccontrollers.txt", 1, FileOptions.Asynchronous).Close(); }
             string line;
             if (new FileInfo("text/irccontrollers.txt").Length != 0)
             {

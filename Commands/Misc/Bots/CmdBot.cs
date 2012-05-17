@@ -83,9 +83,9 @@ namespace CommandDll
                 List<string> tempArray = new List<string>();
                 foreach (var b in p.Level.ExtraData)
                 {
-                    if (b.Value.ToLower().Split(' ')[0].Equals(margs.ToLower()))
+                    if (b.Value.ToString().ToLower().Split(' ')[0].Equals(margs.ToLower()))
                     {
-                        tempArray.Add(b.Key);
+                        tempArray.Add(b.Key.ToString());
                     }
                 }
                 foreach (string s in tempArray)
@@ -196,9 +196,9 @@ namespace CommandDll
                 List<string> tempArray = new List<string>();
                 foreach (var b in p.Level.ExtraData)
                 {
-                    if (b.Value.ToLower().Split(' ')[0].Equals(margs.ToLower()))
+                    if (b.Value.ToString().ToLower().Split(' ')[0].Equals(margs.ToLower()))
                     {
-                        tempArray.Add(b.Key);
+                        tempArray.Add(b.Key.ToString());
                     }
                 }
                 foreach (string s in tempArray)

@@ -19,6 +19,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
 using MCForge.API.Events;
+using MCForge.Utils;
 
 namespace CommandDll {
     public class CmdCuboid : ICommand {
@@ -114,7 +115,7 @@ namespace CommandDll {
         }
         public void CatchBlock(Player p, BlockChangeEventArgs args) {
             CatchPos cpos = new CatchPos();
-            cpos.pos = new Vector3(args.X, args.Z, args.Y);
+            cpos.pos = new Vector3S(args.X, args.Z, args.Y);
             cpos.block = args.Holding;
             args.Cancel();
             p.OnPlayerBlockChange.Normal -= new Event<Player, BlockChangeEventArgs>.EventHandler(CatchBlock);
@@ -139,7 +140,7 @@ namespace CommandDll {
                     for (xx = Math.Min((ushort)(cpos.pos.x), x); xx <= Math.Max((ushort)(cpos.pos.x), x); ++xx) {
                         for (zz = Math.Min((ushort)(cpos.pos.z), z); zz <= Math.Max((ushort)(cpos.pos.z), z); ++zz) {
                             for (yy = Math.Min((ushort)(cpos.pos.y), y); yy <= Math.Max((ushort)(cpos.pos.y), y); ++yy) {
-                                Vector3 loop = new Vector3(xx, zz, yy);
+                                Vector3S loop = new Vector3S(xx, zz, yy);
                                 if (p.Level.GetBlock(loop) != NewType) {
                                     BufferAdd(buffer, xx, zz, yy);
                                 }
@@ -359,9 +360,9 @@ namespace CommandDll {
             return SolidType.solid;
         }
         protected void BufferAdd(List<Pos> list, ushort x, ushort z, ushort y) {
-            BufferAdd(list, new Vector3(x, z, y));
+            BufferAdd(list, new Vector3S(x, z, y));
         }
-        protected void BufferAdd(List<Pos> list, Vector3 type) {
+        protected void BufferAdd(List<Pos> list, Vector3S type) {
             Pos pos;
             pos.pos = type;
             list.Add(pos);
@@ -369,11 +370,11 @@ namespace CommandDll {
         protected struct CatchPos {
             public SolidType cuboidType;
             public byte block;
-            public Vector3 pos;
-            public Vector3 secondPos;
+            public Vector3S pos;
+            public Vector3S secondPos;
         }
         protected struct Pos {
-            public Vector3 pos;
+            public Vector3S pos;
         }
         protected enum SolidType { solid, hollow, walls, holes, wire, random };
     }

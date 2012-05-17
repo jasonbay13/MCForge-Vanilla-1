@@ -142,11 +142,11 @@ namespace MCForge.Entity {
         /// <summary>
         /// The players current position
         /// </summary>
-        public Vector3 Pos;
+        public Vector3S Pos;
         /// <summary>
         /// The players last known position
         /// </summary>
-        public Vector3 oldPos;
+        public Vector3S oldPos;
         /// <summary>
         /// The players current rotation
         /// </summary>
@@ -158,7 +158,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// The players last known click
         /// </summary>
-        public Vector3 LastClick;
+        public Vector3S LastClick;
         /// <summary>
         /// Get or set if the player is hidden from other players
         /// </summary>

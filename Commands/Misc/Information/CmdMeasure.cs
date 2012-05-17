@@ -19,6 +19,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
+using MCForge.Utils;
 
 namespace CommandDll {
     public class CmdMeasure : ICommand {
@@ -63,7 +64,7 @@ namespace CommandDll {
             args.Unregister();
             sender.SendBlockChange(args.X, args.Z, args.Y, sender.Level.GetBlock(args.X, args.Z, args.Y));
             CatchPos cpos = (CatchPos)sender.GetDatapass("CmdMeasure_cpos");
-            cpos.FirstBlock = new Vector3(args.X, args.Z, args.Y);
+            cpos.FirstBlock = new Vector3S(args.X, args.Z, args.Y);
             sender.SetDatapass("CmdMeasure_cpos", cpos);
             sender.OnPlayerBlockChange.Normal += new BlockChangeEvent.EventHandler(CatchBlock2);
             //p.CatchNextBlockchange(new Player.BlockChangeDelegate(CatchBlock2), (object)cpos);
@@ -74,7 +75,7 @@ namespace CommandDll {
             args.Unregister();
             sender.SendBlockChange(args.X, args.Z, args.Y, sender.Level.GetBlock(args.X, args.Z, args.Y));
             CatchPos cpos = (CatchPos)sender.GetDatapass("CmdMeasure_cpos");
-            Vector3 FirstBlock = cpos.FirstBlock;
+            Vector3S FirstBlock = cpos.FirstBlock;
             ushort xx, zz, yy;
             int count = 0;
             for (xx = Math.Min((ushort)(FirstBlock.x), args.X); xx <= Math.Max((ushort)(FirstBlock.x), args.X); ++xx)
@@ -93,7 +94,7 @@ namespace CommandDll {
             p.SendMessage("Shortcut: /ms");
         }
         public struct CatchPos {
-            public Vector3 FirstBlock;
+            public Vector3S FirstBlock;
             public List<byte> ignore;
             public int count;
         }

@@ -31,7 +31,7 @@ namespace CommandDll {
 
         public void Use(Player p, string[] args) {
             //if (p == null) stuff here, not sure if should add yet or not since Console cannot do commands at the moment.
-            Vector3 click = p.LastClick;
+            Vector3S click = p.LastClick;
 
             if (args.Length == 3) {
                 try {

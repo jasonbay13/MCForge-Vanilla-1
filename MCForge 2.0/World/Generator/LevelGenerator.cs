@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge.Core;
+using MCForge.Utils;
 
 namespace MCForge.World.Generator {
 
@@ -331,7 +332,7 @@ namespace MCForge.World.Generator {
         /// </summary>
         /// <param name="type">Type of tree to generate</param>
         /// <param name="pos">Location to generate the tree</param>
-        public void GenerateTree(TreeType type, Vector3 pos) {
+        public void GenerateTree(TreeType type, Vector3S pos) {
             switch (type) {
                 case TreeType.Big:
                 case TreeType.Fat:
@@ -349,7 +350,7 @@ namespace MCForge.World.Generator {
         /// </summary>
         public void SetPosition() {
             //TODO: Estimate the best position to place the player
-            SetPosition(new Vector3(), new Vector2());
+            SetPosition(new Vector3S(), new Vector2S());
         }
 
 
@@ -358,7 +359,7 @@ namespace MCForge.World.Generator {
         /// </summary>
         /// <param name="manualPosition">The position.</param>
         /// <param name="angleRot">The angle rotation.</param>
-        public void SetPosition(Vector3 manualPosition, Vector2 angleRot) {
+        public void SetPosition(Vector3S manualPosition, Vector2S angleRot) {
             Level.SpawnPos = manualPosition;
             Level.SpawnRot = new byte[2] { (byte)angleRot.x, (byte)angleRot.z };
         }

@@ -64,7 +64,7 @@ namespace MCForge.World {
         public abstract byte VisibleBlock { get; }
         public abstract string Name { get; }
         public abstract byte Permission { get; }
-        public virtual void SetBlock(Vector3 pos, Level l) {
+        public virtual void SetBlock(Vector3S pos, Level l) {
             l.SetBlock(pos.x, pos.z, pos.y, VisibleBlock);
         }
         public virtual void SetBlock(int x, int z, int y, Level l) {
