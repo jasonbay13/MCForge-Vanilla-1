@@ -95,7 +95,8 @@ namespace MCForge.Utils {
         /// <param name="vectorTo">The vector to.</param>
         /// <returns>An enumeration of a path from a vector to a vector</returns>
         public IEnumerable<Vector3S> PathTo(Vector3S vectorTo) {
-            Vector3S a = this - vectorTo;
+            Vector3S tempThis = new Vector3S(this);
+            Vector3S a = vectorTo - this;
             Vector3S b = MathUtils.SignVector(a);
             a = MathUtils.AbsVector(a);
             Vector3S c = a * 2;
@@ -114,20 +115,20 @@ namespace MCForge.Utils {
             int right = c.GetDimention(y) - a.GetDimention(x);
             int left = c.GetDimention(z) - a.GetDimention(x);
             for (int j = 0; j < a.GetDimention(x); j++) {
-                yield return this;
+                yield return tempThis;
 
                 if (right > 0) {
-                    SetValueInDimention(z, (short)(b.GetDimention(z) + GetDimention(z)));
+                    tempThis.SetValueInDimention(y, (short)(b.GetDimention(y) + tempThis.GetDimention(y)));
                     right -= c.GetDimention(x);
                 }
 
                 if (left > 0) {
-                    SetValueInDimention(y, (short)(b.GetDimention(y) + GetDimention(y)));
+                    tempThis.SetValueInDimention(z, (short)(b.GetDimention(z) + tempThis.GetDimention(z)));
                     left -= c.GetDimention(x);
                 }
-                right += c.GetDimention(z);
-                left += c.GetDimention(y);
-                SetValueInDimention(x, (short)(b.GetDimention(x) + GetDimention(x)));
+                right += c.GetDimention(y);
+                left += c.GetDimention(z);
+                tempThis.SetValueInDimention(x, (short)(b.GetDimention(x) + tempThis.GetDimention(x)));
             }
             yield return vectorTo;
         }
@@ -143,6 +144,10 @@ namespace MCForge.Utils {
                     for (ushort z = (ushort) Math.Min(this.z, a.z); z < Math.Max(this.z, a.z); z++)
                         yield return new Vector3S(x, z, y);
             
+        }
+
+        public IEnumerable<Vector3S> Layer(Vector3S to) {
+            return null;
         }
 
         public short GetDimention(int dimention) {

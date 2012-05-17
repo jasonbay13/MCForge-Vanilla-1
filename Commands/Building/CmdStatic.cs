@@ -34,7 +34,13 @@ namespace CommandDll.Building {
         }
 
         public byte Permission {
-            get { return (byte)PermissionLevel.Builder; }
+            get {
+#if DEBUG
+                return (byte)PermissionLevel.Guest;
+#else
+                return (byte)PermissionLevel.Builder
+#endif
+            }
         }
 
         public void Use(MCForge.Entity.Player p, string[] args) {
@@ -42,7 +48,7 @@ namespace CommandDll.Building {
             if (args.Length < 1) {
                 if (playerDictionary.ContainsKey(p)) {
                     p.SendMessage("&cStatic Disabled");
-                    p.OnCommandEnd.All -= OnEndCommand;
+                    p.OnCommandEnd.Normal -= OnEndCommand;
                     playerDictionary.Remove(p);
                 }
                 else {
@@ -58,7 +64,7 @@ namespace CommandDll.Building {
                 return;
             }
 
-            p.OnCommandEnd.All += OnEndCommand;
+            p.OnCommandEnd.Normal += OnEndCommand;
             playerDictionary.ChangeOrCreate<Player, ICommand>(p, cmd);
 
             string[] newArgs;

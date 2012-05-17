@@ -49,7 +49,7 @@ namespace MCForge.Core {
         /// <summary>
         /// The server owner.
         /// </summary>
-        public static string owner;        
+        public static string owner;
         /// <summary>
         /// The rank that can destroy griefer_stone without getting kicked
         /// </summary>
@@ -76,11 +76,11 @@ namespace MCForge.Core {
         private static int BotInterval = 10;
         private static int BotIntervalCurrent = 0;
         static bool debug = false;
-        public static bool DebugMode { 
-        	get {
-        		return debug;
-        	}
-        	set { debug = value; }
+        public static bool DebugMode {
+            get {
+                return debug;
+            }
+            set { debug = value; }
         }
         public struct TempBan { public string name; public DateTime allowed; }
         public static List<TempBan> tempbans = new List<TempBan>();
@@ -189,8 +189,8 @@ namespace MCForge.Core {
         public delegate void ForeachBotDelegate(Bot p);
 
         public static void Init() {
-        	Logger.Log("Debug mode started", LogType.Debug);
-        	//TODO Add debug messages
+            Logger.Log("Debug mode started", LogType.Debug);
+            //TODO Add debug messages
             //TODO load the level if it exists
             Block.InIt();
             UpdateTimer = new System.Timers.Timer(100);
@@ -208,7 +208,7 @@ namespace MCForge.Core {
             reload.Initialize();
 
             Groups.PlayerGroup.Load();
-            
+
             Database.init();
 
             CreateCoreFiles();
@@ -226,13 +226,12 @@ namespace MCForge.Core {
             Started = true;
             Logger.Log("[Important]: Server Started.", Color.Black, Color.White);
             IRC = new IRC();
-            try
-            {
+            try {
                 IRC.Start();
             }
             catch { }
         }
-        
+
         static void Update() {
             HeartbeatIntervalCurrent++;
             GroupsaveIntervalCurrent++;
@@ -290,10 +289,8 @@ namespace MCForge.Core {
                     a.Invoke(Players[i]);
             }
         }
-        public static void ForeachBot(ForeachBotDelegate a)
-        {
-            for (int i = 0; i < Bots.Count; i++)
-            {
+        public static void ForeachBot(ForeachBotDelegate a) {
+            for (int i = 0; i < Bots.Count; i++) {
                 if (Bots.Count > i)
                     a.Invoke(Bots[i]);
             }
@@ -324,10 +321,21 @@ namespace MCForge.Core {
         #region Socket Stuff
         private static TcpListener listener;
         private static void StartListening() {
+            if (ServerSettings.GetSettingBoolean("Use-UPnP")) {
+                    if (!UPnP.Discover()) {
+                        Logger.Log("Your router does not support UPnP. You must port forward.", LogType.Error);
+                    }
+                    else {
+
+                        UPnP.ForwardPort(ServerSettings.GetSettingInt("port"), ProtocolType.Tcp, "MCForge Server");
+                        Logger.Log("Port forwarded automatically using UPnP");
+
+                    }
+            }
+            listener = new TcpListener(System.Net.IPAddress.Any, ServerSettings.GetSettingInt("port"));
+            listener.Start();
             while (true) {
                 try {
-                    listener = new TcpListener(System.Net.IPAddress.Any, ServerSettings.GetSettingInt("port"));
-                    listener.Start();
                     IAsyncResult ar = listener.BeginAcceptTcpClient(new AsyncCallback(AcceptCallback), listener);
                     break;
                 }
@@ -389,8 +397,8 @@ namespace MCForge.Core {
         }
 
         public static void OnLog(object sender, LogEventArgs args) {
-        	if (!DebugMode && args.LogType == LogType.Debug)
-        		return;
+            if (!DebugMode && args.LogType == LogType.Debug)
+                return;
             var tColor = ColorUtils.ToConsoleColor(args.TextColor);
             var bColor = ColorUtils.ToConsoleColor(args.BackgroundColor);
             Console.ForegroundColor = tColor;
@@ -399,7 +407,7 @@ namespace MCForge.Core {
             Console.ResetColor();
         }
         #endregion
-        
+
         class TimedMethod {
             public TimedMethodDelegate MethodToInvoke;
             public int consistentTime;

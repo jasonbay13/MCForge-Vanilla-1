@@ -116,8 +116,6 @@ namespace MCForge.Entity {
                     Buffer.BlockCopy(buffer, length + 1, tempbuffer, 0, buffer.Length - length - 1);
 
                     buffer = tempbuffer;
-                    if (message[0] != 255)
-                        message = message;
                     if (!OnPlayerReceivePacket.Call(this, new PacketEventArgs(message, true, (packet.types)msg), OnAllPlayersReceivePacket).Canceled) {
                         ThreadPool.QueueUserWorkItem(delegate {
                             switch (msg) {

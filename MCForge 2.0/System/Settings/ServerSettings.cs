@@ -57,6 +57,7 @@ namespace MCForge.Utils.Settings {
             Values = new List<SettingNode>{
                 new SettingNode("ServerName", "[MCForge] Default", "Name of your server"),
                 new SettingNode("Port", "25565", null),
+                new SettingNode("Use-UPnP", "false", "if enabled will automatically forward port for you, this is not recommended, and will not work in some cases"),
                 new SettingNode("MOTD", "Welcome to my server!", "Message that shows up when you start server"),
                 new SettingNode("MaxPlayers", "20", "Max players that can play on your server at a time"),
                 new SettingNode("Public", "true", "if set to true, your server will show up on MCForge.net server list and Minecraft.net's server list"),

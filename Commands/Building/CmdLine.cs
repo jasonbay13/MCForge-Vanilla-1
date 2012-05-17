@@ -111,7 +111,7 @@ namespace CommandDll.Building {
 
 
                 //Can't use path.Count(), it overwrite some blocks, therefore it would give us a misreading...
-                sender.SendMessage(string.Format("Changed {0} blocks in a line", count));
+                sender.SendMessage(string.Format("Changed {0} {1} blocks in a line", count, path.Count()));
             }
             catch (Exception er) {
                 sender.SendMessage("An Error occurred while trying to make a pretty line");
