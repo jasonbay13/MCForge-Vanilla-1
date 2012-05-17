@@ -23,7 +23,7 @@ using MCForge.Entity;
 using MCForge.Core;
 using MCForge.Utils.Settings;
 using System.IO;
-using MCForge.API.System;
+using MCForge.API;
 using System.Text.RegularExpressions;
 using System.Net.Sockets;
 using MCForge.API.Events;
@@ -54,12 +54,12 @@ namespace Plugins.WomPlugin {
         public void OnLoad(string[] args1) {
             WomSettings = new WomSettings();
             WomSettings.OnLoad();
-            OnReceivePacket.Register(OnData);
+            //OnReceivePacket.Register(OnData);
             Player.OnAllPlayersChat.Normal += ((sender, args) => SendDetailToPlayer(sender, "This is a detail, deal &4With &3It"));
         }
 
         private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
-        void OnData(OnReceivePacket args) {
+        /*void OnData(OnReceivePacket args) {
             if (args.Data.Length < 0)
                 return;
             if (args.Data[0] != (byte)'G')
@@ -116,7 +116,7 @@ namespace Plugins.WomPlugin {
                 }
             }
             args.Player.Kick("");
-        }
+        }*/
         public void OnUnload() {
             throw new NotImplementedException();
         }
