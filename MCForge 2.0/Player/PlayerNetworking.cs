@@ -99,13 +99,13 @@ namespace MCForge.Entity {
                     case 8: length = 9; break; // input
                     case 13: length = 65; break; // chat
                     default: {
-                            OnReceivePacket args = new OnReceivePacket(this, buffer);
-                            bool cancel = OnPlayerReceiveUnknownPacket.Call(this, new PacketEventArgs(buffer, true, (packet.types)msg), OnAllPlayersReceiveUnknownPacket).Canceled;
-                            if (args.IsCanceled || cancel)
-                                return new byte[1];
-                            Kick("Unhandled message id \"" + msg + "\"!");
-                            return new byte[0];
-                        }
+							ReceivePacketEventArgs args = new ReceivePacketEventArgs(buffer);
+							OnReceivePacket.Call(this, args);
+							if (args.Canceled)
+								return new byte[1];
+							Kick("Unhandled message id \"" + msg + "\"!");
+							return new byte[0];
+						}
 
                 }
                 if (buffer.Length > length) {

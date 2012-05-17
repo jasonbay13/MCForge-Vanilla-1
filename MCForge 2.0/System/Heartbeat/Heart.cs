@@ -13,28 +13,36 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
+using System.Net;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
+using MCForge.Utils.Settings;
+using MCForge.Utils;
 
-namespace MCForge.API
+namespace MCForge.Core.HeartService
 {
 	/// <summary>
-	/// Can the event be canceled
+	/// An abstract class for custom heartbeats
 	/// </summary>
-    public interface Cancelable
-    {
-		/// <summary>
-		/// Is the event canceled?
-		/// </summary>
-		bool cancel { get; }
-		/// <summary>
-		/// Cancel the events of this type.
-		/// </summary>
-		void Cancel();
-		/// <summary>
-		/// Allow the events of this type.
-		/// </summary>
-		void Allow();
+	public abstract class Heart
+	{
+		public static List<Heart> hearts = new List<Heart>();
+		public abstract string URL { get; }
+		public abstract string Prepare();
+		public virtual string OnPump(StreamReader responseStreamReader)
+		{
+			string line = ""; int i = 0;
+			string URL = "";
+
+            while (line != null)
+            {
+                i++;
+                line = responseStreamReader.ReadLine();
+                if (line != null)
+                    URL = line;
+            }
+            responseStreamReader.Close();
+            return URL;
+		}
 	}
 }
