@@ -75,7 +75,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Cancelable.cs" />
     <Compile Include="API\Events\Event.cs" />
     <Compile Include="API\Events\ICancelable.cs" />
     <Compile Include="API\Events\IStoppable.cs" />
@@ -88,16 +87,9 @@
     <Compile Include="API\Events\Player\MoveEvent.cs" />
     <Compile Include="API\Events\Player\PacketEvent.cs" />
     <Compile Include="API\Events\System\CommandLoadEvent.cs" />
+    <Compile Include="API\Events\System\OnSettingLoad.cs" />
     <Compile Include="API\Events\System\PluginLoadEvent.cs" />
     <Compile Include="API\Events\System\ReceivePacket.cs" />
-    <Compile Include="API\Priority.cs" />
-    <Compile Include="API\System\OnCommandLoaded.cs" />
-    <Compile Include="API\System\OnCommandUnloaded.cs" />
-    <Compile Include="API\System\OnReceivePacket.cs" />
-    <Compile Include="API\System\OnSettingLoad.cs" />
-    <Compile Include="API\System\SystemEvent.cs" />
-    <Compile Include="API\World\OnLevelSave.cs" />
-    <Compile Include="API\World\WorldEvent.cs" />
     <Compile Include="Database\Database.cs" />
     <Compile Include="Database\MySQL.cs" />
     <Compile Include="Database\SQL.cs" />
@@ -110,6 +102,10 @@
     <Compile Include="Robot\BotMap.cs" />
     <Compile Include="Player\PlayerNetworking.cs" />
     <Compile Include="System\FileUtils.cs" />
+    <Compile Include="System\Heartbeat\Heart.cs" />
+    <Compile Include="System\Heartbeat\Heartbeat.cs" />
+    <Compile Include="System\Heartbeat\MBeat.cs" />
+    <Compile Include="System\Heartbeat\WBeat.cs" />
     <Compile Include="System\IRC.cs" />
     <Compile Include="System\Logger.cs" />
     <Compile Include="System\Settings\ExtraSettings.cs" />
@@ -157,8 +153,6 @@
     <Compile Include="World\Blocks\DefaultBlocks\White.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Yellow.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\YellowFlower.cs" />
-    <Compile Include="API\Event.cs" />
-    <Compile Include="System\Heartbeat.cs" />
     <Compile Include="Interfaces\Commands\CmdReloadCommands.cs" />
     <Compile Include="Interfaces\Commands\ICommand.cs" />
     <Compile Include="Interfaces\Commands\Command.cs" />
@@ -216,6 +210,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="System\Heartbeat" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.txt" />

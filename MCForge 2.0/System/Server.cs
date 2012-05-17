@@ -18,6 +18,7 @@ using System.Drawing;
 using System.IO;
 using System.Net.Sockets;
 using System.Timers;
+using System.Text;
 using MCForge.Entity;
 using MCForge.Interface;
 using MCForge.Interface.Command;
@@ -27,6 +28,7 @@ using MCForge.Utils;
 using MCForge.World;
 using MCForge.Robot;
 using MCForge.SQL;
+using MCForge.Core.HeartService;
 
 namespace MCForge.Core {
     public static class Server {

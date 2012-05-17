@@ -679,6 +679,9 @@ namespace MCForge.Entity {
         /// Gets called when a packet is sent to any player.
         /// </summary>
         public static PacketEvent OnAllPlayersSendPacket = new PacketEvent();
+        
+        public static ReceivePacket OnReceivePacket = new ReceivePacket();
+        
         Dictionary<string,object> datapasses=new Dictionary<string,object>();
         /// <summary>
         /// Gets a datapass object and removes it from the list.
