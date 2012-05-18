@@ -313,13 +313,13 @@ namespace MCForge.Entity {
             byte rotx = message[7];
             byte roty = message[8];
             Vector3S fromPosition = new Vector3S(Pos.x, Pos.y, Pos.z);
+            oldPos = fromPosition;
             Pos.x = (short)x;
             Pos.y = (short)y;
             Pos.z = (short)z;
             Rot = new byte[2] { rotx, roty };
             if (!(fromPosition.x == Pos.x && fromPosition.y == Pos.y && fromPosition.z == Pos.z))
             {
-                Console.WriteLine("test");
                 MoveEventArgs eargs = new MoveEventArgs(fromPosition);
                 bool cancel = OnPlayerMove.Call(this, eargs, OnAllPlayersMove).Canceled;
                 if (cancel) {
@@ -327,6 +327,7 @@ namespace MCForge.Entity {
                     return;
                 }
             }
+            UpdatePosition(true);
         }
         private void HandleChat(byte[] message) {
             if (!IsLoggedIn) return;
