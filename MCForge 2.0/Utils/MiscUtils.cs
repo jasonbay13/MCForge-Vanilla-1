@@ -12,6 +12,8 @@ namespace MCForge.Utils {
     /// Misc utils and extentions.
     /// </summary>
     public static class MiscUtils {
+
+
         /// <summary>
         /// Gets the object if it exist.
         /// </summary>
@@ -36,23 +38,23 @@ namespace MCForge.Utils {
         /// <param name="dict">The dict.</param>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-		public static void CreateIfNotExist<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value) {
-			if (!dict.ContainsKey(key))
-				dict.Add(key, value);
-		}
+        public static void CreateIfNotExist<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value) {
+            if (!dict.ContainsKey(key))
+                dict.Add(key, value);
+        }
 
-		/// <summary>
-		/// Convert the list into a string
-		/// </summary>
-		/// <param name="list"></param>
-		/// <returns>The string value of the list</returns>
-		public static string ListToString(this List<string> list) {
-			string ret = "";
-			foreach (string item in list) {
-				ret += item + "\n";
-			}
-			return ret;
-		}
+        /// <summary>
+        /// Convert the list into a string
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns>The string value of the list</returns>
+        public static string ListToString(this List<string> list) {
+            string ret = "";
+            foreach (string item in list) {
+                ret += item + "\n";
+            }
+            return ret;
+        }
 
         /// <summary>
         /// Save data to the database

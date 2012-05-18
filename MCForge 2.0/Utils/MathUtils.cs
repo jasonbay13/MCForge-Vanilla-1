@@ -10,6 +10,16 @@ namespace MCForge.Utils {
     /// A class full of static methods to help assist common 3D and 2D math algorithms
     /// </summary>
     public class MathUtils {
+
+        private static Random _random;
+        public static Random Random {
+            get {
+                if (_random == null)
+                    _random = new Random(DateTime.Now.Millisecond);
+                return _random;
+            }
+        }
+
         #region Abs Vector
 
         /// <summary>

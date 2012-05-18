@@ -100,18 +100,15 @@ namespace CommandDll.Building {
                 byte block = raw.Block;
 
                 IEnumerable<Vector3S> path = from.PathTo(to);
-                int count = 0;
 
                 foreach (var pos in path) {
                     if (!sender.Level.IsInBounds(pos))
                         continue;
                     sender.Level.BlockChange(pos, block);
-                    count++;
                 }
 
 
-                //Can't use path.Count(), it overwrite some blocks, therefore it would give us a misreading...
-                sender.SendMessage(string.Format("Changed {0} {1} blocks in a line", count, path.Count()));
+                sender.SendMessage(string.Format("Changed {0} blocks in a line", path.Count()));
             }
             catch (Exception er) {
                 sender.SendMessage("An Error occurred while trying to make a pretty line");

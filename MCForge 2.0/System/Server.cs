@@ -334,8 +334,14 @@ namespace MCForge.Core {
 
                     }
             }
-            listener = new TcpListener(System.Net.IPAddress.Any, ServerSettings.GetSettingInt("port"));
-            listener.Start();
+            try {
+                listener = new TcpListener(System.Net.IPAddress.Any, ServerSettings.GetSettingInt("port"));
+                listener.Start();
+            }
+            catch (Exception e) {
+                Logger.LogError(e);
+                return;
+            }
             while (true) {
                 try {
                     IAsyncResult ar = listener.BeginAcceptTcpClient(new AsyncCallback(AcceptCallback), listener);
