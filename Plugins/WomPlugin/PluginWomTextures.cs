@@ -23,12 +23,12 @@ using MCForge.Entity;
 using MCForge.Core;
 using MCForge.Utils.Settings;
 using System.IO;
+using MCForge.API;
 using System.Text.RegularExpressions;
 using System.Net.Sockets;
 using MCForge.API.Events;
 using System.Threading;
 using MCForge.World;
-using MCForge.API;
 
 namespace Plugins.WomPlugin {
     public class PluginWomTextures : IPlugin {
@@ -53,7 +53,7 @@ namespace Plugins.WomPlugin {
         public void OnLoad(string[] args1) {
             WomSettings = new WomSettings();
             WomSettings.OnLoad();
-            
+            //OnReceivePacket.Register(OnData);
             Player.OnAllPlayersChat.Normal += ((sender, args) => SendDetailToPlayer(sender, "This is a detail, deal &4With &3It"));
         }
 
