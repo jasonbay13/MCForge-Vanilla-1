@@ -20,13 +20,15 @@ namespace MCForge.API.Events {
         /// Creates a new instance
         /// </summary>
         /// <param name="fromPosition">The position where the move started</param>
-        public MoveEventArgs(Vector3S fromPosition) {
+        public MoveEventArgs(Vector3S fromPosition, Vector3S toPosition) {
             this.FromPosition = fromPosition;
+            this.ToPosition = toPosition;
         }
         /// <summary>
         /// The position where the move started
         /// </summary>
         public Vector3S FromPosition { get; private set; }
+        public Vector3S ToPosition { get; private set; }
         private bool canceled = false;
         /// <summary>
         /// Whether or not the handling should be canceled

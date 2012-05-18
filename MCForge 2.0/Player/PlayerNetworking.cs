@@ -320,10 +320,10 @@ namespace MCForge.Entity {
             Rot = new byte[2] { rotx, roty };
             if (!(fromPosition.x == Pos.x && fromPosition.y == Pos.y && fromPosition.z == Pos.z))
             {
-                MoveEventArgs eargs = new MoveEventArgs(fromPosition);
+                MoveEventArgs eargs = new MoveEventArgs(fromPosition, Pos);
                 bool cancel = OnPlayerMove.Call(this, eargs, OnAllPlayersMove).Canceled;
                 if (cancel) {
-                    this.SendToPos(Pos, Rot);
+                    this.SendToPos(fromPosition, Rot);
                     return;
                 }
             }
