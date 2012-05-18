@@ -5,7 +5,7 @@ using System.Text;
 using MCForge.Core;
 
 namespace MCForge.Utils {
-    public class Vector3S {
+    public class Vector3S{
         public short x;
         public short y;
         public short z;
