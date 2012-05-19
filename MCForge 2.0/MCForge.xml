@@ -3140,33 +3140,33 @@
             Get or set the color of the background
             </summary>
         </member>
-        <member name="T:MCForge.API.Events.TargetPlayerArgs">
+        <member name="T:MCForge.API.Events.Robot.TargetPlayerArgs">
             <summary>
             PlayerMoveEventArgs
             </summary>
         </member>
-        <member name="M:MCForge.API.Events.TargetPlayerArgs.#ctor(MCForge.Entity.Player)">
+        <member name="M:MCForge.API.Events.Robot.TargetPlayerArgs.#ctor(MCForge.Entity.Player)">
             <summary>
             Creates a new instance
             </summary>
             <param name="fromPosition">The position where the move started</param>
         </member>
-        <member name="M:MCForge.API.Events.TargetPlayerArgs.Cancel">
+        <member name="M:MCForge.API.Events.Robot.TargetPlayerArgs.Cancel">
             <summary>
             Cancels the handling
             </summary>
         </member>
-        <member name="M:MCForge.API.Events.TargetPlayerArgs.Allow">
+        <member name="M:MCForge.API.Events.Robot.TargetPlayerArgs.Allow">
             <summary>
             Allows the handling
             </summary>
         </member>
-        <member name="P:MCForge.API.Events.TargetPlayerArgs.Player">
+        <member name="P:MCForge.API.Events.Robot.TargetPlayerArgs.Player">
             <summary>
             The position where the move started
             </summary>
         </member>
-        <member name="P:MCForge.API.Events.TargetPlayerArgs.Canceled">
+        <member name="P:MCForge.API.Events.Robot.TargetPlayerArgs.Canceled">
             <summary>
             Whether or not the handling should be canceled
             </summary>
