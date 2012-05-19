@@ -27,7 +27,7 @@ namespace CommandDll
         public string Author { get { return "cazzar"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
-        public byte Permission { get { return 80; } }
+        public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
         {
             if (args.Length != 2)
@@ -50,7 +50,7 @@ namespace CommandDll
                 return;
             }
 
-            if (who.Group.Permission >= p.Group.Permission)
+           /* if (who.Group.Permission >= p.Group.Permission)
             {
                 p.SendMessage("You cannot change the rank of someone of an equal or greater rank!");
                 return;
@@ -64,7 +64,7 @@ namespace CommandDll
             {
                 p.SendMessage(group.Colour + who.Username + Server.DefaultColor + " is already that rank");
                 return;
-            }
+            }*/
             group.AddPlayer(who);
             Player.UniversalChat(group.Colour + who.Username + Server.DefaultColor + " had their rank set to " + group.Colour + group.Name);
 

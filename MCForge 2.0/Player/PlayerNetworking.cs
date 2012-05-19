@@ -13,22 +13,21 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using MCForge.API;
+using MCForge.API.Events;
 using MCForge.Core;
 using MCForge.Groups;
+using MCForge.Robot;
+using MCForge.SQL;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
-using System.Drawing;
-using MCForge.API.Events;
-using MCForge.Robot;
-using MCForge.SQL;
 
 namespace MCForge.Entity {
     public partial class Player {
@@ -40,22 +39,7 @@ namespace MCForge.Entity {
             Player p = (Player)result.AsyncState;
 
             //Why is this here? this is a terrible spot for this!
-            try {
-                if (Server.reviewlist.Contains(p)) {
-                    Server.reviewlist.Remove(p);
-                    foreach (Player pl in Server.reviewlist.ToArray()) {
-                        int position = Server.reviewlist.IndexOf(pl);
-                        if (position == 0) {
-                            pl.SendMessage("You're next in the review queue!");
-                            continue;
-                        }
-                        pl.SendMessage(position == 1 ? "There is " + position + " players in front of you!" : "There are " + position + " players in front of you!");
-                    }
-                }
-            }
-            catch {
-                Logger.Log("Error removing " + p.Username + " from the review list!", LogType.Error);
-            }
+            //Sorry, I was merging manually, and failed at pasting
 
             try {
                 int length = p.Socket.EndReceive(result);
@@ -66,6 +50,14 @@ namespace MCForge.Entity {
                         UniversalChat(color ?? "" + p.Username + Server.DefaultColor + " has disconnected.");
                         p.GlobalDie();
                     }
+                    if (Server.reviewlist.Contains(p)) {
+                        Server.reviewlist.Remove(p);
+                        foreach (Player pl in Server.reviewlist.ToArray()) {
+                            int position = Server.reviewlist.IndexOf(pl);
+                            if (position == 0) { pl.SendMessage("You're next in the review queue!"); continue; }
+                            pl.SendMessage(position == 1 ? "There is 1 player in front of you!" : "There are " + position + " players in front of you!");
+                        }
+                    }                  
                     return;
                 }
 
@@ -962,7 +954,18 @@ namespace MCForge.Entity {
         /// </summary>
         /// <param name="text">The message to send.</param>
         public static void UniversalChat(string text) {
-            Server.ForeachPlayer(p => p.SendMessage(text));
+            Server.ForeachPlayer(p => {
+                string message = text;
+                if (message.Contains("$name")) {
+                    if (ServerSettings.GetSettingBoolean("$Before$Name")) { message = message.Replace("$name", "$" + p.Username); }
+                    else { message = message.Replace("$name", p.Username); }
+                }
+                if (message.Contains("$money")) { message = message.Replace("$money", p.money.ToString()); }
+                if (message.Contains("$rank")) { message = message.Replace("$rank", p.Group.Name); }
+                if (message.Contains("$ip")) { message = message.Replace("$ip", p.Ip); }
+                p.SendMessage(message);
+            });
+         
         }
         /// <summary>
         /// Sends a message to all operators+
@@ -971,7 +974,15 @@ namespace MCForge.Entity {
         public static void UniversalChatOps(string message) {
             Server.ForeachPlayer(p => {
                 if (p.Group.Permission >= Server.opchatperm) {
-                    p.SendMessage(message);
+                    string text = message;
+                    if (text.Contains("$name")) {
+                        if (ServerSettings.GetSettingBoolean("$Before$Name")) { text = text.Replace("$name", "$" + p.Username); }
+                        else { text = text.Replace("$name", p.Username); }
+                    }
+                    if (text.Contains("$money")) { text = text.Replace("$money", p.money.ToString()); }
+                    if (text.Contains("$rank")) { text = text.Replace("$rank", p.Group.Color); }
+                    if (text.Contains("$ip")) { text = text.Replace("$ip", p.Ip); }
+                    p.SendMessage(text);
                 }
             });
         }
@@ -982,7 +993,15 @@ namespace MCForge.Entity {
         public static void UniversalChatAdmins(string message) {
             Server.ForeachPlayer(p => {
                 if (p.Group.Permission >= Server.adminchatperm) {
-                    p.SendMessage(message);
+                    string text = message;
+                    if (text.Contains("$name")) {
+                        if (ServerSettings.GetSettingBoolean("$Before$Name")) { text = text.Replace("$name", "$" + p.Username); }
+                        else { text = text.Replace("$name", p.Username); }
+                    }
+                    if (text.Contains("$money")) { text = text.Replace("$money", p.money.ToString()); }
+                    if (text.Contains("$rank")) { text = text.Replace("$rank", p.Group.Color); }
+                    if (text.Contains("$ip")) { text = text.Replace("$ip", p.Ip); }
+                    p.SendMessage(text);
                 }
             });
         }
@@ -994,7 +1013,15 @@ namespace MCForge.Entity {
         public static void RankChat(Player from, string message) {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p.Group.Permission == from.Group.Permission) {
-                    p.SendMessage(message);
+                    string text = message;
+                    if (text.Contains("$name")) {
+                        if (ServerSettings.GetSettingBoolean("$Before$Name")) { text = text.Replace("$name", "$" + p.Username); }
+                        else { text = text.Replace("$name", p.Username); }
+                    }
+                    if (text.Contains("$money")) { text = text.Replace("$money", p.money.ToString()); }
+                    if (text.Contains("$rank")) { text = text.Replace("$rank", p.Group.Color); }
+                    if (text.Contains("$ip")) { text = text.Replace("$ip", p.Ip); }
+                    p.SendMessage(text);
                 }
             });
         }
@@ -1005,7 +1032,18 @@ namespace MCForge.Entity {
         /// <param name="message">The message to be sent</param>
         public static void LevelChat(Player from, string message) {
             Server.ForeachPlayer(delegate(Player p) {
-                if (p.Level == from.Level) { p.SendMessage(message); }
+                if (p.Level == from.Level) 
+                {
+                    string text = message;
+                    if (text.Contains("$name")) {
+                        if (ServerSettings.GetSettingBoolean("$Before$Name")) { text = text.Replace("$name", "$" + p.Username); }
+                        else { text = text.Replace("$name", p.Username); }
+                    }
+                    if (text.Contains("$money")) { text = text.Replace("$money", p.money.ToString()); }
+                    if (text.Contains("$rank")) { text = text.Replace("$rank", p.Group.Color); }
+                    if (text.Contains("$ip")) { text = text.Replace("$ip", p.Ip); }
+                    p.SendMessage(text);
+                }
             });
         }
         private void CloseConnection() {

@@ -70,6 +70,9 @@ namespace MCForge.Utils.Settings {
                 new SettingNode("IRC-Channel", "#", "IRC channel to connect to"),
                 new SettingNode("IRC-OPChannel", "#", "IRC operator channel to connect to"),
                 new SettingNode("IRC-NickServ", "password", "IRC NickServ password (optional when IRC is enabled)"),
+                new SettingNode("AgreeingToRules", "true", "If set to true players below op will need to read the rules and agree before they can use commands"),
+                new SettingNode("$Before$Name", "true", null),
+               
                 
                                                               };
 
@@ -102,7 +105,7 @@ namespace MCForge.Utils.Settings {
                     foreach (var v in Values) {
                         writer.WriteLine(v.Description == null
                                              ? string.Format("{0}={1}\n", v.Key.ToLower(), v.Value)
-                                             : string.Format("#{0}\n{1}={2}\n", v.Description, v.Key.ToLower(), v.Value));
+                                             : string.Format("#{0}\r\n{1}={2}\n", v.Description, v.Key.ToLower(), v.Value));
 
                     }
                 }
@@ -271,7 +274,7 @@ namespace MCForge.Utils.Settings {
                         ? v.Value
                         : v.Description == null
                             ? string.Format("{0}={1}" + (v != Values.Last() ? "\n" : ""), v.Key, v.Value)
-                            : string.Format("#{0}\n{1}={2}" + (v != Values.Last() ? "\n" : ""), v.Description, v.Key, v.Value));
+                            : string.Format("#{0}\r\n{1}={2}" + (v != Values.Last() ? "\n" : ""), v.Description, v.Key, v.Value));
 
                 }
             }
