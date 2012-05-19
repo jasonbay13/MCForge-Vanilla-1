@@ -32,12 +32,12 @@ namespace CommandDll {
 
         public void Use(Player p, string[] args) {
             if (args.Length != 0) { Help(p); return; }
-            p.SendMessage("This server's name is &b" + ServerSettings.GetSetting("servername") + ServerSettings.GetSetting("DefaultColor") + ".");
+            p.SendMessage("This server's name is &b" + ServerSettings.GetSetting("servername") + Server.DefaultColor + ".");
             p.SendMessage(Server.Players.Count == 1 ? "There is no one else on the server" : "There are currently " + Server.Players.Count + " players on this server"); //TODO dont include hidden if above current rank
-            //p.SendMessage("This server currently has $banned people that are &8banned" + ServerSettings.GetSetting("DefaultColor") + ".");
+            //p.SendMessage("This server currently has $banned people that are &8banned" + Server.DefaultColor + ".");
             p.SendMessage("This server currently has " + Level.Levels.Count + " levels loaded.");
             //p.SendMessage("This server's currency is: " + Server.moneys); // later for when money works.
-            p.SendMessage("This server runs on &bMCForge 2.0" + ServerSettings.GetSetting("DefaultColor") + ".");
+            p.SendMessage("This server runs on &bMCForge 2.0" + Server.DefaultColor + ".");
             p.SendMessage("This server's version: &a" + Assembly.GetExecutingAssembly().GetName().Version);
             TimeSpan up = DateTime.Now - Server.StartTime;
             string upTime = "Time online: &b";

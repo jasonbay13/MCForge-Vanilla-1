@@ -47,7 +47,7 @@ namespace MCForge.Entity {
                     p.CloseConnection();
                     if (!p.IsBeingKicked) {
                         var color = (string)p.ExtraData.GetIfExist("Color");
-                        UniversalChat(color ?? "" + p.Username + ServerSettings.GetSetting("DefaultColor") + " has disconnected.");
+                        UniversalChat(color ?? "" + p.Username + Server.DefaultColor + " has disconnected.");
                         p.GlobalDie();
                     }
                     if (Server.reviewlist.Contains(p)) {
@@ -463,7 +463,7 @@ namespace MCForge.Entity {
                     return;
                 }
                 else {
-                    SendMessage("Use either %aYes " + ServerSettings.GetSetting("DefaultColor") + "or %cNo " + ServerSettings.GetSetting("DefaultColor") + " to vote!");
+                    SendMessage("Use either %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + " to vote!");
                 }
 
             }
@@ -576,7 +576,7 @@ namespace MCForge.Entity {
             var mTitle = ExtraData.GetIfExist("Title");
             var mTColor = ExtraData.GetIfExist("TitleColor");
             var mColor = ExtraData.GetIfExist("Color");
-            ExtraData["Prefix"] = mTitle == null ? "" : "[" + mTColor ?? ServerSettings.GetSetting("DefaultColor") + mTitle + mColor ?? ServerSettings.GetSetting("DefaultColor") + "]";
+            ExtraData["Prefix"] = mTitle == null ? "" : "[" + mTColor ?? Server.DefaultColor + mTitle + mColor ?? Server.DefaultColor + "]";
         }
 
         #endregion
@@ -619,7 +619,7 @@ namespace MCForge.Entity {
                 message = message.Replace("&" + ch + " &", "&");
             }
             if (!String.IsNullOrWhiteSpace(message))
-                message = ServerSettings.GetSetting("DefaultColor") + message;
+                message = Server.DefaultColor + message;
 
             pa.Add(packet.types.Message);
             pa.Add(PlayerID);

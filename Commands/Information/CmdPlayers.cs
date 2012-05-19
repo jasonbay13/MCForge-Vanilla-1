@@ -34,13 +34,13 @@ namespace CommandDll
             foreach (PlayerGroup group in PlayerGroup.Groups)
             {
                 string send = group.Color + group.Name;
-                if (!send.EndsWith("ed") && !send.EndsWith("s")) { send += "s: " + ServerSettings.GetSetting("DefaultColor"); } //Plural
-                else { send += ": " + ServerSettings.GetSetting("DefaultColor"); }
+                if (!send.EndsWith("ed") && !send.EndsWith("s")) { send += "s: " + Server.DefaultColor; } //Plural
+                else { send += ": " + Server.DefaultColor; }
                 Server.ForeachPlayer(delegate(Player pl)
                     {
                         //who added this shiz e.O
-                        //if (pl.Group.Permission == group.Permission) { send +=  pl.Username + "&a, " + ServerSettings.GetSetting("DefaultColor"); }
-                        send += pl.Username + "&a, " + ServerSettings.GetSetting("DefaultColor");
+                        //if (pl.Group.Permission == group.Permission) { send +=  pl.Username + "&a, " + Server.DefaultColor; }
+                        send += pl.Username + "&a, " + Server.DefaultColor;
                     });
                 p.SendMessage(send.Trim().Remove(send.Length - 4, 4));
             }

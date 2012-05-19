@@ -12,6 +12,7 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
+using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Interface.Command;
@@ -61,11 +62,11 @@ namespace CommandDll
             }
             if (who.Group == group)
             {
-                p.SendMessage(group.Colour + who.Username + ServerSettings.GetSetting("DefaultColor") + " is already that rank");
+                p.SendMessage(group.Colour + who.Username + Server.DefaultColor + " is already that rank");
                 return;
             }
             group.AddPlayer(who);
-            Player.UniversalChat(group.Colour + who.Username + ServerSettings.GetSetting("DefaultColor") + " had their rank set to " + group.Colour + group.Name);
+            Player.UniversalChat(group.Colour + who.Username + Server.DefaultColor + " had their rank set to " + group.Colour + group.Name);
 
         }
 

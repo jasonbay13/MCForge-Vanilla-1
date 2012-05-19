@@ -34,9 +34,9 @@ namespace CommandDll.Misc
         public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
         {
-            if (!p.IsVerified) { p.SendMessage("&cYou already have a password set. " + ServerSettings.GetSetting("DefaultColor") + "You &ccannot change " + ServerSettings.GetSetting("DefaultColor") + "it unless &cyou verify it with &a/pass [Password]. " + ServerSettings.GetSetting("DefaultColor") + "If you have &cforgotten " + ServerSettings.GetSetting("DefaultColor") + "your password, contact the server host and they can &creset it!"); return; }
+            if (!p.IsVerified) { p.SendMessage("&cYou already have a password set. " + Server.DefaultColor + "You &ccannot change " + Server.DefaultColor + "it unless &cyou verify it with &a/pass [Password]. " + Server.DefaultColor + "If you have &cforgotten " + Server.DefaultColor + "your password, contact the server host and they can &creset it!"); return; }
             if (args[0] == "") { Help(p); return; }
-            if (p.Group.Permission < Server.VerifyGroup.Permission) { p.SendMessage("Only " + Server.VerifyGroup.Color + Server.VerifyGroup.Name + "s " + ServerSettings.GetSetting("DefaultColor") + "and above need to verify."); return; }
+            if (p.Group.Permission < Server.VerifyGroup.Permission) { p.SendMessage("Only " + Server.VerifyGroup.Color + Server.VerifyGroup.Name + "s " + Server.DefaultColor + "and above need to verify."); return; }
             int number = args[0].Split(' ').Length;
             if (number > 1)
             {

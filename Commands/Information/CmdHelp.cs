@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Interface.Command;
@@ -35,13 +36,13 @@ namespace CommandDll.Information
         {
             if (args.Length == 0)
             {
-                p.SendMessage("Use &b/help ranks" + ServerSettings.GetSetting("DefaultColor") + " for a list of ranks.");
-                p.SendMessage("Use &b/help build" + ServerSettings.GetSetting("DefaultColor") + " for a list of building commands.");
-                p.SendMessage("Use &b/help mod" + ServerSettings.GetSetting("DefaultColor") + " for a list of moderation commands.");
-                p.SendMessage("Use &b/help information" + ServerSettings.GetSetting("DefaultColor") + " for a list of information commands.");
-                p.SendMessage("Use &b/help other" + ServerSettings.GetSetting("DefaultColor") + " for a list of other commands.");
-                p.SendMessage("Use &b/help colors" + ServerSettings.GetSetting("DefaultColor") + " to view the color codes.");
-                p.SendMessage("Use &b/help [command] or /help [block] " + ServerSettings.GetSetting("DefaultColor") + "to view more info.");
+                p.SendMessage("Use &b/help ranks" + Server.DefaultColor + " for a list of ranks.");
+                p.SendMessage("Use &b/help build" + Server.DefaultColor + " for a list of building commands.");
+                p.SendMessage("Use &b/help mod" + Server.DefaultColor + " for a list of moderation commands.");
+                p.SendMessage("Use &b/help information" + Server.DefaultColor + " for a list of information commands.");
+                p.SendMessage("Use &b/help other" + Server.DefaultColor + " for a list of other commands.");
+                p.SendMessage("Use &b/help colors" + Server.DefaultColor + " to view the color codes.");
+                p.SendMessage("Use &b/help [command] or /help [block] " + Server.DefaultColor + "to view more info.");
             }
             else if (args.Length == 1)
             {
@@ -72,14 +73,14 @@ namespace CommandDll.Information
                     case "colors":
                         p.SendMessage("&fTo use a color simply put a '%' sign symbol before you put the color code.");
                         p.SendMessage("Colors Available:");
-                        p.SendMessage("0 - &0Black " + ServerSettings.GetSetting("DefaultColor") + "| 8 - &8Gray");
-                        p.SendMessage("1 - &1Navy " + ServerSettings.GetSetting("DefaultColor") + "| 9 - &9Blue");
-                        p.SendMessage("2 - &2Green " + ServerSettings.GetSetting("DefaultColor") + "| a - &aLime");
-                        p.SendMessage("3 - &3Teal " + ServerSettings.GetSetting("DefaultColor") + "| b - &bAqua");
-                        p.SendMessage("4 - &4Maroon " + ServerSettings.GetSetting("DefaultColor") + "| c - &cRed");
-                        p.SendMessage("5 - &5Purple " + ServerSettings.GetSetting("DefaultColor") + "| d - &dPink");
-                        p.SendMessage("6 - &6Gold " + ServerSettings.GetSetting("DefaultColor") + "| e - &eYellow");
-                        p.SendMessage("7 - &7Silver " + ServerSettings.GetSetting("DefaultColor") + "| f - &fWhite");
+                        p.SendMessage("0 - &0Black " + Server.DefaultColor + "| 8 - &8Gray");
+                        p.SendMessage("1 - &1Navy " + Server.DefaultColor + "| 9 - &9Blue");
+                        p.SendMessage("2 - &2Green " + Server.DefaultColor + "| a - &aLime");
+                        p.SendMessage("3 - &3Teal " + Server.DefaultColor + "| b - &bAqua");
+                        p.SendMessage("4 - &4Maroon " + Server.DefaultColor + "| c - &cRed");
+                        p.SendMessage("5 - &5Purple " + Server.DefaultColor + "| d - &dPink");
+                        p.SendMessage("6 - &6Gold " + Server.DefaultColor + "| e - &eYellow");
+                        p.SendMessage("7 - &7Silver " + Server.DefaultColor + "| f - &fWhite");
                         return;
                     case "ranks":
                         foreach (PlayerGroup grp in PlayerGroup.Groups)

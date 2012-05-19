@@ -67,7 +67,7 @@ namespace CommandDll
                 case "place":
                     if (!Server.reviewlist.Contains(p)) {
                         p.SendMessage("You're not in the review queue!");
-                        p.SendMessage("Use &9/review &benter " + ServerSettings.GetSetting("DefaultColor") + "to enter the queue!");
+                        p.SendMessage("Use &9/review &benter " + Server.DefaultColor + "to enter the queue!");
                         return;
                     }
                     SendPositon(false, p);
@@ -89,7 +89,7 @@ namespace CommandDll
                     if (!Server.reviewlist.Contains(p)) 
                     { 
                         p.SendMessage("You're not in the review queue!");
-                        p.SendMessage("Use &9/review &benter " + ServerSettings.GetSetting("DefaultColor") + "to enter the queue!");
+                        p.SendMessage("Use &9/review &benter " + Server.DefaultColor + "to enter the queue!");
                         return;
                     }
                     Server.reviewlist.Remove(p);
@@ -102,8 +102,8 @@ namespace CommandDll
                 case "next":
                     if (p.Group.Permission < ServerSettings.GetSettingInt("ReviewModeratorPerm")) 
                     { 
-                        p.SendMessage("You can't use &9/review &bnext" + ServerSettings.GetSetting("DefaultColor") + "!"); 
-                        p.SendMessage("Use &9/review &benter " + ServerSettings.GetSetting("DefaultColor") + "to enter the queue!");
+                        p.SendMessage("You can't use &9/review &bnext" + Server.DefaultColor + "!"); 
+                        p.SendMessage("Use &9/review &benter " + Server.DefaultColor + "to enter the queue!");
                         return;
                     }
                     Player rev = Server.reviewlist[0];

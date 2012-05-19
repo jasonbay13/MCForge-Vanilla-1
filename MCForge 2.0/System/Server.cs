@@ -156,6 +156,10 @@ namespace MCForge.Core {
         /// The IRC client for the server
         /// </summary>
         public static IRC IRC = null;
+        /// <summary>
+        /// The default color
+        /// </summary>
+        public static string DefaultColor { get { return ServerSettings.GetSetting("DefaultColor"); } }
 
         /// <summary>
         /// This delegate is used when a command or plugin needs to call a method after a certain amount of time

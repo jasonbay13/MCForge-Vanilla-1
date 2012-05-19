@@ -35,7 +35,7 @@ namespace CommandDll
             Player who;
             string titleColor;
 
-            p.ExtraData.CreateIfNotExist("TitleColor", ServerSettings.GetSetting("DefaultColor"));
+            p.ExtraData.CreateIfNotExist("TitleColor", Server.DefaultColor);
 
             if (args.Length == 1)
             {
@@ -57,7 +57,7 @@ namespace CommandDll
 
             string message = "";
 
-            who.ExtraData.CreateIfNotExist("TitleColor", ServerSettings.GetSetting("DefaultColor"));
+            who.ExtraData.CreateIfNotExist("TitleColor", Server.DefaultColor);
 
             if (titleColor == "del")
             {

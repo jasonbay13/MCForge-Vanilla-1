@@ -68,16 +68,16 @@ namespace CommandDll.Misc {
             who.ExtraData["Money"] = (int)who.ExtraData["Money"] + amt;
             Player.UniversalChat((string)p.ExtraData.GetIfExist("Color") ?? "" +
                                   p.Username +
-                                  ServerSettings.GetSetting("DefaultColor") +
+                                  Server.DefaultColor +
                                   " was paid &3" +
                                   amt +
-                                  ServerSettings.GetSetting("DefaultColor") +
+                                  Server.DefaultColor +
                                   " " +
                                   Server.moneys +
                                   " by " +
                                   who.ExtraData.GetIfExist("Color") ?? "" +
                                   who.Username +
-                                  ServerSettings.GetSetting("DefaultColor") +
+                                  Server.DefaultColor +
                                   ".");
 
             //TODO: DB save

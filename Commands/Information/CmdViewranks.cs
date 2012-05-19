@@ -13,6 +13,7 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System.IO;
+using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Interface.Command;
@@ -36,8 +37,8 @@ namespace CommandDll
             try
             {
                 string[] players = File.ReadAllLines(group.File);
-                string send = "People with the rank " + group.Color + group.Name + ServerSettings.GetSetting("DefaultColor") + ": ";
-                foreach (string player in players) { send += player + "&a, " + ServerSettings.GetSetting("DefaultColor"); }         
+                string send = "People with the rank " + group.Color + group.Name + Server.DefaultColor + ": ";
+                foreach (string player in players) { send += player + "&a, " + Server.DefaultColor; }         
                 p.SendMessage(send.Remove(send.Length - 4, 4));
             }
             catch { p.SendMessage("Error reading ranks!"); return; }

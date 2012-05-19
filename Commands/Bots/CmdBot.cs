@@ -55,7 +55,7 @@ namespace CommandDll
                     + TemporaryPlayer.Player.Rot[0] + " " + TemporaryPlayer.Player.Rot[1]); //Add bot to level metadata
                                                                                             //This enables cross server bot transfer
                                                                                             //And returns when level is loaded
-                p.SendMessage("Spawned " + ArrayToString(fargs.ToArray()) + ServerSettings.GetSetting("DefaultColor") + "!");
+                p.SendMessage("Spawned " + ArrayToString(fargs.ToArray()) + Server.DefaultColor + "!");
             }
             else if (args[0].ToLower() == "remove")
             {
@@ -94,9 +94,9 @@ namespace CommandDll
                     p.Level.ExtraData.Remove(s);
                 }
                 if (hitBot)
-                    p.SendMessage("Removed " + ArrayToString(fargs.ToArray()) + ServerSettings.GetSetting("DefaultColor") + "!");
+                    p.SendMessage("Removed " + ArrayToString(fargs.ToArray()) + Server.DefaultColor + "!");
                 else
-                    p.SendMessage("Could not find " + ArrayToString(fargs.ToArray()) + ServerSettings.GetSetting("DefaultColor") + "!");
+                    p.SendMessage("Could not find " + ArrayToString(fargs.ToArray()) + Server.DefaultColor + "!");
             }
             else if (args[0].ToLower() == "summon")
             {
@@ -121,9 +121,9 @@ namespace CommandDll
                     }
                 }
                 if (hitBot)
-                    p.SendMessage("Summoned " + ArrayToString(fargs.ToArray()) + ServerSettings.GetSetting("DefaultColor") + "!");
+                    p.SendMessage("Summoned " + ArrayToString(fargs.ToArray()) + Server.DefaultColor + "!");
                 else
-                    p.SendMessage("Could not find " + ArrayToString(fargs.ToArray()) + ServerSettings.GetSetting("DefaultColor") + "!");
+                    p.SendMessage("Could not find " + ArrayToString(fargs.ToArray()) + Server.DefaultColor + "!");
             }
             else if (args[0].ToLower() == "ai")
             {
