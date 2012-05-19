@@ -25,25 +25,23 @@ namespace CommandDll
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
-        public byte Permission { get { return 80; } }
+        public byte Permission { get { return 0; } }
 
         public void Use(Player p, string[] args)
         {
             if (args.Length == 0) { Help(p); return; }
             Player who = Player.Find(args[0]);
             if (who == null) { p.SendMessage("Cannot find player!"); return; }
-            if (who == p) { p.SendMessage("Cannot demote yourself!"); return; }
+            if (who == p) { p.SendMessage("Cannot promote yourself!"); return; }
             PlayerGroup current = who.Group;
             bool next = false;
-            foreach (PlayerGroup rank in PlayerGroup.Groups)
-            {
-                if (rank == current) { next = true; continue; }
-                if (next) 
-                {
-                    string[] info = new string[2] { who.Username, rank.Name };
-                    Command.Find("setrank").Use(p, info);
-                    break;
+            foreach (PlayerGroup rank in PlayerGroup.Groups) {
+                if (rank == who.Group) { next = true; continue; }
+                if (next) {
+                    if (rank.Permission >= p.Group.Permission) { p.SendMessage("You can't promote someone to a higher or equal rank!"); break; }
+                    Command.Find("setrank").Use(p, new string[2] { who.Username, rank.Name }); break; 
                 }
+                
             }         
         }
 
