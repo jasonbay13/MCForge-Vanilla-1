@@ -7,7 +7,7 @@ using MCForge.Robot;
 using MCForge.Core;
 using MCForge.Utils;
 
-namespace MCForge.API.Events
+namespace MCForge.API.Events.Robot
 {
     public class TargetPlayerEvent : Event<Bot, TargetPlayerArgs>
     {

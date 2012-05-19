@@ -15,6 +15,7 @@ using System.Linq;
 using MCForge.SQL;
 using System.Data;
 using MCForge.Entity;
+using MCForge.API.Events.Robot;
 using MCForge.API.Events;
 
 //This namespace should get it's own directory
@@ -23,6 +24,8 @@ namespace MCForge.Robot
     public sealed partial class Bot
     {
         public static TargetPlayerEvent OnBotTargetPlayer = new TargetPlayerEvent();
+
+        public static MoveBotEvent OnBotMove = new MoveBotEvent();
 
         public bool FollowPlayers = false;
         public bool BreakBlocks = false;
@@ -90,8 +93,15 @@ namespace MCForge.Robot
                         #endregion
                         if (HitAPlayer)
                         {
+                            Vector3S TempLocation = new Vector3S(Bot.Player.Pos);
                             TemporaryLocation = new Vector3S(Bot.Player.Pos);
                             TemporaryLocation.Move(13, ClosestLocation);
+
+                            MoveEventArgs eargs = new MoveEventArgs(TemporaryLocation, Bot.Player.Pos);
+                            bool cancel = OnBotMove.Call(Bot, eargs).Canceled;
+                            if (cancel){
+                                TemporaryLocation = TempLocation;
+                            }
                         }
                     }
 
