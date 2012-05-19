@@ -22,6 +22,8 @@ namespace MCForge.Robot
 {
     public sealed partial class Bot
     {
+        public static TargetPlayerEvent OnBotTargetPlayer = new TargetPlayerEvent();
+
         public bool FollowPlayers = false;
         public bool BreakBlocks = false;
         public bool Jumping = false;
@@ -73,9 +75,15 @@ namespace MCForge.Robot
                         {
                             if (p.Level == Bot.Player.Level)
                             {
-                                HitAPlayer = true;
-                                if (p.Pos - Bot.Player.Pos < ClosestLocation - Bot.Player.Pos) {
-                                    ClosestLocation = new Vector3S(p.Pos);
+                                TargetPlayerArgs eargs = new TargetPlayerArgs(p);
+                                bool cancel = OnBotTargetPlayer.Call(Bot, eargs).Canceled;
+                                if (!cancel)
+                                {
+                                    HitAPlayer = true;
+                                    if (p.Pos - Bot.Player.Pos < ClosestLocation - Bot.Player.Pos)
+                                    {
+                                        ClosestLocation = new Vector3S(p.Pos);
+                                    }
                                 }
                             }
                         }

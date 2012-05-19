@@ -903,7 +903,7 @@
             PlayerMoveEventArgs
             </summary>
         </member>
-        <member name="M:MCForge.API.Events.MoveEventArgs.#ctor(MCForge.Utils.Vector3S)">
+        <member name="M:MCForge.API.Events.MoveEventArgs.#ctor(MCForge.Utils.Vector3S,MCForge.Utils.Vector3S)">
             <summary>
             Creates a new instance
             </summary>
@@ -3138,6 +3138,37 @@
         <member name="P:MCForge.Utils.LogEventArgs.BackgroundColor">
             <summary>
             Get or set the color of the background
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.TargetPlayerArgs">
+            <summary>
+            PlayerMoveEventArgs
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.TargetPlayerArgs.#ctor(MCForge.Entity.Player)">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="fromPosition">The position where the move started</param>
+        </member>
+        <member name="M:MCForge.API.Events.TargetPlayerArgs.Cancel">
+            <summary>
+            Cancels the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.TargetPlayerArgs.Allow">
+            <summary>
+            Allows the handling
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.TargetPlayerArgs.Player">
+            <summary>
+            The position where the move started
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.TargetPlayerArgs.Canceled">
+            <summary>
+            Whether or not the handling should be canceled
             </summary>
         </member>
     </members>
