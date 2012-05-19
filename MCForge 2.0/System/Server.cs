@@ -384,6 +384,7 @@ namespace MCForge.Core {
         }
 
         public static void OnLog(object sender, LogEventArgs args) {
+            if (args == null) return;
             if (!DebugMode && args.LogType == LogType.Debug)
                 return;
             var tColor = ColorUtils.ToConsoleColor(args.TextColor);
