@@ -222,13 +222,10 @@
   <ItemGroup>
     <Content Include="README.txt" />
     <Content Include="MCForge.ico" />
-    <Content Include="sqlite3.dll">
+    <Content Include="../System.Data.SQLite.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="System.Data.SQLite.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="System.Data.SQLite.xml">
+    <Content Include="../System.Data.SQLite.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
