@@ -16,6 +16,8 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
+using MCForge.Utils.Settings;
+
 namespace CommandDll
 {
     public class CmdRTitle : ICommand
@@ -62,7 +64,7 @@ namespace CommandDll
                 who = p;
 
             who.ExtraData.CreateIfNotExist("Title", "");
-            who.ExtraData.CreateIfNotExist("TitleColor", Server.DefaultColor);
+            who.ExtraData.CreateIfNotExist("TitleColor", ServerSettings.GetSetting("DefaultColor"));
 
             if (message != who.ExtraData["Title"])
                 message = message.Substring(0, message.Length - 1);
@@ -91,7 +93,7 @@ namespace CommandDll
             who.ExtraData["TitleColor"] = "&c";
             who.ExtraData["Title"] = message;
             who.SetPrefix();
-            Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") + who.Username + Server.DefaultColor + " had thier title set to &b[&c" + message + "&b]");
+            Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") + who.Username + ServerSettings.GetSetting("DefaultColor") + " had thier title set to &b[&c" + message + "&b]");
             //TODO Save to database.
         }
 

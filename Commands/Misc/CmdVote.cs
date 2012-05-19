@@ -17,6 +17,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
+using MCForge.Utils.Settings;
 
 namespace CommandDll
 {
@@ -37,9 +38,9 @@ namespace CommandDll
             ResetVotes();
             Server.voting = true;
             Player.UniversalChat("VOTE: " + message);
-            Player.UniversalChat("Use: %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + "to vote!");
+            Player.UniversalChat("Use: %aYes " + ServerSettings.GetSetting("DefaultColor") + "or %cNo " + ServerSettings.GetSetting("DefaultColor") + "to vote!");
             Thread.Sleep(15000);
-            Player.UniversalChat("The votes are in! %aYes: " + Server.YesVotes + " %cNo: " + Server.NoVotes + Server.DefaultColor + "!");
+            Player.UniversalChat("The votes are in! %aYes: " + Server.YesVotes + " %cNo: " + Server.NoVotes + ServerSettings.GetSetting("DefaultColor") + "!");
 			Server.ForeachPlayer(delegate(Player pl)
 			{
                 pl.ExtraData.CreateIfNotExist("Voted", false);

@@ -240,7 +240,7 @@ namespace MCForge
                                 {
                                     color = c.Name(value); if (color != "") color = value; else { Server.s.Log("Could not find " + value); return; }
                                 }
-                                Server.DefaultColor = color;
+                                //ServerSettings.GetSetting("DefaultColor") = color;
                                 break;
                             case "irc-color":
                                 color = c.Parse(value);

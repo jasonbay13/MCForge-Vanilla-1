@@ -260,7 +260,7 @@ namespace MCForge.Entity {
             if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
-                    if (bool.Parse(ServerSettings.GetSetting("AgreeingToRules"))) {
+                    if (ServerSettings.GetSettingBoolean("AgreeingToRules")) {
                         if (!Server.agreed.Contains(Username) && Group.Permission < 80 && name != "rules" && name != "agree" && name != "disagree") {
                             SendMessage("You need to /agree to the /rules before you can use commands!"); return;
                         }

@@ -18,7 +18,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
-using MCForge.Utils;
+using MCForge.Utils.Settings;
 
 namespace CommandDll.Misc {
     class CmdResetPass : ICommand {
@@ -34,7 +34,7 @@ namespace CommandDll.Misc {
             if (p != null && !p.IsOwner) { p.SendMessage("Only the server owner can reset passwords!"); return; }
             if (who == null) { p.SendMessage("Could not find \"" + args[0] + "\"."); return; }
             if (!File.Exists("extra/passwords/" + who.Username + ".xml")) { p.SendMessage("The player you specified does not have a password!"); return; }
-            if (p != null && !p.IsVerified) { p.SendMessage("You cannot reset passwords until you have verified with &a/pass <password>" + Server.DefaultColor + "!"); return; }
+            if (p != null && !p.IsVerified) { p.SendMessage("You cannot reset passwords until you have verified with &a/pass <password>" + ServerSettings.GetSetting("DefaultColor") + "!"); return; }
             try {
                 File.Delete("extra/passwords/" + who.Username + ".xml");
                 p.SendMessage((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + "'s password has been successfully reset.");

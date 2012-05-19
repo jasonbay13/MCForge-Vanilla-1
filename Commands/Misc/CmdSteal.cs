@@ -16,6 +16,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
+using MCForge.Utils.Settings;
 
 namespace CommandDll.Misc {
     class CmdSteal : ICommand {
@@ -67,16 +68,16 @@ namespace CommandDll.Misc {
             p.ExtraData["Money"] = (int)p.ExtraData["Money"] + amt;
             Player.UniversalChat((string)p.ExtraData.GetIfExist("Color") ?? "" +
                                   p.Username +
-                                  Server.DefaultColor +
+                                  ServerSettings.GetSetting("DefaultColor") +
                                   " took &3" +
                                   amt +
-                                  Server.DefaultColor +
+                                  ServerSettings.GetSetting("DefaultColor") +
                                   " " +
                                   Server.moneys +
                                   " from " +
                                   who.ExtraData.GetIfExist("Color") ?? "" +
                                   who.Username +
-                                  Server.DefaultColor +
+                                  ServerSettings.GetSetting("DefaultColor") +
                                   ".");
 
         }

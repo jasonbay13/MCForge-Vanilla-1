@@ -67,7 +67,7 @@ namespace CommandDll
                         //Need goto here
                         if (who.IsLoading)
                         {
-                            p.SendMessage("Waiting for " + (string)who.ExtraData.GetIfExist("Color") + who.Username + Server.DefaultColor + " to spawn...");
+                            p.SendMessage("Waiting for " + (string)who.ExtraData.GetIfExist("Color") + who.Username + ServerSettings.GetSetting("DefaultColor") + " to spawn...");
                             while (who.IsLoading) 
                                 Thread.Sleep(5);
                             
@@ -108,7 +108,7 @@ namespace CommandDll
                         //Need goto here
                         if (two.IsLoading)
                         {
-                            p.SendMessage("Waiting for " + (string)two.ExtraData.GetIfExist("Color") + two.Username + Server.DefaultColor + " to spawn...");
+                            p.SendMessage("Waiting for " + (string)two.ExtraData.GetIfExist("Color") + two.Username + ServerSettings.GetSetting("DefaultColor") + " to spawn...");
                             while (two.IsLoading) {
                                 Thread.Sleep(5);
                             }

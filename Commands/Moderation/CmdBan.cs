@@ -14,10 +14,10 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.IO;
-using MCForge.Interface.Command;
 using MCForge.Entity;
-using MCForge.Core;
+using MCForge.Interface.Command;
 using MCForge.Utils;
+using MCForge.Utils.Settings;
 
 namespace CommandDll.Moderation
 {
@@ -63,13 +63,13 @@ namespace CommandDll.Moderation
                 }
                 if (reason == "")
                 {
-                    if (who != null) Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
-                    else Player.UniversalChat("&3" + args[0] + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
+                    if (who != null) Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + ServerSettings.GetSetting("DefaultColor") + " is now &8banned" + ServerSettings.GetSetting("DefaultColor") + "!");
+                    else Player.UniversalChat("&3" + args[0] + ServerSettings.GetSetting("DefaultColor") + " is now &8banned" + ServerSettings.GetSetting("DefaultColor") + "!");
                 }
                 else
                 {
-                    if (who != null) { Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChat("&4Reason: &f" + reason); }
-                    else { Player.UniversalChat("&3" + args[0] + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChat("&4Reason: &f" + reason); }
+                    if (who != null) { Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + ServerSettings.GetSetting("DefaultColor") + " is now &8banned" + ServerSettings.GetSetting("DefaultColor") + "!"); Player.UniversalChat("&4Reason: &f" + reason); }
+                    else { Player.UniversalChat("&3" + args[0] + ServerSettings.GetSetting("DefaultColor") + " is now &8banned" + ServerSettings.GetSetting("DefaultColor") + "!"); Player.UniversalChat("&4Reason: &f" + reason); }
                 }
             }
             if (Stealth)
@@ -98,13 +98,13 @@ namespace CommandDll.Moderation
                 }
                 if (reason == "")
                 {
-                    if (who != null) Player.UniversalChatOps((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
-                    else Player.UniversalChatOps("&3" + args[0] + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
+                    if (who != null) Player.UniversalChatOps((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + ServerSettings.GetSetting("DefaultColor") + " is now &8banned" + ServerSettings.GetSetting("DefaultColor") + "!");
+                    else Player.UniversalChatOps("&3" + args[0] + ServerSettings.GetSetting("DefaultColor") + " is now &8banned" + ServerSettings.GetSetting("DefaultColor") + "!");
                 }
                 else
                 {
-                    if (who != null) { Player.UniversalChatOps((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
-                    else { Player.UniversalChatOps("&3" + args[0] + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
+                    if (who != null) { Player.UniversalChatOps((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + ServerSettings.GetSetting("DefaultColor") + " is now &8banned" + ServerSettings.GetSetting("DefaultColor") + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
+                    else { Player.UniversalChatOps("&3" + args[0] + ServerSettings.GetSetting("DefaultColor") + " is now &8banned" + ServerSettings.GetSetting("DefaultColor") + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
                 }
             }
         }

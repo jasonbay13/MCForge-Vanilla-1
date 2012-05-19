@@ -47,7 +47,7 @@ namespace MCForge.Entity {
                     p.CloseConnection();
                     if (!p.IsBeingKicked) {
                         var color = (string)p.ExtraData.GetIfExist("Color");
-                        UniversalChat(color ?? "" + p.Username + Server.DefaultColor + " has disconnected.");
+                        UniversalChat(color ?? "" + p.Username + ServerSettings.GetSetting("DefaultColor") + " has disconnected.");
                         p.GlobalDie();
                     }
                     if (Server.reviewlist.Contains(p)) {
@@ -463,7 +463,7 @@ namespace MCForge.Entity {
                     return;
                 }
                 else {
-                    SendMessage("Use either %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + " to vote!");
+                    SendMessage("Use either %aYes " + ServerSettings.GetSetting("DefaultColor") + "or %cNo " + ServerSettings.GetSetting("DefaultColor") + " to vote!");
                 }
 
             }
@@ -473,7 +473,7 @@ namespace MCForge.Entity {
             {
                 incomingText = incomingText.Trim().TrimStart('#');
                 UniversalChatOps("&a<&fTo Ops&a> " + Group.Color + Username + ": &f" + incomingText);
-                if (Group.Permission < Server.opchatperm) {
+                if (Group.Permission < ServerSettings.GetSettingInt("OpChatPermission")) {
                     SendMessage("&a<&fTo Ops&a> " + Group.Color + Username + ": &f" + incomingText);
                 } //So players who aren't op see their messages
                 Logger.Log("<OpChat> <" + Username + "> " + incomingText);
@@ -508,7 +508,7 @@ namespace MCForge.Entity {
             {
                 incomingText = incomingText.TrimStart().TrimStart('+');
                 UniversalChatAdmins("&a<&fTo Admins&a> " + Group.Color + Username + ": &f" + incomingText);
-                if (Group.Permission < Server.adminchatperm) {
+                if (Group.Permission < ServerSettings.GetSettingInt("AdminChatPermission")) {
                     SendMessage("&a<&fTo Admins&a> " + Group.Color + Username + ": &f" + incomingText);
                 }
                 Logger.Log("<AdminChat> <" + Username + "> " + incomingText);
@@ -576,7 +576,7 @@ namespace MCForge.Entity {
             var mTitle = ExtraData.GetIfExist("Title");
             var mTColor = ExtraData.GetIfExist("TitleColor");
             var mColor = ExtraData.GetIfExist("Color");
-            ExtraData["Prefix"] = mTitle == null ? "" : "[" + mTColor ?? Server.DefaultColor + mTitle + mColor ?? Server.DefaultColor + "]";
+            ExtraData["Prefix"] = mTitle == null ? "" : "[" + mTColor ?? ServerSettings.GetSetting("DefaultColor") + mTitle + mColor ?? ServerSettings.GetSetting("DefaultColor") + "]";
         }
 
         #endregion
@@ -619,7 +619,7 @@ namespace MCForge.Entity {
                 message = message.Replace("&" + ch + " &", "&");
             }
             if (!String.IsNullOrWhiteSpace(message))
-                message = Server.DefaultColor + message;
+                message = ServerSettings.GetSetting("DefaultColor") + message;
 
             pa.Add(packet.types.Message);
             pa.Add(PlayerID);
@@ -949,21 +949,27 @@ namespace MCForge.Entity {
                 }
             });
         }
+
+        static string ConvertVariables(Player p, string text)
+        {
+            if (text.Contains("$name")) {
+                if (ServerSettings.GetSettingBoolean("$Before$Name")) { text = text.Replace("$name", "$" + p.Username); }
+                else { text = text.Replace("$name", p.Username); }
+            }
+            if (text.Contains("$money")) { text = text.Replace("$money", p.money.ToString()); }
+            if (text.Contains("$" + Server.moneys)) { text = text.Replace("$" + Server.moneys, p.money.ToString()); }
+            if (text.Contains("$rank")) { text = text.Replace("$rank", p.Group.Name); }
+            if (text.Contains("$ip")) { text = text.Replace("$ip", p.Ip); }
+            if (text.Contains("$server")) { text = text.Replace("$server", ServerSettings.GetSetting("ServerName")); }
+            return text;
+        }
         /// <summary>
         /// Send a message to everyone, on every world
         /// </summary>
         /// <param name="text">The message to send.</param>
         public static void UniversalChat(string text) {
-            Server.ForeachPlayer(p => {
-                string message = text;
-                if (message.Contains("$name")) {
-                    if (ServerSettings.GetSettingBoolean("$Before$Name")) { message = message.Replace("$name", "$" + p.Username); }
-                    else { message = message.Replace("$name", p.Username); }
-                }
-                if (message.Contains("$money")) { message = message.Replace("$money", p.money.ToString()); }
-                if (message.Contains("$rank")) { message = message.Replace("$rank", p.Group.Name); }
-                if (message.Contains("$ip")) { message = message.Replace("$ip", p.Ip); }
-                p.SendMessage(message);
+            Server.ForeachPlayer(p => {       
+                p.SendMessage(ConvertVariables(p, text));
             });
          
         }
@@ -973,16 +979,8 @@ namespace MCForge.Entity {
         /// <param name="message">The message to send</param>
         public static void UniversalChatOps(string message) {
             Server.ForeachPlayer(p => {
-                if (p.Group.Permission >= Server.opchatperm) {
-                    string text = message;
-                    if (text.Contains("$name")) {
-                        if (ServerSettings.GetSettingBoolean("$Before$Name")) { text = text.Replace("$name", "$" + p.Username); }
-                        else { text = text.Replace("$name", p.Username); }
-                    }
-                    if (text.Contains("$money")) { text = text.Replace("$money", p.money.ToString()); }
-                    if (text.Contains("$rank")) { text = text.Replace("$rank", p.Group.Color); }
-                    if (text.Contains("$ip")) { text = text.Replace("$ip", p.Ip); }
-                    p.SendMessage(text);
+                if (p.Group.Permission >= ServerSettings.GetSettingInt("OpChatPermission")) {
+                    p.SendMessage(ConvertVariables(p, message));
                 }
             });
         }
@@ -992,16 +990,8 @@ namespace MCForge.Entity {
         /// <param name="message">The message to be sent</param>
         public static void UniversalChatAdmins(string message) {
             Server.ForeachPlayer(p => {
-                if (p.Group.Permission >= Server.adminchatperm) {
-                    string text = message;
-                    if (text.Contains("$name")) {
-                        if (ServerSettings.GetSettingBoolean("$Before$Name")) { text = text.Replace("$name", "$" + p.Username); }
-                        else { text = text.Replace("$name", p.Username); }
-                    }
-                    if (text.Contains("$money")) { text = text.Replace("$money", p.money.ToString()); }
-                    if (text.Contains("$rank")) { text = text.Replace("$rank", p.Group.Color); }
-                    if (text.Contains("$ip")) { text = text.Replace("$ip", p.Ip); }
-                    p.SendMessage(text);
+                if (p.Group.Permission >= ServerSettings.GetSettingInt("AdminChatPermission")) {
+                    p.SendMessage(ConvertVariables(p, message));
                 }
             });
         }
@@ -1013,15 +1003,7 @@ namespace MCForge.Entity {
         public static void RankChat(Player from, string message) {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p.Group.Permission == from.Group.Permission) {
-                    string text = message;
-                    if (text.Contains("$name")) {
-                        if (ServerSettings.GetSettingBoolean("$Before$Name")) { text = text.Replace("$name", "$" + p.Username); }
-                        else { text = text.Replace("$name", p.Username); }
-                    }
-                    if (text.Contains("$money")) { text = text.Replace("$money", p.money.ToString()); }
-                    if (text.Contains("$rank")) { text = text.Replace("$rank", p.Group.Color); }
-                    if (text.Contains("$ip")) { text = text.Replace("$ip", p.Ip); }
-                    p.SendMessage(text);
+                    p.SendMessage(ConvertVariables(p, message));
                 }
             });
         }
@@ -1032,18 +1014,7 @@ namespace MCForge.Entity {
         /// <param name="message">The message to be sent</param>
         public static void LevelChat(Player from, string message) {
             Server.ForeachPlayer(delegate(Player p) {
-                if (p.Level == from.Level) 
-                {
-                    string text = message;
-                    if (text.Contains("$name")) {
-                        if (ServerSettings.GetSettingBoolean("$Before$Name")) { text = text.Replace("$name", "$" + p.Username); }
-                        else { text = text.Replace("$name", p.Username); }
-                    }
-                    if (text.Contains("$money")) { text = text.Replace("$money", p.money.ToString()); }
-                    if (text.Contains("$rank")) { text = text.Replace("$rank", p.Group.Color); }
-                    if (text.Contains("$ip")) { text = text.Replace("$ip", p.Ip); }
-                    p.SendMessage(text);
-                }
+                if (p.Level == from.Level) { p.SendMessage(ConvertVariables(p, message)); }
             });
         }
         private void CloseConnection() {

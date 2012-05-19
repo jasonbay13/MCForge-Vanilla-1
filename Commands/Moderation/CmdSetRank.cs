@@ -12,11 +12,10 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
-using MCForge.Interface.Command;
 using MCForge.Entity;
-using MCForge.Core;
 using MCForge.Groups;
+using MCForge.Interface.Command;
+using MCForge.Utils.Settings;
 
 namespace CommandDll
 {
@@ -50,7 +49,7 @@ namespace CommandDll
                 return;
             }
 
-           /* if (who.Group.Permission >= p.Group.Permission)
+            if (who.Group.Permission >= p.Group.Permission)
             {
                 p.SendMessage("You cannot change the rank of someone of an equal or greater rank!");
                 return;
@@ -62,11 +61,11 @@ namespace CommandDll
             }
             if (who.Group == group)
             {
-                p.SendMessage(group.Colour + who.Username + Server.DefaultColor + " is already that rank");
+                p.SendMessage(group.Colour + who.Username + ServerSettings.GetSetting("DefaultColor") + " is already that rank");
                 return;
-            }*/
+            }
             group.AddPlayer(who);
-            Player.UniversalChat(group.Colour + who.Username + Server.DefaultColor + " had their rank set to " + group.Colour + group.Name);
+            Player.UniversalChat(group.Colour + who.Username + ServerSettings.GetSetting("DefaultColor") + " had their rank set to " + group.Colour + group.Name);
 
         }
 

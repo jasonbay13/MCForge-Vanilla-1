@@ -21,6 +21,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
+using MCForge.Utils.Settings;
 
 namespace CommandDll.Misc {
     class CmdPass : ICommand {
@@ -36,17 +37,17 @@ namespace CommandDll.Misc {
             p.ExtraData.CreateIfNotExist("PassTries", 0);
             if (p.IsVerified) { p.SendMessage("You already verified!"); return; }
             if (!Server.Verifying) { p.SendMessage("You don't need to verify!"); return; }
-            if (p.Group.Permission < Server.VerifyGroup.Permission) { p.SendMessage("Only " + Server.VerifyGroup.Color + Server.VerifyGroup.Name + "s " + Server.DefaultColor + "and above need to verify."); return; }
+            if (p.Group.Permission < Server.VerifyGroup.Permission) { p.SendMessage("Only " + Server.VerifyGroup.Color + Server.VerifyGroup.Name + "s " + ServerSettings.GetSetting("DefaultColor") + "and above need to verify."); return; }
             if ((int)p.ExtraData["PassTries"] >= 3) { p.Kick("Did you really think you could keep on guessing?"); return; }
             int foundone = 0;
             if (args[0] == "") { Help(p); return; }
             int number = args.Length;
             if (number > 1) {
-                p.SendMessage("Your password must be &cone " + Server.DefaultColor + "word!");
+                p.SendMessage("Your password must be &cone " + ServerSettings.GetSetting("DefaultColor") + "word!");
                 return;
             }
             if (!Directory.Exists("extra/passwords")) {
-                p.SendMessage("You have not &cset a password" + Server.DefaultColor + ", use &a/setpass [Password] " + Server.DefaultColor + "to set one!");
+                p.SendMessage("You have not &cset a password" + ServerSettings.GetSetting("DefaultColor") + ", use &a/setpass [Password] " + ServerSettings.GetSetting("DefaultColor") + "to set one!");
                 return;
             }
             DirectoryInfo di = new DirectoryInfo("extra/passwords/");
@@ -64,7 +65,7 @@ namespace CommandDll.Misc {
                 return;
             }
             if (foundone < 0) {
-                p.SendMessage("You have not &cset a password, " + Server.DefaultColor + "use &a/setpass [Password] &cto set one!");
+                p.SendMessage("You have not &cset a password, " + ServerSettings.GetSetting("DefaultColor") + "use &a/setpass [Password] &cto set one!");
                 return;
             }
             if (foundone > 1) {
@@ -72,12 +73,12 @@ namespace CommandDll.Misc {
                 return;
             }
             if (!File.Exists("extra/passwords/" + p.Username + ".xml")) {
-                p.SendMessage("You have not &cset a password, " + Server.DefaultColor + "use &a/setpass [Password] &cto set one!");
+                p.SendMessage("You have not &cset a password, " + ServerSettings.GetSetting("DefaultColor") + "use &a/setpass [Password] &cto set one!");
                 return;
             }
             Crypto.DecryptStringAES(File.ReadAllText("extra/passwords/" + p.Username + ".xml"), "MCForgeEncryption", p, args[0]);
             if (args[0] == password) {
-                p.SendMessage("Thank you, " + (string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + Server.DefaultColor + "! You are now &averified " + Server.DefaultColor + "and have &aaccess to admin commands and features!");
+                p.SendMessage("Thank you, " + (string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + ServerSettings.GetSetting("DefaultColor") + "! You are now &averified " + ServerSettings.GetSetting("DefaultColor") + "and have &aaccess to admin commands and features!");
                 if (p.IsVerified == false)
                     p.IsVerified = true;
                 password = "";
@@ -85,8 +86,8 @@ namespace CommandDll.Misc {
                 return;
             }
             p.ExtraData["PassTries"] = (int)p.ExtraData["PassTries"] + 1;
-            p.SendMessage("&cIncorrect Password. " + Server.DefaultColor + "Remember your password is &ccase sensitive!");
-            p.SendMessage("If you have &cforgotten your password, " + Server.DefaultColor + "contact the server host and they can reset it! &cIncorrect " + Server.DefaultColor + "Tries: &b" + p.ExtraData["PassTries"]);
+            p.SendMessage("&cIncorrect Password. " + ServerSettings.GetSetting("DefaultColor") + "Remember your password is &ccase sensitive!");
+            p.SendMessage("If you have &cforgotten your password, " + ServerSettings.GetSetting("DefaultColor") + "contact the server host and they can reset it! &cIncorrect " + ServerSettings.GetSetting("DefaultColor") + "Tries: &b" + p.ExtraData["PassTries"]);
             return;
         }
 

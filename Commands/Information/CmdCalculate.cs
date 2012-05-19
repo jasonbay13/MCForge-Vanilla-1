@@ -16,6 +16,7 @@ using System;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils.Settings;
 
 namespace CommandDll
 {
@@ -62,7 +63,7 @@ namespace CommandDll
                             return;
                     }
                 Meep:
-                    p.SendMessage((operation == "pi") ? ("The answer:&a " + num1 + " x PI " + Server.DefaultColor + " = " + Colors.red + result) : ("The answer: &aThe " + operation + " of " + num1 + Colors.yellow + " = " + Colors.red + result));
+                    p.SendMessage((operation == "pi") ? ("The answer:&a " + num1 + " x PI " + ServerSettings.GetSetting("DefaultColor") + " = " + Colors.red + result) : ("The answer: &aThe " + operation + " of " + num1 + Colors.yellow + " = " + Colors.red + result));
                     return;
                 }
                 else if (args.Length == 3)
@@ -102,7 +103,7 @@ namespace CommandDll
                             return;
                     }
                 _Meep:
-                    p.SendMessage("The answer:&a " + num1 + " " + operation + " " + num2 + Server.DefaultColor + " = " + Colors.red + result);
+                    p.SendMessage("The answer:&a " + num1 + " " + operation + " " + num2 + ServerSettings.GetSetting("DefaultColor") + " = " + Colors.red + result);
                     return;
                 }
                 else

@@ -18,6 +18,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using System.Collections.Generic;
 using MCForge.Utils;
+using MCForge.Utils.Settings;
 
 namespace CommandDll.Moderation {
     class CmdUnban : ICommand {
@@ -40,10 +41,10 @@ namespace CommandDll.Moderation {
                             if (line != who.Username)
                                 l.Add(line);
                             File.WriteAllLines("bans/NameBans.txt", l.ToArray());
-                            Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is now unbanned!");
+                            Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + ServerSettings.GetSetting("DefaultColor") + " is now unbanned!");
                             return;
                         }
-                        p.SendMessage((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is not banned.");
+                        p.SendMessage((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + ServerSettings.GetSetting("DefaultColor") + " is not banned.");
                     }
                     else {
                         if (line == args[0]) {
@@ -51,10 +52,10 @@ namespace CommandDll.Moderation {
                             if (line != args[0])
                                 l.Add(line);
                             File.WriteAllLines("bans/NameBans.txt", l.ToArray());
-                            Player.UniversalChat("&3" + args[1] + Server.DefaultColor + " is now unbanned!");
+                            Player.UniversalChat("&3" + args[1] + ServerSettings.GetSetting("DefaultColor") + " is now unbanned!");
                             return;
                         }
-                        p.SendMessage("&3" + args[0] + Server.DefaultColor + " is not banned.");
+                        p.SendMessage("&3" + args[0] + ServerSettings.GetSetting("DefaultColor") + " is not banned.");
                     }
                 }
             }
@@ -67,10 +68,10 @@ namespace CommandDll.Moderation {
                             if (line != who.Username)
                                 l.Add(line);
                             File.WriteAllLines("bans/NameBans.txt", l.ToArray());
-                            Player.UniversalChatOps((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is now unbanned!");
+                            Player.UniversalChatOps((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + ServerSettings.GetSetting("DefaultColor") + " is now unbanned!");
                             return;
                         }
-                        p.SendMessage((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is not banned.");
+                        p.SendMessage((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + ServerSettings.GetSetting("DefaultColor") + " is not banned.");
                     }
                     else {
                         if (line == args[1]) {
@@ -78,10 +79,10 @@ namespace CommandDll.Moderation {
                             if (line != args[0])
                                 l.Add(line);
                             File.WriteAllLines("bans/NameBans.txt", l.ToArray());
-                            Player.UniversalChatOps("&3" + args[1] + Server.DefaultColor + " is now unbanned!");
+                            Player.UniversalChatOps("&3" + args[1] + ServerSettings.GetSetting("DefaultColor") + " is now unbanned!");
                             return;
                         }
-                        p.SendMessage("&3" + args[1] + MCForge.Core.Server.DefaultColor + " is not banned.");
+                        p.SendMessage("&3" + args[1] + ServerSettings.GetSetting("DefaultColor") + " is not banned.");
                     }
                 }
             }

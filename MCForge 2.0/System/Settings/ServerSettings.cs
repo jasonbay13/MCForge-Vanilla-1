@@ -15,12 +15,11 @@ permissions and limitations under the Licenses.
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using MCForge.Core;
 using System.Security.Cryptography;
-using System.Drawing;
 
 namespace MCForge.Utils.Settings {
     /// <summary>
@@ -30,6 +29,7 @@ namespace MCForge.Utils.Settings {
 
         internal const byte Version = 7;
         internal static string Salt { get; set; }
+        static List<string> validcolors = new List<string>(new string[] { "a","b","c","d","e","f","0","1","2","3","4","5","6","7","8","9"});
 
         private static bool _initCalled;
         private static List<SettingNode> Values;
@@ -72,8 +72,11 @@ namespace MCForge.Utils.Settings {
                 new SettingNode("IRC-NickServ", "password", "IRC NickServ password (optional when IRC is enabled)"),
                 new SettingNode("AgreeingToRules", "true", "If set to true players below op will need to read the rules and agree before they can use commands"),
                 new SettingNode("$Before$Name", "true", null),
-               
-                
+                new SettingNode("ReviewModeratorPerm", "80", "Determines what rank gets to use /review next and /review remove. Use the permission number, not the rank name!"),
+                new SettingNode("OpChatPermission", "80", "Determines what rank can use the operator chat"),
+                new SettingNode("AdminChatPermission", "100", "Determines what rank can use the admin chat"),
+                new SettingNode("DefaultColor", "&a", "Determines the server's default color"),
+ 
                                                               };
 
 
@@ -150,6 +153,14 @@ namespace MCForge.Utils.Settings {
         /// <returns>The setting value</returns>
         /// <remarks>Returns the first value if multiple values are present</remarks>
         public static string GetSetting(string key) {
+            if (key == "DefaultColor") { //Gotta check if it's valid
+                string value = GetSettingArray(key)[0];
+                if (value.Length > 2) { Logger.Log("Invalid DefaultColor length!"); return "&a"; }
+                if (value[0] != '&' && value[0] != '%') { Logger.Log("Invalid DefaultColor sign. Use % or &!"); return "&a"; }
+                bool okay = false;
+                foreach (string s in validcolors) { if (value[1] == char.Parse(s)) { okay = true; } }
+                if (!okay) { Logger.Log("Invalid DefaultColor color!"); return "&a"; }       
+            }
             key = key.ToLower();
             return GetSettingArray(key)[0];
         }

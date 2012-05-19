@@ -14,12 +14,11 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using MCForge.Utils.Settings;
-using MCForge.Utils;
-using MCForge.Interface;
 using System.Drawing;
+using System.Threading;
+using MCForge.Interface;
+using MCForge.Utils;
+using MCForge.Utils.Settings;
 
 namespace MCForge.Core {
     static class Program {

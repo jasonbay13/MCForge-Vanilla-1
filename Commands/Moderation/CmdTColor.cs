@@ -16,6 +16,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
+using MCForge.Utils.Settings;
 
 namespace CommandDll
 {
@@ -34,7 +35,7 @@ namespace CommandDll
             Player who;
             string titleColor;
 
-            p.ExtraData.CreateIfNotExist("TitleColor", Server.DefaultColor);
+            p.ExtraData.CreateIfNotExist("TitleColor", ServerSettings.GetSetting("DefaultColor"));
 
             if (args.Length == 1)
             {
@@ -56,7 +57,7 @@ namespace CommandDll
 
             string message = "";
 
-            who.ExtraData.CreateIfNotExist("TitleColor", Server.DefaultColor);
+            who.ExtraData.CreateIfNotExist("TitleColor", ServerSettings.GetSetting("DefaultColor"));
 
             if (titleColor == "del")
             {

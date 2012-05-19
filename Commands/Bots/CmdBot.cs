@@ -12,13 +12,13 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
+using System;
+using System.Collections.Generic;
 using MCForge.Core;
-using MCForge.Robot;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-using MCForge.Utils;
-using System.Collections.Generic;
-using System;
+using MCForge.Robot;
+using MCForge.Utils.Settings;
 namespace CommandDll
 {
     public class CmdBot : ICommand
@@ -55,7 +55,7 @@ namespace CommandDll
                     + TemporaryPlayer.Player.Rot[0] + " " + TemporaryPlayer.Player.Rot[1]); //Add bot to level metadata
                                                                                             //This enables cross server bot transfer
                                                                                             //And returns when level is loaded
-                p.SendMessage("Spawned " + ArrayToString(fargs.ToArray()) + Server.DefaultColor + "!");
+                p.SendMessage("Spawned " + ArrayToString(fargs.ToArray()) + ServerSettings.GetSetting("DefaultColor") + "!");
             }
             else if (args[0].ToLower() == "remove")
             {
@@ -94,9 +94,9 @@ namespace CommandDll
                     p.Level.ExtraData.Remove(s);
                 }
                 if (hitBot)
-                    p.SendMessage("Removed " + ArrayToString(fargs.ToArray()) + Server.DefaultColor + "!");
+                    p.SendMessage("Removed " + ArrayToString(fargs.ToArray()) + ServerSettings.GetSetting("DefaultColor") + "!");
                 else
-                    p.SendMessage("Could not find " + ArrayToString(fargs.ToArray()) + Server.DefaultColor + "!");
+                    p.SendMessage("Could not find " + ArrayToString(fargs.ToArray()) + ServerSettings.GetSetting("DefaultColor") + "!");
             }
             else if (args[0].ToLower() == "summon")
             {
@@ -121,9 +121,9 @@ namespace CommandDll
                     }
                 }
                 if (hitBot)
-                    p.SendMessage("Summoned " + ArrayToString(fargs.ToArray()) + Server.DefaultColor + "!");
+                    p.SendMessage("Summoned " + ArrayToString(fargs.ToArray()) + ServerSettings.GetSetting("DefaultColor") + "!");
                 else
-                    p.SendMessage("Could not find " + ArrayToString(fargs.ToArray()) + Server.DefaultColor + "!");
+                    p.SendMessage("Could not find " + ArrayToString(fargs.ToArray()) + ServerSettings.GetSetting("DefaultColor") + "!");
             }
             else if (args[0].ToLower() == "ai")
             {

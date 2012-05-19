@@ -2915,26 +2915,6 @@
             The player who's getting, if it's /votekick
             </summary>
         </member>
-        <member name="F:MCForge.Core.Server.DefaultColor">
-            <summary>
-            The server's default color.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.opchatperm">
-            <summary>
-            Server's op chat permission
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.adminchatperm">
-            <summary>
-            Server's admin chat permission
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.reviewnextperm">
-            <summary>
-            Group permission that can use /review next
-            </summary>
-        </member>
         <member name="F:MCForge.Core.Server.URL">
             <summary>
             The minecraft.net URL of the server

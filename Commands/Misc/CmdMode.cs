@@ -12,14 +12,13 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System.Globalization;
-using MCForge.Core;
+using System;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
+using MCForge.Utils.Settings;
 using MCForge.World;
 using MCForge.World.Blocks;
-using MCForge.Utils;
-using System;
 
 namespace CommandDll {
     public class CmdMode : ICommand {
@@ -57,7 +56,7 @@ namespace CommandDll {
                 if (!p.ExtraData.ContainsKey("BlockMode"))
                     p.ExtraData.Add("BlockMode", b);
 
-                p.SendMessage("&b" + StringUtils.TitleCase(b.Name) + Server.DefaultColor + " mode &9on");
+                p.SendMessage("&b" + StringUtils.TitleCase(b.Name) + ServerSettings.GetSetting("DefaultColor") + " mode &9on");
                 return;
             }
             else {
@@ -79,14 +78,14 @@ namespace CommandDll {
                     p.ExtraData["Mode"] = true;
                     if (!p.ExtraData.ContainsKey("BlockMode"))
                         p.ExtraData.Add("BlockMode", b);
-                    p.SendMessage("&b" + StringUtils.TitleCase(b.Name) + Server.DefaultColor + " mode &9on");
+                    p.SendMessage("&b" + StringUtils.TitleCase(b.Name) + ServerSettings.GetSetting("DefaultColor") + " mode &9on");
                     return;
                 }
                 if (!p.ExtraData.ContainsKey("BlockMode"))
                     throw new Exception("No block set in block mode");
 
                 Block prev = (Block)p.ExtraData["BlockMode"];
-                p.SendMessage("&b" + StringUtils.TitleCase(prev.Name) + Server.DefaultColor + " mode &coff");
+                p.SendMessage("&b" + StringUtils.TitleCase(prev.Name) + ServerSettings.GetSetting("DefaultColor") + " mode &coff");
                 p.ExtraData["Mode"] = false;
                 p.ExtraData["BlockMode"] = null;
             }

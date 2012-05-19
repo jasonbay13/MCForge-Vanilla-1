@@ -16,7 +16,7 @@ using System;
 using System.IO;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-using MCForge.Core;
+using MCForge.Utils.Settings;
 
 namespace CommandDll.Moderation
 {
@@ -50,8 +50,8 @@ namespace CommandDll.Moderation
                     SW.Dispose();
                     SW.Close();
                 }
-                if (reason == "") Player.UniversalChat(args[0] + Server.DefaultColor + " is now &8IP-banned" + Server.DefaultColor + "!");
-                else { Player.UniversalChat(args[0] + Server.DefaultColor + " is now &8IP-banned" + Server.DefaultColor + "!"); Player.UniversalChat("&4Reason: &f" + reason); }
+                if (reason == "") Player.UniversalChat(args[0] + ServerSettings.GetSetting("DefaultColor") + " is now &8IP-banned" + ServerSettings.GetSetting("DefaultColor") + "!");
+                else { Player.UniversalChat(args[0] + ServerSettings.GetSetting("DefaultColor") + " is now &8IP-banned" + ServerSettings.GetSetting("DefaultColor") + "!"); Player.UniversalChat("&4Reason: &f" + reason); }
             }
             if (Stealth)
             {
@@ -69,8 +69,8 @@ namespace CommandDll.Moderation
                     SW.Dispose();
                     SW.Close();
                 }
-                if (reason == "") { Player.UniversalChatOps(args[1] + Server.DefaultColor + " is now &8IP-banned" + Server.DefaultColor + "!"); }
-                else { Player.UniversalChatOps(args[1] + Server.DefaultColor + " is now &8IP-banned" + Server.DefaultColor + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
+                if (reason == "") { Player.UniversalChatOps(args[1] + ServerSettings.GetSetting("DefaultColor") + " is now &8IP-banned" + ServerSettings.GetSetting("DefaultColor") + "!"); }
+                else { Player.UniversalChatOps(args[1] + ServerSettings.GetSetting("DefaultColor") + " is now &8IP-banned" + ServerSettings.GetSetting("DefaultColor") + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
             }
         }
         public void Help(Player p)
