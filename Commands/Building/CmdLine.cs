@@ -82,7 +82,9 @@ namespace CommandDll.Building {
         }
 
         void CatchBlockOne(Player sender, BlockChangeEventArgs e) {
-            byte block = (byte)sender.ExtraData.GetIfExist<object, object>("Command.Line");
+            object extData=sender.ExtraData.GetIfExist<object, object>("Command.Line");
+            byte block = 255;
+            if (extData != null) block = (byte)extData;
             sender.ExtraData.ChangeOrCreate<object, object>("Command.Line", new BlockInfo(block != 255 ? block : e.Holding, new Vector3S(e.X, e.Z, e.Y)));
             e.Cancel();
             sender.OnPlayerBlockChange.Normal -= CatchBlockOne;
