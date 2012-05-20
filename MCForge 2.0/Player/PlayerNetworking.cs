@@ -843,13 +843,13 @@ namespace MCForge.Entity {
                 tempRot[1] = 80;
 
             oldPos = Pos;
-            oldRot = Rot;
+            oldRot = tempRot;
 
             int diffX = tempPos.x - tempOldPos.x;
             int diffZ = tempPos.z - tempOldPos.z;
             int diffY = tempPos.y - tempOldPos.y;
-            int diffR0 = tempRot[0] - tempRot[0];
-            int diffR1 = tempRot[1] - tempRot[1];
+            int diffR0 = tempRot[0] - tempOldRot[0];
+            int diffR1 = tempRot[1] - tempOldRot[1];
 
 
             //TODO rewrite local pos change code
@@ -876,12 +876,12 @@ namespace MCForge.Entity {
                     pa.Add(diffX);
                     pa.Add(diffY);
                     pa.Add(diffZ);
-                    pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
+                    pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 }); //this can't work as diffR(0/1) are signed ints!
                 }
                 else if (rotupdate) {
                     pa.Add(packet.types.SendRotChange);
                     pa.Add(id);
-                    pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
+                    pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 }); //same here
                 }
                 else if (posupdate) {
                     pa.Add(packet.types.SendPosChange);
