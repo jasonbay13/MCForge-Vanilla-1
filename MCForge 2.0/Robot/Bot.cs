@@ -145,7 +145,7 @@ namespace MCForge.Robot
                         }
                     }
 
-                    Bot.Player.UpdatePosition(true); //if false I get kicked.
+                    Bot.Player.UpdatePosition(false);
                 }
             }
         }

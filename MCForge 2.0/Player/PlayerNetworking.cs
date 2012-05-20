@@ -838,16 +838,16 @@ namespace MCForge.Entity {
             Vector3S tempPos = Pos;
             byte[] tempRot = Rot;
             byte[] tempOldRot = oldRot;
-
+            if (tempOldRot == null) tempOldRot = new byte[2];
             if (IsHeadFlipped)
                 tempRot[1] = 80;
 
             oldPos = Pos;
             oldRot = tempRot;
 
-            int diffX = tempPos.x - tempOldPos.x;
-            int diffZ = tempPos.z - tempOldPos.z;
-            int diffY = tempPos.y - tempOldPos.y;
+            short diffX =(short)( tempPos.x - tempOldPos.x);
+            short diffZ = (short)(tempPos.z - tempOldPos.z);
+            short diffY = (short)( tempPos.y - tempOldPos.y);
             int diffR0 = tempRot[0] - tempOldRot[0];
             int diffR1 = tempRot[1] - tempOldRot[1];
 
@@ -868,14 +868,14 @@ namespace MCForge.Entity {
                 pa.Add(tempRot);
             }
             else {
-                bool rotupdate = diffR0 == 0 && diffR1 == 0;
+                bool rotupdate = diffR0 != 0 && diffR1 != 0;
                 bool posupdate = diffX != 0 || diffY != 0 || diffZ != 0;
                 if (rotupdate && posupdate) {
                     pa.Add(packet.types.SendPosANDRotChange);
                     pa.Add(id);
-                    pa.Add(diffX);
-                    pa.Add(diffY);
-                    pa.Add(diffZ);
+                    pa.Add((sbyte)diffX);
+                    pa.Add((sbyte)diffY);
+                    pa.Add((sbyte)diffZ);
                     pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 }); //this can't work as diffR(0/1) are signed ints!
                 }
                 else if (rotupdate) {
@@ -890,6 +890,7 @@ namespace MCForge.Entity {
                     pa.Add((sbyte)(diffY));
                     pa.Add((sbyte)(diffZ));
                 }
+                else return;
             }
 
             Server.ForeachPlayer(delegate(Player p) {
