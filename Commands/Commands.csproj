@@ -51,6 +51,7 @@
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Building\CmdStatic.cs" />
     <Compile Include="Bots\CmdBot.cs" />
+    <Compile Include="Misc\CmdFlipHead.cs" />
     <Compile Include="Moderation\CmdUnload.cs" />
     <Compile Include="Information\CmdMapInfo.cs" />
     <Compile Include="Information\CmdInfo.cs" />

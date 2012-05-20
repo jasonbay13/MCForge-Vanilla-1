@@ -839,6 +839,9 @@ namespace MCForge.Entity {
             byte[] tempRot = Rot;
             byte[] tempOldRot = oldRot;
 
+            if (IsHeadFlipped)
+                tempRot[1] = 80;
+
             oldPos = Pos;
             oldRot = Rot;
 
@@ -862,7 +865,7 @@ namespace MCForge.Entity {
                 pa.Add(tempPos.x);
                 pa.Add(tempPos.y);
                 pa.Add(tempPos.z);
-                pa.Add(Rot);
+                pa.Add(tempRot);
             }
             else {
                 bool rotupdate = diffR0 == 0 && diffR1 == 0;

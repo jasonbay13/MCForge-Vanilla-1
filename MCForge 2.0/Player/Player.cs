@@ -174,6 +174,11 @@ namespace MCForge.Entity {
         public bool IsVerified { get; set; }
 
         /// <summary>
+        /// Flips players head if set to true
+        /// </summary>
+        public bool IsHeadFlipped { get; set; }
+
+        /// <summary>
         /// Holds replacement messages for profan filter
         /// </summary>
         public static readonly List<string> replacement = new List<string>();
