@@ -144,7 +144,7 @@ namespace MCForge.Robot
                             catch { }
                         }
                     }
-
+                    Bot.Player.Rot = new byte[] { (byte)(Bot.Player.Rot[0] + 1), (byte)(Bot.Player.Rot[1] + 1) };
                     Bot.Player.UpdatePosition(false);
                 }
             }

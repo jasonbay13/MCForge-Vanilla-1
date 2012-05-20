@@ -876,12 +876,12 @@ namespace MCForge.Entity {
                     pa.Add((sbyte)diffX);
                     pa.Add((sbyte)diffY);
                     pa.Add((sbyte)diffZ);
-                    pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 }); //this can't work as diffR(0/1) are signed ints!
+                    pa.Add(tempRot);
                 }
                 else if (rotupdate) {
                     pa.Add(packet.types.SendRotChange);
                     pa.Add(id);
-                    pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 }); //same here
+                    pa.Add(tempRot);
                 }
                 else if (posupdate) {
                     pa.Add(packet.types.SendPosChange);
