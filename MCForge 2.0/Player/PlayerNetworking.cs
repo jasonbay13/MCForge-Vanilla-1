@@ -319,7 +319,7 @@ namespace MCForge.Entity {
                     return;
                 }
             }
-            UpdatePosition(true);
+            UpdatePosition(false);
         }
         private void HandleChat(byte[] message) {
             if (!IsLoggedIn) return;
