@@ -12,14 +12,14 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System.Globalization;
+using System;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
+using MCForge.Utils.Settings;
 using MCForge.World;
 using MCForge.World.Blocks;
-using MCForge.Utils;
-using System;
 
 namespace CommandDll {
     public class CmdMode : ICommand {

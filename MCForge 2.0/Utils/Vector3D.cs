@@ -76,6 +76,9 @@ namespace MCForge.Utils {
                 this.z = value.z;
             }
         }
+        public Vector3S GetRounded() {
+            return new Vector3S((short)Math.Round(x), (short)Math.Round(z), (short)Math.Round(y));
+        }
         public Vector3D GetMove(double distance, Vector3D towards) {
             Vector3D ret = new Vector3D(x, z, y);
             ret.Move(distance, towards);
@@ -84,9 +87,9 @@ namespace MCForge.Utils {
         public void Move(double distance, Vector3D towards) {
             Vector3D way = towards - this;
             double length = way.Length;
-            x += (double)Math.Round(((way.x / length) * distance));
-            y += (double)Math.Round(((way.y / length) * distance));
-            z += (double)Math.Round(((way.z / length) * distance));
+            x += (double)(way.x / length) * distance;
+            y += (double)(way.y / length) * distance;
+            z += (double)(way.z / length) * distance;
         }
         public double Length {
             get {

@@ -16,6 +16,8 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
+using MCForge.Utils.Settings;
+
 namespace CommandDll
 {
     public class CmdDisagree : ICommand
@@ -29,6 +31,7 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
+            if (!ServerSettings.GetSettingBoolean("AgreeingToRules")) { p.SendMessage("Agreeing to rules is disabled on this server!"); return; }
             p.ExtraData.CreateIfNotExist("ReadRules", false);
             if (Server.agreed.Contains(p.Username)) { p.SendMessage("You have already agreed to the rules!"); return; }
             if (!(bool)p.ExtraData["ReadRules"]) { p.SendMessage("You need to read the /rules before you can disagree!"); return; }

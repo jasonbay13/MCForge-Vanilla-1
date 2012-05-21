@@ -68,7 +68,7 @@ namespace CommandDll.Building {
             //TODO: Check if user can place block
             //If user can put all of the blocks down
 
-            p.ExtraData.CreateIfNotExist<object, object>("Command.Line", block);
+            p.ExtraData.CreateIfNotExist<object, object>("Command.Line", new BlockInfo(255,new Vector3S(0,0,0)));
             p.OnPlayerBlockChange.Normal += new Event<Player, BlockChangeEventArgs>.EventHandler(CatchBlockOne);
 
         }
@@ -82,8 +82,9 @@ namespace CommandDll.Building {
         }
 
         void CatchBlockOne(Player sender, BlockChangeEventArgs e) {
-            byte block = (byte)sender.ExtraData.GetIfExist<object, object>("Command.Line");
-            sender.ExtraData.ChangeOrCreate<object, object>("Command.Line", new BlockInfo(block != 255 ? block : e.Holding, new Vector3S(e.X, e.Z, e.Y)));
+            BlockInfo block = (BlockInfo)sender.ExtraData.GetIfExist<object, object>("Command.Line");
+
+            sender.ExtraData.ChangeOrCreate<object, object>("Command.Line", new BlockInfo(block.Block != 255 ? block.Block : e.Holding, new Vector3S(e.X, e.Z, e.Y)));
             e.Cancel();
             sender.OnPlayerBlockChange.Normal -= CatchBlockOne;
             sender.OnPlayerBlockChange.Normal += new Event<Player, BlockChangeEventArgs>.EventHandler(CatchBlockTwo);
@@ -100,18 +101,15 @@ namespace CommandDll.Building {
                 byte block = raw.Block;
 
                 IEnumerable<Vector3S> path = from.PathTo(to);
-                int count = 0;
 
                 foreach (var pos in path) {
                     if (!sender.Level.IsInBounds(pos))
                         continue;
                     sender.Level.BlockChange(pos, block);
-                    count++;
                 }
 
 
-                //Can't use path.Count(), it overwrite some blocks, therefore it would give us a misreading...
-                sender.SendMessage(string.Format("Changed {0} blocks in a line", count));
+                sender.SendMessage(string.Format("Changed {0} blocks in a line", path.Count()));
             }
             catch (Exception er) {
                 sender.SendMessage("An Error occurred while trying to make a pretty line");

@@ -144,7 +144,6 @@ namespace MCForge
         public static string Server_Disc = "";
         public static string Server_Flag = "";
 
-
         public static Dictionary<string, string> customdollars = new Dictionary<string, string>();
 
 
@@ -274,7 +273,6 @@ namespace MCForge
         public static bool UseGlobalChat = true;
         public static string GlobalChatNick = "MCF" + new Random().Next();
         public static string GlobalChatColor = "&6";
-
 
         public static int afkminutes = 10;
         public static int afkkick = 45;

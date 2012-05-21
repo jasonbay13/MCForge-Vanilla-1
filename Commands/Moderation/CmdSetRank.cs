@@ -12,11 +12,11 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
-using MCForge.Interface.Command;
-using MCForge.Entity;
 using MCForge.Core;
+using MCForge.Entity;
 using MCForge.Groups;
+using MCForge.Interface.Command;
+using MCForge.Utils.Settings;
 
 namespace CommandDll
 {
@@ -27,7 +27,7 @@ namespace CommandDll
         public string Author { get { return "cazzar"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
-        public byte Permission { get { return 80; } }
+        public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
         {
             if (args.Length != 2)

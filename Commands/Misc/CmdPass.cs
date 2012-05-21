@@ -21,6 +21,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
+using MCForge.Utils.Settings;
 
 namespace CommandDll.Misc {
     class CmdPass : ICommand {

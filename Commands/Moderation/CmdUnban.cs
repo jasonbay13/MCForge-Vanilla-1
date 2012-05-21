@@ -18,6 +18,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using System.Collections.Generic;
 using MCForge.Utils;
+using MCForge.Utils.Settings;
 
 namespace CommandDll.Moderation {
     class CmdUnban : ICommand {
@@ -81,7 +82,7 @@ namespace CommandDll.Moderation {
                             Player.UniversalChatOps("&3" + args[1] + Server.DefaultColor + " is now unbanned!");
                             return;
                         }
-                        p.SendMessage("&3" + args[1] + MCForge.Core.Server.DefaultColor + " is not banned.");
+                        p.SendMessage("&3" + args[1] + Server.DefaultColor + " is not banned.");
                     }
                 }
             }

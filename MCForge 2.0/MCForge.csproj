@@ -86,6 +86,8 @@
     <Compile Include="API\Events\Player\DataSavedEvent.cs" />
     <Compile Include="API\Events\Player\MoveEvent.cs" />
     <Compile Include="API\Events\Player\PacketEvent.cs" />
+    <Compile Include="API\Events\Robot\OnBotMove.cs" />
+    <Compile Include="API\Events\Robot\OnBotTargetPlayer.cs" />
     <Compile Include="API\Events\System\CommandLoadEvent.cs" />
     <Compile Include="API\Events\System\OnSettingLoad.cs">
       <DependentUpon>CommandLoadEvent.cs</DependentUpon>
@@ -114,6 +116,7 @@
     <Compile Include="System\Settings\ExtraSettings.cs" />
     <Compile Include="System\Settings\GroupSettings.cs" />
     <Compile Include="System\Settings\LevelSettings.cs" />
+    <Compile Include="System\UPnP.cs" />
     <Compile Include="Utils\ColorUtils.cs" />
     <Compile Include="Utils\MathUtils.cs" />
     <Compile Include="Utils\MiscUtils.cs" />
@@ -219,11 +222,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="System\Heartbeat" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.txt" />
     <Content Include="MCForge.ico" />
+    <Content Include="../System.Data.SQLite.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="../System.Data.SQLite.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

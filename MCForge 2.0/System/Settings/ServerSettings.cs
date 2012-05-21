@@ -15,12 +15,11 @@ permissions and limitations under the Licenses.
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using MCForge.Core;
 using System.Security.Cryptography;
-using System.Drawing;
 
 namespace MCForge.Utils.Settings {
     /// <summary>
@@ -30,34 +29,15 @@ namespace MCForge.Utils.Settings {
 
         internal const byte Version = 7;
         internal static string Salt { get; set; }
+        static List<string> validcolors = new List<string>(new string[] { "a","b","c","d","e","f","0","1","2","3","4","5","6","7","8","9"});
 
         private static bool _initCalled;
         private static List<SettingNode> Values;
-
-
-        /// <summary>
-        /// This event is triggered when a setting node is changed in anyway
-        /// </summary>
-        public static EventHandler<SettingsChangedEventArgs> OnSettingChanged;
-
-
-        /// <summary>
-        /// Starts the Settings Object
-        /// </summary>
-        /// <remarks>Must be called before any methods are invoked</remarks>
-        public static void Init() {
-
-            if (_initCalled)
-                throw new ArgumentException("\"Settings.Init()\" can only be called once");
-
-            Random random = new Random();
-            GenerateSalt();
-
-            _initCalled = true;
-            Values = new List<SettingNode>{
+        private static readonly SettingNode[] defaultValues = {
                 new SettingNode("ServerName", "[MCForge] Default", "Name of your server"),
                 new SettingNode("Wom-Alternate_Name", "[MCForge] Default", "Name of your server on WoM direct"),
                 new SettingNode("Port", "25565", null),
+                new SettingNode("Use-UPnP", "false", "if enabled will automatically forward port for you, this is not recommended, and will not work in some cases"),
                 new SettingNode("MOTD", "Welcome to my server!", "Message that shows up when you start server"),
                 new SettingNode("MaxPlayers", "20", "Max players that can play on your server at a time"),
                 new SettingNode("Public", "true", "if set to true, your server will show up on MCForge.net server list and Minecraft.net's server list"),
@@ -86,13 +66,39 @@ namespace MCForge.Utils.Settings {
                 new SettingNode("IRC-Enabled", "false", "If set to true, IRC is enabled."),
                 new SettingNode("IRC-Server", "127.0.0.1", "IRC server to connect to"),
                 new SettingNode("IRC-Port", "6667", "IRC server port"),
-                new SettingNode("IRC-Nickname", "MCForge-" + random.Next(1000, 9999), "IRC nickname"),
+                new SettingNode("IRC-Nickname", "MCForge-" + MathUtils.Random.Next(1000, 9999), "IRC nickname"),
                 new SettingNode("IRC-Channel", "#", "IRC channel to connect to"),
                 new SettingNode("IRC-OPChannel", "#", "IRC operator channel to connect to"),
                 new SettingNode("IRC-NickServ", "password", "IRC NickServ password (optional when IRC is enabled)"),
-                
-                //TODO: add all of the default settings here
-                                                        };
+                new SettingNode("AgreeingToRules", "true", "If set to true players below op will need to read the rules and agree before they can use commands"),
+                new SettingNode("$Before$Name", "true", null),
+                new SettingNode("ReviewModeratorPerm", "80", "Determines what rank gets to use /review next and /review remove. Use the permission number, not the rank name!"),
+                new SettingNode("OpChatPermission", "80", "Determines what rank can use the operator chat"),
+                new SettingNode("AdminChatPermission", "100", "Determines what rank can use the admin chat"),
+                new SettingNode("DefaultColor", "&a", "Determines the server's default color"),
+ 
+                                                              };
+
+
+        /// <summary>
+        /// This event is triggered when a setting node is changed in anyway
+        /// </summary>
+        public static EventHandler<SettingsChangedEventArgs> OnSettingChanged;
+
+
+        /// <summary>
+        /// Starts the Settings Object
+        /// </summary>
+        /// <remarks>Must be called before any methods are invoked</remarks>
+        public static void Init() {
+
+            if (_initCalled)
+                throw new ArgumentException("\"Settings.Init()\" can only be called once");
+
+            GenerateSalt();
+
+            _initCalled = true;
+            Values = new List<SettingNode>(defaultValues);
             if (!Directory.Exists(FileUtils.PropertiesPath))
                 Directory.CreateDirectory(FileUtils.PropertiesPath);
 
@@ -102,13 +108,27 @@ namespace MCForge.Utils.Settings {
                     foreach (var v in Values) {
                         writer.WriteLine(v.Description == null
                                              ? string.Format("{0}={1}\n", v.Key.ToLower(), v.Value)
-                                             : string.Format("#{0}\n{1}={2}\n", v.Description, v.Key.ToLower(), v.Value));
+                                             : string.Format("#{0}\r\n{1}={2}\n", v.Description, v.Key.ToLower(), v.Value));
 
                     }
                 }
             }
 
             LoadSettings();
+            UpgradeSettings();
+        }
+
+        private static void UpgradeSettings() {
+            if (Values.Count < defaultValues.Length) {
+                Logger.Log("Upgrading settings...", LogType.Warning);
+                for(int i = 0; i < defaultValues.Length; i++) {
+                    var value = defaultValues[i];
+                    if (!HasKey(value.Key))
+                        Values.Insert(i, value);
+                }
+
+                Save();
+            }
         }
 
 
@@ -133,6 +153,14 @@ namespace MCForge.Utils.Settings {
         /// <returns>The setting value</returns>
         /// <remarks>Returns the first value if multiple values are present</remarks>
         public static string GetSetting(string key) {
+            if (key == "DefaultColor") { //Gotta check if it's valid
+                string value = GetSettingArray(key)[0];
+                if (value.Length > 2) { Logger.Log("Invalid DefaultColor length!"); return "&a"; }
+                if (value[0] != '&' && value[0] != '%') { Logger.Log("Invalid DefaultColor sign. Use % or &!"); return "&a"; }
+                bool okay = false;
+                foreach (string s in validcolors) { if (value[1] == char.Parse(s)) { okay = true; } }
+                if (!okay) { Logger.Log("Invalid DefaultColor color!"); return "&a"; }       
+            }
             key = key.ToLower();
             return GetSettingArray(key)[0];
         }
@@ -250,14 +278,14 @@ namespace MCForge.Utils.Settings {
         /// </summary>
         public static void Save() {
 
-            using (var writer = File.CreateText(FileUtils.PropertiesPath + "server.properties")) {
+            using (var writer = new StreamWriter(File.Create(FileUtils.PropertiesPath + "server.properties"))) {
                 foreach (var v in Values) {
 
-                    writer.Write(v.Description == null && v.Key == null
-                        ? v.Value + (v != Values.Last() ? "\n" : "")
+                    writer.WriteLine(v.Description == null && v.Key == null
+                        ? v.Value
                         : v.Description == null
                             ? string.Format("{0}={1}" + (v != Values.Last() ? "\n" : ""), v.Key, v.Value)
-                            : string.Format("#{0}\n{1}={2}" + (v != Values.Last() ? "\n" : ""), v.Description, v.Key, v.Value));
+                            : string.Format("#{0}\r\n{1}={2}" + (v != Values.Last() ? "\n" : ""), v.Description, v.Key, v.Value));
 
                 }
             }
@@ -302,8 +330,7 @@ namespace MCForge.Utils.Settings {
 
 
         internal static void GenerateSalt() {
-            using (var numberGen = new RNGCryptoServiceProvider())
-            {
+            using (var numberGen = new RNGCryptoServiceProvider()) {
                 var data = new byte[16];
                 numberGen.GetBytes(data);
                 Salt = Convert.ToBase64String(data);

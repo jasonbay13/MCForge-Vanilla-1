@@ -14,12 +14,11 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using MCForge.Utils.Settings;
-using MCForge.Utils;
-using MCForge.Interface;
 using System.Drawing;
+using System.Threading;
+using MCForge.Interface;
+using MCForge.Utils;
+using MCForge.Utils.Settings;
 
 namespace MCForge.Core {
     static class Program {
@@ -41,7 +40,10 @@ namespace MCForge.Core {
             Logger.OnRecieveLog += new EventHandler<LogEventArgs>(Server.OnLog);
             while (true) {
                 string input = Console.ReadLine();
-                if (input.ToLower() == "/stop") break;
+                if (input.ToLower() == "/stop") break; 
+                if (input.ToLower() == "/copyurl") {
+                    System.Windows.Forms.Clipboard.SetDataObject(Server.URL, true);
+                }
                 if (input.ToLower().Split(' ')[0] == "/packets") {
                     string[] cargs = input.ToLower().Split(' ');
                     if (cargs.Length == 1) {
