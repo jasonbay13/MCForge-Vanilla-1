@@ -32,7 +32,7 @@ using MCForge.Robot;
 using MCForge.SQL;
 
 namespace MCForge.Entity {
-    public partial class Player {
+	public partial class Player : Sender {
         #region Incoming Data
         private static void Incoming(IAsyncResult result) {
             while (!Server.Started)
@@ -775,13 +775,6 @@ namespace MCForge.Entity {
             SendPacket(pingPacket);
         }
 
-        /// <summary>
-        /// Send this player a message
-        /// </summary>
-        /// <param name="message">The message to send</param>
-        public void SendMessage(string message) {
-            SendMessage(id, message); // 0xFF is NOT a valid player ID
-        }
         /// <summary>
         /// Exactly what the function name is, it might be useful to change this players pos first ;)
         /// </summary>

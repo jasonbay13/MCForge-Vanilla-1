@@ -34,7 +34,7 @@ namespace MCForge.Entity {
     /// <summary>
     /// The player class, this contains all player information.
     /// </summary>
-    public sealed partial class Player {
+    public sealed partial class Player : Sender {
         #region Variables
 
         //TODO: Change all o dis
@@ -298,6 +298,16 @@ namespace MCForge.Entity {
                 else { if (!p.IsHidden) p.UpdatePosition(false); }
             });
         }
+        
+        
+        /// <summary>
+        /// Send this player a message
+        /// </summary>
+        /// <param name="message">The message to send</param>
+		public override void SendMessage(string message)
+		{
+			SendMessage(id, message);
+		}
         
         #region Database Saving/Loading
 		
