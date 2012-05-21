@@ -319,7 +319,7 @@ namespace MCForge.Entity {
                     return;
                 }
             }
-            UpdatePosition(false);
+            UpdatePosition(true);
         }
         private void HandleChat(byte[] message) {
             if (!IsLoggedIn) return;
@@ -709,6 +709,22 @@ namespace MCForge.Entity {
             pa.Add(p.Rot);
             SendPacket(pa);
         }
+        public void SendSpawn(Player p, string othername)
+        {
+            byte ID = 0xFF;
+            if (p != this)
+                ID = p.id;
+
+            packet pa = new packet();
+            pa.Add(packet.types.SendSpawn);
+            pa.Add((byte)ID);
+            pa.Add(othername, 64);
+            pa.Add(p.Pos.x);
+            pa.Add(p.Pos.y);
+            pa.Add(p.Pos.z);
+            pa.Add(p.Rot);
+            SendPacket(pa);
+        }
         /// <summary>
         /// This send a blockchange to the player only. (Not other players)
         /// </summary>
@@ -831,35 +847,39 @@ namespace MCForge.Entity {
             });
         }
 
-        internal void UpdatePosition(bool ForceTp) {
-            byte changed = 0;   //Denotes what has changed (x,y,z, rotation-x, rotation-y)
+        internal void UpdatePosition(bool ForceTp)
+        {
+            byte changed = 0; //Denotes what has changed (x,y,z, rotation-x, rotation-y)
 
             Vector3S tempOldPos = oldPos;
             Vector3S tempPos = Pos;
             byte[] tempRot = Rot;
             byte[] tempOldRot = oldRot;
             if (tempOldRot == null) tempOldRot = new byte[2];
+
             if (IsHeadFlipped)
-                tempRot[1] = 80;
+                tempRot[1] = 125;
 
             oldPos = Pos;
-            oldRot = tempRot;
+            oldRot = Rot;
 
-            short diffX =(short)( tempPos.x - tempOldPos.x);
-            short diffZ = (short)(tempPos.z - tempOldPos.z);
-            short diffY = (short)( tempPos.y - tempOldPos.y);
+            int diffX = tempPos.x - tempOldPos.x;
+            int diffZ = tempPos.z - tempOldPos.z;
+            int diffY = tempPos.y - tempOldPos.y;
             int diffR0 = tempRot[0] - tempOldRot[0];
             int diffR1 = tempRot[1] - tempOldRot[1];
 
 
             //TODO rewrite local pos change code
-            if (diffX == 0 && diffY == 0 && diffZ == 0 && diffR0 == 0 && diffR1 == 0) {
+            if (diffX == 0 && diffY == 0 && diffZ == 0 && diffR0 == 0 && diffR1 == 0)
+            {
                 return; //No changes
             }
             bool teleport = ForceTp || (Math.Abs(diffX) > 100 || Math.Abs(diffY) > 100 || Math.Abs(diffZ) > 100);
 
             packet pa = new packet();
-            if (teleport) {
+            if (teleport)
+            {
                 pa.Add(packet.types.SendTeleport);
                 pa.Add(id);
                 pa.Add(tempPos.x);
@@ -867,23 +887,27 @@ namespace MCForge.Entity {
                 pa.Add(tempPos.z);
                 pa.Add(tempRot);
             }
-            else {
+            else
+            {
                 bool rotupdate = diffR0 != 0 && diffR1 != 0;
                 bool posupdate = diffX != 0 || diffY != 0 || diffZ != 0;
-                if (rotupdate && posupdate) {
+                if (rotupdate && posupdate)
+                {
                     pa.Add(packet.types.SendPosANDRotChange);
                     pa.Add(id);
-                    pa.Add((sbyte)diffX);
-                    pa.Add((sbyte)diffY);
-                    pa.Add((sbyte)diffZ);
+                    pa.Add(diffX);
+                    pa.Add(diffY);
+                    pa.Add(diffZ);
                     pa.Add(tempRot);
                 }
-                else if (rotupdate) {
+                else if (rotupdate)
+                {
                     pa.Add(packet.types.SendRotChange);
                     pa.Add(id);
                     pa.Add(tempRot);
                 }
-                else if (posupdate) {
+                else if (posupdate)
+                {
                     pa.Add(packet.types.SendPosChange);
                     pa.Add(id);
                     pa.Add((sbyte)(diffX));
@@ -893,8 +917,10 @@ namespace MCForge.Entity {
                 else return;
             }
 
-            Server.ForeachPlayer(delegate(Player p) {
-                if (p != this && p.Level == Level && p.IsLoggedIn && !p.IsLoading) {
+            Server.ForeachPlayer(delegate(Player p)
+            {
+                if (p != this && p.Level == Level && p.IsLoggedIn && !p.IsLoading)
+                {
                     p.SendPacket(pa);
                 }
             });
