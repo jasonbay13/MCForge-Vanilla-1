@@ -38,9 +38,6 @@ namespace MCForge.Entity {
 
             Player p = (Player)result.AsyncState;
 
-            //Why is this here? this is a terrible spot for this!
-            //Sorry, I was merging manually, and failed at pasting
-
             try {
                 int length = p.Socket.EndReceive(result);
                 if (length == 0) {
@@ -319,7 +316,7 @@ namespace MCForge.Entity {
                     return;
                 }
             }
-            UpdatePosition(true);
+            UpdatePosition(false);
         }
         private void HandleChat(byte[] message) {
             if (!IsLoggedIn) return;
@@ -847,7 +844,7 @@ namespace MCForge.Entity {
             });
         }
 
-        internal void UpdatePosition(bool ForceTp)
+        internal void UpdatePosition(bool ForceTp) //Doesnt work when near spawn, makes you fly to 0,0 for no reason
         {
             byte changed = 0; //Denotes what has changed (x,y,z, rotation-x, rotation-y)
 
@@ -856,16 +853,15 @@ namespace MCForge.Entity {
             byte[] tempRot = Rot;
             byte[] tempOldRot = oldRot;
             if (tempOldRot == null) tempOldRot = new byte[2];
-
             if (IsHeadFlipped)
                 tempRot[1] = 125;
 
             oldPos = Pos;
-            oldRot = Rot;
+            oldRot = tempRot;
 
-            int diffX = tempPos.x - tempOldPos.x;
-            int diffZ = tempPos.z - tempOldPos.z;
-            int diffY = tempPos.y - tempOldPos.y;
+            short diffX = (short)(tempPos.x - tempOldPos.x);
+            short diffZ = (short)(tempPos.z - tempOldPos.z);
+            short diffY = (short)(tempPos.y - tempOldPos.y);
             int diffR0 = tempRot[0] - tempOldRot[0];
             int diffR1 = tempRot[1] - tempOldRot[1];
 
@@ -895,9 +891,9 @@ namespace MCForge.Entity {
                 {
                     pa.Add(packet.types.SendPosANDRotChange);
                     pa.Add(id);
-                    pa.Add(diffX);
-                    pa.Add(diffY);
-                    pa.Add(diffZ);
+                    pa.Add((sbyte)diffX);
+                    pa.Add((sbyte)diffY);
+                    pa.Add((sbyte)diffZ);
                     pa.Add(tempRot);
                 }
                 else if (rotupdate)
