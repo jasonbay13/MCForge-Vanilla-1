@@ -12,15 +12,11 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using MCForge.Core;
-using MCForge.Utils;
-using System.Drawing;
 using MCForge.API.Events;
+using MCForge.Utils;
 
 namespace MCForge.Interface.Command
 {
@@ -52,7 +48,7 @@ namespace MCForge.Interface.Command
         /// <param name="reference">the string you want player to type to use your command, you can use this method more than once :)</param>
         public static void AddReference(ICommand command, string reference) {
             if (Commands.ContainsKey(reference)) {
-                Server.Log("[ERROR]: Command " + command.Name + " tried to add a referance that already existed! (" + reference + ")", ConsoleColor.White, ConsoleColor.Red);
+                Logger.Log("Command " + command.Name + " tried to add a referance that already existed! (" + reference + ")", LogType.Error);
                 return;
             }
             Commands.Add(reference.ToLower(), command);

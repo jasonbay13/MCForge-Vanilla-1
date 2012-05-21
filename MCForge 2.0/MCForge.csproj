@@ -86,8 +86,12 @@
     <Compile Include="API\Events\Player\DataSavedEvent.cs" />
     <Compile Include="API\Events\Player\MoveEvent.cs" />
     <Compile Include="API\Events\Player\PacketEvent.cs" />
+    <Compile Include="API\Events\Robot\OnBotMove.cs" />
+    <Compile Include="API\Events\Robot\OnBotTargetPlayer.cs" />
     <Compile Include="API\Events\System\CommandLoadEvent.cs" />
-    <Compile Include="API\Events\System\OnSettingLoad.cs" />
+    <Compile Include="API\Events\System\OnSettingLoad.cs">
+      <DependentUpon>CommandLoadEvent.cs</DependentUpon>
+    </Compile>
     <Compile Include="API\Events\System\PluginLoadEvent.cs" />
     <Compile Include="API\Events\System\ReceivePacket.cs" />
     <Compile Include="Database\Database.cs" />
@@ -98,6 +102,7 @@
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
     <Compile Include="Interfaces\Plugin\IPlugin.cs" />
+    <Compile Include="Player\Sender.cs" />
     <Compile Include="Robot\Bot.cs" />
     <Compile Include="Robot\BotMap.cs" />
     <Compile Include="Player\PlayerNetworking.cs" />
@@ -222,13 +227,10 @@
   <ItemGroup>
     <Content Include="README.txt" />
     <Content Include="MCForge.ico" />
-    <Content Include="sqlite3.dll">
+    <Content Include="../System.Data.SQLite.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="System.Data.SQLite.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="System.Data.SQLite.xml">
+    <Content Include="../System.Data.SQLite.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

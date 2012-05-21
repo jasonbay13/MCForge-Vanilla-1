@@ -14,13 +14,13 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Reflection;
-using MCForge.API.Events;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
-using MCForge.Utils;
+
 namespace CommandDll {
     public class CmdInfo : ICommand {
         public string Name { get { return "Info"; } }

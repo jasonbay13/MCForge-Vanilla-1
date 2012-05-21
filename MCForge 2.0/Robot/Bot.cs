@@ -1,27 +1,36 @@
-﻿using System;
+﻿/*
+Copyright 2011 MCForge
+Dual-licensed under the Educational Community License, Version 2.0 and
+the GNU General Public License, Version 3 (the "Licenses"); you may
+not use this file except in compliance with the Licenses. You may
+obtain a copy of the Licenses at
+http://www.opensource.org/licenses/ecl2.php
+http://www.gnu.org/licenses/gpl-3.0.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the Licenses are distributed on an "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the Licenses for the specific language governing
+permissions and limitations under the Licenses.
+*/
+using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Security.Cryptography;
-using System.Text.RegularExpressions;
-using System.Threading;
+using MCForge.API.Events;
+using MCForge.API.Events.Robot;
 using MCForge.Core;
-using MCForge.Groups;
-using MCForge.Interface.Command;
+using MCForge.Entity;
+using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
-using MCForge.Utils;
-using MCForge.Utils;
-using System.Linq;
-using MCForge.SQL;
-using System.Data;
-using MCForge.Entity;
-using MCForge.API.Events;
 
 //This namespace should get it's own directory
 namespace MCForge.Robot
 {
     public sealed partial class Bot
     {
+        public static TargetPlayerEvent OnBotTargetPlayer = new TargetPlayerEvent();
+
+        public static MoveBotEvent OnBotMove = new MoveBotEvent();
+
         public bool FollowPlayers = false;
         public bool BreakBlocks = false;
         public bool Jumping = false;
@@ -73,17 +82,30 @@ namespace MCForge.Robot
                         {
                             if (p.Level == Bot.Player.Level)
                             {
-                                HitAPlayer = true;
-                                if (p.Pos - Bot.Player.Pos < ClosestLocation - Bot.Player.Pos) {
-                                    ClosestLocation = new Vector3S(p.Pos);
+                                TargetPlayerArgs eargs = new TargetPlayerArgs(p);
+                                bool cancel = OnBotTargetPlayer.Call(Bot, eargs).Canceled;
+                                if (!cancel)
+                                {
+                                    HitAPlayer = true;
+                                    if (p.Pos - Bot.Player.Pos < ClosestLocation - Bot.Player.Pos)
+                                    {
+                                        ClosestLocation = new Vector3S(p.Pos);
+                                    }
                                 }
                             }
                         }
                         #endregion
                         if (HitAPlayer)
                         {
+                            Vector3S TempLocation = new Vector3S(Bot.Player.Pos);
                             TemporaryLocation = new Vector3S(Bot.Player.Pos);
                             TemporaryLocation.Move(13, ClosestLocation);
+
+                            MoveEventArgs eargs = new MoveEventArgs(TemporaryLocation, Bot.Player.Pos);
+                            bool cancel = OnBotMove.Call(Bot, eargs).Canceled;
+                            if (cancel){
+                                TemporaryLocation = TempLocation;
+                            }
                         }
                     }
 
@@ -122,8 +144,8 @@ namespace MCForge.Robot
                             catch { }
                         }
                     }
-
-                    Bot.Player.UpdatePosition(true); //if false I get kicked.
+                    Bot.Player.Rot = new byte[] { (byte)(Bot.Player.Rot[0] + 1), (byte)(Bot.Player.Rot[1] + 1) };
+                    Bot.Player.UpdatePosition(true); //Pls leave this true, bots dont appear properly otherwise
                 }
             }
         }

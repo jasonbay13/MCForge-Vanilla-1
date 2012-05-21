@@ -903,7 +903,7 @@
             PlayerMoveEventArgs
             </summary>
         </member>
-        <member name="M:MCForge.API.Events.MoveEventArgs.#ctor(MCForge.Utils.Vector3S)">
+        <member name="M:MCForge.API.Events.MoveEventArgs.#ctor(MCForge.Utils.Vector3S,MCForge.Utils.Vector3S)">
             <summary>
             Creates a new instance
             </summary>
@@ -1080,26 +1080,6 @@
             The player who's getting, if it's /votekick
             </summary>
         </member>
-        <member name="F:MCForge.Core.Server.DefaultColor">
-            <summary>
-            The server's default color.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.opchatperm">
-            <summary>
-            Server's op chat permission
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.adminchatperm">
-            <summary>
-            Server's admin chat permission
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.reviewnextperm">
-            <summary>
-            Group permission that can use /review next
-            </summary>
-        </member>
         <member name="F:MCForge.Core.Server.URL">
             <summary>
             The minecraft.net URL of the server
@@ -1154,6 +1134,11 @@
         <member name="M:MCForge.Core.Server.SaveAll">
             <summary>
             Saves all of the levels and groups
+            </summary>
+        </member>
+        <member name="P:MCForge.Core.Server.DefaultColor">
+            <summary>
+            The default color
             </summary>
         </member>
         <member name="T:MCForge.Core.Server.TimedMethodDelegate">
@@ -2814,6 +2799,11 @@
             Get or set if the player is verified in the AdminPen
             </summary>
         </member>
+        <member name="P:MCForge.Entity.Player.IsHeadFlipped">
+            <summary>
+            Flips players head if set to true
+            </summary>
+        </member>
         <member name="T:MCForge.Entity.Player.BlockChangeDelegate">
             <summary>
             This delegate is used for when a command wants to be activated the first time a player places a block
@@ -3138,6 +3128,37 @@
         <member name="P:MCForge.Utils.LogEventArgs.BackgroundColor">
             <summary>
             Get or set the color of the background
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.Robot.TargetPlayerArgs">
+            <summary>
+            PlayerMoveEventArgs
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.Robot.TargetPlayerArgs.#ctor(MCForge.Entity.Player)">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="fromPosition">The position where the move started</param>
+        </member>
+        <member name="M:MCForge.API.Events.Robot.TargetPlayerArgs.Cancel">
+            <summary>
+            Cancels the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.Robot.TargetPlayerArgs.Allow">
+            <summary>
+            Allows the handling
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.Robot.TargetPlayerArgs.Player">
+            <summary>
+            The position where the move started
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.Robot.TargetPlayerArgs.Canceled">
+            <summary>
+            Whether or not the handling should be canceled
             </summary>
         </member>
     </members>

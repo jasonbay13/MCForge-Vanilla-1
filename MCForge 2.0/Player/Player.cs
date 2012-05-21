@@ -14,27 +14,26 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
+using MCForge.API.Events;
 using MCForge.Core;
 using MCForge.Groups;
 using MCForge.Interface.Command;
+using MCForge.SQL;
+using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
-using MCForge.Utils;
-using System.Linq;
-using MCForge.SQL;
-using System.Data;
-using MCForge.API.Events;
-using System.Drawing;
 
 namespace MCForge.Entity {
     /// <summary>
     /// The player class, this contains all player information.
     /// </summary>
-    public sealed partial class Player {
+    public sealed partial class Player : Sender {
         #region Variables
 
         //TODO: Change all o dis
@@ -175,6 +174,11 @@ namespace MCForge.Entity {
         public bool IsVerified { get; set; }
 
         /// <summary>
+        /// Flips players head if set to true
+        /// </summary>
+        public bool IsHeadFlipped { get; set; }
+
+        /// <summary>
         /// Holds replacement messages for profan filter
         /// </summary>
         public static readonly List<string> replacement = new List<string>();
@@ -261,8 +265,10 @@ namespace MCForge.Entity {
             if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
-                    if (!Server.agreed.Contains(Username) && Group.Permission < 80 && name != "rules" && name != "agree" && name != "disagree") {
-                        SendMessage("You need to /agree to the /rules before you can use commands!"); return;
+                    if (ServerSettings.GetSettingBoolean("AgreeingToRules")) {
+                        if (!Server.agreed.Contains(Username) && Group.Permission < 80 && name != "rules" && name != "agree" && name != "disagree") {
+                            SendMessage("You need to /agree to the /rules before you can use commands!"); return;
+                        }
                     }
                     if (!Group.CanExecute(cmd)) {
                         SendMessage(Colors.red + "You cannot use /" + name + "!");
@@ -271,7 +277,7 @@ namespace MCForge.Entity {
                     try { 
                         cmd.Use(this, sendArgs);
                         OnCommandEnd.Call(this, new CommandEndEventArgs(cmd, sendArgs), OnAllCommandEnd);
-                    } //Just so it doesn't crash the server if custom command makers release broken commands!
+                    }
                     catch (Exception ex) {
                         Logger.Log("[Error] An error occured when " + Username + " tried to use " + name + "!", Color.Red, Color.Black);
                         Logger.LogError(ex);
@@ -298,6 +304,16 @@ namespace MCForge.Entity {
                 else { if (!p.IsHidden) p.UpdatePosition(false); }
             });
         }
+        
+        
+        /// <summary>
+        /// Send this player a message
+        /// </summary>
+        /// <param name="message">The message to send</param>
+		public override void SendMessage(string message)
+		{
+			SendMessage(id, message);
+		}
         
         #region Database Saving/Loading
 		

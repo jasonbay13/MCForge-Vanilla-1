@@ -13,25 +13,24 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using MCForge.API;
+using MCForge.API.Events;
 using MCForge.Core;
 using MCForge.Groups;
+using MCForge.Robot;
+using MCForge.SQL;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
-using System.Drawing;
-using MCForge.API.Events;
-using MCForge.Robot;
-using MCForge.SQL;
 
 namespace MCForge.Entity {
-    public partial class Player {
+	public partial class Player : Sender {
         #region Incoming Data
         private static void Incoming(IAsyncResult result) {
             while (!Server.Started)
@@ -40,22 +39,7 @@ namespace MCForge.Entity {
             Player p = (Player)result.AsyncState;
 
             //Why is this here? this is a terrible spot for this!
-            try {
-                if (Server.reviewlist.Contains(p)) {
-                    Server.reviewlist.Remove(p);
-                    foreach (Player pl in Server.reviewlist.ToArray()) {
-                        int position = Server.reviewlist.IndexOf(pl);
-                        if (position == 0) {
-                            pl.SendMessage("You're next in the review queue!");
-                            continue;
-                        }
-                        pl.SendMessage(position == 1 ? "There is " + position + " players in front of you!" : "There are " + position + " players in front of you!");
-                    }
-                }
-            }
-            catch {
-                Logger.Log("Error removing " + p.Username + " from the review list!", LogType.Error);
-            }
+            //Sorry, I was merging manually, and failed at pasting
 
             try {
                 int length = p.Socket.EndReceive(result);
@@ -66,6 +50,14 @@ namespace MCForge.Entity {
                         UniversalChat(color ?? "" + p.Username + Server.DefaultColor + " has disconnected.");
                         p.GlobalDie();
                     }
+                    if (Server.reviewlist.Contains(p)) {
+                        Server.reviewlist.Remove(p);
+                        foreach (Player pl in Server.reviewlist.ToArray()) {
+                            int position = Server.reviewlist.IndexOf(pl);
+                            if (position == 0) { pl.SendMessage("You're next in the review queue!"); continue; }
+                            pl.SendMessage(position == 1 ? "There is 1 player in front of you!" : "There are " + position + " players in front of you!");
+                        }
+                    }                  
                     return;
                 }
 
@@ -212,10 +204,11 @@ namespace MCForge.Entity {
                 oldPos = Pos;
                 oldRot = Rot;
 
+                SendSpawn(this);
                 SpawnThisPlayerToOtherPlayers();
+                UpdatePosition(true);
                 SpawnOtherPlayersForThisPlayer();
                 SpawnBotsForThisPlayer();
-                SendSpawn(this);
 
                 IsLoading = false;
                 
@@ -312,19 +305,22 @@ namespace MCForge.Entity {
             ushort z = packet.NTHO(message, 5);
             byte rotx = message[7];
             byte roty = message[8];
-            Vector3S fromPosition = Pos;
+            Vector3S fromPosition = new Vector3S(oldPos.x,oldPos.z, Pos.y);
+            //oldPos = fromPosition;
             Pos.x = (short)x;
             Pos.y = (short)y;
             Pos.z = (short)z;
             Rot = new byte[2] { rotx, roty };
-            if (!(Pos.x == x && Pos.y == y && Pos.z == z)) {
-                MoveEventArgs eargs = new MoveEventArgs(fromPosition);
+            if (!(fromPosition.x == Pos.x && fromPosition.y == Pos.y && fromPosition.z == Pos.z))
+            {
+                MoveEventArgs eargs = new MoveEventArgs(fromPosition, Pos);
                 bool cancel = OnPlayerMove.Call(this, eargs, OnAllPlayersMove).Canceled;
                 if (cancel) {
-                    this.SendToPos(Pos, Rot);
+                    this.SendToPos(fromPosition, Rot);
                     return;
                 }
             }
+            UpdatePosition(false);
         }
         private void HandleChat(byte[] message) {
             if (!IsLoggedIn) return;
@@ -478,7 +474,7 @@ namespace MCForge.Entity {
             {
                 incomingText = incomingText.Trim().TrimStart('#');
                 UniversalChatOps("&a<&fTo Ops&a> " + Group.Color + Username + ": &f" + incomingText);
-                if (Group.Permission < Server.opchatperm) {
+                if (Group.Permission < ServerSettings.GetSettingInt("OpChatPermission")) {
                     SendMessage("&a<&fTo Ops&a> " + Group.Color + Username + ": &f" + incomingText);
                 } //So players who aren't op see their messages
                 Logger.Log("<OpChat> <" + Username + "> " + incomingText);
@@ -513,7 +509,7 @@ namespace MCForge.Entity {
             {
                 incomingText = incomingText.TrimStart().TrimStart('+');
                 UniversalChatAdmins("&a<&fTo Admins&a> " + Group.Color + Username + ": &f" + incomingText);
-                if (Group.Permission < Server.adminchatperm) {
+                if (Group.Permission < ServerSettings.GetSettingInt("AdminChatPermission")) {
                     SendMessage("&a<&fTo Admins&a> " + Group.Color + Username + ": &f" + incomingText);
                 }
                 Logger.Log("<AdminChat> <" + Username + "> " + incomingText);
@@ -713,6 +709,7 @@ namespace MCForge.Entity {
             pa.Add(p.Pos.z);
             pa.Add(p.Rot);
             SendPacket(pa);
+            p.UpdatePosition(true);
         }
         /// <summary>
         /// This send a blockchange to the player only. (Not other players)
@@ -773,13 +770,6 @@ namespace MCForge.Entity {
         }
 
         /// <summary>
-        /// Send this player a message
-        /// </summary>
-        /// <param name="message">The message to send</param>
-        public void SendMessage(string message) {
-            SendMessage(id, message); // 0xFF is NOT a valid player ID
-        }
-        /// <summary>
         /// Exactly what the function name is, it might be useful to change this players pos first ;)
         /// </summary>
         public void SendThisPlayerTheirOwnPos() {
@@ -837,28 +827,28 @@ namespace MCForge.Entity {
         }
 
         internal void UpdatePosition(bool ForceTp) {
-            byte changed = 0;   //Denotes what has changed (x,y,z, rotation-x, rotation-y)
-
-            Vector3S tempOldPos = oldPos;
-            Vector3S tempPos = Pos;
+            Vector3S tempOldPos = new Vector3S(oldPos);
+            Vector3S tempPos = new Vector3S(Pos);
             byte[] tempRot = Rot;
             byte[] tempOldRot = oldRot;
+            if (tempOldRot == null) tempOldRot = new byte[2];
+            if (IsHeadFlipped)
+                tempRot[1] = 80;
 
-            oldPos = Pos;
-            oldRot = Rot;
+            oldPos = tempPos;
+            oldRot = tempRot;
 
-            int diffX = tempPos.x - tempOldPos.x;
-            int diffZ = tempPos.z - tempOldPos.z;
-            int diffY = tempPos.y - tempOldPos.y;
-            int diffR0 = tempRot[0] - tempRot[0];
-            int diffR1 = tempRot[1] - tempRot[1];
-
+            short diffX = (short)(tempPos.x - tempOldPos.x);
+            short diffZ = (short)(tempPos.z - tempOldPos.z);
+            short diffY = (short)(tempPos.y - tempOldPos.y);
+            int diffR0 = tempRot[0] - tempOldRot[0];
+            int diffR1 = tempRot[1] - tempOldRot[1];
 
             //TODO rewrite local pos change code
             if (diffX == 0 && diffY == 0 && diffZ == 0 && diffR0 == 0 && diffR1 == 0) {
                 return; //No changes
             }
-            bool teleport = ForceTp || (Math.Abs(diffX) > 100 || Math.Abs(diffY) > 100 || Math.Abs(diffZ) > 100);
+            bool teleport = ForceTp || (Math.Abs(diffX) >= 127 || Math.Abs(diffY) >= 127 || Math.Abs(diffZ) >= 127);
 
             packet pa = new packet();
             if (teleport) {
@@ -867,23 +857,23 @@ namespace MCForge.Entity {
                 pa.Add(tempPos.x);
                 pa.Add(tempPos.y);
                 pa.Add(tempPos.z);
-                pa.Add(Rot);
+                pa.Add(tempRot);
             }
             else {
-                bool rotupdate = diffR0 == 0 && diffR1 == 0;
+                bool rotupdate = diffR0 != 0 || diffR1 != 0;
                 bool posupdate = diffX != 0 || diffY != 0 || diffZ != 0;
                 if (rotupdate && posupdate) {
                     pa.Add(packet.types.SendPosANDRotChange);
                     pa.Add(id);
-                    pa.Add(diffX);
-                    pa.Add(diffY);
-                    pa.Add(diffZ);
-                    pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
+                    pa.Add((sbyte)diffX);
+                    pa.Add((sbyte)diffY);
+                    pa.Add((sbyte)diffZ);
+                    pa.Add(tempRot);
                 }
                 else if (rotupdate) {
                     pa.Add(packet.types.SendRotChange);
                     pa.Add(id);
-                    pa.Add(new byte[2] { (byte)diffR0, (byte)diffR1 });
+                    pa.Add(tempRot);
                 }
                 else if (posupdate) {
                     pa.Add(packet.types.SendPosChange);
@@ -892,6 +882,7 @@ namespace MCForge.Entity {
                     pa.Add((sbyte)(diffY));
                     pa.Add((sbyte)(diffZ));
                 }
+                else return;
             }
 
             Server.ForeachPlayer(delegate(Player p) {
@@ -907,7 +898,7 @@ namespace MCForge.Entity {
         /// </summary>
         public void SpawnThisPlayerToOtherPlayers() {
             Server.ForeachPlayer(delegate(Player p) {
-                if (p != this && p.Level == Level)
+                if (p != this && p.Level == Level && p.IsLoggedIn && !p.IsLoading)
                     p.SendSpawn(this);
             });
         }
@@ -954,12 +945,29 @@ namespace MCForge.Entity {
                 }
             });
         }
+
+        static string ConvertVariables(Player p, string text)
+        {
+            if (text.Contains("$name")) {
+                if (ServerSettings.GetSettingBoolean("$Before$Name")) { text = text.Replace("$name", "$" + p.Username); }
+                else { text = text.Replace("$name", p.Username); }
+            }
+            if (text.Contains("$money")) { text = text.Replace("$money", p.money.ToString()); }
+            if (text.Contains("$" + Server.moneys)) { text = text.Replace("$" + Server.moneys, p.money.ToString()); }
+            if (text.Contains("$rank")) { text = text.Replace("$rank", p.Group.Name); }
+            if (text.Contains("$ip")) { text = text.Replace("$ip", p.Ip); }
+            if (text.Contains("$server")) { text = text.Replace("$server", ServerSettings.GetSetting("ServerName")); }
+            return text;
+        }
         /// <summary>
         /// Send a message to everyone, on every world
         /// </summary>
         /// <param name="text">The message to send.</param>
         public static void UniversalChat(string text) {
-            Server.ForeachPlayer(p => p.SendMessage(text));
+            Server.ForeachPlayer(p => {       
+                p.SendMessage(ConvertVariables(p, text));
+            });
+         
         }
         /// <summary>
         /// Sends a message to all operators+
@@ -967,8 +975,8 @@ namespace MCForge.Entity {
         /// <param name="message">The message to send</param>
         public static void UniversalChatOps(string message) {
             Server.ForeachPlayer(p => {
-                if (p.Group.Permission >= Server.opchatperm) {
-                    p.SendMessage(message);
+                if (p.Group.Permission >= ServerSettings.GetSettingInt("OpChatPermission")) {
+                    p.SendMessage(ConvertVariables(p, message));
                 }
             });
         }
@@ -978,8 +986,8 @@ namespace MCForge.Entity {
         /// <param name="message">The message to be sent</param>
         public static void UniversalChatAdmins(string message) {
             Server.ForeachPlayer(p => {
-                if (p.Group.Permission >= Server.adminchatperm) {
-                    p.SendMessage(message);
+                if (p.Group.Permission >= ServerSettings.GetSettingInt("AdminChatPermission")) {
+                    p.SendMessage(ConvertVariables(p, message));
                 }
             });
         }
@@ -991,7 +999,7 @@ namespace MCForge.Entity {
         public static void RankChat(Player from, string message) {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p.Group.Permission == from.Group.Permission) {
-                    p.SendMessage(message);
+                    p.SendMessage(ConvertVariables(p, message));
                 }
             });
         }
@@ -1002,7 +1010,7 @@ namespace MCForge.Entity {
         /// <param name="message">The message to be sent</param>
         public static void LevelChat(Player from, string message) {
             Server.ForeachPlayer(delegate(Player p) {
-                if (p.Level == from.Level) { p.SendMessage(message); }
+                if (p.Level == from.Level) { p.SendMessage(ConvertVariables(p, message)); }
             });
         }
         private void CloseConnection() {

@@ -17,18 +17,15 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net.Sockets;
-using System.Timers;
-using System.Text;
+using MCForge.Core.HeartService;
 using MCForge.Entity;
 using MCForge.Interface;
 using MCForge.Interface.Command;
-using MCForge.Utils;
-using MCForge.Utils.Settings;
-using MCForge.Utils;
-using MCForge.World;
 using MCForge.Robot;
 using MCForge.SQL;
-using MCForge.Core.HeartService;
+using MCForge.Utils;
+using MCForge.Utils.Settings;
+using MCForge.World;
 
 namespace MCForge.Core {
     public static class Server {
@@ -109,7 +106,7 @@ namespace MCForge.Core {
         /// <summary>
         /// The list of MCForge developers.
         /// </summary>
-        public static readonly List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "headdetect", "Gamemakergm", "cazzar", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "Shade2010", "Nerketur", "Serado" });
+        public static readonly List<string> devs = new List<string>(new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "headdetect", "Gamemakergm", "cazzar", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "ninedrafted", "Nerketur", "Serado" });
         /// <summary>
         /// List of players that need to be reviewed
         /// </summary>
@@ -149,24 +146,6 @@ namespace MCForge.Core {
         /// The player who's getting, if it's /votekick
         /// </summary>
         public static Player kicker;
-
-        /// <summary>
-        /// The server's default color.
-        /// </summary>
-        public static string DefaultColor = Colors.yellow;
-
-        /// <summary>
-        /// Server's op chat permission
-        /// </summary>
-        public static byte opchatperm = 80; //TODO: add this to properties
-        /// <summary>
-        /// Server's admin chat permission
-        /// </summary>
-        public static byte adminchatperm = 100;
-        /// <summary>
-        /// Group permission that can use /review next
-        /// </summary>
-        public static byte reviewnextperm = 80;
         /// <summary>
         /// The minecraft.net URL of the server
         /// </summary>
@@ -177,6 +156,10 @@ namespace MCForge.Core {
         /// The IRC client for the server
         /// </summary>
         public static IRC IRC = null;
+        /// <summary>
+        /// The default color
+        /// </summary>
+        public static string DefaultColor { get { return ServerSettings.GetSetting("DefaultColor"); } }
 
         /// <summary>
         /// This delegate is used when a command or plugin needs to call a method after a certain amount of time
@@ -405,6 +388,7 @@ namespace MCForge.Core {
         }
 
         public static void OnLog(object sender, LogEventArgs args) {
+            if (args == null) return;
             if (!DebugMode && args.LogType == LogType.Debug)
                 return;
             var tColor = ColorUtils.ToConsoleColor(args.TextColor);

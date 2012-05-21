@@ -5,7 +5,7 @@ using System.Text;
 using MCForge.Core;
 
 namespace MCForge.Utils {
-    public class Vector3S {
+    public class Vector3S{
         public short x;
         public short y;
         public short z;
@@ -95,6 +95,16 @@ namespace MCForge.Utils {
         /// <param name="vectorTo">The vector to.</param>
         /// <returns>An enumeration of a path from a vector to a vector</returns>
         public IEnumerable<Vector3S> PathTo(Vector3S vectorTo) {
+            Vector3D pos = new Vector3D(this);
+            Vector3S rounded = pos.GetRounded();
+            while (rounded != vectorTo) {
+                yield return rounded;
+                pos.Move(1, new Vector3D(vectorTo));
+                rounded = pos.GetRounded();
+            }
+            yield return vectorTo;
+            yield break;
+
             Vector3S tempThis = new Vector3S(this);
             Vector3S a = vectorTo - this;
             Vector3S b = MathUtils.SignVector(a);

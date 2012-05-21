@@ -12,46 +12,44 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
+using System.IO;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Interface.Command;
+using MCForge.Utils.Settings;
 
 namespace CommandDll
 {
-    public class CmdPlayers : ICommand
+    public class CmdViewranks : ICommand
     {
-        public string Name { get { return "Players"; } }
+        public string Name { get { return "Viewranks"; } }
         public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
-
         public void Use(Player p, string[] args)
         {
-            foreach (PlayerGroup group in PlayerGroup.Groups)
+            if (args.Length == 0) { Help(p); }
+            PlayerGroup group = PlayerGroup.Find(args[0]);
+            if (group == null) { p.SendMessage("The rank \"" + args[0] + "\" doesn't exist!"); return; }
+            try
             {
-                string send = group.Color + group.Name;
-                if (!send.EndsWith("ed") && !send.EndsWith("s")) { send += "s: " + Server.DefaultColor; } //Plural
-                else { send += ": " + Server.DefaultColor; }
-                Server.ForeachPlayer(delegate(Player pl)
-                    {
-                        if (pl.Group.Permission == group.Permission) { send +=  pl.Username + "&a, " + Server.DefaultColor; }
-                    });
-                p.SendMessage(send.Trim().Remove(send.Length - 4, 4));
+                string[] players = File.ReadAllLines(group.File);
+                string send = "People with the rank " + group.Color + group.Name + Server.DefaultColor + ": ";
+                foreach (string player in players) { send += player + "&a, " + Server.DefaultColor; }         
+                p.SendMessage(send.Remove(send.Length - 4, 4));
             }
+            catch { p.SendMessage("Error reading ranks!"); return; }
         }
-
         public void Help(Player p)
         {
-            p.SendMessage("/players - shows the online players");
-            p.SendMessage("Shortcuts: /online, /who");
+            p.SendMessage("/viewranks <rank> - Shows all players with the specified rank");
         }
-
         public void Initialize()
         {
-            Command.AddReference(this, new string[3] { "players", "online", "who" });
+            Command.AddReference(this, new string[1] { "viewranks" });
         }
     }
 }

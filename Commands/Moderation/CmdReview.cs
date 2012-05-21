@@ -12,10 +12,11 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using MCForge.Utils;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
+using MCForge.Utils.Settings;
 
 namespace CommandDll
 {
@@ -38,7 +39,7 @@ namespace CommandDll
                 case "enter":
                 case "join":
                     bool ops = false;
-                    Server.ForeachPlayer(delegate(Player pl) { if (pl.Group.Permission >= Server.reviewnextperm) { ops = true; } });
+                    Server.ForeachPlayer(delegate(Player pl) { if (pl.Group.Permission >= ServerSettings.GetSettingInt("ReviewModeratorPerm")) { ops = true; } });
                     if (!ops) { p.SendMessage("There are no ops online! Please wait for one to come on before asking for review"); return; }
                     if (Server.reviewlist.Contains(p)) { p.SendMessage("You're already in the review queue!"); SendPositon(false, p); return; }
                         Server.reviewlist.Add(p);
@@ -74,7 +75,7 @@ namespace CommandDll
                 #endregion
                 #region ==Remove==
                 case "remove":
-                    if (p.Group.Permission < Server.reviewnextperm) { p.SendMessage("You can't remove players from review queue!"); return; }
+                    if (p.Group.Permission < ServerSettings.GetSettingInt("ReviewModeratorPerm")) { p.SendMessage("You can't remove players from review queue!"); return; }
                     Player who = Player.Find(args[1]);
                     if (who == null) { p.SendMessage("Cannot find player!"); return; }
                     if (!Server.reviewlist.Contains(who)) { p.SendMessage(who.Username + " is not in the review queue!"); return; }
@@ -99,7 +100,7 @@ namespace CommandDll
                 #endregion
                 #region ==Next==
                 case "next":
-                    if (p.Group.Permission < Server.reviewnextperm) 
+                    if (p.Group.Permission < ServerSettings.GetSettingInt("ReviewModeratorPerm")) 
                     { 
                         p.SendMessage("You can't use &9/review &bnext" + Server.DefaultColor + "!"); 
                         p.SendMessage("Use &9/review &benter " + Server.DefaultColor + "to enter the queue!");
@@ -121,7 +122,7 @@ namespace CommandDll
                 #endregion
                 #region ==Clear==
                 case "clear":
-                    if (p.Group.Permission < Server.reviewnextperm) { p.SendMessage("You can't clear the review queue!"); return; }
+                    if (p.Group.Permission < ServerSettings.GetSettingInt("ReviewModeratorPerm")) { p.SendMessage("You can't clear the review queue!"); return; }
                     Player.UniversalChat("The review queue has been cleared by " + p.Username + "!");
                     Server.reviewlist.Clear();
                     break;
@@ -139,7 +140,8 @@ namespace CommandDll
             p.SendMessage("/review leave - leave the review queue");
             p.SendMessage("/review view - shows the review queue");
             p.SendMessage("/review position - shows your place in the review queue");
-            if (p.Group.Permission >= Server.reviewnextperm) {
+            if (p.Group.Permission >= ServerSettings.GetSettingInt("ReviewModeratorPerm"))
+            {
                 p.SendMessage("/review remove <player> - removes <player> from the queue");
                 p.SendMessage("/review next - review the next player in the review queue");
                 p.SendMessage("/review clear - clears the review queue");

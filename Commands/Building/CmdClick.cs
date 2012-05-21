@@ -13,12 +13,10 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
 using MCForge.World;
-using MCForge.Utils;
-using MCForge.Utils;
 
 namespace CommandDll {
     public class CmdClick : ICommand {

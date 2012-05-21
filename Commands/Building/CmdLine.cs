@@ -68,7 +68,7 @@ namespace CommandDll.Building {
             //TODO: Check if user can place block
             //If user can put all of the blocks down
 
-            p.ExtraData.CreateIfNotExist<object, object>("Command.Line", block);
+            p.ExtraData.CreateIfNotExist<object, object>("Command.Line", new BlockInfo(255,new Vector3S(0,0,0)));
             p.OnPlayerBlockChange.Normal += new Event<Player, BlockChangeEventArgs>.EventHandler(CatchBlockOne);
 
         }
@@ -82,8 +82,9 @@ namespace CommandDll.Building {
         }
 
         void CatchBlockOne(Player sender, BlockChangeEventArgs e) {
-            byte block = (byte)sender.ExtraData.GetIfExist<object, object>("Command.Line");
-            sender.ExtraData.ChangeOrCreate<object, object>("Command.Line", new BlockInfo(block != 255 ? block : e.Holding, new Vector3S(e.X, e.Z, e.Y)));
+            BlockInfo block = (BlockInfo)sender.ExtraData.GetIfExist<object, object>("Command.Line");
+
+            sender.ExtraData.ChangeOrCreate<object, object>("Command.Line", new BlockInfo(block.Block != 255 ? block.Block : e.Holding, new Vector3S(e.X, e.Z, e.Y)));
             e.Cancel();
             sender.OnPlayerBlockChange.Normal -= CatchBlockOne;
             sender.OnPlayerBlockChange.Normal += new Event<Player, BlockChangeEventArgs>.EventHandler(CatchBlockTwo);
