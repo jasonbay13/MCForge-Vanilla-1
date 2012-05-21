@@ -145,7 +145,7 @@ namespace MCForge.Robot
                         }
                     }
                     Bot.Player.Rot = new byte[] { (byte)(Bot.Player.Rot[0] + 1), (byte)(Bot.Player.Rot[1] + 1) };
-                    Bot.Player.UpdatePosition(false);
+                    Bot.Player.UpdatePosition(true); //Pls leave this true, bots dont appear properly otherwise
                 }
             }
         }
