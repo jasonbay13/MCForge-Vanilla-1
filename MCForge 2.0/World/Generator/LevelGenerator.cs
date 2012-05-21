@@ -60,17 +60,21 @@ namespace MCForge.World.Generator {
         /// <param name="args">The Generator arguments.</param>
         public LevelGenerator(Level level, GeneratorArgs args) {
 
-            if (level.Size.x != level.Size.z)
-                throw new ArgumentException("The x and z must be the same to use advanced level generation");
 
             this.Level = level;
             this.GenArgs = args;
 
-            if (args.MaxLevelGenerationHeight == -1)
-                args.MaxLevelGenerationHeight = level.Size.y;
+            if (args.MaxLevelGenerationHeight < 0)
+                args.MaxLevelGenerationHeight = level.Size.y * Math.Abs(args.MaxLevelGenerationHeight);
 
-            if (args.MinDepth == -1)
-                args.MaxLevelGenerationHeight = level.Size.y;
+            if (args.MinLevelGenerationHeight < 0)
+                args.MinLevelGenerationHeight = level.Size.y * Math.Abs(args.MinLevelGenerationHeight);
+
+            if (args.MinDepth < 0)
+                args.MinDepth = level.Size.y * Math.Abs(args.MinDepth);
+
+            if (args.LiquidLine < 0)
+                args.LiquidLine = Level.Size.y * Math.Abs(args.LiquidLine);
 
             random = new Random((int)args.Seed);
         }
@@ -137,7 +141,10 @@ namespace MCForge.World.Generator {
 
             if (OnProgressArgs != null)
                 OnProgressArgs(this, new GenerationEventArgs("Created map " + Level.Name, 10));
+            Finalize();
         }
+
+
         #endregion
 
         #region Helper methods
@@ -230,8 +237,7 @@ namespace MCForge.World.Generator {
         public void GenerateNoise() {
             for (int z = 0; z < Level.Size.z; z++)
                 for (int x = 0; x < Level.Size.x; x++)
-                    overlay[x, z] = NoiseGenerator.Compute(x, z, x, true);
-
+                    overlay[x, z] = NoiseGenerator.Compute(x, z, x, GenArgs.UseNewNoise);
         }
 
         /// <summary>
@@ -248,26 +254,34 @@ namespace MCForge.World.Generator {
         /// Sets the blocks.
         /// </summary>
         public void SetBlocks() {
-            DateTime curr = DateTime.Now;
             for (int i = 0; i < overlay.Length - 1; i++) {
+
                 int x = i % (Level.Size.x);
                 int z = i / (Level.Size.x);
                 int y = (int)NoiseUtils.Range(overlay[x, z],
-                                             GenArgs.MinLevelGenerationHeight - NoiseUtils.NegateEdge(x, z, Level.Size.x, Level.Size.z),
-                                             GenArgs.MaxLevelGenerationHeight - NoiseUtils.NegateEdge(x, z, Level.Size.x, Level.Size.z));
+                                             (int)GenArgs.MinLevelGenerationHeight - NoiseUtils.NegateEdge(x, z, Level.Size.x, Level.Size.z),
+                                             (int)GenArgs.MaxLevelGenerationHeight - NoiseUtils.NegateEdge(x, z, Level.Size.x, Level.Size.z));
 
-                if (y >= GenArgs.MaxLevelGenerationHeight / 2)
-                    Level.SetBlock(x, z, y + 1, GenArgs.OverlayLayer);
+
+                if (x >= Level.Size.x || y >= Level.Size.y || z >= Level.Size.z)
+                    continue;
+
+
 
 
                 Level.SetBlock(x, z, y, GenArgs.TopLayer);
+                if(y > 0)
+                    Level.SetBlock(x, z, y - 1, GenArgs.TopLayer);
 
-                for(int toGround = y - 1; toGround >= GenArgs.MinLevelGenerationHeight; toGround--)
+                for (int toGround = y - 1; toGround >= GenArgs.MinLevelGenerationHeight; toGround--)
                     Level.SetBlock(x, z, toGround, GenArgs.BottomLayer);
 
-            }
-            // Logger.Log((curr.Millisecond - DateTime.Now.Millisecond) + " = total time");
-
+                if (y <= GenArgs.LiquidLine) {
+                    for (int toGround = (int)GenArgs.LiquidLine; toGround >= 0; toGround--)
+                        if (Level.GetBlock(x, z, toGround) == 0)
+                            Level.SetBlock(x, z, toGround, GenArgs.LiquidBlock);
+                }
+        }
         }
 
         /// <summary>
@@ -275,14 +289,11 @@ namespace MCForge.World.Generator {
         /// </summary>
         public void Generate3DTerrain() {
 
-            if (Level.Size.x != Level.Size.z)
-                throw new Exception("Width and length must be equal to generate 3D terrain");
-
 
             var Ran = new Random();
 
-            int maxHeight = GenArgs.MaxLevelGenerationHeight,
-                minHeight = GenArgs.MinLevelGenerationHeight,
+            int maxHeight = (int)GenArgs.MaxLevelGenerationHeight,
+                minHeight = (int)GenArgs.MinLevelGenerationHeight,
                 currHeight = minHeight;
 
             int halfX = Level.Size.x / 2,
@@ -305,7 +316,7 @@ namespace MCForge.World.Generator {
                 for (int z = 0; z < Level.Size.z; z++)
                     for (int x = 0; x < Level.Size.x; x++) {
 
-                        if ((i - halfZ) * cRand + (x - halfX) * sRand + sk > 0)
+                        if ((z - halfZ) * cRand + (x - halfX) * sRand + sk > 0)
                             map[x, z] += displace;
                         else
                             map[x, z] += -displace;
@@ -322,6 +333,9 @@ namespace MCForge.World.Generator {
                 if (displace < minHeight)
                     displace = minHeight;
             }
+        }
+
+        private void Finalize() {
         }
         #endregion
 

@@ -101,6 +101,7 @@
     <Compile Include="Robot\Bot.cs" />
     <Compile Include="Robot\BotMap.cs" />
     <Compile Include="Player\PlayerNetworking.cs" />
+    <Compile Include="System\Backup.cs" />
     <Compile Include="System\FileUtils.cs" />
     <Compile Include="System\Heartbeat\Heart.cs" />
     <Compile Include="System\Heartbeat\Heartbeat.cs" />

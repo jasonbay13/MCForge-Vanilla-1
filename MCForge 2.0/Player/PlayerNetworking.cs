@@ -717,10 +717,10 @@ namespace MCForge.Entity {
         /// <summary>
         /// This send a blockchange to the player only. (Not other players)
         /// </summary>
-        /// <param name="x"></param> The position the block will be placed in (x)
-        /// <param name="z"></param> The position the block will be placed in (z)
-        /// <param name="y"></param> The position the block will be placed in (y)
-        /// <param name="type"></param> The type of block that will be placed.
+        /// <param name="x">The position the block will be placed in (x)</param> 
+        /// <param name="z"> The position the block will be placed in (z)</param>
+        /// <param name="y"> The position the block will be placed in (y)</param>
+        /// <param name="type"> The type of block that will be placed.</param>
         public void SendBlockChange(ushort x, ushort z, ushort y, byte type) {
             if (x < 0 || y < 0 || z < 0 || x >= Level.Size.x || y >= Level.Size.y || z >= Level.Size.z) return;
 

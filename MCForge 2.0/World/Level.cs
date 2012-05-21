@@ -115,17 +115,16 @@ namespace MCForge.World {
             switch (type) {
                 case LevelTypes.Flat:
                     var gen = new Generator.LevelGenerator(newlevel);
-                    for (int i = newlevel.Size.y / 2 - 1; i > 0; i--)
+                    for (int i = newlevel.Size.y / 2; i >= 0; i--)
                         gen.FillPlaneXZ(i, Block.BlockList.DIRT);
                     gen.FillPlaneXZ(newlevel.Size.y / 2, Block.BlockList.GRASS);
-                    gen.FillY(0, 0, Block.BlockList.RED_CLOTH);
-                    gen.SetPosition();
+                    gen.SetPosition(new Vector3S((short)(newlevel.Size.x / 2 + 1), (short)(newlevel.Size.z / 2 + 1), (short)(newlevel.Size.y / 2 + 1)), new Vector2S());
                     break;
                 case LevelTypes.Pixel:
                     newlevel.CreatePixelArtLevel();
                     break;
                 case LevelTypes.Hell:
-                    Generator.LevelGenerator mGen = new Generator.LevelGenerator(newlevel, Generator.GeneratorTemplate.Hell);
+                    Generator.LevelGenerator mGen = new Generator.LevelGenerator(newlevel, Generator.GeneratorTemplate.Hell(newlevel));
                     mGen.Generate();
                     mGen.SetPosition();
                     break;
@@ -400,7 +399,7 @@ namespace MCForge.World {
         public bool IsInBounds(Vector3S vector) {
             return IsInBounds(vector.x, vector.z, vector.y);
         }
-        
+
         /// <summary>
         /// Determines whether the specified vector is in bounds of the level.
         /// </summary>
