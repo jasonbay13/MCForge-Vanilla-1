@@ -204,10 +204,11 @@ namespace MCForge.Entity {
                 oldPos = Pos;
                 oldRot = Rot;
 
+                SendSpawn(this);
                 SpawnThisPlayerToOtherPlayers();
+                UpdatePosition(true);
                 SpawnOtherPlayersForThisPlayer();
                 SpawnBotsForThisPlayer();
-                SendSpawn(this);
 
                 IsLoading = false;
                 
@@ -304,8 +305,8 @@ namespace MCForge.Entity {
             ushort z = packet.NTHO(message, 5);
             byte rotx = message[7];
             byte roty = message[8];
-            Vector3S fromPosition = new Vector3S(Pos.x, Pos.y, Pos.z);
-            oldPos = fromPosition;
+            Vector3S fromPosition = new Vector3S(oldPos.x,oldPos.z, Pos.y);
+            //oldPos = fromPosition;
             Pos.x = (short)x;
             Pos.y = (short)y;
             Pos.z = (short)z;
@@ -708,6 +709,7 @@ namespace MCForge.Entity {
             pa.Add(p.Pos.z);
             pa.Add(p.Rot);
             SendPacket(pa);
+            p.UpdatePosition(true);
         }
         /// <summary>
         /// This send a blockchange to the player only. (Not other players)
@@ -832,31 +834,28 @@ namespace MCForge.Entity {
         }
 
         internal void UpdatePosition(bool ForceTp) {
-            byte changed = 0;   //Denotes what has changed (x,y,z, rotation-x, rotation-y)
-
-            Vector3S tempOldPos = oldPos;
-            Vector3S tempPos = Pos;
+            Vector3S tempOldPos = new Vector3S(oldPos);
+            Vector3S tempPos = new Vector3S(Pos);
             byte[] tempRot = Rot;
             byte[] tempOldRot = oldRot;
             if (tempOldRot == null) tempOldRot = new byte[2];
             if (IsHeadFlipped)
                 tempRot[1] = 80;
 
-            oldPos = Pos;
+            oldPos = tempPos;
             oldRot = tempRot;
 
-            short diffX =(short)( tempPos.x - tempOldPos.x);
+            short diffX = (short)(tempPos.x - tempOldPos.x);
             short diffZ = (short)(tempPos.z - tempOldPos.z);
-            short diffY = (short)( tempPos.y - tempOldPos.y);
+            short diffY = (short)(tempPos.y - tempOldPos.y);
             int diffR0 = tempRot[0] - tempOldRot[0];
             int diffR1 = tempRot[1] - tempOldRot[1];
-
 
             //TODO rewrite local pos change code
             if (diffX == 0 && diffY == 0 && diffZ == 0 && diffR0 == 0 && diffR1 == 0) {
                 return; //No changes
             }
-            bool teleport = ForceTp || (Math.Abs(diffX) > 100 || Math.Abs(diffY) > 100 || Math.Abs(diffZ) > 100);
+            bool teleport = ForceTp || (Math.Abs(diffX) >= 127 || Math.Abs(diffY) >= 127 || Math.Abs(diffZ) >= 127);
 
             packet pa = new packet();
             if (teleport) {
@@ -868,7 +867,7 @@ namespace MCForge.Entity {
                 pa.Add(tempRot);
             }
             else {
-                bool rotupdate = diffR0 != 0 && diffR1 != 0;
+                bool rotupdate = diffR0 != 0 || diffR1 != 0;
                 bool posupdate = diffX != 0 || diffY != 0 || diffZ != 0;
                 if (rotupdate && posupdate) {
                     pa.Add(packet.types.SendPosANDRotChange);
@@ -906,7 +905,7 @@ namespace MCForge.Entity {
         /// </summary>
         public void SpawnThisPlayerToOtherPlayers() {
             Server.ForeachPlayer(delegate(Player p) {
-                if (p != this && p.Level == Level)
+                if (p != this && p.Level == Level && p.IsLoggedIn && !p.IsLoading)
                     p.SendSpawn(this);
             });
         }
