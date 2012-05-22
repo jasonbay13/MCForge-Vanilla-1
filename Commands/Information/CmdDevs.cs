@@ -30,12 +30,9 @@ namespace CommandDll
         public void Use(Player p, string[] args)
         {
             string send = Colors.yellow + "MCForge Development Team: ";
-            for (int i = 0; i < Server.devs.Count; i++) {
-                send += i != Server.devs.Count - 1
-                    ? Colors.navy + Server.devs[i] + Colors.white + ", "
-                    : Colors.navy + Server.devs[i];
-            }
-            p.SendMessage(send);
+            foreach (string s in Server.devs)
+                send += s + Colors.white + ", ";
+            p.SendMessage(send.Remove(send.Length - 2, 2));
         }
 
         public void Help(Player p)

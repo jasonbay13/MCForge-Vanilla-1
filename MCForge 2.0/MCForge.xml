@@ -1428,6 +1428,17 @@
             <param name="a">the vector to</param>
             <returns>a box like enumerator</returns>
         </member>
+        <member name="T:MCForge.Entity.Sender">
+            <summary>
+            The Sender can be anything from the player to the console
+            </summary>
+        </member>
+        <member name="M:MCForge.Entity.Sender.SendMessage(System.String)">
+            <summary>
+            Send this sender a message
+            </summary>
+            <param name="message">The message to send</param>
+        </member>
         <member name="T:MCForge.Groups.PermissionLevel">
             <summary>
             All the default permission values
@@ -2433,16 +2444,10 @@
             <summary>
             This send a blockchange to the player only. (Not other players)
             </summary>
-            <param name="x"></param> The position the block will be placed in (x)
-            <param name="z"></param> The position the block will be placed in (z)
-            <param name="y"></param> The position the block will be placed in (y)
-            <param name="type"></param> The type of block that will be placed.
-        </member>
-        <member name="M:MCForge.Entity.Player.SendMessage(System.String)">
-            <summary>
-            Send this player a message
-            </summary>
-            <param name="message">The message to send</param>
+            <param name="x">The position the block will be placed in (x)</param> 
+            <param name="z"> The position the block will be placed in (z)</param>
+            <param name="y"> The position the block will be placed in (y)</param>
+            <param name="type"> The type of block that will be placed.</param>
         </member>
         <member name="M:MCForge.Entity.Player.SendThisPlayerTheirOwnPos">
             <summary>
@@ -2564,6 +2569,12 @@
             <summary>
             The current Group of the player
             </summary>
+        </member>
+        <member name="M:MCForge.Entity.Player.SendMessage(System.String)">
+            <summary>
+            Send this player a message
+            </summary>
+            <param name="message">The message to send</param>
         </member>
         <member name="M:MCForge.Entity.Player.LoadAllExtra">
             <summary>
@@ -2836,7 +2847,7 @@
             Templates for <see cref="T:MCForge.World.Generator.GeneratorArgs"/>
             </summary>
         </member>
-        <member name="F:MCForge.World.Generator.GeneratorTemplate.Hell">
+        <member name="M:MCForge.World.Generator.GeneratorTemplate.Hell(MCForge.World.Level)">
             <summary>
             Hell-ish type level
             </summary>
