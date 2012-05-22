@@ -68,7 +68,6 @@ namespace MCForge.Groups
                 catch { Logger.Log("Permission cannot be greater then 128 (is " + linesplit[1] + ")");//, LogType.Error);
                     continue; }
 
-                Logger.Log(cmd.Name);
                 if (!overrides.ContainsKey(cmd))
                     overrides.Add(cmd, perm);
             }
