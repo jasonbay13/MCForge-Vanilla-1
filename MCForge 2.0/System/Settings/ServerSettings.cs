@@ -284,8 +284,8 @@ namespace MCForge.Utils.Settings {
                     writer.WriteLine(v.Description == null && v.Key == null
                         ? v.Value
                         : v.Description == null
-                            ? string.Format("{0}={1}" + (v != Values.Last() ? "\n" : ""), v.Key, v.Value)
-                            : string.Format("#{0}\r\n{1}={2}" + (v != Values.Last() ? "\n" : ""), v.Description, v.Key, v.Value));
+                            ? string.Format("{0}={1}" + (v != Values.Last() ? "\r\n" : ""), v.Key, v.Value)
+                            : string.Format("#{0}\r\n{1}={2}" + (v != Values.Last() ? "\r\n" : ""), v.Description, v.Key, v.Value));
 
                 }
             }
@@ -297,17 +297,21 @@ namespace MCForge.Utils.Settings {
         public static void LoadSettings() {
             if (!File.Exists(FileUtils.PropertiesPath + "server.properties"))
                 return;
-            var text = File.ReadAllLines(FileUtils.PropertiesPath + "server.properties");
+            string[] text = File.ReadAllLines(FileUtils.PropertiesPath + "server.properties");
             Values.Clear();
             for (int i = 0; i < text.Count(); i++) {
                 string read = text[i];
                 SettingNode pair;
 
-                if (String.IsNullOrWhiteSpace(read))
-                    continue;
+                if (String.IsNullOrWhiteSpace(read)) {
+                    Values.Add(new SettingNode(null, read, null));
+                }
 
+                if (read[0] == '#' && (i + 1 < text.Length) ? text[i + 1][0] == '#' || String.IsNullOrWhiteSpace(text[i + 1]) : true) {
+                    Values.Add(new SettingNode(null, read, null));
+                }
 
-                if (read[0] == '#' && (i + 1 < text.Count()) ? text[i + 1][0] != '#' && !String.IsNullOrWhiteSpace(text[i + 1]) : false) {
+                if (read[0] == '#' && (i + 1 < text.Length) ? text[i + 1][0] != '#' && !String.IsNullOrWhiteSpace(text[i + 1]) : false) {
                     i++;
                     var split = text[i].Split('=');
                     pair = new SettingNode(split[0].Trim().ToLower(),
