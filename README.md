@@ -2,6 +2,14 @@
 
 Minecraft Classic Custom Server Software
 
+##Important stuff for Modders / Forkers
+- [Example Code Lists](https://github.com/headdetect/MCForge-Examples) - by headdetect
+- [MCForge Wiki](https://github.com/MCForge/MCForge-Vanilla/wiki)
+
+##Issues and Pull requests
+- Found a bug? [Report it](https://github.com/MCForge/MCForge-Vanilla/issues)
+- [Make a pull request](https://github.com/MCForge/MCForge-Vanilla/wiki/Pull-Requests)
+
 ##About MCForge Vanilla
 
 MCForge Vanilla is a Minecraft Classic Custom Server Software. It has been released under an open-source license to allow the community to help us develop it further.  We welcome all pull requests and will merge them in at our own discretion.
