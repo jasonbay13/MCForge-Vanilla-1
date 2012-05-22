@@ -29,7 +29,7 @@ namespace CommandDll.Moderation
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
-        public void Initialize() { Command.AddReference(this, new string[2] { "unban", "unbanip" }); }
+        public void Initialize() { Command.AddReference(this, new string[1] { "unbanip" }); }
         public void Use(Player p, string[] args)
         {
             bool Stealth = false;

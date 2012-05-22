@@ -89,7 +89,9 @@
     <Compile Include="API\Events\Robot\OnBotMove.cs" />
     <Compile Include="API\Events\Robot\OnBotTargetPlayer.cs" />
     <Compile Include="API\Events\System\CommandLoadEvent.cs" />
-    <Compile Include="API\Events\System\OnSettingLoad.cs" />
+    <Compile Include="API\Events\System\OnSettingLoad.cs">
+      <DependentUpon>CommandLoadEvent.cs</DependentUpon>
+    </Compile>
     <Compile Include="API\Events\System\PluginLoadEvent.cs" />
     <Compile Include="API\Events\System\ReceivePacket.cs" />
     <Compile Include="Database\Database.cs" />
@@ -100,9 +102,11 @@
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
     <Compile Include="Interfaces\Plugin\IPlugin.cs" />
+    <Compile Include="Player\Sender.cs" />
     <Compile Include="Robot\Bot.cs" />
     <Compile Include="Robot\BotMap.cs" />
     <Compile Include="Player\PlayerNetworking.cs" />
+    <Compile Include="System\Backup.cs" />
     <Compile Include="System\FileUtils.cs" />
     <Compile Include="System\Heartbeat\Heart.cs" />
     <Compile Include="System\Heartbeat\Heartbeat.cs" />

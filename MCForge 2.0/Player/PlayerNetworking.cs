@@ -30,7 +30,7 @@ using MCForge.Utils.Settings;
 using MCForge.World;
 
 namespace MCForge.Entity {
-    public partial class Player {
+	public partial class Player : Sender {
         #region Incoming Data
         private static void Incoming(IAsyncResult result) {
             while (!Server.Started)
@@ -714,10 +714,10 @@ namespace MCForge.Entity {
         /// <summary>
         /// This send a blockchange to the player only. (Not other players)
         /// </summary>
-        /// <param name="x"></param> The position the block will be placed in (x)
-        /// <param name="z"></param> The position the block will be placed in (z)
-        /// <param name="y"></param> The position the block will be placed in (y)
-        /// <param name="type"></param> The type of block that will be placed.
+        /// <param name="x">The position the block will be placed in (x)</param> 
+        /// <param name="z"> The position the block will be placed in (z)</param>
+        /// <param name="y"> The position the block will be placed in (y)</param>
+        /// <param name="type"> The type of block that will be placed.</param>
         public void SendBlockChange(ushort x, ushort z, ushort y, byte type) {
             if (x < 0 || y < 0 || z < 0 || x >= Level.Size.x || y >= Level.Size.y || z >= Level.Size.z) return;
 
@@ -769,13 +769,6 @@ namespace MCForge.Entity {
             SendPacket(pingPacket);
         }
 
-        /// <summary>
-        /// Send this player a message
-        /// </summary>
-        /// <param name="message">The message to send</param>
-        public void SendMessage(string message) {
-            SendMessage(id, message); // 0xFF is NOT a valid player ID
-        }
         /// <summary>
         /// Exactly what the function name is, it might be useful to change this players pos first ;)
         /// </summary>

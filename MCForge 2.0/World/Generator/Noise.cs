@@ -99,7 +99,7 @@ namespace MCForge.World {
             float amp = this.Amplitude;
             float freq = this.Frequency;
             for (float i = 0; i < this.Octaves; i++) {
-                noise += useNewNoise ? (Noise(x * freq, y * freq, z * freq) * amp) : (NoiseUtils.InterpolatedNoise(x * freq, y * freq, new Random().Next()) * amp);
+                noise += useNewNoise ? (Noise(x * freq, y * freq, z * freq) * amp) : (NoiseUtils.InterpolatedNoise(x * freq, y * freq) * amp);
                 freq *= 2;                                // octave is the float of the previous frequency
                 amp *= this.Persistence;
             }

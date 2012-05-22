@@ -15,7 +15,7 @@ namespace MCForge.World.Generator {
         /// <value>
         /// The height of the min level generation.
         /// </value>
-        public int MinLevelGenerationHeight { get; set; }
+        public double MinLevelGenerationHeight { get; set; }
 
         /// <summary>
         /// Gets or sets the max height of the level generation.
@@ -23,7 +23,7 @@ namespace MCForge.World.Generator {
         /// <value>
         /// The height of the max level generation.
         /// </value>
-        public int MaxLevelGenerationHeight { get; set; }
+        public double MaxLevelGenerationHeight { get; set; }
 
         /// <summary>
         /// Gets or sets the seed.
@@ -89,7 +89,7 @@ namespace MCForge.World.Generator {
         /// <value>
         /// The liquid line.
         /// </value>
-        public int LiquidLine { get; set; }
+        public double LiquidLine { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [use new noise].
@@ -167,5 +167,7 @@ namespace MCForge.World.Generator {
         /// A constant for the max size of a map (to be used when the size is unknown)
         /// </summary>
         public const int MAX_SIZE = -1;
+
+        public byte FlowingLiquid { get; set; }
     }
 }
