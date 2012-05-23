@@ -270,7 +270,7 @@ namespace MCForge.Utils.Settings {
 
         internal static SettingNode GetNode(string key) {
             key = key.ToLower();
-            return Values.FirstOrDefault(pair => pair.Key.ToLower() == key.ToLower());
+            return Values.FirstOrDefault(pair => (pair.Key == null) ? false : pair.Key.ToLower() == key.ToLower());
         }
 
         /// <summary>
@@ -305,10 +305,12 @@ namespace MCForge.Utils.Settings {
 
                 if (String.IsNullOrWhiteSpace(read)) {
                     Values.Add(new SettingNode(null, read, null));
+                    continue;
                 }
 
                 if (read[0] == '#' && (i + 1 < text.Length) ? text[i + 1][0] == '#' || String.IsNullOrWhiteSpace(text[i + 1]) : true) {
                     Values.Add(new SettingNode(null, read, null));
+                    continue;
                 }
 
                 if (read[0] == '#' && (i + 1 < text.Length) ? text[i + 1][0] != '#' && !String.IsNullOrWhiteSpace(text[i + 1]) : false) {
@@ -392,7 +394,8 @@ namespace MCForge.Utils.Settings {
         public string Description { get; set; }
 
         public SettingNode(string key, string value, string description) {
-            Key = key.ToLower();
+            if (key != null)
+                Key = key.ToLower();
             Value = value;
             Description = description;
         }
