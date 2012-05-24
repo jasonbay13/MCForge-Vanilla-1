@@ -48,7 +48,8 @@ namespace MCForge.Interface.Command
         /// <param name="reference">the string you want player to type to use your command, you can use this method more than once :)</param>
         public static void AddReference(ICommand command, string reference) {
             if (Commands.ContainsKey(reference)) {
-                Logger.Log("Command " + command.Name + " tried to add a referance that already existed! (" + reference + ")", LogType.Error);
+                Logger.Log("Command " + command.Name + " replaces " + Commands[reference].Name + " for /" + reference, LogType.Warning);
+                Commands[reference] = command;
                 return;
             }
             Commands.Add(reference.ToLower(), command);
