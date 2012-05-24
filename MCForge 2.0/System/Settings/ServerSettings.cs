@@ -308,7 +308,7 @@ namespace MCForge.Utils.Settings {
                     continue;
                 }
 
-                if (read[0] == '#' && (i + 1 < text.Length) ? text[i + 1][0] == '#' || String.IsNullOrWhiteSpace(text[i + 1]) : true) {
+                if (read[0] == '#' && ((i + 1 < text.Length) ? text[i + 1][0] == '#' || String.IsNullOrWhiteSpace(text[i + 1]) : true)) {
                     Values.Add(new SettingNode(null, read, null));
                     continue;
                 }
