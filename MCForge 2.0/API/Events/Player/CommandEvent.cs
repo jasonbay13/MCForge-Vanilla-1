@@ -45,6 +45,13 @@ namespace MCForge.API.Events {
             canceled = true;
         }
         /// <summary>
+        /// Changes the command name
+        /// </summary>
+        public void ChangeCommand(string s)
+        {
+            Command = s;
+        }
+        /// <summary>
         /// Allows the handling
         /// </summary>
         public void Allow() {

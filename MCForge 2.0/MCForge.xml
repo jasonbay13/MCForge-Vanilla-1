@@ -2340,6 +2340,11 @@
             Cancels the handling
             </summary>
         </member>
+        <member name="M:MCForge.API.Events.CommandEventArgs.ChangeCommand(System.String)">
+            <summary>
+            Changes the command name
+            </summary>
+        </member>
         <member name="M:MCForge.API.Events.CommandEventArgs.Allow">
             <summary>
             Allows the handling

@@ -259,9 +259,12 @@ namespace MCForge.Entity {
 
             string name = args[0].ToLower().Trim();
             CommandEventArgs eargs = new CommandEventArgs(name, sendArgs);
-            bool canceled = OnPlayerCommand.Call(this, eargs, OnAllPlayersCommand).Canceled;
+            eargs = OnPlayerCommand.Call(this, eargs, OnAllPlayersCommand);
+            bool canceled = eargs.Canceled;
             if (canceled) // If any event canceled us
                 return;
+            if (name != eargs.Command)
+                name = eargs.Command;
             if (Command.Commands.ContainsKey(name)) {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
