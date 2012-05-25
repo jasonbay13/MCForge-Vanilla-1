@@ -209,7 +209,7 @@
         </member>
         <member name="E:MCForge.API.Events.Event`2.All">
             <summary>
-            Represents all priority levels (for removing only)
+            Represents normal priority level (for removing only)
             </summary>
         </member>
         <member name="T:MCForge.API.Events.Event`2.EventHandler">
@@ -939,7 +939,7 @@
             <param name="data">The datapass object.</param>
         </member>
         <member name="P:MCForge.Entity.Player.IsOwner">
-            <summary>
+            <summary>C
             Checks if the player is the server owner.
             </summary>
         </member>
@@ -1538,6 +1538,7 @@
             Creates a new instance
             </summary>
             <param name="message">The message</param>
+            <param name="username">The username</param>
         </member>
         <member name="M:MCForge.API.Events.ChatEventArgs.Cancel">
             <summary>
@@ -2502,6 +2503,11 @@
             The Minecraft Heartbeat
             </summary>
         </member>
+        <member name="T:MCForge.Interfaces.IIOProvider">
+            <summary>
+            Provides methods for admin input and output
+            </summary>
+        </member>
         <member name="M:MCForge.Interface.Plugin.IPlugin.OnLoad(System.String[])">
             <summary>
             The initialization of the plugin.
@@ -2780,6 +2786,40 @@
             Stops showing the message.
             </summary>
             <param name="p">The player to stop showing the message to.</param>
+        </member>
+        <member name="T:MCForge.API.Events.EventRegisterArgs">
+            <summary>
+            The EventRegister EventArgs
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.EventRegisterArgs.#ctor(System.Type,System.Type,System.Delegate,System.Boolean)">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="senderType">The type of the sender</param>
+            <param name="argsType">The type of the arguments</param>
+            <param name="method">The method</param>
+            <param name="registering">Whether the method gets regestered (true) or unregistered (false)</param>
+        </member>
+        <member name="F:MCForge.API.Events.EventRegisterArgs.SenderType">
+            <summary>
+            The type of the sender
+            </summary>
+        </member>
+        <member name="F:MCForge.API.Events.EventRegisterArgs.ArgsType">
+            <summary>
+            The type of the arguments
+            </summary>
+        </member>
+        <member name="F:MCForge.API.Events.EventRegisterArgs.Method">
+            <summary>
+            The method
+            </summary>
+        </member>
+        <member name="F:MCForge.API.Events.EventRegisterArgs.Registering">
+            <summary>
+            Whether the method gets regestered (true) or unregistered (false)
+            </summary>
         </member>
         <member name="T:MCForge.World.Generator.LevelGenerator">
             <summary>

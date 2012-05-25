@@ -68,19 +68,22 @@ namespace MCForge.Entity {
         /// </summary>
         //public int money = 0;
 
-        /// <summary>
+        /// <summary>C
         /// Checks if the player is the server owner.
         /// </summary>
         public bool IsOwner { get { return Username == Server.owner; } }
-        
+
+        internal string _DisplayName = "";
+        public string DisplayName
+        {
+            get { return _DisplayName; }
+            set { _DisplayName = value; this.GlobalDie(); SpawnThisPlayerToOtherPlayers(); }
+        }
+
         /// <summary>
         /// This is the player's username
         /// </summary>       
-        public string Username
-        {
-            get;
-            set;
-        }
+        public string Username { get; set; }
         
         /// <summary>
         /// This is the UID for the player in the database

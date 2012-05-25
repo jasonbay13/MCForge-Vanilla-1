@@ -139,6 +139,7 @@ namespace MCForge.Entity {
                 if (IsLoggedIn) return;
                 byte version = message[0];
                 Username = enc.GetString(message, 1, 64).Trim();
+                _DisplayName = Username;
                 string BanReason = null;
                 bool banned = false;
 
@@ -435,7 +436,6 @@ namespace MCForge.Entity {
             if (canceled || eargs.Message == null || eargs.Message.Length == 0)
                 return;
             incomingText = eargs.Message;
-            string nickname = eargs.Username;
 
             //TODO: add this to a different plugin, its a mess right here, and i hate it
             if (Server.voting) {
@@ -492,15 +492,15 @@ namespace MCForge.Entity {
                 if (!groupname.EndsWith("ed") && !groupname.EndsWith("s")) {
                     groupname += "s";
                 } //Plural
-                RankChat(this, "&a<&fTo " + groupname + "&a> " + Group.Color + nickname + ": &f" + incomingText);
-                Logger.Log("<" + groupname + " Chat> <" + Username + " as " + nickname + "> " + incomingText);
+                RankChat(this, "&a<&fTo " + groupname + "&a> " + Group.Color + DisplayName + ": &f" + incomingText);
+                Logger.Log("<" + groupname + " Chat> <" + Username + " as " + DisplayName + "> " + incomingText);
                 return;
             }
             if (incomingText[0] == '!') //Level chat
             {
                 incomingText = incomingText.Trim().TrimStart('!');
-                LevelChat(this, "&a<&f" + Level.Name + "&a> " + nickname + ":&f " + incomingText);
-                Logger.Log("<" + Level.Name + " Chat> " + Username + " as " + nickname + ": " + incomingText);
+                LevelChat(this, "&a<&f" + Level.Name + "&a> " + DisplayName + ":&f " + incomingText);
+                Logger.Log("<" + Level.Name + " Chat> " + Username + " as " + DisplayName + ": " + incomingText);
                 return;
             }
 
@@ -555,14 +555,14 @@ namespace MCForge.Entity {
                 return;
             }
             //TODO: remove to place better
-            Logger.Log("<" + Username + " as " + nickname + "> " + incomingText);
+            Logger.Log("<" + Username + " as " + DisplayName + "> " + incomingText);
             var voiceString = (string)ExtraData.GetIfExist("VoiceString") ?? "";
             var mColor = (string)ExtraData.GetIfExist("Color") ?? Group.Color;
             var mPrefix = (string)ExtraData.GetIfExist("Prefix") ?? "";
             string msg = voiceString +
                           mColor +
                           mPrefix +
-                          nickname +
+                          Username +
                           ": &f" +
                           incomingText;
             try {
@@ -703,7 +703,7 @@ namespace MCForge.Entity {
             packet pa = new packet();
             pa.Add(packet.types.SendSpawn);
             pa.Add((byte)ID);
-            pa.Add(p.Username, 64);
+            pa.Add(p._DisplayName, 64);
             pa.Add(p.Pos.x);
             pa.Add(p.Pos.y);
             pa.Add(p.Pos.z);
@@ -1017,11 +1017,10 @@ namespace MCForge.Entity {
             ConnectionEventArgs eargs = new ConnectionEventArgs(false);
             OnPlayerDisconnect.Call(this, eargs);
             OnAllPlayersDisconnect.Call(this, eargs);
-            IsLoggedIn = false;
 
             GlobalDie();
             Server.RemovePlayer(this);
-            if (!IsBot)
+            if (!IsBot && IsLoggedIn)
             {
                 Logger.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", Color.Gray, Color.Black);
                 try
@@ -1033,6 +1032,7 @@ namespace MCForge.Entity {
                 if (Server.PlayerCount > 0)
                     Player.UniversalChat(Username + " has disconnected");
             }
+            IsLoggedIn = false;
             Server.Connections.Remove(this);
 
             Socket.Close();
