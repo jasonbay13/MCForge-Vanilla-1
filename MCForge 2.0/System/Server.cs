@@ -428,6 +428,22 @@ namespace MCForge.Core {
             Logger.DeInit();
         }
 
+        /// <summary>
+        /// Restarts the server (TODO - Mono compatible)
+        /// </summary>
+        public static void Restart()
+        {
+            // Get the parameters/arguments passed to program if any
+            string arguments = string.Empty;
+            string[] args = Environment.GetCommandLineArgs();
+            for (int i = 1; i < args.Length; i++) // args[0] is always exe path/filename
+                arguments += args[i] + " ";
+
+            // Restart current application, with same arguments/parameters
+            System.Diagnostics.Process.Start(System.Windows.Forms.Application.ExecutablePath, arguments);
+            Stop();
+            Environment.Exit(1);
+        }
 
         /// <summary>
         /// Saves all of the levels and groups
