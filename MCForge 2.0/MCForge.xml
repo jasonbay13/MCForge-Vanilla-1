@@ -2698,6 +2698,11 @@
             Stops the server
             </summary>
         </member>
+        <member name="M:MCForge.Core.Server.Quit">
+            <summary>
+            Exits the server
+            </summary>
+        </member>
         <member name="M:MCForge.Core.Server.Restart">
             <summary>
             Restarts the server (TODO - Mono compatible)

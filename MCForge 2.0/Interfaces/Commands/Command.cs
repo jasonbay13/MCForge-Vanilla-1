@@ -24,7 +24,7 @@ namespace MCForge.Interface.Command
 	/// The command class, used to store commands for players to use
 	/// </summary>
     public class Command {
-        internal static Dictionary<string, ICommand> Commands = new Dictionary<string, ICommand>();
+        public static Dictionary<string, ICommand> Commands = new Dictionary<string, ICommand>();
 
         /// <summary>
         /// Returns the dictionary of all commands.

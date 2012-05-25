@@ -99,7 +99,7 @@ namespace MCForge.Interface {
                 }
                 catch { } //Stops loading bad DLL files
 		}
-        internal static void InitCommandsAndPlugins() {
+        public static void InitCommandsAndPlugins() {
             string path = Directory.GetCurrentDirectory();
             string[] DLLFiles = Directory.GetFiles(path, "*.dll");
             foreach (string s in DLLFiles)

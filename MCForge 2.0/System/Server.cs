@@ -429,6 +429,14 @@ namespace MCForge.Core {
         }
 
         /// <summary>
+        /// Exits the server
+        /// </summary>
+        public static void Quit()
+        {
+            Environment.Exit(1);
+        }
+
+        /// <summary>
         /// Restarts the server (TODO - Mono compatible)
         /// </summary>
         public static void Restart()
@@ -442,7 +450,7 @@ namespace MCForge.Core {
             // Restart current application, with same arguments/parameters
             System.Diagnostics.Process.Start(System.Windows.Forms.Application.ExecutablePath, arguments);
             Stop();
-            Environment.Exit(1);
+            Quit();
         }
 
         /// <summary>

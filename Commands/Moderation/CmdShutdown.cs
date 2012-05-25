@@ -20,9 +20,9 @@ using MCForge.Utils.Settings;
 
 namespace CommandDll
 {
-    public class CmdRestart : ICommand
+    public class CmdShutdown : ICommand
     {
-        public string Name { get { return "Restart"; } }
+        public string Name { get { return "Shutdown"; } }
         public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Snowl"; } }
         public int Version { get { return 1; } }
@@ -31,17 +31,18 @@ namespace CommandDll
 
         public void Use(Player p, string[] args)
         {
-            Server.Restart();
+            Server.Stop();
+            Server.Quit();
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/restart - Restarts the server");
+            p.SendMessage("/shutdown - Shuts down the server");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, "restart");
+            Command.AddReference(this, "shutdown");
         }
     }
 }

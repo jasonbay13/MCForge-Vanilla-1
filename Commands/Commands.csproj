@@ -53,6 +53,7 @@
     <Compile Include="Bots\CmdBot.cs" />
     <Compile Include="Misc\CmdFlipHead.cs" />
     <Compile Include="Moderation\CmdRestart.cs" />
+    <Compile Include="Moderation\CmdShutdown.cs" />
     <Compile Include="Moderation\CmdUnload.cs" />
     <Compile Include="Information\CmdMapInfo.cs" />
     <Compile Include="Information\CmdInfo.cs" />
