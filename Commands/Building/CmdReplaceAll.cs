@@ -48,6 +48,9 @@ namespace CommandDll
                 p.SendMessage("Could not find block specified");
             }
 
+            type = Block.NameToBlock(args[0]);
+            type2 = Block.NameToBlock(args[1]);
+
             foreach (byte b in p.Level.Data)
             {
                 if (b == type)

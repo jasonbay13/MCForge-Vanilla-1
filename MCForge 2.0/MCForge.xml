@@ -939,7 +939,7 @@
             <param name="data">The datapass object.</param>
         </member>
         <member name="P:MCForge.Entity.Player.IsOwner">
-            <summary>C
+            <summary>
             Checks if the player is the server owner.
             </summary>
         </member>

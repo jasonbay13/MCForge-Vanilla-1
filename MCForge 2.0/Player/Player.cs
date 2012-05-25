@@ -68,7 +68,7 @@ namespace MCForge.Entity {
         /// </summary>
         //public int money = 0;
 
-        /// <summary>C
+        /// <summary>
         /// Checks if the player is the server owner.
         /// </summary>
         public bool IsOwner { get { return Username == Server.owner; } }
