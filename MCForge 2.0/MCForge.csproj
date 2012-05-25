@@ -101,7 +101,9 @@
     <Compile Include="Groups\CommandPermissionOverrides.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
+    <Compile Include="Interfaces\IIOProvider.cs" />
     <Compile Include="Interfaces\Plugin\IPlugin.cs" />
+    <Compile Include="Player\ConsolePlayer.cs" />
     <Compile Include="Player\Sender.cs" />
     <Compile Include="Robot\Bot.cs" />
     <Compile Include="Robot\BotMap.cs" />

@@ -19,6 +19,9 @@ using System.Threading;
 using MCForge.Interface;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
+using MCForge.Interfaces;
+using MCForge.Entity;
+using MCForge.Interface.Command;
 
 namespace MCForge.Core {
     static class Program {
@@ -38,13 +41,30 @@ namespace MCForge.Core {
             Console.Title = ServerSettings.GetSetting("ServerName") + " - MCForge 2.0"; //Don't know what MCForge version we are using yet.
             new Thread(new ThreadStart(Server.Init)).Start();
             Logger.OnRecieveLog += new EventHandler<LogEventArgs>(Server.OnLog);
+            cp = new ConsolePlayer(cio);
             while (true) {
                 string input = Console.ReadLine();
-                if (input.ToLower() == "/stop") break; 
-                if (input.ToLower() == "/copyurl") {
+                if (input.Trim().StartsWith("/")) {
+                    if (input.Trim().Length > 1) {
+                        string name = input.Trim().Substring(1);
+                        ICommand c = Command.Find(name);
+                        if (c != null) {
+                            int i = input.Trim().IndexOf(" ");
+                            if (i > 0) {
+                                string[] cargs = input.Trim().Substring(i + 1).Split(' ');
+                                c.Use(cp, cargs);
+                            }
+                            else {
+                                c.Use(cp, new string[0]);
+                            }
+                        }
+                    }
+                }
+                if (input.ToLower() == "!stop") break; 
+                if (input.ToLower() == "!copyurl") {
                     System.Windows.Forms.Clipboard.SetDataObject(Server.URL, true);
                 }
-                if (input.ToLower().Split(' ')[0] == "/packets") {
+                if (input.ToLower().Split(' ')[0] == "!packets") {
                     string[] cargs = input.ToLower().Split(' ');
                     if (cargs.Length == 1) {
                         MCForge.Entity.Player.OnAllPlayersReceivePacket.Important += new API.Events.PacketEvent.EventHandler(OnPacket);
@@ -128,7 +148,8 @@ namespace MCForge.Core {
 
             }
         }
-
+        private static ConsolePlayer cp;
+        private static CommandIO cio = new CommandIO();
         private static List<byte> hidePackets = new List<byte>();
         private static List<byte> cancelPackets = new List<byte>();
         private static Dictionary<byte, int> reducePackets = new Dictionary<byte, int>();
@@ -178,6 +199,18 @@ namespace MCForge.Core {
                     return true;
             }
             return args[args.Length - 1] == "abort-setup";
+        }
+    }
+    class CommandIO : IIOProvider {
+        public string ReadLine() {
+            if (Console.CursorLeft != 0) Console.WriteLine();
+            Console.Write("CIO input: ");
+           return Console.ReadLine();
+        }
+
+        public void WriteLine(string line) {
+            if (Console.CursorLeft != 0) Console.WriteLine();
+            Console.WriteLine("CIO output: "+line);
         }
     }
 }

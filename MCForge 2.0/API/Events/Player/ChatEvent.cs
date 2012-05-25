@@ -18,6 +18,7 @@ namespace MCForge.API.Events {
         /// Creates a new instance
         /// </summary>
         /// <param name="message">The message</param>
+        /// <param name="username">The username</param>
         public ChatEventArgs(string message, string username) {
             this.Message = message;
             this.Username = username;

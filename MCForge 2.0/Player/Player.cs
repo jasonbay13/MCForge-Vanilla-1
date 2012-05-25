@@ -33,7 +33,7 @@ namespace MCForge.Entity {
     /// <summary>
     /// The player class, this contains all player information.
     /// </summary>
-    public sealed partial class Player : Sender {
+    public partial class Player : Sender {
         #region Variables
 
         //TODO: Change all o dis
