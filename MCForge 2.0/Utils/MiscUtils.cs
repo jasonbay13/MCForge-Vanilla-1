@@ -107,6 +107,7 @@ namespace MCForge.Utils {
                 return null;
             }
             return Regex.Replace(stringToClean, @"[\r\n\x00\x1a\\'""]", @"\$0");
+        }
 
         /// <summary>
         /// If an array contains that object it returns <c>true</c> otherwise <c>false</c>

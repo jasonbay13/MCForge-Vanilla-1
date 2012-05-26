@@ -68,9 +68,7 @@ namespace MCForge.Core {
             if (!ServerSettings.GetSettingBoolean("BackupFiles"))
                 return;
 
-            BackupAll();
-
-            _timer = new Timer(ServerSettings.GetSettingInt("BackupInterval"));
+            _timer = new Timer(ServerSettings.GetSettingInt("BackupInterval") * 1000);
             _timer.Elapsed += (obj, e) => {
                 BackupAll();
             };
