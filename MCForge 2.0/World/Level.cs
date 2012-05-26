@@ -183,7 +183,7 @@ namespace MCForge.World {
                     long v = Binary.ReadInt64();
                     if (v != 28542713840690029) //The magic number
                     {
-                        Logger.Log("Not a new MCForge Level! Attemping to load old MCForge level format!", Color.Red, Color.Black);
+                        Logger.Log("Not a new MCForge Level! Attemping to load old MCForge level format!", Color.Red, Color.Black, LogType.Debug);
                         Binary.Dispose();
                         FileStream fs = File.OpenRead(Name);
                         try {

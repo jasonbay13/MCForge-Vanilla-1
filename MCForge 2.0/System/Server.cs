@@ -174,6 +174,7 @@ namespace MCForge.Core {
         public delegate void ForeachBotDelegate(Bot p);
 
         public static void Init() {
+            Logger.WriteLog("--------- Server Started at " + DateTime.Now.ToShortDateString() +  " " + DateTime.Now.ToShortTimeString() + " ---------");
             Logger.Log("Debug mode started", LogType.Debug);
             //TODO Add debug messages
             //TODO load the level if it exists
