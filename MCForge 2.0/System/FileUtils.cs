@@ -3,6 +3,7 @@
 using System.IO;
 using System.Net;
 using MCForge.Utils;
+using System;
 
 namespace MCForge.Utils {
 
@@ -10,11 +11,14 @@ namespace MCForge.Utils {
 
     public class FileUtils {
 
+        public const string BackupsPath = "backups/";
         public const string PropertiesPath = "properties/";
         public const string LevelsPath = "levels/";
         public const string DllsPath = "dlls/";
         public const string ExtrasPath = "extras/";
         public const string TextPath = "text/";
+        public const string LogsPath = "logs/";
+
 
 
         /// <summary>

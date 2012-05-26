@@ -66,7 +66,7 @@ namespace CommandDll.Misc {
 
             p.ExtraData["Money"] = (int)p.ExtraData["Money"] - amt;
             who.ExtraData["Money"] = (int)who.ExtraData["Money"] + amt;
-            Player.UniversalChat((string)p.ExtraData.GetIfExist("Color") ?? "" +
+            Player.UniversalChat(p.Color +
                                   p.Username +
                                   Server.DefaultColor +
                                   " was paid &3" +
@@ -75,7 +75,7 @@ namespace CommandDll.Misc {
                                   " " +
                                   Server.moneys +
                                   " by " +
-                                  who.ExtraData.GetIfExist("Color") ?? "" +
+                                  who.Color +
                                   who.Username +
                                   Server.DefaultColor +
                                   ".");

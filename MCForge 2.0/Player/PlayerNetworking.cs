@@ -38,18 +38,17 @@ namespace MCForge.Entity {
 
             Player p = (Player)result.AsyncState;
 
-            //Why is this here? this is a terrible spot for this!
-            //Sorry, I was merging manually, and failed at pasting
 
             try {
                 int length = p.Socket.EndReceive(result);
                 if (length == 0) {
                     p.CloseConnection();
                     if (!p.IsBeingKicked) {
-                        var color = (string)p.ExtraData.GetIfExist("Color");
-                        UniversalChat(color ?? "" + p.Username + Server.DefaultColor + " has disconnected.");
+                        UniversalChat(p.Color + p.Username + Server.DefaultColor + " has disconnected.");
                         p.GlobalDie();
-                    }
+                    }    
+
+                    //Why is this here? this is a terrible spot for this!
                     if (Server.reviewlist.Contains(p)) {
                         Server.reviewlist.Remove(p);
                         foreach (Player pl in Server.reviewlist.ToArray()) {
@@ -57,7 +56,9 @@ namespace MCForge.Entity {
                             if (position == 0) { pl.SendMessage("You're next in the review queue!"); continue; }
                             pl.SendMessage(position == 1 ? "There is 1 player in front of you!" : "There are " + position + " players in front of you!");
                         }
-                    }                  
+                    }  
+                    //End Rage
+
                     return;
                 }
 
@@ -128,7 +129,7 @@ namespace MCForge.Entity {
             }
             catch (Exception e) {
                 Kick("CONNECTION ERROR: (0x03)");
-                Logger.Log("[ERROR]: PLAYER MESSAGE RECEIVE ERROR (0x03)", Color.Red, Color.Black);
+                Logger.Log("[ERROR]: PLAYER MESSAGE RECEIVE ERROR (0x03)", System.Drawing.Color.Red, System.Drawing.Color.Black);
                 Logger.LogError(e);
             }
             return buffer;
@@ -175,7 +176,7 @@ namespace MCForge.Entity {
 
                 //TODO Database Stuff
 
-                Logger.Log("[System]: " + Ip + " logging in as " + Username + ".", Color.Green, Color.Black);
+                Logger.Log("[System]: " + Ip + " logging in as " + Username + ".", System.Drawing.Color.Green, System.Drawing.Color.Black);
                 try {
                     Server.IRC.SendMessage(Username + " joined the game!");
                 }
@@ -400,7 +401,7 @@ namespace MCForge.Entity {
 
             ExtraData.CreateIfNotExist("Voiced", true);
             var isVoiced = (bool)ExtraData.GetIfExist("Voiced");
-            if (Server.moderation && !isVoiced && !Server.devs.Contains(Username)) {
+            if (Server.moderation && !isVoiced && !Server.devs.Contains<string>(Username)) {
                 SendMessage("You can't talk during chat moderation!");
                 return;
             }
@@ -795,7 +796,7 @@ namespace MCForge.Entity {
         /// </summary>
         /// <param name="message">The message to send</param>
         public void SKick(string message) {
-            Logger.Log("[Info]: Kicked: *" + Username + "* " + message, Color.Yellow, Color.Black);
+            Logger.Log("[Info]: Kicked: *" + Username + "* " + message, System.Drawing.Color.Yellow, System.Drawing.Color.Black);
             SendKick(message);
             //CloseConnection();
         }
@@ -1022,7 +1023,7 @@ namespace MCForge.Entity {
             Server.RemovePlayer(this);
             if (!IsBot && IsLoggedIn)
             {
-                Logger.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", Color.Gray, Color.Black);
+                Logger.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", System.Drawing.Color.Gray, System.Drawing.Color.Black);
                 try
                 {
                     Server.IRC.SendMessage("[System]: " + Username + " has disconnected");

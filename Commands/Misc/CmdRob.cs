@@ -80,7 +80,7 @@ namespace CommandDll.Misc
             if (InBetween(4, x, 6)) { amt -= amt / 5; Rob(p, who, amt); }
             if (InBetween(7, x, 15)) { amt = amt / 5; Rob(p, who, amt); }
             if (InBetween(16, x, 25)) { amt = amt / 10; Rob(p, who, amt); }
-            if (InBetween(26, x, 100)) { Player.UniversalChat((string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + Server.DefaultColor + " tried to rob " + (string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " but failed!"); p.Kick("Thief!"); }
+            if (InBetween(26, x, 100)) { Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " tried to rob " + who.Color + who.Username + Server.DefaultColor + " but failed!"); p.Kick("Thief!"); }
         }
         public void Help(Player p)
         {
@@ -99,7 +99,7 @@ namespace CommandDll.Misc
         {
             p.ExtraData["Money"] = (int)p.ExtraData["Money"] + amt;
             who.ExtraData["Money"] = (int)who.ExtraData["Money"] - amt;
-            Player.UniversalChat((string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + Server.DefaultColor + " robbed " + (string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " of &3" + amt + Server.DefaultColor + " " + Server.moneys + ".");
+            Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " robbed " + who.Color + who.Username + Server.DefaultColor + " of &3" + amt + Server.DefaultColor + " " + Server.moneys + ".");
         }
     }
 }

@@ -78,7 +78,7 @@ namespace CommandDll.Misc {
             }
             Crypto.DecryptStringAES(File.ReadAllText("extra/passwords/" + p.Username + ".xml"), "MCForgeEncryption", p, args[0]);
             if (args[0] == password) {
-                p.SendMessage("Thank you, " + (string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + Server.DefaultColor + "! You are now &averified " + Server.DefaultColor + "and have &aaccess to admin commands and features!");
+                p.SendMessage("Thank you, " + p.Color + p.Username + Server.DefaultColor + "! You are now &averified " + Server.DefaultColor + "and have &aaccess to admin commands and features!");
                 if (p.IsVerified == false)
                     p.IsVerified = true;
                 password = "";

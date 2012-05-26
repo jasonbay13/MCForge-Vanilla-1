@@ -33,7 +33,6 @@ namespace CommandDll
         {
             if (args.Length == 0) { Help(p); return; }
             string function = args[0].ToLower();
-            p.ExtraData.CreateIfNotExist("Color", p.Group.Color);
             switch (function) {
                 #region ==Enter==
                 case "enter":
@@ -44,7 +43,7 @@ namespace CommandDll
                     if (Server.reviewlist.Contains(p)) { p.SendMessage("You're already in the review queue!"); SendPositon(false, p); return; }
                         Server.reviewlist.Add(p);
                         p.SendMessage("You have been added to the review queue!");
-                        Player.UniversalChatOps(p.ExtraData["Color"].ToString() + p.Username + " has entered the review queue!");               
+                        Player.UniversalChatOps(p.Color.ToString() + p.Username + " has entered the review queue!");               
                         SendPositon(false, p);
                     break;
                 #endregion
@@ -54,8 +53,7 @@ namespace CommandDll
                     string send = "Players in the review queue: ";
                     foreach (Player pl in Server.reviewlist) 
                     {
-                        pl.ExtraData.CreateIfNotExist("Color", pl.Group.Color);
-                        send += (string)(p.ExtraData["Color"]) + pl.Username + ", "; 
+                        send += p.Color + pl.Username + ", "; 
                     }
                     send = send.Trim().TrimEnd(',');
                     p.SendMessage(send);
@@ -93,7 +91,7 @@ namespace CommandDll
                         return;
                     }
                     Server.reviewlist.Remove(p);
-                    Player.UniversalChat(p.ExtraData["Color"].ToString() + p.Username + " has left the queue!");
+                    Player.UniversalChat(p.Color.ToString() + p.Username + " has left the queue!");
                     p.SendMessage("You have been removed from the review queue!");
                     SendPositon(true);
                     break;

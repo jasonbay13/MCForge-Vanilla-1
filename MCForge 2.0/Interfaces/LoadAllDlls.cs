@@ -24,7 +24,6 @@ using MCForge.Core;
 using MCForge.Utils;
 using System.Drawing;
 using MCForge.API.Events;
-using MCForge.Utils;
 using MCForge.Utils.Settings;
 
 namespace MCForge.Interface {
@@ -77,7 +76,7 @@ namespace MCForge.Interface {
                                     ICommand instance = (ICommand)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
                                     if (!Command.Command.OnCommandLoad.Call(instance, new CommandLoadEventArgs(true)).Canceled) {
                                         instance.Initialize();
-                                        Logger.Log("[Command]: " + instance.Name + " Initialized!");
+                                        Logger.Log("[Command]: " + instance.Name + " Initialized!", LogType.Debug);
                                     }
                                 }
                                 else
@@ -89,7 +88,7 @@ namespace MCForge.Interface {
                                         if (!Plugin.Plugin.OnPluginLoad.Call(instance, new PluginLoadEventArgs(true)).Canceled) {
                                             instance.OnLoad(args);
                                             Plugin.Plugin.AddReference(instance);
-                                            Logger.Log("[Plugin]: " + instance.Name + " Initialized!");
+                                            Logger.Log("[Plugin]: " + instance.Name + " Initialized!", LogType.Debug);
                                         }
                                     }
                                 }

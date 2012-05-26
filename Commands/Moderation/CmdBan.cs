@@ -64,12 +64,12 @@ namespace CommandDll.Moderation
                 }
                 if (reason == "")
                 {
-                    if (who != null) Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
+                    if (who != null) Player.UniversalChat(who.Color ?? "" + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
                     else Player.UniversalChat("&3" + args[0] + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
                 }
                 else
                 {
-                    if (who != null) { Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChat("&4Reason: &f" + reason); }
+                    if (who != null) { Player.UniversalChat(who.Color ?? "" + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChat("&4Reason: &f" + reason); }
                     else { Player.UniversalChat("&3" + args[0] + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChat("&4Reason: &f" + reason); }
                 }
             }
@@ -99,12 +99,12 @@ namespace CommandDll.Moderation
                 }
                 if (reason == "")
                 {
-                    if (who != null) Player.UniversalChatOps((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
+                    if (who != null) Player.UniversalChatOps(who.Color + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
                     else Player.UniversalChatOps("&3" + args[0] + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!");
                 }
                 else
                 {
-                    if (who != null) { Player.UniversalChatOps((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
+                    if (who != null) { Player.UniversalChatOps(who.Color+ who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
                     else { Player.UniversalChatOps("&3" + args[0] + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
                 }
             }

@@ -2,6 +2,10 @@
 using System.Threading;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using MCForge.Core;
+using System.Web.Configuration;
+using System.Reflection;
 
 namespace MCForge.Utils {
     /// <summary>
@@ -9,7 +13,6 @@ namespace MCForge.Utils {
     /// </summary>
     public class Logger {
 
-        private static bool _initCalled;
         private static bool _flushMessages;
         private static bool _flushErrorMessages;
 
@@ -30,34 +33,41 @@ namespace MCForge.Utils {
         internal static Queue<LogEventArgs> _flushErrorQueue;
 
 
-        /// <summary>
-        /// Initializes Logger object
-        /// </summary>
-        /// <remarks>Must be called before any of the methods are invoked</remarks>
-        public static void Init() {
-            if (_initCalled)
-                throw new ArgumentException("\"Logger.Init()\" can only be called once");
+        private static DateTime _lastTime;
 
-            _initCalled = true;
+
+        internal static string DateFormat {
+            get { return _lastTime.ToString( "dd-MM-yyyy" ) + "-MCForge.log"; }
+        }
+
+
+        /// <summary>
+        /// Initializes Logger object staticly
+        /// </summary>
+        static Logger ( ) {
+
             _flushMessages = true;
             _flushErrorMessages = true;
 
             _flushQueue = new Queue<LogEventArgs>();
             _flushErrorQueue = new Queue<LogEventArgs>();
 
-            _workerThread = new Thread(Flush);
+            _workerThread = new Thread( Flush );
             _workerThread.Start();
-            _errorWorkerThread = new Thread(FlushErrors);
+            _errorWorkerThread = new Thread( FlushErrors );
             _errorWorkerThread.Start();
 
+
+            _lastTime = DateTime.Now;
+            FileUtils.CreateDirIfNotExist( FileUtils.LogsPath );
+            FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + DateFormat, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS: " + Environment.OSVersion + Environment.NewLine);
 
         }
 
         /// <summary>
         /// De-Initializes the logger class
         /// </summary>
-        public static void DeInit() {
-            _initCalled = false;
+        public static void DeInit ( ) {
             _flushMessages = false;
             _flushErrorMessages = false;
         }
@@ -67,24 +77,23 @@ namespace MCForge.Utils {
         /// </summary>
         /// <param name="message">The message to be logged</param>
         /// <param name="logType">The log type</param>
-        public static void Log(string message, LogType logType = LogType.Normal) {
-        	Color one = Color.White;
-        	switch (logType)
-        	{
-        		case LogType.Critical:
-        			one = Color.DarkRed;
-        			break;
-        		case LogType.Debug:
-        			one = Color.DarkMagenta;
-        			break;
-        		case LogType.Error:
-        			one = Color.Red;
-        			break;
-        		case LogType.Warning:
-        			one = Color.Yellow;
-        			break;
-        	}
-            Log(message, one, Color.Black, logType);
+        public static void Log ( string message, LogType logType = LogType.Normal ) {
+            Color one = Color.White;
+            switch ( logType ) {
+                case LogType.Critical:
+                    one = Color.DarkRed;
+                    break;
+                case LogType.Debug:
+                    one = Color.DarkMagenta;
+                    break;
+                case LogType.Error:
+                    one = Color.Red;
+                    break;
+                case LogType.Warning:
+                    one = Color.Yellow;
+                    break;
+            }
+            Log( message, one, Color.Black, logType );
         }
 
         /// <summary>
@@ -94,44 +103,54 @@ namespace MCForge.Utils {
         /// <param name="textColor">Color of the text</param>
         /// <param name="bgColor">Color of the background</param> 
         /// <param name="logType">The log type</param>
-        public static void Log(string message, Color textColor, Color bgColor, LogType logType = LogType.Normal) {
-            if (!_initCalled)
-                throw new ArgumentException("You must call \"Logger.Init()\" before any logs can be created");
-                _flushQueue.Enqueue(new LogEventArgs(message, logType, textColor, bgColor));
+        public static void Log ( string message, Color textColor, Color bgColor, LogType logType = LogType.Normal ) {
+            _flushQueue.Enqueue( new LogEventArgs( message, logType, textColor, bgColor ) );
+            WriteLog( message );
         }
 
         /// <summary>
         /// Logs an exception, to be grabbed by a log event handler
         /// </summary>
         /// <param name="e">Exception to be logged</param>
-        public static void LogError(Exception e) {
-            if (!_initCalled)
-                throw new ArgumentException("You must call \"Logger.Init()\" before any logs can be created");
-
-                _flushErrorQueue.Enqueue(new LogEventArgs(e.Message + "\n" + e.StackTrace, LogType.Error));
-
+        public static void LogError ( Exception e ) {
+            _flushErrorQueue.Enqueue( new LogEventArgs( e.Message + "\n" + e.StackTrace, LogType.Error ) );
+            WriteLog( "-------[Error]-------\n\r " + e.Message + "\n" + e.StackTrace  + "\n\r----------------------");
         }
 
-        internal static void Flush() {
-                while (_flushMessages) {
-                    Thread.Sleep(20);
-                    if (_flushQueue.Count > 0) {
-                        if (OnRecieveLog != null)
-                            OnRecieveLog(null, _flushQueue.Dequeue());
-                    }
-                    
-                }
+        /// <summary>
+        /// Writes the log message to the log file
+        /// </summary>
+        /// <param name="log">Message to log</param>
+        public static void WriteLog ( string log ) {
+            if ( _lastTime.Day != DateTime.Now.Day ) {
+                _lastTime = DateTime.Now;
+               FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + DateFormat, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS:" + Environment.OSVersion + Environment.NewLine );
+            }
+
+            using ( var writer = new StreamWriter( FileUtils.LogsPath + DateFormat, true ) )
+                writer.WriteLine( log );
         }
 
-        internal static void FlushErrors() {
-                while (_flushErrorMessages) {
-                    Thread.Sleep(20);
-                    if (_flushErrorQueue.Count > 0) {
-                        if (OnRecieveErrorLog != null)
-                            OnRecieveErrorLog(null, _flushErrorQueue.Dequeue());
-                    }
-                    
+        internal static void Flush ( ) {
+            while ( _flushMessages ) {
+                Thread.Sleep( 20 );
+                if ( _flushQueue.Count > 0 ) {
+                    if ( OnRecieveLog != null )
+                        OnRecieveLog( null, _flushQueue.Dequeue() );
                 }
+
+            }
+        }
+
+        internal static void FlushErrors ( ) {
+            while ( _flushErrorMessages ) {
+                Thread.Sleep( 20 );
+                if ( _flushErrorQueue.Count > 0 ) {
+                    if ( OnRecieveErrorLog != null )
+                        OnRecieveErrorLog( null, _flushErrorQueue.Dequeue() );
+                }
+
+            }
         }
 
     }
@@ -140,9 +159,9 @@ namespace MCForge.Utils {
     /// Log type for the specified message
     /// </summary>
     public enum LogType {
-    	/// <summary>
-    	/// The normal messages
-    	/// </summary>
+        /// <summary>
+        /// The normal messages
+        /// </summary>
         Normal,
         /// <summary>
         /// Error messages
@@ -196,7 +215,7 @@ namespace MCForge.Utils {
         /// </summary>
         /// <param name="log">Message of the log event</param>
         /// <param name="logType">Type of log event</param>
-        public LogEventArgs(string log, LogType logType) {
+        public LogEventArgs ( string log, LogType logType ) {
             Message = log;
             LogType = logType;
             TextColor = Color.White;
@@ -210,7 +229,7 @@ namespace MCForge.Utils {
         /// <param name="logType">Type of log event</param>
         /// <param name="textColor">Color of the text</param>
         /// <param name="bgColor">Color of the background</param>
-        public LogEventArgs(string log, LogType logType, Color textColor, Color bgColor) {
+        public LogEventArgs ( string log, LogType logType, Color textColor, Color bgColor ) {
             Message = log;
             LogType = logType;
             TextColor = textColor;

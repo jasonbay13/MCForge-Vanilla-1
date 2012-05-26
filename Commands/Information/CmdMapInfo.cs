@@ -66,7 +66,7 @@ namespace CommandDll {
             }
 
             templist.ForEach((p) => {
-                sender.SendMessage(String.Concat((string)p.ExtraData.GetIfExist("Color"), p.Username));
+                sender.SendMessage(String.Concat(p.Color, p.Username));
             });
         }
 

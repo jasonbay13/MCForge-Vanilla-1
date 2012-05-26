@@ -103,7 +103,6 @@ namespace MCForge.Utils {
                 rounded = pos.GetRounded();
             }
             yield return vectorTo;
-            yield break;
 
             Vector3S tempThis = new Vector3S(this);
             Vector3S a = vectorTo - this;
