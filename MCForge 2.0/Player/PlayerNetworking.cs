@@ -1014,13 +1014,14 @@ namespace MCForge.Entity {
             });
         }
         private void CloseConnection() {
+            if (IsBot) return;
             ConnectionEventArgs eargs = new ConnectionEventArgs(false);
             OnPlayerDisconnect.Call(this, eargs);
             OnAllPlayersDisconnect.Call(this, eargs);
 
             GlobalDie();
             Server.RemovePlayer(this);
-            if (!IsBot && IsLoggedIn)
+            if (IsLoggedIn)
             {
                 Logger.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", System.Drawing.Color.Gray, System.Drawing.Color.Black);
                 try
