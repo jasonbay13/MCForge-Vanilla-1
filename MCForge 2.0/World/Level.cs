@@ -204,7 +204,7 @@ namespace MCForge.World {
 
                                 finalLevel.Size = new Vector3S((short)vars[0], (short)vars[1], (short)vars[2]);
 
-                                finalLevel.SpawnPos = new Vector3S((short)vars[3], (short)vars[5], (short)vars[4]);
+                                finalLevel.SpawnPos = new Vector3S((short)vars[3], (short)vars[4], (short)vars[5]);
 
                                 finalLevel.SpawnRot = new byte[2] { rot[0], rot[1] };
 
@@ -215,7 +215,7 @@ namespace MCForge.World {
                                 for (int x = 0; x < finalLevel.Size.x; x++)
                                     for (int y = 0; y < finalLevel.Size.y; y++)
                                         for (int z = 0; z < finalLevel.Size.z; z++)
-                                            try { finalLevel.SetBlock(x, y, z, (byte)OldMCForgeToNewMCForge.Convert(blocks[finalLevel.PosToInt((ushort)x, (ushort)y, (ushort)z)])); } //Converts all custom blocks to normal blocks.
+                                            try { finalLevel.SetBlock(x, z, y, (byte)OldMCForgeToNewMCForge.Convert(blocks[finalLevel.PosToInt((ushort)x, (ushort)z, (ushort)y)])); } //Converts all custom blocks to normal blocks.
                                             catch { continue; }
                                 gs.Close();
                                 #endregion
@@ -483,11 +483,6 @@ namespace MCForge.World {
             return x + z * Size.x + y * Size.x * Size.z;
         }
 
-        public int OldPosToInt(int x, int y, int z) {
-            if (x < 0 || x >= Size.x || y < 0 || y >= Size.z || z < 0 || z >= Size.y)
-                return -1;
-            return x + (z * Size.x) + (y * Size.x * Size.y);
-        }
         /// <summary>
         /// Convert an int POS to an xzy pos
         /// </summary>

@@ -833,7 +833,7 @@ namespace MCForge.Entity {
             byte[] tempOldRot = oldRot;
             if (tempOldRot == null) tempOldRot = new byte[2];
             if (IsHeadFlipped)
-                tempRot[1] = 80;
+                tempRot[1] = 125;
 
             oldPos = tempPos;
             oldRot = tempRot;
