@@ -53,6 +53,12 @@ namespace MCForge.World {
         public delegate void ForEachBlockDelegate(int pos);
 
 
+        public bool BackupLevel {
+            get;
+            set;
+        }
+
+
         /// <summary>
         /// Name of the level
         /// </summary>
@@ -614,6 +620,9 @@ namespace MCForge.World {
                 }
                 catch (Exception e) { Logger.LogError(e); }
             }
+        }
+        public override string ToString ( ) {
+            return Name;
         }
     }
 }

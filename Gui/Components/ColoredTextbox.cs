@@ -22,7 +22,7 @@ namespace MCForge.Gui.Components {
 
     /// <summary>
     /// RichTextBox with integreted support for colors
-    /// </summary>C:\Users\Brayden\Forks\MCForge-Vanilla\MCForge 2.0\Gui\Components\ColoredTextbox.cs
+    /// </summary>
     public partial class ColoredTextBox : RichTextBox {
 
         private List<string> wList;

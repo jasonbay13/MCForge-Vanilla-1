@@ -25,22 +25,27 @@ using MCForge.Interface.Command;
 
 namespace MCForge.Core {
     static class Program {
+        private static void Logger_OnRecieveErrorLog ( object sender, LogEventArgs e ) {
+            var prevColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("[Error] " + e.Message);
+            Console.ForegroundColor = prevColor;
+        }
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main(string[] args) {
-            Logger.Init();
             bool checker = CheckArgs(args);
             if (!checker)
                 ServerSettings.Init();
             else
                 Logger.Log("Aborting setup..", LogType.Critical);
-            ColorUtils.Init();
 
-            Console.Title = ServerSettings.GetSetting("ServerName") + " - MCForge 2.0"; //Don't know what MCForge version we are using yet.
+            Console.Title = ServerSettings.GetSetting("ServerName") + " - MCForge 6"; //Don't know what MCForge version we are using yet.
             new Thread(new ThreadStart(Server.Init)).Start();
             Logger.OnRecieveLog += new EventHandler<LogEventArgs>(Server.OnLog);
+            Logger.OnRecieveErrorLog += new EventHandler<LogEventArgs>(Logger_OnRecieveErrorLog);
             cp = new ConsolePlayer(cio);
             while (true) {
                 string input = Console.ReadLine();

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MCForge 2.0")]
+[assembly: AssemblyTitle("MCForge 6")]
 [assembly: AssemblyDescription("Minecraft Classic Custom Server Software")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MCForge")]
-[assembly: AssemblyProduct("MCForge 2.0")]
+[assembly: AssemblyProduct("MCForge 6")]
 [assembly: AssemblyCopyright("Copyright © MCForge 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

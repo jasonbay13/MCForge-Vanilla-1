@@ -18,7 +18,7 @@ namespace MCForge.Utils {
         private static Dictionary<Color, ConsoleColor> colorToConsole;
         private static Dictionary<ConsoleColor, Color> consoleToColor;
 
-        public static void Init() {
+        static ColorUtils() {
             colorToConsole = new Dictionary<Color, ConsoleColor>();
 
             colorToConsole.Add(Color.Blue, ConsoleColor.Blue);

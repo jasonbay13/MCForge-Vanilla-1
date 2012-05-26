@@ -115,7 +115,7 @@ namespace MCForge.World {
         /// <param name="name">Name of the block to check</param>
         /// <returns>If the block exists</returns>
         public static bool ValidBlockName(string name) {
-            return !(NameToBlock(name) is UNKNOWN);
+            return !(NameToBlock(name) == Block.BlockList.UNKNOWN);
         }
 
         /// <summary>
@@ -145,22 +145,16 @@ namespace MCForge.World {
 
         public static bool CanWalkThrough(byte blockToCheck)
         {
-            if (blockToCheck == Block.BlockList.AIR ||
+            return ( blockToCheck == Block.BlockList.AIR ||
                 blockToCheck == Block.BlockList.WATER ||
                 blockToCheck == Block.BlockList.LAVA ||
                 blockToCheck == Block.BlockList.ACTIVE_LAVA ||
-                blockToCheck == Block.BlockList.ACTIVE_WATER)
-                return true;
-            else
-                return false;
+                blockToCheck == Block.BlockList.ACTIVE_WATER );
         }
 
         public static bool IsOPBlock(byte blockToCheck)
         {
-            if (blockToCheck == Block.BlockList.BEDROCK)
-                return true;
-            else
-                return false;
+            return blockToCheck == Block.BlockList.BEDROCK;
         }
 
         /// <summary>

@@ -107,6 +107,21 @@ namespace MCForge.Utils {
                 return null;
             }
             return Regex.Replace(stringToClean, @"[\r\n\x00\x1a\\'""]", @"\$0");
+
+        /// <summary>
+        /// If an array contains that object it returns <c>true</c> otherwise <c>false</c>
+        /// </summary>
+        /// <typeparam name="T">Type of the array and object</typeparam>
+        /// <param name="theArray">The array to check</param>
+        /// <param name="obj">object to check</param>
+        /// <returns>If an array contains that object it returns <c>true</c> otherwise <c>false</c></returns>
+        public static bool Contains<T> ( this T[] theArray, T obj ) {
+            for ( int i = 0; i < theArray.Length; i++ ) {
+                T d = theArray[ i ];
+                if ( d.Equals( obj ) )
+                    return true;
+            }
+            return false;
         }
 
     }

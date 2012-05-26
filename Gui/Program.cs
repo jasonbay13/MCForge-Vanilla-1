@@ -10,9 +10,7 @@ using MCForge.Utils.Settings;
 namespace MCForge.Gui {
     class Program {
         static void Main(string[] args) {
-            Logger.Init();
             ServerSettings.Init();
-            ColorUtils.Init();
 
 
             Application.EnableVisualStyles();

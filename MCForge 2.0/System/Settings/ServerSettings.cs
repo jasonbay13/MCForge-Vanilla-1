@@ -29,55 +29,56 @@ namespace MCForge.Utils.Settings {
 
         internal const byte Version = 7;
         internal static string Salt { get; set; }
-        static List<string> validcolors = new List<string>(new string[] { "a","b","c","d","e","f","0","1","2","3","4","5","6","7","8","9"});
+        static List<string> validcolors = new List<string>( new string[] { "a", "b", "c", "d", "e", "f", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" } );
 
         private static bool _initCalled;
         private static List<SettingNode> Values;
         private static readonly SettingNode[] defaultValues = {
-                new SettingNode("ServerName", "[MCForge] Default", "Name of your server"),
-                new SettingNode("Wom-Alternate_Name", "[MCForge] Default", "Name of your server on WoM direct"),
-                new SettingNode("Port", "25565", null),
-                new SettingNode("Use-UPnP", "false", "if enabled will automatically forward port for you, this is not recommended, and will not work in some cases"),
-                new SettingNode("MOTD", "Welcome to my server!", "Message that shows up when you start server"),
-                new SettingNode("MaxPlayers", "20", "Max players that can play on your server at a time"),
-                new SettingNode("Public", "true", "if set to true, your server will show up on MCForge.net server list and Minecraft.net's server list"),
-                new SettingNode("Wom-Server_Description", "A MCForge server", "A Description of your server."),
-                new SettingNode("Wom-Server_Flags", "[MCForge]", null),
-                new SettingNode("UsingConsole", "true", "set to \"false\" if you want gui. If using mono set to \"true\""),
-                new SettingNode("ShutdownMessage", "Server shutting down!", "Message to show when server is shutting down"),
-                new SettingNode("WelcomeMessage", "Welcome $name to $server<br>enjoy your stay", "Welcome message, to signify a line break use \"<br>\""),
-                new SettingNode("ConfigPath", "config/", "File path for group player properties, do not mess with unless you know what you are doing"),
-                new SettingNode("MessageAppending", "true", "allow use of message appending, ex using \">\" at the end of your message will allow you to finish your statement on a new chat segment"),
-                new SettingNode("DefaultGroup", "guest", "The name of the default group, if it doesn't exist it will cause problems"),
-                new SettingNode("Offline", "false", "if set to true, it will skip authintication, causing a major security flaw"),
-                new SettingNode("AllowHigherRankTp", "true", "Allow players of a lower rank to teleport to a user of a higher rank"),
-                new SettingNode("Main-Level", "main", "The name of the main level. If tihs is empty or doesn't exist, it will generate a flat level."),
-                new SettingNode("DatabaseType", "sqlite", "The type of database you want to use (mysql/sqlite)"),
-                new SettingNode("MySQL-IP", "127.0.0.1", "The IP of the sql (mysql/sqlite) database"),
-                new SettingNode("MySQL-Port", "3306", "The port for the mysql database (sqlite does not need a port, leave this blank)"),
-                new SettingNode("MySQL-Username", "root", "The username for the mysql database"),
-                new SettingNode("MySQL-Password", "password", "The password for the mysql database"),
-                new SettingNode("MySQL-Pooling", "True", null),
-                new SettingNode("MySQL-DBName", "MCForge", "The database name for MySQL"),
-                new SettingNode("SQLite-Filepath", "_mcforge.db", "The filepath for the database"),
-                new SettingNode("SQLite-Pooling", "True", null),
-                new SettingNode("Database-Queuing", "False", null),
-                new SettingNode("Database-Flush_Interval", "20", null),
-                new SettingNode("IRC-Enabled", "false", "If set to true, IRC is enabled."),
-                new SettingNode("IRC-Server", "127.0.0.1", "IRC server to connect to"),
-                new SettingNode("IRC-Port", "6667", "IRC server port"),
-                new SettingNode("IRC-Nickname", "MCForge-" + MathUtils.Random.Next(1000, 9999), "IRC nickname"),
-                new SettingNode("IRC-Channel", "#", "IRC channel to connect to"),
-                new SettingNode("IRC-OPChannel", "#", "IRC operator channel to connect to"),
-                new SettingNode("IRC-NickServ", "password", "IRC NickServ password (optional when IRC is enabled)"),
-                new SettingNode("AgreeingToRules", "true", "If set to true players below op will need to read the rules and agree before they can use commands"),
-                new SettingNode("$Before$Name", "true", null),
-                new SettingNode("ReviewModeratorPerm", "80", "Determines what rank gets to use /review next and /review remove. Use the permission number, not the rank name!"),
-                new SettingNode("OpChatPermission", "80", "Determines what rank can use the operator chat"),
-                new SettingNode("AdminChatPermission", "100", "Determines what rank can use the admin chat"),
-                new SettingNode("DefaultColor", "&a", "Determines the server's default color"),
- 
-                                                              };
+                    new SettingNode("ServerName", "[MCForge] Default", "Name of your server"),
+                    new SettingNode("Wom-Alternate_Name", "[MCForge] Default", "Name of your server on WoM direct"),
+                    new SettingNode("Port", "25565", null),
+                    new SettingNode("Use-UPnP", "false", "if enabled will automatically forward port for you, this is not recommended, and will not work in some cases"),
+                    new SettingNode("MOTD", "Welcome to my server!", "Message that shows up when you start server"),
+                    new SettingNode("MaxPlayers", "20", "Max players that can play on your server at a time"),
+                    new SettingNode("Public", "true", "if set to true, your server will show up on MCForge.net server list and Minecraft.net's server list"),
+                    new SettingNode("Wom-Server_Description", "A MCForge server", "A Description of your server."),
+                    new SettingNode("Wom-Server_Flags", "[MCForge]", null),
+                    new SettingNode("UsingConsole", "true", "set to \"false\" if you want gui. If using mono set to \"true\""),
+                    new SettingNode("ShutdownMessage", "Server shutting down!", "Message to show when server is shutting down"),
+                    new SettingNode("WelcomeMessage", "Welcome $name to $server<br>enjoy your stay", "Welcome message, to signify a line break use \"<br>\""),
+                    new SettingNode("ConfigPath", "config/", "File path for group player properties, do not mess with unless you know what you are doing"),
+                    new SettingNode("MessageAppending", "true", "allow use of message appending, ex using \">\" at the end of your message will allow you to finish your statement on a new chat segment"),
+                    new SettingNode("DefaultGroup", "guest", "The name of the default group, if it doesn't exist it will cause problems"),
+                    new SettingNode("Offline", "false", "if set to true, it will skip authintication, causing a major security flaw"),
+                    new SettingNode("AllowHigherRankTp", "true", "Allow players of a lower rank to teleport to a user of a higher rank"),
+                    new SettingNode("Main-Level", "main", "The name of the main level. If tihs is empty or doesn't exist, it will generate a flat level."),
+                    new SettingNode("DatabaseType", "sqlite", "The type of database you want to use (mysql/sqlite)"),
+                    new SettingNode("MySQL-IP", "127.0.0.1", "The IP of the sql (mysql/sqlite) database"),
+                    new SettingNode("MySQL-Port", "3306", "The port for the mysql database (sqlite does not need a port, leave this blank)"),
+                    new SettingNode("MySQL-Username", "root", "The username for the mysql database"),
+                    new SettingNode("MySQL-Password", "password", "The password for the mysql database"),
+                    new SettingNode("MySQL-Pooling", "True", null),
+                    new SettingNode("MySQL-DBName", "MCForge", "The database name for MySQL"),
+                    new SettingNode("SQLite-Filepath", "_mcforge.db", "The filepath for the database"),
+                    new SettingNode("SQLite-Pooling", "True", null),
+                    new SettingNode("Database-Queuing", "False", null),
+                    new SettingNode("Database-Flush_Interval", "20", null),
+                    new SettingNode("IRC-Enabled", "false", "If set to true, IRC is enabled."),
+                    new SettingNode("IRC-Server", "127.0.0.1", "IRC server to connect to"),
+                    new SettingNode("IRC-Port", "6667", "IRC server port"),
+                    new SettingNode("IRC-Nickname", "MCForge-" + MathUtils.Random.Next(1000, 9999), "IRC nickname"),
+                    new SettingNode("IRC-Channel", "#", "IRC channel to connect to"),
+                    new SettingNode("IRC-OPChannel", "#", "IRC operator channel to connect to"),
+                    new SettingNode("IRC-NickServ", "password", "IRC NickServ password (optional when IRC is enabled)"),
+                    new SettingNode("AgreeingToRules", "true", "If set to true players below op will need to read the rules and agree before they can use commands"),
+                    new SettingNode("$Before$Name", "true", null),
+                    new SettingNode("ReviewModeratorPerm", "80", "Determines what rank gets to use /review next and /review remove. Use the permission number, not the rank name!"),
+                    new SettingNode("OpChatPermission", "80", "Determines what rank can use the operator chat"),
+                    new SettingNode("AdminChatPermission", "100", "Determines what rank can use the admin chat"),
+                    new SettingNode("DefaultColor", "&a", "Determines the server's default color"),
+                    new SettingNode("BackupFiles", "true", "If set to true, files will be backed up to the backup folder"),
+                    new SettingNode("BackupInterval", "300", "the interval to backup your files (in seconds)")
+               };
 
 
         /// <summary>
@@ -91,6 +92,7 @@ namespace MCForge.Utils.Settings {
         /// </summary>
         /// <remarks>Must be called before any methods are invoked</remarks>
         public static void Init() {
+            //Do not set to static ServerSettings(){}
 
             if (_initCalled)
                 throw new ArgumentException("\"Settings.Init()\" can only be called once");

@@ -108,6 +108,11 @@ namespace MCForge.Entity {
         private byte[] tempBuffer = new byte[0xFFF];
 
         /// <summary>
+        /// The player's color
+        /// </summary>
+        public string Color { get; set;}
+
+        /// <summary>
         /// True if the player is currently loading a map
         /// </summary>
         public bool IsLoading { get; set; }
@@ -209,7 +214,6 @@ namespace MCForge.Entity {
         /// <param name="PassBack">A passback object that can be used for a command to send data back to itself for use</param>
         public delegate void NextChatDelegate(Player p, string message, object PassBack);
         private BlockChangeDelegate blockChange;
-        private NextChatDelegate nextChat;
 
         /// <summary>
         /// The current Group of the player
@@ -229,7 +233,7 @@ namespace MCForge.Entity {
                 Client = TcpClient;
                 Server.Connections.Add(this);
                 Ip = Socket.RemoteEndPoint.ToString().Split(':')[0];
-                Logger.Log("[System]: " + Ip + " connected", Color.Gray, Color.Black);
+                Logger.Log("[System]: " + Ip + " connected", System.Drawing.Color.Gray, System.Drawing.Color.Black);
 
                 CheckMultipleConnections();
                 if (CheckIfBanned()) return;
@@ -282,7 +286,7 @@ namespace MCForge.Entity {
                         OnCommandEnd.Call(this, new CommandEndEventArgs(cmd, sendArgs), OnAllCommandEnd);
                     }
                     catch (Exception ex) {
-                        Logger.Log("[Error] An error occured when " + Username + " tried to use " + name + "!", Color.Red, Color.Black);
+                        Logger.Log("[Error] An error occured when " + Username + " tried to use " + name + "!", System.Drawing.Color.Red, System.Drawing.Color.Black);
                         Logger.LogError(ex);
                     }
                     if (ExtraData.ContainsKey("LastCmd"))
@@ -410,7 +414,6 @@ namespace MCForge.Entity {
             if (!ExtraData.ContainsKey("PassBackData"))
                 ExtraData.Add("PassBackData", null);
             ExtraData["PassBackData"] = data;
-            nextChat = null;
             blockChange = change;
         }
         /// <summary>

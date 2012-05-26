@@ -52,7 +52,6 @@ namespace PluginsDLL {
         private static int width = 62;
         private static int messageHeight = 10;
         private static int totalHeight = 20;
-        private static char col = '%';
         private static double refreshTime = 9500;
         private static int calcLength(string part) {
             return part.Length; // -2 * part.Count(c => { return c == col; });

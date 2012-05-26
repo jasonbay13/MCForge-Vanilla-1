@@ -24,7 +24,6 @@ using MCForge.Utils;
 using System.Threading;
 using MCForge.Core;
 using MCForge.Interface;
-using MCForge.Utils;
 using MCForge.Entity;
 using MCForge.API.Events;
 using MCForge.Gui.API;

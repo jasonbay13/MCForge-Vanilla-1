@@ -47,10 +47,10 @@ namespace CommandDll
 						if (pl.Level == p.Level && pl != p && p.Group.Permission > pl.Group.Permission) //Missing permissions
 						{
 							pl.SendToPos(p.Pos, p.Rot);
-                            pl.SendMessage("You were summoned by " + (string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + Server.DefaultColor + ".");
+                            pl.SendMessage("You were summoned by " + p.Color+ p.Username + Server.DefaultColor + ".");
 						}
 					});
-                    Player.UniversalChat((string)p.ExtraData.GetIfExist("Color") ?? "" + p.Username + Server.DefaultColor + " summoned everyone!");
+                    Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " summoned everyone!");
                     return;
                 }
                 else

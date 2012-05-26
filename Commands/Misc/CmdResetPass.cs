@@ -37,7 +37,7 @@ namespace CommandDll.Misc {
             if (p != null && !p.IsVerified) { p.SendMessage("You cannot reset passwords until you have verified with &a/pass <password>" + Server.DefaultColor + "!"); return; }
             try {
                 File.Delete("extra/passwords/" + who.Username + ".xml");
-                p.SendMessage((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + "'s password has been successfully reset.");
+                p.SendMessage(who.Color + who.Username + "'s password has been successfully reset.");
             }
             catch (Exception e) {
                 p.SendMessage("Password deletion failed. Please manually delete the file, extra/passwords/" + who.Username + ".xml, to reset " + who.Username + "'s password.");

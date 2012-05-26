@@ -30,12 +30,12 @@ namespace CommandDll {
             Player who;
             string color;
 
-            p.ExtraData.CreateIfNotExist("Color", p.Group.Color);
+            p.Color = p.Group.Color;
 
             if (args.Length == 1) {
                 who = p;
                 color = args[0] == "del" ? p.Group.Color : Colors.Parse(args[0]);
-                if (p.ExtraData["Color"] == color) { p.SendMessage("You are already that color!"); return; }
+                if (p.Color == color) { p.SendMessage("You are already that color!"); return; }
             }
             else {
                 who = Player.Find(args[0]);
@@ -46,7 +46,7 @@ namespace CommandDll {
                 
 
                 color = args[1] == "del" ? who.Group.Color : Colors.Parse(args[1]);
-                if (who.ExtraData["Color"] == color) { p.SendMessage("They are already that color!"); return; }
+                if (who.Color == color) { p.SendMessage("They are already that color!"); return; }
             }
             if (color == "") { p.SendMessage("Could not find color."); return; }
 
@@ -54,10 +54,9 @@ namespace CommandDll {
             if (color == who.Group.Color)
                 message = "their groups default.";
             else
-                message = color + Colors.Name(color) + who.ExtraData["Color"] + ".";
-            Player.UniversalChat(who.ExtraData["Color"] + "*" + who.Username + (who.Username.EndsWith("s") || who.Username.EndsWith("x") ? "'" : "'s") + " color was changed to " + message);
-            who.ExtraData.CreateIfNotExist("Color", color);
-            who.ExtraData["Color"] = color;
+                message = color + Colors.Name(color) + who.Color+ ".";
+            Player.UniversalChat(who.Color + "*" + who.Username + (who.Username.EndsWith("s") || who.Username.EndsWith("x") ? "'" : "'s") + " color was changed to " + message);
+            who.Color= color;
 
             who.GlobalDie();
             who.SendSpawn(who);

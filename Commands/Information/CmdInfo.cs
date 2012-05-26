@@ -37,7 +37,7 @@ namespace CommandDll {
             //p.SendMessage("This server currently has $banned people that are &8banned" + Server.DefaultColor + ".");
             p.SendMessage("This server currently has " + Level.Levels.Count + " levels loaded.");
             //p.SendMessage("This server's currency is: " + Server.moneys); // later for when money works.
-            p.SendMessage("This server runs on &bMCForge 2.0" + Server.DefaultColor + ".");
+            p.SendMessage("This server runs on &bMCForge 6" + Server.DefaultColor + ".");
             p.SendMessage("This server's version: &a" + Assembly.GetExecutingAssembly().GetName().Version);
             TimeSpan up = DateTime.Now - Server.StartTime;
             string upTime = "Time online: &b";
