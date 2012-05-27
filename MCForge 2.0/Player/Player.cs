@@ -524,7 +524,7 @@ namespace MCForge.Entity {
         /// </summary>
         /// <param name="strin">The string input</param>
         /// <returns>Outputs some colorful RAIIIIIINBBBBBBOWWWWWWW text</returns>
-        public string Rainbow(string strin)
+        public static string Rainbow(string strin)
         {
             string rainbowString = "4c6eb3912ad5";
             string rainbow = "";
