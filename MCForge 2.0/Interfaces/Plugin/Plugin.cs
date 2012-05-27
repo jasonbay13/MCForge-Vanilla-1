@@ -114,7 +114,16 @@ namespace MCForge.Interface.Plugin {
             foreach (string s in DLLFiles)
             {
                 ret++;
-                LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                if (name == "")
+                    LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                else if (ignoreCase)
+                {
+                    if (s.ToLower() == name.ToLower())
+                        LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                }
+                else
+                    if (s == name)
+                        LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
             }
             if (ServerSettings.HasKey("PluginsPath"))
             {
@@ -124,7 +133,16 @@ namespace MCForge.Interface.Plugin {
                     DLLFiles = Directory.GetFiles(pluginspath, "*.dll");
                     foreach (string s in DLLFiles)
                     {
-                        LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                        if (name == "")
+                            LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                        else if (ignoreCase)
+                        {
+                            if (s.ToLower() == name.ToLower())
+                                LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                        }
+                        else
+                            if (s == name)
+                                LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
                         ret++;
                     }
                 }
