@@ -93,12 +93,12 @@ namespace MCForge.Groups
         /// The colour of the group.
         /// note color == colour
         /// </summary>
-		public string Colour { get { return Color; } set { Color = value;} }
-		/// <summary>
-		/// The color of the group.
+        public string Colour { get { return Color; } set { Color = value; } }
+        /// <summary>
+        /// The color of the group.
         /// note color == colour
-		/// </summary>
-		public string Color { get; set; }
+        /// </summary>
+        public string Color { get; set; }
 
         int _maxblockchange = 100;
         /// <summary>
@@ -204,11 +204,11 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         public void SendMessage(string message)
         {
-			Server.ForeachPlayer(delegate(Player p)
-			{
-				if (p.Group == this)
-					p.SendMessage(message);
-			});
+            Server.ForeachPlayer(delegate(Player p)
+            {
+                if (p.Group == this)
+                    p.SendMessage(message);
+            });
         }
 
         /// <summary>
@@ -299,12 +299,12 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         public static void Load()
         {
-            PlayerGroupProperties.Load();
             CommandPermissionOverrides.Load();
-            if (!(Groups.Count > 0))
-            {
-                InitDefaultGroups();
-            }
+
+            Groups.Clear();
+            InitDefaultGroups();
+
+
             foreach (PlayerGroup g in Groups)
             {
                 Logger.Log("[Group] " + g.Name + " Initialized");
@@ -316,11 +316,12 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         public static void InitDefaultGroups()
         {
-            //PlayerGroupProperties.Load();
+            PlayerGroupProperties.Load();
             //foreach (PlayerGroup g in PlayerGroup.groups)
             //{
             //    Logger.Log("[Group] " + g.name + " Initialized");
             //}
+            Groups.Clear();
             new PlayerGroup((byte)PermissionLevel.Guest, "Guest", Colors.white, "guests.txt");
             new PlayerGroup((byte)PermissionLevel.Builder, "Builder", Colors.green, "builders.txt");
             new PlayerGroup((byte)PermissionLevel.AdvBuilder, "AdvBuilder", Colors.lime, "advbuilders.txt");
