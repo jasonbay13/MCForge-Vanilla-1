@@ -174,6 +174,94 @@ namespace MCForge.World
                         for (int i = 1; i <= 6; i++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + i)), Holding); }
                         if (dir == "r") { z += 2; } if (dir == "l") { z -= 2; } if (dir == "u") { x += 2; } if (dir == "d") { x -= 2; }
                         break;
+                    case 'K':
+                        for (int i = 0; i <= 6; i++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + i)), Holding); }
+                        for (int i = 1; i <= 2; i++) {
+                            if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + 4)), Holding);
+                        }
+                        if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                        for (int i = 0; i <= 5; i++) { if (i != 3 && i != 5) { continue; } p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + i)), Holding); }
+                        if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                        for (int i = 0; i <= 6; i++) { if (i == 3 || i == 4 || i == 5) { continue; } p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + i)), Holding); }
+                        if (dir == "r") { z += 2; } if (dir == "l") { z -= 2; } if (dir == "u") { x += 2; } if (dir == "d") { x -= 2; }
+                        break;
+                    case 'L':
+                        for (int i = 0; i <= 6; i++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + i)), Holding); }
+                        for (int i = 1; i <= 4; i++) {
+                            if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)y), Holding);
+                        }
+                        if (dir == "r") { z += 2; } if (dir == "l") { z -= 2; } if (dir == "u") { x += 2; } if (dir == "d") { x -= 2; }
+                        break;
+                    case 'M':
+                        for (int i = 0; i <= 6; i++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + i)), Holding); }
+                        for (int i = 1; i <= 3; i++) {
+                            if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, i == 2 ? (double)(y + 4) : (double)(y + 5)), Holding);
+                        }
+                        if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                        for (int i = 0; i <= 6; i++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + i)), Holding); }
+                        if (dir == "r") { z += 2; } if (dir == "l") { z -= 2; } if (dir == "u") { x += 2; } if (dir == "d") { x -= 2; }
+                        break;
+                    case 'N':
+                        for (int i = 0; i <= 6; i++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + i)), Holding); }
+                        for (int i = 5; i >= 3; i--) {
+                            if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + i)), Holding);
+                        }
+                        if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                        for (int i = 0; i <= 6; i++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + i)), Holding); }
+                        if (dir == "r") { z += 2; } if (dir == "l") { z -= 2; } if (dir == "u") { x += 2; } if (dir == "d") { x -= 2; }
+                        break;
+                    case 'O':
+                        for (short yy = 1; yy <= 5; yy++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + yy)), Holding); }
+                        for (int i = 1; i <= 3; i++) {
+                            if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)y), Holding);
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + 6)), Holding);
+                        }
+                        if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                        for (short yy = 1; yy <= 5; yy++)  { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + yy)), Holding); }
+                        if (dir == "r") { z += 2; } if (dir == "l") { z -= 2; } if (dir == "u") { x += 2; } if (dir == "d") { x -= 2; }
+                        break;
+                    case 'P':
+                        for (short yy = 0; yy <= 6; yy++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + yy)), Holding); }
+                        for (int i = 1; i <= 3; i++) {
+                            if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + 4)), Holding);
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + 6)), Holding);
+                        }
+                        if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                        p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + 5)), Holding);
+                        if (dir == "r") { z += 2; } if (dir == "l") { z -= 2; } if (dir == "u") { x += 2; } if (dir == "d") { x -= 2; }
+                        break;
+                    case 'Q':
+                        for (short yy = 1; yy <= 5; yy++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + yy)), Holding); }
+                        for (int i = 1; i <= 3; i++) {
+                            if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                            if (i < 3) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)y), Holding); }
+                            else { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + 1)), Holding); }
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + 6)), Holding);
+                        }
+                        if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                        for (short yy = 0; yy <= 5; yy++) { if (yy == 1) { continue; } p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + yy)), Holding); }
+                        if (dir == "r") { z += 2; } if (dir == "l") { z -= 2; } if (dir == "u") { x += 2; } if (dir == "d") { x -= 2; }
+                        break;
+                    case 'R':
+                        for (short yy = 0; yy <= 6; yy++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + yy)), Holding); }
+                        for (int i = 1; i <= 3; i++) {
+                            if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + 4)), Holding);
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + 6)), Holding);
+                        }
+                        if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                        for (double d = 0; d <= 5; d++) { if (d == 4) { continue; } p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + d)), Holding); }
+                        if (dir == "r") { z += 2; } if (dir == "l") { z -= 2; } if (dir == "u") { x += 2; } if (dir == "d") { x -= 2; }
+                        break;
+                    case ' ':
+                        if (dir == "r") { z += 4; } if (dir == "l") { z -= 4; } if (dir == "u") { x += 4; } if (dir == "d") { x -= 4; }
+                        break;
                     default:
                         p.SendMessage("Sorry the letter \"" + c + "\" hasn't been implemented yet!");
                         break;
@@ -182,7 +270,7 @@ namespace MCForge.World
             }
         }
         /// <summary>
-        /// A static component for the letter 'A' (capitolized)
+        /// A static component for the letter 'A' (capitalized)
         /// </summary>
         public static readonly WorldComponent LetterA = new WorldComponent(
             new BlockComponent(255, new Vector3S(1, 0, 0)), new BlockComponent(255, new Vector3S(2, 0, 0)),
