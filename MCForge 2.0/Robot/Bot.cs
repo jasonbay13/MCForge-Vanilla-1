@@ -67,7 +67,7 @@ namespace MCForge.Robot
         /// </summary>
         public static void HandleBots()
         {
-            foreach (Bot Bot in Server.Bots)
+            foreach (Bot Bot in Server.Bots.ToArray())
             {
                 Random Random = new Random();
                 bool PlayerBelow = false;
