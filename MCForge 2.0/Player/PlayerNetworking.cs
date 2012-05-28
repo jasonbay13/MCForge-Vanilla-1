@@ -169,7 +169,8 @@ namespace MCForge.Entity {
                 ConnectionEventArgs eargs = new ConnectionEventArgs(true);
                 bool cancel = OnPlayerConnect.Call(this, eargs, OnAllPlayersConnect).Canceled;
                 if (cancel) {
-                    Kick("Disconnected by event");
+                    if (IsLoggedIn)
+                        Kick("Disconnected by event");
                     return;
                 }
 
