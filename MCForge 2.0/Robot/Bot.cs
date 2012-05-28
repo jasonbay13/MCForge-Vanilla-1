@@ -47,6 +47,7 @@ namespace MCForge.Robot
         public Bot(string Username, Vector3S Position, byte[] Rotation, Level level, bool FollowPlayers, bool BreakBlocks, bool Jumping)
         {
             Player = new Player();
+            Player.IsLoggedIn = false;
             Player.IsBot = true;
             Player.Username = Username;
             Player.Pos = Position;
@@ -66,7 +67,7 @@ namespace MCForge.Robot
         /// </summary>
         public static void HandleBots()
         {
-            foreach (Bot Bot in Server.Bots)
+            foreach (Bot Bot in Server.Bots.ToArray())
             {
                 Random Random = new Random();
                 bool PlayerBelow = false;

@@ -28,7 +28,7 @@ namespace MCForge.Core {
         private static void Logger_OnRecieveErrorLog ( object sender, LogEventArgs e ) {
             var prevColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine( "[Error] " + e.Message );
+            Console.WriteLine("[Error] " + e.Message);
             Console.ForegroundColor = prevColor;
         }
         /// <summary>

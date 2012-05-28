@@ -4,198 +4,6 @@
         <name>MCForge</name>
     </assembly>
     <members>
-        <member name="T:MCForge.World.PerlinNoise">
-            <summary>
-            Implementation of 3D Perlin Noise after Ken Perlin's reference implementation.
-            </summary>
-        </member>
-        <member name="T:MCForge.World.NoiseUtils">
-            <summary>
-            6
-            </summary>
-        </member>
-        <member name="M:MCForge.World.NoiseUtils.IsOnBounds(System.Double[0:,0:],System.Double,System.Double)">
-            <summary>
-            Determines whether the location [is on bounds] in [the specified big map].
-            </summary>
-            <param name="bigMap">The big map.</param>
-            <param name="x">The x.</param>
-            <param name="y">The y.</param>
-            <returns>
-              <c>true</c> if [is on bounds] [the specified big map]; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:MCForge.World.NoiseUtils.IsOnBounds(System.Single[0:,0:],System.Single,System.Single)">
-            <summary>
-            Is the X and Y in the bounds of the map bigMap
-            </summary>
-            <param name="bigMap">The map to check</param>
-            <param name="x">The X cord.</param>
-            <param name="y">The Y cord.</param>
-            <returns>If true, then the position is out of bounds of the map. Otherwise it is not</returns>
-        </member>
-        <member name="T:MCForge.World.Generator.GeneratorArgs">
-            <summary>
-            Level Generation Arguments
-            </summary>
-        </member>
-        <member name="F:MCForge.World.Generator.GeneratorArgs.MAX_SIZE">
-            <summary>
-            A constant for the max size of a map (to be used when the size is unknown)
-            </summary>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.MinLevelGenerationHeight">
-            <summary>
-            Gets or sets the min height of the level generation.
-            </summary>
-            <value>
-            The height of the min level generation.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.MaxLevelGenerationHeight">
-            <summary>
-            Gets or sets the max height of the level generation.
-            </summary>
-            <value>
-            The height of the max level generation.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.Seed">
-            <summary>
-            Gets or sets the seed.
-            </summary>
-            <value>
-            The seed.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.MaxDepth">
-            <summary>
-            Gets or sets the max depth.
-            </summary>
-            <value>
-            The max depth.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.MinDepth">
-            <summary>
-            Gets or sets the min depth.
-            </summary>
-            <value>
-            The min depth.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.OverlayLayer">
-            <summary>
-            Gets or sets the block overlay layer.
-            </summary>
-            <value>
-            The overlay layer.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.TopLayer">
-            <summary>
-            Gets or sets the top layer of block.
-            </summary>
-            <value>
-            The top layer.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.BottomLayer">
-            <summary>
-            Gets or sets the bottom layer.
-            </summary>
-            <value>
-            The bottom layer.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.LiquidBlock">
-            <summary>
-            Gets or sets the liquid block.
-            </summary>
-            <value>
-            The liquid block.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.LiquidLine">
-            <summary>
-            Gets or sets the liquid line.
-            </summary>
-            <value>
-            The liquid line.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.UseNewNoise">
-            <summary>
-            Gets or sets a value indicating whether [use new noise].
-            </summary>
-            <value>
-              <c>true</c> if [use new noise]; otherwise, <c>false</c>.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.PlantTrees">
-            <summary>
-            Gets or sets a value indicating whether to [plant trees].
-            </summary>
-            <value>
-              <c>true</c> if [plant trees]; otherwise, <c>false</c>.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.PlantSaplings">
-            <summary>
-            Gets or sets a value indicating whether [plant saplings].
-            </summary>
-            <value>
-              <c>true</c> if [plant saplings]; otherwise, <c>false</c>.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.PlantFlowers">
-            <summary>
-            Gets or sets a value indicating whether [plant flowers].
-            </summary>
-            <value>
-              <c>true</c> if [plant flowers]; otherwise, <c>false</c>.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.PlantMushrooms">
-            <summary>
-            Gets or sets a value indicating whether [plant mushrooms].
-            </summary>
-            <value>
-              <c>true</c> if [plant mushrooms]; otherwise, <c>false</c>.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.Amplitude">
-            <summary>
-            Gets or sets the amplitude.
-            </summary>
-            <value>
-            The amplitude.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.WaveFrequency">
-            <summary>
-            Gets or sets the wave frequency.
-            </summary>
-            <value>
-            The wave frequency.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.MoutainOctaves">
-            <summary>
-            Gets or sets the moutain octaves.
-            </summary>
-            <value>
-            The moutain octaves.
-            </value>
-        </member>
-        <member name="P:MCForge.World.Generator.GeneratorArgs.Persistence">
-            <summary>
-            Gets or sets the persistence.
-            </summary>
-            <value>
-            The persistence.
-            </value>
-        </member>
         <member name="M:MCForge.World.Block.Add(MCForge.World.Block)">
             <summary>
             Add your custom block to the list
@@ -298,95 +106,61 @@
             Air Block
             </summary>
         </member>
-        <member name="T:MCForge.Interface.Plugin.IPluginMessageViewer">
+        <member name="T:MCForge.SQL.Database">
             <summary>
-            Interface for making a plugin with a message viewer
+            Description of Database.
             </summary>
         </member>
-        <member name="M:MCForge.Interface.Plugin.IPlugin.OnLoad(System.String[])">
+        <member name="M:MCForge.SQL.Database.QueueCommand(System.String)">
             <summary>
-            The initialization of the plugin.
+            Add a sql command to the queue
+            </summary>
+            <param name="cmd">The command to add</param>
+        </member>
+        <member name="M:MCForge.SQL.Database.QueueCommands(System.String[])">
+            <summary>
+            Add multiple commands to the queue
+            </summary>
+            <param name="cmds">The array of commands to add</param>
+        </member>
+        <member name="M:MCForge.SQL.Database.Flush">
+            <summary>
+            Flush all the commands
+            This will execute all the commands in the queue and remove them
             </summary>
         </member>
-        <member name="M:MCForge.Interface.Plugin.IPlugin.OnUnload">
+        <member name="M:MCForge.SQL.Database.Dispose">
             <summary>
-            The unload of a plugin.
+            Close the SQL connection and dispose resources
+            THIS SHOULD ONLY BE CALLED ONCE
             </summary>
         </member>
-        <member name="P:MCForge.Interface.Plugin.IPlugin.Name">
+        <member name="M:MCForge.SQL.Database.executeQuery(System.String)">
             <summary>
-            The name of the plugin
+            Execute a command to the sql server
+            This wont return any data
+            If the server is set to queue all commands, then the commands will be added to queue
             </summary>
+            <param name="queryString">The command to execute</param>
         </member>
-        <member name="P:MCForge.Interface.Plugin.IPlugin.Author">
+        <member name="M:MCForge.SQL.Database.executeQuery(System.String[])">
             <summary>
-            The author of the plugin (to add multiple authors just make the string like "Merlin33069, someone else"
+            Execute multiple commands to the sql server
+            This wont return any data
+            If the server is set to queue all commands, then the commands will be added to queue
             </summary>
+            <param name="commands">The commands to execute</param>
         </member>
-        <member name="P:MCForge.Interface.Plugin.IPlugin.Version">
+        <member name="M:MCForge.SQL.Database.fillData(System.String)">
             <summary>
-            The command version
+            Execute a command to the sql server and return a datatable of the result
             </summary>
+            <param name="queryString">The command to execute</param>
+            <returns>The datatable</returns>
         </member>
-        <member name="P:MCForge.Interface.Plugin.IPlugin.CUD">
+        <member name="T:MCForge.API.Events.MoveEvent">
             <summary>
-            Unique identifier for this plugin, will be used later to link to McForge databases
-            </summary>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowMessage(MCForge.Entity.Player,System.String)">
-            <summary>
-            Starts showing a message.
-            </summary>
-            <param name="p">The player to show the message to.</param>
-            <param name="message">The message to show.</param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.AppendText(MCForge.Entity.Player,System.String)">
-            <summary>
-            Appends text at the end of the message.
-            </summary>
-            <param name="p">The player to append the message to</param>
-            <param name="text">The message to append.</param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowNextPage(MCForge.Entity.Player)">
-            <summary>
-            Shows the next page if possible.
-            </summary>
-            <param name="p">The player to show the next page to. </param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowPage(MCForge.Entity.Player,System.Int32)">
-            <summary>
-            Shows a selected page if possible.
-            </summary>
-            <param name="p">The player to show the page to.</param>
-            <param name="page">The page to show.</param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowNextLine(MCForge.Entity.Player)">
-            <summary>
-            Shows next line if possible.
-            </summary>
-            <param name="p">The player to show the line to.</param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowPreviousPage(MCForge.Entity.Player)">
-            <summary>
-            Shows previous page if possible.
-            </summary>
-            <param name="p">The player to show the page to.</param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowPreviousLine(MCForge.Entity.Player)">
-            <summary>
-            Shows previous line if possible.
-            </summary>
-            <param name="p">The player to show the line to.</param>
-        </member>
-        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.Stop(MCForge.Entity.Player)">
-            <summary>
-            Stops showing the message.
-            </summary>
-            <param name="p">The player to stop showing the message to.</param>
-        </member>
-        <member name="T:MCForge.API.Events.ConnectionEvent">
-            <summary>
-            PlayerConnection event class
+            PlayerMove event class
             </summary>
         </member>
         <member name="T:MCForge.API.Events.Event`2">
@@ -445,9 +219,9 @@
             <param name="sender">The sender</param>
             <param name="args">The arguments</param>
         </member>
-        <member name="T:MCForge.API.Events.ConnectionEventArgs">
+        <member name="T:MCForge.API.Events.MoveEventArgs">
             <summary>
-            PlayConnectionEventArgs
+            PlayerMoveEventArgs
             </summary>
         </member>
         <member name="T:MCForge.API.Events.EventArgs">
@@ -480,28 +254,28 @@
             Whether or not the handling should be canceled
             </summary>
         </member>
-        <member name="M:MCForge.API.Events.ConnectionEventArgs.#ctor(System.Boolean)">
+        <member name="M:MCForge.API.Events.MoveEventArgs.#ctor(MCForge.Utils.Vector3S,MCForge.Utils.Vector3S)">
             <summary>
             Creates a new instance
             </summary>
-            <param name="connected">Whether the player is connected or not</param>
+            <param name="fromPosition">The position where the move started</param>
         </member>
-        <member name="M:MCForge.API.Events.ConnectionEventArgs.Cancel">
+        <member name="M:MCForge.API.Events.MoveEventArgs.Cancel">
             <summary>
             Cancels the handling
             </summary>
         </member>
-        <member name="M:MCForge.API.Events.ConnectionEventArgs.Allow">
+        <member name="M:MCForge.API.Events.MoveEventArgs.Allow">
             <summary>
             Allows the handling
             </summary>
         </member>
-        <member name="P:MCForge.API.Events.ConnectionEventArgs.Connected">
+        <member name="P:MCForge.API.Events.MoveEventArgs.FromPosition">
             <summary>
-            Whether the player is connected or not
+            The position where the move started
             </summary>
         </member>
-        <member name="P:MCForge.API.Events.ConnectionEventArgs.Canceled">
+        <member name="P:MCForge.API.Events.MoveEventArgs.Canceled">
             <summary>
             Whether or not the handling should be canceled
             </summary>
@@ -575,541 +349,269 @@
             The Z.
             </value>
         </member>
-        <member name="T:MCForge.Core.IRC">
+        <member name="M:MCForge.Interface.Plugin.Plugin.GetNames">
             <summary>
-            IRC Class to connect to an Internet Relay Chat Server
+            Get the names of all plugins
             </summary>
+            <returns>The names of all plugins</returns>
         </member>
-        <member name="T:MCForge.SQL.Database">
+        <member name="M:MCForge.Interface.Plugin.Plugin.unload(System.String,System.Boolean)">
             <summary>
-            Description of Database.
+            Unloads a plugin
             </summary>
+            <param name="name">The name of the plugin to unload</param>
+            <param name="ignoreCase">Wheter or not to ignore the case. (default true)</param>
+            <returns>Wheter or not the plugin is unloaded</returns>
         </member>
-        <member name="M:MCForge.SQL.Database.QueueCommand(System.String)">
+        <member name="M:MCForge.Interface.Plugin.Plugin.reload(System.String,System.Boolean)">
             <summary>
-            Add a sql command to the queue
+            Reload one or all unloaded plugins.
             </summary>
-            <param name="cmd">The command to add</param>
+            <param name="name">The name of the plugin to load, or an empty string to load all plugins</param>
+            <param name="ignoreCase">Whether the case of the name gets ignored or not</param>
+            <returns></returns>
         </member>
-        <member name="M:MCForge.SQL.Database.QueueCommands(System.String[])">
+        <member name="M:MCForge.Interface.Plugin.Plugin.AddReference(MCForge.Interface.Plugin.IPlugin)">
             <summary>
-            Add multiple commands to the queue
+            Add an array of references to your command here
             </summary>
-            <param name="cmds">The array of commands to add</param>
+            <param name="plugin">The plugin d that this reference... references, you should most likely use 'this'</param>    
         </member>
-        <member name="M:MCForge.SQL.Database.Flush">
+        <member name="M:MCForge.Interface.Plugin.Plugin.getByInterface(System.String)">
             <summary>
-            Flush all the commands
-            This will execute all the commands in the queue and remove them
+            Gets a plugin by interface.
             </summary>
+            <param name="name">The name of the interface</param>
+            <returns></returns>
         </member>
-        <member name="M:MCForge.SQL.Database.Dispose">
+        <member name="F:MCForge.Interface.Plugin.Plugin.OnPluginLoad">
             <summary>
-            Close the SQL connection and dispose resources
-            THIS SHOULD ONLY BE CALLED ONCE
+            Gets called when a plugin gets loaded.
             </summary>
         </member>
-        <member name="M:MCForge.SQL.Database.executeQuery(System.String)">
+        <member name="F:MCForge.Interface.Plugin.Plugin.OnPluginUnload">
             <summary>
-            Execute a command to the sql server
-            This wont return any data
-            If the server is set to queue all commands, then the commands will be added to queue
+            Gets called when a plugin gets unloaded.
             </summary>
-            <param name="queryString">The command to execute</param>
         </member>
-        <member name="M:MCForge.SQL.Database.executeQuery(System.String[])">
+        <member name="T:MCForge.Utils.MathUtils">
             <summary>
-            Execute multiple commands to the sql server
-            This wont return any data
-            If the server is set to queue all commands, then the commands will be added to queue
+            A class full of static methods to help assist common 3D and 2D math algorithms
             </summary>
-            <param name="commands">The commands to execute</param>
         </member>
-        <member name="M:MCForge.SQL.Database.fillData(System.String)">
+        <member name="M:MCForge.Utils.MathUtils.AbsVector(MCForge.Utils.Vector3S)">
             <summary>
-            Execute a command to the sql server and return a datatable of the result
+            Gets a vector where every indices has been Math.Absoluted.
             </summary>
-            <param name="queryString">The command to execute</param>
-            <returns>The datatable</returns>
+            <param name="Vector">The vector.</param>
+            <returns>A absoluted Vector</returns>
         </member>
-        <member name="M:MCForge.Interface.LoadAllDlls.LoadDLL(System.String,System.String[])">
+        <member name="M:MCForge.Utils.MathUtils.AbsVector(MCForge.Utils.Vector3D)">
             <summary>
-            Load a DLL
+            Gets a vector where every indices has been Math.Absoluted.
             </summary>
-            <param name="s">The filepath of the DLL</param>
-            <param name="args">The args to passed to the plugin OnLoad method.</param>
+            <param name="Vector">The vector.</param>
+            <returns>A absoluted Vector</returns>
         </member>
-        <member name="M:MCForge.API.Events.PluginLoadEventArgs.Cancel">
+        <member name="M:MCForge.Utils.MathUtils.AbsVector(MCForge.Utils.Vector2S)">
             <summary>
-            Cancels the handling
+            Gets a vector where every indices has been Math.Absoluted.
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A absoluted Vector</returns>
         </member>
-        <member name="M:MCForge.API.Events.PluginLoadEventArgs.Allow">
+        <member name="M:MCForge.Utils.MathUtils.AbsVector(MCForge.Utils.Vector2D)">
             <summary>
-            Allows the handling
+            Gets a vector where every indices has been Math.Absoluted.
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A absoluted Vector</returns>
         </member>
-        <member name="P:MCForge.API.Events.PluginLoadEventArgs.GetsLoaded">
+        <member name="M:MCForge.Utils.MathUtils.SinVector(MCForge.Utils.Vector2S)">
             <summary>
-            Gets whether the command gets loaded or unloaded.
+            Gets a vector where every indices has been Math.Sined.
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A sined Vector</returns>
         </member>
-        <member name="P:MCForge.API.Events.PluginLoadEventArgs.Canceled">
+        <member name="M:MCForge.Utils.MathUtils.SinVector(MCForge.Utils.Vector2D)">
             <summary>
-            Whether or not the handling should be canceled
+            Gets a vector where every indices has been Math.Sined.
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A sined Vector</returns>
         </member>
-        <member name="T:MCForge.API.Events.PacketEvent">
+        <member name="M:MCForge.Utils.MathUtils.SinVector(MCForge.Utils.Vector3D)">
             <summary>
-            The PacketEvent
+            Gets a vector where every indices has been Math.Sined.
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A sined Vector</returns>
         </member>
-        <member name="T:MCForge.API.Events.PacketEventArgs">
+        <member name="M:MCForge.Utils.MathUtils.SinVector(MCForge.Utils.Vector3S)">
             <summary>
-            The PacketEventArgs
+            Gets a vector where every indices has been Math.Sined.
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A sined Vector</returns>
         </member>
-        <member name="M:MCForge.API.Events.PacketEventArgs.#ctor(System.Byte[],System.Boolean,MCForge.Core.packet.types)">
+        <member name="M:MCForge.Utils.MathUtils.CosVector(MCForge.Utils.Vector2S)">
             <summary>
-            Creates a new instance
+            Gets a vector where every indices has been Math.Cosined.
             </summary>
-            <param name="data">The packet data</param>
-            <param name="incoming">True for incoming, false for outgoing packet.</param>
+            <param name="Vector">The vector.</param>
+            <returns>A cosined Vector</returns>
         </member>
-        <member name="M:MCForge.API.Events.PacketEventArgs.Cancel">
+        <member name="M:MCForge.Utils.MathUtils.CosVector(MCForge.Utils.Vector2D)">
             <summary>
-            Cancels the handling
+            Gets a vector where every indices has been Math.Cosined.
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A cosined Vector</returns>
         </member>
-        <member name="M:MCForge.API.Events.PacketEventArgs.Allow">
+        <member name="M:MCForge.Utils.MathUtils.CosVector(MCForge.Utils.Vector3D)">
             <summary>
-            Allows the handling
+            Gets a vector where every indices has been Math.Cosined.
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A cosined Vector</returns>
         </member>
-        <member name="M:MCForge.API.Events.PacketEventArgs.Equals(MCForge.API.Events.PacketEventArgs)">
+        <member name="M:MCForge.Utils.MathUtils.CosVector(MCForge.Utils.Vector3S)">
             <summary>
-            Compares equality (ICancelable and IStoppable are not part of the comparison)
+            Gets a vector where every indices has been Math.Cosined.
             </summary>
-            <param name="other">The value to be compared to.</param>
-            <returns>Whether they are equal or not.</returns>
+            <param name="Vector">The vector.</param>
+            <returns>A cosined Vector</returns>
         </member>
-        <member name="M:MCForge.API.Events.PacketEventArgs.Clone">
+        <member name="M:MCForge.Utils.MathUtils.TanVector(MCForge.Utils.Vector2S)">
             <summary>
-            Creates a new instance
+            Gets a vector where every indices has been Math.Tangented.
             </summary>
-            <returns>A new instance</returns>
+            <param name="Vector">The vector.</param>
+            <returns>A tangified Vector</returns>
         </member>
-        <member name="P:MCForge.API.Events.PacketEventArgs.Type">
+        <member name="M:MCForge.Utils.MathUtils.TanVector(MCForge.Utils.Vector2D)">
             <summary>
-            The packet type
+            Gets a vector where every indices has been Math.Tangented.
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A tangified Vector</returns>
         </member>
-        <member name="P:MCForge.API.Events.PacketEventArgs.Data">
+        <member name="M:MCForge.Utils.MathUtils.TanVector(MCForge.Utils.Vector3D)">
             <summary>
-            Packet data
+            Gets a vector where every indices has been Math.Tangented.
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A tangified Vector</returns>
         </member>
-        <member name="P:MCForge.API.Events.PacketEventArgs.Incoming">
+        <member name="M:MCForge.Utils.MathUtils.TanVector(MCForge.Utils.Vector3S)">
             <summary>
-            Gets the packet was incoming or is outgoing
+            Gets a vector where every indices has been Math.Tangented.
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A tangified Vector</returns>
         </member>
-        <member name="P:MCForge.API.Events.PacketEventArgs.Canceled">
+        <member name="M:MCForge.Utils.MathUtils.SignVector(MCForge.Utils.Vector2S)">
             <summary>
-            Whether or not the handling should be canceled
+            Gets a vector where every indices has been signed
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A signed Vector</returns>
         </member>
-        <member name="M:MCForge.Core.PDB.CompareTo(MCForge.Core.PDB)">
+        <member name="M:MCForge.Utils.MathUtils.SignVector(MCForge.Utils.Vector2D)">
             <summary>
-            This allows a PDB to be compared to another PDB by looking at the username, and subsequently, it can then be sorted.
+            Gets a vector where every indices has been signed
             </summary>
-            <param name="pdb">The comparing PDB</param>
-            <returns>returns a comparison of the usernames</returns>
+            <param name="Vector">The vector.</param>
+            <returns>A signed Vector</returns>
         </member>
-        <member name="M:MCForge.Core.HeartService.Heartbeat.sendHeartbeat">
+        <member name="M:MCForge.Utils.MathUtils.SignVector(MCForge.Utils.Vector3D)">
             <summary>
-            Sends all the heartbeats.
+            Gets a vector where every indices has been signed
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A signed Vector</returns>
         </member>
-        <member name="M:MCForge.Robot.Bot.#ctor(System.String,MCForge.Utils.Vector3S,System.Byte[],MCForge.World.Level,System.Boolean,System.Boolean,System.Boolean)">
+        <member name="M:MCForge.Utils.MathUtils.SignVector(MCForge.Utils.Vector3S)">
             <summary>
-            A robot (entity) that appears in the world.
+            Gets a vector where every indices has been signed
             </summary>
+            <param name="Vector">The vector.</param>
+            <returns>A signed Vector</returns>
         </member>
-        <member name="M:MCForge.Robot.Bot.HandleBots">
+        <member name="M:MCForge.Utils.ColorUtils.ToColor(System.ConsoleColor)">
             <summary>
-            Handles bot AI
+            Convert a console color to an ARGB color
             </summary>
+            <param name="color">Console color to convert</param>
+            <returns>A color</returns>
         </member>
-        <member name="P:MCForge.Robot.Bot.Player">
+        <member name="M:MCForge.Utils.ColorUtils.ToConsoleColor(System.Drawing.Color)">
             <summary>
-            Player which is assigned to the bot
+            Convert an ARGB color to a Win32 ConsoleColor
             </summary>
+            <param name="color">Color to convert</param>
+            <remarks>If no ConsoleColor is found to convert, ConsoleColor.Black will be returned</remarks>
+            <returns>A converted ConsoleColor</returns>
         </member>
-        <member name="T:MCForge.Properties.Resources">
+        <member name="P:MCForge.Utils.ColorUtils.DarkYellow">
             <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
+            A color representing hex value CC 77 22
             </summary>
         </member>
-        <member name="P:MCForge.Properties.Resources.ResourceManager">
+        <member name="T:MCForge.Interface.Command.Command">
             <summary>
-              Returns the cached ResourceManager instance used by this class.
+            The command class, used to store commands for players to use
             </summary>
         </member>
-        <member name="P:MCForge.Properties.Resources.Culture">
+        <member name="M:MCForge.Interface.Command.Command.AddReference(MCForge.Interface.Command.ICommand,System.String[])">
             <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
+            Add an array of referances to your command here
             </summary>
+            <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
+            <param name="reference">the array of strings you want players to type to use your command</param>
         </member>
-        <member name="T:MCForge.API.Events.EventRegisterArgs">
+        <member name="M:MCForge.Interface.Command.Command.AddReference(MCForge.Interface.Command.ICommand,System.String)">
             <summary>
-            The EventRegister EventArgs
+            Add a referance to your command here
             </summary>
+            <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
+            <param name="reference">the string you want player to type to use your command, you can use this method more than once :)</param>
         </member>
-        <member name="M:MCForge.API.Events.EventRegisterArgs.#ctor(System.Type,System.Type,System.Delegate,System.Boolean)">
+        <member name="F:MCForge.Interface.Command.Command.OnCommandLoad">
             <summary>
-            Creates a new instance
+            Gets called when a command gets loaded.
             </summary>
-            <param name="senderType">The type of the sender</param>
-            <param name="argsType">The type of the arguments</param>
-            <param name="method">The method</param>
-            <param name="registering">Whether the method gets regestered (true) or unregistered (false)</param>
         </member>
-        <member name="F:MCForge.API.Events.EventRegisterArgs.SenderType">
+        <member name="P:MCForge.Interface.Command.Command.all">
             <summary>
-            The type of the sender
+            Returns the dictionary of all commands.
             </summary>
         </member>
-        <member name="F:MCForge.API.Events.EventRegisterArgs.ArgsType">
+        <member name="P:MCForge.Interface.Command.Command.OnCommandUnload">
             <summary>
-            The type of the arguments
+            Gets called when a command gets unloaded.
             </summary>
         </member>
-        <member name="F:MCForge.API.Events.EventRegisterArgs.Method">
+        <member name="F:MCForge.Interface.Command.CommandTypes.Building">
             <summary>
-            The method
+            Build type of command
             </summary>
         </member>
-        <member name="F:MCForge.API.Events.EventRegisterArgs.Registering">
+        <member name="F:MCForge.Interface.Command.CommandTypes.Mod">
             <summary>
-            Whether the method gets regestered (true) or unregistered (false)
+            Mod type of command
             </summary>
         </member>
-        <member name="F:MCForge.Core.Server.ShowFirstRunScreen">
+        <member name="F:MCForge.Interface.Command.CommandTypes.Misc">
             <summary>
-            Show the first run screen?
+            Misc type of command
             </summary>
         </member>
-        <member name="F:MCForge.Core.Server.moneys">
+        <member name="F:MCForge.Interface.Command.CommandTypes.Information">
             <summary>
-            The name of the server currency.
+            Info type of command
             </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.VerifyGroup">
-            <summary>
-            The miniumum rank that needs to verify.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.Verifying">
-            <summary>
-            Do people need to use /pass?
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.owner">
-            <summary>
-            The server owner.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.grieferstoneperm">
-            <summary>
-            The rank that can destroy griefer_stone without getting kicked
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.grieferstonewarns">
-            <summary>
-            The amount of griefer_stone warns player will recieve before getting kicked
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.shuttingDown">
-            <summary>
-            Get whether the server is currently shutting down
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.Started">
-            <summary>
-            Get whether the server is currently fully started or not
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.Players">
-            <summary>
-            Get the current list of online players, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.Bots">
-            <summary>
-            Get the current list of bots, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.IPBans">
-            <summary>
-            The current list of banned IP addresses. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.UsernameBans">
-            <summary>
-            The list of banned usernames. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.devs">
-            <summary>
-            The list of MCForge developers.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.reviewlist">
-            <summary>
-            List of players that need to be reviewed
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.agreed">
-            <summary>
-            List of players that agreed to the rules
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.Mainlevel">
-            <summary>
-            The main level of the server, where players spawn when they first join
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.moderation">
-            <summary>
-            Determines if the chat moderation is enabled
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.voting">
-            <summary>
-            Is the server in voting mode?
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.kickvote">
-            <summary>
-            Is it a kickvote?
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.YesVotes">
-            <summary>
-            Amount of yes votes.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.NoVotes">
-            <summary>
-            Amount of no votes.
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.kicker">
-            <summary>
-            The player who's getting, if it's /votekick
-            </summary>
-        </member>
-        <member name="F:MCForge.Core.Server.URL">
-            <summary>
-            The minecraft.net URL of the server
-            </summary>
-            
-        </member>
-        <member name="F:MCForge.Core.Server.IRC">
-            <summary>
-            The IRC client for the server
-            </summary>
-        </member>
-        <member name="M:MCForge.Core.Server.ForeachPlayer(MCForge.Core.Server.ForeachPlayerDelegate)">
-            <summary>
-            Loops through online players
-            </summary>
-            <param name="a"></param>
-        </member>
-        <member name="M:MCForge.Core.Server.AddTimedMethod(MCForge.Core.Server.TimedMethodDelegate,System.Int32,System.Int32,System.Object)">
-            <summary>
-            Add a method to be called in a specified time for a specified number of repetitions
-            </summary>
-            <param name="d">The delegate representing the method to be called</param>
-            <param name="time">The amount of milliseconds you want to wait to call this method, and to wait inbetween each calling if it repeats (note that this is rounded to 10ths of a second)</param>
-            <param name="repeat">the number of times to repeat this call</param>
-            <param name="PassBack">the object to pass back to the method that is called.</param>
-        </member>
-        <member name="M:MCForge.Core.Server.Log(System.String)">
-            <summary>
-            Write A message to the Console and the GuiLog using default (white on black) colors.
-            </summary>
-            <param name="message">The message to show</param>
-        </member>
-        <member name="M:MCForge.Core.Server.Log(System.Exception)">
-            <summary>
-            Write an error to the Console and the GuiLog using Red on black colors
-            </summary>
-            <param name="E">The error exception to write.</param>
-        </member>
-        <member name="M:MCForge.Core.Server.Log(System.String,System.ConsoleColor,System.ConsoleColor)">
-            <summary>
-            Write a message to the console and GuiLog using a specified TextColor and BackGround Color
-            </summary>
-            <param name="message">The Message to show</param>
-            <param name="TextColor">The color of the text to show</param>
-            <param name="BackgroundColor">The color behind the text.</param>
-        </member>
-        <member name="M:MCForge.Core.Server.Stop">
-            <summary>
-            Stops the server
-            </summary>
-        </member>
-        <member name="M:MCForge.Core.Server.Quit">
-            <summary>
-            Exits the server
-            </summary>
-        </member>
-        <member name="M:MCForge.Core.Server.Restart">
-            <summary>
-            Restarts the server (TODO - Mono compatible)
-            </summary>
-        </member>
-        <member name="M:MCForge.Core.Server.SaveAll">
-            <summary>
-            Saves all of the levels and groups
-            </summary>
-        </member>
-        <member name="P:MCForge.Core.Server.DefaultColor">
-            <summary>
-            The default color
-            </summary>
-        </member>
-        <member name="T:MCForge.Core.Server.TimedMethodDelegate">
-            <summary>
-            This delegate is used when a command or plugin needs to call a method after a certain amount of time
-            </summary>
-            <param name="dataPass">This delegate passes the object that was passed to it back to the method that is to be invoked</param>
-            <returns>this delegate returns an updated object for the datapass</returns>
-        </member>
-        <member name="T:MCForge.Core.HeartService.MBeat">
-            <summary>
-            The Minecraft Heartbeat
-            </summary>
-        </member>
-        <member name="T:MCForge.Core.HeartService.Heart">
-            <summary>
-            An abstract class for custom heartbeats
-            </summary>
-        </member>
-        <member name="T:MCForge.Interfaces.IIOProvider">
-            <summary>
-            Provides methods for admin input and output
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.MoveEvent">
-            <summary>
-            PlayerMove event class
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.MoveEventArgs">
-            <summary>
-            PlayerMoveEventArgs
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.MoveEventArgs.#ctor(MCForge.Utils.Vector3S,MCForge.Utils.Vector3S)">
-            <summary>
-            Creates a new instance
-            </summary>
-            <param name="fromPosition">The position where the move started</param>
-        </member>
-        <member name="M:MCForge.API.Events.MoveEventArgs.Cancel">
-            <summary>
-            Cancels the handling
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.MoveEventArgs.Allow">
-            <summary>
-            Allows the handling
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.MoveEventArgs.FromPosition">
-            <summary>
-            The position where the move started
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.MoveEventArgs.Canceled">
-            <summary>
-            Whether or not the handling should be canceled
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.CommandEndEvent">
-            <summary>
-            Event Class for when a command that a player called has just ended
-            <remarks>Ended = End of <see cref="T:MCForge.Interface.Command.ICommand"/> Use()</remarks>
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.CommandEndEventArgs">
-            <summary>
-            Event Class for when a command that a player called has just ended
-            <remarks>Ended = End of <see cref="T:MCForge.Interface.Command.ICommand"/> Use()</remarks>
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.CommandEndEventArgs.#ctor(MCForge.Interface.Command.ICommand,System.String[])">
-            <summary>
-            Creates a new instance
-            </summary>
-            <param name="command">The command</param>
-            <param name="args">The arguments that was passed to the command</param>
-        </member>
-        <member name="P:MCForge.API.Events.CommandEndEventArgs.Command">
-            <summary>
-            Gets the the command that was used
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.CommandEndEventArgs.Args">
-            <summary>
-            Gets the argument that was used in the command.
-            </summary>
-        </member>
-        <member name="M:MCForge.World.WorldComponent.#ctor(MCForge.World.BlockComponent[])">
-            <summary>
-            Initializes a new instance of the <see cref="T:MCForge.World.WorldComponent"/> class.
-            </summary>
-            <param name="xyz">The pieces of the component.</param>
-        </member>
-        <member name="M:MCForge.World.WorldComponent.DrawOnLevel(MCForge.World.Level,MCForge.Utils.Vector3S,System.Byte)">
-            <summary>
-            Draws the on level.
-            </summary>
-            <param name="mLevel">The level to draw on.</param>
-            <param name="startPos">The start pos.</param>
-            <param name="blockOverlay">A block to set the component as. If it is not already set</param>
-            <remarks>if the block in the component is set to 255 a block overlay will be used automaticly, no block change will occur if the block is at 254</remarks>
-        </member>
-        <member name="F:MCForge.World.WorldComponent.LetterA">
-            <summary>
-            A static component for the letter 'A' (capitolized)
-            </summary>
-        </member>
-        <member name="T:MCForge.World.BlockComponent">
-            <summary>
-            A struct containting a Block and position
-            </summary>
-        </member>
-        <member name="F:MCForge.World.BlockComponent.Block">
-            <summary>
-            The type of block
-            </summary>
-        </member>
-        <member name="F:MCForge.World.BlockComponent.Pos">
-            <summary>
-            The position
-            </summary>
-        </member>
-        <member name="M:MCForge.World.BlockComponent.#ctor(System.Byte,MCForge.Utils.Vector3S)">
-            <summary>
-            Initializes a new instance of the <see cref="T:MCForge.World.BlockComponent"/> struct.
-            </summary>
-            <param name="block">The block.</param>
-            <param name="mVec">The position.</param>
         </member>
         <member name="T:MCForge.Entity.Player">
             <summary>
@@ -1522,451 +1024,12 @@
             <param name="message">The string the player sent</param>
             <param name="PassBack">A passback object that can be used for a command to send data back to itself for use</param>
         </member>
-        <member name="T:MCForge.Interface.Command.Command">
+        <member name="M:MCForge.Core.PDB.CompareTo(MCForge.Core.PDB)">
             <summary>
-            The command class, used to store commands for players to use
+            This allows a PDB to be compared to another PDB by looking at the username, and subsequently, it can then be sorted.
             </summary>
-        </member>
-        <member name="M:MCForge.Interface.Command.Command.AddReference(MCForge.Interface.Command.ICommand,System.String[])">
-            <summary>
-            Add an array of referances to your command here
-            </summary>
-            <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
-            <param name="reference">the array of strings you want players to type to use your command</param>
-        </member>
-        <member name="M:MCForge.Interface.Command.Command.AddReference(MCForge.Interface.Command.ICommand,System.String)">
-            <summary>
-            Add a referance to your command here
-            </summary>
-            <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
-            <param name="reference">the string you want player to type to use your command, you can use this method more than once :)</param>
-        </member>
-        <member name="F:MCForge.Interface.Command.Command.OnCommandLoad">
-            <summary>
-            Gets called when a command gets loaded.
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Command.Command.all">
-            <summary>
-            Returns the dictionary of all commands.
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Command.Command.OnCommandUnload">
-            <summary>
-            Gets called when a command gets unloaded.
-            </summary>
-        </member>
-        <member name="F:MCForge.Interface.Command.CommandTypes.Building">
-            <summary>
-            Build type of command
-            </summary>
-        </member>
-        <member name="F:MCForge.Interface.Command.CommandTypes.Mod">
-            <summary>
-            Mod type of command
-            </summary>
-        </member>
-        <member name="F:MCForge.Interface.Command.CommandTypes.Misc">
-            <summary>
-            Misc type of command
-            </summary>
-        </member>
-        <member name="F:MCForge.Interface.Command.CommandTypes.Information">
-            <summary>
-            Info type of command
-            </summary>
-        </member>
-        <member name="T:MCForge.SQL.SQLite">
-            <summary>
-            Description of SQLite.
-            </summary>
-        </member>
-        <member name="T:MCForge.SQL.ISQL">
-            <summary>
-            Description of SQL.
-            </summary>
-        </member>
-        <member name="T:MCForge.World.Generator.GeneratorTemplate">
-            <summary>
-            Templates for <see cref="T:MCForge.World.Generator.GeneratorArgs"/>
-            </summary>
-        </member>
-        <member name="M:MCForge.World.Generator.GeneratorTemplate.Hell(MCForge.World.Level)">
-            <summary>
-            Hell-ish type level
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.OnSettingLoadArgs">
-            <summary>
-            Description of OnSettingLoad.
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.OnSettingLoadArgs.Cancel">
-            <summary>
-            Cancels the handling
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.OnSettingLoadArgs.Allow">
-            <summary>
-            Allows the handling
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.OnSettingLoadArgs.setting">
-            <summary>
-            The setting that is being loaded
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.OnSettingLoadArgs.Canceled">
-            <summary>
-            Whether or not the handling should be canceled
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.Robot.TargetPlayerArgs">
-            <summary>
-            PlayerMoveEventArgs
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.Robot.TargetPlayerArgs.#ctor(MCForge.Entity.Player)">
-            <summary>
-            Creates a new instance
-            </summary>
-            <param name="fromPosition">The position where the move started</param>
-        </member>
-        <member name="M:MCForge.API.Events.Robot.TargetPlayerArgs.Cancel">
-            <summary>
-            Cancels the handling
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.Robot.TargetPlayerArgs.Allow">
-            <summary>
-            Allows the handling
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.Robot.TargetPlayerArgs.Player">
-            <summary>
-            The position where the move started
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.Robot.TargetPlayerArgs.Canceled">
-            <summary>
-            Whether or not the handling should be canceled
-            </summary>
-        </member>
-        <member name="T:MCForge.Interface.Command.ICommand">
-            <summary>
-            Interface for Commands
-            </summary>
-        </member>
-        <member name="M:MCForge.Interface.Command.ICommand.Use(MCForge.Entity.Player,System.String[])">
-            <summary>
-            The method that will be called when a player uses this command
-            </summary>
-            <param name="p">a Player class</param>
-            <param name="args">the args of the command the player sent</param>
-        </member>
-        <member name="M:MCForge.Interface.Command.ICommand.Help(MCForge.Entity.Player)">
-            <summary>
-            The method to run when a player uses the /help command
-            </summary>
-            <param name="p">a Player instance</param>
-        </member>
-        <member name="M:MCForge.Interface.Command.ICommand.Initialize">
-            <summary>
-            The initialization of the command, you need to add command references here.
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Command.ICommand.Name">
-            <summary>
-            The name of the command
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Command.ICommand.Type">
-            <summary>
-            The type of command this is
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Command.ICommand.Author">
-            <summary>
-            The author of the command (to add multiple authors just make the string like "Merlin33069, someone else"
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Command.ICommand.Version">
-            <summary>
-            The command version
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Command.ICommand.CUD">
-            <summary>
-            Unique identifier for this plugin, will be used later to link to MCForge databases
-            </summary>
-        </member>
-        <member name="P:MCForge.Interface.Command.ICommand.Permission">
-            <summary>
-            The default permission value for the command
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="T:MCForge.Utils.MathUtils">
-            <summary>
-            A class full of static methods to help assist common 3D and 2D math algorithms
-            </summary>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.AbsVector(MCForge.Utils.Vector3S)">
-            <summary>
-            Gets a vector where every indices has been Math.Absoluted.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A absoluted Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.AbsVector(MCForge.Utils.Vector3D)">
-            <summary>
-            Gets a vector where every indices has been Math.Absoluted.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A absoluted Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.AbsVector(MCForge.Utils.Vector2S)">
-            <summary>
-            Gets a vector where every indices has been Math.Absoluted.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A absoluted Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.AbsVector(MCForge.Utils.Vector2D)">
-            <summary>
-            Gets a vector where every indices has been Math.Absoluted.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A absoluted Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.SinVector(MCForge.Utils.Vector2S)">
-            <summary>
-            Gets a vector where every indices has been Math.Sined.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A sined Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.SinVector(MCForge.Utils.Vector2D)">
-            <summary>
-            Gets a vector where every indices has been Math.Sined.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A sined Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.SinVector(MCForge.Utils.Vector3D)">
-            <summary>
-            Gets a vector where every indices has been Math.Sined.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A sined Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.SinVector(MCForge.Utils.Vector3S)">
-            <summary>
-            Gets a vector where every indices has been Math.Sined.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A sined Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.CosVector(MCForge.Utils.Vector2S)">
-            <summary>
-            Gets a vector where every indices has been Math.Cosined.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A cosined Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.CosVector(MCForge.Utils.Vector2D)">
-            <summary>
-            Gets a vector where every indices has been Math.Cosined.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A cosined Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.CosVector(MCForge.Utils.Vector3D)">
-            <summary>
-            Gets a vector where every indices has been Math.Cosined.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A cosined Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.CosVector(MCForge.Utils.Vector3S)">
-            <summary>
-            Gets a vector where every indices has been Math.Cosined.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A cosined Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.TanVector(MCForge.Utils.Vector2S)">
-            <summary>
-            Gets a vector where every indices has been Math.Tangented.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A tangified Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.TanVector(MCForge.Utils.Vector2D)">
-            <summary>
-            Gets a vector where every indices has been Math.Tangented.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A tangified Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.TanVector(MCForge.Utils.Vector3D)">
-            <summary>
-            Gets a vector where every indices has been Math.Tangented.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A tangified Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.TanVector(MCForge.Utils.Vector3S)">
-            <summary>
-            Gets a vector where every indices has been Math.Tangented.
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A tangified Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.SignVector(MCForge.Utils.Vector2S)">
-            <summary>
-            Gets a vector where every indices has been signed
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A signed Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.SignVector(MCForge.Utils.Vector2D)">
-            <summary>
-            Gets a vector where every indices has been signed
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A signed Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.SignVector(MCForge.Utils.Vector3D)">
-            <summary>
-            Gets a vector where every indices has been signed
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A signed Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.MathUtils.SignVector(MCForge.Utils.Vector3S)">
-            <summary>
-            Gets a vector where every indices has been signed
-            </summary>
-            <param name="Vector">The vector.</param>
-            <returns>A signed Vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.ColorUtils.ToColor(System.ConsoleColor)">
-            <summary>
-            Convert a console color to an ARGB color
-            </summary>
-            <param name="color">Console color to convert</param>
-            <returns>A color</returns>
-        </member>
-        <member name="M:MCForge.Utils.ColorUtils.ToConsoleColor(System.Drawing.Color)">
-            <summary>
-            Convert an ARGB color to a Win32 ConsoleColor
-            </summary>
-            <param name="color">Color to convert</param>
-            <remarks>If no ConsoleColor is found to convert, ConsoleColor.Black will be returned</remarks>
-            <returns>A converted ConsoleColor</returns>
-        </member>
-        <member name="P:MCForge.Utils.ColorUtils.DarkYellow">
-            <summary>
-            A color representing hex value CC 77 22
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.ChatEvent">
-            <summary>
-            PlayerChat event class
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.ChatEventArgs">
-            <summary>
-            PlayerChatEventArgs
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.ChatEventArgs.#ctor(System.String,System.String)">
-            <summary>
-            Creates a new instance
-            </summary>
-            <param name="message">The message</param>
-            <param name="username">The username</param>
-        </member>
-        <member name="M:MCForge.API.Events.ChatEventArgs.Cancel">
-            <summary>
-            Cancels the handling
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.ChatEventArgs.Allow">
-            <summary>
-            Allows the handling
-            </summary>
-        </member>
-        <member name="M:MCForge.API.Events.ChatEventArgs.Equals(MCForge.API.Events.ChatEventArgs)">
-            <summary>
-            Compares equality (ICancelable and IStoppable are not part of the comparison)
-            </summary>
-            <param name="other">The value to be compared to.</param>
-            <returns>Whether they are equal or not.</returns>
-        </member>
-        <member name="M:MCForge.API.Events.ChatEventArgs.Clone">
-            <summary>
-            Creates a new instance
-            </summary>
-            <returns>A new instance</returns>
-        </member>
-        <member name="P:MCForge.API.Events.ChatEventArgs.Message">
-            <summary>
-            Gets or sets the message
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.ChatEventArgs.Username">
-            <summary>
-            Gets or sets the Username
-            </summary>
-        </member>
-        <member name="P:MCForge.API.Events.ChatEventArgs.Canceled">
-            <summary>
-            Whether or not the handling should be canceled
-            </summary>
-        </member>
-        <member name="M:MCForge.Utils.Vector3S.PathTo(MCForge.Utils.Vector3S)">
-            <summary>
-            Creates a path to another vector
-            </summary>
-            <param name="vectorTo">The vector to.</param>
-            <returns>An enumeration of a path from a vector to a vector</returns>
-        </member>
-        <member name="M:MCForge.Utils.Vector3S.Box(MCForge.Utils.Vector3S)">
-            <summary>
-            Boxes the specified vector.
-            </summary>
-            <param name="a">the vector to</param>
-            <returns>a box like enumerator</returns>
-        </member>
-        <member name="T:MCForge.Utils.StringUtils">
-            <summary>
-            Set of utils for manipulating strings
-            </summary>
-        </member>
-        <member name="M:MCForge.Utils.StringUtils.CapitolizeFirstChar(System.String)">
-            <summary>
-            Change your string's first character to uppercase 
-            </summary>
-            <param name="StringToChange">The String message to change</param>
-            <returns>String Version of CapitolizeFirstChar</returns>
-        </member>
-        <member name="M:MCForge.Utils.StringUtils.TitleCase(System.String)">
-            <summary>
-            Change the specified string to title case
-            EX: String = "foo bar"
-            Returns "Foo Bar"
-            </summary>
-            <param name="StringToChange">The string to change</param>
-            <returns>A string version of TitleCase</returns>
-        </member>
-        <member name="M:MCForge.Utils.StringUtils.ContainsBadChar(System.String)">
-            <summary>
-            sdfsdf
-            </summary>
-            <param name="message">sdfdsf</param>
-            <returns>sdfsdf</returns>
+            <param name="pdb">The comparing PDB</param>
+            <returns>returns a comparison of the usernames</returns>
         </member>
         <member name="T:MCForge.Utils.MiscUtils">
             <summary>
@@ -2036,6 +1099,601 @@
             <param name="stringToClean">The string to clean.</param>
             <returns>A cleaned string</returns>
         </member>
+        <member name="M:MCForge.Utils.Settings.ExtraSettings.GetSettingArray(System.String)">
+            <summary>
+            Gets a setting
+            </summary>
+            <param name="key">The key</param>
+            <returns>The setting values, use [0] at end if it only has 1 value</returns>
+        </member>
+        <member name="M:MCForge.Utils.Settings.ExtraSettings.GetSetting(System.String)">
+            <summary>
+            Gets a setting
+            </summary>
+            <param name="key">The key</param>
+            <returns>The setting value</returns>
+            <remarks>Returns the first value if multiple values are present</remarks>
+        </member>
+        <member name="M:MCForge.Utils.Settings.ExtraSettings.GetSettingInt(System.String)">
+            <summary>
+            Gets a setting
+            </summary>
+            <param name="key">The key</param>
+            <returns>The setting value specified by the key, or -1 if the setting is not found or could not be parsed</returns>
+        </member>
+        <member name="M:MCForge.Utils.Settings.ExtraSettings.GetSettingBoolean(System.String)">
+            <summary>
+            Gets a setting
+            </summary>
+            <param name="key">The key</param>
+            <returns>The setting value specified by the key, or false if the setting is not found</returns>
+        </member>
+        <member name="M:MCForge.Utils.Settings.ExtraSettings.SetSetting(System.String,System.String,System.String[])">
+            <summary>
+            Set the setting
+            </summary>
+            <param name="key">key to save value to</param>
+            <param name="description">Write a description (optional)</param>
+            <param name="values">for each string in values, it will be seperated by a comma ','</param>
+            <remarks>If the setting does not exist, it will create a new one</remarks>
+        </member>
+        <member name="M:MCForge.Utils.Settings.ExtraSettings.SetSetting(System.String,System.Int32,System.String)">
+            <summary>
+            Set the setting
+            </summary>
+            <param name="key">key to save value to</param>
+            <param name="value">value (or multiple values sperated by a comma ',') to set setting to</param>
+            <param name="description">Write a description (optional)</param>
+            <remarks>If the setting does not exist, it will create a new one</remarks>
+        </member>
+        <member name="M:MCForge.Utils.Settings.ExtraSettings.SetSetting(System.String,System.Boolean,System.String)">
+            <summary>
+            Set the setting
+            </summary>
+            <param name="key">key to save value to</param>
+            <param name="value">value to set setting to</param>
+            <param name="description">Write a description (optional)</param>
+            <remarks>If the setting does not exist, it will create a new one</remarks>
+        </member>
+        <member name="M:MCForge.Utils.Settings.ExtraSettings.LoadSettings">
+            <summary>
+            Loads all the settings into the memory, if no properties file is found it will return an empty list
+            </summary>
+            <returns>A list of setting nodes</returns>
+        </member>
+        <member name="T:MCForge.Groups.PermissionLevel">
+            <summary>
+            All the default permission values
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MCForge.Groups.PermissionLevel.Guest">
+            <summary>
+            Guest permission
+            <value>0</value>
+            </summary>
+        </member>
+        <member name="F:MCForge.Groups.PermissionLevel.Builder">
+            <summary>
+            Builder permission
+            <value>30</value>
+            </summary>
+        </member>
+        <member name="F:MCForge.Groups.PermissionLevel.AdvBuilder">
+            <summary>
+            Advanced Builder permission
+            <value>50</value>
+            </summary>
+        </member>
+        <member name="F:MCForge.Groups.PermissionLevel.Operator">
+            <summary>
+            Operator permission
+            <value>80</value>
+            </summary>
+        </member>
+        <member name="F:MCForge.Groups.PermissionLevel.SuperOP">
+            <summary>
+            Super Operator permission
+            <value>100</value>
+            </summary>
+        </member>
+        <member name="F:MCForge.Groups.PermissionLevel.Owner">
+            <summary>
+            Owner permission
+            <value>120</value>
+            </summary>
+        </member>
+        <member name="T:MCForge.Groups.PlayerGroup">
+            <summary>
+            The main permission system for MCForge
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="F:MCForge.Groups.PlayerGroup.Groups">
+            <summary>
+            A list of all the available groups 
+            </summary>
+        </member>
+        <member name="F:MCForge.Groups.PlayerGroup.Players">
+            <summary>
+            A list of all the players in the group (includes offline players)
+            </summary>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MCForge.Groups.PlayerGroup"/> class. without adding it to the group list
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.add">
+            <summary>
+            Adds this instance to the list of groups ONLY use it when you initialised with PlayerGroup().
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.#ctor(System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MCForge.Groups.PlayerGroup"/> class.
+            </summary>
+            <param name="perm">The permission level of the group.</param>
+            <param name="name">The name of the group.</param>
+            <param name="colour">The colour of the group.</param>1
+            <param name="file">The filename to save the group player list in</param>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.SendMessage(System.String)">
+            <summary>
+            Sends the message to the group.
+            </summary>
+            <param name="message">The message.</param>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.CanExecute(MCForge.Interface.Command.ICommand)">
+            <summary>
+            Determines whether this instance can execute the specified command.
+            </summary>
+            <param name="command">The command.</param>
+            <returns><c>true</c> if this instance can execute the specified command; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.SaveGroup">
+            <summary>
+            Saves the group to disk.
+            </summary>
+            <returns><c>true</c> if no errors saving</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.LoadGroup">
+            <summary>
+            Loads the group from disk.
+            </summary>
+            <returns><c>true</c> if no errors when loading</returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.AddPlayer(MCForge.Entity.Player)">
+            <summary>
+            Adds the player to this group.
+            </summary>
+            <param name="p">The p.</param>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.Load">
+            <summary>
+            Loads this groups player list.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.InitDefaultGroups">
+            <summary>
+            Initializes the default groups.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.Exists(System.String)">
+            <summary>
+            Checks if the specified group exists
+            </summary>
+            <param name="name">The name.</param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.PlayerGroup.Find(System.String)">
+            <summary>
+            Finds the specified group.
+            </summary>
+            <param name="name">The name of the group.</param>
+        </member>
+        <member name="P:MCForge.Groups.PlayerGroup.Name">
+            <summary>
+            The name of the group
+            </summary>
+        </member>
+        <member name="P:MCForge.Groups.PlayerGroup.Permission">
+            <summary>
+            The permission level of the group.
+            </summary>
+        </member>
+        <member name="P:MCForge.Groups.PlayerGroup.Colour">
+            <summary>
+            The colour of the group.
+            note color == colour
+            </summary>
+        </member>
+        <member name="P:MCForge.Groups.PlayerGroup.Color">
+            <summary>
+            The color of the group.
+            note color == colour
+            </summary>
+        </member>
+        <member name="P:MCForge.Groups.PlayerGroup.MaxBlockChange">
+            <summary>
+            The maximum amount of blocks this group can change.
+            </summary>
+        </member>
+        <member name="P:MCForge.Groups.PlayerGroup.File">
+            <summary>
+            The filename to save the group list into. when setting it des not contain the "ranks/" part
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.CommandEndEvent">
+            <summary>
+            Event Class for when a command that a player called has just ended
+            <remarks>Ended = End of <see cref="T:MCForge.Interface.Command.ICommand"/> Use()</remarks>
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.CommandEndEventArgs">
+            <summary>
+            Event Class for when a command that a player called has just ended
+            <remarks>Ended = End of <see cref="T:MCForge.Interface.Command.ICommand"/> Use()</remarks>
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.CommandEndEventArgs.#ctor(MCForge.Interface.Command.ICommand,System.String[])">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="command">The command</param>
+            <param name="args">The arguments that was passed to the command</param>
+        </member>
+        <member name="P:MCForge.API.Events.CommandEndEventArgs.Command">
+            <summary>
+            Gets the the command that was used
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.CommandEndEventArgs.Args">
+            <summary>
+            Gets the argument that was used in the command.
+            </summary>
+        </member>
+        <member name="T:MCForge.World.PerlinNoise">
+            <summary>
+            Implementation of 3D Perlin Noise after Ken Perlin's reference implementation.
+            </summary>
+        </member>
+        <member name="T:MCForge.World.NoiseUtils">
+            <summary>
+            6
+            </summary>
+        </member>
+        <member name="M:MCForge.World.NoiseUtils.IsOnBounds(System.Double[0:,0:],System.Double,System.Double)">
+            <summary>
+            Determines whether the location [is on bounds] in [the specified big map].
+            </summary>
+            <param name="bigMap">The big map.</param>
+            <param name="x">The x.</param>
+            <param name="y">The y.</param>
+            <returns>
+              <c>true</c> if [is on bounds] [the specified big map]; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:MCForge.World.NoiseUtils.IsOnBounds(System.Single[0:,0:],System.Single,System.Single)">
+            <summary>
+            Is the X and Y in the bounds of the map bigMap
+            </summary>
+            <param name="bigMap">The map to check</param>
+            <param name="x">The X cord.</param>
+            <param name="y">The Y cord.</param>
+            <returns>If true, then the position is out of bounds of the map. Otherwise it is not</returns>
+        </member>
+        <member name="T:MCForge.Utils.Logger">
+            <summary>
+            Logger Utility
+            </summary>
+        </member>
+        <member name="M:MCForge.Utils.Logger.Init">
+            <summary>
+            Initializes Logger object
+            </summary>
+            <remarks>Must be called before any of the methods are invoked</remarks>
+        </member>
+        <member name="M:MCForge.Utils.Logger.DeInit">
+            <summary>
+            De-Initializes the logger class
+            </summary>
+        </member>
+        <member name="M:MCForge.Utils.Logger.Log(System.String,MCForge.Utils.LogType)">
+            <summary>
+            Logs a message, to be grabbed by a log event handler
+            </summary>
+            <param name="message">The message to be logged</param>
+            <param name="logType">The log type</param>
+        </member>
+        <member name="M:MCForge.Utils.Logger.Log(System.String,System.Drawing.Color,System.Drawing.Color,MCForge.Utils.LogType)">
+            <summary>
+            Logs a message, to be grabbed by a log event handler
+            </summary>
+            <param name="message">The message to be logged</param>
+            <param name="textColor">Color of the text</param>
+            <param name="bgColor">Color of the background</param> 
+            <param name="logType">The log type</param>
+        </member>
+        <member name="M:MCForge.Utils.Logger.LogError(System.Exception)">
+            <summary>
+            Logs an exception, to be grabbed by a log event handler
+            </summary>
+            <param name="e">Exception to be logged</param>
+        </member>
+        <member name="E:MCForge.Utils.Logger.OnRecieveLog">
+            <summary>
+            This event is called when Logger.Log() is invoked
+            </summary>
+        </member>
+        <member name="E:MCForge.Utils.Logger.OnRecieveErrorLog">
+            <summary>
+            This event is called when Logger.LogError() is invoked
+            </summary>
+        </member>
+        <member name="T:MCForge.Utils.LogType">
+            <summary>
+            Log type for the specified message
+            </summary>
+        </member>
+        <member name="F:MCForge.Utils.LogType.Normal">
+            <summary>
+            The normal messages
+            </summary>
+        </member>
+        <member name="F:MCForge.Utils.LogType.Error">
+            <summary>
+            Error messages
+            </summary>
+        </member>
+        <member name="F:MCForge.Utils.LogType.Debug">
+            <summary>
+            Debug messages (only appears if the server is in debugging mode)
+            </summary>
+        </member>
+        <member name="F:MCForge.Utils.LogType.Warning">
+            <summary>
+            Warning messages
+            </summary>
+        </member>
+        <member name="F:MCForge.Utils.LogType.Critical">
+            <summary>
+            Critical messages
+            </summary>
+        </member>
+        <member name="T:MCForge.Utils.LogEventArgs">
+             <summary>
+            Log event where object holding the event
+            would get a string (the message)
+             </summary>
+        </member>
+        <member name="M:MCForge.Utils.LogEventArgs.#ctor(System.String,MCForge.Utils.LogType)">
+            <summary>
+            Default constructor for creating a log event
+            </summary>
+            <param name="log">Message of the log event</param>
+            <param name="logType">Type of log event</param>
+        </member>
+        <member name="M:MCForge.Utils.LogEventArgs.#ctor(System.String,MCForge.Utils.LogType,System.Drawing.Color,System.Drawing.Color)">
+            <summary>
+            Default constructor for creating a log event
+            </summary>
+            <param name="log">Message of the log event</param>
+            <param name="logType">Type of log event</param>
+            <param name="textColor">Color of the text</param>
+            <param name="bgColor">Color of the background</param>
+        </member>
+        <member name="P:MCForge.Utils.LogEventArgs.Message">
+            <summary>
+            Get or set the message of the log event
+            </summary>
+        </member>
+        <member name="P:MCForge.Utils.LogEventArgs.LogType">
+            <summary>
+            Get or set the type of log
+            </summary>
+        </member>
+        <member name="P:MCForge.Utils.LogEventArgs.TextColor">
+            <summary>
+            Get or set the color of the text
+            </summary>
+        </member>
+        <member name="P:MCForge.Utils.LogEventArgs.BackgroundColor">
+            <summary>
+            Get or set the color of the background
+            </summary>
+        </member>
+        <member name="T:MCForge.Core.HeartService.WBeat">
+            <summary>
+            The WoM heartbeat
+            </summary>
+        </member>
+        <member name="T:MCForge.Core.HeartService.Heart">
+            <summary>
+            An abstract class for custom heartbeats
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.ChatEvent">
+            <summary>
+            PlayerChat event class
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.ChatEventArgs">
+            <summary>
+            PlayerChatEventArgs
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.ChatEventArgs.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="message">The message</param>
+            <param name="username">The username</param>
+        </member>
+        <member name="M:MCForge.API.Events.ChatEventArgs.Cancel">
+            <summary>
+            Cancels the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.ChatEventArgs.Allow">
+            <summary>
+            Allows the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.ChatEventArgs.Equals(MCForge.API.Events.ChatEventArgs)">
+            <summary>
+            Compares equality (ICancelable and IStoppable are not part of the comparison)
+            </summary>
+            <param name="other">The value to be compared to.</param>
+            <returns>Whether they are equal or not.</returns>
+        </member>
+        <member name="M:MCForge.API.Events.ChatEventArgs.Clone">
+            <summary>
+            Creates a new instance
+            </summary>
+            <returns>A new instance</returns>
+        </member>
+        <member name="P:MCForge.API.Events.ChatEventArgs.Message">
+            <summary>
+            Gets or sets the message
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.ChatEventArgs.Username">
+            <summary>
+            Gets or sets the Username
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.ChatEventArgs.Canceled">
+            <summary>
+            Whether or not the handling should be canceled
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.OnSettingLoadArgs">
+            <summary>
+            Description of OnSettingLoad.
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.OnSettingLoadArgs.Cancel">
+            <summary>
+            Cancels the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.OnSettingLoadArgs.Allow">
+            <summary>
+            Allows the handling
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.OnSettingLoadArgs.setting">
+            <summary>
+            The setting that is being loaded
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.OnSettingLoadArgs.Canceled">
+            <summary>
+            Whether or not the handling should be canceled
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.Robot.TargetPlayerArgs">
+            <summary>
+            PlayerMoveEventArgs
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.Robot.TargetPlayerArgs.#ctor(MCForge.Entity.Player)">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="fromPosition">The position where the move started</param>
+        </member>
+        <member name="M:MCForge.API.Events.Robot.TargetPlayerArgs.Cancel">
+            <summary>
+            Cancels the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.Robot.TargetPlayerArgs.Allow">
+            <summary>
+            Allows the handling
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.Robot.TargetPlayerArgs.Player">
+            <summary>
+            The position where the move started
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.Robot.TargetPlayerArgs.Canceled">
+            <summary>
+            Whether or not the handling should be canceled
+            </summary>
+        </member>
+        <member name="T:MCForge.World.Generator.GeneratorTemplate">
+            <summary>
+            Templates for <see cref="T:MCForge.World.Generator.GeneratorArgs"/>
+            </summary>
+        </member>
+        <member name="M:MCForge.World.Generator.GeneratorTemplate.Hell(MCForge.World.Level)">
+            <summary>
+            Hell-ish type level
+            </summary>
+        </member>
+        <member name="T:MCForge.Core.IRC">
+            <summary>
+            IRC Class to connect to an Internet Relay Chat Server
+            </summary>
+        </member>
+        <member name="M:MCForge.Core.HeartService.Heartbeat.sendHeartbeat">
+            <summary>
+            Sends all the heartbeats.
+            </summary>
+        </member>
+        <member name="M:MCForge.Utils.FileUtils.CreateFileFromWeb(System.String,System.String)">
+            <summary>
+            Downloads  a file from the specifed website
+            </summary>
+            <param name="url">File address</param>
+            <param name="saveLocation">Location to save the file</param>
+        </member>
+        <member name="M:MCForge.Utils.FileUtils.CreateFileFromBytes(System.Byte[],System.String)">
+            <summary>
+            
+            </summary>
+            <param name="bytes"></param>
+            <param name="saveLocation"></param>
+        </member>
+        <member name="M:MCForge.Utils.FileUtils.CreateDirIfNotExist(System.String)">
+            <summary>
+            Creates a directory if it doesn't exist, will log results
+            </summary>
+        </member>
+        <member name="M:MCForge.Utils.FileUtils.CreateFileIfNotExist(System.String,System.String)">
+            <summary>
+            Creats a file if it doesnt already exist, logs results.
+            </summary>
+            <param name="fileLoc"></param>
+        </member>
+        <member name="M:MCForge.Robot.Bot.#ctor(System.String,MCForge.Utils.Vector3S,System.Byte[],MCForge.World.Level,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            A robot (entity) that appears in the world.
+            </summary>
+        </member>
+        <member name="M:MCForge.Robot.Bot.HandleBots">
+            <summary>
+            Handles bot AI
+            </summary>
+        </member>
+        <member name="P:MCForge.Robot.Bot.Player">
+            <summary>
+            Player which is assigned to the bot
+            </summary>
+        </member>
         <member name="T:MCForge.API.Events.BlockChangeEvent">
             <summary>
             PlayerBlockChange event class
@@ -2102,6 +1760,425 @@
             </summary>
         </member>
         <member name="P:MCForge.API.Events.BlockChangeEventArgs.Canceled">
+            <summary>
+            Whether or not the handling should be canceled
+            </summary>
+        </member>
+        <member name="T:MCForge.World.Generator.GeneratorArgs">
+            <summary>
+            Level Generation Arguments
+            </summary>
+        </member>
+        <member name="F:MCForge.World.Generator.GeneratorArgs.MAX_SIZE">
+            <summary>
+            A constant for the max size of a map (to be used when the size is unknown)
+            </summary>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.MinLevelGenerationHeight">
+            <summary>
+            Gets or sets the min height of the level generation.
+            </summary>
+            <value>
+            The height of the min level generation.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.MaxLevelGenerationHeight">
+            <summary>
+            Gets or sets the max height of the level generation.
+            </summary>
+            <value>
+            The height of the max level generation.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.Seed">
+            <summary>
+            Gets or sets the seed.
+            </summary>
+            <value>
+            The seed.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.MaxDepth">
+            <summary>
+            Gets or sets the max depth.
+            </summary>
+            <value>
+            The max depth.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.MinDepth">
+            <summary>
+            Gets or sets the min depth.
+            </summary>
+            <value>
+            The min depth.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.OverlayLayer">
+            <summary>
+            Gets or sets the block overlay layer.
+            </summary>
+            <value>
+            The overlay layer.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.TopLayer">
+            <summary>
+            Gets or sets the top layer of block.
+            </summary>
+            <value>
+            The top layer.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.BottomLayer">
+            <summary>
+            Gets or sets the bottom layer.
+            </summary>
+            <value>
+            The bottom layer.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.LiquidBlock">
+            <summary>
+            Gets or sets the liquid block.
+            </summary>
+            <value>
+            The liquid block.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.LiquidLine">
+            <summary>
+            Gets or sets the liquid line.
+            </summary>
+            <value>
+            The liquid line.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.UseNewNoise">
+            <summary>
+            Gets or sets a value indicating whether [use new noise].
+            </summary>
+            <value>
+              <c>true</c> if [use new noise]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.PlantTrees">
+            <summary>
+            Gets or sets a value indicating whether to [plant trees].
+            </summary>
+            <value>
+              <c>true</c> if [plant trees]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.PlantSaplings">
+            <summary>
+            Gets or sets a value indicating whether [plant saplings].
+            </summary>
+            <value>
+              <c>true</c> if [plant saplings]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.PlantFlowers">
+            <summary>
+            Gets or sets a value indicating whether [plant flowers].
+            </summary>
+            <value>
+              <c>true</c> if [plant flowers]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.PlantMushrooms">
+            <summary>
+            Gets or sets a value indicating whether [plant mushrooms].
+            </summary>
+            <value>
+              <c>true</c> if [plant mushrooms]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.Amplitude">
+            <summary>
+            Gets or sets the amplitude.
+            </summary>
+            <value>
+            The amplitude.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.WaveFrequency">
+            <summary>
+            Gets or sets the wave frequency.
+            </summary>
+            <value>
+            The wave frequency.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.MoutainOctaves">
+            <summary>
+            Gets or sets the moutain octaves.
+            </summary>
+            <value>
+            The moutain octaves.
+            </value>
+        </member>
+        <member name="P:MCForge.World.Generator.GeneratorArgs.Persistence">
+            <summary>
+            Gets or sets the persistence.
+            </summary>
+            <value>
+            The persistence.
+            </value>
+        </member>
+        <member name="M:MCForge.Interface.LoadAllDlls.LoadDLL(System.String,System.String[])">
+            <summary>
+            Load a DLL
+            </summary>
+            <param name="s">The filepath of the DLL</param>
+            <param name="args">The args to passed to the plugin OnLoad method.</param>
+        </member>
+        <member name="M:MCForge.Utils.Vector3S.PathTo(MCForge.Utils.Vector3S)">
+            <summary>
+            Creates a path to another vector
+            </summary>
+            <param name="vectorTo">The vector to.</param>
+            <returns>An enumeration of a path from a vector to a vector</returns>
+        </member>
+        <member name="M:MCForge.Utils.Vector3S.Box(MCForge.Utils.Vector3S)">
+            <summary>
+            Boxes the specified vector.
+            </summary>
+            <param name="a">the vector to</param>
+            <returns>a box like enumerator</returns>
+        </member>
+        <member name="M:MCForge.API.Events.ReceivePacketEventArgs.Cancel">
+            <summary>
+            Cancels the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.ReceivePacketEventArgs.Allow">
+            <summary>
+            Allows the handling
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.ReceivePacketEventArgs.Data">
+            <summary>
+            Data Recieved
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.ReceivePacketEventArgs.Canceled">
+            <summary>
+            Whether or not the handling should be canceled
+            </summary>
+        </member>
+        <member name="M:MCForge.World.WorldComponent.#ctor(MCForge.World.BlockComponent[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:MCForge.World.WorldComponent"/> class.
+            </summary>
+            <param name="xyz">The pieces of the component.</param>
+        </member>
+        <member name="M:MCForge.World.WorldComponent.DrawOnLevel(MCForge.World.Level,MCForge.Utils.Vector3S,System.Byte)">
+            <summary>
+            Draws the on level.
+            </summary>
+            <param name="mLevel">The level to draw on.</param>
+            <param name="startPos">The start pos.</param>
+            <param name="blockOverlay">A block to set the component as. If it is not already set</param>
+            <remarks>if the block in the component is set to 255 a block overlay will be used automaticly, no block change will occur if the block is at 254</remarks>
+        </member>
+        <member name="F:MCForge.World.WorldComponent.LetterA">
+            <summary>
+            A static component for the letter 'A' (capitolized)
+            </summary>
+        </member>
+        <member name="T:MCForge.World.BlockComponent">
+            <summary>
+            A struct containting a Block and position
+            </summary>
+        </member>
+        <member name="F:MCForge.World.BlockComponent.Block">
+            <summary>
+            The type of block
+            </summary>
+        </member>
+        <member name="F:MCForge.World.BlockComponent.Pos">
+            <summary>
+            The position
+            </summary>
+        </member>
+        <member name="M:MCForge.World.BlockComponent.#ctor(System.Byte,MCForge.Utils.Vector3S)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MCForge.World.BlockComponent"/> struct.
+            </summary>
+            <param name="block">The block.</param>
+            <param name="mVec">The position.</param>
+        </member>
+        <member name="T:MCForge.Utils.StringUtils">
+            <summary>
+            Set of utils for manipulating strings
+            </summary>
+        </member>
+        <member name="M:MCForge.Utils.StringUtils.CapitolizeFirstChar(System.String)">
+            <summary>
+            Change your string's first character to uppercase 
+            </summary>
+            <param name="StringToChange">The String message to change</param>
+            <returns>String Version of CapitolizeFirstChar</returns>
+        </member>
+        <member name="M:MCForge.Utils.StringUtils.TitleCase(System.String)">
+            <summary>
+            Change the specified string to title case
+            EX: String = "foo bar"
+            Returns "Foo Bar"
+            </summary>
+            <param name="StringToChange">The string to change</param>
+            <returns>A string version of TitleCase</returns>
+        </member>
+        <member name="M:MCForge.Utils.StringUtils.ContainsBadChar(System.String)">
+            <summary>
+            sdfsdf
+            </summary>
+            <param name="message">sdfdsf</param>
+            <returns>sdfsdf</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:MCForge.Groups.CommandPermissionOverrides.overrides" -->
+        <member name="M:MCForge.Groups.CommandPermissionOverrides.Load">
+            <summary>
+            Loads the data for the command permissions.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.CommandPermissionOverrides.SaveDefaults">
+            <summary>
+            Saves the defaults from all initialised commands.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.CommandPermissionOverrides.Save">
+            <summary>
+            Saves the permissions to file.
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:MCForge.Groups.CommandPermissionOverrides.SetPermission(MCForge.Interface.Command.ICommand,System.Byte)">
+            <summary>
+            Sets the permission of the command.
+            </summary>
+            <param name="cmd">The command to set the new position.</param>
+            <param name="newpermission">The new permission value.</param>
+            <remarks></remarks>
+        </member>
+        <member name="T:MCForge.SQL.MySQL">
+            <summary>
+            Description of MySQL.
+            </summary>
+        </member>
+        <member name="T:MCForge.SQL.ISQL">
+            <summary>
+            Description of SQL.
+            </summary>
+        </member>
+        <member name="M:MCForge.SQL.MySQL.executeQuery(System.String)">
+            <summary>
+            execute a query
+            </summary>
+            <param name="queryString">The command to execute</param>
+        </member>
+        <member name="M:MCForge.SQL.MySQL.executeQuery(System.String[])">
+            <summary>
+            Execute more than 1 command at once
+            Use this in a loop or if your going to execute more than 1 thing at a time
+            </summary>
+            <param name="queryString">The commands to execute</param>
+        </member>
+        <member name="T:MCForge.API.Events.PacketEvent">
+            <summary>
+            The PacketEvent
+            </summary>
+        </member>
+        <member name="T:MCForge.API.Events.PacketEventArgs">
+            <summary>
+            The PacketEventArgs
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.PacketEventArgs.#ctor(System.Byte[],System.Boolean,MCForge.Core.packet.types)">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="data">The packet data</param>
+            <param name="incoming">True for incoming, false for outgoing packet.</param>
+        </member>
+        <member name="M:MCForge.API.Events.PacketEventArgs.Cancel">
+            <summary>
+            Cancels the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.PacketEventArgs.Allow">
+            <summary>
+            Allows the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.PacketEventArgs.Equals(MCForge.API.Events.PacketEventArgs)">
+            <summary>
+            Compares equality (ICancelable and IStoppable are not part of the comparison)
+            </summary>
+            <param name="other">The value to be compared to.</param>
+            <returns>Whether they are equal or not.</returns>
+        </member>
+        <member name="M:MCForge.API.Events.PacketEventArgs.Clone">
+            <summary>
+            Creates a new instance
+            </summary>
+            <returns>A new instance</returns>
+        </member>
+        <member name="P:MCForge.API.Events.PacketEventArgs.Type">
+            <summary>
+            The packet type
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.PacketEventArgs.Data">
+            <summary>
+            Packet data
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.PacketEventArgs.Incoming">
+            <summary>
+            Gets the packet was incoming or is outgoing
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.PacketEventArgs.Canceled">
+            <summary>
+            Whether or not the handling should be canceled
+            </summary>
+        </member>
+        <member name="T:MCForge.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:MCForge.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:MCForge.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.CommandLoadEventArgs.Cancel">
+            <summary>
+            Cancels the handling
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.CommandLoadEventArgs.Allow">
+            <summary>
+            Allows the handling
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.CommandLoadEventArgs.GetsLoaded">
+            <summary>
+            Gets whether the command gets loaded or unloaded.
+            </summary>
+        </member>
+        <member name="P:MCForge.API.Events.CommandLoadEventArgs.Canceled">
             <summary>
             Whether or not the handling should be canceled
             </summary>
@@ -2367,51 +2444,381 @@
             Inspired from the Nether
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "F:MCForge.Groups.CommandPermissionOverrides.overrides" -->
-        <member name="M:MCForge.Groups.CommandPermissionOverrides.Load">
+        <member name="T:MCForge.Interface.Command.ICommand">
             <summary>
-            Loads the data for the command permissions.
+            Interface for Commands
+            </summary>
+        </member>
+        <member name="M:MCForge.Interface.Command.ICommand.Use(MCForge.Entity.Player,System.String[])">
+            <summary>
+            The method that will be called when a player uses this command
+            </summary>
+            <param name="p">a Player class</param>
+            <param name="args">the args of the command the player sent</param>
+        </member>
+        <member name="M:MCForge.Interface.Command.ICommand.Help(MCForge.Entity.Player)">
+            <summary>
+            The method to run when a player uses the /help command
+            </summary>
+            <param name="p">a Player instance</param>
+        </member>
+        <member name="M:MCForge.Interface.Command.ICommand.Initialize">
+            <summary>
+            The initialization of the command, you need to add command references here.
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Command.ICommand.Name">
+            <summary>
+            The name of the command
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Command.ICommand.Type">
+            <summary>
+            The type of command this is
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Command.ICommand.Author">
+            <summary>
+            The author of the command (to add multiple authors just make the string like "Merlin33069, someone else"
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Command.ICommand.Version">
+            <summary>
+            The command version
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Command.ICommand.CUD">
+            <summary>
+            Unique identifier for this plugin, will be used later to link to MCForge databases
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Command.ICommand.Permission">
+            <summary>
+            The default permission value for the command
             </summary>
             <remarks></remarks>
         </member>
-        <member name="M:MCForge.Groups.CommandPermissionOverrides.SaveDefaults">
+        <member name="T:MCForge.Core.HeartService.MBeat">
             <summary>
-            Saves the defaults from all initialised commands.
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.Groups.CommandPermissionOverrides.Save">
-            <summary>
-            Saves the permissions to file.
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.Groups.CommandPermissionOverrides.SetPermission(MCForge.Interface.Command.ICommand,System.Byte)">
-            <summary>
-            Sets the permission of the command.
-            </summary>
-            <param name="cmd">The command to set the new position.</param>
-            <param name="newpermission">The new permission value.</param>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.API.Events.ReceivePacketEventArgs.Cancel">
-            <summary>
-            Cancels the handling
+            The Minecraft Heartbeat
             </summary>
         </member>
-        <member name="M:MCForge.API.Events.ReceivePacketEventArgs.Allow">
+        <member name="T:MCForge.Interfaces.IIOProvider">
             <summary>
-            Allows the handling
+            Provides methods for admin input and output
             </summary>
         </member>
-        <member name="P:MCForge.API.Events.ReceivePacketEventArgs.Data">
+        <member name="M:MCForge.Interface.Plugin.IPlugin.OnLoad(System.String[])">
             <summary>
-            Data Recieved
+            The initialization of the plugin.
             </summary>
         </member>
-        <member name="P:MCForge.API.Events.ReceivePacketEventArgs.Canceled">
+        <member name="M:MCForge.Interface.Plugin.IPlugin.OnUnload">
             <summary>
-            Whether or not the handling should be canceled
+            The unload of a plugin.
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Plugin.IPlugin.Name">
+            <summary>
+            The name of the plugin
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Plugin.IPlugin.Author">
+            <summary>
+            The author of the plugin (to add multiple authors just make the string like "Merlin33069, someone else"
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Plugin.IPlugin.Version">
+            <summary>
+            The command version
+            </summary>
+        </member>
+        <member name="P:MCForge.Interface.Plugin.IPlugin.CUD">
+            <summary>
+            Unique identifier for this plugin, will be used later to link to McForge databases
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.ShowFirstRunScreen">
+            <summary>
+            Show the first run screen?
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.moneys">
+            <summary>
+            The name of the server currency.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.VerifyGroup">
+            <summary>
+            The miniumum rank that needs to verify.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.Verifying">
+            <summary>
+            Do people need to use /pass?
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.owner">
+            <summary>
+            The server owner.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.grieferstoneperm">
+            <summary>
+            The rank that can destroy griefer_stone without getting kicked
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.grieferstonewarns">
+            <summary>
+            The amount of griefer_stone warns player will recieve before getting kicked
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.shuttingDown">
+            <summary>
+            Get whether the server is currently shutting down
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.Started">
+            <summary>
+            Get whether the server is currently fully started or not
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.Players">
+            <summary>
+            Get the current list of online players, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.Bots">
+            <summary>
+            Get the current list of bots, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.IPBans">
+            <summary>
+            The current list of banned IP addresses. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.UsernameBans">
+            <summary>
+            The list of banned usernames. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.devs">
+            <summary>
+            The list of MCForge developers.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.reviewlist">
+            <summary>
+            List of players that need to be reviewed
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.agreed">
+            <summary>
+            List of players that agreed to the rules
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.Mainlevel">
+            <summary>
+            The main level of the server, where players spawn when they first join
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.moderation">
+            <summary>
+            Determines if the chat moderation is enabled
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.voting">
+            <summary>
+            Is the server in voting mode?
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.kickvote">
+            <summary>
+            Is it a kickvote?
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.YesVotes">
+            <summary>
+            Amount of yes votes.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.NoVotes">
+            <summary>
+            Amount of no votes.
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.kicker">
+            <summary>
+            The player who's getting, if it's /votekick
+            </summary>
+        </member>
+        <member name="F:MCForge.Core.Server.URL">
+            <summary>
+            The minecraft.net URL of the server
+            </summary>
+            
+        </member>
+        <member name="F:MCForge.Core.Server.IRC">
+            <summary>
+            The IRC client for the server
+            </summary>
+        </member>
+        <member name="M:MCForge.Core.Server.ForeachPlayer(MCForge.Core.Server.ForeachPlayerDelegate)">
+            <summary>
+            Loops through online players
+            </summary>
+            <param name="a"></param>
+        </member>
+        <member name="M:MCForge.Core.Server.AddTimedMethod(MCForge.Core.Server.TimedMethodDelegate,System.Int32,System.Int32,System.Object)">
+            <summary>
+            Add a method to be called in a specified time for a specified number of repetitions
+            </summary>
+            <param name="d">The delegate representing the method to be called</param>
+            <param name="time">The amount of milliseconds you want to wait to call this method, and to wait inbetween each calling if it repeats (note that this is rounded to 10ths of a second)</param>
+            <param name="repeat">the number of times to repeat this call</param>
+            <param name="PassBack">the object to pass back to the method that is called.</param>
+        </member>
+        <member name="M:MCForge.Core.Server.Log(System.String)">
+            <summary>
+            Write A message to the Console and the GuiLog using default (white on black) colors.
+            </summary>
+            <param name="message">The message to show</param>
+        </member>
+        <member name="M:MCForge.Core.Server.Log(System.Exception)">
+            <summary>
+            Write an error to the Console and the GuiLog using Red on black colors
+            </summary>
+            <param name="E">The error exception to write.</param>
+        </member>
+        <member name="M:MCForge.Core.Server.Log(System.String,System.ConsoleColor,System.ConsoleColor)">
+            <summary>
+            Write a message to the console and GuiLog using a specified TextColor and BackGround Color
+            </summary>
+            <param name="message">The Message to show</param>
+            <param name="TextColor">The color of the text to show</param>
+            <param name="BackgroundColor">The color behind the text.</param>
+        </member>
+        <member name="M:MCForge.Core.Server.Stop">
+            <summary>
+            Stops the server
+            </summary>
+        </member>
+        <member name="M:MCForge.Core.Server.Quit">
+            <summary>
+            Exits the server
+            </summary>
+        </member>
+        <member name="M:MCForge.Core.Server.Restart">
+            <summary>
+            Restarts the server (TODO - Mono compatible)
+            </summary>
+        </member>
+        <member name="M:MCForge.Core.Server.SaveAll">
+            <summary>
+            Saves all of the levels and groups
+            </summary>
+        </member>
+        <member name="P:MCForge.Core.Server.DefaultColor">
+            <summary>
+            The default color
+            </summary>
+        </member>
+        <member name="T:MCForge.Core.Server.TimedMethodDelegate">
+            <summary>
+            This delegate is used when a command or plugin needs to call a method after a certain amount of time
+            </summary>
+            <param name="dataPass">This delegate passes the object that was passed to it back to the method that is to be invoked</param>
+            <returns>this delegate returns an updated object for the datapass</returns>
+        </member>
+        <member name="T:MCForge.Interface.Plugin.IPluginMessageViewer">
+            <summary>
+            Interface for making a plugin with a message viewer
+            </summary>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowMessage(MCForge.Entity.Player,System.String)">
+            <summary>
+            Starts showing a message.
+            </summary>
+            <param name="p">The player to show the message to.</param>
+            <param name="message">The message to show.</param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.AppendText(MCForge.Entity.Player,System.String)">
+            <summary>
+            Appends text at the end of the message.
+            </summary>
+            <param name="p">The player to append the message to</param>
+            <param name="text">The message to append.</param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowNextPage(MCForge.Entity.Player)">
+            <summary>
+            Shows the next page if possible.
+            </summary>
+            <param name="p">The player to show the next page to. </param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowPage(MCForge.Entity.Player,System.Int32)">
+            <summary>
+            Shows a selected page if possible.
+            </summary>
+            <param name="p">The player to show the page to.</param>
+            <param name="page">The page to show.</param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowNextLine(MCForge.Entity.Player)">
+            <summary>
+            Shows next line if possible.
+            </summary>
+            <param name="p">The player to show the line to.</param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowPreviousPage(MCForge.Entity.Player)">
+            <summary>
+            Shows previous page if possible.
+            </summary>
+            <param name="p">The player to show the page to.</param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.ShowPreviousLine(MCForge.Entity.Player)">
+            <summary>
+            Shows previous line if possible.
+            </summary>
+            <param name="p">The player to show the line to.</param>
+        </member>
+        <member name="M:MCForge.Interface.Plugin.IPluginMessageViewer.Stop(MCForge.Entity.Player)">
+            <summary>
+            Stops showing the message.
+            </summary>
+            <param name="p">The player to stop showing the message to.</param>
+        </member>
+        <member name="T:MCForge.API.Events.EventRegisterArgs">
+            <summary>
+            The EventRegister EventArgs
+            </summary>
+        </member>
+        <member name="M:MCForge.API.Events.EventRegisterArgs.#ctor(System.Type,System.Type,System.Delegate,System.Boolean)">
+            <summary>
+            Creates a new instance
+            </summary>
+            <param name="senderType">The type of the sender</param>
+            <param name="argsType">The type of the arguments</param>
+            <param name="method">The method</param>
+            <param name="registering">Whether the method gets regestered (true) or unregistered (false)</param>
+        </member>
+        <member name="F:MCForge.API.Events.EventRegisterArgs.SenderType">
+            <summary>
+            The type of the sender
+            </summary>
+        </member>
+        <member name="F:MCForge.API.Events.EventRegisterArgs.ArgsType">
+            <summary>
+            The type of the arguments
+            </summary>
+        </member>
+        <member name="F:MCForge.API.Events.EventRegisterArgs.Method">
+            <summary>
+            The method
+            </summary>
+        </member>
+        <member name="F:MCForge.API.Events.EventRegisterArgs.Registering">
+            <summary>
+            Whether the method gets regestered (true) or unregistered (false)
             </summary>
         </member>
         <member name="T:MCForge.World.Generator.LevelGenerator">
@@ -2592,428 +2999,51 @@
             Notch's version of a small tree
             </summary>
         </member>
-        <member name="M:MCForge.Interface.Plugin.Plugin.GetNames">
+        <member name="T:MCForge.SQL.SQLite">
             <summary>
-            Get the names of all plugins
+            Description of SQLite.
             </summary>
-            <returns>The names of all plugins</returns>
         </member>
-        <member name="M:MCForge.Interface.Plugin.Plugin.unload(System.String,System.Boolean)">
+        <member name="T:MCForge.API.Events.DataSavedEventArgs">
             <summary>
-            Unloads a plugin
+            PlayerBlockChangeEventArgs
             </summary>
-            <param name="name">The name of the plugin to unload</param>
-            <param name="ignoreCase">Wheter or not to ignore the case. (default true)</param>
-            <returns>Wheter or not the plugin is unloaded</returns>
         </member>
-        <member name="M:MCForge.Interface.Plugin.Plugin.reload(System.String,System.Boolean)">
+        <member name="T:MCForge.API.Events.ConnectionEvent">
             <summary>
-            Reload one or all unloaded plugins.
+            PlayerConnection event class
             </summary>
-            <param name="name">The name of the plugin to load, or an empty string to load all plugins</param>
-            <param name="ignoreCase">Whether the case of the name gets ignored or not</param>
-            <returns></returns>
         </member>
-        <member name="M:MCForge.Interface.Plugin.Plugin.AddReference(MCForge.Interface.Plugin.IPlugin)">
+        <member name="T:MCForge.API.Events.ConnectionEventArgs">
             <summary>
-            Add an array of references to your command here
+            PlayConnectionEventArgs
             </summary>
-            <param name="plugin">The plugin d that this reference... references, you should most likely use 'this'</param>    
         </member>
-        <member name="M:MCForge.Interface.Plugin.Plugin.getByInterface(System.String)">
+        <member name="M:MCForge.API.Events.ConnectionEventArgs.#ctor(System.Boolean)">
             <summary>
-            Gets a plugin by interface.
+            Creates a new instance
             </summary>
-            <param name="name">The name of the interface</param>
-            <returns></returns>
+            <param name="connected">Whether the player is connected or not</param>
         </member>
-        <member name="F:MCForge.Interface.Plugin.Plugin.OnPluginLoad">
+        <member name="M:MCForge.API.Events.ConnectionEventArgs.Cancel">
             <summary>
-            Gets called when a plugin gets loaded.
+            Cancels the handling
             </summary>
         </member>
-        <member name="F:MCForge.Interface.Plugin.Plugin.OnPluginUnload">
+        <member name="M:MCForge.API.Events.ConnectionEventArgs.Allow">
             <summary>
-            Gets called when a plugin gets unloaded.
+            Allows the handling
             </summary>
         </member>
-        <member name="M:MCForge.Utils.Settings.ExtraSettings.GetSettingArray(System.String)">
+        <member name="P:MCForge.API.Events.ConnectionEventArgs.Connected">
             <summary>
-            Gets a setting
+            Whether the player is connected or not
             </summary>
-            <param name="key">The key</param>
-            <returns>The setting values, use [0] at end if it only has 1 value</returns>
         </member>
-        <member name="M:MCForge.Utils.Settings.ExtraSettings.GetSetting(System.String)">
+        <member name="P:MCForge.API.Events.ConnectionEventArgs.Canceled">
             <summary>
-            Gets a setting
+            Whether or not the handling should be canceled
             </summary>
-            <param name="key">The key</param>
-            <returns>The setting value</returns>
-            <remarks>Returns the first value if multiple values are present</remarks>
-        </member>
-        <member name="M:MCForge.Utils.Settings.ExtraSettings.GetSettingInt(System.String)">
-            <summary>
-            Gets a setting
-            </summary>
-            <param name="key">The key</param>
-            <returns>The setting value specified by the key, or -1 if the setting is not found or could not be parsed</returns>
-        </member>
-        <member name="M:MCForge.Utils.Settings.ExtraSettings.GetSettingBoolean(System.String)">
-            <summary>
-            Gets a setting
-            </summary>
-            <param name="key">The key</param>
-            <returns>The setting value specified by the key, or false if the setting is not found</returns>
-        </member>
-        <member name="M:MCForge.Utils.Settings.ExtraSettings.SetSetting(System.String,System.String,System.String[])">
-            <summary>
-            Set the setting
-            </summary>
-            <param name="key">key to save value to</param>
-            <param name="description">Write a description (optional)</param>
-            <param name="values">for each string in values, it will be seperated by a comma ','</param>
-            <remarks>If the setting does not exist, it will create a new one</remarks>
-        </member>
-        <member name="M:MCForge.Utils.Settings.ExtraSettings.SetSetting(System.String,System.Int32,System.String)">
-            <summary>
-            Set the setting
-            </summary>
-            <param name="key">key to save value to</param>
-            <param name="value">value (or multiple values sperated by a comma ',') to set setting to</param>
-            <param name="description">Write a description (optional)</param>
-            <remarks>If the setting does not exist, it will create a new one</remarks>
-        </member>
-        <member name="M:MCForge.Utils.Settings.ExtraSettings.SetSetting(System.String,System.Boolean,System.String)">
-            <summary>
-            Set the setting
-            </summary>
-            <param name="key">key to save value to</param>
-            <param name="value">value to set setting to</param>
-            <param name="description">Write a description (optional)</param>
-            <remarks>If the setting does not exist, it will create a new one</remarks>
-        </member>
-        <member name="M:MCForge.Utils.Settings.ExtraSettings.LoadSettings">
-            <summary>
-            Loads all the settings into the memory, if no properties file is found it will return an empty list
-            </summary>
-            <returns>A list of setting nodes</returns>
-        </member>
-        <member name="T:MCForge.Utils.Logger">
-            <summary>
-            Logger Utility
-            </summary>
-        </member>
-        <member name="M:MCForge.Utils.Logger.#cctor">
-            <summary>
-            Initializes Logger object staticly
-            </summary>
-        </member>
-        <member name="M:MCForge.Utils.Logger.DeInit">
-            <summary>
-            De-Initializes the logger class
-            </summary>
-        </member>
-        <member name="M:MCForge.Utils.Logger.Log(System.String,MCForge.Utils.LogType)">
-            <summary>
-            Logs a message, to be grabbed by a log event handler
-            </summary>
-            <param name="message">The message to be logged</param>
-            <param name="logType">The log type</param>
-        </member>
-        <member name="M:MCForge.Utils.Logger.Log(System.String,System.Drawing.Color,System.Drawing.Color,MCForge.Utils.LogType)">
-            <summary>
-            Logs a message, to be grabbed by a log event handler
-            </summary>
-            <param name="message">The message to be logged</param>
-            <param name="textColor">Color of the text</param>
-            <param name="bgColor">Color of the background</param> 
-            <param name="logType">The log type</param>
-        </member>
-        <member name="M:MCForge.Utils.Logger.LogError(System.Exception)">
-            <summary>
-            Logs an exception, to be grabbed by a log event handler
-            </summary>
-            <param name="e">Exception to be logged</param>
-        </member>
-        <member name="M:MCForge.Utils.Logger.WriteLog(System.String)">
-            <summary>
-            Writes the log message to the log file
-            </summary>
-            <param name="log">Message to log</param>
-        </member>
-        <member name="E:MCForge.Utils.Logger.OnRecieveLog">
-            <summary>
-            This event is called when Logger.Log() is invoked
-            </summary>
-        </member>
-        <member name="E:MCForge.Utils.Logger.OnRecieveErrorLog">
-            <summary>
-            This event is called when Logger.LogError() is invoked
-            </summary>
-        </member>
-        <member name="T:MCForge.Utils.LogType">
-            <summary>
-            Log type for the specified message
-            </summary>
-        </member>
-        <member name="F:MCForge.Utils.LogType.Normal">
-            <summary>
-            The normal messages
-            </summary>
-        </member>
-        <member name="F:MCForge.Utils.LogType.Error">
-            <summary>
-            Error messages
-            </summary>
-        </member>
-        <member name="F:MCForge.Utils.LogType.Debug">
-            <summary>
-            Debug messages (only appears if the server is in debugging mode)
-            </summary>
-        </member>
-        <member name="F:MCForge.Utils.LogType.Warning">
-            <summary>
-            Warning messages
-            </summary>
-        </member>
-        <member name="F:MCForge.Utils.LogType.Critical">
-            <summary>
-            Critical messages
-            </summary>
-        </member>
-        <member name="T:MCForge.Utils.LogEventArgs">
-             <summary>
-            Log event where object holding the event
-            would get a string (the message)
-             </summary>
-        </member>
-        <member name="M:MCForge.Utils.LogEventArgs.#ctor(System.String,MCForge.Utils.LogType)">
-            <summary>
-            Default constructor for creating a log event
-            </summary>
-            <param name="log">Message of the log event</param>
-            <param name="logType">Type of log event</param>
-        </member>
-        <member name="M:MCForge.Utils.LogEventArgs.#ctor(System.String,MCForge.Utils.LogType,System.Drawing.Color,System.Drawing.Color)">
-            <summary>
-            Default constructor for creating a log event
-            </summary>
-            <param name="log">Message of the log event</param>
-            <param name="logType">Type of log event</param>
-            <param name="textColor">Color of the text</param>
-            <param name="bgColor">Color of the background</param>
-        </member>
-        <member name="P:MCForge.Utils.LogEventArgs.Message">
-            <summary>
-            Get or set the message of the log event
-            </summary>
-        </member>
-        <member name="P:MCForge.Utils.LogEventArgs.LogType">
-            <summary>
-            Get or set the type of log
-            </summary>
-        </member>
-        <member name="P:MCForge.Utils.LogEventArgs.TextColor">
-            <summary>
-            Get or set the color of the text
-            </summary>
-        </member>
-        <member name="P:MCForge.Utils.LogEventArgs.BackgroundColor">
-            <summary>
-            Get or set the color of the background
-            </summary>
-        </member>
-        <member name="T:MCForge.Groups.PermissionLevel">
-            <summary>
-            All the default permission values
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="F:MCForge.Groups.PermissionLevel.Guest">
-            <summary>
-            Guest permission
-            <value>0</value>
-            </summary>
-        </member>
-        <member name="F:MCForge.Groups.PermissionLevel.Builder">
-            <summary>
-            Builder permission
-            <value>30</value>
-            </summary>
-        </member>
-        <member name="F:MCForge.Groups.PermissionLevel.AdvBuilder">
-            <summary>
-            Advanced Builder permission
-            <value>50</value>
-            </summary>
-        </member>
-        <member name="F:MCForge.Groups.PermissionLevel.Operator">
-            <summary>
-            Operator permission
-            <value>80</value>
-            </summary>
-        </member>
-        <member name="F:MCForge.Groups.PermissionLevel.SuperOP">
-            <summary>
-            Super Operator permission
-            <value>100</value>
-            </summary>
-        </member>
-        <member name="F:MCForge.Groups.PermissionLevel.Owner">
-            <summary>
-            Owner permission
-            <value>120</value>
-            </summary>
-        </member>
-        <member name="T:MCForge.Groups.PlayerGroup">
-            <summary>
-            The main permission system for MCForge
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="F:MCForge.Groups.PlayerGroup.Groups">
-            <summary>
-            A list of all the available groups 
-            </summary>
-        </member>
-        <member name="F:MCForge.Groups.PlayerGroup.Players">
-            <summary>
-            A list of all the players in the group (includes offline players)
-            </summary>
-        </member>
-        <member name="M:MCForge.Groups.PlayerGroup.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:MCForge.Groups.PlayerGroup"/> class. without adding it to the group list
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.Groups.PlayerGroup.add">
-            <summary>
-            Adds this instance to the list of groups ONLY use it when you initialised with PlayerGroup().
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.Groups.PlayerGroup.#ctor(System.Int32,System.String,System.String,System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:MCForge.Groups.PlayerGroup"/> class.
-            </summary>
-            <param name="perm">The permission level of the group.</param>
-            <param name="name">The name of the group.</param>
-            <param name="colour">The colour of the group.</param>1
-            <param name="file">The filename to save the group player list in</param>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.Groups.PlayerGroup.SendMessage(System.String)">
-            <summary>
-            Sends the message to the group.
-            </summary>
-            <param name="message">The message.</param>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.Groups.PlayerGroup.CanExecute(MCForge.Interface.Command.ICommand)">
-            <summary>
-            Determines whether this instance can execute the specified command.
-            </summary>
-            <param name="command">The command.</param>
-            <returns><c>true</c> if this instance can execute the specified command; otherwise, <c>false</c>.</returns>
-        </member>
-        <member name="M:MCForge.Groups.PlayerGroup.SaveGroup">
-            <summary>
-            Saves the group to disk.
-            </summary>
-            <returns><c>true</c> if no errors saving</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.Groups.PlayerGroup.LoadGroup">
-            <summary>
-            Loads the group from disk.
-            </summary>
-            <returns><c>true</c> if no errors when loading</returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.Groups.PlayerGroup.AddPlayer(MCForge.Entity.Player)">
-            <summary>
-            Adds the player to this group.
-            </summary>
-            <param name="p">The p.</param>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.Groups.PlayerGroup.Load">
-            <summary>
-            Loads this groups player list.
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.Groups.PlayerGroup.InitDefaultGroups">
-            <summary>
-            Initializes the default groups.
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.Groups.PlayerGroup.Exists(System.String)">
-            <summary>
-            Checks if the specified group exists
-            </summary>
-            <param name="name">The name.</param>
-            <returns></returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:MCForge.Groups.PlayerGroup.Find(System.String)">
-            <summary>
-            Finds the specified group.
-            </summary>
-            <param name="name">The name of the group.</param>
-        </member>
-        <member name="P:MCForge.Groups.PlayerGroup.Name">
-            <summary>
-            The name of the group
-            </summary>
-        </member>
-        <member name="P:MCForge.Groups.PlayerGroup.Permission">
-            <summary>
-            The permission level of the group.
-            </summary>
-        </member>
-        <member name="P:MCForge.Groups.PlayerGroup.Colour">
-            <summary>
-            The colour of the group.
-            note color == colour
-            </summary>
-        </member>
-        <member name="P:MCForge.Groups.PlayerGroup.Color">
-            <summary>
-            The color of the group.
-            note color == colour
-            </summary>
-        </member>
-        <member name="P:MCForge.Groups.PlayerGroup.MaxBlockChange">
-            <summary>
-            The maximum amount of blocks this group can change.
-            </summary>
-        </member>
-        <member name="P:MCForge.Groups.PlayerGroup.File">
-            <summary>
-            The filename to save the group list into. when setting it des not contain the "ranks/" part
-            </summary>
-        </member>
-        <member name="T:MCForge.SQL.MySQL">
-            <summary>
-            Description of MySQL.
-            </summary>
-        </member>
-        <member name="M:MCForge.SQL.MySQL.executeQuery(System.String)">
-            <summary>
-            execute a query
-            </summary>
-            <param name="queryString">The command to execute</param>
-        </member>
-        <member name="M:MCForge.SQL.MySQL.executeQuery(System.String[])">
-            <summary>
-            Execute more than 1 command at once
-            Use this in a loop or if your going to execute more than 1 thing at a time
-            </summary>
-            <param name="queryString">The commands to execute</param>
         </member>
         <member name="T:MCForge.Utils.Settings.ServerSettings">
             <summary>
@@ -3130,47 +3160,22 @@
             A simple class housing information of a setting key, value, and description
             </summary>
         </member>
-        <member name="M:MCForge.Utils.FileUtils.CreateFileFromWeb(System.String,System.String)">
-            <summary>
-            Downloads  a file from the specifed website
-            </summary>
-            <param name="url">File address</param>
-            <param name="saveLocation">Location to save the file</param>
-        </member>
-        <member name="M:MCForge.Utils.FileUtils.CreateFileFromBytes(System.Byte[],System.String)">
-            <summary>
-            
-            </summary>
-            <param name="bytes"></param>
-            <param name="saveLocation"></param>
-        </member>
-        <member name="M:MCForge.Utils.FileUtils.CreateDirIfNotExist(System.String)">
-            <summary>
-            Creates a directory if it doesn't exist, will log results
-            </summary>
-        </member>
-        <member name="M:MCForge.Utils.FileUtils.CreateFileIfNotExist(System.String,System.String)">
-            <summary>
-            Creats a file if it doesnt already exist, logs results.
-            </summary>
-            <param name="fileLoc"></param>
-        </member>
-        <member name="M:MCForge.API.Events.CommandLoadEventArgs.Cancel">
+        <member name="M:MCForge.API.Events.PluginLoadEventArgs.Cancel">
             <summary>
             Cancels the handling
             </summary>
         </member>
-        <member name="M:MCForge.API.Events.CommandLoadEventArgs.Allow">
+        <member name="M:MCForge.API.Events.PluginLoadEventArgs.Allow">
             <summary>
             Allows the handling
             </summary>
         </member>
-        <member name="P:MCForge.API.Events.CommandLoadEventArgs.GetsLoaded">
+        <member name="P:MCForge.API.Events.PluginLoadEventArgs.GetsLoaded">
             <summary>
             Gets whether the command gets loaded or unloaded.
             </summary>
         </member>
-        <member name="P:MCForge.API.Events.CommandLoadEventArgs.Canceled">
+        <member name="P:MCForge.API.Events.PluginLoadEventArgs.Canceled">
             <summary>
             Whether or not the handling should be canceled
             </summary>
@@ -3215,16 +3220,6 @@
         <member name="P:MCForge.API.Events.CommandEventArgs.Canceled">
             <summary>
             Whether or not the handling should be canceled
-            </summary>
-        </member>
-        <member name="T:MCForge.Core.HeartService.WBeat">
-            <summary>
-            The WoM heartbeat
-            </summary>
-        </member>
-        <member name="T:MCForge.API.Events.DataSavedEventArgs">
-            <summary>
-            PlayerBlockChangeEventArgs
             </summary>
         </member>
     </members>

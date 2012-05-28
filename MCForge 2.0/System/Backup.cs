@@ -12,13 +12,13 @@ namespace MCForge.Core {
     public class Backup {
 
         internal static string DateFormat {
-            get { return _lastTime.ToString( "dd-MM-yyyy" ); }
+            get { return _lastTime.ToString("dd-MM-yyyy"); }
         }
 
         private static DateTime _lastTime;
         private static Timer _timer;
 
-        public static void BackupAll ( ) {
+        public static void BackupAll() {
             CheckDirs();
 
             BackupLevels();
@@ -26,57 +26,56 @@ namespace MCForge.Core {
             BackupGroups();
         }
 
-        public static void BackupLevels ( ) {
+        public static void BackupLevels() {
             CheckDirs();
 
-            foreach ( var level in Level.Levels ) {
-                if ( !level.BackupLevel )
+            foreach (var level in Level.Levels) {
+                if (!level.BackupLevel)
                     continue;
 
-                BackupLevel( level );
+                BackupLevel(level);
             }
         }
 
-        public static void BackupGroups ( ) {
+        public static void BackupGroups() {
             CheckDirs();
         }
 
-        public static void BackupLogs ( ) {
+        public static void BackupLogs() {
             CheckDirs();
 
-            if ( File.Exists( FileUtils.LogsPath + Logger.DateFormat ) )
-                File.Copy( FileUtils.LogsPath + Logger.DateFormat, FileUtils.BackupsPath + DateFormat + "-backup/" +  DateTime.Now.ToString("hhmmss")+ "logs.log" );
+            if (File.Exists(FileUtils.LogsPath + Logger.DateFormat))
+                File.Copy(FileUtils.LogsPath + Logger.DateFormat, FileUtils.BackupsPath + DateFormat + "-backup/" + DateTime.Now.ToString("hhmmss") + "logs.log");
         }
 
-        public static void BackupLevel ( Level s ) {
+        public static void BackupLevel(Level s) {
             CheckDirs();
 
-            if ( File.Exists( FileUtils.LevelsPath + s.Name + ".lvl" ) ) {
-                File.Copy( FileUtils.LevelsPath + s.Name + ".lvl", "levels/" + DateTime.Now.ToString("hhmmss")+ s.Name + ".lvl" );
+            if (File.Exists(FileUtils.LevelsPath + s.Name + ".lvl")) {
+                File.Copy(FileUtils.LevelsPath + s.Name + ".lvl", "levels/" + DateTime.Now.ToString("hhmmss") + s.Name + ".lvl");
             }
         }
 
-        public static void CheckDirs ( ) {
-            if ( _lastTime.Day != DateTime.Now.Day )
+        public static void CheckDirs() {
+            if (_lastTime.Day != DateTime.Now.Day)
                 return;
 
             _lastTime = DateTime.Now;
-            FileUtils.CreateDirIfNotExist( FileUtils.BackupsPath + DateFormat + "-backup" );
+            FileUtils.CreateDirIfNotExist(FileUtils.BackupsPath + DateFormat + "-backup");
         }
 
-        public static void StartBackup ( ) {
-            if ( !ServerSettings.GetSettingBoolean( "BackupFiles" ) )
+        public static void StartBackup() {
+            if (!ServerSettings.GetSettingBoolean("BackupFiles"))
                 return;
 
-            _timer = new Timer( ServerSettings.GetSettingInt( "BackupInterval" )  * 1000);
-            _timer.Start();
-            _timer.Elapsed += ( obj, e) => {
+            _timer = new Timer(ServerSettings.GetSettingInt("BackupInterval") * 1000);
+            _timer.Elapsed += (obj, e) => {
                 BackupAll();
             };
         }
-        static Backup ( ) {
+        static Backup() {
             _lastTime = DateTime.Now;
-            FileUtils.CreateDirIfNotExist( FileUtils.BackupsPath + DateFormat + "-backup" );
+            FileUtils.CreateDirIfNotExist(FileUtils.BackupsPath + DateFormat + "-backup");
 
         }
     }

@@ -98,6 +98,52 @@ namespace MCForge.Interface {
                 }
                 catch { } //Stops loading bad DLL files
 		}
+        public static void LoadDLL(string s, string[] args, bool plugin)
+        {
+            Assembly DLLAssembly = LoadFile(s); //Prevents the dll from being in use inside windows
+            try
+            {
+                foreach (Type ClassType in DLLAssembly.GetTypes())
+                {
+                    if (ClassType.IsPublic)
+                    {
+                        if (!ClassType.IsAbstract)
+                        {
+                            if (plugin)
+                            {
+                                Type typeInterface = ClassType.GetInterface("IPlugin", true);
+                                if (typeInterface != null)
+                                {
+                                    IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
+                                    if (!Plugin.Plugin.OnPluginLoad.Call(instance, new PluginLoadEventArgs(true)).Canceled)
+                                    {
+                                        instance.OnLoad(args);
+                                        Plugin.Plugin.AddReference(instance);
+                                        Logger.Log("[Plugin]: " + instance.Name + " Initialized!", LogType.Debug);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                Type typeInterface = ClassType.GetInterface("ICommand", true);
+
+                                if (typeInterface != null)
+                                {
+                                    ICommand instance = (ICommand)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
+                                    if (!Command.Command.OnCommandLoad.Call(instance, new CommandLoadEventArgs(true)).Canceled)
+                                    {
+                                        instance.Initialize();
+                                        Logger.Log("[Command]: " + instance.Name + " Initialized!", LogType.Debug);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch { } //Stops loading bad DLL files
+        }
+
         public static void InitCommandsAndPlugins() {
             string path = Directory.GetCurrentDirectory();
             string[] DLLFiles = Directory.GetFiles(path, "*.dll");

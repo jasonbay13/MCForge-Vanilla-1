@@ -46,7 +46,7 @@ namespace MCForge.Entity {
                     if (!p.IsBeingKicked) {
                         UniversalChat(p.Color + p.Username + Server.DefaultColor + " has disconnected.");
                         p.GlobalDie();
-                    }    
+                    }
 
                     //Why is this here? this is a terrible spot for this!
                     if (Server.reviewlist.Contains(p)) {
@@ -56,9 +56,8 @@ namespace MCForge.Entity {
                             if (position == 0) { pl.SendMessage("You're next in the review queue!"); continue; }
                             pl.SendMessage(position == 1 ? "There is 1 player in front of you!" : "There are " + position + " players in front of you!");
                         }
-                    }  
+                    }                  
                     //End Rage
-
                     return;
                 }
 
@@ -170,7 +169,8 @@ namespace MCForge.Entity {
                 ConnectionEventArgs eargs = new ConnectionEventArgs(true);
                 bool cancel = OnPlayerConnect.Call(this, eargs, OnAllPlayersConnect).Canceled;
                 if (cancel) {
-                    Kick("Disconnected by event");
+                    if (IsLoggedIn)
+                        Kick("Disconnected by event");
                     return;
                 }
 
@@ -1015,13 +1015,14 @@ namespace MCForge.Entity {
             });
         }
         private void CloseConnection() {
+            if (IsBot) return;
             ConnectionEventArgs eargs = new ConnectionEventArgs(false);
             OnPlayerDisconnect.Call(this, eargs);
             OnAllPlayersDisconnect.Call(this, eargs);
 
             GlobalDie();
             Server.RemovePlayer(this);
-            if (!IsBot && IsLoggedIn)
+            if (IsLoggedIn)
             {
                 Logger.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", System.Drawing.Color.Gray, System.Drawing.Color.Black);
                 try

@@ -82,32 +82,68 @@ namespace MCForge.Interface.Plugin {
         /// <param name="ignoreCase">Whether the case of the name gets ignored or not</param>
         /// <returns></returns>
         public static int reload(string name = "", bool ignoreCase = true) {
-            List<string> paths = new List<string>();
-            paths.Add(Directory.GetCurrentDirectory());
-            if (ServerSettings.HasKey("PluginsPath"))
-                paths.Add(ServerSettings.GetSetting("PluginsPath"));
-            int ret = 0;
-            foreach (string path in paths) {
-                string[] DLLFiles = Directory.GetFiles(path, "*.DLL");
-                foreach (string s in DLLFiles) {
-                    Assembly DLLAssembly = LoadAllDlls.LoadFile(s); //Prevents the dll from being in use inside windows
-                    foreach (Type ClassType in DLLAssembly.GetTypes()) {
-                        if (ClassType.IsPublic) {
-                            if (!ClassType.IsAbstract) {
-                                Type typeInterface = ClassType.GetInterface("IPlugin", true);
-                                if (typeInterface != null) {
-                                    IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                    if (!isLoaded(instance.Name) && (name == "" || ((ignoreCase && instance.Name.ToLower() == name.ToLower()) || instance.Name == name))) {
-                                        if (!Plugin.OnPluginLoad.Call(instance, new PluginLoadEventArgs(true)).Canceled) {
-                                            instance.OnLoad(new string[] { "-reload" });
-                                            AddReference(instance);
-                                            Logger.Log("[Plugin]: " + instance.Name + " Initialized!", System.Drawing.Color.Magenta, System.Drawing.Color.Black);
-                                            ret++;
-                                        }
-                                    }
-                                }
-                            }
+            foreach (IPlugin p in Plugins.ToArray())
+            {
+                if (name != "")
+                {
+                    if (ignoreCase)
+                    {
+                        if (p.Name.ToLower() == name.ToLower())
+                        {
+                            unload(name);
+                            break;
                         }
+                    }
+                    else
+                        if (p.Name == name)
+                        {
+                            unload(name);
+                            break;
+                        }
+                }
+                else
+                {
+                    unload(p.Name);
+                    Logger.Log("Unloaded " + p.Name);
+                }
+            }
+
+            int ret = 0;
+            string path = Directory.GetCurrentDirectory();
+            string[] DLLFiles = Directory.GetFiles(path, "*.dll");
+            foreach (string s in DLLFiles)
+            {
+                ret++;
+                if (name == "")
+                    LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                else if (ignoreCase)
+                {
+                    if (s.ToLower() == name.ToLower())
+                        LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                }
+                else
+                    if (s == name)
+                        LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+            }
+            if (ServerSettings.HasKey("PluginsPath"))
+            {
+                string pluginspath = ServerSettings.GetSetting("PluginsPath");
+                if (Directory.Exists(pluginspath))
+                {
+                    DLLFiles = Directory.GetFiles(pluginspath, "*.dll");
+                    foreach (string s in DLLFiles)
+                    {
+                        if (name == "")
+                            LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                        else if (ignoreCase)
+                        {
+                            if (s.ToLower() == name.ToLower())
+                                LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                        }
+                        else
+                            if (s == name)
+                                LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                        ret++;
                     }
                 }
             }

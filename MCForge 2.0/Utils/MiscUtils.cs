@@ -22,11 +22,11 @@ namespace MCForge.Utils {
         /// <param name="dict">The dict.</param>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public static object GetIfExist<TKey, TValue> ( this Dictionary<TKey, TValue> dict, TKey key ) {
-            if ( key == null )
+        public static object GetIfExist<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key) {
+            if (key == null)
                 return null;
-            if ( dict.ContainsKey( key ) )
-                return dict[ key ];
+            if (dict.ContainsKey(key))
+                return dict[key];
             return null;
         }
 
@@ -38,9 +38,9 @@ namespace MCForge.Utils {
         /// <param name="dict">The dict.</param>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        public static void CreateIfNotExist<TKey, TValue> ( this Dictionary<TKey, TValue> dict, TKey key, TValue value ) {
-            if ( !dict.ContainsKey( key ) )
-                dict.Add( key, value );
+        public static void CreateIfNotExist<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value) {
+            if (!dict.ContainsKey(key))
+                dict.Add(key, value);
         }
 
         /// <summary>
@@ -48,9 +48,9 @@ namespace MCForge.Utils {
         /// </summary>
         /// <param name="list"></param>
         /// <returns>The string value of the list</returns>
-        public static string ListToString ( this List<string> list ) {
+        public static string ListToString(this List<string> list) {
             string ret = "";
-            foreach ( string item in list ) {
+            foreach (string item in list) {
                 ret += item + "\n";
             }
             return ret;
@@ -62,13 +62,13 @@ namespace MCForge.Utils {
         /// <param name="dict"></param>
         /// <param name="p">The player that has the data</param>
         /// <param name="key">The key to locate the value</param>
-        public static void Save ( this Dictionary<object, object> dict, Player p, object key ) {
+        public static void Save(this Dictionary<object, object> dict, Player p, object key) {
             var cleanedMessage = key.ToString().MySqlEscape();
-            if ( dict.ContainsKey( cleanedMessage ) ) {
-                if ( !p.IsInTable( cleanedMessage ) )
-                    Database.executeQuery( "INSERT INTO extra (key, value, UID) VALUES ('" + cleanedMessage + "', '" + dict[ cleanedMessage ].ToString() + "', " + p.UID + ")" );
+            if (dict.ContainsKey(cleanedMessage)) {
+                if (!p.IsInTable(cleanedMessage))
+                    Database.executeQuery("INSERT INTO extra (key, value, UID) VALUES ('" + cleanedMessage + "', '" + dict[cleanedMessage].ToString() + "', " + p.UID + ")");
                 else
-                    Database.executeQuery( "UPDATE extra SET value='" + dict[ cleanedMessage ].ToString() + "' WHERE key='" + cleanedMessage + "' AND UID=" + p.UID );
+                    Database.executeQuery("UPDATE extra SET value='" + dict[cleanedMessage].ToString() + "' WHERE key='" + cleanedMessage + "' AND UID=" + p.UID);
             }
         }
 
@@ -80,9 +80,9 @@ namespace MCForge.Utils {
         /// <param name="dict">The dict.</param>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        public static void ChangeOrCreate<TKey, TValue> ( this Dictionary<TKey, TValue> dict, TKey key, TValue value ) {
-            dict.CreateIfNotExist<TKey, TValue>( key, value );
-            dict[ key ] = value;
+        public static void ChangeOrCreate<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value) {
+            dict.CreateIfNotExist<TKey, TValue>(key, value);
+            dict[key] = value;
         }
 
         /// <summary>
@@ -94,19 +94,19 @@ namespace MCForge.Utils {
         /// <param name="key">The key of the dictionary</param>
         /// <returns>An object casted to the specified type, or null if not found</returns>
         /// <remarks>Must have a nullable type interface</remarks>
-        public static TValue Get<TKey, TValue> ( this Dictionary<TKey, TValue> dict, TKey key ) {
-            return ( TValue ) dict.GetIfExist<TKey, TValue>( key );
+        public static TValue Get<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key) {
+            return (TValue)dict.GetIfExist<TKey, TValue>(key);
         }
         /// <summary>
         /// Cleans a string for input into a database
         /// </summary>
         /// <param name="stringToClean">The string to clean.</param>
         /// <returns>A cleaned string</returns>
-        public static string MySqlEscape ( this string stringToClean ) {
-            if ( stringToClean == null ) {
+        public static string MySqlEscape(this string stringToClean) {
+            if (stringToClean == null) {
                 return null;
             }
-            return Regex.Replace( stringToClean, @"[\r\n\x00\x1a\\'""]", @"\$0" );
+            return Regex.Replace(stringToClean, @"[\r\n\x00\x1a\\'""]", @"\$0");
         }
 
         /// <summary>

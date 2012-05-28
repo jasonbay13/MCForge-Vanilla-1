@@ -24,7 +24,6 @@ using MCForge.Robot;
 using MCForge.World.Blocks;
 using MCForge.Utils;
 using System.Drawing;
-using System.ComponentModel;
 
 namespace MCForge.World {
     /// <summary>
@@ -46,18 +45,20 @@ namespace MCForge.World {
         /// <param name="x">the loops current block location (x)</param>
         /// <param name="z">the loops current block location (z)</param>
         /// <param name="y">the loops current block location (y)</param>
-        public delegate void ForEachBlockDelegateXZY ( int x, int z, int y );
+        public delegate void ForEachBlockDelegateXZY(int x, int z, int y);
         /// <summary>
         /// This delegate is used for looping through the blocks in a level in an automated fashion, and each cycle returns the position in POS format
         /// </summary>
         /// <param name="pos">the loops current block position (pos)</param>
-        public delegate void ForEachBlockDelegate ( int pos );
+        public delegate void ForEachBlockDelegate(int pos);
 
 
         public bool BackupLevel {
             get;
             set;
         }
+
+
         /// <summary>
         /// Name of the level
         /// </summary>
@@ -69,7 +70,7 @@ namespace MCForge.World {
         /// </summary>
         public int TotalBlocks {
             get {
-                if ( _TotalBlocks == 0 ) _TotalBlocks = Size.x * Size.z * Size.y;
+                if (_TotalBlocks == 0) _TotalBlocks = Size.x * Size.z * Size.y;
                 return _TotalBlocks;
             }
         }
@@ -96,10 +97,10 @@ namespace MCForge.World {
         /// </summary>
         public Dictionary<object, object> ExtraData;
 
-        private Level ( Vector3S size ) {
+        private Level(Vector3S size) {
             Size = size;
             //data = new byte[Size.x, Size.z, Size.y];
-            Data = new byte[ TotalBlocks ];
+            Data = new byte[TotalBlocks];
 
             ExtraData = new Dictionary<object, object>();
         }
@@ -113,23 +114,23 @@ namespace MCForge.World {
         /// <returns>
         /// returns the level that was created
         /// </returns>
-        public static Level CreateLevel ( Vector3S size, LevelTypes type, string name = "main" ) {
-            Level newlevel = new Level( size ) {
+        public static Level CreateLevel(Vector3S size, LevelTypes type, string name = "main") {
+            Level newlevel = new Level(size) {
                 Name = name
             };
-            switch ( type ) {
+            switch (type) {
                 case LevelTypes.Flat:
-                    var gen = new Generator.LevelGenerator( newlevel );
-                    for ( int i = newlevel.Size.y / 2; i >= 0; i-- )
-                        gen.FillPlaneXZ( i, Block.BlockList.DIRT );
-                    gen.FillPlaneXZ( newlevel.Size.y / 2, Block.BlockList.GRASS );
-                    gen.SetPosition( new Vector3S( ( short ) ( newlevel.Size.x / 2 + 1 ), ( short ) ( newlevel.Size.z / 2 + 1 ), ( short ) ( newlevel.Size.y / 2 + 1 ) ), new Vector2S() );
+                    var gen = new Generator.LevelGenerator(newlevel);
+                    for (int i = newlevel.Size.y / 2; i >= 0; i--)
+                        gen.FillPlaneXZ(i, Block.BlockList.DIRT);
+                    gen.FillPlaneXZ(newlevel.Size.y / 2, Block.BlockList.GRASS);
+                    gen.SetPosition(new Vector3S((short)(newlevel.Size.x / 2 + 1), (short)(newlevel.Size.z / 2 + 1), (short)(newlevel.Size.y / 2 + 1)), new Vector2S());
                     break;
                 case LevelTypes.Pixel:
                     newlevel.CreatePixelArtLevel();
                     break;
                 case LevelTypes.Hell:
-                    Generator.LevelGenerator mGen = new Generator.LevelGenerator( newlevel, Generator.GeneratorTemplate.Hell( newlevel ) );
+                    Generator.LevelGenerator mGen = new Generator.LevelGenerator(newlevel, Generator.GeneratorTemplate.Hell(newlevel));
                     mGen.Generate();
                     mGen.SetPosition();
                     break;
@@ -138,89 +139,89 @@ namespace MCForge.World {
             return newlevel;
         }
 
-        private void CreateFlatLevel ( ) {
+        private void CreateFlatLevel() {
             int middle = Size.y / 2;
-            for ( int x = 0; x < Size.x; ++x )
-                for ( int z = 0; z < Size.z; ++z )
-                    for ( int y = 0; y <= middle; ++y )
-                        Data[ x + z * Size.x + y * Size.x * Size.z ] = y < middle ? ( byte ) 3 : ( byte ) 2;
+            for (int x = 0; x < Size.x; ++x)
+                for (int z = 0; z < Size.z; ++z)
+                    for (int y = 0; y <= middle; ++y)
+                        Data[x + z * Size.x + y * Size.x * Size.z] = y < middle ? (byte)3 : (byte)2;
 
-            SpawnPos = new Vector3S( ( short ) ( Size.x / 2 ), ( short ) ( Size.z / 2 ), ( short ) ( Size.y ) );
-            SpawnRot = new byte[ 2 ] { 0, 0 };
+            SpawnPos = new Vector3S((short)(Size.x / 2), (short)(Size.z / 2), (short)(Size.y));
+            SpawnRot = new byte[2] { 0, 0 };
         }
 
-        private void CreatePixelArtLevel ( ) {
-            ForEachBlockXZY( ( x, z, y ) => {
-                if ( x == 0 || x == Size.x - 1 || z == 0 || z == Size.z - 1 )
-                    SetBlock( x, z, y, Block.BlockList.WHITE_CLOTH );
+        private void CreatePixelArtLevel() {
+            ForEachBlockXZY((x, z, y) => {
+                if (x == 0 || x == Size.x - 1 || z == 0 || z == Size.z - 1)
+                    SetBlock(x, z, y, Block.BlockList.WHITE_CLOTH);
 
-                if ( y == 0 )
-                    SetBlock( x, z, y, Block.BlockList.BLACK_CLOTH );
-            } );
+                if (y == 0)
+                    SetBlock(x, z, y, Block.BlockList.BLACK_CLOTH);
+            });
 
             //TODO: ^ make faster
-            SpawnPos = new Vector3S( ( short ) ( Size.x / 2 ), ( short ) ( Size.z / 2 ), ( short ) ( Size.y ) );
-            SpawnRot = new byte[ 2 ] { 0, 0 };
+            SpawnPos = new Vector3S((short)(Size.x / 2), (short)(Size.z / 2), (short)(Size.y));
+            SpawnRot = new byte[2] { 0, 0 };
         }
 
         /// <summary>
         /// Load a level.
         /// </summary>
         /// <returns>The loaded level</returns>
-        public static Level LoadLevel ( string levelName ) {
+        public static Level LoadLevel(string levelName) {
             string Name = "levels\\" + levelName + ".lvl";
-            Level finalLevel = new Level( new Vector3S( 32, 32, 32 ) );
+            Level finalLevel = new Level(new Vector3S(32, 32, 32));
             finalLevel.Name = levelName;
             try {
                 BinaryReader Binary = null;
                 try {
-                    Binary = new BinaryReader( File.Open( Name, FileMode.Open ) );
+                    Binary = new BinaryReader(File.Open(Name, FileMode.Open));
                 }
                 catch { return null; }
 
-                using ( Binary ) {
+                using (Binary) {
                     long v = Binary.ReadInt64();
-                    if ( v != 28542713840690029 ) //The magic number
+                    if (v != 28542713840690029) //The magic number
                     {
-                        Logger.Log( "Not a new MCForge Level! Attemping to load old MCForge level format!", Color.Red, Color.Black );
+                        Logger.Log("Not a new MCForge Level! Attemping to load old MCForge level format!", Color.Red, Color.Black, LogType.Debug);
                         Binary.Dispose();
-                        FileStream fs = File.OpenRead( Name );
+                        FileStream fs = File.OpenRead(Name);
                         try {
-                            GZipStream gs = new GZipStream( fs, CompressionMode.Decompress );
-                            byte[] ver = new byte[ 2 ];
-                            gs.Read( ver, 0, ver.Length );
-                            ushort version = BitConverter.ToUInt16( ver, 0 );
-                            if ( version == 1874 ) //Is a old MCForge level!
+                            GZipStream gs = new GZipStream(fs, CompressionMode.Decompress);
+                            byte[] ver = new byte[2];
+                            gs.Read(ver, 0, ver.Length);
+                            ushort version = BitConverter.ToUInt16(ver, 0);
+                            if (version == 1874) //Is a old MCForge level!
                             {
                                 #region Old MCForge Level
-                                ushort[] vars = new ushort[ 6 ];
-                                byte[] rot = new byte[ 2 ];
-                                byte[] header = new byte[ 16 ]; gs.Read( header, 0, header.Length );
+                                ushort[] vars = new ushort[6];
+                                byte[] rot = new byte[2];
+                                byte[] header = new byte[16]; gs.Read(header, 0, header.Length);
 
-                                vars[ 0 ] = BitConverter.ToUInt16( header, 0 ); //X
-                                vars[ 1 ] = BitConverter.ToUInt16( header, 2 ); //Z
-                                vars[ 2 ] = BitConverter.ToUInt16( header, 4 ); //Y
-                                vars[ 3 ] = BitConverter.ToUInt16( header, 6 ); //SpawnX
-                                vars[ 4 ] = BitConverter.ToUInt16( header, 8 ); //SpawnZ
-                                vars[ 5 ] = BitConverter.ToUInt16( header, 10 ); //SpawnY
+                                vars[0] = BitConverter.ToUInt16(header, 0); //X
+                                vars[1] = BitConverter.ToUInt16(header, 2); //Z
+                                vars[2] = BitConverter.ToUInt16(header, 4); //Y
+                                vars[3] = BitConverter.ToUInt16(header, 6); //SpawnX
+                                vars[4] = BitConverter.ToUInt16(header, 8); //SpawnZ
+                                vars[5] = BitConverter.ToUInt16(header, 10); //SpawnY
 
-                                rot[ 0 ] = header[ 12 ]; //SpawnHeading
-                                rot[ 1 ] = header[ 13 ]; //SpawnYaw
+                                rot[0] = header[12]; //SpawnHeading
+                                rot[1] = header[13]; //SpawnYaw
 
-                                finalLevel.Size = new Vector3S( ( short ) vars[ 0 ], ( short ) vars[ 1 ], ( short ) vars[ 2 ] );
+                                finalLevel.Size = new Vector3S((short)vars[0], (short)vars[1], (short)vars[2]);
 
-                                finalLevel.SpawnPos = new Vector3S( ( short ) vars[ 3 ], ( short ) vars[ 4 ], ( short ) vars[ 5 ] );
+                                finalLevel.SpawnPos = new Vector3S((short)vars[3], (short)vars[4], (short)vars[5]);
 
-                                finalLevel.SpawnRot = new byte[ 2 ] { rot[ 0 ], rot[ 1 ] };
+                                finalLevel.SpawnRot = new byte[2] { rot[0], rot[1] };
 
                                 finalLevel._TotalBlocks = finalLevel.Size.x * finalLevel.Size.z * finalLevel.Size.y;
-                                byte[] blocks = new byte[ finalLevel.Size.x * finalLevel.Size.z * finalLevel.Size.y ];
-                                gs.Read( blocks, 0, blocks.Length );
-                                finalLevel.Data = new byte[ finalLevel._TotalBlocks ];
-                                for ( int x = 0; x < finalLevel.Size.x; x++ )
-                                    for ( int y = 0; y < finalLevel.Size.y; y++ )
-                                        for ( int z = 0; z < finalLevel.Size.z; z++ )
-                                            try { finalLevel.SetBlock( x, z, y, ( byte ) OldMCForgeToNewMCForge.Convert( blocks[ finalLevel.PosToInt( ( ushort ) x, ( ushort ) z, ( ushort ) y ) ] ) ); } //Converts all custom blocks to normal blocks.
+                                byte[] blocks = new byte[finalLevel.Size.x * finalLevel.Size.z * finalLevel.Size.y];
+                                gs.Read(blocks, 0, blocks.Length);
+                                finalLevel.Data = new byte[finalLevel._TotalBlocks];
+                                for (int x = 0; x < finalLevel.Size.x; x++)
+                                    for (int y = 0; y < finalLevel.Size.y; y++)
+                                        for (int z = 0; z < finalLevel.Size.z; z++)
+                                            try { finalLevel.SetBlock(x, z, y, (byte)OldMCForgeToNewMCForge.Convert(blocks[finalLevel.PosToInt((ushort)x, (ushort)z, (ushort)y)])); } //Converts all custom blocks to normal blocks.
                                             catch { continue; }
                                 gs.Close();
                                 #endregion
@@ -232,39 +233,39 @@ namespace MCForge.World {
                     {
                         #region New MCForge Level
                         string s = Binary.ReadString();
-                        int x = Convert.ToInt32( s.Split( '@' )[ 0 ] );
-                        int y = Convert.ToInt32( s.Split( '@' )[ 1 ] );
-                        int z = Convert.ToInt32( s.Split( '@' )[ 2 ] );
-                        finalLevel.Size = new Vector3S( ( short ) x, ( short ) z, ( short ) y );
+                        int x = Convert.ToInt32(s.Split('@')[0]);
+                        int y = Convert.ToInt32(s.Split('@')[1]);
+                        int z = Convert.ToInt32(s.Split('@')[2]);
+                        finalLevel.Size = new Vector3S((short)x, (short)z, (short)y);
 
                         s = Binary.ReadString();
-                        x = Convert.ToInt32( s.Split( '!' )[ 0 ] );
-                        y = Convert.ToInt32( s.Split( '!' )[ 1 ] );
-                        z = Convert.ToInt32( s.Split( '!' )[ 2 ] );
-                        finalLevel.SpawnPos = new Vector3S( ( short ) x, ( short ) z, ( short ) y );
+                        x = Convert.ToInt32(s.Split('!')[0]);
+                        y = Convert.ToInt32(s.Split('!')[1]);
+                        z = Convert.ToInt32(s.Split('!')[2]);
+                        finalLevel.SpawnPos = new Vector3S((short)x, (short)z, (short)y);
 
                         s = Binary.ReadString();
-                        int heading = Convert.ToInt32( s.Split( '~' )[ 0 ] );
-                        int yaw = Convert.ToInt32( s.Split( '~' )[ 1 ] );
-                        finalLevel.SpawnRot = new byte[ 2 ] { ( byte ) heading, ( byte ) yaw };
+                        int heading = Convert.ToInt32(s.Split('~')[0]);
+                        int yaw = Convert.ToInt32(s.Split('~')[1]);
+                        finalLevel.SpawnRot = new byte[2] { (byte)heading, (byte)yaw };
 
                         int count = Binary.ReadInt32();
 
-                        for ( int i = 0; i < count; i++ ) //Metadata for blocks
+                        for (int i = 0; i < count; i++) //Metadata for blocks
                         {
                             string key = Binary.ReadString();
                             string value = Binary.ReadString();
-                            finalLevel.ExtraData[ key ] = value;
+                            finalLevel.ExtraData[key] = value;
                         }
 
                         finalLevel._TotalBlocks = Binary.ReadInt32();
                         int ByteLength = Binary.ReadInt32();
-                        byte[] b = Decompress( Binary.ReadBytes( ByteLength ) );
-                        finalLevel.Data = new byte[ finalLevel._TotalBlocks ];
+                        byte[] b = Decompress(Binary.ReadBytes(ByteLength));
+                        finalLevel.Data = new byte[finalLevel._TotalBlocks];
                         finalLevel.Data = b;
                         try {
                             string EOF = Binary.ReadString();
-                            if ( EOF != "EOF" ) {
+                            if (EOF != "EOF") {
                                 Binary.Dispose();
                                 return null;
                             }
@@ -277,7 +278,7 @@ namespace MCForge.World {
                 finalLevel.HandleMetaData();
                 return finalLevel;
             }
-            catch ( Exception e ) { Logger.Log( e.Message ); Logger.Log( e.StackTrace ); } return null;
+            catch (Exception e) { Logger.Log(e.Message); Logger.Log(e.StackTrace); } return null;
         }
 
 
@@ -286,25 +287,25 @@ namespace MCForge.World {
         /// in the MCForge-only binary format.
         /// </summary>
         /// <remarks>The resulting files are not compatible with the official Minecraft software.</remarks>
-        public bool SaveToBinary ( ) {
+        public bool SaveToBinary() {
             string Name = "levels\\" + this.Name + ".lvl";
-            if ( !Directory.Exists( "levels" ) ) Directory.CreateDirectory( "levels" );
-            var Binary = new BinaryWriter( File.Open( Name, FileMode.Create ) );
+            if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
+            var Binary = new BinaryWriter(File.Open(Name, FileMode.Create));
 
             try {
-                Binary.Write( 0x6567726f66636d ); //Magic Number to make sure it is a compatible file.
-                Binary.Write( Size.x + "@" + Size.y + "@" + Size.z );
-                Binary.Write( SpawnPos.x + "!" + SpawnPos.y + "!" + SpawnPos.z ); //Unused
-                Binary.Write( SpawnRot[ 0 ] + "~" + SpawnRot[ 1 ] ); //Unused
-                Binary.Write( ExtraData.Count );
-                foreach ( var pair in ExtraData ) {
-                    Binary.Write( pair.Key.ToString() );
-                    Binary.Write( pair.Value.ToString() );
+                Binary.Write(0x6567726f66636d); //Magic Number to make sure it is a compatible file.
+                Binary.Write(Size.x + "@" + Size.y + "@" + Size.z);
+                Binary.Write(SpawnPos.x + "!" + SpawnPos.y + "!" + SpawnPos.z); //Unused
+                Binary.Write(SpawnRot[0] + "~" + SpawnRot[1]); //Unused
+                Binary.Write(ExtraData.Count);
+                foreach (var pair in ExtraData) {
+                    Binary.Write(pair.Key.ToString());
+                    Binary.Write(pair.Value.ToString());
                 }
-                Binary.Write( _TotalBlocks );
-                Binary.Write( Compress( Data ).Length );
-                Binary.Write( Compress( Data ) );
-                Binary.Write( "EOF" ); //EOF makes sure the entire file saved.
+                Binary.Write(_TotalBlocks);
+                Binary.Write(Compress(Data).Length);
+                Binary.Write(Compress(Data));
+                Binary.Write("EOF"); //EOF makes sure the entire file saved.
             }
             finally {
                 Binary.Dispose();
@@ -316,11 +317,11 @@ namespace MCForge.World {
         /// loop through all the blocks in xzy running a delegated method for each block, the delegated method will be bassed coordinated in xzy format
         /// </summary>
         /// <param name="FEBD">the delegate to call on each cycle</param>
-        public void ForEachBlockXZY ( ForEachBlockDelegateXZY FEBD ) {
-            for ( int x = 0; x < Size.x; x++ ) {
-                for ( int z = 0; z < Size.z; z++ ) {
-                    for ( int y = 0; y < Size.y; y++ ) {
-                        FEBD( x, z, y );
+        public void ForEachBlockXZY(ForEachBlockDelegateXZY FEBD) {
+            for (int x = 0; x < Size.x; x++) {
+                for (int z = 0; z < Size.z; z++) {
+                    for (int y = 0; y < Size.y; y++) {
+                        FEBD(x, z, y);
                     }
                 }
             }
@@ -329,9 +330,9 @@ namespace MCForge.World {
         /// loop through all the blocks in xzy running a delegated method for each block, the delegated method will be passed coordinated in int format
         /// </summary>
         /// <param name="FEBD">the delegate to call on each cycle</param>
-        public void ForEachBlock ( ForEachBlockDelegate FEBD ) {
-            for ( int i = 0; i < Data.Length; ++i ) {
-                FEBD( i );
+        public void ForEachBlock(ForEachBlockDelegate FEBD) {
+            for (int i = 0; i < Data.Length; ++i) {
+                FEBD(i);
             }
         }
 
@@ -344,16 +345,19 @@ namespace MCForge.World {
         /// <param name="y">Location of y</param>
         /// <param name="block">Block to set</param>
         /// <param name="p">A player who doesn't need the update.</param>
-        public void BlockChange ( ushort x, ushort z, ushort y, byte block, Player p = null ) {
-            if ( y == Size.y ) return;
-            byte currentType = GetBlock( x, z, y );
+        public void BlockChange(ushort x, ushort z, ushort y, byte block, Player p = null) {
+            if (y == Size.y) return;
+            byte currentType = GetBlock(x, z, y);
 
-            if ( block == currentType ) return;
+            if (block == currentType) return;
 
-            SetBlock( x, z, y, block );
-            if ( p == null )
-                Player.GlobalBlockchange( this, x, z, y, block );
-            else p.SendBlockchangeToOthers( this, x, z, y, block );
+            SetBlock(x, z, y, block);
+            if (p == null)
+                Player.GlobalBlockchange(this, x, z, y, block);
+            else {
+                p.SendBlockchangeToOthers(this, x, z, y, block);
+                p.SendBlockChange(x, z, y, block);
+            }
 
 
 
@@ -366,8 +370,8 @@ namespace MCForge.World {
         /// <param name="vector">Position of the block</param>
         /// <param name="block">Block to set</param>
         /// <param name="p">A player who doesn't need the update.</param>
-        public void BlockChange ( Vector3D vector, byte block, Player p = null ) {
-            BlockChange( ( ushort ) vector.x, ( ushort ) vector.z, ( ushort ) vector.y, block, p );
+        public void BlockChange(Vector3D vector, byte block, Player p = null) {
+            BlockChange((ushort)vector.x, (ushort)vector.z, (ushort)vector.y, block, p);
         }
 
         /// <summary>
@@ -376,8 +380,8 @@ namespace MCForge.World {
         /// <param name="vector">Position of the block</param>
         /// <param name="block">Block to set</param>
         /// <param name="p">A player who doesn't need the update.</param>
-        public void BlockChange ( Vector3S vector, byte block, Player p = null ) {
-            BlockChange( ( ushort ) vector.x, ( ushort ) vector.z, ( ushort ) vector.y, block, p );
+        public void BlockChange(Vector3S vector, byte block, Player p = null) {
+            BlockChange((ushort)vector.x, (ushort)vector.z, (ushort)vector.y, block, p);
         }
 
         /// <summary>
@@ -389,8 +393,8 @@ namespace MCForge.World {
         /// <returns>
         ///   <c>true</c> if [is in bounds] [the specified x]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsInBounds ( int x, int z, int y ) {
-            return ( x > 0 && x < Size.x && y > 0 && y < Size.y && z > 0 && z < Size.z );
+        public bool IsInBounds(int x, int z, int y) {
+            return (x > 0 && x < Size.x && y > 0 && y < Size.y && z > 0 && z < Size.z);
         }
 
 
@@ -401,8 +405,8 @@ namespace MCForge.World {
         /// <returns>
         ///   <c>true</c> if [is in bounds] [the specified vector]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsInBounds ( Vector3S vector ) {
-            return IsInBounds( vector.x, vector.z, vector.y );
+        public bool IsInBounds(Vector3S vector) {
+            return IsInBounds(vector.x, vector.z, vector.y);
         }
 
         /// <summary>
@@ -412,18 +416,19 @@ namespace MCForge.World {
         /// <returns>
         ///   <c>true</c> if [is in bounds] [the specified vector]; otherwise, <c>false</c>.
         /// </returns>
-        public bool IsInBounds ( Vector3D vector ) {
-            return IsInBounds( ( int ) vector.x, ( int ) vector.z, ( int ) vector.y );
+        public bool IsInBounds(Vector3D vector) {
+            return IsInBounds((int)vector.x, (int)vector.z, (int)vector.y);
         }
         #region SetBlock And Overloads
-        internal void SetBlock ( Vector3S pos, byte block ) {
-            SetBlock( pos.x, pos.z, pos.y, block );
+        internal void SetBlock(Vector3S pos, byte block) {
+            SetBlock(pos.x, pos.z, pos.y, block);
         }
-        internal void SetBlock ( int x, int z, int y, byte block ) {
-            SetBlock( PosToInt( x, z, y ), block );
+        internal void SetBlock(int x, int z, int y, byte block) {
+            SetBlock(PosToInt(x, z, y), block);
         }
-        internal void SetBlock ( int pos, byte block ) {
-            Data[ pos ] = block;
+        internal void SetBlock(int pos, byte block) {
+            if (pos >= 0 && pos < Data.Length)
+                Data[pos] = block;
         }
         #endregion
         #region GetBlock and Overloads
@@ -432,8 +437,8 @@ namespace MCForge.World {
         /// </summary>
         /// <param name="pos">the pos to check and return</param>
         /// <returns>a byte that represents the blocktype at the given location</returns>
-        public byte GetBlock ( Vector3S pos ) {
-            return GetBlock( pos.x, pos.z, pos.y );
+        public byte GetBlock(Vector3S pos) {
+            return GetBlock(pos.x, pos.z, pos.y);
         }
         /// <summary>
         /// get the block at a given xzy pos
@@ -442,8 +447,8 @@ namespace MCForge.World {
         /// <param name="z">z pos to get</param>
         /// <param name="y">y pos to get</param>
         /// <returns>a byte that represents the blocktype at the given location</returns>
-        public byte GetBlock ( int x, int z, int y ) {
-            return GetBlock( PosToInt( ( ushort ) x, ( ushort ) z, ( ushort ) y ) );
+        public byte GetBlock(int x, int z, int y) {
+            return GetBlock(PosToInt((ushort)x, (ushort)z, (ushort)y));
         }
         /// <summary>
         /// get the block at a given xzy position
@@ -452,20 +457,19 @@ namespace MCForge.World {
         /// <param name="z">z pos to get</param>
         /// <param name="y">y pos to get</param>
         /// <returns>a byte that represents the blocktype at the given location</returns>
-        public byte GetBlock ( ushort x, ushort z, ushort y ) {
-            return GetBlock( PosToInt( x, z, y ) );
+        public byte GetBlock(ushort x, ushort z, ushort y) {
+            return GetBlock(PosToInt(x, z, y));
         }
         /// <summary>
         /// Get the block at a given pos in the data array
         /// </summary>
         /// <param name="pos">the pos to get the block from</param>
         /// <returns>a byte that represents the blocktype at the given location</returns>
-        public byte GetBlock ( int pos ) {
-            try {
-                return Data[ pos ];
-            }
-            catch ( Exception e ) {
-                Logger.LogError( e );
+        public byte GetBlock(int pos) {
+            if (pos >= 0 && pos < Data.Length)
+                return Data[pos];
+            else {
+                Logger.Log("Out of bounds in Level.GetBlock(int pos)", LogType.Error);
                 return Block.BlockList.UNKNOWN; //Unknown Block
             }
         }
@@ -478,13 +482,13 @@ namespace MCForge.World {
         /// <param name="z">Z position to convert</param>
         /// <param name="y">Y position to convert</param>
         /// <returns>an integer representing the given block position in the DATA array above.</returns>
-        public int PosToInt ( int x, int z, int y ) {
-            if ( x < 0 ) { return -1; }
-            if ( x >= Size.x ) { return -1; }
-            if ( y < 0 ) { return -1; }
-            if ( y >= Size.y ) { return -1; }
-            if ( z < 0 ) { return -1; }
-            if ( z >= Size.z ) { return -1; }
+        public int PosToInt(int x, int z, int y) {
+            if (x < 0) { return -1; }
+            if (x >= Size.x) { return -1; }
+            if (y < 0) { return -1; }
+            if (y >= Size.y) { return -1; }
+            if (z < 0) { return -1; }
+            if (z >= Size.z) { return -1; }
             return x + z * Size.x + y * Size.x * Size.z;
         }
 
@@ -493,12 +497,12 @@ namespace MCForge.World {
         /// </summary>
         /// <param name="pos">The int pos to convert</param>
         /// <returns>a 3 dimensional representation of the block position</returns>
-        public Vector3S IntToPos ( int pos ) {
-            short y = ( short ) ( pos / Size.x / Size.z ); pos -= y * Size.x * Size.z;
-            short z = ( short ) ( pos / Size.x ); pos -= z * Size.x;
-            short x = ( short ) pos;
+        public Vector3S IntToPos(int pos) {
+            short y = (short)(pos / Size.x / Size.z); pos -= y * Size.x * Size.z;
+            short z = (short)(pos / Size.x); pos -= z * Size.x;
+            short x = (short)pos;
 
-            return new Vector3S( x, z, y );
+            return new Vector3S(x, z, y);
         }
         /// <summary>
         /// Return the position (int) relative to a given block position (int) given an offset of xzy
@@ -508,7 +512,7 @@ namespace MCForge.World {
         /// <param name="z">the offset along the z axis</param>
         /// <param name="y">the offset along the y axis</param>
         /// <returns>returns an int representing the offset block location in the data array</returns>
-        public int IntOffset ( int pos, int x, int z, int y ) {
+        public int IntOffset(int pos, int x, int z, int y) {
             return pos + x + z * Size.x + y * Size.x * Size.z;
         }
 
@@ -537,10 +541,10 @@ namespace MCForge.World {
         /// <param name="input">The byte array.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-        private byte[] Compress ( byte[] input ) {
-            using ( MemoryStream ms = new MemoryStream() ) {
-                using ( GZipStream deflateStream = new GZipStream( ms, CompressionMode.Compress ) ) {
-                    deflateStream.Write( input, 0, input.Length );
+        private byte[] Compress(byte[] input) {
+            using (MemoryStream ms = new MemoryStream()) {
+                using (GZipStream deflateStream = new GZipStream(ms, CompressionMode.Compress)) {
+                    deflateStream.Write(input, 0, input.Length);
                 }
                 return ms.ToArray();
             }
@@ -552,19 +556,19 @@ namespace MCForge.World {
         /// <param name="gzip">The byte array.</param>
         /// <returns></returns>
         /// <remarks></remarks>
-        private static byte[] Decompress ( byte[] gzip ) {
-            using ( GZipStream stream = new GZipStream( new MemoryStream( gzip ), CompressionMode.Decompress ) ) {
+        private static byte[] Decompress(byte[] gzip) {
+            using (GZipStream stream = new GZipStream(new MemoryStream(gzip), CompressionMode.Decompress)) {
                 const int size = 4096;
-                byte[] buffer = new byte[ size ];
-                using ( MemoryStream memory = new MemoryStream() ) {
+                byte[] buffer = new byte[size];
+                using (MemoryStream memory = new MemoryStream()) {
                     int count = 0;
                     do {
-                        count = stream.Read( buffer, 0, size );
-                        if ( count > 0 ) {
-                            memory.Write( buffer, 0, count );
+                        count = stream.Read(buffer, 0, size);
+                        if (count > 0) {
+                            memory.Write(buffer, 0, count);
                         }
                     }
-                    while ( count > 0 );
+                    while (count > 0);
                     return memory.ToArray();
                 }
             }
@@ -574,13 +578,13 @@ namespace MCForge.World {
         /// Finds the specified level.
         /// </summary>
         /// <param name="LevelName">Name of the level.</param>
-        public static Level FindLevel ( string LevelName ) {
+        public static Level FindLevel(string LevelName) {
             try {
-                return Levels.Find( e => {
+                return Levels.Find(e => {
                     return e.Name.ToLower() == LevelName.ToLower();
-                } );
+                });
             }
-            catch ( Exception e ) { Logger.LogError( e ); }
+            catch (Exception e) { Logger.LogError(e); }
             return null;
         }
 
@@ -588,42 +592,40 @@ namespace MCForge.World {
         /// Adds the level to the level list.
         /// </summary>
         /// <param name="level">Name of the level.</param>
-        public static void AddLevel ( Level level ) {
-            if ( Levels.Contains( level ) )
+        public static void AddLevel(Level level) {
+            if (Levels.Contains(level))
                 return;
 
-            Levels.Add( level );
+            Levels.Add(level);
         }
 
         /// <summary>
         /// Handles the extra data for the level
         /// </summary>
-        public void HandleMetaData ( ) {
-            if ( ExtraData.Count > 0 ) {
+        public void HandleMetaData() {
+            if (ExtraData.Count > 0) {
                 try {
-                    foreach ( var pair in ExtraData ) {
-                        if ( pair.Key.ToString().StartsWith( "Bot" ) ) //Load bots
+                    foreach (var pair in ExtraData) {
+                        if (pair.Key.ToString().StartsWith("Bot")) //Load bots
                         {
-                            string[] StringSplit = pair.Value.ToString().Split( ' ' );
-                            if ( StringSplit.Length == 9 ) {
-                                ushort x = Convert.ToUInt16( StringSplit[ 4 ] );
-                                ushort y = Convert.ToUInt16( StringSplit[ 5 ] );
-                                ushort z = Convert.ToUInt16( StringSplit[ 6 ] );
-                                Bot TemporaryBot = new Bot( StringSplit[ 0 ],
-                                    new Vector3S( x, z, y ),
-                                    new byte[] { Convert.ToByte( StringSplit[ 7 ] ), Convert.ToByte( StringSplit[ 8 ] ) }, this,
-                                    Convert.ToBoolean( StringSplit[ 1 ] ), Convert.ToBoolean( StringSplit[ 2 ] ), Convert.ToBoolean( StringSplit[ 3 ] ) );
+                            string[] StringSplit = pair.Value.ToString().Split(' ');
+                            if (StringSplit.Length == 9) {
+                                ushort x = Convert.ToUInt16(StringSplit[4]);
+                                ushort y = Convert.ToUInt16(StringSplit[5]);
+                                ushort z = Convert.ToUInt16(StringSplit[6]);
+                                Bot TemporaryBot = new Bot(StringSplit[0],
+                                    new Vector3S(x, z, y),
+                                    new byte[] { Convert.ToByte(StringSplit[7]), Convert.ToByte(StringSplit[8]) }, this,
+                                    Convert.ToBoolean(StringSplit[1]), Convert.ToBoolean(StringSplit[2]), Convert.ToBoolean(StringSplit[3]));
                             }
                         }
                     }
                 }
-                catch ( Exception e ) { Logger.LogError( e ); }
+                catch (Exception e) { Logger.LogError(e); }
             }
         }
         public override string ToString ( ) {
             return Name;
         }
     }
-
-  
 }

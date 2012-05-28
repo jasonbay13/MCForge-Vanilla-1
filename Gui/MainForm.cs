@@ -41,9 +41,10 @@ namespace MCForge.Gui {
             pluginManager.Init();
             pluginManager.AttachItems();
             Logger.OnRecieveLog += (obj, args) => {
-                coloredTextBox1.Write(args.Message);
+                coloredTextBox1.Write(Environment.NewLine + args.Message);
             };
-            Player.OnAllPlayersConnect.Important += new ConnectionEvent.EventHandler(OnConnect);
+            Player.OnAllPlayersConnect.Important += OnConnect;
+            Player.OnAllPlayersDisconnect.Important += OnDisconnect;
 
             chatButtonChange.Text = "Chat";
 
@@ -81,9 +82,13 @@ namespace MCForge.Gui {
                 case DialogResult.Yes:
                     Server.SaveAll();
                     Server.Stop();
+                    System.Diagnostics.Process pr = System.Diagnostics.Process.GetCurrentProcess();
+                    pr.Kill();
                     break;
                 case DialogResult.No:
                     Server.Stop();
+                    System.Diagnostics.Process pro = System.Diagnostics.Process.GetCurrentProcess();
+                    pro.Kill();
                     break;
                 case DialogResult.Cancel:
                     e.Cancel = true;
