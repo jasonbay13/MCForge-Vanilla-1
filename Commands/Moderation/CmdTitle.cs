@@ -73,7 +73,7 @@ namespace CommandDll
                 message = "set to &b[" + title + "]";
             }
             who.SetPrefix();
-            Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " had their title " + message);
+            Player.UniversalChat(who.Color + who.Username + Server.DefaultColor + " had their title " + message);
             //TODO Save to database.
         }
 
