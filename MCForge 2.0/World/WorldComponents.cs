@@ -52,6 +52,7 @@ namespace MCForge.World
             {
                 switch (char.ToUpper(c)) //TODO: add all letters support (including lowercase)
                 {
+                    #region Uppercase Letters
                     case 'A':
                         for (short yy = 0; yy <= 5; yy++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + yy)), Holding); }
                         for (int i = 1; i <= 3; i++)
@@ -362,10 +363,49 @@ namespace MCForge.World
                         }
                         if (dir == "r") { z += 6; } if (dir == "l") { z -= 6; } if (dir == "u") { x += 6; } if (dir == "d") { x -= 6; }
                         break;
-                        
+                    #endregion
+                    #region Lowercase Letters
+                    //Gotta do this
+                    #endregion
+                    #region Numbers
+                    case '0':
+                        for (short yy = 1; yy <= 5; yy++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + yy)), Holding); }
+                        for (int i = 1; i <= 3; i++) {
+                            if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)y), Holding);
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + 6)), Holding);
+                        }
+                        if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                        for (short yy = 1; yy <= 5; yy++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + yy)), Holding); }
+                        for (int i = 4; i >= 2; i--) {
+                            if (dir == "r") { z--; } if (dir == "l") { z++; } if (dir == "u") { x--; } if (dir == "d") { x++; }
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + i)), Holding);
+                        }
+                        if (dir == "r") { z += 5; } if (dir == "l") { z -= 5; } if (dir == "u") { x += 5; } if (dir == "d") { x -= 5; }
+                        break;
+                    case '1':
+                        for (int i = 1; i <= 5; i++) {
+                            p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y)), Holding);
+                            if (i == 3) { 
+                                for (int j = 0; j <= 6; j++) { 
+                                    p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + j)), Holding);
+                                    if (j == 5) {
+                                        if (dir == "r") { z--; } if (dir == "l") { z++; } if (dir == "u") { x--; } if (dir == "d") { x++; }
+                                        p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + j)), Holding);
+                                        if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                                    }
+                                }
+                            }
+                            if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                        }
+                        if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                        break;
+                    #endregion
+                    #region Other
                     case ' ':
                         if (dir == "r") { z += 4; } if (dir == "l") { z -= 4; } if (dir == "u") { x += 4; } if (dir == "d") { x -= 4; }
                         break;
+                    #endregion
                     default:
                         p.SendMessage("Sorry the letter \"" + c + "\" hasn't been implemented yet!");
                         break;

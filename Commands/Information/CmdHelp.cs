@@ -51,13 +51,15 @@ namespace CommandDll.Information
                 string cmdTypeName = "Unknown";
                 CommandTypes cmdType = CommandTypes.Misc;
 
-                switch (args[0])
+                switch (args[0].ToLower())
                 {
                     case "build":
+                    case "building":
                         cmdTypeName = "Building";
                         cmdType = CommandTypes.Building;
                         break;
                     case "mod":
+                    case "moderation":
                         cmdTypeName = "Moderation";
                         cmdType = CommandTypes.Mod;
                         break;
@@ -128,9 +130,10 @@ namespace CommandDll.Information
                 p.SendMessage(cmdTypeName + " commands you may use:");
                 //First get them all, just names, in a list.
                 List<string> cmdList = new List<string>();
+                List<ICommand> added = new List<ICommand>();
                 foreach (KeyValuePair<string, ICommand> c in Command.all.ToList().FindAll(match => (match.Value.Permission <= p.Group.Permission) && (match.Value.Type == cmdType)))
                 {
-                    cmdList.Add(c.Key);
+                    if (!added.Contains(c.Value)) { cmdList.Add(c.Key); added.Add(c.Value); }
                 }
                 StringBuilder sb = new StringBuilder();
                 int count = 0;

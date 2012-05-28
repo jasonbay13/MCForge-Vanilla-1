@@ -165,102 +165,208 @@ namespace MCForge.World {
             /// Air Block
             /// </summary>
             public const byte AIR = 0;
-
             /// <summary>
-            /// Air Block
+            /// Stone Block
             /// </summary>
             public const byte STONE = 1;
-
             /// <summary>
-            /// Air Block
+            /// Grass Block
             /// </summary>
             public const byte GRASS = 2;
-
             /// <summary>
-            /// Air Block
+            /// Dirt Block
             /// </summary>
             public const byte DIRT = 3;
-
             /// <summary>
-            /// Air Block
+            /// Cobblestone Block
             /// </summary>
             public const byte COBBLESTONE = 4;
-
             /// <summary>
-            /// Air Block
+            /// Wood_plank Block
             /// </summary>
             public const byte WOOD_PLANK = 5;
-
             /// <summary>
-            /// Air Block
+            /// Sapling Block
             /// </summary>
             public const byte SAPLING = 6;
-
             /// <summary>
-            /// Air Block
+            /// Bedrock Block
             /// </summary>
             public const byte BEDROCK = 7;
-
             /// <summary>
-            /// Air Block
+            /// Active_water Block
             /// </summary>
             public const byte ACTIVE_WATER = 8;
-
             /// <summary>
-            /// Air Block
+            /// Water Block
             /// </summary>
             public const byte WATER = 9;
-
             /// <summary>
-            /// Air Block
+            /// Active_lava Block
             /// </summary>
             public const byte ACTIVE_LAVA = 10;
-
             /// <summary>
-            /// Air Block
+            /// Lava Block
             /// </summary>
             public const byte LAVA = 11;
-
-            //TODO: finish (badpokerface)
+            /// <summary>
+            /// Sand Block
+            /// </summary>
             public const byte SAND = 12;
+            /// <summary>
+            /// Gravel Block
+            /// </summary>
             public const byte GRAVEL = 13;
+            /// <summary>
+            /// Gold_ore Block
+            /// </summary>
             public const byte GOLD_ORE = 14;
+            /// <summary>
+            /// Iron_ore Block
+            /// </summary>
             public const byte IRON_ORE = 15;
+            /// <summary>
+            /// Coal_ore Block
+            /// </summary>
             public const byte COAL_ORE = 16;
+            /// <summary>
+            /// Wood Block
+            /// </summary>
             public const byte WOOD = 17;
+            /// <summary>
+            /// Leaves Block
+            /// </summary>
             public const byte LEAVES = 18;
+            /// <summary>
+            /// Sponge Block
+            /// </summary>
             public const byte SPONGE = 19;
+            /// <summary>
+            /// Glass Block
+            /// </summary>
             public const byte GLASS = 20;
+            /// <summary>
+            /// Red_cloth Block
+            /// </summary>
             public const byte RED_CLOTH = 21;
+            /// <summary>
+            /// Orange_cloth Block
+            /// </summary>
             public const byte ORANGE_CLOTH = 22;
+            /// <summary>
+            /// Yellow_cloth Block
+            /// </summary>
             public const byte YELLOW_CLOTH = 23;
+            /// <summary>
+            /// Lime_cloth Block
+            /// </summary>
             public const byte LIME_CLOTH = 24;
+            /// <summary>
+            /// Green_cloth Block
+            /// </summary>
             public const byte GREEN_CLOTH = 25;
+            /// <summary>
+            /// Cyan_green_cloth Block
+            /// </summary>
             public const byte CYAN_GREEN_CLOTH = 26;
+            /// <summary>
+            /// Cyan_cloth Block
+            /// </summary>
             public const byte CYAN_CLOTH = 27;
+            /// <summary>
+            /// Blue_cloth Block
+            /// </summary>
             public const byte BLUE_CLOTH = 28;
+            /// <summary>
+            /// Purple_cloth Block
+            /// </summary>
             public const byte PURPLE_CLOTH = 29;
+            /// <summary>
+            /// Indigo_cloth Block
+            /// </summary>
             public const byte INDIGO_CLOTH = 30;
+            /// <summary>
+            /// Violet_cloth Block
+            /// </summary>
             public const byte VIOLET_CLOTH = 31;
+            /// <summary>
+            /// Magenta_cloth Block
+            /// </summary>
             public const byte MAGENTA_CLOTH = 32;
+            /// <summary>
+            /// Pink_cloth Block
+            /// </summary>
             public const byte PINK_CLOTH = 33;
+            /// <summary>
+            /// Black_cloth Block
+            /// </summary>
             public const byte BLACK_CLOTH = 34;
+            /// <summary>
+            /// Gray_cloth Block
+            /// </summary>
             public const byte GRAY_CLOTH = 35;
+            /// <summary>
+            /// White_cloth Block
+            /// </summary>
             public const byte WHITE_CLOTH = 36;
+            /// <summary>
+            /// Yellow_flower Block
+            /// </summary>
             public const byte YELLOW_FLOWER = 37;
+            /// <summary>
+            /// Red_flower Block
+            /// </summary>
             public const byte RED_FLOWER = 38;
+            /// <summary>
+            /// Brown_mushroom Block
+            /// </summary>
             public const byte BROWN_MUSHROOM = 39;
+            /// <summary>
+            /// Red_mushroom Block
+            /// </summary>
             public const byte RED_MUSHROOM = 40;
+            /// <summary>
+            /// Gold_block Block
+            /// </summary>
             public const byte GOLD_BLOCK = 41;
+            /// <summary>
+            /// Iron_block Block
+            /// </summary>
             public const byte IRON_BLOCK = 42;
+            /// <summary>
+            /// Double_stair Block
+            /// </summary>
             public const byte DOUBLE_STAIR = 43;
+            /// <summary>
+            /// Stair Block
+            /// </summary>
             public const byte STAIR = 44;
+            /// <summary>
+            /// Brick Block
+            /// </summary>
             public const byte BRICK = 45;
+            /// <summary>
+            /// Tnt Block
+            /// </summary>
             public const byte TNT = 46;
+            /// <summary>
+            /// Bookshelf Block
+            /// </summary>
             public const byte BOOKSHELF = 47;
+            /// <summary>
+            /// Mossy_cobblestone Block
+            /// </summary>
             public const byte MOSSY_COBBLESTONE = 48;
+            /// <summary>
+            /// Obsidian Block
+            /// </summary>
             public const byte OBSIDIAN = 49;
+            /// <summary>
+            /// Unknown Block
+            /// </summary>
             public const byte UNKNOWN = 255;
+            /// <summary>
+
         }
 
     }
