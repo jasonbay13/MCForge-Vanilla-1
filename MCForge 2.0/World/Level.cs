@@ -427,7 +427,8 @@ namespace MCForge.World {
             SetBlock(PosToInt(x, z, y), block);
         }
         internal void SetBlock(int pos, byte block) {
-            Data[pos] = block;
+            if (pos >= 0 && pos < Data.Length)
+                Data[pos] = block;
         }
         #endregion
         #region GetBlock and Overloads
@@ -465,11 +466,10 @@ namespace MCForge.World {
         /// <param name="pos">the pos to get the block from</param>
         /// <returns>a byte that represents the blocktype at the given location</returns>
         public byte GetBlock(int pos) {
-            try {
+            if (pos >= 0 && pos < Data.Length)
                 return Data[pos];
-            }
-            catch (Exception e) {
-                Logger.LogError(e);
+            else {
+                Logger.Log("Out of bounds in Level.GetBlock(int pos)", LogType.Error);
                 return Block.BlockList.UNKNOWN; //Unknown Block
             }
         }
