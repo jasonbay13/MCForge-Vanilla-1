@@ -40,6 +40,7 @@ namespace CommandDll.Information
                 p.SendMessage("Use &b/help build" + Server.DefaultColor + " for a list of building commands.");
                 p.SendMessage("Use &b/help mod" + Server.DefaultColor + " for a list of moderation commands.");
                 p.SendMessage("Use &b/help information" + Server.DefaultColor + " for a list of information commands.");
+                p.SendMessage("Use &b/help custom" + Server.DefaultColor + " for a list of custom commands.");
                 p.SendMessage("Use &b/help other" + Server.DefaultColor + " for a list of other commands.");
                 p.SendMessage("Use &b/help colors" + Server.DefaultColor + " to view the color codes.");
                 p.SendMessage("Use &b/help [command] or /help [block] " + Server.DefaultColor + "to view more info.");
@@ -68,6 +69,10 @@ namespace CommandDll.Information
                     case "other":
                         cmdTypeName = "Miscellaneous";
                         cmdType = CommandTypes.Misc;
+                        break;
+                    case "custom":
+                        cmdTypeName = "Custom Commands";
+                        cmdType = CommandTypes.Custom;
                         break;
                     case "colours":
                     case "colors":

@@ -93,6 +93,10 @@ namespace MCForge.Interface.Command
         /// Info type of command
         /// </summary>
 		Information,
-		//fun,
+
+        /// <summary>
+        /// Plugin commands
+        /// </summary>
+        Custom,
 	}
 }
