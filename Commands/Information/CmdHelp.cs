@@ -71,7 +71,7 @@ namespace CommandDll.Information
                         cmdType = CommandTypes.Misc;
                         break;
                     case "custom":
-                        cmdTypeName = "Custom Commands";
+                        cmdTypeName = "Custom";
                         cmdType = CommandTypes.Custom;
                         break;
                     case "colours":
@@ -143,7 +143,7 @@ namespace CommandDll.Information
                 {
                     sb.Append(", ").Append(PlayerGroup.Groups.Find(grp => grp.Permission == Command.Find(c).Permission).Color).Append(c);
                     count = (count + 1) % 5; // 5 commands per line.
-                    if (count == 0)
+                    if (count == 0 || count == cmdList.Count())
                     {
                         p.SendMessage(sb.Remove(0, 2).ToString());
                         sb.Clear();

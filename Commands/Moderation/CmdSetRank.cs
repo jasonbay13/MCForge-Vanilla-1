@@ -31,7 +31,10 @@ namespace CommandDll
         public void Use(Player p, string[] args)
         {
             if (args.Length != 2)
+            {
                 Help(p);
+                return;
+            }
 
             Player who = null;
             who = Player.Find(args[0]);
