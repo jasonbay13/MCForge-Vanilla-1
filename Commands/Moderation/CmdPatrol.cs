@@ -58,7 +58,7 @@ namespace CommandDll.Moderation
                 return;
             }
             Player found = allUnder[(new Random()).Next(allUnder.Count)];
-            p.SendMessage("Player found!  Transporting you to " + (string)found.ExtraData.GetIfExist("Color") ?? "" + found.Username + Server.DefaultColor + "!");
+            p.SendMessage("Player found!  Transporting you to " + found.Color + found.Username + Server.DefaultColor + "!");
             if (p.Level != found.Level)
             {
                 //Go to the level first
@@ -66,7 +66,7 @@ namespace CommandDll.Moderation
             }
             if (found.IsLoading)
             {
-                p.SendMessage("Waiting for " + (string)found.ExtraData.GetIfExist("Color") ?? "" + found.Username + Server.DefaultColor + " to spawn...");
+                p.SendMessage("Waiting for " + found.Color + found.Username + Server.DefaultColor + " to spawn...");
 
                 while (found.IsLoading) { 
                     Thread.Sleep(5);

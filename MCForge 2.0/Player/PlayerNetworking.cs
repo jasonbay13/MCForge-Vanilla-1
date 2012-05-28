@@ -560,7 +560,7 @@ namespace MCForge.Entity {
             //TODO: remove to place better
             Logger.Log("<" + Username + " as " + DisplayName + "> " + incomingText);
             var voiceString = (string)ExtraData.GetIfExist("VoiceString") ?? "";
-            var mColor = (string)ExtraData.GetIfExist("Color") ?? Group.Color;
+            var mColor = Color ?? Group.Color;
             var mPrefix = (string)ExtraData.GetIfExist("Prefix") ?? "";
             string msg = voiceString +
                           mColor +
@@ -579,7 +579,7 @@ namespace MCForge.Entity {
             ExtraData.CreateIfNotExist("Prefix", "");
             var mTitle = ExtraData.GetIfExist("Title");
             var mTColor = ExtraData.GetIfExist("TitleColor");
-            var mColor = ExtraData.GetIfExist("Color");
+            var mColor = Color;
             ExtraData["Prefix"] = mTitle == null ? "" : "[" + mTColor ?? Server.DefaultColor + mTitle + mColor ?? Server.DefaultColor + "]";
         }
 

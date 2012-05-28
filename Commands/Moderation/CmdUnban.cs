@@ -41,10 +41,10 @@ namespace CommandDll.Moderation {
                             if (line != who.Username)
                                 l.Add(line);
                             File.WriteAllLines("bans/NameBans.txt", l.ToArray());
-                            Player.UniversalChat((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is now unbanned!");
+                            Player.UniversalChat(who.Color  + who.Username + Server.DefaultColor + " is now unbanned!");
                             return;
                         }
-                        p.SendMessage((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is not banned.");
+                        p.SendMessage(who.Color + who.Username + Server.DefaultColor + " is not banned.");
                     }
                     else {
                         if (line == args[0]) {
@@ -68,10 +68,10 @@ namespace CommandDll.Moderation {
                             if (line != who.Username)
                                 l.Add(line);
                             File.WriteAllLines("bans/NameBans.txt", l.ToArray());
-                            Player.UniversalChatOps((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is now unbanned!");
+                            Player.UniversalChatOps(who.Color + who.Username + Server.DefaultColor + " is now unbanned!");
                             return;
                         }
-                        p.SendMessage((string)who.ExtraData.GetIfExist("Color") ?? "" + who.Username + Server.DefaultColor + " is not banned.");
+                        p.SendMessage(who.Color + who.Username + Server.DefaultColor + " is not banned.");
                     }
                     else {
                         if (line == args[1]) {
