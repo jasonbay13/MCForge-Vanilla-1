@@ -30,7 +30,7 @@ using MCForge.Utils.Settings;
 using MCForge.World;
 
 namespace MCForge.Entity {
-	public partial class Player : Sender {
+    public partial class Player : Sender {
         #region Incoming Data
         private static void Incoming(IAsyncResult result) {
             while (!Server.Started)
@@ -56,7 +56,7 @@ namespace MCForge.Entity {
                             if (position == 0) { pl.SendMessage("You're next in the review queue!"); continue; }
                             pl.SendMessage(position == 1 ? "There is 1 player in front of you!" : "There are " + position + " players in front of you!");
                         }
-                    }                  
+                    }
                     //End Rage
                     return;
                 }
@@ -90,13 +90,13 @@ namespace MCForge.Entity {
                     case 8: length = 9; break; // input
                     case 13: length = 65; break; // chat
                     default: {
-							ReceivePacketEventArgs args = new ReceivePacketEventArgs(buffer);
-							OnReceivePacket.Call(this, args);
-							if (args.Canceled)
-								return new byte[1];
-							Kick("Unhandled message id \"" + msg + "\"!");
-							return new byte[0];
-						}
+                            ReceivePacketEventArgs args = new ReceivePacketEventArgs(buffer);
+                            OnReceivePacket.Call(this, args);
+                            if (args.Canceled)
+                                return new byte[1];
+                            Kick("Unhandled message id \"" + msg + "\"!");
+                            return new byte[0];
+                        }
 
                 }
                 if (buffer.Length > length) {
@@ -213,7 +213,7 @@ namespace MCForge.Entity {
                 SpawnBotsForThisPlayer();
 
                 IsLoading = false;
-                
+
                 //Load from Database
                 Load();
 
@@ -307,19 +307,21 @@ namespace MCForge.Entity {
             ushort z = packet.NTHO(message, 5);
             byte rotx = message[7];
             byte roty = message[8];
-            Vector3S fromPosition = new Vector3S(oldPos.x,oldPos.z, Pos.y);
+            Vector3S fromPosition = new Vector3S(oldPos.x, oldPos.z, Pos.y);
             //oldPos = fromPosition;
             Pos.x = (short)x;
             Pos.y = (short)y;
             Pos.z = (short)z;
             Rot = new byte[2] { rotx, roty };
-            if (!(fromPosition.x == Pos.x && fromPosition.y == Pos.y && fromPosition.z == Pos.z))
-            {
-                MoveEventArgs eargs = new MoveEventArgs(fromPosition, Pos);
-                bool cancel = OnPlayerMove.Call(this, eargs, OnAllPlayersMove).Canceled;
-                if (cancel) {
-                    this.SendToPos(fromPosition, Rot);
+            if (!(fromPosition.x == Pos.x && fromPosition.y == Pos.y && fromPosition.z == Pos.z)) {
+                MoveEventArgs eargs = new MoveEventArgs(new Vector3S(fromPosition), new Vector3S(Pos));
+                eargs = OnPlayerMove.Call(this, eargs, OnAllPlayersMove);
+                if (eargs.Canceled) {
                     return;
+                }
+                else {
+                    Pos = eargs.ToPosition;
+                    oldPos = eargs.FromPosition;
                 }
             }
             UpdatePosition(false);
@@ -583,7 +585,7 @@ namespace MCForge.Entity {
 
         #endregion
         #region Outgoing Packets
-        private void SendPacket(packet pa) {
+        public void SendPacket(packet pa) {
             if (!OnPlayerSendPacket.Call(this, new PacketEventArgs(pa.GetMessage(), false, (packet.types)pa.bytes[0]), OnAllPlayersSendPacket).Canceled) {
                 try {
                     lastPacket = (packet.types)pa.bytes[0];
@@ -775,7 +777,8 @@ namespace MCForge.Entity {
         /// </summary>
         public void SendThisPlayerTheirOwnPos() {
             packet pa = new packet();
-            pa.Add((byte)8);
+            pa.Add(packet.types.SendTeleport);
+            pa.Add((byte)255);
             pa.Add(Pos.x);
             pa.Add(Pos.y);
             pa.Add(Pos.z);
@@ -827,7 +830,7 @@ namespace MCForge.Entity {
             });
         }
 
-        internal void UpdatePosition(bool ForceTp) {
+        internal void  UpdatePosition(bool ForceTp) {
             Vector3S tempOldPos = new Vector3S(oldPos);
             Vector3S tempPos = new Vector3S(Pos);
             byte[] tempRot = Rot;
@@ -935,6 +938,7 @@ namespace MCForge.Entity {
                     p.SendBlockChange(x, z, y, block);
             });
         }
+
         /// <summary>
         /// Kill this player for everyone.
         /// </summary>
@@ -947,8 +951,7 @@ namespace MCForge.Entity {
             });
         }
 
-        static string ConvertVariables(Player p, string text)
-        {
+        static string ConvertVariables(Player p, string text) {
             if (text.Contains("$name")) {
                 if (ServerSettings.GetSettingBoolean("$Before$Name")) { text = text.Replace("$name", "$" + p.Username); }
                 else { text = text.Replace("$name", p.Username); }
@@ -965,10 +968,10 @@ namespace MCForge.Entity {
         /// </summary>
         /// <param name="text">The message to send.</param>
         public static void UniversalChat(string text) {
-            Server.ForeachPlayer(p => {       
+            Server.ForeachPlayer(p => {
                 p.SendMessage(ConvertVariables(p, text));
             });
-         
+
         }
         /// <summary>
         /// Sends a message to all operators+
@@ -1022,11 +1025,9 @@ namespace MCForge.Entity {
 
             GlobalDie();
             Server.RemovePlayer(this);
-            if (IsLoggedIn)
-            {
+            if (IsLoggedIn) {
                 Logger.Log("[System]: " + Username + " Has DC'ed (" + lastPacket + ")", System.Drawing.Color.Gray, System.Drawing.Color.Black);
-                try
-                {
+                try {
                     Server.IRC.SendMessage("[System]: " + Username + " has disconnected");
                 }
                 catch { }

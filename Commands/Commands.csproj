@@ -54,6 +54,7 @@
     <Compile Include="Building\CmdWrite.cs" />
     <Compile Include="Building\CmdWrite2.cs" />
     <Compile Include="Misc\CmdFlipHead.cs" />
+    <Compile Include="Misc\CmdRun.cs" />
     <Compile Include="Moderation\CmdRestart.cs" />
     <Compile Include="Moderation\CmdShutdown.cs" />
     <Compile Include="Moderation\CmdUnload.cs" />

@@ -37,7 +37,7 @@ namespace MCForge.World.Generator {
         public LevelGenerator(Level level) {
 
             if (level.Size.x != level.Size.z)
-                throw new ArgumentException("The x and z must be the same to use advanced level generation");
+                ;// throw new ArgumentException("The x and z must be the same to use advanced level generation");
 
             //Create a standard mountain level
             GenArgs = new GeneratorArgs() {

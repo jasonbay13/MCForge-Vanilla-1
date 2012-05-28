@@ -116,19 +116,27 @@ namespace MCForge.Utils {
             _flushErrorQueue.Enqueue(new LogEventArgs(e.Message + "\n" + e.StackTrace, LogType.Error));
             WriteLog("-------[Error]-------\n\r " + e.Message + "\n" + e.StackTrace + "\n\r----------------------");
         }
-
+        public static int count = 0;
         /// <summary>
         /// Writes the log message to the log file
         /// </summary>
         /// <param name="log">Message to log</param>
         public static void WriteLog(string log) {
+            if (count != 0) {
+                int c = count;
+                while (count >= c) Thread.Sleep(200);
+            }
+            count++;
             if (_lastTime.Day != DateTime.Now.Day) {
                 _lastTime = DateTime.Now;
                 FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + DateFormat, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS:" + Environment.OSVersion + Environment.NewLine);
             }
 
-            using (var writer = new StreamWriter(FileUtils.LogsPath + DateFormat, true))
+            using (var writer = new StreamWriter(FileUtils.LogsPath + DateFormat, true)) {
                 writer.WriteLine(log);
+                writer.Close();
+            }
+            count--;
         }
 
         internal static void Flush() {
