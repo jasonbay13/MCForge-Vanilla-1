@@ -143,8 +143,7 @@ namespace MCForge.World
                         break;
                     case 'H':
                         for (short yy = 0; yy <= 6; yy++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(sy + yy)), Holding); }
-                        for (int i = 1; i <= 3; i++)
-                        {
+                        for (int i = 1; i <= 3; i++) {
                             if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
                             p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + 4)), Holding);
                         }
@@ -153,11 +152,10 @@ namespace MCForge.World
                         if (dir == "r") { z += 2; } if (dir == "l") { z -= 2; } if (dir == "u") { x += 2; } if (dir == "d") { x -= 2; }
                         break;
                     case 'I':
-                        for (short zz = 0; zz <= 2; zz++)
-                        {
+                        for (short zz = 1; zz <= 3; zz++) {
                             p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)y), Holding);
                             p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + 6)), Holding);
-                            if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
+                            if (zz < 3) { if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; } }
                         }
                         if (dir == "r") { z--; } if (dir == "l") { z++; } if (dir == "u") { x--; } if (dir == "d") { x++; }
                         for (int i = 1; i <= 5; i++) { p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + i)), Holding); }
@@ -165,8 +163,7 @@ namespace MCForge.World
                         break;
                     case 'J':
                         p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)(y + 1)), Holding);
-                        for (int i = 1; i <= 3; i++)
-                        {
+                        for (int i = 1; i <= 3; i++) {
                             if (dir == "r") { z++; } if (dir == "l") { z--; } if (dir == "u") { x++; } if (dir == "d") { x--; }
                             p.Level.BlockChange(new Vector3D((double)x, (double)z, (double)y), Holding);
                         }

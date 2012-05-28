@@ -134,7 +134,7 @@ namespace MCForge.SQL
 		/// <param name="queryString">The command to execute</param>
 		public static void executeQuery(string queryString)
 		{
-			//Logger.Log("Executing " + queryString, LogType.Debug); SO SPAMMY .-.
+			Logger.Log("Executing " + queryString, LogType.Debug);
 			if (queuecommands)
 				QueueCommand(queryString);
 			else
