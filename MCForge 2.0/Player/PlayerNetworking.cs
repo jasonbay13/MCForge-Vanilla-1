@@ -358,17 +358,6 @@ namespace MCForge.Entity {
             var gex = new Regex(@"[ ]{2,}", RegexOptions.None);
             incomingText = gex.Replace(incomingText, @" ");
 
-            //This allows people to use //Command and have it appear as /Command in the chat.
-            if (incomingText.StartsWith("//")) {
-                incomingText = incomingText.Remove(0, 1);
-            }
-            else if (incomingText[0] == '/') {
-                incomingText = incomingText.Remove(0, 1);
-
-                string[] args = incomingText.Split(' ');
-                HandleCommand(args);
-                return;
-            }
 
             //Meep is used above for //Command
 
@@ -434,6 +423,19 @@ namespace MCForge.Entity {
                     return;
                 }
             }
+
+            //This allows people to use //Command and have it appear as /Command in the chat.
+            if (incomingText.StartsWith("//")) {
+                incomingText = incomingText.Remove(0, 1);
+            }
+            else if (incomingText[0] == '/') {
+                incomingText = incomingText.Remove(0, 1);
+
+                string[] args = incomingText.Split(' ');
+                HandleCommand(args);
+                return;
+            }
+
             ChatEventArgs eargs = new ChatEventArgs(incomingText, Username);
             bool canceled = OnPlayerChat.Call(this, eargs, OnAllPlayersChat).Canceled;
             if (canceled || eargs.Message == null || eargs.Message.Length == 0)
@@ -565,7 +567,7 @@ namespace MCForge.Entity {
             string msg = voiceString +
                           mColor +
                           mPrefix +
-                          Username +
+                          DisplayName +
                           ": &f" +
                           incomingText;
             try {
