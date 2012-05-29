@@ -59,6 +59,7 @@ namespace CommandDll {
             sender.ExtraData["RunCounter"] = 0;
             Vector3S tmpPos = new Vector3S(args.FromPosition);
             tmpPos.Horizontal = tmpPos.Horizontal.GetMove(320, args.ToPosition.Horizontal);
+            if (tmpPos.x < 32 || tmpPos.z < 32 || tmpPos.x > (sender.Level.Size.x - 1) * 32 || tmpPos.z > (sender.Level.Size.z - 1) * 32) return;
             packet pa = new packet();
             pa.Add(packet.types.SendTeleport);
             pa.Add((sbyte)-1);
