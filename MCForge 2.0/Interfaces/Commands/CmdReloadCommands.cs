@@ -28,6 +28,7 @@ namespace MCForge.Interface.Command
 		public void Use(Player p, string[] args)
 		{
 			Player.UniversalChat("Reloading the Command system, please wait.");
+            Plugin.Plugin.unloadAll();
 			Command.Commands.Clear();
 			LoadAllDlls.InitCommandsAndPlugins();
             Initialize();
