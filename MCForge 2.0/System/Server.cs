@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading;
 using MCForge.Core.HeartService;
 using MCForge.Entity;
 using MCForge.Interface;
@@ -189,7 +190,10 @@ namespace MCForge.Core {
             Logger.Log("Finished loading DLL's", LogType.Debug);
             Logger.Log("Sending Heartbeat..", LogType.Debug);
 
-            Heartbeat.sendHeartbeat();
+            ThreadPool.QueueUserWorkItem((state) =>
+            {
+                    Heartbeat.sendHeartbeat();
+            });
 
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
