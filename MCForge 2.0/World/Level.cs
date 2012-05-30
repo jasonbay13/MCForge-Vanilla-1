@@ -169,7 +169,7 @@ namespace MCForge.World {
         /// </summary>
         /// <returns>The loaded level</returns>
         public static Level LoadLevel(string levelName) {
-            string Name = "levels\\" + levelName + ".lvl";
+            string Name = "levels//" + levelName + ".lvl";
             Level finalLevel = new Level(new Vector3S(32, 32, 32));
             finalLevel.Name = levelName;
             try {
