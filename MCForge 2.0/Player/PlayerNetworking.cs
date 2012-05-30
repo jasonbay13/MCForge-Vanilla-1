@@ -190,9 +190,12 @@ namespace MCForge.Entity {
 
                 SendMotd();
                 IsLoading = true;
-                Level = Server.Mainlevel;
                 //SendMap(); changing the level value will send the map
                 IsLoggedIn = true;
+                if (Level == null)
+                    Level = Server.Mainlevel;
+                else
+                    Level = Level;
 
                 id = FreeId();
                 UpgradeConnectionToPlayer();

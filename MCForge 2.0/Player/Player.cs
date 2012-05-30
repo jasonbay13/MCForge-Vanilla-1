@@ -139,7 +139,8 @@ namespace MCForge.Entity {
             }
             set {
                 _level = value;
-                SendMap();
+                if (IsLoggedIn)
+                    SendMap();
             }
         }
         /// <summary>
