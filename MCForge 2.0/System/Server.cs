@@ -192,7 +192,7 @@ namespace MCForge.Core {
 
             ThreadPool.QueueUserWorkItem((state) =>
             {
-                    Heartbeat.sendHeartbeat();
+                Heartbeat.sendHeartbeat();
             });
 
             CmdReloadCmds reload = new CmdReloadCmds();
