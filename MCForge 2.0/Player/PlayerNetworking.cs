@@ -393,7 +393,7 @@ namespace MCForge.Entity {
                 return;
             }
 
-            ExtraData.CreateIfNotExist("Voiced", true);
+            ExtraData.CreateIfNotExist("Voiced", false);
             var isVoiced = (bool)ExtraData.GetIfExist("Voiced");
             if (Server.moderation && !isVoiced && !Server.devs.Contains<string>(Username)) {
                 SendMessage("You can't talk during chat moderation!");
