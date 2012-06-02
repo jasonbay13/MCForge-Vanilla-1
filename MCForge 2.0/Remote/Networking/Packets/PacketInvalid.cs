@@ -2,37 +2,20 @@ using System;
 
 namespace MCForge.Remote.Packets {
     public class PacketInvalid : Packet {
-        public PacketInvalid() {
+        public PacketInvalid(IRemote remote) :base(remote) {
         }
 
-        #region implemented abstract members of ComputerRemote.Packet
         public override PacketID PacketID {
-            get {
-                throw new NotImplementedException();
-            }
+            get { return Remote.PacketID.Invalid; }
         }
 
-        public override int Length {
-            get {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override byte[] Data {
-            get {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override void ReadPacket(byte[] data) {
+        public override void ReadPacket(Networking.PacketData data) {
             throw new NotImplementedException();
         }
 
-        public override void WritePacket(IRemote c) {
-            throw new NotImplementedException();
+        public override Networking.PacketData WritePacket() {
+            return null;
         }
-
-        #endregion
     }
 }
 

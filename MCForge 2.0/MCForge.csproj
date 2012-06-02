@@ -91,6 +91,10 @@
     <Compile Include="API\Events\Player\DataSavedEvent.cs" />
     <Compile Include="API\Events\Player\MoveEvent.cs" />
     <Compile Include="API\Events\Player\PacketEvent.cs" />
+    <Compile Include="API\Events\Remote\RemoteConnectEvent.cs" />
+    <Compile Include="API\Events\Remote\RemoteDisconnectEvent.cs" />
+    <Compile Include="API\Events\Remote\RemoteLoginEvent.cs" />
+    <Compile Include="API\Events\Remote\RemotePacketEvent.cs" />
     <Compile Include="API\Events\Robot\OnBotMove.cs" />
     <Compile Include="API\Events\Robot\OnBotTargetPlayer.cs" />
     <Compile Include="API\Events\System\CommandLoadEvent.cs" />
@@ -110,6 +114,7 @@
     <Compile Include="Interfaces\Plugin\IPlugin.cs" />
     <Compile Include="Player\ConsolePlayer.cs" />
     <Compile Include="Player\Sender.cs" />
+    <Compile Include="Remote\Networking\PacketData.cs" />
     <Compile Include="Remote\Types\AndroidRemote.cs" />
     <Compile Include="Remote\IRemote.cs" />
     <Compile Include="Remote\Networking\Packet.cs" />
@@ -118,7 +123,7 @@
     <Compile Include="Remote\Networking\PacketReader.cs" />
     <Compile Include="Remote\Networking\Packets\PacketHandShake.cs" />
     <Compile Include="Remote\Networking\Packets\PacketInvalid.cs" />
-    <Compile Include="Remote\Networking\Packets\PacketKick.cs" />
+    <Compile Include="Remote\Networking\Packets\PacketDisconnect.cs" />
     <Compile Include="Remote\Networking\Packets\PacketLogin.cs" />
     <Compile Include="Remote\Networking\Packets\PacketMessage.cs" />
     <Compile Include="Remote\Networking\Packets\PacketPing.cs" />
@@ -248,7 +253,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="Remote\Networking\Events\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.txt" />

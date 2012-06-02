@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net.Sockets;
+using MCForge.Remote.Networking;
+using MCForge.Remote.Packets;
 
 namespace MCForge.Remote {
     public class AndroidRemote : IRemote {
@@ -11,11 +13,24 @@ namespace MCForge.Remote {
             NetworkStream = socket.GetStream();
             PacketWriter = new PacketWriter(this);
             PacketReader = new PacketReader(this);
+            PacketOptions = new PacketOptions() {
+                UseBigEndian = true,
+                UseShortAsHeaderSize = true
+            };
+
+            PacketReader.StartRead();
+            PacketReader.OnReadPacket += ProcessPackets;
         }
 
         #region IRemote Members
 
-        public System.Net.Sockets.NetworkStream NetworkStream { get; set;}
+        public string Username { get; set; }
+
+        public int RemoteID { get; set; }
+
+        public PacketOptions PacketOptions { get; set; }
+
+        public NetworkStream NetworkStream { get; set; }
 
         public PacketReader PacketReader { get; set; }
 
@@ -37,7 +52,27 @@ namespace MCForge.Remote {
 
         #region Event Handlers
 
+        void ProcessPackets(object sender, PacketReadEventArgs args) {
+            switch (args.Packet.PacketID) {
+                case PacketID.Login:
+                    OnLogin((PacketLogin)args.Packet);
+                    return;
+                case PacketID.Ping:
+                    OnPing();
+                    return;
+                default:
+                    return;
+            }
+        }
 
+        void OnLogin(PacketLogin packet) {
+        }
+
+        void OnPing() {
+
+        }
         #endregion
+
+
     }
 }

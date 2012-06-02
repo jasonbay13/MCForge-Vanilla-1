@@ -1,38 +1,22 @@
 using System;
+using MCForge.Remote.Networking;
 
 namespace MCForge.Remote.Packets {
     public class PacketHandShake : Packet {
-        public PacketHandShake() {
+        public PacketHandShake(IRemote remote) :base(remote) {
         }
 
-        #region implemented abstract members of ComputerRemote.Packet
         public override PacketID PacketID {
-            get {
-                throw new NotImplementedException();
-            }
+            get { return Remote.PacketID.Handshake; }
         }
 
-        public override int Length {
-            get {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override byte[] Data {
-            get {
-                throw new NotImplementedException();
-            }
-        }
-
-        public override void ReadPacket(byte[] data) {
+        public override void ReadPacket(Networking.PacketData data) {
             throw new NotImplementedException();
         }
 
-        public override void WritePacket(IRemote c) {
+        public override PacketData WritePacket() {
             throw new NotImplementedException();
         }
-
-        #endregion
     }
 }
 

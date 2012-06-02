@@ -52,7 +52,7 @@
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Building\CmdStatic.cs" />
     <Compile Include="Bots\CmdBot.cs" />
-    <Compile Include="Building\CmdWrite2.cs" />
+    <Compile Include="Building\CmdWrite.cs" />
     <Compile Include="Misc\CmdFlipHead.cs" />
     <Compile Include="Misc\CmdNickname.cs" />
     <Compile Include="Misc\CmdRun.cs" />

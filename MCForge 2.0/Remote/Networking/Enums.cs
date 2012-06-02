@@ -10,10 +10,11 @@ namespace MCForge.Remote {
         Handshake,
         Request,
         Chat,
-        Ping, 
+        Ping,
         Disconnect,
         Edit,
-        Crypto
+        Crypto,
+        Invalid
 
     }
 

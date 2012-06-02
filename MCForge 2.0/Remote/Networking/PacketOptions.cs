@@ -8,7 +8,7 @@ namespace MCForge.Remote.Networking {
 
         public bool UseBigEndian { get; set; }
 
-        public byte SizeOfHeader { get; set; }
+        public bool UseShortAsHeaderSize { get; set; }
 
     }
 }

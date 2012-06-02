@@ -1,12 +1,13 @@
 using System;
 
 namespace MCForge.Remote.Packets {
-    public class PacketMessage : Packet {
-        public PacketMessage(IRemote remote) :base(remote) {
+    public class PacketDisconnect : Packet {
+        public PacketDisconnect(IRemote remote) :base(remote) {
         }
 
+
         public override PacketID PacketID {
-            get { return Remote.PacketID.Chat; }
+            get { return Remote.PacketID.Disconnect; }
         }
 
         public override void ReadPacket(Networking.PacketData data) {

@@ -7,13 +7,17 @@ using MCForge.Remote.Networking;
 namespace MCForge.Remote {
    public class RemoteManager {
 
-       public static PacketOptions PacketOptions { get; set; }
-
        public static List<IRemote> RemoteList { get; set; }
 
        static RemoteManager() {
-           PacketOptions = new PacketOptions();
            RemoteList = new List<IRemote>();
+       }
+
+       public static IRemote GetRemoteByLoginName(string name) {
+           foreach (var remote in RemoteList)
+               if (remote.Username == name)
+                   return remote;
+           return null;
        }
     }
 }

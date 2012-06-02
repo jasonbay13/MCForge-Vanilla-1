@@ -3,6 +3,7 @@ using System.Text;
 using System.Net;
 using System.IO;
 using MCForge.Remote.Packets;
+using MCForge.Remote.Networking;
 
 namespace MCForge.Remote {
     public abstract class Packet {
@@ -273,100 +274,28 @@ namespace MCForge.Remote {
         #endregion
 
         
-        public static Packet GetPacket ( PacketID pId, bool isServer = true ) {
+        public static Packet GetPacket ( PacketID pId  ) {
             byte id = ( byte ) pId;
             Type t = Packets[ id ];
             if ( t == typeof( PacketInvalid ) ) {
                 return null;
             }
             Packet p = ( Packet ) Activator.CreateInstance( Packets[ ( byte ) pId ] );
-            p.IsServer = isServer;
             return p;
+        }
+
+        private IRemote remote;
+
+        public Packet(IRemote remote) {
+            this.remote = remote;
         }
 
         #region Inherited
         public abstract PacketID PacketID { get; }
-        protected bool IsServer { get; set; }
-        public abstract int Length { get; }
-        public abstract byte[] Data { get; }
-
-        public abstract void ReadPacket ( byte[] data );
-        public abstract void WritePacket ( IRemote c );
+        public abstract void ReadPacket ( PacketData data );
+        public abstract PacketData WritePacket ();
         #endregion
 
-        #region Tools
-
-        //TODO Check for remote manager packet options
-        public static byte[] GetString ( string s ) {
-            byte[] a = new byte[ s.Length + 2 ];
-            GetShort( ( short ) s.Length ).CopyTo( a, 0 );
-            Encoding.UTF8.GetBytes( s ).CopyTo( a, 2 );
-            return a;
-        }
-        public static byte[] GetInt ( int s ) {
-            return BitConverter.GetBytes( IPAddress.HostToNetworkOrder( s ) );
-        }
-        public static byte[] GetDouble ( double s ) {
-            return new byte[ 0 ];
-        }
-        public static byte[] GetLong ( long s ) {
-            return BitConverter.GetBytes( IPAddress.HostToNetworkOrder( s ) );
-        }
-        public static byte[] GetShort ( short s ) {
-            return BitConverter.GetBytes( IPAddress.HostToNetworkOrder( s ) );
-        }
-        public static byte[] GetBoolean ( bool b ) {
-            return new byte[ 0 ];
-        }
-        public static string ReadString ( Stream mStream, int start, int count ) {
-            byte[] bytes = new byte[ count ];
-            mStream.Read( bytes, start, count );
-            return ReadString( bytes );
-        }
-        public static int ReadInt ( Stream mStream, int start ) {
-            byte[] bytes = new byte[ 4 ];
-            mStream.Read( bytes, start, 4 );
-            return ReadInt( bytes );
-        }
-        public static double ReadDouble ( Stream mStream, int start ) {
-            byte[] bytes = new byte[ 8 ];
-            mStream.Read( bytes, start, 8 );
-            return ReadDouble( bytes );
-        }
-        public static long ReadLong ( Stream mStream, int start ) {
-            byte[] bytes = new byte[ 8 ];
-            mStream.Read( bytes, start, 8 );
-            return ReadLong( bytes );
-        }
-        public static short ReadShort ( Stream mStream, int start ) {
-            byte[] bytes = new byte[ 2 ];
-            mStream.Read( bytes, start, 2 );
-            return ReadShort( bytes );
-        }
-        public static bool ReadBoolean ( Stream mStream ) {
-            return new BinaryReader( mStream ).ReadBoolean();
-        }
-        public static string ReadString ( byte[] bytes, int start = 0, int count = 64 ) {
-            return Encoding.ASCII.GetString( bytes, start, count );
-        }
-        public static int ReadInt ( byte[] bytes ) {
-            return IPAddress.HostToNetworkOrder( BitConverter.ToInt32( bytes, 0 ) );
-        }
-
-        public static double ReadDouble ( byte[] bytes, int start = 0 ) {
-            return BitConverter.Int64BitsToDouble( ReadLong( bytes, start ) );
-        }
-
-        public static long ReadLong ( byte[] bytes, int start = 0 ) {
-            return IPAddress.HostToNetworkOrder( BitConverter.ToInt64( bytes, start ) );
-        }
-
-
-        public static short ReadShort ( byte[] bytes, int start = 0 ) {
-            return IPAddress.HostToNetworkOrder( BitConverter.ToInt16( bytes, start ) );
-        }
-
-        #endregion
     }
 }
 
