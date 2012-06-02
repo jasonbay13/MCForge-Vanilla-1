@@ -46,8 +46,6 @@ namespace MCForge.Remote.Packets {
             throw new NotImplementedException();
         }
 
-        public override void HandlePacket(IRemote c) {
-        }
         #endregion
     }
 }
