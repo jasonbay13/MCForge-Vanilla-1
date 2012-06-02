@@ -183,7 +183,7 @@ namespace MCForge.Entity {
                 catch { }
                 UniversalChat(Username + " joined the game!");
 
-                WOM.sendjoin(Username);
+                WOM.SendJoin(Username);
 
                 CheckDuplicatePlayers(Username);
                 foreach (PlayerGroup g in PlayerGroup.Groups)
@@ -348,7 +348,7 @@ namespace MCForge.Entity {
             if (incomingText.StartsWith("/womid"))
             {
                 usingwom = true;
-                WOM.senddetail(this); //Will make this editable later ?
+                WOM.SendDetail(this); //Will make this editable later ?
                 return;
             }
 
@@ -916,7 +916,7 @@ namespace MCForge.Entity {
         /// </summary>
         public void SpawnThisPlayerToOtherPlayers() {
             Server.ForeachPlayer(delegate(Player p) {
-                if (p != this && p.Level == Level && p.IsLoggedIn && !p.IsLoading)
+                if (p != this && p.Level == Level && p.IsLoggedIn && !p.IsLoading && !p.IsHidden)
                     p.SendSpawn(this);
             });
         }
@@ -1048,7 +1048,7 @@ namespace MCForge.Entity {
 
                 if (Server.PlayerCount > 0)
                     Player.UniversalChat(Username + " has disconnected");
-                WOM.sendleave(Username);
+                WOM.SendLeave(Username);
             }
             IsLoggedIn = false;
             Server.Connections.Remove(this);

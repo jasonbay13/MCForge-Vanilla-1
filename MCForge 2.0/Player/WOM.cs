@@ -9,31 +9,50 @@ namespace MCForge
 {
    public class WOM
     {
-       public static void sendjoin(string name)
+       /// <summary>
+       /// When a player joins using the WOM client (World of Minecraft)
+       /// </summary>
+        /// <param name="Username">Players Username</param>
+       public static void SendJoin(string Username)
        {
            foreach (Player p in Server.Players)
            {
                if (p.usingwom)
                {
-                   p.SendMessage("^detail.user.join=%e" + name);
+                   p.SendMessage("^detail.user.join=%e" + Username);
                }
            }
        }
-       public static void sendleave(string name)
+
+       /// <summary>
+       /// When a player leaves using the WOM client (World of Minecraft)
+       /// </summary>
+       /// <param name="name"></param>
+       public static void SendLeave(string Username)
        {
            foreach (Player p in Server.Players)
            {
                if (p.usingwom)
                {
-                   p.SendMessage("^detail.user.part=%e" + name);
+                   p.SendMessage("^detail.user.part=%e" + Username);
                }
            }
        }
-       public static void senddetail(Player p)
+
+       /// <summary>
+       /// Send initial login message to a player using the WOM client (World of Minecraft)
+       /// </summary>
+       /// <param name="p"></param>
+       public static void SendDetail(Player p)
        {
            p.SendMessage("^detail.user=%aWelcome to MCForge 6.0");
        }
-       public static void notify(string message)
+
+       /// <summary>
+       /// Sends a message to a client
+       /// </summary>
+       /// <param name="message"></param>
+       public static void NotifyClient(string message)
        {
            foreach (Player p in Server.Players)
            {

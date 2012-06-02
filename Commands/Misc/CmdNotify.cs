@@ -36,7 +36,7 @@ namespace CommandDll
             }
             if (tosend.Length >= 44) { p.SendMessage("You can only send messages with 41 characters or less"); return; } //gah ill make it send the rest below another time
 
-            WOM.notify(tosend);
+            WOM.NotifyClient(tosend);
         }
 
         public void Help(Player p)
