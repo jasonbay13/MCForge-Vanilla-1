@@ -34,16 +34,16 @@ namespace CommandDll.Moderation
         {
             bool Stealth = false;
             if (args[0] == "#") Stealth = true;
+            List<string> lines = new List<string>(File.ReadAllLines("bans/IPBans.txt"));
             if (!Stealth)
             {
-                foreach (string line in File.ReadAllLines("bans/IPbBans.txt"))
+                foreach (string line in lines)
                 {
                     if (line == args[0])
                     {
-                        List<string> l = new List<string>();
-                        if (line != args[0])
-                            l.Add(line);
-                        File.WriteAllLines("Bans/IP Bans.txt", l.ToArray());
+                        for (int i = 1; i <= lines.Count; i++)
+                            if (lines[i] == args[0]) lines.Remove(lines[i]);
+                        File.WriteAllLines("bans/IPBans.txt", lines.ToArray());
                         Player.UniversalChat("&3" + args[0] + Server.DefaultColor + " is now unbanned!");
                         return;
                     }
@@ -56,10 +56,9 @@ namespace CommandDll.Moderation
                 {
                     if (line == args[0])
                     {
-                        List<string> l = new List<string>();
-                        if (line != args[0])
-                            l.Add(line);
-                        File.WriteAllLines("Bans/IP Bans.txt", l.ToArray());
+                        for (int i = 1; i <= lines.Count; i++)
+                            if (lines[i] == args[0]) lines.Remove(lines[i]);
+                        File.WriteAllLines("bans/IPBans.txt", lines.ToArray());
                         Player.UniversalChatOps("&3" + args[0] + Server.DefaultColor + " is now unbanned!");
                         return;
                     }

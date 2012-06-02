@@ -12,7 +12,6 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 
@@ -29,13 +28,15 @@ namespace CommandDll.Moderation
         public void Initialize() { Command.AddReference(this, new string[2] { "bankick", "kickban" }); }
         public void Use(Player p, string[] args)
         {
-            string _reason = "";
+            string message = "";
+            for (int i = 1; i <= args.Length; i++)
+                message += args[i] + " ";
             bool Stealth = false;
             if (args[0] == "#") Stealth = true;
             if (!Stealth)
             {
                 Player who = Player.Find(args[0]);
-                string reason = _reason.Substring(args[0].Length + 1);
+                string reason = message.Trim().Substring(args[0].Length + 1);
                 if (reason == "")
                 {
                     if (who != null) { Command.Find("ban").Use(p, new string[1] { who.Username }); who.Kick("Banned by " + p.Username + "!"); }
@@ -50,7 +51,7 @@ namespace CommandDll.Moderation
             if (Stealth)
             {
                 Player who = Player.Find(args[1]);
-                string reason = _reason.Substring(args[0].Length + args[1].Length + 2);
+                string reason = message.Trim().Substring(args[0].Length + args[1].Length + 2);
                 if (reason == "")
                 {
                     if (who != null) { Command.Find("ban").Use(p, new string[2] { "#", who.Username }); who.SKick("Banned by " + p.Username + "!"); }

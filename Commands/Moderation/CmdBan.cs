@@ -17,8 +17,6 @@ using System.IO;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-using MCForge.Utils;
-using MCForge.Utils.Settings;
 
 namespace CommandDll.Moderation
 {
@@ -33,13 +31,15 @@ namespace CommandDll.Moderation
         public void Initialize() { Command.AddReference(this, "ban"); }
         public void Use(Player p, string[] args)
         {
-            string _reason = "";
+            string message = "";
+            for (int i = 1; i <= args.Length; i++)
+                message += args[i] + " ";
             bool Stealth = false;
             if (args[0] == "#") Stealth = true;
             if (!Stealth)
             {
                 Player who = Player.Find(args[0]);
-                string reason = _reason.Substring(args[0].Length + 1);
+                string reason = message.Trim().Substring(args[0].Length + 1);
                 using (StreamWriter SW = File.AppendText("bans/NameBans.txt"))
                 {
                     if (who != null)
@@ -76,7 +76,7 @@ namespace CommandDll.Moderation
             if (Stealth)
             {
                 Player who = Player.Find(args[1]);
-                string reason = _reason.Substring(args[0].Length + args[1].Length + 2);
+                string reason = message.Trim().Substring(args[0].Length + args[1].Length + 2);
                 using (StreamWriter SW = File.AppendText("bans/NameBans.txt"))
                 {
                     if (who != null)
@@ -104,7 +104,7 @@ namespace CommandDll.Moderation
                 }
                 else
                 {
-                    if (who != null) { Player.UniversalChatOps(who.Color+ who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
+                    if (who != null) { Player.UniversalChatOps(who.Color + who.Username + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
                     else { Player.UniversalChatOps("&3" + args[0] + Server.DefaultColor + " is now &8banned" + Server.DefaultColor + "!"); Player.UniversalChatOps("&4Reason: &f" + reason); }
                 }
             }
