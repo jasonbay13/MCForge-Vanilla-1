@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
+using System.Threading;
 using MCForge.Utils.Settings;
 using MCForge.Utils;
 using System.Drawing;
@@ -42,12 +43,12 @@ namespace MCForge.Core.HeartService
 			{
 				try
 				{
-					string url = Heart.hearts[i].URL + "?" + Heart.hearts[i].Prepare();
-					WebRequest Heartbeat = WebRequest.Create(url);
-					Stream responseStream = Heartbeat.GetResponse().GetResponseStream();
-					StreamReader responseStreamReader = new StreamReader(responseStream);
-					output[i] = Heart.hearts[i].OnPump(responseStreamReader);
-					responseStream.Close();
+                    string url = Heart.hearts[i].URL + "?" + Heart.hearts[i].Prepare();
+                    WebRequest Heartbeat = WebRequest.Create(url);
+                    Stream responseStream = Heartbeat.GetResponse().GetResponseStream();
+                    StreamReader responseStreamReader = new StreamReader(responseStream);
+                    output[i] = Heart.hearts[i].OnPump(responseStreamReader);
+                    responseStream.Close();
 				}
 				catch (Exception e)
 				{

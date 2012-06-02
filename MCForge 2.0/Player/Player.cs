@@ -64,6 +64,11 @@ namespace MCForge.Entity {
         public bool IsBot = false;
 
         /// <summary>
+        /// If the player is on wom client
+        /// </summary>
+        public bool usingwom = false;
+
+        /// <summary>
         /// The player's money.
         /// </summary>
         //public int money = 0;
@@ -139,7 +144,8 @@ namespace MCForge.Entity {
             }
             set {
                 _level = value;
-                SendMap();
+                if (IsLoggedIn)
+                    SendMap();
             }
         }
         /// <summary>

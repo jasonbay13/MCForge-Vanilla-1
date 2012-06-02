@@ -26,6 +26,7 @@ using MCForge.SQL;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
+using System.Threading;
 
 namespace MCForge.Core {
     public static class Server {
@@ -189,7 +190,12 @@ namespace MCForge.Core {
             Logger.Log("Finished loading DLL's", LogType.Debug);
             Logger.Log("Sending Heartbeat..", LogType.Debug);
 
-            Heartbeat.sendHeartbeat();
+            Thread HeartThread = new Thread(new ThreadStart(delegate
+            {
+                Heartbeat.sendHeartbeat();
+            }));
+
+            HeartThread.Start();
 
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
@@ -204,7 +210,7 @@ namespace MCForge.Core {
 
             Mainlevel = Level.LoadLevel(ServerSettings.GetSetting("Main-Level"));
             if (Mainlevel == null)
-                Mainlevel = Level.CreateLevel(new Vector3S(256, 128, 64), Level.LevelTypes.Hell);
+                Mainlevel = Level.CreateLevel(new Vector3S(256, 128, 64), Level.LevelTypes.Flat);
 
             Logger.Log("Loading Bans", LogType.Debug);
             Logger.Log("IPBANS", LogType.Debug);

@@ -35,7 +35,11 @@ namespace CommandDll.Building {
 
         public byte Permission {
             get {
-                return ( byte ) PermissionLevel.Builder;
+#if DEBUG
+                return (byte)PermissionLevel.Guest;
+#else
+                return (byte)PermissionLevel.Builder
+#endif
             }
         }
 

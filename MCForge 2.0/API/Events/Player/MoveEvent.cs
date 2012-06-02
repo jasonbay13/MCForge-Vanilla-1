@@ -15,7 +15,7 @@ namespace MCForge.API.Events {
     /// <summary>
     /// PlayerMoveEventArgs
     /// </summary>
-    public class MoveEventArgs : EventArgs, ICancelable {
+    public class MoveEventArgs : EventArgs, ICancelable, IEquatable<MoveEventArgs>, ICloneable {
         /// <summary>
         /// Creates a new instance
         /// </summary>
@@ -27,8 +27,8 @@ namespace MCForge.API.Events {
         /// <summary>
         /// The position where the move started
         /// </summary>
-        public Vector3S FromPosition { get; private set; }
-        public Vector3S ToPosition { get; private set; }
+        public Vector3S FromPosition;
+        public Vector3S ToPosition;
         private bool canceled = false;
         /// <summary>
         /// Whether or not the handling should be canceled
@@ -47,6 +47,14 @@ namespace MCForge.API.Events {
         /// </summary>
         public void Allow() {
             canceled = false;
+        }
+
+        public bool Equals(MoveEventArgs other) {
+            return ToPosition == other.ToPosition && FromPosition == other.FromPosition;
+        }
+
+        public object Clone() {
+            return new MoveEventArgs(new Vector3S(FromPosition), new Vector3S(ToPosition));
         }
     }
 }

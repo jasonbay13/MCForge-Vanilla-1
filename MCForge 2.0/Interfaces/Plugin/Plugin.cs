@@ -66,6 +66,28 @@ namespace MCForge.Interface.Plugin {
             return false;
         }
 
+        /// <summary>
+        /// Unloads all plugins
+        /// </summary>
+        /// <returns>Wheter or not all plugins are unloaded</returns>
+        public static bool unloadAll()
+        {
+            foreach (IPlugin ip in Plugins)
+            {
+                if (!Plugin.OnPluginUnload.Call(ip, new PluginLoadEventArgs(false)).Canceled)
+                {
+                    try
+                    {
+                        ip.OnUnload();
+                    }
+                    catch { Logger.Log(ip.Name + " cannot be unloaded", LogType.Warning); }
+                    Plugins.Remove(ip);
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private static bool isLoaded(string name, bool ignoreCase=true)
         {
             foreach (IPlugin ip in Plugins)

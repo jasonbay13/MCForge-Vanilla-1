@@ -73,7 +73,7 @@ namespace CommandDll {
 
         //TODO: fix if target is to close at origin
         IEnumerable<Vector3S> BlockString(string text, Vector3S origin, Vector3S target, Vector3S lvlSize) {
-            Font font = new Font(FontFamily.GenericSerif, 12f);
+            Font font = SystemFonts.DefaultFont;
             Image tmp = new Bitmap(1000, 1000);
             Bitmap img = new Bitmap((int)Graphics.FromImage(tmp).MeasureString(text, font).Width, (int)Graphics.FromImage(tmp).MeasureString(text, font).Height);
             tmp = null;

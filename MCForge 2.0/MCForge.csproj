@@ -148,6 +148,7 @@
     <Compile Include="Utils\Vector2S.cs" />
     <Compile Include="Utils\Vector3D.cs" />
     <Compile Include="Utils\Vector3S.cs" />
+    <Compile Include="Player\WOM.cs" />
     <Compile Include="World\Blocks\Custom\Griefer_stone.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\ActiveLava.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\ActiveWater.cs" />
@@ -258,6 +259,12 @@
     <Content Include="../System.Data.SQLite.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="sqlite3.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
