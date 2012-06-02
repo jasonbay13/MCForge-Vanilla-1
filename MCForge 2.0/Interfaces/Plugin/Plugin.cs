@@ -82,7 +82,6 @@ namespace MCForge.Interface.Plugin {
                     }
                     catch { Logger.Log(ip.Name + " cannot be unloaded", LogType.Warning); }
                     Plugins.Remove(ip);
-                    return true;
                 }
             }
             return false;
