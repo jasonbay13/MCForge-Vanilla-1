@@ -47,7 +47,7 @@ namespace MCForge.Core {
         /// </summary>
         public static bool Verifying = false;
         /// <summary>
-        /// The server owner.
+        /// The name of the server owner.
         /// </summary>
         public static string owner;
         /// <summary>

@@ -1,32 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MCForge.Interface.Command;
+﻿using MCForge.Interface.Command;
 using MCForge.Entity;
 
 namespace CommandDll.Misc {
     public class CmdNickname : ICommand {
-        public string Name {
-            get { return "Nickname"; }
-        }
-
-        public CommandTypes Type {
-            get { return CommandTypes.Misc; }
-        }
-
-        public string Author {
-            get { return "headdetect, ninedrafted"; }
-        }
-
-        public int Version {
-            get { return 1; }
-        }
-
-        public string CUD {
-            get { return ""; }
-        }
-
+        public string Name { get { return "Nickname"; } }
+        public CommandTypes Type { get { return CommandTypes.Misc; } }
+        public string Author { get { return "headdetect, ninedrafted"; } }
+        public int Version { get { return 1; } }
+        public string CUD { get { return ""; } }
         public byte Permission {
             get {
 #if DEBUG
