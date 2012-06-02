@@ -17,11 +17,11 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using System.Collections.Generic;
-using MCForge.Utils;
-using MCForge.Utils.Settings;
 
-namespace CommandDll.Moderation {
-    class CmdUnban : ICommand {
+namespace CommandDll.Moderation
+{
+    class CmdUnban : ICommand
+    {
         public string Name { get { return "Unban"; } }
         public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Sinjai"; } }
@@ -29,65 +29,45 @@ namespace CommandDll.Moderation {
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
         public void Initialize() { Command.AddReference(this, "unban"); }
-        public void Use(Player p, string[] args) {
+        public void Use(Player p, string[] args)
+        {
             bool Stealth = false;
             if (args[0] == "#") Stealth = true;
-            if (!Stealth) {
-                Player who = Player.Find(args[0]);
-                foreach (string line in File.ReadAllLines("bans/NameBans.txt")) {
-                    if (who != null) {
-                        if (line == who.Username) {
-                            List<string> l = new List<string>();
-                            if (line != who.Username)
-                                l.Add(line);
-                            File.WriteAllLines("bans/NameBans.txt", l.ToArray());
-                            Player.UniversalChat(who.Color  + who.Username + Server.DefaultColor + " is now unbanned!");
-                            return;
-                        }
-                        p.SendMessage(who.Color + who.Username + Server.DefaultColor + " is not banned.");
+            Player who = Player.Find(args[0]);
+            foreach (string line in File.ReadAllLines("bans/NameBans.txt"))
+            {
+                if (who != null)
+                {
+                    if (line == who.Username)
+                    {
+                        List<string> l = new List<string>();
+                        if (line != who.Username)
+                            l.Add(line);
+                        File.WriteAllLines("bans/NameBans.txt", l.ToArray());
+                        if (!Stealth) Player.UniversalChat(who.Color + who.Username + Server.DefaultColor + " is now unbanned!");
+                        else Player.UniversalChatOps(who.Color + who.Username + Server.DefaultColor + " is now unbanned!");
+                        return;
                     }
-                    else {
-                        if (line == args[0]) {
-                            List<string> l = new List<string>();
-                            if (line != args[0])
-                                l.Add(line);
-                            File.WriteAllLines("bans/NameBans.txt", l.ToArray());
-                            Player.UniversalChat("&3" + args[1] + Server.DefaultColor + " is now unbanned!");
-                            return;
-                        }
-                        p.SendMessage("&3" + args[0] + Server.DefaultColor + " is not banned.");
-                    }
+                    p.SendMessage(who.Color + who.Username + Server.DefaultColor + " is not banned.");
                 }
-            }
-            if (Stealth) {
-                Player who = Player.Find(args[1]);
-                foreach (string line in File.ReadAllLines("bans/NameBans.txt")) {
-                    if (who != null) {
-                        if (line == who.Username) {
-                            List<string> l = new List<string>();
-                            if (line != who.Username)
-                                l.Add(line);
-                            File.WriteAllLines("bans/NameBans.txt", l.ToArray());
-                            Player.UniversalChatOps(who.Color + who.Username + Server.DefaultColor + " is now unbanned!");
-                            return;
-                        }
-                        p.SendMessage(who.Color + who.Username + Server.DefaultColor + " is not banned.");
+                else
+                {
+                    if (line == args[0])
+                    {
+                        List<string> l = new List<string>();
+                        if (line != args[0])
+                            l.Add(line);
+                        File.WriteAllLines("bans/NameBans.txt", l.ToArray());
+                        if (!Stealth) Player.UniversalChat("&3" + args[1] + Server.DefaultColor + " is now unbanned!");
+                        else Player.UniversalChatOps("&3" + args[1] + Server.DefaultColor + " is now unbanned!");
+                        return;
                     }
-                    else {
-                        if (line == args[1]) {
-                            List<string> l = new List<string>();
-                            if (line != args[0])
-                                l.Add(line);
-                            File.WriteAllLines("bans/NameBans.txt", l.ToArray());
-                            Player.UniversalChatOps("&3" + args[1] + Server.DefaultColor + " is now unbanned!");
-                            return;
-                        }
-                        p.SendMessage("&3" + args[1] + Server.DefaultColor + " is not banned.");
-                    }
+                    p.SendMessage("&3" + args[0] + Server.DefaultColor + " is not banned.");
                 }
             }
         }
-        public void Help(Player p) {
+        public void Help(Player p)
+        {
             p.SendMessage("/unban <player> - Unban <player>.");
             p.SendMessage("/unban # <player> - Stealth unban <player>. (Unban message sent to ops+ only.)");
         }

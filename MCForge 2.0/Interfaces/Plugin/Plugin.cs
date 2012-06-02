@@ -72,7 +72,7 @@ namespace MCForge.Interface.Plugin {
         /// <returns>Wheter or not all plugins are unloaded</returns>
         public static bool unloadAll()
         {
-            foreach (IPlugin ip in Plugins)
+            foreach (IPlugin ip in Plugins.ToArray())
             {
                 if (!Plugin.OnPluginUnload.Call(ip, new PluginLoadEventArgs(false)).Canceled)
                 {
@@ -82,7 +82,6 @@ namespace MCForge.Interface.Plugin {
                     }
                     catch { Logger.Log(ip.Name + " cannot be unloaded", LogType.Warning); }
                     Plugins.Remove(ip);
-                    return true;
                 }
             }
             return false;

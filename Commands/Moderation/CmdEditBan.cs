@@ -12,10 +12,8 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
 using MCForge.Interface.Command;
 using MCForge.Entity;
-using System.Collections.Generic;
 using System.IO;
 
 namespace CommandDll.Moderation
@@ -32,9 +30,13 @@ namespace CommandDll.Moderation
         public void Use(Player p, string[] args)
         {
             int _ = 0;
-            string _newreason = "";
-            string newreason = _newreason.Substring(args[0].IndexOf(" ") + 1);
-            string[] lines = File.ReadAllLines("Bans/Ban Info.txt");
+            string message = "";
+            for (int i = 1; i <= args.Length; i++)
+            {
+                message += args[i] + " ";
+            }
+            string newreason = message.Trim().Substring(args[0].Length + 1);
+            string[] lines = File.ReadAllLines("bans/BanInfo.txt");
             if (lines.Length < 1) { p.SendMessage("Could not find ban information for \"" + args[0] + "\"."); return; }
             foreach (string line in lines)
             {
@@ -43,14 +45,11 @@ namespace CommandDll.Moderation
                     string date = line.Split('`')[2];
                     string time = line.Split('`')[3];
                     string banner = line.Split('`')[4];
-                    List<string> temp = new List<string>();
-                    foreach (string l in lines)
+                    for (int o = 1; o <= lines.Length; o++)
                     {
-                        if (!l.StartsWith(args[0]))
-                            temp.Add(l);
-                        temp.Add(args[0] + "`" + newreason + "`" + date + "`" + time + "`" + banner);
+                        if (lines[o].Split('`')[0] == args[0]) lines[o] = args[0] + "`" + newreason + "`" + date + "`" + time + "`" + banner;
                     }
-                    File.WriteAllLines("baninfo.txt", temp.ToArray());
+                    File.WriteAllLines("bans/BanInfo.txt", lines);
                     p.SendMessage("Successfully set " + args[0] + "'s ban reason to \"" + newreason + "\".");
                 }
                 else
