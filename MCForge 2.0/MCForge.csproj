@@ -110,6 +110,21 @@
     <Compile Include="Interfaces\Plugin\IPlugin.cs" />
     <Compile Include="Player\ConsolePlayer.cs" />
     <Compile Include="Player\Sender.cs" />
+    <Compile Include="Remote\Types\AndroidRemote.cs" />
+    <Compile Include="Remote\IRemote.cs" />
+    <Compile Include="Remote\Networking\Packet.cs" />
+    <Compile Include="Remote\Networking\Enums.cs" />
+    <Compile Include="Remote\Networking\PacketOptions.cs" />
+    <Compile Include="Remote\Networking\PacketReader.cs" />
+    <Compile Include="Remote\Networking\Packets\PacketHandShake.cs" />
+    <Compile Include="Remote\Networking\Packets\PacketInvalid.cs" />
+    <Compile Include="Remote\Networking\Packets\PacketKick.cs" />
+    <Compile Include="Remote\Networking\Packets\PacketLogin.cs" />
+    <Compile Include="Remote\Networking\Packets\PacketMessage.cs" />
+    <Compile Include="Remote\Networking\Packets\PacketPing.cs" />
+    <Compile Include="Remote\Networking\PacketWriter.cs" />
+    <Compile Include="Remote\RemoteConnector.cs" />
+    <Compile Include="Remote\RemoteManager.cs" />
     <Compile Include="Robot\Bot.cs" />
     <Compile Include="Robot\BotMap.cs" />
     <Compile Include="Player\PlayerNetworking.cs" />
@@ -196,6 +211,8 @@
     <Compile Include="World\Blocks\DefaultBlocks\Stone.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Water.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Wood.cs" />
+    <Compile Include="World\Drawing\CubeBrush.cs" />
+    <Compile Include="World\Drawing\IBrush.cs" />
     <Compile Include="World\Generator\GeneratorArgs.cs" />
     <Compile Include="World\Generator\GeneratorTemplate.cs" />
     <Compile Include="World\Generator\LevelGenerator.cs" />
@@ -230,6 +247,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="Remote\Networking\Events\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.txt" />

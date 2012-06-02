@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Building\CmdBrush.cs" />
     <Compile Include="Building\CmdClick.cs" />
     <Compile Include="Building\CmdCuboid.cs" />
     <Compile Include="Building\CmdLayer.cs" />
