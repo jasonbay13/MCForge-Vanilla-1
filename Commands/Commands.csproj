@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Building\CmdBrush.cs" />
     <Compile Include="Building\CmdClick.cs" />
     <Compile Include="Building\CmdCuboid.cs" />
     <Compile Include="Building\CmdLayer.cs" />
@@ -51,7 +52,6 @@
     <Compile Include="Building\CmdReplaceNot.cs" />
     <Compile Include="Building\CmdStatic.cs" />
     <Compile Include="Bots\CmdBot.cs" />
-    <Compile Include="Building\CmdWrite.cs" />
     <Compile Include="Building\CmdWrite2.cs" />
     <Compile Include="Misc\CmdFlipHead.cs" />
     <Compile Include="Misc\CmdNickname.cs" />

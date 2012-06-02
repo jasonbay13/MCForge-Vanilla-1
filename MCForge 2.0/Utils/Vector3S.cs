@@ -5,7 +5,7 @@ using System.Text;
 using MCForge.Core;
 
 namespace MCForge.Utils {
-    public class Vector3S{
+    public class Vector3S {
         public short x;
         public short y;
         public short z;
@@ -36,6 +36,12 @@ namespace MCForge.Utils {
         }
         public static Vector3S operator -(Vector3S a, Vector3S b) {
             return new Vector3S((short)(a.x - b.x), (short)(a.z - b.z), (short)(a.y - b.y));
+        }
+        public static Vector3S operator -(Vector3S a, int b) {
+            return new Vector3S((short)(a.x - b), (short)(a.z - b), (short)(a.y - b));
+        }
+        public static Vector3S operator -(Vector3S a, double b) {
+            return new Vector3S((short)(a.x - b), (short)(a.z - b), (short)(a.y - b));
         }
         public static Vector3S operator +(Vector3S a, Vector3S b) {
             return new Vector3S((short)(a.x + b.x), (short)(a.z + b.z), (short)(a.y + b.y));
@@ -149,11 +155,11 @@ namespace MCForge.Utils {
         /// <param name="a">the vector to</param>
         /// <returns>a box like enumerator</returns>
         public IEnumerable<Vector3S> Box(Vector3S a) {
-            for (ushort x = (ushort)Math.Min(this.x, a.x); x < Math.Max(this.x, a.x); x++) 
+            for (ushort x = (ushort)Math.Min(this.x, a.x); x < Math.Max(this.x, a.x); x++)
                 for (ushort y = (ushort)Math.Min(this.y, a.y); y < Math.Max(this.y, a.y); y++)
-                    for (ushort z = (ushort) Math.Min(this.z, a.z); z < Math.Max(this.z, a.z); z++)
+                    for (ushort z = (ushort)Math.Min(this.z, a.z); z < Math.Max(this.z, a.z); z++)
                         yield return new Vector3S(x, z, y);
-            
+
         }
 
         public IEnumerable<Vector3S> Layer(Vector3S to) {

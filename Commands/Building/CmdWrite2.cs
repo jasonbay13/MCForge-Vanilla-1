@@ -24,7 +24,7 @@ using System.IO;
 
 namespace CommandDll {
     public class CmdWrite2 : ICommand {
-        public string Name { get { return "Write2"; } }
+        public string Name { get { return "Write"; } }
         public CommandTypes Type { get { return CommandTypes.Building; } }
         public string Author { get { return "Arrem, ninedrafted"; } }
         public int Version { get { return 1; } }
@@ -59,11 +59,11 @@ namespace CommandDll {
         }
         public void Help(Player p) {
             p.SendMessage("write2 <message> - writes a specified message in blocks");
-            p.SendMessage("Shortcut: /wt2");
+            p.SendMessage("Shortcut: /wt");
         }
 
         public void Initialize() {
-            Command.AddReference(this, new string[2] { "write2", "wt2" });
+            Command.AddReference(this, new string[2] { "write", "wt" });
         }
         protected struct CatchPos {
             public byte block;
