@@ -56,6 +56,7 @@
     <Compile Include="Misc\CmdFlipHead.cs" />
     <Compile Include="Misc\CmdNickname.cs" />
     <Compile Include="Misc\CmdRun.cs" />
+    <Compile Include="Misc\CmdNotify.cs" />
     <Compile Include="Moderation\CmdRestart.cs" />
     <Compile Include="Moderation\CmdShutdown.cs" />
     <Compile Include="Moderation\CmdUnload.cs" />

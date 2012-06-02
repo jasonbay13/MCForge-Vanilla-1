@@ -183,6 +183,8 @@ namespace MCForge.Entity {
                 catch { }
                 UniversalChat(Username + " joined the game!");
 
+                WOM.sendjoin(Username);
+
                 CheckDuplicatePlayers(Username);
                 foreach (PlayerGroup g in PlayerGroup.Groups)
                     if (g.Players.Contains(Username.ToLower()))
@@ -342,6 +344,13 @@ namespace MCForge.Entity {
             }
 
             incomingText = Regex.Replace(incomingText, @"\s\s+", " ");
+
+            if (incomingText.StartsWith("/womid"))
+            {
+                usingwom = true;
+                WOM.senddetail(this); //Will make this editable later ?
+                return;
+            }
 
             if (StringUtils.ContainsBadChar(incomingText)) {
                 Kick("Illegal character in chat message!");
@@ -627,7 +636,7 @@ namespace MCForge.Entity {
                 message = message.Replace("%" + ch, "&" + ch);
                 message = message.Replace("&" + ch + " &", "&");
             }
-            if (!String.IsNullOrWhiteSpace(message))
+            if (!String.IsNullOrWhiteSpace(message) && message.IndexOf("^detail.user") == -1)
                 message = Server.DefaultColor + message;
 
             pa.Add(packet.types.Message);
@@ -1039,6 +1048,7 @@ namespace MCForge.Entity {
 
                 if (Server.PlayerCount > 0)
                     Player.UniversalChat(Username + " has disconnected");
+                WOM.sendleave(Username);
             }
             IsLoggedIn = false;
             Server.Connections.Remove(this);

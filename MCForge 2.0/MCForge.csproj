@@ -133,6 +133,7 @@
     <Compile Include="Utils\Vector2S.cs" />
     <Compile Include="Utils\Vector3D.cs" />
     <Compile Include="Utils\Vector3S.cs" />
+    <Compile Include="Player\WOM.cs" />
     <Compile Include="World\Blocks\Custom\Griefer_stone.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\ActiveLava.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\ActiveWater.cs" />
