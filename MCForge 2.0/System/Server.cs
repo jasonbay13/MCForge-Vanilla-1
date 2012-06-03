@@ -27,6 +27,7 @@ using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
 using System.Threading;
+using System.Net;
 
 namespace MCForge.Core {
     public static class Server {
@@ -107,7 +108,16 @@ namespace MCForge.Core {
         /// <summary>
         /// The list of MCForge developers.
         /// </summary>
-        public static readonly string[] devs = new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "headdetect", "Gamemakergm", "cazzar", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "ninedrafted", "Nerketur", "Serado" };
+        public static readonly string[] devs
+        {
+            get
+            {
+                using (WebClient W = new WebClient())
+                {
+                    return W.DownloadString("http://server.mcforge.net/devs.txt").Split(':');
+                }
+            }
+        }
         /// <summary>
         /// List of players that need to be reviewed
         /// </summary>
