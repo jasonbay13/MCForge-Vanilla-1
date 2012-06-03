@@ -336,7 +336,7 @@ namespace MCForge.Entity {
 			Logger.Log("Saving " + Username + " to the database", LogType.Debug);
 			List<string> commands = new List<string>();
 			commands.Add("UPDATE _players SET money=" + money + ", lastlogin='" + LastLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', firstlogin='" + FirstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE UID=" + UID);
-			//TODO Add more commands...to save more stuff..
+			commands.Add("UPDATE _players SET color='" + Color + "' WHERE UID=" + UID);
 			DataSaved.Call(this, new DataSavedEventArgs(UID));
 			Database.executeQuery(commands.ToArray());
 		}
@@ -350,7 +350,7 @@ namespace MCForge.Entity {
 				FirstLogin = DateTime.Now;
 				LastLogin = DateTime.Now;
 				money = 0;
-				Database.fillData("INSERT INTO _players (Name, IP, firstlogin, lastlogin, money) VALUES ('" + Username + "', '" + Ip + "', '" + FirstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + LastLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', 0)");
+				Database.executeQuery("INSERT INTO _players (Name, IP, firstlogin, lastlogin, money, color) VALUES ('" + Username + "', '" + Ip + "', '" + FirstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + LastLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', 0, '" + Color + "')");
 				DataTable temp = Database.fillData("SELECT * FROM _players WHERE Name='" + Username + "'");
 				if (temp.Rows.Count != 0)
 					UID = int.Parse(temp.Rows[0]["UID"].ToString());
@@ -362,6 +362,7 @@ namespace MCForge.Entity {
 				FirstLogin = DateTime.Parse(playerdb.Rows[0]["firstlogin"].ToString());
 				LastLogin = DateTime.Now;
 				money = int.Parse(playerdb.Rows[0]["money"].ToString());
+				Color = playerdb.Rows[0]["color"].ToString();
 				//TODO Add total login and total Blocks
 			}
 			playerdb.Dispose();

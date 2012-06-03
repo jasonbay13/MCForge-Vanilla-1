@@ -30,7 +30,7 @@ namespace MCForge.SQL
 			Open();
 			string[] commands = new string[4];
 			commands[0] = "CREATE DATABASE if not exists '" + ServerSettings.GetSetting("MySQL-DBName") + "'";
-			commands[1] = "CREATE TABLE if not exists _players (UID INTEGER not null auto_increment, Name VARCHAR(20), IP VARCHAR(20), firstlogin DATETIME, lastlogin DATETIME, money MEDIUMINT, totallogin MEDIUMINT, totalblocks MEDIUMINT PRIMARY KEY (UID));";
+			commands[1] = "CREATE TABLE if not exists _players (UID INTEGER not null auto_increment, Name VARCHAR(20), IP VARCHAR(20), firstlogin DATETIME, lastlogin DATETIME, money MEDIUMINT, totallogin MEDIUMINT, totalblocks MEDIUMINT, color VARCHAR(5) PRIMARY KEY (UID));";
 			commands[2] = "CREATE TABLE if not exists extra (key VARCHAR(1000), value VARCHAR(1000), UID INTEGER);";
 			commands[3] = "CREATE TABLE if not exists Blocks (UID INTEGER, X MEDIUMINT, Y MEDIUMINT, Z MEDIUMINT, Level VARCHAR(100), Deleted VARCHAR(30), Date DATETIME);";
 			executeQuery(commands);

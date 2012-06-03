@@ -1,0 +1,7 @@
+<?xml version='1.0'?>
+<project basedir='.' default='all' name='MCForge'>
+  <property name='src' value='src'/>
+  <property name='build' value='bin'/>
+  <property name='nant.settings.currentframework' value='net-3.5'/>
+  <target depends='' name='all'/>
+</project>
