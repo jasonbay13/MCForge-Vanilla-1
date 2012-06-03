@@ -153,7 +153,10 @@ namespace MCForge.Core {
         /// </summary>
         /// 
         public static string URL = "";
-
+        /// <summary>
+        /// Internet utilies
+        /// </summary>
+        public static InetUtils InternetUtils;
         /// <summary>
         /// The IRC client for the server
         /// </summary>
@@ -209,7 +212,8 @@ namespace MCForge.Core {
 
             CreateCoreFiles();
 
-            Logger.Log(InetUntils.CanConnectToInternet() + "");
+            InternetUtils = new InetUtils();
+            InetUtils.InternetAvailable = InetUtils.CanConnectToInternet();
 
             Mainlevel = Level.LoadLevel(ServerSettings.GetSetting("Main-Level"));
             if (Mainlevel == null)
