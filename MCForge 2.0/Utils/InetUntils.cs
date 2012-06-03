@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.NetworkInformation;
 using Timer=System.Threading.Timer;
+using System.Net;
 
 namespace MCForge.Utils
 {
@@ -34,18 +35,37 @@ namespace MCForge.Utils
             return false;
         }
 
-        public static bool CanConnectToInternet() //Check if is returning right page (e.g router might display cannot connect page)
+        public static bool CanConnectToInternet() //Uses NSCI (http://technet.microsoft.com/en-us/library/cc766017.aspx)
         {
-            try {
-                System.Net.IPHostEntry Temp = System.Net.Dns.GetHostEntry("www.mcforge.net");
+            string DnsCheck = "dns.msftncsi.com";
+            IPAddress[] AddressList = Dns.GetHostAddresses(DnsCheck);
+            bool DNSFine = false;
+            foreach (IPAddress IPA in AddressList)
+            {
+                if (IPA.ToString() == "131.107.255.255")
+                    DNSFine = true;
             }
-            catch { return false; }
-            try {
-                System.Net.Sockets.TcpClient clnt = new System.Net.Sockets.TcpClient("www.mcforge.com", 80);
-                clnt.Close();
-            }
-            catch { return false; }
+            if (DNSFine == false)
+                return false;
+
+            string ConnectionCheck = "http://www.msftncsi.com/ncsi.txt";
+            string Result = GrabWebpage(ConnectionCheck);
+            if (Result != "Microsoft NCSI")
+                return false;
+
             return true;
+        }
+
+        public static string GrabWebpage(string location)
+        {
+            try
+            {
+                using (var client = new WebClient())
+                {
+                    return client.DownloadString(location);
+                }
+            }
+            catch { return ""; }
         }
     }
 }

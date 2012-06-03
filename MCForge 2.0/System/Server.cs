@@ -209,6 +209,8 @@ namespace MCForge.Core {
 
             CreateCoreFiles();
 
+            Logger.Log(InetUntils.CanConnectToInternet() + "");
+
             Mainlevel = Level.LoadLevel(ServerSettings.GetSetting("Main-Level"));
             if (Mainlevel == null)
                 Mainlevel = Level.CreateLevel(new Vector3S(256, 128, 64), Level.LevelTypes.Flat);
