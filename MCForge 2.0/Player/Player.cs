@@ -78,7 +78,7 @@ namespace MCForge.Entity {
         /// </summary>
         public bool IsOwner { get { return Username == Server.owner; } }
 
-        internal string _DisplayName = "";
+        public string _DisplayName = "";
         public string DisplayName
         {
             get { return _DisplayName; }

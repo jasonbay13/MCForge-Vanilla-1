@@ -146,7 +146,7 @@
     <Compile Include="System\Settings\LevelSettings.cs" />
     <Compile Include="System\UPnP.cs" />
     <Compile Include="Utils\ColorUtils.cs" />
-    <Compile Include="Utils\InetUntils.cs" />
+    <Compile Include="Utils\InetUtils.cs" />
     <Compile Include="Utils\MathUtils.cs" />
     <Compile Include="Utils\MiscUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
