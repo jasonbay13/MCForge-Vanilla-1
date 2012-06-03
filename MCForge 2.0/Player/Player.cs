@@ -367,6 +367,10 @@ namespace MCForge.Entity {
 			}
 			playerdb.Dispose();
 			LoadExtra();
+			//Because milk
+			this.OnPlayerDisconnect.Important += delegate { 
+				Save();
+			};
 		}
 		
 		#endregion
