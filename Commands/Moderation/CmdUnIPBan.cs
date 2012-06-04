@@ -17,7 +17,6 @@ using System.IO;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-using MCForge.Utils.Settings;
 
 namespace CommandDll.Moderation
 {

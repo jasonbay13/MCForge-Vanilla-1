@@ -12,15 +12,12 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
-using MCForge.World;
 using MCForge.API.Events;
 using System.Drawing;
 using System.Collections.Generic;
-using System.IO;
 
 namespace CommandDll {
     public class CmdWrite2 : ICommand {
@@ -58,7 +55,7 @@ namespace CommandDll {
             return;
         }
         public void Help(Player p) {
-            p.SendMessage("write2 <message> - writes a specified message in blocks");
+            p.SendMessage("/write <message> - writes a specified message in blocks");
             p.SendMessage("Shortcut: /wt");
         }
 

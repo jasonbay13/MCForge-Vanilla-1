@@ -12,15 +12,12 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-using System.Collections.Generic;
-using System.Threading;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
-using MCForge.World.Blocks;
 using MCForge.Utils;
-using MCForge.World;
-namespace CommandDll {
+namespace CommandDll
+{
     public class CmdRun : ICommand {
         public string Name { get { return "Run"; } }
         public CommandTypes Type { get { return CommandTypes.Misc; } }
@@ -75,7 +72,7 @@ namespace CommandDll {
             count++;
         }
         public void Help(Player p) {
-            p.SendMessage("/run - Allows you to run");
+            p.SendMessage("/run - Allows you to run.");
         }
 
         public void Initialize() {

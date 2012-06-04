@@ -32,49 +32,18 @@ namespace CommandDll.Misc
         {
             if (args.Length != 2) { Help(p); return; }
             Player who = Player.Find(args[0]);
-
-            if (p.Group.Permission < who.Group.Permission) { 
-                p.SendMessage("You cannot rob your superiors!"); 
-                return; 
-            }
-
-            if (who == null) {
-                p.SendMessage("Could not find \"" + args[0] + "\"!");
-                return;
-            }
-            if (who == p && !p.IsOwner) {
-                p.SendMessage("You cannot take money from yourself!");
-                return;
-            }
+            if (p.Group.Permission < who.Group.Permission) { p.SendMessage("You cannot rob your superiors!"); return; }
+            if (who == null) { p.SendMessage("Could not find \"" + args[0] + "\"!"); return; }
+            if (who == p) { p.SendMessage("You cannot take money from yourself!"); return; }
             int amt;
-
-            try {
-                amt = int.Parse(args[1]);
-            }
-            catch {
-                p.SendMessage("Invalid amount!");
-                return;
-            }
-
+            try { amt = int.Parse(args[1]); }
+            catch { p.SendMessage("Invalid amount!"); return; }
             who.ExtraData.CreateIfNotExist("Money", 0);
             p.ExtraData.CreateIfNotExist("Money", 0);
-
-            if ((int)who.ExtraData["Money"] - amt < 0) {
-                p.SendMessage("You cannot steal money that " + who.Username + " does not have!");
-                return;
-            }
-            if ((int)p.ExtraData["Money"] + amt > 16777215) {
-                p.SendMessage("If you steal that much, you'll be so rich your wallet will burst! You cannot have over 16777215 " + Server.moneys + ".");
-                return;
-            }
-            if (amt < 0) {
-                p.SendMessage("Cannot take negative amounts of " + Server.moneys + ".");
-                return;
-            }
-
-
-            Random rand = new Random();
-            int x = rand.Next(1, 101);
+            if ((int)who.ExtraData["Money"] - amt < 0) { p.SendMessage("You cannot steal money that " + who.Color + who.Username + Server.DefaultColor + " does not have!"); return; }
+            if ((int)p.ExtraData["Money"] + amt > 16777215) { p.SendMessage("If you steal that much, you'll be so rich your wallet will burst! You cannot have over 16777215 " + Server.moneys + "."); return; }
+            if (amt < 0) { p.SendMessage("Cannot take negative amounts of " + Server.moneys + "."); return; }
+            int x = new Random().Next(1, 101);
             if (InBetween(1, x, 3)) { Rob(p, who, amt); }
             if (InBetween(4, x, 6)) { amt -= amt / 5; Rob(p, who, amt); }
             if (InBetween(7, x, 15)) { amt = amt / 5; Rob(p, who, amt); }

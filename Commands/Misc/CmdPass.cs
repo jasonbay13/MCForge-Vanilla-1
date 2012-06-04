@@ -21,13 +21,12 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
-using MCForge.Utils.Settings;
 
 namespace CommandDll.Misc {
     class CmdPass : ICommand {
         public string Name { get { return "Pass"; } }
         public CommandTypes Type { get { return CommandTypes.Misc; } }
-        public string Author { get { return "Sinjai"; } }
+        public string Author { get { return ""; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }

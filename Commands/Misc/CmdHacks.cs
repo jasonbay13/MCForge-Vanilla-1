@@ -61,7 +61,7 @@ namespace CommandDll
 
         public void Help(Player p)
         {
-            p.SendMessage("/Hacks - |-|4(|< 7|-|3 |*14||37");
+            p.SendMessage("/Hacks - |-|4(|< 7|-|3 53|^\\/3|^");
             p.SendMessage("Shortcuts: /hax, /haxor");
         }
         public void Initialize()

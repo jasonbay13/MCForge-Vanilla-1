@@ -16,7 +16,6 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Interface.Command;
-using MCForge.Utils.Settings;
 
 namespace CommandDll
 {

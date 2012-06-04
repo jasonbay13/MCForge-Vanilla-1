@@ -20,7 +20,6 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Interface.Command;
-using MCForge.Utils.Settings;
 
 namespace CommandDll.Information
 {
@@ -156,11 +155,11 @@ namespace CommandDll.Information
         }
         public void Help(Player p)
         {
-            p.SendMessage("...really? Wow. Just...wow.");
+            p.SendMessage("...really? Wow. Just... wow.");
         }
         public void Initialize()
         {
-            Command.AddReference(this, new string[1] { "help" });
+            Command.AddReference(this, "help");
         }
     }
 }

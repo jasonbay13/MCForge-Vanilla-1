@@ -65,7 +65,7 @@ namespace CommandDll {
         }
 
         public void Initialize() {
-            Command.AddReference(this, "info");
+            Command.AddReference(this, new string[2] { "info", "information" });
         }
     }
 }

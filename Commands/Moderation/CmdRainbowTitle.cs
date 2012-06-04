@@ -16,13 +16,12 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
-using MCForge.Utils.Settings;
 
 namespace CommandDll
 {
-    public class CmdRTitle : ICommand
+    public class CmdRainbowTitle : ICommand
     {
-        public string Name { get { return "RTitle"; } }
+        public string Name { get { return "RainbowTitle"; } }
         public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "7imekeeper"; } }
         public int Version { get { return 1; } }

@@ -1,40 +1,38 @@
-﻿using System;
+﻿/*
+Copyright 2012 MCForge
+Dual-licensed under the Educational Community License, Version 2.0 and
+the GNU General Public License, Version 3 (the "Licenses"); you may
+not use this file except in compliance with the Licenses. You may
+obtain a copy of the Licenses at
+http://www.opensource.org/licenses/ecl2.php
+http://www.gnu.org/licenses/gpl-3.0.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the Licenses are distributed on an "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the Licenses for the specific language governing
+permissions and limitations under the Licenses.
+*/
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MCForge.Interface.Command;
 using MCForge.Groups;
 using MCForge.Entity;
 using MCForge.Utils;
 using MCForge.API.Events;
 
-namespace CommandDll.Building {
-    public class CmdStatic : ICommand {
-
+namespace CommandDll.Building
+{
+    public class CmdStatic : ICommand
+    {
         private static readonly Dictionary<Player, ICommand> playerDictionary = new Dictionary<Player, ICommand>();
-
-        public string Name {
-            get { return "Static"; }
-        }
-
-        public CommandTypes Type {
-            get { return CommandTypes.Building; }
-        }
-
-        public string Author {
-            get { return "headdetect"; }
-        }
-
-        public int Version {
-            get { return 1; }
-        }
-
-        public string CUD {
-            get { return "com.mcforge.cmdstatic"; }
-        }
-
-        public byte Permission {
-            get {
+        public string Name { get { return "Static"; } }
+        public CommandTypes Type { get { return CommandTypes.Building; } }
+        public string Author { get { return "headdetect"; } }
+        public int Version { get { return 1; } }
+        public string CUD { get { return "com.mcforge.cmdstatic"; } }
+        public byte Permission
+        {
+            get
+            {
 #if DEBUG
                 return (byte)PermissionLevel.Guest;
 #else
@@ -42,16 +40,19 @@ namespace CommandDll.Building {
 #endif
             }
         }
+        public void Use(Player p, string[] args)
+        {
 
-        public void Use(MCForge.Entity.Player p, string[] args) {
-
-            if (args.Length < 1) {
-                if (playerDictionary.ContainsKey(p)) {
+            if (args.Length < 1)
+            {
+                if (playerDictionary.ContainsKey(p))
+                {
                     p.SendMessage("&cStatic Disabled");
                     p.OnCommandEnd.Normal -= OnEndCommand;
                     playerDictionary.Remove(p);
                 }
-                else {
+                else
+                {
                     Help(p);
                 }
                 return;
@@ -59,7 +60,8 @@ namespace CommandDll.Building {
 
             ICommand cmd = Command.Find(args[0]);
 
-            if (cmd == null) {
+            if (cmd == null)
+            {
                 p.SendMessage("&cCan't find the specified command");
                 return;
             }
@@ -68,10 +70,12 @@ namespace CommandDll.Building {
             playerDictionary.ChangeOrCreate<Player, ICommand>(p, cmd);
 
             string[] newArgs;
-            if (args.Length < 2) {
+            if (args.Length < 2)
+            {
                 newArgs = new string[0];
             }
-            else {
+            else
+            {
                 newArgs = new string[args.Length - 1];
                 args.CopyTo(newArgs, 1);
             }
@@ -81,17 +85,21 @@ namespace CommandDll.Building {
 
         }
 
-        public void Help(MCForge.Entity.Player p) {
+        public void Help(Player p)
+        {
             p.SendMessage("static [command] (args <optional>) - Makes every command a toggle.");
             p.SendMessage("If [command] is given, then that command is used");
             p.SendMessage("If (args) is given it will use that command with specified arguments");
+            p.SendMessage("Shortcut: /t");
         }
 
-        public void Initialize() {
+        public void Initialize()
+        {
             Command.AddReference(this, new[] { "t", "static" });
         }
 
-        public void OnEndCommand(Player sender, CommandEndEventArgs e) {
+        public void OnEndCommand(Player sender, CommandEndEventArgs e)
+        {
             e.Command.Use(sender, e.Args);
         }
     }

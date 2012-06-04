@@ -16,7 +16,6 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
-using MCForge.Utils.Settings;
 
 namespace CommandDll
 {
@@ -76,12 +75,11 @@ namespace CommandDll
             Player.UniversalChat(who.Color + who.Username + Server.DefaultColor + " had their title " + message);
             //TODO Save to database.
         }
-
         public void Help(Player p)
         {
             p.SendMessage("/title <title> - Sets your title");
             p.SendMessage("/title [player] <title> - Sets [player]'s title");
-            p.SendMessage("If <title> is \"del\" it deletes the title");
+            p.SendMessage("If <title> is \"del\", the current title will be deleted.");
         }
 
         public void Initialize()

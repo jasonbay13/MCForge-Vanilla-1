@@ -16,8 +16,6 @@ using System.Collections.Generic;
 using System.Threading;
 using MCForge.Interface.Command;
 using MCForge.Entity;
-using MCForge.Core;
-using MCForge.World.Blocks;
 using MCForge.Utils;
 using MCForge.World;
 namespace CommandDll
