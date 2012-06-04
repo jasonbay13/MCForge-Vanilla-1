@@ -71,7 +71,7 @@ namespace MCForge.Utils.Settings {
                     new SettingNode("IRC-OPChannel", "#", "IRC operator channel to connect to"),
                     new SettingNode("IRC-NickServ", "password", "IRC NickServ password (optional when IRC is enabled)"),
                     new SettingNode("AgreeingToRules", "true", "If set to true players below op will need to read the rules and agree before they can use commands"),
-                    new SettingNode("$Before$Name", "true", null),
+                    new SettingNode("$Before$Name", "true", "Puts a $ before the name of the variable if used. For example, if $name was typed in chat it would bring up $headdetect instead of just headdetect"),
                     new SettingNode("ReviewModeratorPerm", "80", "Determines what rank gets to use /review next and /review remove. Use the permission number, not the rank name!"),
                     new SettingNode("OpChatPermission", "80", "Determines what rank can use the operator chat"),
                     new SettingNode("AdminChatPermission", "100", "Determines what rank can use the admin chat"),

@@ -128,7 +128,6 @@
     <Compile Include="Remote\Networking\Packets\PacketMessage.cs" />
     <Compile Include="Remote\Networking\Packets\PacketPing.cs" />
     <Compile Include="Remote\Networking\PacketWriter.cs" />
-    <Compile Include="Remote\RemoteConnector.cs" />
     <Compile Include="Remote\RemoteManager.cs" />
     <Compile Include="Robot\Bot.cs" />
     <Compile Include="Robot\BotMap.cs" />

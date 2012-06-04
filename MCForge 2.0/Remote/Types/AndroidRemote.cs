@@ -5,9 +5,10 @@ using System.Text;
 using System.Net.Sockets;
 using MCForge.Remote.Networking;
 using MCForge.Remote.Packets;
+using MCForge.Entity;
 
 namespace MCForge.Remote {
-    public class AndroidRemote : IRemote {
+    public class AndroidRemote :  IRemote {
 
         public AndroidRemote(TcpClient socket) {
             NetworkStream = socket.GetStream();

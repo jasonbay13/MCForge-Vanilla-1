@@ -16,7 +16,7 @@ namespace MCForge.Remote {
             typeof(PacketLogin), // 0x00
             typeof(PacketHandShake), // 0x01
             //typeof(PacketRequest), // 0x02
-            //typeof(PacketChat), // 0x03
+            typeof(PacketMessage), // 0x03
             typeof(PacketPing), // 0x04
             typeof(PacketDisconnect), // 0x05
             //typeof(PacketEdit), // 0x06
