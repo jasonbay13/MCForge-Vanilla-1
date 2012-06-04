@@ -37,7 +37,15 @@ namespace CommandDll
                 return;
             }
             Vector3S meep = new Vector3S((short)(p.Level.SpawnPos.x * 32), (short)(p.Level.SpawnPos.z * 32 + 51), (short)(p.Level.SpawnPos.y * 32));
-            p.SendToPos(meep, p.Level.SpawnRot);
+            packet pa = new packet();
+            pa.Add(packet.types.SendTeleport);
+            pa.Add(unchecked((byte)-1)); //If the ID is not greater than one it doesn't work :c
+            pa.Add(meep.x);
+            pa.Add(meep.y);
+            pa.Add(meep.z);
+            pa.Add(p.Rot);
+
+            p.SendPacket(pa);
         }
         public void Help(Player p)
         {

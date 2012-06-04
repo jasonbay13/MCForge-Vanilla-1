@@ -27,6 +27,7 @@ using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
 using System.Threading;
+using System.Net;
 
 namespace MCForge.Core {
     public static class Server {
@@ -107,7 +108,7 @@ namespace MCForge.Core {
         /// <summary>
         /// The list of MCForge developers.
         /// </summary>
-        public static readonly string[] devs = new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "headdetect", "Gamemakergm", "cazzar", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "ninedrafted", "Nerketur", "Serado" };
+        public static readonly string[] devs = new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "headdetect", "Gamemakergm", "cazzar", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "ninedrafted", "Nerketur", "Serado", "501st_Commander" };
         /// <summary>
         /// List of players that need to be reviewed
         /// </summary>
@@ -152,7 +153,10 @@ namespace MCForge.Core {
         /// </summary>
         /// 
         public static string URL = "";
-
+        /// <summary>
+        /// Internet utilies
+        /// </summary>
+        public static InetUtils InternetUtils;
         /// <summary>
         /// The IRC client for the server
         /// </summary>
@@ -207,6 +211,9 @@ namespace MCForge.Core {
             Database.init();
 
             CreateCoreFiles();
+
+            InternetUtils = new InetUtils();
+            InetUtils.InternetAvailable = InetUtils.CanConnectToInternet();
 
             Mainlevel = Level.LoadLevel(ServerSettings.GetSetting("Main-Level"));
             if (Mainlevel == null)

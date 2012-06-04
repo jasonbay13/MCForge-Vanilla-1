@@ -844,7 +844,7 @@ namespace MCForge.Entity {
             });
         }
 
-        internal void  UpdatePosition(bool ForceTp) {
+        internal void UpdatePosition(bool ForceTp) {
             Vector3S tempOldPos = new Vector3S(oldPos);
             Vector3S tempPos = new Vector3S(Pos);
             byte[] tempRot = Rot;
