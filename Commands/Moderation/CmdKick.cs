@@ -63,7 +63,7 @@ namespace CommandDll.Moderation
                 string devs = "";
                 for (int i = 1; i <= Server.devs.Length; i++)
                     devs += Server.devs[i];
-                if (devs.Contains(who.Username)) { p.SendMessage("You cannot kick a developer!"); Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " tried to kick an MCForge developer!"); return; }
+                if (devs.ToLower().Contains(who.Username.ToLower())) { p.SendMessage("You cannot kick a developer!"); Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " tried to kick an MCForge developer!"); return; }
                 if (kickmsg != "")
                     who.Kick(kickmsg);
                 else
