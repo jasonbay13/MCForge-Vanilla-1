@@ -9,6 +9,7 @@ namespace MCForge.Remote {
         Login,
         Handshake,
         Request,
+        Fulfill,
         Chat,
         Ping,
         Disconnect,
@@ -32,11 +33,20 @@ namespace MCForge.Remote {
         Maps
     }
 
+    public enum LoginResponse {
+        Correct,
+        Cred,
+        Version,
+        Banned,
+        BadUsername
+    }
+
     public enum ChatType {
         Player,
         Op,
         Admin,
-        Logs
+        Logs,
+        Command
     }
 
     public enum MoveType {
@@ -46,14 +56,14 @@ namespace MCForge.Remote {
     }
 
     public enum LevelActionType {
-        Unloading,
-        Loading
+        Loading,
+        Unloading
     }
 
     public enum EditType {
         Group,
         Player,
-        Map, 
+        Map,
         Settings,
     }
 }

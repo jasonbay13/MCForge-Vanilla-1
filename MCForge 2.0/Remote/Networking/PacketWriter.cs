@@ -20,7 +20,7 @@ namespace MCForge.Remote {
                 _packetQueue.Enqueue(p);
         }
 
-        private void StartWrite() {
+        public void StartWrite() {
             new Thread(new ThreadStart(() => {
                 while (Remote.CanProcessPackets) {
                     if (_packetQueue.Count > 0) {
@@ -36,5 +36,6 @@ namespace MCForge.Remote {
                 }
             })).Start();
         }
+
     }
 }

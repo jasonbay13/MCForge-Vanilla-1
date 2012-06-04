@@ -19,8 +19,6 @@ namespace MCForge.Remote {
                 UseShortAsHeaderSize = true
             };
 
-            PacketReader.StartRead();
-            PacketReader.OnReadPacket += ProcessPackets;
         }
 
         #region IRemote Members
@@ -53,6 +51,10 @@ namespace MCForge.Remote {
         /// <param name="e">always null</param>
         public void Run(object e) {
         
+            PacketReader.StartRead();
+            PacketReader.OnReadPacket += ProcessPackets;
+
+            PacketWriter.StartWrite();
         }
 
         #endregion

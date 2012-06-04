@@ -36,7 +36,7 @@ namespace MCForge.Interface.Command
         /// </summary>
         /// <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
         /// <param name="reference">the array of strings you want players to type to use your command</param>
-        public static void AddReference(ICommand command, string[] reference) {
+        public static void AddReference(ICommand command, params string[] reference) {
             foreach (string s in reference) {
                 AddReference(command, s.ToLower());
             }

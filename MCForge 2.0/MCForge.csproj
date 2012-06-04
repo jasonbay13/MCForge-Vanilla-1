@@ -219,6 +219,8 @@
     <Compile Include="World\Blocks\DefaultBlocks\Wood.cs" />
     <Compile Include="World\Drawing\CubeBrush.cs" />
     <Compile Include="World\Drawing\IBrush.cs" />
+    <Compile Include="World\Drawing\RandomBrush.cs" />
+    <Compile Include="World\Drawing\SphereBrush.cs" />
     <Compile Include="World\Generator\GeneratorArgs.cs" />
     <Compile Include="World\Generator\GeneratorTemplate.cs" />
     <Compile Include="World\Generator\LevelGenerator.cs" />

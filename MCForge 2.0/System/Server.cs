@@ -28,9 +28,13 @@ using MCForge.Utils.Settings;
 using MCForge.World;
 using System.Threading;
 using System.Net;
+using System.Reflection;
 
 namespace MCForge.Core {
     public static class Server {
+
+        public static Assembly ServerAssembly { get { return Assembly.GetAssembly(typeof(Server)); } }
+
         /// <summary>
         /// Show the first run screen?
         /// </summary>
@@ -76,13 +80,7 @@ namespace MCForge.Core {
         private static int PingIntervalCurrent = 0;
         private static int BotInterval = 10;
         private static int BotIntervalCurrent = 0;
-        static bool debug = false;
-        public static bool DebugMode {
-            get {
-                return debug;
-            }
-            set { debug = value; }
-        }
+        public static bool DebugMode {get;set;}
         public struct TempBan { public string name; public DateTime allowed; }
         public static List<TempBan> tempbans = new List<TempBan>();
         public static DateTime StartTime = DateTime.Now;
