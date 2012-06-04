@@ -14,6 +14,14 @@ namespace MCForge.Utils {
     public static class MiscUtils {
 
 
+        public static bool ContainsIgnoreCase(this string[] array, string test){
+            for (int i = 0; i < array.Length; i++)
+                if (array[i].ToLower() == test.ToLower())
+                    return true;
+            return false;
+        }
+
+
         /// <summary>
         /// Gets the object if it exist.
         /// </summary>

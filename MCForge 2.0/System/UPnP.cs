@@ -14,6 +14,12 @@ namespace MCForge.Core {
 
     public class UPnP {
 
+        private const string req = "M-SEARCH * HTTP/1.1\r\n" +
+                                                            "HOST: 239.255.255.250:1900\r\n" +
+                                                            "ST:upnp:rootdevice\r\n" +
+                                                            "MAN:\"ssdp:discover\"\r\n" +
+                                                            "MX:3\r\n\r\n";
+
         static TimeSpan _timeout = new TimeSpan(0, 0, 0, 3);
         public static TimeSpan TimeOut {
             get { return _timeout; }
@@ -23,11 +29,6 @@ namespace MCForge.Core {
         public static bool Discover() {
             Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             s.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
-            string req = "M-SEARCH * HTTP/1.1\r\n" +
-            "HOST: 239.255.255.250:1900\r\n" +
-            "ST:upnp:rootdevice\r\n" +
-            "MAN:\"ssdp:discover\"\r\n" +
-            "MX:3\r\n\r\n";
             byte[] data = Encoding.ASCII.GetBytes(req);
             IPEndPoint ipe = new IPEndPoint(IPAddress.Broadcast, 1900);
             byte[] buffer = new byte[0x1000];
@@ -108,7 +109,7 @@ namespace MCForge.Core {
             "<NewExternalPort>" + port + "</NewExternalPort>" +
             "<NewProtocol>" + protocol.ToString().ToUpper() + "</NewProtocol>" +
             "</u:DeletePortMapping>", "DeletePortMapping");
-            
+
         }
 
         public static IPAddress GetExternalIP() {

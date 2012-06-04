@@ -24,5 +24,6 @@ namespace MCForge.Remote {
 
         void Disconnect(string message);
 
+        void Run(object e);
     }
 }

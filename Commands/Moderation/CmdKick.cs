@@ -15,6 +15,8 @@ permissions and limitations under the Licenses.
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
+using MCForge.Utils;
+using System;
 
 namespace CommandDll.Moderation
 {
@@ -31,22 +33,24 @@ namespace CommandDll.Moderation
         public byte Permission { get { return 80; } }
         public void Use(Player p, string[] args)
         {
-            string message = "";
-            for (int i = 1; i <= args.Length; i++)
-                message += args[i] + " ";
-            string kickmsg = message.Trim().Substring(args[0].Length + 1);
-            bool ip = false;
-            if (args[0].Contains(".")) ip = true;
-            if (ip)
+
+            if (args.Length < 1) {
+                Help(p);
+                return;
+            }
+
+            string kickmsg = "";
+
+            if (args.Length > 1)
+                kickmsg = String.Join(" ", args, 1, args.Length - 1);
+
+            if (args[0].Contains("."))
             {
                 Server.Players.ForEach(pl =>
                 {
                     if (pl.Ip == args[0])
                     {
-                        if (kickmsg != "")
-                            pl.Kick(kickmsg);
-                        else
-                            pl.Kick("Kicked by " + p.Username + "!");
+                            pl.Kick(kickmsg.Trim() != "" ? kickmsg : "Kicked by " + p.Username + "!");
                     }
                     else
                     {
@@ -60,14 +64,8 @@ namespace CommandDll.Moderation
                 if (who == null) { p.SendMessage("Player \"" + args[0] + "\" not found!"); return; }
                 if (who.Group.Permission > p.Group.Permission) { p.SendMessage("You cannot kick your superiors!"); Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " tried to kick " + who.Color + who.Username + Server.DefaultColor + " but failed!"); return; }
                 if (who == p) { p.Kick(p.Username + " kicked himself!"); return; }
-                string devs = "";
-                for (int i = 1; i <= Server.devs.Length; i++)
-                    devs += Server.devs[i];
-                if (devs.ToLower().Contains(who.Username.ToLower())) { p.SendMessage("You cannot kick a developer!"); Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " tried to kick an MCForge developer!"); return; }
-                if (kickmsg != "")
-                    who.Kick(kickmsg);
-                else
-                    who.Kick("Kicked by " + p.Username + "!");
+                if (Server.devs.ContainsIgnoreCase(who.Username)) { p.SendMessage("You cannot kick a developer!"); Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " tried to kick an MCForge developer!"); return; }
+                    who.Kick(kickmsg.Trim() != "" ? kickmsg : "Kicked by " + p.Username + "!");
             }
         }
         public void Help(Player p)

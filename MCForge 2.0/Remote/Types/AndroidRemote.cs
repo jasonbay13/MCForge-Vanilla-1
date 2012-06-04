@@ -47,6 +47,14 @@ namespace MCForge.Remote {
             NetworkStream.Close();
         }
 
+        /// <summary>
+        /// Its the alternative to the PSVM
+        /// </summary>
+        /// <param name="e">always null</param>
+        public void Run(object e) {
+        
+        }
+
         #endregion
 
 
