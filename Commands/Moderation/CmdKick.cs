@@ -60,6 +60,10 @@ namespace CommandDll.Moderation
                 if (who == null) { p.SendMessage("Player \"" + args[0] + "\" not found!"); return; }
                 if (who.Group.Permission > p.Group.Permission) { p.SendMessage("You cannot kick your superiors!"); Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " tried to kick " + who.Color + who.Username + Server.DefaultColor + " but failed!"); return; }
                 if (who == p) { p.Kick(p.Username + " kicked himself!"); return; }
+                string devs = "";
+                for (int i = 1; i <= Server.devs.Length; i++)
+                    devs += Server.devs[i];
+                if (devs.Contains(who.Username)) { p.SendMessage("You cannot kick a developer!"); Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " tried to kick an MCForge developer!"); return; }
                 if (kickmsg != "")
                     who.Kick(kickmsg);
                 else
