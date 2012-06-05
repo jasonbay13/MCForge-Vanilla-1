@@ -74,7 +74,7 @@ namespace MCForge.Core {
         private static int GroupsaveIntervalCurrent = 0;
         private static int PingInterval = 10;
         private static int PingIntervalCurrent = 0;
-        private static int BotInterval = 200; //Controls bot speed, MUST be under or at 200 for it to function correctly
+        private static int BotInterval = 25;
         private static int BotIntervalCurrent = 0;
         static bool debug = false;
         public static bool DebugMode {

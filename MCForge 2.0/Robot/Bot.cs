@@ -41,10 +41,11 @@ namespace MCForge.Robot
         //AStar Variables
         public BotMap2D LevelMap;
         public List<Location> Waypoint = new List<Location>();
-        public int shouldCheckAgainLoopInt = 10;
+        public int shouldCheckAgainLoopInt = 1000;
+        public int intLoop = 0;
         public bool shouldCheckAgain { 
             get {
-                if (shouldCheckAgainLoopInt >= Waypoint.Count)
+                if (shouldCheckAgainLoopInt > 999 || shouldCheckAgainLoopInt >= Waypoint.Count)
                 {
                     shouldCheckAgainLoopInt = 0;
                     return true;
@@ -136,13 +137,18 @@ namespace MCForge.Robot
                             Pathfound.x = (short)(Bot.Waypoint[Bot.shouldCheckAgainLoopInt].X * 32);
                             Pathfound.z = (short)(Bot.Waypoint[Bot.shouldCheckAgainLoopInt].Y * 32);
 
-                            Bot.shouldCheckAgainLoopInt++;
+                            if (Bot.intLoop >= 2) //Slows down the bots so they arent insta-propogate, it slows them a bit too much though, need to fix
+                            {                     //Also makes them a bit less accurate than instant, but much more accurate than Vector2D.Move()
+                                Bot.intLoop = 0;
+                                Bot.shouldCheckAgainLoopInt++;
+                            }
+                            else
+                            {
+                                Bot.intLoop += 1;
+                            }
 
-                            TemporaryLocation.x += (short)(Pathfound.x - TemporaryLocation.x);
-                            TemporaryLocation.z += (short)(Pathfound.z - TemporaryLocation.z);
-                            /* using Move() causes the bot to walk through walls (really bad pathfinding)... this way is near perfect accuracy BUT he walks really fast... 
-                             * To slow him down you need to slow the rate that HandleBots() is called
-                             * */
+                            TemporaryLocation.x += (short)((Pathfound.x - TemporaryLocation.x) / 3);
+                            TemporaryLocation.z += (short)((Pathfound.z - TemporaryLocation.z) / 3);
 
                             #endregion
 
@@ -166,8 +172,8 @@ namespace MCForge.Robot
 
             Vector3S Pathfound = new Vector3S(0, 0, 0);
 
-            RouteFinder routeFinder = new RouteFinder(0, 0, Bot.Player.Level.Size.x, Bot.Player.Level.Size.z, true);
-            routeFinder.InitialLocation = new Location((Bot.Player.Pos.x / 32), (Bot.Player.Pos.z / 32));
+            RouteFinder routeFinder = new RouteFinder(0, 0, Bot.Player.Level.Size.x, Bot.Player.Level.Size.z, false); //Setting to true allows diagonal movement (so its quicker, and better)
+            routeFinder.InitialLocation = new Location((Bot.Player.Pos.x / 32), (Bot.Player.Pos.z / 32));             //BUT players can move through diagonal spaces... so not allowed until fixed
             try
             {
                 routeFinder.AddGoal(new Location((ClosestLocation.x / 32), (ClosestLocation.z / 32)));
