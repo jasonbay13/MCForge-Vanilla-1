@@ -24,13 +24,13 @@ namespace MCForge.Robot {
                 Vector3S pos = l.IntToPos(i);
                 AirMap[pos.x, pos.z, pos.y] = isAir(l.GetBlock(i));
             }
-            for (int x = 0; x < AirMap.GetLength(0); x++) {
+            /*for (int x = 0; x < AirMap.GetLength(0); x++) {
                 for (int z = 0; z < AirMap.GetLength(1); z++) {
                     for (int y = 0; y < AirMap.GetLength(2); y++) {
 
                     }
                 }
-            }
+            }*/
         }
         bool[, ,] AirMap;
         bool[, ,] PosMap;
@@ -57,5 +57,33 @@ namespace MCForge.Robot {
             public List<Vector3D> Connecteds = new List<Vector3D>();
             public List<double> Distances = new List<double>();
         } 
+    }
+
+    public class BotMap2D
+    {
+        public BotMap2D(Level l, short y)
+        {
+            AirMap = new int[l.Size.x, l.Size.z];//return x + z * Size.x + y * Size.x * Size.z;
+            for (short x = 0; x < l.Size.x; x += 1)
+            {
+                for (short z = 0; z < l.Size.z; z += 1)
+                {
+                    Vector3S pos = new Vector3S(x, z, (short)(y / 32));
+                    AirMap[x, z] = canWalkThrough(l.GetBlock(pos));
+                }
+            }
+        }
+        int[,] AirMap;
+        int canWalkThrough(byte block)
+        {
+            if (Block.CanWalkThrough(block))
+                return 1;
+            else
+                return -1;
+        }
+        public int GetMap(int x, int z)
+        {
+            return (AirMap[x, z]);
+        }
     }
 }
