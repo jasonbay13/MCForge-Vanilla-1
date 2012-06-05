@@ -44,7 +44,7 @@ namespace MCForge.Robot
         public int shouldCheckAgainLoopInt = 10;
         public bool shouldCheckAgain { 
             get {
-                if (shouldCheckAgainLoopInt >= 7 || shouldCheckAgainLoopInt >= Waypoint.Count / 2)
+                if (shouldCheckAgainLoopInt >= Waypoint.Count)
                 {
                     shouldCheckAgainLoopInt = 0;
                     return true;
@@ -65,6 +65,7 @@ namespace MCForge.Robot
         public Bot(string Username, Vector3S Position, byte[] Rotation, Level level, bool FollowPlayers, bool BreakBlocks, bool Jumping)
         {
             Player = new Player();
+            Player._DisplayName = Username;
             Player.IsLoggedIn = false;
             Player.IsBot = true;
             Player.Username = Username;
@@ -129,7 +130,7 @@ namespace MCForge.Robot
                                 if (Bot.Waypoint == null) //Hit the player!
                                 {
                                     Bot.Waypoint = new List<Location>();
-                                    Bot.Waypoint.Add(new Location(Pathfound.x, Pathfound.z));
+                                    Bot.Waypoint.Add(new Location(Pathfound.x / 32, Pathfound.z / 32));
                                 }
                             }
                             Pathfound.x = (short)(Bot.Waypoint[Bot.shouldCheckAgainLoopInt].X * 32);
@@ -137,9 +138,13 @@ namespace MCForge.Robot
 
                             Bot.shouldCheckAgainLoopInt++;
 
-                            #endregion
+                            TemporaryLocation.x += (short)(Pathfound.x - TemporaryLocation.x);
+                            TemporaryLocation.z += (short)(Pathfound.z - TemporaryLocation.z);
+                            /* using Move() causes the bot to walk through walls (really bad pathfinding)... this way is near perfect accuracy BUT he walks really fast... 
+                             * To slow him down you need to slow the rate that HandleBots() is called
+                             * */
 
-                            TemporaryLocation.Move(15, Pathfound);
+                            #endregion
 
                             MoveEventArgs eargs = new MoveEventArgs(TemporaryLocation, Bot.Player.Pos);
                             bool cancel = OnBotMove.Call(Bot, eargs).Canceled;
@@ -183,7 +188,6 @@ namespace MCForge.Robot
                             /*
                              * TODO - If his path is invalid... stop targeting that player.
                              * Sometimes the bot walks through walls... why?
-                             * AStar should be more accurate... (I think!)
                              * Change location (which is pretty close, but changing it causes issues) to Vector2S
                              * */
                         }
