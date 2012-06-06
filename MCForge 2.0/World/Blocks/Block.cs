@@ -145,11 +145,23 @@ namespace MCForge.World {
 
         public static bool CanWalkThrough(byte blockToCheck)
         {
-            return ( blockToCheck == Block.BlockList.AIR ||
-                blockToCheck == Block.BlockList.WATER ||
-                blockToCheck == Block.BlockList.LAVA ||
-                blockToCheck == Block.BlockList.ACTIVE_LAVA ||
-                blockToCheck == Block.BlockList.ACTIVE_WATER );
+            return ( blockToCheck == BlockList.AIR ||
+                blockToCheck == BlockList.WATER ||
+                blockToCheck == BlockList.LAVA ||
+                blockToCheck == BlockList.ACTIVE_LAVA ||
+                blockToCheck == BlockList.ACTIVE_WATER ||
+                blockToCheck == BlockList.RED_FLOWER ||
+                blockToCheck == BlockList.RED_MUSHROOM ||
+                blockToCheck == BlockList.RED_FLOWER ||
+                blockToCheck == BlockList.BROWN_MUSHROOM);
+        }
+
+        public static bool CanEscalate(byte blockToCheck)
+        {
+            return (blockToCheck == BlockList.WATER ||
+                blockToCheck == BlockList.LAVA ||
+                blockToCheck == BlockList.ACTIVE_LAVA ||
+                blockToCheck == BlockList.ACTIVE_WATER);
         }
 
         public static bool IsOPBlock(byte blockToCheck)

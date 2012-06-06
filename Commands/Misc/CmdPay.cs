@@ -16,76 +16,41 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
-using MCForge.Utils.Settings;
 
-namespace CommandDll.Misc {
-    class CmdPay : ICommand {
+namespace CommandDll.Misc
+{
+    class CmdPay : ICommand
+    {
         public string Name { get { return "Pay"; } }
         public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Sinjai"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
-        public void Use(Player p, string[] args) {
-
+        public void Use(Player p, string[] args)
+        {
             if (args.Length != 2) { Help(p); return; }
             Player who = Player.Find(args[0]);
-            if (who == null) {
-                p.SendMessage("Could not find \"" + args[0] + "\"!");
-                return;
-            }
-            if (who == p && !p.IsOwner) {
-                p.SendMessage("You cannot pay yourself!");
-                return;
-            }
+            if (who == null) { p.SendMessage("Could not find \"" + args[0] + "\"!"); return; }
+            if (who == p && !p.IsOwner) { p.SendMessage("You cannot pay yourself!"); return; }
             int amt;
-
-            try {
-                amt = int.Parse(args[1]);
-            }
-            catch {
-                p.SendMessage("Invalid amount!");
-                return;
-            }
-
+            try { amt = int.Parse(args[1]); }
+            catch { p.SendMessage("Invalid amount!"); return; }
             who.ExtraData.CreateIfNotExist("Money", 0);
             p.ExtraData.CreateIfNotExist("Money", 0);
-
-            if ((int)p.ExtraData["Money"] - amt < 0) {
-                p.SendMessage("You cannot pay with more " + Server.moneys + " than you have!");
-                return;
-            }
-            if ((int)who.ExtraData["Money"] + amt > 16777215) {
-                p.SendMessage("Has too much stuffs, their wallet will explode! They cannot have over 16777215 " + Server.moneys + ".");
-                return;
-            }
-            if (amt < 0) {
-                p.SendMessage("Cannot give negative amounts of " + Server.moneys + ".");
-                return;
-            }
-
+            if ((int)p.ExtraData["Money"] - amt < 0) { p.SendMessage("You cannot pay with more " + Server.moneys + " than you have!"); return; }
+            if ((int)who.ExtraData["Money"] + amt > 16777215) { p.SendMessage("You cannot pay that much! " + who.Color + who.Username + Server.DefaultColor + " cannot have over 16777215 " + Server.moneys + "."); return; }
+            if (amt < 0) { p.SendMessage("Cannot give negative amounts of " + Server.moneys + "."); return; }
             p.ExtraData["Money"] = (int)p.ExtraData["Money"] - amt;
             who.ExtraData["Money"] = (int)who.ExtraData["Money"] + amt;
-            Player.UniversalChat(p.Color +
-                                  p.Username +
-                                  Server.DefaultColor +
-                                  " was paid &3" +
-                                  amt +
-                                  Server.DefaultColor +
-                                  " " +
-                                  Server.moneys +
-                                  " by " +
-                                  who.Color +
-                                  who.Username +
-                                  Server.DefaultColor +
-                                  ".");
-
-            //TODO: DB save
+            Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " was paid &3" + amt + Server.DefaultColor + " " + Server.moneys + " by " + who.Color + who.Username + Server.DefaultColor + ".");
         }
-        public void Help(Player p) {
+        public void Help(Player p)
+        {
             p.SendMessage("/pay <player> <amount> - Pay <player> <amount> of " + Server.moneys + ".");
         }
-        public void Initialize() {
+        public void Initialize()
+        {
             Command.AddReference(this, "pay");
         }
     }

@@ -15,13 +15,11 @@ permissions and limitations under the Licenses.
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MCForge.Interface.Command;
-using MCForge.Entity;
-using MCForge.Core;
-using MCForge.Groups;
 using System.Threading;
-using MCForge.Utils;
-using MCForge.Utils.Settings;
+using MCForge.Core;
+using MCForge.Entity;
+using MCForge.Groups;
+using MCForge.Interface.Command;
 
 namespace CommandDll.Moderation
 {

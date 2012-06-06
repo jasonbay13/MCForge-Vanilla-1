@@ -78,7 +78,7 @@ namespace MCForge.Core {
         private static int GroupsaveIntervalCurrent = 0;
         private static int PingInterval = 10;
         private static int PingIntervalCurrent = 0;
-        private static int BotInterval = 10;
+        private static int BotInterval = 25;
         private static int BotIntervalCurrent = 0;
         public static bool DebugMode {get;set;}
         public struct TempBan { public string name; public DateTime allowed; }

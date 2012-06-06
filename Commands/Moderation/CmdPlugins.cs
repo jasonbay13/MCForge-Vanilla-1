@@ -1,45 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿/*
+Copyright 2012 MCForge
+Dual-licensed under the Educational Community License, Version 2.0 and
+the GNU General Public License, Version 3 (the "Licenses"); you may
+not use this file except in compliance with the Licenses. You may
+obtain a copy of the Licenses at
+http://www.opensource.org/licenses/ecl2.php
+http://www.gnu.org/licenses/gpl-3.0.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the Licenses are distributed on an "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the Licenses for the specific language governing
+permissions and limitations under the Licenses.
+*/
+using System;
+using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Interface.Plugin;
-using MCForge.Entity;
 
 namespace CommandDll.Moderation
 {
-    public class CmdPlugins:ICommand
+    public class CmdPlugins : ICommand
     {
-        public string Name
-        {
-            get { return "plugins"; }
-        }
-
-        public CommandTypes Type
-        {
-            get { return CommandTypes.Mod; }
-        }
-
-        public string Author
-        {
-            get { return "ninedrafted"; }
-        }
-
-        public int Version
-        {
-            get { return 1; }
-        }
-
-        public string CUD
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public byte Permission
-        {
-            get { return 0; } //SuperOP 100
-        }
-
+        public string Name { get { return "plugins"; } }
+        public CommandTypes Type { get { return CommandTypes.Mod; } }
+        public string Author { get { return "ninedrafted"; } }
+        public int Version { get { return 1; } }
+        public string CUD { get { throw new NotImplementedException(); } }
+        public byte Permission { get { return 0; } /*SuperOP 100*/ }
         public void Use(Player p, string[] args)
         {
             if (args.Length == 0)
@@ -79,7 +66,7 @@ namespace CommandDll.Moderation
                         p.SendMessage(count + " plugins loaded.");
                         return;
                     }
-                    
+
                 }
                 if (args.Length == 2)
                 {
@@ -112,10 +99,10 @@ namespace CommandDll.Moderation
 
         public void Help(Player p)
         {
-            p.SendMessage("/plugins show: Shows all loaded plugins");
-            p.SendMessage("/plugins unload [name]: Unloads a plugin called [name] (ignores case)");
-            p.SendMessage("/plugins load [name]: Tries to load a plugin with [name] (ignores case)");
-            p.SendMessage("/plugins reload: Loads all unloaded plugins");
+            p.SendMessage("/plugins show - Shows all loaded plugins");
+            p.SendMessage("/plugins unload <name> - Unloads a plugin called [name] (ignores case)");
+            p.SendMessage("/plugins load <name> - Tries to load a plugin with [name] (ignores case)");
+            p.SendMessage("/plugins reload - Loads all unloaded plugins");
         }
 
         public void Initialize()

@@ -42,6 +42,7 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/notify - Sends a message up the top right for wom users.");
+            p.SendMessage("/alert may also be used.");
         }
 
         public void Initialize()

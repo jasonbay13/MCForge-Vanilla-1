@@ -17,7 +17,6 @@ using System.IO;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-using MCForge.Utils.Settings;
 
 namespace CommandDll.Moderation
 {
@@ -78,7 +77,7 @@ namespace CommandDll.Moderation
         {
             p.SendMessage("/ipban <player> [reason] - IP-ban <player> with [reason] as the given reason.");
             p.SendMessage("/ipban # <player> [reason] - Stealth IP-ban <player> with [reason] as the given reason. (Banned message sent to ops+ only.");
-            p.SendMessage("[reason] is optional");
+            p.SendMessage("[reason] is optional.");
         }
     }
 }

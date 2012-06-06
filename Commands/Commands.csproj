@@ -87,13 +87,13 @@
     <Compile Include="Misc\CmdTake.cs" />
     <Compile Include="Misc\CmdGive.cs" />
     <Compile Include="Misc\CmdPass.cs" />
-    <Compile Include="Misc\CmdResetPass.cs" />
+    <Compile Include="Misc\CmdResetPassword.cs" />
     <Compile Include="Misc\CmdSetPass.cs" />
     <Compile Include="Misc\CmdWhisper.cs" />
     <Compile Include="Moderation\CmdColor.cs" />
     <Compile Include="Moderation\CmdPromote.cs" />
     <Compile Include="Moderation\CmdReview.cs" />
-    <Compile Include="Moderation\CmdRTitle.cs" />
+    <Compile Include="Moderation\CmdRainbowTitle.cs" />
     <Compile Include="Moderation\CmdSave.cs" />
     <Compile Include="Moderation\CmdSettings.cs" />
     <Compile Include="Information\CmdHelp.cs" />

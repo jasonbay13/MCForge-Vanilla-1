@@ -16,8 +16,6 @@ using System.Threading;
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-using MCForge.Utils;
-using MCForge.Utils.Settings;
 using MCForge.World;
 
 namespace CommandDll
@@ -95,11 +93,12 @@ namespace CommandDll
         {
             p.SendMessage("/summon <player> - Summons player to your position.");
             p.SendMessage("/summon all - Summons all players in the map.");
+            p.SendMessage("Shortcut: /s");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, "summon");
+            Command.AddReference(this, new string[2] { "summon", "s" });
         }
     }
 }

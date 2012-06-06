@@ -113,7 +113,7 @@ namespace CommandDll.Moderation
         {
             p.SendMessage("/ban <player> [reason] - Ban <player> with [reason] as the given reason.");
             p.SendMessage("/ban # <player> [reason] - Stealth ban <player> with [reason] as the given reason. (Banned message sent to ops+ only.");
-            p.SendMessage("[reason] is optional");
+            p.SendMessage("[reason] is optional.");
         }
     }
 }

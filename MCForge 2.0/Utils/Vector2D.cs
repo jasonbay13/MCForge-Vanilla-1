@@ -30,6 +30,12 @@ namespace MCForge.Utils {
             return new Vector2D((double)(a.x / b.x), (double)(a.z / b.z));
         }
         public static bool operator ==(Vector2D a, Vector2D b) {
+            if (Object.ReferenceEquals(a, b))
+                return true;
+
+            if ((object)a == null || (object)b == null)
+                return false;
+
             return (a.x == b.x && a.z == b.z);
         }
         public static bool operator !=(Vector2D a, Vector2D b) {

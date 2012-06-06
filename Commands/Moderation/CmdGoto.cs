@@ -1,5 +1,4 @@
-﻿using MCForge.Core;
-/*
+﻿/*
 Copyright 2011 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -15,8 +14,8 @@ permissions and limitations under the Licenses.
 */
 using MCForge.Entity;
 using MCForge.Interface.Command;
-using MCForge.World;
 using MCForge.Utils;
+using MCForge.World;
 
 namespace CommandDll
 {
