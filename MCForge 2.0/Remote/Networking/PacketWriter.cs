@@ -10,16 +10,28 @@ namespace MCForge.Remote {
 
         private Queue<Packet> _packetQueue;
         private IRemote Remote;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PacketWriter"/> class.
+        /// </summary>
+        /// <param name="remote">The remote.</param>
         public PacketWriter(IRemote remote) {
             Remote = remote;
             _packetQueue = new Queue<Packet>();
         }
 
+        /// <summary>
+        /// Writes the packet.
+        /// </summary>
+        /// <param name="p">The packet to write.</param>
         public void WritePacket(Packet p) {
             if (Remote.CanProcessPackets)
                 _packetQueue.Enqueue(p);
         }
 
+        /// <summary>
+        /// Starts the thread for writing.
+        /// </summary>
         public void StartWrite() {
             new Thread(new ThreadStart(() => {
                 while (Remote.CanProcessPackets) {

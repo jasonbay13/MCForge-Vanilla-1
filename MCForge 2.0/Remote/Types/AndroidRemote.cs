@@ -10,6 +10,10 @@ using MCForge.Entity;
 namespace MCForge.Remote {
     public class AndroidRemote :  IRemote {
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AndroidRemote"/> class.
+        /// </summary>
+        /// <param name="socket">The socket.</param>
         public AndroidRemote(TcpClient socket) {
             NetworkStream = socket.GetStream();
             PacketWriter = new PacketWriter(this);

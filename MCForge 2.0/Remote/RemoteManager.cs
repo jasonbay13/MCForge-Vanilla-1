@@ -21,26 +21,50 @@ namespace MCForge.Remote {
 
         public static readonly RemoteConnectEvent OnRemoteConnect = new RemoteConnectEvent();
 
+        /// <summary>
+        /// Gets or sets the port.
+        /// </summary>
+        /// <value>
+        /// The port.
+        /// </value>
         public static int Port {
             get { return ServerSettings.GetSettingInt("Remote-Port"); }
             set { ServerSettings.SetSetting("Remote-Port", value.ToString()); }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [enable remote].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [enable remote]; otherwise, <c>false</c>.
+        /// </value>
         public static bool EnableRemote {
             get { return ServerSettings.GetSettingBoolean("Enable-Remote"); }
             set { ServerSettings.SetSetting("Enable-Remote", value.ToString()); }
         }
 
+        /// <summary>
+        /// Gets or sets the binding IP.
+        /// </summary>
+        /// <value>
+        /// The binding IP.
+        /// </value>
         public static string BindingIP {
             get { return ServerSettings.GetSetting("Remote-IP"); }
             set { ServerSettings.SetSetting("Remote-IP", value); }
         }
 
 
+        /// <summary>
+        /// Initializes the <see cref="RemoteManager"/> class.
+        /// </summary>
         static RemoteManager() {
             RemoteList = new List<IRemote>();
         }
 
+        /// <summary>
+        /// Starts listening for clients.
+        /// </summary>
         public void StartListen() {
             if (!EnableRemote)
                 return;
@@ -54,6 +78,7 @@ namespace MCForge.Remote {
             StreamReader reader = new StreamReader(client.GetStream());
             string type = reader.ReadLine();
             IRemote remote = null;
+
             RemoteConnectEventArgs args = new RemoteConnectEventArgs();
             OnRemoteConnect.Call(type, args);
 
@@ -82,6 +107,11 @@ namespace MCForge.Remote {
 
         #region Utilities
 
+        /// <summary>
+        /// Gets a remote from the name.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>A remote from the login name</returns>
         public static IRemote GetRemoteByLoginName(string name) {
             foreach (var remote in RemoteList)
                 if (remote.Username == name)

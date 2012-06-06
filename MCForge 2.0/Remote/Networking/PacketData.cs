@@ -12,6 +12,13 @@ namespace MCForge.Remote.Networking {
         private BinaryWriter _write;
         private PacketOptions _options;
         private byte[] _data;
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PacketData"/> class.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="options">The options.</param>
         public PacketData(byte[] data, PacketOptions options) {
             _data = data;
             _mem = new MemoryStream(data);
@@ -19,16 +26,26 @@ namespace MCForge.Remote.Networking {
             _options = options;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PacketData"/> class.
+        /// </summary>
+        /// <param name="options">The options.</param>
         public PacketData(PacketOptions options) {
             _mem = new MemoryStream();
             _write = new BinaryWriter(_mem);
             _options = options;
         }
 
+        /// <summary>
+        /// Checks to see if it can read.
+        /// </summary>
         public void CheckRead() {
             if (_read == null) throw new IOException("This is a output only PacketData");
         }
 
+        /// <summary>
+        /// Checks to see if it can write.
+        /// </summary>
         public void CheckWrite() {
             if (_write == null) throw new IOException("This is an input only PacketData");
         }
