@@ -10,6 +10,7 @@ using System.IO;
 using System.Threading;
 using MCForge.Utils;
 using MCForge.Core;
+using MCForge.API.Events.Remote;
 
 namespace MCForge.Remote {
     public class RemoteManager {
@@ -17,6 +18,8 @@ namespace MCForge.Remote {
         public static List<IRemote> RemoteList { get; set; }
 
         private static TcpListener serverSocket;
+
+        public static readonly RemoteConnectEvent OnRemoteConnect = new RemoteConnectEvent();
 
         public static int Port {
             get { return ServerSettings.GetSettingInt("Remote-Port"); }
@@ -51,8 +54,21 @@ namespace MCForge.Remote {
             StreamReader reader = new StreamReader(client.GetStream());
             string type = reader.ReadLine();
             IRemote remote = null;
+            RemoteConnectEventArgs args = new RemoteConnectEventArgs();
+            OnRemoteConnect.Call(type, args);
+
+            if (args.Canceled) {
+                client.Close();
+                reader.Close();
+
+                if (!Server.shuttingDown)
+                    serverSocket.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
+
+                return;
+            }
+
             try {
-                remote = (IRemote)Activator.CreateInstance(Type.GetType(type), client);
+                remote = (IRemote)Activator.CreateInstance(args.Assembly.GetType(type), client);
                 ThreadPool.QueueUserWorkItem(new WaitCallback(remote.Run));
             }
             catch (Exception e) {
