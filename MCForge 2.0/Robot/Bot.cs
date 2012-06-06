@@ -134,8 +134,12 @@ namespace MCForge.Robot
                                     Bot.Waypoint.Add(new Location(Pathfound.x / 32, Pathfound.z / 32));
                                 }
                             }
-                            Pathfound.x = (short)(Bot.Waypoint[Bot.shouldCheckAgainLoopInt].X * 32);
-                            Pathfound.z = (short)(Bot.Waypoint[Bot.shouldCheckAgainLoopInt].Y * 32);
+                            try
+                            {
+                                Pathfound.x = (short)(Bot.Waypoint[Bot.shouldCheckAgainLoopInt].X * 32);
+                                Pathfound.z = (short)(Bot.Waypoint[Bot.shouldCheckAgainLoopInt].Y * 32);
+                            }
+                            catch { Bot.shouldCheckAgainLoopInt = 0; }
 
                             if (Bot.intLoop >= 2) //Slows down the bots so they arent insta-propogate, it slows them a bit too much though, need to fix
                             {                     //Also makes them a bit less accurate than instant, but much more accurate than Vector2D.Move()
@@ -149,8 +153,29 @@ namespace MCForge.Robot
 
                             TemporaryLocation.x += (short)((Pathfound.x - TemporaryLocation.x) / 3);
                             TemporaryLocation.z += (short)((Pathfound.z - TemporaryLocation.z) / 3);
-
                             #endregion
+
+                            Block Block1 = Bot.Player.Level.GetBlock(TemporaryLocation / 32);
+                            Block Block2 = Bot.Player.Level.GetBlock((TemporaryLocation.x / 32), (TemporaryLocation.z / 32), (TemporaryLocation.y / 32) - 1);
+                            Block BlockUnderneath = Bot.Player.Level.GetBlock((TemporaryLocation.x / 32), (TemporaryLocation.z / 32), (TemporaryLocation.y / 32) - 2);
+
+                            if (Block.CanWalkThrough(BlockUnderneath) && Block.CanWalkThrough(Block2)
+                                && !Block.CanEscalate(Block1) && !Block.CanEscalate(Block2))
+                            {
+                                TemporaryLocation.y -= 21;
+                                Bot.shouldCheckAgainLoopInt = 1000;
+                            }
+
+                            if (Block.CanWalkThrough(Block1) && !Block.CanWalkThrough(Block2) && !Block.CanWalkThrough(BlockUnderneath))
+                            {
+                                TemporaryLocation.y += 21;
+                                Bot.shouldCheckAgainLoopInt = 1000;
+                            }
+                            else if (Block.CanEscalate(Block1) && Block.CanEscalate(Block2))
+                            {
+                                TemporaryLocation.y += 21;
+                                Bot.shouldCheckAgainLoopInt = 1000;
+                            }
 
                             MoveEventArgs eargs = new MoveEventArgs(TemporaryLocation, Bot.Player.Pos);
                             bool cancel = OnBotMove.Call(Bot, eargs).Canceled;
@@ -160,6 +185,10 @@ namespace MCForge.Robot
                         }
                     }
 
+                    if (TemporaryLocation.y != Bot.Player.Pos.y)
+                    {
+                        Bot.LevelMap = new BotMap2D(Bot.Player.Level, TemporaryLocation.y);
+                    }
                     Bot.Player.Pos = TemporaryLocation;
                     Bot.Player.UpdatePosition(true); //Pls leave this true, bots dont appear properly otherwise
                 }
@@ -170,10 +199,8 @@ namespace MCForge.Robot
         {
             bool Calculate = true;
 
-            Vector3S Pathfound = new Vector3S(0, 0, 0);
-
-            RouteFinder routeFinder = new RouteFinder(0, 0, Bot.Player.Level.Size.x, Bot.Player.Level.Size.z, false); //Setting to true allows diagonal movement (so its quicker, and better)
-            routeFinder.InitialLocation = new Location((Bot.Player.Pos.x / 32), (Bot.Player.Pos.z / 32));             //BUT players can move through diagonal spaces... so not allowed until fixed
+            RouteFinder routeFinder = new RouteFinder(0, 0, Bot.Player.Level.Size.x, Bot.Player.Level.Size.z, true); 
+            routeFinder.InitialLocation = new Location((Bot.Player.Pos.x / 32), (Bot.Player.Pos.z / 32)); 
             try
             {
                 routeFinder.AddGoal(new Location((ClosestLocation.x / 32), (ClosestLocation.z / 32)));
