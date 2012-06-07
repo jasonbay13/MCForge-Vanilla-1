@@ -99,7 +99,7 @@
     <Compile Include="Information\CmdHelp.cs" />
     <Compile Include="Information\CmdImpersonate.cs" />
     <Compile Include="Misc\CmdSummon.cs" />
-    <Compile Include="Misc\CmdCrashServer.cs" />
+    <Compile Include="Misc\CmdCrashserver.cs" />
     <Compile Include="Misc\CmdHacks.cs" />
     <Compile Include="Moderation\CmdSetRank.cs" />
     <Compile Include="Moderation\CmdSetSpawn.cs" />
