@@ -38,23 +38,23 @@ namespace MCForge.Core {
         /// <summary>
         /// Show the first run screen?
         /// </summary>
-        public static bool ShowFirstRunScreen = true;
+        public static bool ShowFirstRunScreen = ServerSettings.GetSettingBoolean("ShowFirstRunScreen");
         /// <summary>
         /// The name of the server currency.
         /// </summary>
-        public static string moneys;
+        public static string moneys = ServerSettings.GetSetting("MoneyName");
         /// <summary>
         /// The miniumum rank that needs to verify.
         /// </summary>
-        public static Groups.PlayerGroup VerifyGroup;
+        public static Groups.PlayerGroup VerifyGroup = Groups.PlayerGroup.Find(ServerSettings.GetSetting("VerifyGroup"));
         /// <summary>
         /// Do people need to use /pass?
         /// </summary>
-        public static bool Verifying = false;
+        public static bool Verifying = ServerSettings.GetSettingBoolean("Verifying");
         /// <summary>
         /// The name of the server owner.
         /// </summary>
-        public static string owner;
+        public static string owner = ServerSettings.GetSetting("ServerOwner");
         /// <summary>
         /// The rank that can destroy griefer_stone without getting kicked
         /// </summary>
