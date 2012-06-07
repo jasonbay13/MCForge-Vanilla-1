@@ -611,7 +611,7 @@ namespace MCForge.Entity {
         }
 
         /// <summary>
-        /// Attempts to find the player in the list of online players. Returns null if more than one players are found or if no players are found.
+        /// Attempts to find the player in the list of online players. Returns null if more than one player is found or if no players are found.
         /// </summary>
         /// <param name="name">The player name to find</param>
         /// <remarks>Can be a partial name</remarks>
@@ -622,8 +622,7 @@ namespace MCForge.Entity {
                     if (pl.Username.ToLower().Contains(name.ToLower()))
                         pls.Add(pl);
                 });
-            if (pls.Count == 1) return pls[0];
-            return null;
+            return (pls.Count == 1) ? pls.ToArray()[0] : null;
         }
         #endregion
 
