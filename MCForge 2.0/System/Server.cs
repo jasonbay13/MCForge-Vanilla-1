@@ -225,6 +225,8 @@ namespace MCForge.Core {
             StartListening();
             Started = true;
             Logger.Log("[Important]: Server Started.", Color.Black, Color.White);
+            if (!ServerSettings.GetSettingBoolean("VerifyNames"))
+            	Logger.Log("[Important]: The server is running with verify names off! This could lead to bad things! Please turn on verify names if you dont know the risk and dont want these bad things to happen!", LogType.Critical);
             IRC = new IRC();
             try {
                 IRC.Start();

@@ -20,6 +20,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using MCForge.Utils.Settings;
 
 namespace MCForge.Utils.Settings {
     /// <summary>
@@ -44,6 +45,7 @@ namespace MCForge.Utils.Settings {
                     new SettingNode("MOTD", "Welcome to my server!", "Message that shows up when you start server"),
                     new SettingNode("MaxPlayers", "20", "Max players that can play on your server at a time"),
                     new SettingNode("Public", "true", "if set to true, your server will show up on MCForge.net server list and Minecraft.net's server list"),
+                    new SettingNode("VerifyNames", "true", "Check to see if the player logging in owns that account."),
                     new SettingNode("Wom-Server_Description", "A MCForge server", "A Description of your server."),
                     new SettingNode("Wom-Server_Flags", "[MCForge]", null),
                     new SettingNode("UsingConsole", "true", "set to \"false\" if you want gui. If using mono set to \"true\""),

@@ -5,7 +5,7 @@ using System.Text;
 using MCForge.Entity;
 using MCForge.Core;
 
-namespace MCForge
+namespace MCForge.Entity
 {
    public class WOM
     {

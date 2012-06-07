@@ -585,9 +585,12 @@ namespace MCForge.Entity {
                 }
 
                 if (verify == null || verify == "" || verify == "--" || (verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0') && verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0'))) {
-                    SKick("Account could not be verified, try again.");
+        			if (ServerSettings.GetSettingBoolean("VerifyNames"))
+        			{
+        			SKick("Account could not be verified, try again.");
                     //Logger.Log("'" + verify + "' != '" + BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.salt + name))).Replace("-", "").ToLower().TrimStart('0') + "'");
                     return false;
+        			}
                 }
             }
             if (name.Length > 16 || !ValidName(name)) {
