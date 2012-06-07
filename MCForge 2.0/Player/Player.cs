@@ -611,14 +611,18 @@ namespace MCForge.Entity {
         }
 
         /// <summary>
-        /// Attempts to find the player in the list of online players
+        /// Attempts to find the player in the list of online players. Returns null if more than one players are found or if no players are found.
         /// </summary>
         /// <param name="name">The player name to find</param>
         /// <remarks>Can be a partial name</remarks>
         public static Player Find(string name) {
-            foreach (var p in Server.Players)
-                if (p.Username.ToLower().StartsWith(name.ToLower()))
-                    return p;
+            List<Player> pls = new List<Player>();
+            Server.Players.ForEach(pl =>
+                {
+                    if (pl.Username.ToLower().Contains(name.ToLower()))
+                        pls.Add(pl);
+                });
+            if (pls.Count == 1) return pls[0];
             return null;
         }
         #endregion
