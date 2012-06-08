@@ -20,6 +20,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using MCForge.Utils.Settings;
 
 namespace MCForge.Utils.Settings {
     /// <summary>
@@ -44,9 +45,15 @@ namespace MCForge.Utils.Settings {
                     new SettingNode("MOTD", "Welcome to my server!", "Message that shows up when you start server"),
                     new SettingNode("MaxPlayers", "20", "Max players that can play on your server at a time"),
                     new SettingNode("Public", "true", "if set to true, your server will show up on MCForge.net server list and Minecraft.net's server list"),
-                    new SettingNode("Wom-Server_Description", "A MCForge server", "A Description of your server."),
+                    new SettingNode("VerifyNames", "true", "Check to see if the player logging in owns that account."),
+                    new SettingNode("Wom-Server_Description", "An MCForge server", "A Description of your server."),
                     new SettingNode("Wom-Server_Flags", "[MCForge]", null),
-                    new SettingNode("UsingConsole", "true", "set to \"false\" if you want gui. If using mono set to \"true\""),
+                    new SettingNode("MoneyName", "moneys", "The name of the server currency."),
+                    new SettingNode("ServerOwner", "Notch", "The username of the server owner."),
+                    new SettingNode("Verifying", "false", "Do people need to use /pass upon login?"),
+                    new SettingNode("VerifyGroup", "operator", "The name of the minimum group that needs to verify using /pass."),
+                    new SettingNode("ShowFirstRunScreen", "true", "Whether or not to show the first run screen when the server is started."),
+                    new SettingNode("UsingConsole", "true", "Set to \"false\" if you want GUI. If using mono set to \"true\"."),
                     new SettingNode("ShutdownMessage", "Server shutting down!", "Message to show when server is shutting down"),
                     new SettingNode("WelcomeMessage", "Welcome $name to $server<br>enjoy your stay", "Welcome message, to signify a line break use \"<br>\""),
                     new SettingNode("ConfigPath", "config/", "File path for group player properties, do not mess with unless you know what you are doing"),

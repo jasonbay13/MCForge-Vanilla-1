@@ -75,7 +75,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// Checks if the player is the server owner.
         /// </summary>
-        public bool IsOwner { get { return Username == Server.owner; } }
+        public bool IsOwner { get { return Username.ToLower() == Server.owner.ToLower(); } }
 
         public string _DisplayName = "";
         public string DisplayName
@@ -585,9 +585,12 @@ namespace MCForge.Entity {
                 }
 
                 if (verify == null || verify == "" || verify == "--" || (verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0') && verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0'))) {
-                    SKick("Account could not be verified, try again.");
+        			if (ServerSettings.GetSettingBoolean("VerifyNames"))
+        			{
+        			SKick("Account could not be verified, try again.");
                     //Logger.Log("'" + verify + "' != '" + BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.salt + name))).Replace("-", "").ToLower().TrimStart('0') + "'");
                     return false;
+        			}
                 }
             }
             if (name.Length > 16 || !ValidName(name)) {
@@ -608,12 +611,12 @@ namespace MCForge.Entity {
         }
 
         /// <summary>
-        /// Attempts to find the player in the list of online players
+        /// Attempts to find the player in the list of online players. Returns null if no players are found.
         /// </summary>
         /// <param name="name">The player name to find</param>
         /// <remarks>Can be a partial name</remarks>
         public static Player Find(string name) {
-            foreach (var p in Server.Players)
+            foreach (var p in Server.Players.ToArray())
                 if (p.Username.ToLower().StartsWith(name.ToLower()))
                     return p;
             return null;
