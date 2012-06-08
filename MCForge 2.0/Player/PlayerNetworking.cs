@@ -970,7 +970,7 @@ namespace MCForge.Entity {
                 else { text = text.Replace("$name", p.Username); }
             }
             if (text.Contains("$money")) { text = text.Replace("$money", p.money.ToString()); }
-            if (text.Contains("$" + Server.moneys)) { text = text.Replace("$" + Server.moneys, p.money.ToString()); }
+            if (text.Contains("$" + Server.Moneys)) { text = text.Replace("$" + Server.Moneys, p.money.ToString()); }
             if (text.Contains("$rank")) { text = text.Replace("$rank", p.Group.Name); }
             if (text.Contains("$ip")) { text = text.Replace("$ip", p.Ip); }
             if (text.Contains("$server")) { text = text.Replace("$server", ServerSettings.GetSetting("ServerName")); }

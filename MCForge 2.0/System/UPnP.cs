@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Xml;
 using System.IO;
+using System.Diagnostics;
 
 
 //This upnp class comes from http://www.codeproject.com/Articles/27992/NAT-Traversal-with-UPnP-in-C, Modified for use with MCForge
@@ -112,6 +113,7 @@ namespace MCForge.Core {
 
         }
 
+        [DebuggerStepThrough]
         public static IPAddress GetExternalIP() {
             if (string.IsNullOrEmpty(_serviceUrl))
                 throw new Exception("No UPnP service available or Discover() has not been called");
@@ -123,6 +125,7 @@ namespace MCForge.Core {
             return IPAddress.Parse(IP);
         }
 
+        [DebuggerStepThrough]
         public static string GetLocalIP() {
             IPHostEntry host;
             string localIP = "?";

@@ -51,20 +51,20 @@ namespace CommandDll.Misc {
             p.ExtraData.CreateIfNotExist("Money", 0);
 
             if ((int)who.ExtraData["Money"] - amt < 0) {
-                p.SendMessage("Players cannot have less than 0 " + Server.moneys + ".");
+                p.SendMessage("Players cannot have less than 0 " + Server.Moneys + ".");
                 return;
             }
             if (amt < 0) {
-                p.SendMessage("Cannot take negative amounts of " + Server.moneys + ".");
+                p.SendMessage("Cannot take negative amounts of " + Server.Moneys + ".");
                 return;
             }
 
             who.ExtraData["Money"] = (int)who.ExtraData["Money"] - amt;
-            Player.UniversalChat(who.Color + who.Username + Server.DefaultColor + " was rattled down for &3" + amt + Server.DefaultColor + " " + Server.moneys + ".");
+            Player.UniversalChat(who.Color + who.Username + Server.DefaultColor + " was rattled down for &3" + amt + Server.DefaultColor + " " + Server.Moneys + ".");
             //TODO: DB save
         }
         public void Help(Player p) {
-            p.SendMessage("/take <player> <amount> - Take <amount> of " + Server.moneys + " from <player>.");
+            p.SendMessage("/take <player> <amount> - Take <amount> of " + Server.Moneys + " from <player>.");
         }
         public void Initialize() {
             Command.AddReference(this, "take");

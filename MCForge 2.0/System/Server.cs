@@ -38,11 +38,17 @@ namespace MCForge.Core {
         /// <summary>
         /// Show the first run screen?
         /// </summary>
-        public static bool ShowFirstRunScreen = ServerSettings.GetSettingBoolean("ShowFirstRunScreen");
+        public static bool ShowFirstRunScreen {
+            get { return ServerSettings.GetSettingBoolean("ShowFirstRunScreen"); }
+            set { ServerSettings.SetSetting("ShowFirstRunScreen", value.ToString().ToLower()); }
+        }
         /// <summary>
         /// The name of the server currency.
         /// </summary>
-        public static string moneys = ServerSettings.GetSetting("MoneyName");
+        public static string Moneys {
+            get { return ServerSettings.GetSetting("MoneyName"); }
+            set { ServerSettings.SetSetting("MoneyName", value); }
+        }
         /// <summary>
         /// The miniumum rank that needs to verify.
         /// </summary>
@@ -50,23 +56,29 @@ namespace MCForge.Core {
         /// <summary>
         /// Do people need to use /pass?
         /// </summary>
-        public static bool Verifying = ServerSettings.GetSettingBoolean("Verifying");
+        public static bool Verifying {
+            get { return ServerSettings.GetSettingBoolean("Verifying"); }
+            set { ServerSettings.SetSetting("Verifying", value.ToString().ToLower()); }
+        }
         /// <summary>
         /// The name of the server owner.
         /// </summary>
-        public static string owner = ServerSettings.GetSetting("ServerOwner");
+        public static string Owner {
+            get { return ServerSettings.GetSetting("ServerOwner"); }
+            set { ServerSettings.SetSetting("ServerOwner", value); }
+        }
         /// <summary>
         /// The rank that can destroy griefer_stone without getting kicked
         /// </summary>
-        public static byte grieferstoneperm = 80;
+        public static byte GrieferStonePerm = 80;
         /// <summary>
         /// The amount of griefer_stone warns player will recieve before getting kicked
         /// </summary>
-        public static int grieferstonewarns = 3;
+        public static int GrieferStoneWarns = 3;
         /// <summary>
         /// Get whether the server is currently shutting down
         /// </summary>
-        public static bool shuttingDown;
+        public static bool ShuttingDown;
         /// <summary>
         /// Get whether the server is currently fully started or not
         /// </summary>
@@ -150,7 +162,7 @@ namespace MCForge.Core {
         /// The minecraft.net URL of the server
         /// </summary>
         /// 
-        public static string URL = "";
+        public static string URL { get; set; }
         /// <summary>
         /// Internet utilies
         /// </summary>
@@ -163,8 +175,22 @@ namespace MCForge.Core {
         /// The default color
         /// </summary>
         public static string DefaultColor {
-            get { return ServerSettings.GetSetting("DefaultColor"); }
-            set { ServerSettings.SetSetting("DefaultColor", null, value); }
+            get {
+                var colo = ServerSettings.GetSetting("DefaultColor");
+                if (!ColorUtils.IsValidMinecraftColorCode(colo)) {
+                    Logger.Log("Color code \"" + colo + "\" is not a valid color code", LogType.Error);
+                    colo = "&a";
+                }
+                return colo;
+            }
+            set {
+                var colo = value;
+                if (!ColorUtils.IsValidMinecraftColorCode(colo)) {
+                    Logger.Log("Color code \"" + colo + "\" is not a valid color code", LogType.Error);
+                    colo = "&a";
+                }
+                ServerSettings.SetSetting("DefaultColor", null, colo);
+            }
         }
 
         /// <summary>
@@ -228,7 +254,7 @@ namespace MCForge.Core {
             Started = true;
             Logger.Log("[Important]: Server Started.", Color.Black, Color.White);
             if (!ServerSettings.GetSettingBoolean("VerifyNames"))
-            	Logger.Log("[Important]: The server is running with verify names off! This could lead to bad things! Please turn on verify names if you dont know the risk and dont want these bad things to happen!", LogType.Critical);
+                Logger.Log("[Important]: The server is running with verify names off! This could lead to bad things! Please turn on verify names if you dont know the risk and dont want these bad things to happen!", LogType.Critical);
             IRC = new IRC();
             try {
                 IRC.Start();
@@ -371,7 +397,7 @@ namespace MCForge.Core {
                 new Player(clientSocket);
             }
             catch { }
-            if (!shuttingDown) {
+            if (!ShuttingDown) {
                 listener.BeginAcceptTcpClient(new AsyncCallback(AcceptCallback), listener);
             }
         }
@@ -446,7 +472,7 @@ namespace MCForge.Core {
         public static void Stop() {
             foreach (var p in Players)
                 p.Kick(ServerSettings.GetSetting("ShutdownMessage"));
-            shuttingDown = true;
+            ShuttingDown = true;
             UpdateTimer.Stop();
             listener.Stop();
             Logger.DeInit();

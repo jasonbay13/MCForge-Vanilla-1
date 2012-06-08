@@ -30,7 +30,6 @@ namespace MCForge.Utils.Settings {
 
         internal const byte Version = 7;
         internal static string Salt { get; set; }
-        static List<string> validcolors = new List<string>( new string[] { "a", "b", "c", "d", "e", "f", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" } );
 
         private static bool _initCalled;
         private static List<SettingNode> Values;
@@ -133,7 +132,7 @@ namespace MCForge.Utils.Settings {
         private static void UpgradeSettings() {
             if (Values.Count < defaultValues.Length) {
                 Logger.Log("Upgrading settings...", LogType.Warning);
-                for(int i = 0; i < defaultValues.Length; i++) {
+                for (int i = 0; i < defaultValues.Length; i++) {
                     var value = defaultValues[i];
                     if (!HasKey(value.Key))
                         Values.Insert(i, value);
@@ -165,14 +164,6 @@ namespace MCForge.Utils.Settings {
         /// <returns>The setting value</returns>
         /// <remarks>Returns the first value if multiple values are present</remarks>
         public static string GetSetting(string key) {
-            if (key == "DefaultColor") { //Gotta check if it's valid
-                string value = GetSettingArray(key)[0];
-                if (value.Length > 2) { Logger.Log("Invalid DefaultColor length!"); return "&a"; }
-                if (value[0] != '&' && value[0] != '%') { Logger.Log("Invalid DefaultColor sign. Use % or &!"); return "&a"; }
-                bool okay = false;
-                foreach (string s in validcolors) { if (value[1] == char.Parse(s)) { okay = true; } }
-                if (!okay) { Logger.Log("Invalid DefaultColor color!"); return "&a"; }       
-            }
             key = key.ToLower();
             return GetSettingArray(key)[0];
         }
@@ -188,14 +179,11 @@ namespace MCForge.Utils.Settings {
             var pair = GetNode(key);
             if (pair == null)
                 return -1;
-            try {
-                int.TryParse(GetNode(key).Value, out i);
-                return i;
-            }
-            catch {
+            if (!int.TryParse(GetNode(key).Value, out i)) {
                 Logger.Log("ServerSettings: integer expected as first value for '" + key + "'", Color.Red, Color.Black);
                 return -1;
             }
+            return i;
         }
 
         /// <summary>

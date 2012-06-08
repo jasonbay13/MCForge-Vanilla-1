@@ -38,14 +38,14 @@ namespace CommandDll.Misc
             catch { p.SendMessage("Invalid amount!"); return; }
             who.ExtraData.CreateIfNotExist("Money", 0);
             p.ExtraData.CreateIfNotExist("Money", 0);
-            if ((int)who.ExtraData["Money"] + amt > 16777215) { p.SendMessage("Players cannot have more than 16777215 " + Server.moneys + "."); return; }
-            if (amt < 0) { p.SendMessage("Cannot take negative amounts of " + Server.moneys + "."); return; }
+            if ((int)who.ExtraData["Money"] + amt > 16777215) { p.SendMessage("Players cannot have more than 16777215 " + Server.Moneys + "."); return; }
+            if (amt < 0) { p.SendMessage("Cannot take negative amounts of " + Server.Moneys + "."); return; }
             who.ExtraData["Money"] = (int)who.ExtraData["Money"] + amt;
-            Player.UniversalChat(who.Color + who.Username + Server.DefaultColor + " was given &3" + amt + Server.DefaultColor + " " + Server.moneys + ".");
+            Player.UniversalChat(who.Color + who.Username + Server.DefaultColor + " was given &3" + amt + Server.DefaultColor + " " + Server.Moneys + ".");
         }
         public void Help(Player p)
         {
-            p.SendMessage("/give <player> <amount> - Give <player> <amount> amount of " + Server.moneys + ".");
+            p.SendMessage("/give <player> <amount> - Give <player> <amount> amount of " + Server.Moneys + ".");
         }
         public void Initialize()
         {

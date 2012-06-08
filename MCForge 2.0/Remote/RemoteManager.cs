@@ -86,7 +86,7 @@ namespace MCForge.Remote {
                 client.Close();
                 reader.Close();
 
-                if (!Server.shuttingDown)
+                if (!Server.ShuttingDown)
                     serverSocket.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
 
                 return;
@@ -101,7 +101,7 @@ namespace MCForge.Remote {
                 if (remote != null)
                     remote.Disconnect("Caused Error");
             }
-            if (!Server.shuttingDown)
+            if (!Server.ShuttingDown)
                 serverSocket.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }
 

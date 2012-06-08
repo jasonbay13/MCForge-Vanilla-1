@@ -41,8 +41,8 @@ namespace CommandDll.Misc
             who.ExtraData.CreateIfNotExist("Money", 0);
             p.ExtraData.CreateIfNotExist("Money", 0);
             if ((int)who.ExtraData["Money"] - amt < 0) { p.SendMessage("You cannot steal money that " + who.Color + who.Username + Server.DefaultColor + " does not have!"); return; }
-            if ((int)p.ExtraData["Money"] + amt > 16777215) { p.SendMessage("If you steal that much, you'll be so rich your wallet will burst! You cannot have over 16777215 " + Server.moneys + "."); return; }
-            if (amt < 0) { p.SendMessage("Cannot take negative amounts of " + Server.moneys + "."); return; }
+            if ((int)p.ExtraData["Money"] + amt > 16777215) { p.SendMessage("If you steal that much, you'll be so rich your wallet will burst! You cannot have over 16777215 " + Server.Moneys + "."); return; }
+            if (amt < 0) { p.SendMessage("Cannot take negative amounts of " + Server.Moneys + "."); return; }
             int x = new Random().Next(1, 101);
             if (InBetween(1, x, 3)) { Rob(p, who, amt); }
             if (InBetween(4, x, 6)) { amt -= amt / 5; Rob(p, who, amt); }
@@ -52,7 +52,7 @@ namespace CommandDll.Misc
         }
         public void Help(Player p)
         {
-            p.SendMessage("/rob <player> <amount> - Try to take <amount> " + Server.moneys + " from <player>.");
+            p.SendMessage("/rob <player> <amount> - Try to take <amount> " + Server.Moneys + " from <player>.");
         }
         public void Initialize()
         {
@@ -67,7 +67,7 @@ namespace CommandDll.Misc
         {
             p.ExtraData["Money"] = (int)p.ExtraData["Money"] + amt;
             who.ExtraData["Money"] = (int)who.ExtraData["Money"] - amt;
-            Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " robbed " + who.Color + who.Username + Server.DefaultColor + " of &3" + amt + Server.DefaultColor + " " + Server.moneys + ".");
+            Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " robbed " + who.Color + who.Username + Server.DefaultColor + " of &3" + amt + Server.DefaultColor + " " + Server.Moneys + ".");
         }
     }
 }

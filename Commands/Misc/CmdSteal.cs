@@ -40,15 +40,15 @@ namespace CommandDll.Misc
             who.ExtraData.CreateIfNotExist("Money", 0);
             p.ExtraData.CreateIfNotExist("Money", 0);
             if ((int)who.ExtraData["Money"] - amt < 0) { p.SendMessage("You cannot steal money that " + who.Color + who.Username + Server.DefaultColor + " does not have!"); return; }
-            if ((int)p.ExtraData["Money"] + amt > 16777215) { p.SendMessage("If you steal that much, you'll be so rich your wallet will burst! You cannot have over 16777215 " + Server.moneys + "."); return; }
-            if (amt < 0) { p.SendMessage("Cannot take negative amounts of " + Server.moneys + "."); return; }
+            if ((int)p.ExtraData["Money"] + amt > 16777215) { p.SendMessage("If you steal that much, you'll be so rich your wallet will burst! You cannot have over 16777215 " + Server.Moneys + "."); return; }
+            if (amt < 0) { p.SendMessage("Cannot take negative amounts of " + Server.Moneys + "."); return; }
             who.ExtraData["Money"] = (int)who.ExtraData["Money"] - amt;
             p.ExtraData["Money"] = (int)p.ExtraData["Money"] + amt;
-            Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " took &3" + amt + Server.DefaultColor + " " + Server.moneys + " from " + who.Color + who.Username + Server.DefaultColor + ".");
+            Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " took &3" + amt + Server.DefaultColor + " " + Server.Moneys + " from " + who.Color + who.Username + Server.DefaultColor + ".");
         }
         public void Help(Player p)
         {
-            p.SendMessage("/steal <player> <amount> - Steal <amount> " + Server.moneys + " from <player>.");
+            p.SendMessage("/steal <player> <amount> - Steal <amount> " + Server.Moneys + " from <player>.");
             p.SendMessage("Differs from /rob in that /steal is always successful.");
         }
         public void Initialize()

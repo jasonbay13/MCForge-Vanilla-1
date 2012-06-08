@@ -78,5 +78,21 @@ namespace MCForge.Utils {
                 return colorToConsole[color];
             return ConsoleColor.Black;
         }
+
+        public static bool IsValidMinecraftColorCode(string value) {
+            if (value.Length != 2) {
+                return false;
+            }
+            if (value[0] != '&' && value[0] != '%') {
+                return false;
+            }
+            for (char i = 'a'; i <= 'f'; i++)
+                if (value[1] == i)
+                    return true;
+            for (char i = '1'; i <= '9'; i++)
+                if (value[1] == i)
+                    return true;
+            return false;
+        }
     }
 }

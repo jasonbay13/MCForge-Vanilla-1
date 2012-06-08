@@ -75,7 +75,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// Checks if the player is the server owner.
         /// </summary>
-        public bool IsOwner { get { return Username.ToLower() == Server.owner.ToLower(); } }
+        public bool IsOwner { get { return Username.ToLower() == Server.Owner.ToLower(); } }
 
         public string _DisplayName = "";
         public string DisplayName
