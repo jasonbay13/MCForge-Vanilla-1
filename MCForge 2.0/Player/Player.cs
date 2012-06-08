@@ -130,6 +130,8 @@ namespace MCForge.Entity {
         /// </summary>
         public bool IsBeingKicked { get; set; }
 
+        public bool StaticCommandsEnabled { get; set; }
+
         private Level _level;
         /// <summary>
         /// This is the players current level

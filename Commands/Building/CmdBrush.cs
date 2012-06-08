@@ -105,6 +105,11 @@ namespace CommandDll.Building {
             IBrush b = (IBrush)Activator.CreateInstance(raw.BrushType);
             var qq = b.Draw(loc, raw.Block, raw.Size);
 
+            if (sender.Group.MaxBlockChange < qq.Count()) {
+                sender.SendMessage("You cannot set that many blocks");
+                return;
+            }
+
             foreach (var fml in qq) 
                 sender.SendBlockChange((ushort)fml.x, (ushort)fml.z, (ushort)fml.y, block);
 

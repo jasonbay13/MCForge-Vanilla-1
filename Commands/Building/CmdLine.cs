@@ -91,7 +91,10 @@ namespace CommandDll.Building {
                 byte block = raw.Block;
 
                 IEnumerable<Vector3S> path = from.PathTo(to);
-
+                if (sender.Group.MaxBlockChange < path.Count()) {
+                    sender.SendMessage("You are not allowed to change that many blocks");
+                    return;
+                }
                 foreach (var pos in path) {
                     if (!sender.Level.IsInBounds(pos))
                         continue;
@@ -106,7 +109,6 @@ namespace CommandDll.Building {
                 Logger.LogError(er);
             }
 
-            sender.ExtraData.Remove("Command.Line");
         }
 
         private struct BlockInfo {
