@@ -92,7 +92,7 @@ namespace MCForge.Gui.Components {
             string newRtf = TheColorsOfTheRainbow;
             newRtf = wList.Aggregate(newRtf, (msg, s) => msg + s);
             newRtf += '}';
-            Rtf = newRtf;
+            Rtf = newRtf; //DIS THING
 
             this.Select(this.Text.Length - 1, 0);
             this.ScrollToCaret();

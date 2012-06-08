@@ -48,7 +48,7 @@ namespace MCForge.Utils
         public static bool CanConnectToInternet() //Uses NSCI (http://technet.microsoft.com/en-us/library/cc766017.aspx)
         {
             string DnsCheck = "dns.msftncsi.com";
-            IPAddress[] AddressList = Dns.GetHostAddresses(DnsCheck);
+            IPAddress[] AddressList = Dns.GetHostAddresses(DnsCheck); //DIS THING
             bool DNSFine = false;
             foreach (IPAddress IPA in AddressList)
             {
