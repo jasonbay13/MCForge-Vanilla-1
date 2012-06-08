@@ -221,7 +221,7 @@ namespace MCForge.Entity {
                 Load();
 
                 foreach (string w in ServerSettings.GetSetting("welcomemessage").Split(new string[] { "<br>" }, StringSplitOptions.RemoveEmptyEntries))
-                    SendMessage(w);
+                    SendMessage(ConvertVariables(this, w));
 
             }
             catch (Exception e) {
@@ -623,9 +623,6 @@ namespace MCForge.Entity {
             }
         }
         private void SendMessage(byte PlayerID, string message) {
-            packet pa = new packet();
-
-
             for (int i = 0; i < 10; i++) {
                 message = message.Replace("%" + i, "&" + i);
                 message = message.Replace("&" + i + " &", "&");
@@ -637,16 +634,12 @@ namespace MCForge.Entity {
             if (!String.IsNullOrWhiteSpace(message) && message.IndexOf("^detail.user") == -1)
                 message = Server.DefaultColor + message;
 
-            pa.Add(packet.types.Message);
-            pa.Add(PlayerID);
-
             try {
                 foreach (string line in LineWrapping(message)) {
-                    if (pa.bytes.Length < 64)
-                        pa.Add(line, 64);
-                    else
-                        pa.Set(2, line, 64);
-
+                    packet pa = new packet();
+                    pa.Add(packet.types.Message);
+                    pa.Add(PlayerID);
+                    pa.Add(line, 64);
                     SendPacket(pa);
                 }
             }

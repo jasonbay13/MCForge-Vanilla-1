@@ -141,7 +141,7 @@ namespace MCForge.Robot
                             }
                             catch { Bot.shouldCheckAgainLoopInt = 0; }
 
-                            if (Bot.intLoop >= 2) //Slows down the bots so they arent insta-propogate, it slows them a bit too much though, need to fix
+                            if (Bot.intLoop >= 1) //Slows down the bots so they arent insta-propogate, it slows them a bit too much though, need to fix
                             {                     //Also makes them a bit less accurate than instant, but much more accurate than Vector2D.Move()
                                 Bot.intLoop = 0;
                                 Bot.shouldCheckAgainLoopInt++;
@@ -151,8 +151,8 @@ namespace MCForge.Robot
                                 Bot.intLoop += 1;
                             }
 
-                            TemporaryLocation.x += (short)((Pathfound.x - TemporaryLocation.x) / 3);
-                            TemporaryLocation.z += (short)((Pathfound.z - TemporaryLocation.z) / 3);
+                            TemporaryLocation.x += (short)((Pathfound.x - TemporaryLocation.x) / 2);
+                            TemporaryLocation.z += (short)((Pathfound.z - TemporaryLocation.z) / 2);
                             #endregion
 
                             Block Block1 = Bot.Player.Level.GetBlock(TemporaryLocation / 32);
