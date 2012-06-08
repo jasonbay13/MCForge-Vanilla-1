@@ -80,7 +80,7 @@ namespace MCForge.Core {
         private static int PingIntervalCurrent = 0;
         private static int BotInterval = 25;
         private static int BotIntervalCurrent = 0;
-        public static bool DebugMode {get;set;}
+        public static bool DebugMode { get; set; }
         public struct TempBan { public string name; public DateTime allowed; }
         public static List<TempBan> tempbans = new List<TempBan>();
         public static DateTime StartTime = DateTime.Now;
@@ -162,7 +162,10 @@ namespace MCForge.Core {
         /// <summary>
         /// The default color
         /// </summary>
-        public static string DefaultColor { get { return ServerSettings.GetSetting("DefaultColor"); } }
+        public static string DefaultColor {
+            get { return ServerSettings.GetSetting("DefaultColor"); }
+            set { ServerSettings.SetSetting("DefaultColor", null, value); }
+        }
 
         /// <summary>
         /// This delegate is used when a command or plugin needs to call a method after a certain amount of time
@@ -177,7 +180,7 @@ namespace MCForge.Core {
         public delegate void ForeachBotDelegate(Bot p);
 
         public static void Init() {
-            Logger.WriteLog("--------- Server Started at " + DateTime.Now.ToShortDateString() +  " " + DateTime.Now.ToShortTimeString() + " ---------");
+            Logger.WriteLog("--------- Server Started at " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + " ---------");
             Logger.Log("Debug mode started", LogType.Debug);
             //TODO Add debug messages
             //TODO load the level if it exists
@@ -192,8 +195,7 @@ namespace MCForge.Core {
             Logger.Log("Finished loading DLL's", LogType.Debug);
             Logger.Log("Sending Heartbeat..", LogType.Debug);
 
-            Thread HeartThread = new Thread(new ThreadStart(delegate
-            {
+            Thread HeartThread = new Thread(new ThreadStart(delegate {
                 Heartbeat.sendHeartbeat();
             }));
 
@@ -321,16 +323,21 @@ namespace MCForge.Core {
         #region Socket Stuff
         private static TcpListener listener;
         private static void StartListening() {
-            if (ServerSettings.GetSettingBoolean("Use-UPnP")) {
+            try {
+                if (ServerSettings.GetSettingBoolean("Use-UPnP")) {
                     if (!UPnP.Discover()) {
                         Logger.Log("Your router does not support UPnP. You must port forward.", LogType.Error);
                     }
                     else {
 
-                        UPnP.ForwardPort(ServerSettings.GetSettingInt("port"), ProtocolType.Tcp, "MCForge Server");
+                        UPnP.ForwardPort(ServerSettings.GetSettingInt("port"), ProtocolType.Tcp, "MCForgeServer");
                         Logger.Log("Port forwarded automatically using UPnP");
 
                     }
+                }
+            }
+            catch {
+                Logger.Log("There was a problem setting up upnp, this can be a number of problems. Try again or manually port forward.", LogType.Error);
             }
             try {
                 listener = new TcpListener(System.Net.IPAddress.Any, ServerSettings.GetSettingInt("port"));
@@ -446,16 +453,14 @@ namespace MCForge.Core {
         /// <summary>
         /// Exits the server
         /// </summary>
-        public static void Quit()
-        {
+        public static void Quit() {
             Environment.Exit(1);
         }
 
         /// <summary>
         /// Restarts the server (TODO - Mono compatible)
         /// </summary>
-        public static void Restart()
-        {
+        public static void Restart() {
             // Get the parameters/arguments passed to program if any
             string arguments = string.Empty;
             string[] args = Environment.GetCommandLineArgs();

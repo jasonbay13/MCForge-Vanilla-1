@@ -31,11 +31,7 @@ namespace CommandDll.Building {
         public string CUD {get { return "com.mcforge.commands.line"; }}
         public byte Permission {
             get {
-#if DEBUG
-                return (byte)PermissionLevel.Guest;
-#else
-                return (byte)PermissionLevel.Builder
-#endif
+                return (byte)PermissionLevel.Builder;
             }
         }
         public void Use(Player p, string[] args) {

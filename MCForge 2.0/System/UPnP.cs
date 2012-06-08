@@ -94,7 +94,7 @@ namespace MCForge.Core {
                 throw new Exception("No UPnP service available or Discover() has not been called");
             XmlDocument xdoc = SOAPRequest(_serviceUrl, "<u:AddPortMapping xmlns:u=\"urn:schemas-upnp-org:service:WANIPConnection:1\">" +
                 "<NewRemoteHost></NewRemoteHost><NewExternalPort>" + port.ToString() + "</NewExternalPort><NewProtocol>" + protocol.ToString().ToUpper() + "</NewProtocol>" +
-                "<NewInternalPort>" + port.ToString() + "</NewInternalPort><NewInternalClient>" + Dns.GetHostAddresses(Dns.GetHostName())[0].ToString() +
+                "<NewInternalPort>" + port.ToString() + "</NewInternalPort><NewInternalClient>" + GetLocalIP() +
                 "</NewInternalClient><NewEnabled>1</NewEnabled><NewPortMappingDescription>" + description +
             "</NewPortMappingDescription><NewLeaseDuration>0</NewLeaseDuration></u:AddPortMapping>", "AddPortMapping");
         }
@@ -121,6 +121,18 @@ namespace MCForge.Core {
             nsMgr.AddNamespace("tns", "urn:schemas-upnp-org:device-1-0");
             string IP = xdoc.SelectSingleNode("//NewExternalIPAddress/text()", nsMgr).Value;
             return IPAddress.Parse(IP);
+        }
+
+        public static string GetLocalIP() {
+            IPHostEntry host;
+            string localIP = "?";
+            host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (IPAddress ip in host.AddressList) {
+                if (ip.AddressFamily == AddressFamily.InterNetwork) {
+                    localIP = ip.ToString();
+                }
+            }
+            return localIP;
         }
 
         private static XmlDocument SOAPRequest(string url, string soap, string function) {
