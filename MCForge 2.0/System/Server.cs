@@ -107,7 +107,7 @@ namespace MCForge.Core {
         /// </summary>
         public static List<Bot> Bots = new List<Bot>();
         public static int BotCount { get { return Bots.Count; } }
-        
+
         /// <summary>
         /// The current list of banned IP addresses. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
         /// </summary>
@@ -384,7 +384,7 @@ namespace MCForge.Core {
             }
             while (true) {
                 try {
-                     listener.BeginAcceptTcpClient(new AsyncCallback(AcceptCallback), listener);
+                    listener.BeginAcceptTcpClient(new AsyncCallback(AcceptCallback), listener);
                     break;
                 }
                 catch (SocketException E) {
@@ -480,8 +480,12 @@ namespace MCForge.Core {
             foreach (var p in Players)
                 p.Kick(ServerSettings.GetSetting("ShutdownMessage"));
             ShuttingDown = true;
-            UpdateTimer.Stop();
-            listener.Stop();
+
+            if (UpdateTimer != null)
+                UpdateTimer.Stop();
+
+            if (listener != null)
+                listener.Stop();
             Logger.DeInit();
         }
 

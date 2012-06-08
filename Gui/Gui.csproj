@@ -55,7 +55,9 @@
   <ItemGroup>
     <Compile Include="API\MCForgeGui.cs" />
     <Compile Include="API\MCForgeGuiManager.cs" />
-    <Compile Include="Components\ColoredReader.cs" />
+    <Compile Include="Components\ColoredReader.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Components\ColoredReader.Designer.cs">
       <DependentUpon>ColoredReader.cs</DependentUpon>
     </Compile>
