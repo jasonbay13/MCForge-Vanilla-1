@@ -168,7 +168,22 @@ namespace MCForge.Entity {
                         Kick("Disconnected by event");
                     return;
                 }
-                if (Server.PlayerCount >= ServerSettings.GetSettingInt("MaxPlayers") && !Server.vips.Contains(Username) && !Server.devs.Contains(Username)) { SKick("Too many players!"); return; }
+            Gotos_Are_The_Devil:
+                if (Server.PlayerCount >= ServerSettings.GetSettingInt("MaxPlayers") && !Server.vips.Contains(Username) && !Server.devs.Contains(Username)) {
+                    int LoopAmount = 0;
+                    while (Server.PlayerCount >= ServerSettings.GetSettingInt("MaxPlayers"))
+                    {
+                        LoopAmount++;
+                        Thread.Sleep(1000);
+                        packet pa = new packet();
+                        pa.Add(packet.types.MOTD);
+                        pa.Add(ServerSettings.Version);
+                        pa.Add("Waiting in queue, waiting for " + LoopAmount + " seconds", 64);
+                        pa.Add(Server.PlayerCount + " players are online right now out of " + ServerSettings.GetSettingInt("MaxPlayers") + "!", 64);
+                        pa.Add((byte)0);
+                        SendPacket(pa);
+                    }
+                }
                 //TODO Database Stuff
 
                 Logger.Log("[System]: " + Ip + " logging in as " + Username + ".", System.Drawing.Color.Green, System.Drawing.Color.Black);
@@ -195,6 +210,8 @@ namespace MCForge.Entity {
                     Level = Level;
 
                 id = FreeId();
+                if (Server.PlayerCount >= ServerSettings.GetSettingInt("MaxPlayers"))
+                    goto Gotos_Are_The_Devil;                                          //Gotos are literally the devil, but it works here so two players dont login at once
                 UpgradeConnectionToPlayer();
 
                 short x = (short)((0.5 + Level.SpawnPos.x) * 32);
