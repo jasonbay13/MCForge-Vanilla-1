@@ -45,17 +45,16 @@ namespace MCForge.Entity {
                         UniversalChat(p.Color + p.Username + Server.DefaultColor + " has disconnected.");
                         p.GlobalDie();
                     }
-
-                    //Why is this here? this is a terrible spot for this!
-                    if (Server.reviewlist.Contains(p)) {
+                    if (Server.reviewlist.Contains(p))
+                    {
                         Server.reviewlist.Remove(p);
-                        foreach (Player pl in Server.reviewlist.ToArray()) {
+                        foreach (Player pl in Server.reviewlist.ToArray())
+                        {
                             int position = Server.reviewlist.IndexOf(pl);
                             if (position == 0) { pl.SendMessage("You're next in the review queue!"); continue; }
                             pl.SendMessage(position == 1 ? "There is 1 player in front of you!" : "There are " + position + " players in front of you!");
                         }
                     }
-                    //End Rage
                     return;
                 }
 
@@ -161,9 +160,7 @@ namespace MCForge.Entity {
                         return;
                     }
                 }
-                catch {
-                }
-
+                catch { }
                 ConnectionEventArgs eargs = new ConnectionEventArgs(true);
                 bool cancel = OnPlayerConnect.Call(this, eargs, OnAllPlayersConnect).Canceled;
                 if (cancel) {
@@ -171,7 +168,7 @@ namespace MCForge.Entity {
                         Kick("Disconnected by event");
                     return;
                 }
-
+                if (Server.PlayerCount >= ServerSettings.GetSettingInt("MaxPlayers") && !Server.vips.Contains(Username) && !Server.devs.Contains(Username)) { SKick("Too many players!"); return; }
                 //TODO Database Stuff
 
                 Logger.Log("[System]: " + Ip + " logging in as " + Username + ".", System.Drawing.Color.Green, System.Drawing.Color.Black);

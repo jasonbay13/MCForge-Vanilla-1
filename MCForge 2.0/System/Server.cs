@@ -17,6 +17,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net.Sockets;
+using System.Reflection;
+using System.Threading;
 using MCForge.Core.HeartService;
 using MCForge.Entity;
 using MCForge.Interface;
@@ -26,9 +28,6 @@ using MCForge.SQL;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
-using System.Threading;
-using System.Net;
-using System.Reflection;
 
 namespace MCForge.Core {
     public static class Server {
@@ -108,6 +107,7 @@ namespace MCForge.Core {
         /// </summary>
         public static List<Bot> Bots = new List<Bot>();
         public static int BotCount { get { return Bots.Count; } }
+        
         /// <summary>
         /// The current list of banned IP addresses. Note that if you do a foreach on this (or any other public list) you should always add .ToArray() to the end to avoid errors!
         /// </summary>
@@ -120,6 +120,10 @@ namespace MCForge.Core {
         /// The list of MCForge developers.
         /// </summary>
         public static readonly string[] devs = new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "headdetect", "Gamemakergm", "cazzar", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "ninedrafted", "Nerketur", "Serado", "501st_Commander" };
+        /// <summary>
+        /// List of VIPs
+        /// </summary>
+        public static List<string> vips = new List<string>();
         /// <summary>
         /// List of players that need to be reviewed
         /// </summary>
@@ -301,11 +305,16 @@ namespace MCForge.Core {
             FileUtils.CreateFileIfNotExist("bans/NameBans.txt");
             FileUtils.CreateFileIfNotExist("bans/BanInfo.txt");
 
+            FileUtils.CreateFileIfNotExist("ranks/vips.txt", "#Vips are the players who can join the server when it's full!" + Environment.NewLine + "#Each name should be in a new line, whithout # at the start!");
+
+
             try {
                 string[] lines = File.ReadAllLines("text/agreed.txt");
                 foreach (string pl in lines) { agreed.Add(pl); }
+                lines = File.ReadAllLines("ranks/vips.txt");
+                foreach (string line in lines) { if (line.Trim()[0] != '#') { vips.Add(line); } }
             }
-            catch { Logger.Log("Error reading agreed players!", LogType.Error); }
+            catch { Logger.Log("Error reading agreed players and vips!", LogType.Error); }
         }
         /// <summary>
         /// Loops through online players, it is quite pointless. It would be more effecent to just use Server.Players.ForEach(stuff in here);
