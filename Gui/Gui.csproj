@@ -55,17 +55,19 @@
   <ItemGroup>
     <Compile Include="API\MCForgeGui.cs" />
     <Compile Include="API\MCForgeGuiManager.cs" />
-    <Compile Include="Components\ColoredTextbox.cs">
-      <SubType>Component</SubType>
+    <Compile Include="Components\ColoredReader.cs" />
+    <Compile Include="Components\ColoredReader.Designer.cs">
+      <DependentUpon>ColoredReader.cs</DependentUpon>
     </Compile>
-    <Compile Include="Components\ColoredTextbox.Designer.cs">
-      <DependentUpon>ColoredTextbox.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Components\NativeMethods.cs" />
     <Compile Include="Components\NewsFeeder.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Components\NewsFeeder.Designer.cs">
       <DependentUpon>NewsFeeder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\StyledRichTextBox.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Components\TransparentPanel.cs">
       <SubType>Component</SubType>
@@ -110,9 +112,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\mcforge_logo.png" />
-    <EmbeddedResource Include="Components\ColoredTextbox.resx">
-      <DependentUpon>ColoredTextbox.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FirstRunScreen.resx">
       <DependentUpon>FirstRunScreen.cs</DependentUpon>
     </EmbeddedResource>

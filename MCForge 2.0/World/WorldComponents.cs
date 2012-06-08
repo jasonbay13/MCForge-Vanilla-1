@@ -10,7 +10,7 @@ namespace MCForge.World {
     public class WorldComponent {
 
         private BlockComponent[] components;
-        public enum TreeType { classic, notch, swamp, cactus }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="WorldComponent"/> class.
         /// </summary>
@@ -43,9 +43,14 @@ namespace MCForge.World {
         }
         public static void GenerateTree(Player p, ushort x, ushort z, ushort y, TreeType type, bool gothrough = false)
         {
-            byte air = Block.BlockList.AIR, sap = Block.BlockList.SAPLING, trunk = Block.BlockList.WOOD, leaf = Block.BlockList.LEAVES;
+            byte air = Block.BlockList.AIR, 
+                      sap = Block.BlockList.SAPLING, 
+                      trunk = Block.BlockList.WOOD, 
+                      leaf = Block.BlockList.LEAVES;
+
             #region Normal
-            if (type == TreeType.classic) {
+
+            if (type == TreeType.Classic) {
                     byte height = (byte)MathUtils.Random.Next(5, 8);
                     short top = (short)(height - MathUtils.Random.Next(2, 4));
                     ushort xxx, yyy, zzz;
@@ -76,8 +81,9 @@ namespace MCForge.World {
                     p.Level.BlockChange(x, z, y, trunk);
             }
             #endregion
+
             #region Notchy
-            if (type == TreeType.notch) {
+            if (type == TreeType.Notch) {
                 byte dist, tile, height = (byte)MathUtils.Random.Next(3, 7), top = (byte)(height - 2);
                 short xx, yy, zz;
                 ushort xxx, yyy, zzz;
@@ -108,17 +114,6 @@ namespace MCForge.World {
             #endregion
 
         }
-        /// <summary>
-        /// A static component for the letter 'A' (capitalized)
-        /// </summary>
-        public static readonly WorldComponent LetterA = new WorldComponent(
-            new BlockComponent(255, new Vector3S(1, 0, 0)), new BlockComponent(255, new Vector3S(2, 0, 0)),
-            new BlockComponent(255, new Vector3S(0, 0, 1)), new BlockComponent(255, new Vector3S(3, 0, 1)),
-            new BlockComponent(255, new Vector3S(0, 0, 2)), new BlockComponent(255, new Vector3S(1, 0, 2)), new BlockComponent(255, new Vector3S(2, 0, 2)), new BlockComponent(255, new Vector3S(3, 0, 2)),
-            new BlockComponent(255, new Vector3S(0, 0, 3)), new BlockComponent(255, new Vector3S(3, 0, 3)),
-            new BlockComponent(255, new Vector3S(0, 0, 4)), new BlockComponent(255, new Vector3S(3, 0, 4)),
-            new BlockComponent(255, new Vector3S(0, 0, 5)), new BlockComponent(255, new Vector3S(3, 0, 5))
-       );
     }
 
     public enum Direction {
@@ -129,6 +124,13 @@ namespace MCForge.World {
         Up,
         Down
     }
+
+  public enum TreeType { 
+      Classic, 
+      Notch, 
+      Swamp, 
+      Cactus
+  }
 
     /// <summary>
     /// A struct containting a Block and position

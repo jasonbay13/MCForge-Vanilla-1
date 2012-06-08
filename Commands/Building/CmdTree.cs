@@ -35,14 +35,14 @@ namespace CommandDll
         {
             if (args.Length == 0) {
                 p.SendMessage("Place a block where you would like your tree to grow!");
-                p.ExtraData.ChangeOrCreate("TreeType", WorldComponent.TreeType.classic); 
+                p.ExtraData.ChangeOrCreate("TreeType", TreeType.Classic); 
                 p.OnPlayerBlockChange.Normal += BlockChange; 
             }
             else {
                 switch (args[0].ToLower()) { 
                     case "classic":
                     case "default":
-                        p.ExtraData.ChangeOrCreate("TreeType", WorldComponent.TreeType.classic);
+                        p.ExtraData.ChangeOrCreate("TreeType", TreeType.Classic);
                         break;
                     case "swamp":
                         //p.ExtraData.ChangeOrCreate("TreeType", WorldComponent.TreeType.swamp);
@@ -54,7 +54,7 @@ namespace CommandDll
                         p.SendMessage("Not implemented!"); return;
                         //break;
                     case "notch":
-                        p.ExtraData.ChangeOrCreate("TreeType", WorldComponent.TreeType.notch);
+                        p.ExtraData.ChangeOrCreate("TreeType", TreeType.Notch);
                         break;
                     default:
                         p.SendMessage("Invalid tree type!"); 
@@ -67,7 +67,7 @@ namespace CommandDll
         }
         public void BlockChange(Player p, BlockChangeEventArgs args) {
             p.OnPlayerBlockChange.Normal -= BlockChange;
-            WorldComponent.GenerateTree(p, args.X, args.Z, args.Y, (WorldComponent.TreeType)p.ExtraData["TreeType"], false);
+            WorldComponent.GenerateTree(p, args.X, args.Z, args.Y, (TreeType)p.ExtraData["TreeType"], false);
             p.ExtraData.Remove("TreeType");
         }
         public void Help(Player p)

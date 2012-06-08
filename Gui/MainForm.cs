@@ -41,7 +41,16 @@ namespace MCForge.Gui {
             pluginManager.Init();
             pluginManager.AttachItems();
             Logger.OnRecieveLog += (obj, args) => {
-                coloredTextBox1.Write(Environment.NewLine + args.Message);
+
+                if (args.LogType == LogType.Debug)
+                    return;
+
+                if (args.LogType == LogType.Normal)
+                    coloredReader1.AppendLog(args.Message + Environment.NewLine);
+                else
+                    coloredReader1.AppendLog(args.Message + Environment.NewLine, args.TextColor, Color.White);
+
+                coloredReader1.ScrollToEnd();
             };
             Player.OnAllPlayersConnect.Important += OnConnect;
             Player.OnAllPlayersDisconnect.Important += OnDisconnect;

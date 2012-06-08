@@ -51,8 +51,8 @@ namespace MCForge.Gui
             this.mPlayersListBox = new System.Windows.Forms.ListBox();
             this.chatBox = new System.Windows.Forms.TextBox();
             this.chatButtonChange = new System.Windows.Forms.ComboBox();
-            this.coloredTextBox1 = new MCForge.Gui.Components.ColoredTextBox(this.components);
             this.newsFeeder1 = new MCForge.Gui.Components.NewsFeeder(this.components);
+            this.coloredReader1 = new MCForge.Gui.Components.ColoredReader(this.components);
             this.menuStrip1.SuspendLayout();
             this.mPlayerGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -121,17 +121,6 @@ namespace MCForge.Gui
             this.chatButtonChange.Size = new System.Drawing.Size(83, 21);
             this.chatButtonChange.TabIndex = 6;
             // 
-            // coloredTextBox1
-            // 
-            this.coloredTextBox1.AutoWordSelection = true;
-            this.coloredTextBox1.BackColor = System.Drawing.Color.White;
-            this.coloredTextBox1.Location = new System.Drawing.Point(12, 27);
-            this.coloredTextBox1.Name = "coloredTextBox1";
-            this.coloredTextBox1.ReadOnly = true;
-            this.coloredTextBox1.Size = new System.Drawing.Size(576, 386);
-            this.coloredTextBox1.TabIndex = 4;
-            this.coloredTextBox1.Text = "";
-            // 
             // newsFeeder1
             // 
             this.newsFeeder1.BackColor = System.Drawing.Color.White;
@@ -151,15 +140,23 @@ namespace MCForge.Gui
             this.newsFeeder1.TabIndex = 7;
             this.newsFeeder1.Text = "Connecting...";
             // 
+            // coloredReader1
+            // 
+            this.coloredReader1.Location = new System.Drawing.Point(12, 28);
+            this.coloredReader1.Name = "coloredReader1";
+            this.coloredReader1.Size = new System.Drawing.Size(576, 383);
+            this.coloredReader1.TabIndex = 8;
+            this.coloredReader1.Text = "";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(826, 497);
+            this.Controls.Add(this.coloredReader1);
             this.Controls.Add(this.newsFeeder1);
             this.Controls.Add(this.chatButtonChange);
             this.Controls.Add(this.chatBox);
-            this.Controls.Add(this.coloredTextBox1);
             this.Controls.Add(this.mPlayerGroupBox);
             this.Controls.Add(this.mStatus);
             this.Controls.Add(this.menuStrip1);
@@ -187,10 +184,10 @@ namespace MCForge.Gui
         private System.Windows.Forms.ToolStripMenuItem pluginsToolStripMenuItem;
         private System.Windows.Forms.GroupBox mPlayerGroupBox;
         private System.Windows.Forms.ListBox mPlayersListBox;
-        private Components.ColoredTextBox coloredTextBox1;
         private System.Windows.Forms.TextBox chatBox;
         private System.Windows.Forms.ComboBox chatButtonChange;
         private Components.NewsFeeder newsFeeder1;
+        private Components.ColoredReader coloredReader1;
 	}
 }
 
