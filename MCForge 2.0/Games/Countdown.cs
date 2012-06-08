@@ -26,7 +26,14 @@ namespace MCForge.Games
 {
     public static class Countdown
     {
-        public enum CountdownGameStatus : int { Disabled = 0, Enabled = 1, AboutToStart = 2, InProgress = 3, Finished = 4 }
+        public enum CountdownGameStatus  { 
+            Disabled, 
+            Enabled,
+            AboutToStart, 
+            InProgress,
+            Finished 
+        }
+
         public static List<Player> players = new List<Player>();
         public static List<Player> playersleftlist = new List<Player>();
         public static List<string> squaresleft = new List<string>();

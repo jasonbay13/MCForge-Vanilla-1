@@ -37,7 +37,7 @@ namespace MCForge.Utils {
 
 
         internal static string DateFormat {
-            get { return _lastTime.ToString("dd-MM-yyyy") + "-MCForge.log"; }
+            get { return _lastTime.ToString("MM-dd-yyyy") + "-MCForge.log"; }
         }
 
 
@@ -114,7 +114,7 @@ namespace MCForge.Utils {
         /// <param name="e">Exception to be logged</param>
         public static void LogError(Exception e) {
             _flushErrorQueue.Enqueue(new LogEventArgs(e.Message + "\n" + e.StackTrace, LogType.Error));
-            WriteLog("-------[Error]-------\n\r " + e.Message + "\n" + e.StackTrace + "\n\r----------------------");
+            WriteLog("-------[Error]-------\n\r " + e.Message + "\n" + e.StackTrace + "\n\r---------------------");
         }
         public static int count = 0;
         /// <summary>

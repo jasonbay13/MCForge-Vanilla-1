@@ -57,6 +57,7 @@
     <Compile Include="Misc\CmdNickname.cs" />
     <Compile Include="Misc\CmdRun.cs" />
     <Compile Include="Misc\CmdNotify.cs" />
+    <Compile Include="Moderation\CmdFollow.cs" />
     <Compile Include="Moderation\CmdHide.cs" />
     <Compile Include="Moderation\CmdRestart.cs" />
     <Compile Include="Moderation\CmdShutdown.cs" />
