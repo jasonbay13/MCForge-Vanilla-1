@@ -37,7 +37,6 @@ namespace MCForge.Entity {
 
             Player p = (Player)result.AsyncState;
 
-
             try {
                 int length = p.Socket.EndReceive(result);
                 if (length == 0) {
@@ -346,7 +345,7 @@ namespace MCForge.Entity {
 
             if (incomingText.StartsWith("/womid"))
             {
-                usingwom = true;
+                UsingWom = true;
                 WOM.SendDetail(this); //Will make this editable later ?
                 return;
             }
@@ -778,6 +777,11 @@ namespace MCForge.Entity {
                 Kick("Unknown Packet received");
             }
 
+            Reader.Close();
+            Reader.Dispose();
+
+            Writer.Close();
+            Writer.Dispose();
 
 
         }

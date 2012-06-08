@@ -337,7 +337,7 @@ namespace MCForge.Utils.Settings {
 
         internal static void GenerateSalt() {
             using (var numberGen = new RNGCryptoServiceProvider()) {
-                var data = new byte[16];
+                var data = new byte[20];
                 numberGen.GetBytes(data);
                 Salt = Convert.ToBase64String(data);
             }

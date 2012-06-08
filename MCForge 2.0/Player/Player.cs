@@ -65,7 +65,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// If the player is on wom client
         /// </summary>
-        public bool usingwom = false;
+        public bool UsingWom { get; set; }
 
         /// <summary>
         /// The player's money.

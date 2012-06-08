@@ -32,10 +32,22 @@ namespace MCForge.Core.HeartService
 			Heart.hearts.Add(new MBeat());
 			Heart.hearts.Add(new WBeat());
 		}
+
+        public static void ActivateHeartBeat() {
+            while (true) {
+                if (Server.ShuttingDown)
+                    return;
+
+                SendHeartbeat();
+
+                Thread.Sleep(45000);
+            }
+        }
+
 		/// <summary>
 		/// Sends all the heartbeats.
 		/// </summary>
-		public static string[] sendHeartbeat()
+		public static void SendHeartbeat()
 		{
 			if (Heart.hearts.Count == 0) PrepareHearts();
 			string[] output = new string[Heart.hearts.Count];
@@ -62,7 +74,7 @@ namespace MCForge.Core.HeartService
 				//saltlength is not limited by salt.Length
 				//an approxitmately maximum is UrlEncode(salt).Length==60 (sometimes 66 is accepted and next time 62 is too long)
 				ServerSettings.GenerateSalt();
-				output = sendHeartbeat(); //loops till output[i] claims not about salt is too long anymore
+                SendHeartbeat();
 			}
 			else
 			{
@@ -70,7 +82,6 @@ namespace MCForge.Core.HeartService
 				Server.URL = output[0];
 				writeURL(output[0], "text/heartbeaturl.txt");
 			}
-			return output;
 		}
 
 		static void writeURL(string URL, string file)

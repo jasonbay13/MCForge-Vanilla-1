@@ -97,6 +97,7 @@ namespace MCForge.Core {
         public static List<TempBan> tempbans = new List<TempBan>();
         public static DateTime StartTime = DateTime.Now;
         internal static List<Player> Connections = new List<Player>();
+
         /// <summary>
         /// Get the current list of online players, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
         /// </summary>
@@ -221,10 +222,7 @@ namespace MCForge.Core {
             Logger.Log("Finished loading DLL's", LogType.Debug);
             Logger.Log("Sending Heartbeat..", LogType.Debug);
 
-            Thread HeartThread = new Thread(new ThreadStart(delegate {
-                Heartbeat.sendHeartbeat();
-            }));
-
+            Thread HeartThread = new Thread(new ThreadStart(Heartbeat.ActivateHeartBeat));
             HeartThread.Start();
 
             CmdReloadCmds reload = new CmdReloadCmds();
@@ -262,6 +260,7 @@ namespace MCForge.Core {
             catch { }
         }
 
+        [Obsolete("Causes problems on mono", false)]
         static void Update() {
             HeartbeatIntervalCurrent++;
             GroupsaveIntervalCurrent++;
@@ -270,7 +269,6 @@ namespace MCForge.Core {
 
             Player.GlobalUpdate();
 
-            if (HeartbeatIntervalCurrent >= HeartbeatInterval) { Heartbeat.sendHeartbeat(); HeartbeatIntervalCurrent = 0; }
             if (GroupsaveIntervalCurrent >= GroupsaveInterval) { foreach (Groups.PlayerGroup g in Groups.PlayerGroup.Groups) { g.SaveGroup(); } GroupsaveIntervalCurrent = 0; }
             if (PingIntervalCurrent >= PingInterval) { Player.GlobalPing(); }
             if (BotIntervalCurrent >= BotInterval) { Bot.HandleBots(); }
@@ -310,7 +308,7 @@ namespace MCForge.Core {
             catch { Logger.Log("Error reading agreed players!", LogType.Error); }
         }
         /// <summary>
-        /// Loops through online players
+        /// Loops through online players, it is quite pointless. It would be more effecent to just use Server.Players.ForEach(stuff in here);
         /// </summary>
         /// <param name="a"></param>
         public static void ForeachPlayer(ForeachPlayerDelegate a) {
@@ -377,7 +375,7 @@ namespace MCForge.Core {
             }
             while (true) {
                 try {
-                    IAsyncResult ar = listener.BeginAcceptTcpClient(new AsyncCallback(AcceptCallback), listener);
+                     listener.BeginAcceptTcpClient(new AsyncCallback(AcceptCallback), listener);
                     break;
                 }
                 catch (SocketException E) {

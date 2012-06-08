@@ -25,7 +25,7 @@ using MCForge.Interface.Command;
 
 namespace MCForge.Core {
     static class Program {
-        private static void Logger_OnRecieveErrorLog ( object sender, LogEventArgs e ) {
+        private static void Logger_OnRecieveErrorLog(object sender, LogEventArgs e) {
             var prevColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("[Error] " + e.Message);
@@ -65,11 +65,11 @@ namespace MCForge.Core {
                         }
                     }
                 }
-                if (input.ToLower() == "!stop") break; 
-                if (input.ToLower() == "!copyurl") {
+                if (input.ToLower() == "!stop") break;
+                else if (input.ToLower() == "!copyurl") {
                     System.Windows.Forms.Clipboard.SetDataObject(Server.URL, true);
                 }
-                if (input.ToLower().Split(' ')[0] == "!packets") {
+                else  if (input.ToLower().Split(' ')[0] == "!packets") {
                     string[] cargs = input.ToLower().Split(' ');
                     if (cargs.Length == 1) {
                         MCForge.Entity.Player.OnAllPlayersReceivePacket.Important += new API.Events.PacketEvent.EventHandler(OnPacket);
@@ -145,11 +145,11 @@ namespace MCForge.Core {
                 }
 
                 //You can use this to talk to the players, someone is probably going to improve this.
-                /*else
-                {
-                    Player.UniversalChat(Colors.lime + "[Console] " + Colors.yellow + input);
-                    Logger.Log("[Console] " + input);
-                }*/
+                else {
+                    Player.UniversalChat(Colors.white + "[Console] " +Server.DefaultColor+ input);
+                    Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
+                    Logger.Log("[Console] " + input, Color.Yellow, Color.Black , LogType.Normal );
+                }
 
             }
         }
@@ -210,12 +210,12 @@ namespace MCForge.Core {
         public string ReadLine() {
             if (Console.CursorLeft != 0) Console.WriteLine();
             Console.Write("CIO input: ");
-           return Console.ReadLine();
+            return Console.ReadLine();
         }
 
         public void WriteLine(string line) {
             if (Console.CursorLeft != 0) Console.WriteLine();
-            Console.WriteLine("CIO output: "+line);
+            Console.WriteLine("CIO output: " + line);
         }
     }
 }

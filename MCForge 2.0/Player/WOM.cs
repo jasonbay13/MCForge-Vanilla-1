@@ -17,7 +17,7 @@ namespace MCForge.Entity
        {
            foreach (Player p in Server.Players)
            {
-               if (p.usingwom)
+               if (p.UsingWom)
                {
                    p.SendMessage("^detail.user.join=%e" + Username);
                }
@@ -32,7 +32,7 @@ namespace MCForge.Entity
        {
            foreach (Player p in Server.Players)
            {
-               if (p.usingwom)
+               if (p.UsingWom)
                {
                    p.SendMessage("^detail.user.part=%e" + Username);
                }
@@ -56,7 +56,7 @@ namespace MCForge.Entity
        {
            foreach (Player p in Server.Players)
            {
-               if (p.usingwom)
+               if (p.UsingWom)
                {
                    p.SendMessage("^detail.user.alert=" + message);
                }
