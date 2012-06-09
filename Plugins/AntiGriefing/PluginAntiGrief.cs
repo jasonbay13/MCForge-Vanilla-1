@@ -142,7 +142,7 @@ namespace Plugins.AntiGriefingPlugin {
                 return;
 
             foreach (var value in AllowList)
-                if ((value.Key != username || !value.Value.Contains(sender)) && sender.Group.Permission > (byte)PermissionLevel.Operator) {
+                if ((value.Key != username || !value.Value.Contains(sender)) && sender.Group.Permission < (byte)PermissionLevel.Operator) {
                     sender.SendMessage("U silly head, you didnt make this. Ask " + username + " to add you to list");
                     args.Cancel();
                 }
