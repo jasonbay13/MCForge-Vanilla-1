@@ -40,19 +40,37 @@ namespace Plugins.AntiGriefingPlugin {
         }
 
         void OnAllPlayersBlockChange_Normal(Player sender, BlockChangeEventArgs args) {
-
+        	if (!hasPlayerInfo(sender))
+        	{
+        		players.Add(new PlayerInfo(sender));
+        		return;
+        	}
+        	PlayerInfo pi = getPlayerInfo(sender);
+        	
         }
 
         void OnAllPlayersConnect_Normal(Player sender, ConnectionEventArgs e) {
             if (!e.Connected)
                 return;
 
-            var pInfo = new PlayerInfo(sender);
+            if (hasPlayerInfo(sender))
+            	return;
 
-            if (players.Contains(pInfo))
-                return;
-
-            players.Add(pInfo);
+            players.Add(new PlayerInfo(sender));
+        }
+        
+        public PlayerInfo getPlayerInfo(Player p) {
+        	PlayerInfo toreturn = null;
+        	players.ForEach(pi => {
+        	                	if (pi.Player == p)
+        	                		toreturn = pi;
+        	                });
+        	return toreturn;
+        }
+        
+        public bool hasPlayerInfo(Player p)
+        {
+        	return getPlayerInfo(p) != null;
         }
 
         public void OnUnload() {
