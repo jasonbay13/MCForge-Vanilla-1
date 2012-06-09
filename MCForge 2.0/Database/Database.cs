@@ -107,6 +107,7 @@ namespace MCForge.SQL
 		{
 			while (flushcommands)
 			{
+                if (Server.ShuttingDown) return;
 				Thread.Sleep(FlushWait);
 				if (commands.Count > 0)
 					executeQuery(commands.Dequeue());
