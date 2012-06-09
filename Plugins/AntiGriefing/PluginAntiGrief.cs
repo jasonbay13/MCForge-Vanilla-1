@@ -104,7 +104,15 @@ namespace Plugins.AntiGriefingPlugin {
         		return;
         	}
         	PlayerInfo pi = getPlayerInfo(sender);
-        	
+        	if (pi.LastBlock == args.Holding && args.Action == ActionType.Place)
+        	{
+        		if (pi.LastPlace.AddMilliseconds(1000) > DateTime.Now)
+        			pi.offense++;
+        		else
+        			pi.offense--;
+        		if (getPlayerInfo(sender).kicked)
+        			args.Cancel();
+        	}
         }
 
         void OnAllPlayersConnect_Normal(Player sender, ConnectionEventArgs e) {
