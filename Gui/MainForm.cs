@@ -40,7 +40,7 @@ namespace MCForge.Gui {
                 splashScreen.ShowDialog();
             })).Start();
             InitializeComponent();
-            this.Visible = false;
+            Hide();
             pluginManager = new MCForgeGuiManager(pluginsToolStripMenuItem);
         }
 
@@ -69,10 +69,10 @@ namespace MCForge.Gui {
             Server.OnServerFinishSetup += () => {
                 splashScreen.Dispose();
                 if (InvokeRequired) {
-                    Invoke((MethodInvoker)delegate { this.Visible = true; });
+                    Invoke((MethodInvoker)Show);
                 }
-                else { 
-                    this.Visible = true;
+                else {
+                    Show();
                 }
             };
             Player.OnAllPlayersConnect.Important += OnConnect;
