@@ -31,7 +31,7 @@ namespace MCForge.SQL
 			string[] commands = new string[3];
 			commands[0] = "CREATE TABLE if not exists _players (UID INTEGER not null PRIMARY KEY AUTOINCREMENT, Name VARCHAR(20), IP VARCHAR(20), firstlogin DATETIME, lastlogin DATETIME, money MEDIUMINT, totallogin MEDIUMINT, totalblocks MEDIUMINT, color VARCHAR(5));";
 			commands[1] = "CREATE TABLE if not exists extra (key VARCHAR(1000), value VARCHAR(1000), UID INTEGER);";
-			commands[2] = "CREATE TABLE if not exists Blocks (UID INTEGER, X MEDIUMINT, Y MEDIUMINT, Z MEDIUMINT, Level VARCHAR(100), Deleted VARCHAR(30), Date DATETIME);";
+			commands[2] = "CREATE TABLE if not exists Blocks (UID INTEGER, X MEDIUMINT, Y MEDIUMINT, Z MEDIUMINT, Level VARCHAR(100),  Deleted VARCHAR(30), Block VARCHAR(30), Date DATETIME);";
 			executeQuery(commands);
 		}
 		public override void executeQuery(string[] queryString)
@@ -117,5 +117,6 @@ namespace MCForge.SQL
 				base.Dispose();
 			}
 		}
+
 	}
 }

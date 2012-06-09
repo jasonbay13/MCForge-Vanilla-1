@@ -6,6 +6,7 @@ using System.Data;
 using MCForge.SQL;
 using MCForge.Entity;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace MCForge.Utils {
     /// <summary>
@@ -14,6 +15,14 @@ namespace MCForge.Utils {
     public static class MiscUtils {
 
 
+        /// <summary>
+        /// Determines whether [contains ignore case] [the specified array].
+        /// </summary>
+        /// <param name="array">The array.</param>
+        /// <param name="test">The test.</param>
+        /// <returns>
+        ///   <c>true</c> if [contains ignore case] [the specified array]; otherwise, <c>false</c>.
+        /// </returns>
         public static bool ContainsIgnoreCase(this string[] array, string test){
             for (int i = 0; i < array.Length; i++)
                 if (array[i].ToLower() == test.ToLower())
@@ -110,6 +119,7 @@ namespace MCForge.Utils {
         /// </summary>
         /// <param name="stringToClean">The string to clean.</param>
         /// <returns>A cleaned string</returns>
+        [DebuggerStepThrough]
         public static string MySqlEscape(this string stringToClean) {
             if (stringToClean == null) {
                 return null;

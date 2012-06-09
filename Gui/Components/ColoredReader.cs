@@ -15,7 +15,6 @@ namespace MCForge.Gui.Components {
     /// </summary>
     public partial class ColoredReader : StyledRichTextBox {
 
-
         public ColoredReader() {
             InitializeComponent();
             ReadOnly = true;
@@ -50,8 +49,8 @@ namespace MCForge.Gui.Components {
                 string split = messagesSplit[i];
                 if (String.IsNullOrWhiteSpace(split))
                     continue;
-                Color color = GetColorFromChar(split[0]);
-                AppendLog(split.Substring(1), color, Color.White);
+                Color? color = GetColorFromChar(split[0]);
+                AppendLog(color != null ? split.Substring(1) : split, color ?? Color.Black, Color.White);
             }
 
         }
@@ -96,8 +95,8 @@ namespace MCForge.Gui.Components {
         /// Gets a color from a char.
         /// </summary>
         /// <param name="c">The char.</param>
-        /// <returns></returns>
-        public Color GetColorFromChar(char c) {
+        /// <returns>A color, that can be null</returns>
+        public Color? GetColorFromChar(char c) {
             switch (c) {
                 case '0': return Color.Black;
                 case '1': return Color.DarkBlue;
@@ -115,7 +114,7 @@ namespace MCForge.Gui.Components {
                 case 'd': return Color.Pink;
                 case 'e': return Color.Yellow;
                 case 'f': return Color.White;
-                default: return Color.Black;
+                default: return null;
             }
         }
 
