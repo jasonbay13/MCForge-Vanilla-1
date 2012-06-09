@@ -10,7 +10,8 @@ using MCForge.API.Events;
 namespace Plugins.AntiGriefingPlugin {
     public class PluginAntiGrief : IPlugin {
         List<PlayerInfo> players = new List<PlayerInfo>();
-
+        const string caps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+		const string nocaps = "abcdefghijklmnopqrstuvwxyz ";
         #region IPlugin Members
 
         public string Name {
@@ -35,8 +36,65 @@ namespace Plugins.AntiGriefingPlugin {
             Player.OnAllPlayersChat.Normal += new Event<Player, ChatEventArgs>.EventHandler(OnAllPlayersChat_Normal);
         }
 
-        void OnAllPlayersChat_Normal(Player sender, ChatEventArgs args) {
-
+        void OnAllPlayersChat_Normal(Player p, ChatEventArgs args) {
+        	#region Spam Check
+        	if (hasPlayerInfo(p))
+        	{
+        		PlayerInfo pi = getPlayerInfo(p);
+        		if (pi.LastMessage.ToLower() == args.Message.ToLower())
+        			pi.offense++;
+        		else
+        		{
+        			pi.LastMessage = args.Message;
+        			pi.offense--;
+        		}
+        	}
+        	#endregion
+        	
+        	#region Caps Check
+        	int rage = 0;
+			bool skip = false;
+		goagain:
+			string newmessage = "";
+			string message = args.Message;
+			for (int i = 0; i < message.Length; i++)
+			{
+				char c = message[i];
+				if (caps.IndexOf(c) != -1)
+					rage++;
+				else
+					rage--;
+				if (rage >= 5 && caps.IndexOf(c) != -1)
+					c = nocaps[caps.IndexOf(c)];
+				newmessage += c;
+			}
+			if (rage == message.Length)
+			{
+				skip = true;
+				Player.SendMessage(p, "Lay off the caps :/");
+				goto goagain;
+			}
+			else if (rage >= 7 && !skip)
+			{
+				Player.SendMessage(p, "Lay off the caps :/");
+				if (!hasPlayerInfo(p))
+				{
+					PlayerInfo pi = new PlayerInfo(p);
+					pi.LastMessageSent = DateTime.Now;
+					pi.LastMessage = message;
+					players.Add(pi);
+				}
+				else
+				{
+					PlayerInfo pi = getPlayerInfo(p);
+					pi.offense++;
+				}
+			}
+			args.Message = newmessage;
+			#endregion
+			
+			if (hasPlayerInfo(p) && getPlayerInfo(p).kicked)
+				args.Cancel();
         }
 
         void OnAllPlayersBlockChange_Normal(Player sender, BlockChangeEventArgs args) {
