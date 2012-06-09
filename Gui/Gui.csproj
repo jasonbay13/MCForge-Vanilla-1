@@ -75,12 +75,6 @@
     <Compile Include="Components\StyledRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FirstRunScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FirstRunScreen.Designer.cs">
-      <DependentUpon>FirstRunScreen.cs</DependentUpon>
-    </Compile>
     <Compile Include="LogoForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,9 +108,6 @@
   <ItemGroup>
     <Content Include="Resources\mcforge_spinner.png" />
     <None Include="Resources\mcforge_logo.png" />
-    <EmbeddedResource Include="FirstRunScreen.resx">
-      <DependentUpon>FirstRunScreen.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="LogoForm.resx">
       <DependentUpon>LogoForm.cs</DependentUpon>
     </EmbeddedResource>

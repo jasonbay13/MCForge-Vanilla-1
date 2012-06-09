@@ -44,12 +44,11 @@ namespace MCForge.World {
         public static void GenerateTree(Player p, ushort x, ushort z, ushort y, TreeType type, bool gothrough = false)
         {
             byte air = Block.BlockList.AIR, 
-                      sap = Block.BlockList.SAPLING, 
-                      trunk = Block.BlockList.WOOD, 
-                      leaf = Block.BlockList.LEAVES;
+                 sap = Block.BlockList.SAPLING, 
+                 trunk = Block.BlockList.WOOD, 
+                 leaf = Block.BlockList.LEAVES;
 
             #region Normal
-
             if (type == TreeType.Classic) {
                     byte height = (byte)MathUtils.Random.Next(5, 8);
                     short top = (short)(height - MathUtils.Random.Next(2, 4));
@@ -78,10 +77,9 @@ namespace MCForge.World {
                             }
                         }
                     }
-                    p.Level.BlockChange(x, z, y, trunk);
+                    //p.Level.BlockChange(x, z, y, trunk);
             }
             #endregion
-
             #region Notchy
             if (type == TreeType.Notch) {
                 byte dist, tile, height = (byte)MathUtils.Random.Next(3, 7), top = (byte)(height - 2);
@@ -112,7 +110,65 @@ namespace MCForge.World {
                 p.Level.BlockChange(x, z, y, trunk);
             }
             #endregion
-
+            #region Swamp
+            if (type == TreeType.Swamp) {
+                byte dist,tile, height = (byte)MathUtils.Random.Next(4, 8), top = (byte)(height - 2);
+                short xx,yy,zz;
+                ushort xxx,yyy,zzz;
+                for (yy = 0; yy <= height; yy++) {
+                    yyy = (ushort)(y + yy);
+                    tile = p.Level.GetBlock(x, z, yyy);
+                    if (gothrough || tile == air || (yyy == y && tile == sap)) { p.Level.BlockChange(x, z, yyy, trunk); }
+                }
+                for (yy = top; yy <= height + 1; yy++) {
+                    dist = yy > height - 1 ? (byte)2 : (byte)3;
+                    for (xx = (short)-dist; xx <= dist; xx++) {
+                        for (zz = (short)-dist; zz <= dist; zz++) {
+                            xxx = (ushort)(x + xx);
+                            yyy = (ushort)(y + yy);
+                            zzz = (ushort)(z + zz);
+                            tile = p.Level.GetBlock(xxx, zzz, yyy);
+                            if ((xxx == x && zzz == z && yy <= height) || (!gothrough && tile != air)) { continue; }
+                            if (Math.Abs(xx) == dist && Math.Abs(zz) == dist) {
+                                if (yy > height) { continue; }
+                                if (MathUtils.Random.Next(2) == 0) { p.Level.BlockChange(xxx, zzz, yyy, leaf); }
+                            }
+                            else { p.Level.BlockChange(xxx, zzz, yyy, leaf); }
+                        }
+                    }
+                }
+            }        
+            #endregion
+            #region Bush
+            if (type == TreeType.Bush) {
+                short top = (short)2;
+                ushort xxx, yyy, zzz;
+                for (ushort yy = 0; yy < 2; yy++) {
+                    if (!gothrough && p.Level.GetBlock(x, z, (ushort)(y + yy)) != air && p.Level.GetBlock(x, z, (ushort)(y + yy)) != sap) { continue; }
+                    p.Level.BlockChange(new Vector3D(x, z, y + yy), trunk);
+                }
+                int rand = MathUtils.Random.Next(2);
+                for (short xx = (short)-top; xx <= top; ++xx) {
+                    for (short yy = rand == 0 ? (short)0 : (short)-top; yy <= top; ++yy) {
+                        for (short zz = (short)-top; zz <= top; ++zz) {
+                            short Dist = (short)(Math.Sqrt(xx * xx + yy * yy + zz * zz));
+                            if (Dist < top + 1) {
+                                if (MathUtils.Random.Next((int)(Dist)) < 2) {
+                                    try {
+                                        xxx = (ushort)(x + xx);
+                                        yyy = rand == 0 ? (ushort)(y + yy) : (ushort)(y + yy + 1);
+                                        zzz = (ushort)(z + zz);
+                                        if ((xxx != x || zzz != z || yy >= top - 1) && (gothrough || p.Level.GetBlock(xxx, zzz, yyy) == air)) { p.Level.BlockChange(new Vector3D(xxx, zzz, yyy), leaf); }
+                                    }
+                                    catch { }
+                                }
+                            }
+                        }
+                    }
+                }
+                p.Level.BlockChange(x, z, y, trunk);
+            }
+            #endregion
         }
     }
 
@@ -129,7 +185,8 @@ namespace MCForge.World {
       Classic, 
       Notch, 
       Swamp, 
-      Cactus
+      Cactus,
+      Bush
   }
 
     /// <summary>

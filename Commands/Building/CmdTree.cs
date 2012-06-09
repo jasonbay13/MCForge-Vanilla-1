@@ -45,16 +45,17 @@ namespace CommandDll
                         p.ExtraData.ChangeOrCreate("TreeType", TreeType.Classic);
                         break;
                     case "swamp":
-                        //p.ExtraData.ChangeOrCreate("TreeType", WorldComponent.TreeType.swamp);
-                        p.SendMessage("Not implemented!"); return;
-                        //break;
+                        p.ExtraData.ChangeOrCreate("TreeType", TreeType.Swamp);
+                        break;
                     case "cactus":
                     case "cacti":
-                        //p.ExtraData.ChangeOrCreate("TreeType", WorldComponent.TreeType.cactus);
                         p.SendMessage("Not implemented!"); return;
                         //break;
                     case "notch":
                         p.ExtraData.ChangeOrCreate("TreeType", TreeType.Notch);
+                        break;
+                    case "bush":
+                        p.ExtraData.ChangeOrCreate("TreeType", TreeType.Bush);
                         break;
                     default:
                         p.SendMessage("Invalid tree type!"); 
@@ -73,7 +74,7 @@ namespace CommandDll
         public void Help(Player p)
         {
             p.SendMessage("/tree [type] - generates a tree");
-            p.SendMessage("Valid types: classic, cactus, notch, pine, swamp");
+            p.SendMessage("Valid types: classic, cactus, notch, swamp");
         }
 
         public void Initialize()
