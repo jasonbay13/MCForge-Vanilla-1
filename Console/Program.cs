@@ -65,11 +65,21 @@ namespace MCForge.Core {
                         }
                     }
                 }
-                if (input.ToLower() == "!stop") break;
+                if (input.ToLower() == "!stop") {
+                    Console.Write("Would you like to save all? [y/n]:");
+                    if (Console.ReadLine().ToLower().StartsWith("y")) {
+                        Server.SaveAll();
+                        Server.Stop();
+                    }
+                    else {
+                        Server.Stop();
+                    }
+                    return;
+                }
                 else if (input.ToLower() == "!copyurl") {
                     System.Windows.Forms.Clipboard.SetDataObject(Server.URL, true);
                 }
-                else  if (input.ToLower().Split(' ')[0] == "!packets") {
+                else if (input.ToLower().Split(' ')[0] == "!packets") {
                     string[] cargs = input.ToLower().Split(' ');
                     if (cargs.Length == 1) {
                         MCForge.Entity.Player.OnAllPlayersReceivePacket.Important += new API.Events.PacketEvent.EventHandler(OnPacket);
@@ -143,12 +153,11 @@ namespace MCForge.Core {
                         }
                     }
                 }
-
                 //You can use this to talk to the players, someone is probably going to improve this.
                 else {
-                    Player.UniversalChat(Colors.white + "[Console] " +Server.DefaultColor+ input);
+                    Player.UniversalChat(Colors.white + "[Console] " + Server.DefaultColor + input);
                     Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
-                    Logger.Log("[Console] " + input, Color.Yellow, Color.Black , LogType.Normal );
+                    Logger.Log("[Console] " + input, Color.Yellow, Color.Black, LogType.Normal);
                 }
 
             }
