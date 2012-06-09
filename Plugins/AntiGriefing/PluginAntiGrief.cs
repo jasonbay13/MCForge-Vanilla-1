@@ -14,7 +14,8 @@ namespace Plugins.AntiGriefingPlugin {
     public class PluginAntiGrief : IPlugin {
         private readonly List<PlayerInfo> players = new List<PlayerInfo>();
         private readonly Dictionary<string, IList<Player>> AllowList = new Dictionary<string, IList<Player>>();
-
+        const string caps = "ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+        const string nocaps = "abcdefghijklmnopqrstuvwxyz ";
         #region IPlugin Members
 
         public string Name {
@@ -81,8 +82,58 @@ namespace Plugins.AntiGriefingPlugin {
             p.SendMessage("/ag disallow <player> - disallows the specified <player> to modify your blocks");
         }
 
-        void OnAllPlayersChat_Normal(Player sender, ChatEventArgs args) {
+        void OnAllPlayersChat_Normal(Player p, ChatEventArgs args) {
+            #region Spam Check
+            if (hasPlayerInfo(p)) {
+                PlayerInfo pi = getPlayerInfo(p);
+                if (pi.LastMessage.ToLower() == args.Message.ToLower())
+                    pi.offense++;
+                else {
+                    pi.LastMessage = args.Message;
+                    pi.offense--;
+                }
+            }
+            #endregion
 
+            #region Caps Check
+            int rage = 0;
+            bool skip = false;
+        goagain: //EWW LABELS
+            string newmessage = "";
+            string message = args.Message;
+            for (int i = 0; i < message.Length; i++) {
+                char c = message[i];
+                if (caps.IndexOf(c) != -1)
+                    rage++;
+                else
+                    rage--;
+                if (rage >= 5 && caps.IndexOf(c) != -1)
+                    c = nocaps[caps.IndexOf(c)];
+                newmessage += c;
+            }
+            if (rage == message.Length) {
+                skip = true;
+                p.SendMessage("Lay off the caps :/");
+                goto goagain;
+            }
+            else if (rage >= 7 && !skip) {
+                p.SendMessage("Lay off the caps :/");
+                if (!hasPlayerInfo(p)) {
+                    PlayerInfo pi = new PlayerInfo(p);
+                    pi.LastMessageSent = DateTime.Now;
+                    pi.LastMessage = message;
+                    players.Add(pi);
+                }
+                else {
+                    PlayerInfo pi = getPlayerInfo(p);
+                    pi.offense++;
+                }
+            }
+            args.Message = newmessage;
+            #endregion
+
+            if (hasPlayerInfo(p) && getPlayerInfo(p).kicked)
+                args.Cancel();
         }
 
         void OnAllPlayersBlockChange_Normal(Player sender, BlockChangeEventArgs args) {
@@ -90,25 +141,49 @@ namespace Plugins.AntiGriefingPlugin {
             if (username == null) //no owner, ADD ALL THE BLOCKS
                 return;
 
-            foreach (var value in AllowList) 
-                if ((value.Key == username && value.Value.Contains(sender)) || sender.Group.Permission >= (byte)PermissionLevel.Operator)
-                    return;
+            foreach (var value in AllowList)
+                if ((value.Key != username || !value.Value.Contains(sender)) && sender.Group.Permission > (byte)PermissionLevel.Operator) {
+                    sender.SendMessage("U silly head, you didnt make this. Ask " + username + " to add you to list");
+                    args.Cancel();
+                }
 
-            sender.SendMessage("U silly head, you didnt make this. Ask " + username + " to add you to list");
-            args.Cancel();
 
+            if (!hasPlayerInfo(sender)) {
+                players.Add(new PlayerInfo(sender));
+                return;
+            }
+            PlayerInfo pi = getPlayerInfo(sender);
+            if (pi.LastBlock == args.Holding && args.Action == ActionType.Place) {
+                if (pi.LastPlace.AddMilliseconds(1000) > DateTime.Now)
+                    pi.offense++;
+                else
+                    pi.offense--;
+                if (getPlayerInfo(sender).kicked)
+                    args.Cancel();
+            }
         }
 
         void OnAllPlayersConnect_Normal(Player sender, ConnectionEventArgs e) {
             if (!e.Connected)
                 return;
 
-            var pInfo = new PlayerInfo(sender);
-
-            if (players.Contains(pInfo))
+            if (hasPlayerInfo(sender))
                 return;
 
-            players.Add(pInfo);
+            players.Add(new PlayerInfo(sender));
+        }
+
+        public PlayerInfo getPlayerInfo(Player p) {
+            PlayerInfo toreturn = null;
+            players.ForEach(pi => {
+                if (pi.Player == p)
+                    toreturn = pi;
+            });
+            return toreturn;
+        }
+
+        public bool hasPlayerInfo(Player p) {
+            return getPlayerInfo(p) != null;
         }
 
         public void OnUnload() {

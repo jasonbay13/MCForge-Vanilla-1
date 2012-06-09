@@ -14,7 +14,41 @@ namespace Plugins.AntiGriefingPlugin {
         /// The time the player last placed a block
         /// </summary>
         public DateTime LastPlace { get; set; }
-
+        
+        /// <summary>
+        /// The last time a player sent a message
+        /// </summary>
+        public DateTime LastMessageSent { get; set; }
+        
+        /// <summary>
+        /// The last message the player sent
+        /// </summary>
+        public string LastMessage { get; set; }
+        
+        /// <summary>
+        /// Weather the player has been kicked for griefing
+        /// </summary>
+        public bool kicked { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the player griefing offenses (strikes)
+        /// </summary>
+        public int offense { 
+        	get { return _strikes; } 
+        	set {
+        		if (value >= 0)
+        		{
+        			if (value > 5)
+        			{
+        				Player.Kick("You were caught griefing!");
+        				kicked = true;
+        			}
+        			_strikes = value;
+        		}
+        	}
+        }
+        
+        protected int _strikes;
 
         /// <summary>
         /// Gets or sets the last block.
