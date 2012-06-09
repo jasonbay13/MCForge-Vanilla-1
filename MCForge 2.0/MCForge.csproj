@@ -264,6 +264,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="ProfilingSessions\Session20120607_180035.sdps" />
     <Content Include="README.txt" />
     <Content Include="MCForge.ico" />
     <Content Include="System.Data.SQLite.dll">
