@@ -9,6 +9,7 @@ using MCForge.API.Events;
 
 namespace Plugins.AntiGriefingPlugin {
     public class PlayerInfo {
+
         /// <summary>
         /// The time the player last placed a block
         /// </summary>

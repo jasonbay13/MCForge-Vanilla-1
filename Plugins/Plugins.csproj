@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AntiGriefing\Helper.cs" />
     <Compile Include="AntiGriefing\PlayerInfo.cs" />
     <Compile Include="AntiGriefing\PluginAntiGrief.cs" />
     <Compile Include="PluginMessageViewer.cs" />

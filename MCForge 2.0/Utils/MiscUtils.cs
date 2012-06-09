@@ -7,6 +7,7 @@ using MCForge.SQL;
 using MCForge.Entity;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Collections;
 
 namespace MCForge.Utils {
     /// <summary>
@@ -23,7 +24,7 @@ namespace MCForge.Utils {
         /// <returns>
         ///   <c>true</c> if [contains ignore case] [the specified array]; otherwise, <c>false</c>.
         /// </returns>
-        public static bool ContainsIgnoreCase(this string[] array, string test){
+        public static bool ContainsIgnoreCase(this string[] array, string test) {
             for (int i = 0; i < array.Length; i++)
                 if (array[i].ToLower() == test.ToLower())
                     return true;
@@ -47,6 +48,28 @@ namespace MCForge.Utils {
             return null;
         }
 
+        public static bool RemoveValue<TKey, TValue>(this Dictionary<TKey, IList<TValue>> dict, TKey key, TValue valueToRemove) {
+            if (!dict.ContainsKey(key))
+                return false;
+
+            foreach (var value in dict) {
+                if (value.Key.Equals(key)) {
+                    return value.Value.Remove(valueToRemove);
+                }
+            }
+            return false;
+        }
+
+        public static void AddValue<TKey, TValue>(this Dictionary<TKey, IList<TValue>> dict, TKey key, TValue valueToAdd) {
+            if (!dict.CreateIfNotExist<TKey, IList<TValue>>(key, new List<TValue> { valueToAdd }))
+                return;
+
+            foreach (var value in dict)
+                if (value.Key.Equals(key))
+                    value.Value.Add(valueToAdd);
+
+        }
+
         /// <summary>
         /// Puts object in list if it does not exist.
         /// </summary>
@@ -55,9 +78,13 @@ namespace MCForge.Utils {
         /// <param name="dict">The dict.</param>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        public static void CreateIfNotExist<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value) {
-            if (!dict.ContainsKey(key))
+        /// <returns>If it exists, returns true. Else, returns false</returns>
+        public static bool CreateIfNotExist<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value) {
+            if (!dict.ContainsKey(key)) {
                 dict.Add(key, value);
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -134,10 +161,10 @@ namespace MCForge.Utils {
         /// <param name="theArray">The array to check</param>
         /// <param name="obj">object to check</param>
         /// <returns>If an array contains that object it returns <c>true</c> otherwise <c>false</c></returns>
-        public static bool Contains<T> ( this T[] theArray, T obj ) {
-            for ( int i = 0; i < theArray.Length; i++ ) {
-                T d = theArray[ i ];
-                if ( d.Equals( obj ) )
+        public static bool Contains<T>(this T[] theArray, T obj) {
+            for (int i = 0; i < theArray.Length; i++) {
+                T d = theArray[i];
+                if (d.Equals(obj))
                     return true;
             }
             return false;
