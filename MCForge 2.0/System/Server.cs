@@ -210,6 +210,10 @@ namespace MCForge.Core {
 
         public delegate void ForeachBotDelegate(Bot p);
 
+        public delegate void ServerFinishSetup();
+
+        public static event ServerFinishSetup OnServerFinishSetup;
+
         public static void Init() {
             Logger.WriteLog("--------- Server Started at " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + " ---------");
             Logger.Log("Debug mode started", LogType.Debug);
@@ -257,6 +261,10 @@ namespace MCForge.Core {
             UsernameBans = new List<string>(File.ReadAllLines("bans/NameBans.txt"));
             StartListening();
             Started = true;
+
+            if (OnServerFinishSetup != null)
+                OnServerFinishSetup();
+
             Logger.Log("[Important]: Server Started.", Color.Black, Color.White);
             if (!ServerSettings.GetSettingBoolean("VerifyNames"))
                 Logger.Log("[Important]: The server is running with verify names off! This could lead to bad things! Please turn on verify names if you dont know the risk and dont want these bad things to happen!", LogType.Critical);

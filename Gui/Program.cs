@@ -15,7 +15,6 @@ namespace MCForge.Gui {
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //new Thread(new ThreadStart(Server.Init)).Start(); Will be called when the main form is created
             //Application.Run(new LogoForm());
             Application.Run(new MainForm());
         }

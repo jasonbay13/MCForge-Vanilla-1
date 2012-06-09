@@ -31,16 +31,29 @@ using MCForge.Gui.API;
 namespace MCForge.Gui {
     internal partial class MainForm : Form {
         private MCForgeGuiManager pluginManager;
+        private LogoForm splashScreen;
         public MainForm() {
+
+            //Splash Form
+            new Thread(new ThreadStart(() => {
+                splashScreen = new LogoForm();
+                splashScreen.ShowDialog();
+            })).Start();
             InitializeComponent();
+            this.Visible = false;
             pluginManager = new MCForgeGuiManager(pluginsToolStripMenuItem);
         }
 
         private void frmMain_Load(object sender, System.EventArgs e) {
-            new Thread(new ThreadStart(Server.Init)).Start();
+            this.Visible = false;
             pluginManager.Init();
             pluginManager.AttachItems();
             Logger.OnRecieveLog += (obj, args) => {
+
+                if (!splashScreen.IsDisposed) {
+                    splashScreen.Log(args.Message);
+                    return;
+                }
 
                 if (args.LogType == LogType.Debug)
                     return;
@@ -52,12 +65,23 @@ namespace MCForge.Gui {
 
                 coloredReader1.ScrollToEnd();
             };
+
+            Server.OnServerFinishSetup += () => {
+                splashScreen.Dispose();
+                if (InvokeRequired) {
+                    Invoke((MethodInvoker)delegate { this.Visible = true; });
+                }
+                else { 
+                    this.Visible = true;
+                }
+            };
             Player.OnAllPlayersConnect.Important += OnConnect;
             Player.OnAllPlayersDisconnect.Important += OnDisconnect;
 
             chatButtonChange.Text = "Chat";
-
             newsFeeder1.StartRead();
+
+            new Thread(new ThreadStart(Server.Init)).Start();
         }
         private void Chat(object sender, KeyEventArgs e) {
             if (e.KeyCode == Keys.Enter) {
@@ -123,6 +147,7 @@ namespace MCForge.Gui {
             mPlayersListBox.Items.Remove(sender.Username);
         }
         #endregion
+
 
     }
 }

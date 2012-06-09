@@ -67,8 +67,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.80.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -223,6 +224,7 @@
     <Compile Include="World\Blocks\DefaultBlocks\Water.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Wood.cs" />
     <Compile Include="World\Drawing\CubeBrush.cs" />
+    <Compile Include="World\Drawing\Fonts.cs" />
     <Compile Include="World\Drawing\IBrush.cs" />
     <Compile Include="World\Drawing\RandomBrush.cs" />
     <Compile Include="World\Drawing\SphereBrush.cs" />
@@ -257,20 +259,28 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="World\Drawing\Fonts\Ubuntu\Ubuntu.ttf" />
+    <None Include="World\Drawing\Fonts\Minecraft\minecraft.ttf" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Content Include="README.txt" />
     <Content Include="MCForge.ico" />
-    <Content Include="../System.Data.SQLite.dll">
+    <Content Include="System.Data.SQLite.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="../System.Data.SQLite.xml">
+    <Content Include="System.Data.SQLite.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="sqlite3.dll">
+    <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="World\Drawing\Fonts\Minecraft\LICENSE.txt" />
+    <Content Include="World\Drawing\Fonts\Minecraft\README.txt" />
+    <Content Include="World\Drawing\Fonts\Ubuntu\CONTRIBUTING.txt" />
+    <Content Include="World\Drawing\Fonts\Ubuntu\copyright.txt" />
+    <Content Include="World\Drawing\Fonts\Ubuntu\LICENCE.txt" />
+    <Content Include="World\Drawing\Fonts\Ubuntu\TRADEMARKS.txt" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

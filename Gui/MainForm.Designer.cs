@@ -190,4 +190,3 @@ namespace MCForge.Gui
         private Components.ColoredReader coloredReader1;
 	}
 }
-
