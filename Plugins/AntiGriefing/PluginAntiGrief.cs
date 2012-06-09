@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MCForge.Interface.Plugin;
+using MCForge.Entity;
 
 namespace Plugins.AntiGriefingPlugin {
     public class PluginAntiGrief : IPlugin {
+		List<IPlayer> players = new List<IPlayer>();
+		
         #region IPlugin Members
-
+        
         public string Name {
             get { throw new NotImplementedException(); }
         }
@@ -25,13 +28,25 @@ namespace Plugins.AntiGriefingPlugin {
         }
 
         public void OnLoad(string[] args) {
-            throw new NotImplementedException();
+            Player.OnAllPlayersConnect.Normal += new EventHandler(Player_OnAllPlayersConnect_Normal);
+        }
+
+        void Player_OnAllPlayersConnect_Normal(object sender, EventArgs e)
+        {
+        	if (!players.Contains((Player)sender))
+        		players.Add((IPlayer)sender);
         }
 
         public void OnUnload() {
-            throw new NotImplementedException();
+        	players.Clear();
         }
 
         #endregion
     }
+	
+	public class IPlayer : Player {
+		public DateTime lastPlace = DateTime.Now;
+		public IPlayer() : base() { }
+		public IPlayer(TcpClient TcpClient) : base (TcpClient) { }
+	}
 }
