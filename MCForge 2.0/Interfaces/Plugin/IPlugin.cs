@@ -15,7 +15,7 @@ permissions and limitations under the Licenses.
 
 namespace MCForge.Interface.Plugin
 {
-	public interface IPlugin : IPlugin1
+	public interface IPlugin
 	{
 		/// <summary>
 		/// The name of the plugin
