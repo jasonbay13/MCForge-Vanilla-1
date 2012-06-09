@@ -30,6 +30,13 @@ namespace MCForge.Utils {
             return StringToChange;
         }
 
+        public static string Truncate(string source, int length, string ending = "...") {
+            if (source.Length > length) {
+                return source.Substring(0, length) + ending;
+            }
+            return source;
+        }
+
         /// <summary>
         /// Change the specified string to title case
         /// EX: String = "foo bar"

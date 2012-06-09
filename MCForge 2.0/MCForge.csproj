@@ -223,6 +223,7 @@
     <Compile Include="World\Blocks\DefaultBlocks\Water.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Wood.cs" />
     <Compile Include="World\Drawing\CubeBrush.cs" />
+    <Compile Include="World\Drawing\Fonts.cs" />
     <Compile Include="World\Drawing\IBrush.cs" />
     <Compile Include="World\Drawing\RandomBrush.cs" />
     <Compile Include="World\Drawing\SphereBrush.cs" />
@@ -257,6 +258,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="World\Drawing\Fonts\Ubuntu\Ubuntu.ttf" />
+    <None Include="World\Drawing\Fonts\Minecraft\minecraft.ttf" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -271,6 +274,12 @@
     <Content Include="sqlite3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="World\Drawing\Fonts\Minecraft\LICENSE.txt" />
+    <Content Include="World\Drawing\Fonts\Minecraft\README.txt" />
+    <Content Include="World\Drawing\Fonts\Ubuntu\CONTRIBUTING.txt" />
+    <Content Include="World\Drawing\Fonts\Ubuntu\copyright.txt" />
+    <Content Include="World\Drawing\Fonts\Ubuntu\LICENCE.txt" />
+    <Content Include="World\Drawing\Fonts\Ubuntu\TRADEMARKS.txt" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
