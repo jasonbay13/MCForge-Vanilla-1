@@ -62,8 +62,6 @@ namespace MCForge.Interface {
             Assembly DLLAssembly = LoadFile(s); //Prevents the dll from being in use inside windows
             try {
                 foreach (Type ClassType in DLLAssembly.GetTypes()) {
-                    if (s.Contains( "Commands.dll"))
-                        Logger.Log(ClassType.Name);
                     if (ClassType.IsPublic) {
                         if (!ClassType.IsAbstract) {
                             Type typeInterface = ClassType.GetInterface("ICommand", true);
@@ -90,8 +88,7 @@ namespace MCForge.Interface {
                     }
                 }
             }
-            catch(Exception e) {
-                Logger.LogError(e);
+            catch {
             } //Stops loading bad DLL files
         }
         public static void LoadDLL(string s, string[] args, bool plugin) {

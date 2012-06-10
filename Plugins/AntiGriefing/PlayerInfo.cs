@@ -72,6 +72,7 @@ namespace Plugins.AntiGriefingPlugin {
         /// <param name="p">The player.</param>
         public PlayerInfo(Player p) {
             Player = p;
+            LastMessage = "";
             LastBlock = 0;
             LastPlace = DateTime.Now;
         }

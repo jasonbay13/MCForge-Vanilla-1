@@ -267,13 +267,13 @@
     <Content Include="ProfilingSessions\Session20120607_180035.sdps" />
     <Content Include="README.txt" />
     <Content Include="MCForge.ico" />
+    <Content Include="sqlite3.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="System.Data.SQLite.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="System.Data.SQLite.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="World\Drawing\Fonts\Minecraft\LICENSE.txt" />
