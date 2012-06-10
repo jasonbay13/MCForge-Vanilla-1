@@ -71,6 +71,7 @@ namespace MCForge.Commands
         }
         public void BlockChange(Player p, BlockChangeEventArgs args) {
             p.OnPlayerBlockChange.Normal -= BlockChange;
+            args.Cancel();
             WorldComponent.GenerateTree(p, args.X, args.Z, args.Y, (TreeType)p.ExtraData["TreeType"], false);
             p.ExtraData.Remove("TreeType");
         }
