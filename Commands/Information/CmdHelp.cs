@@ -21,7 +21,7 @@ using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Interface.Command;
 
-namespace CommandDll.Information
+namespace MCForge.Commands.Information
 {
     public class CmdHelp : ICommand
     {
@@ -130,7 +130,7 @@ namespace CommandDll.Information
                 //First get them all, just names, in a list.
                 List<string> cmdList = new List<string>();
                 List<ICommand> added = new List<ICommand>();
-                foreach (KeyValuePair<string, ICommand> c in Command.all.ToList().FindAll(match => (match.Value.Permission <= p.Group.Permission) && (match.Value.Type == cmdType)))
+                foreach (KeyValuePair<string, ICommand> c in Command.All.ToList().FindAll(match => (match.Value.Permission <= p.Group.Permission) && (match.Value.Type == cmdType)))
                 {
                     if (!added.Contains(c.Value)) { cmdList.Add(c.Key); added.Add(c.Value); }
                 }

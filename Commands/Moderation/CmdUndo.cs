@@ -6,7 +6,7 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Groups;
 
-namespace CommandDll.Moderation {
+namespace MCForge.Commands.Moderation {
     public class CmdUndo : ICommand {
         #region ICommand Members
 
@@ -27,7 +27,7 @@ namespace CommandDll.Moderation {
         }
 
         public string CUD {
-            get { throw new NotImplementedException(); }
+            get { return ""; }
         }
 
         public byte Permission {
@@ -70,7 +70,7 @@ namespace CommandDll.Moderation {
         }
 
         public void Initialize() {
-            throw new NotImplementedException();
+            Command.AddReference(this, "undo");
         }
 
         #endregion

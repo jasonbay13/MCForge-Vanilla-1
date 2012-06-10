@@ -15,7 +15,7 @@ permissions and limitations under the Licenses.
 using MCForge.Interface.Command;
 using MCForge.Entity;
 
-namespace CommandDll.Misc {
+namespace MCForge.Commands.Misc {
     public class CmdNickname : ICommand {
         public string Name { get { return "Nickname"; } }
         public CommandTypes Type { get { return CommandTypes.Misc; } }

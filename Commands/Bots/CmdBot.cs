@@ -19,7 +19,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Robot;
 using MCForge.Utils.Settings;
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdBot : ICommand
     {

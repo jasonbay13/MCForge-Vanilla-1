@@ -10,7 +10,7 @@ using MCForge.API;
 using MCForge.API.Events;
 using MCForge.Utils;
 
-namespace CommandDll {
+namespace MCForge.Commands {
     public class CmdDataPassExample : ICommand {
         string _Name = "DataPassExample";
         public string Name { get { return _Name; } }

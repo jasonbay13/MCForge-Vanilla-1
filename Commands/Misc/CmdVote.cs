@@ -19,7 +19,7 @@ using MCForge.Interface.Command;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
 
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdVote : ICommand
     {

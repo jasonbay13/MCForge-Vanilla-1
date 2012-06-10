@@ -9,7 +9,7 @@ using MCForge.SQL;
 using MCForge.Utils;
 using MCForge.Core;
 using MCForge.World;
-namespace CommandDll.Information {
+namespace MCForge.Commands.Information {
     public class CmdAbout : ICommand {
         #region ICommand Members
 
@@ -30,7 +30,7 @@ namespace CommandDll.Information {
         }
 
         public string CUD {
-            get { throw new NotImplementedException(); }
+            get { return ""; }
         }
 
         public byte Permission {
@@ -43,7 +43,7 @@ namespace CommandDll.Information {
         }
 
         public void Help(MCForge.Entity.Player p) {
-            throw new NotImplementedException();
+           
         }
 
         public void Initialize() {

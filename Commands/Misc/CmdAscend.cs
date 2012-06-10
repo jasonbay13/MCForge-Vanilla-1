@@ -18,7 +18,7 @@ using MCForge.Interface.Command;
 using MCForge.World;
 using MCForge.Utils;
 
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdAscend : ICommand
     {

@@ -16,7 +16,7 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Core;
 using MCForge.Utils;
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdRun : ICommand {
         public string Name { get { return "Run"; } }

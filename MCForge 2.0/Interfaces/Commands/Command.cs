@@ -29,7 +29,7 @@ namespace MCForge.Interface.Command
         /// <summary>
         /// Returns the dictionary of all commands.
         /// </summary>
-        public static Dictionary<string, ICommand> all { get { return Commands; } }
+        public static Dictionary<string, ICommand> All { get { return Commands; } }
 
         /// <summary>
         /// Add an array of referances to your command here
@@ -47,7 +47,7 @@ namespace MCForge.Interface.Command
         /// <param name="command">the command that this referance... referances, you should most likely use 'this'</param>
         /// <param name="reference">the string you want player to type to use your command, you can use this method more than once :)</param>
         public static void AddReference(ICommand command, string reference) {
-            if (Commands.ContainsKey(reference)) {
+            if (Commands.ContainsKey(reference.ToLower())) {
                 Logger.Log("Command " + command.Name + " replaces " + Commands[reference].Name + " for /" + reference, LogType.Debug);
                 Commands[reference] = command;
                 return;

@@ -21,7 +21,7 @@ using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Interface.Command;
 
-namespace CommandDll.Moderation
+namespace MCForge.Commands.Moderation
 {
     public class CmdPatrol : ICommand
     {

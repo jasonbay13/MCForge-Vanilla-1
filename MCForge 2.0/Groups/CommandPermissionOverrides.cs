@@ -54,8 +54,7 @@ namespace MCForge.Groups
                     Logger.Log("Line: \"" + line + "is not recognised");//, LogType.Error);
                 }
 
-                ICommand cmd = null;
-                cmd = FindCommandByName(linesplit[0]);
+                ICommand cmd  = FindCommandByName(linesplit[0]);
                 if (cmd == null)
                 {
                     Logger.Log("Command \"" + linesplit[0] + "\" could not be found");//, LogType.Error);

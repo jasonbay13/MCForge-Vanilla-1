@@ -20,7 +20,7 @@ using MCForge.Interface.Command;
 using MCForge.World;
 using MCForge.Utils;
 
-namespace CommandDll {
+namespace MCForge.Commands {
     public class CmdReplaceNot : ICommand {
         public string Name { get { return "ReplaceNot"; } }
         public CommandTypes Type { get { return CommandTypes.Building; } }

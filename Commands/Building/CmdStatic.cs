@@ -19,7 +19,7 @@ using MCForge.Entity;
 using MCForge.Utils;
 using MCForge.API.Events;
 
-namespace CommandDll.Building {
+namespace MCForge.Commands.Building {
     public class CmdStatic : ICommand {
         public string Name { get { return "Static"; } }
         public CommandTypes Type { get { return CommandTypes.Building; } }

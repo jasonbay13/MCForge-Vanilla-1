@@ -22,3 +22,6 @@ Gui/obj/x86/Release/Gui.exe
 Gui/obj/x86/Release/Gui.pdb
 Gui/obj/
 Console/obj/
+
+/Gui - WPF/bin
+/Gui - WPF/obj

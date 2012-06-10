@@ -18,7 +18,7 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Utils;
 using MCForge.World;
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdFly : ICommand
     {

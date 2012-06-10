@@ -20,7 +20,7 @@ using MCForge.World;
 using MCForge.API.Events;
 using MCForge.Utils;
 
-namespace CommandDll {
+namespace MCForge.Commands {
     public class CmdCuboid : ICommand {
         public string Name { get { return "Cuboid"; } }
         public CommandTypes Type { get { return CommandTypes.Building; } }

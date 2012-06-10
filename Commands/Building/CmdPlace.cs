@@ -18,7 +18,7 @@ using MCForge.Entity;
 using MCForge.World;
 using MCForge.Utils;
 
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdPlace : ICommand
     {

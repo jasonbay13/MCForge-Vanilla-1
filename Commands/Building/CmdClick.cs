@@ -18,7 +18,7 @@ using MCForge.Interface.Command;
 using MCForge.Utils;
 using MCForge.World;
 
-namespace CommandDll {
+namespace MCForge.Commands {
     public class CmdClick : ICommand {
         public string Name { get { return "Click"; } }
         public CommandTypes Type { get { return CommandTypes.Building; } }

@@ -17,7 +17,7 @@ using MCForge.Interface.Command;
 using MCForge.Utils;
 using MCForge.World;
 
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdGoto : ICommand
     {

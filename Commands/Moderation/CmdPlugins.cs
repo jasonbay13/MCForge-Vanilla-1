@@ -17,7 +17,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Interface.Plugin;
 
-namespace CommandDll.Moderation
+namespace MCForge.Commands.Moderation
 {
     public class CmdPlugins : ICommand
     {

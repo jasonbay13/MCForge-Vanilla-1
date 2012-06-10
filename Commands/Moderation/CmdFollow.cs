@@ -7,7 +7,7 @@ using MCForge.Groups;
 using MCForge.Entity;
 using MCForge.Utils;
 
-namespace CommandDll.Moderation {
+namespace MCForge.Commands.Moderation {
    public class CmdFollow : ICommand {
        #region ICommand Members
 

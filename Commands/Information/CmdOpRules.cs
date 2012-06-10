@@ -16,7 +16,7 @@ using System.IO;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdOpRules : ICommand
     {

@@ -21,7 +21,7 @@ using MCForge.Utils.Settings;
 using MCForge.World;
 using MCForge.API.Events;
 
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdTree : ICommand
     {
@@ -72,7 +72,12 @@ namespace CommandDll
         }
         public void BlockChange(Player p, BlockChangeEventArgs args) {
             p.OnPlayerBlockChange.Normal -= BlockChange;
+<<<<<<< HEAD
             WorldComponent.GenerateTree(p, args.X, args.Z, args.Y, (TreeType)p.ExtraData["TreeType"], ServerSettings.GetSettingBoolean("TreesGoThrough"));
+=======
+            args.Cancel();
+            WorldComponent.GenerateTree(p, args.X, args.Z, args.Y, (TreeType)p.ExtraData["TreeType"], false);
+>>>>>>> 91aa1666800f6ec99597a5d900b84d995af98535
             p.ExtraData.Remove("TreeType");
         }
         public void Help(Player p)

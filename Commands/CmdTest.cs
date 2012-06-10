@@ -2,7 +2,7 @@
 using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
-namespace CommandDll {
+namespace MCForge.Commands {
     public class CmdTest : ICommand {
         string _Name = "test";
         public string Name { get { return _Name; } }

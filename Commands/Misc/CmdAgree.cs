@@ -20,7 +20,7 @@ using MCForge.Core;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
 
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdAgree : ICommand
     {

@@ -18,7 +18,7 @@ using MCForge.Interface.Command;
 using MCForge.Utils;
 using System;
 
-namespace CommandDll.Moderation
+namespace MCForge.Commands.Moderation
 {
     /// <summary>
     /// Command for kicking someone!

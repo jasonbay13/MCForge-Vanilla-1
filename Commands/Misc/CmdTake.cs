@@ -18,7 +18,7 @@ using MCForge.Interface.Command;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
 
-namespace CommandDll.Misc {
+namespace MCForge.Commands.Misc {
     class CmdTake : ICommand {
         public string Name { get { return "Take"; } }
         public CommandTypes Type { get { return CommandTypes.Misc; } }

@@ -17,9 +17,9 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
 
-namespace CommandDll.Misc
+namespace MCForge.Commands.Misc
 {
-    class CmdGive : ICommand
+    public class CmdGive : ICommand
     {
         public string Name { get { return "Give"; } }
         public CommandTypes Type { get { return CommandTypes.Misc; } }

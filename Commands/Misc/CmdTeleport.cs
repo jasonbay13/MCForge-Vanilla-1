@@ -18,7 +18,7 @@ using MCForge.Interface.Command;
 using MCForge.Utils.Settings;
 using MCForge.Utils;
 using System.Threading;
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdTeleport : ICommand
     {
