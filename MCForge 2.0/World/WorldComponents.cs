@@ -169,6 +169,40 @@ namespace MCForge.World {
                 p.Level.BlockChange(x, z, y, trunk);
             }
             #endregion
+            #region Pine
+            if (type == TreeType.Pine) {
+                byte height = (byte)MathUtils.Random.Next(6, 8), top = (byte)(height - 2), distance = (byte)2, tile;
+                short xx, yy, zz;
+                ushort xxx, yyy, zzz;
+                for (yy = 0; yy <= height; yy++) {
+                    yyy = (ushort)(y + yy);
+                    tile = p.Level.GetBlock(x, z, yyy);
+                    if (gothrough || tile == air || (yyy == y && tile == sap)) { p.Level.BlockChange(x, z, yyy, trunk); }
+                }
+                for (yy = 0; yy <= (short)(height + 2); yy++) {
+                    if (yy == 0) { continue; }
+                    if (yy == 1 && MathUtils.Random.Next(2) == 1) { continue; }
+                    if (yy == (height + 2)) {
+                        if (MathUtils.Random.Next(2) == 1) { continue; }
+                        p.Level.BlockChange(x, z, (ushort)(y + yy), leaf); continue;
+                    }
+                    distance = distance == 2 ? (byte)1 : (byte)2;
+                    if ((ushort)(yy) >= height) { distance = 1; }
+                    for (xx = (short)-distance; xx <= (short)distance; xx++) {
+                        for (zz = (short)-distance; zz <= (short)distance; zz++) {
+                            xxx = (ushort)(x + xx);
+                            zzz = (ushort)(z + zz);
+                            yyy = (ushort)(y + yy);
+                            tile = p.Level.GetBlock(xxx, zzz, yyy);
+                            if ((xxx == x & zzz == z && yy <= height) || (!gothrough && tile != air)) { continue; }
+                            if (yy == height && height % 2 == 0) { continue; }
+                            if (Math.Abs(xx) == (short)distance && Math.Abs(zz) == (short)distance) { continue; }
+                            else { p.Level.BlockChange(xxx, zzz, yyy, leaf); }
+                        }
+                    }
+                }
+            }
+            #endregion
         }
     }
 
@@ -186,7 +220,8 @@ namespace MCForge.World {
       Notch, 
       Swamp, 
       Cactus,
-      Bush
+      Bush,
+      Pine
   }
 
     /// <summary>
