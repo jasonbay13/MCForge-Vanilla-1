@@ -15,7 +15,7 @@ permissions and limitations under the Licenses.
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdOpChat : ICommand
     {

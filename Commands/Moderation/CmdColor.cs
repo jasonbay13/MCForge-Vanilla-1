@@ -16,7 +16,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
-namespace CommandDll {
+namespace MCForge.Commands {
     public class CmdColor : ICommand {
         public string Name { get { return "Color"; } }
         public CommandTypes Type { get { return CommandTypes.Mod; } }

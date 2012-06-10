@@ -19,7 +19,7 @@ using MCForge.API.Events;
 using System.Drawing;
 using System.Collections.Generic;
 
-namespace CommandDll {
+namespace MCForge.Commands {
     public class CmdWrite2 : ICommand {
         public string Name { get { return "Write"; } }
         public CommandTypes Type { get { return CommandTypes.Building; } }

@@ -16,7 +16,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using System.IO;
 
-namespace CommandDll.Moderation
+namespace MCForge.Commands.Moderation
 {
     class CmdBanInfo : ICommand
     {

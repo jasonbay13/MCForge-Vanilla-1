@@ -53,85 +53,70 @@ namespace MCForge.Interface {
             }
             catch { return null; }
         }
-		/// <summary>
-		/// Load a DLL
-		/// </summary>
-		/// <param name="s">The filepath of the DLL</param>
+        /// <summary>
+        /// Load a DLL
+        /// </summary>
+        /// <param name="s">The filepath of the DLL</param>
         /// <param name="args">The args to passed to the plugin OnLoad method.</param>
-		public static void LoadDLL(string s, string[] args)
-		{
-			 Assembly DLLAssembly = LoadFile(s); //Prevents the dll from being in use inside windows
-                try
-                {
-                    foreach (Type ClassType in DLLAssembly.GetTypes())
-                    {
-                        if (ClassType.IsPublic)
-                        {
-                            if (!ClassType.IsAbstract)
-                            {
-                                Type typeInterface = ClassType.GetInterface("ICommand", true);
+        public static void LoadDLL(string s, string[] args) {
+            Assembly DLLAssembly = LoadFile(s); //Prevents the dll from being in use inside windows
+            try {
+                foreach (Type ClassType in DLLAssembly.GetTypes()) {
+                    if (s.Contains( "Commands.dll"))
+                        Logger.Log(ClassType.Name);
+                    if (ClassType.IsPublic) {
+                        if (!ClassType.IsAbstract) {
+                            Type typeInterface = ClassType.GetInterface("ICommand", true);
+                            if (typeInterface != null) {
 
-                                if (typeInterface != null)
-                                {
-                                    ICommand instance = (ICommand)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                    if (!Command.Command.OnCommandLoad.Call(instance, new CommandLoadEventArgs(true)).Canceled) {
-                                        instance.Initialize();
-                                        Logger.Log("[Command]: " + instance.Name + " Initialized!", LogType.Debug);
-                                    }
-                                }
-                                else
-                                {
-                                    typeInterface = ClassType.GetInterface("IPlugin", true);
-                                    if (typeInterface != null)
-                                    {
-                                        IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                        if (!Plugin.Plugin.OnPluginLoad.Call(instance, new PluginLoadEventArgs(true)).Canceled) {
-                                            instance.OnLoad(args);
-                                            Plugin.Plugin.AddReference(instance);
-                                            Logger.Log("[Plugin]: " + instance.Name + " Initialized!", LogType.Debug);
-                                        }
-                                    }
+                                ICommand instance = (ICommand)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
+                                if (!Command.Command.OnCommandLoad.Call(instance, new CommandLoadEventArgs(true)).Canceled) {
+                                    instance.Initialize();
+                                    Logger.Log("[Command]: " + instance.Name + " Initialized!", LogType.Debug);
                                 }
                             }
-                        }
-                    }
-                }
-                catch { } //Stops loading bad DLL files
-		}
-        public static void LoadDLL(string s, string[] args, bool plugin)
-        {
-            Assembly DLLAssembly = LoadFile(s); //Prevents the dll from being in use inside windows
-            try
-            {
-                foreach (Type ClassType in DLLAssembly.GetTypes())
-                {
-                    if (ClassType.IsPublic)
-                    {
-                        if (!ClassType.IsAbstract)
-                        {
-                            if (plugin)
-                            {
-                                Type typeInterface = ClassType.GetInterface("IPlugin", true);
-                                if (typeInterface != null)
-                                {
+                            else {
+                                typeInterface = ClassType.GetInterface("IPlugin", true);
+                                if (typeInterface != null) {
                                     IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                    if (!Plugin.Plugin.OnPluginLoad.Call(instance, new PluginLoadEventArgs(true)).Canceled)
-                                    {
+                                    if (!Plugin.Plugin.OnPluginLoad.Call(instance, new PluginLoadEventArgs(true)).Canceled) {
                                         instance.OnLoad(args);
                                         Plugin.Plugin.AddReference(instance);
                                         Logger.Log("[Plugin]: " + instance.Name + " Initialized!", LogType.Debug);
                                     }
                                 }
                             }
-                            else
-                            {
+                        }
+                    }
+                }
+            }
+            catch(Exception e) {
+                Logger.LogError(e);
+            } //Stops loading bad DLL files
+        }
+        public static void LoadDLL(string s, string[] args, bool plugin) {
+            Assembly DLLAssembly = LoadFile(s); //Prevents the dll from being in use inside windows
+            try {
+                foreach (Type ClassType in DLLAssembly.GetTypes()) {
+                    if (ClassType.IsPublic) {
+                        if (!ClassType.IsAbstract) {
+                            if (plugin) {
+                                Type typeInterface = ClassType.GetInterface("IPlugin", true);
+                                if (typeInterface != null) {
+                                    IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
+                                    if (!Plugin.Plugin.OnPluginLoad.Call(instance, new PluginLoadEventArgs(true)).Canceled) {
+                                        instance.OnLoad(args);
+                                        Plugin.Plugin.AddReference(instance);
+                                        Logger.Log("[Plugin]: " + instance.Name + " Initialized!", LogType.Debug);
+                                    }
+                                }
+                            }
+                            else {
                                 Type typeInterface = ClassType.GetInterface("ICommand", true);
 
-                                if (typeInterface != null)
-                                {
+                                if (typeInterface != null) {
                                     ICommand instance = (ICommand)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                    if (!Command.Command.OnCommandLoad.Call(instance, new CommandLoadEventArgs(true)).Canceled)
-                                    {
+                                    if (!Command.Command.OnCommandLoad.Call(instance, new CommandLoadEventArgs(true)).Canceled) {
                                         instance.Initialize();
                                         Logger.Log("[Command]: " + instance.Name + " Initialized!", LogType.Debug);
                                     }
@@ -148,7 +133,7 @@ namespace MCForge.Interface {
             string path = Directory.GetCurrentDirectory();
             string[] DLLFiles = Directory.GetFiles(path, "*.dll");
             foreach (string s in DLLFiles)
-            	LoadDLL(s, new string[] { "-normal" });
+                LoadDLL(s, new string[] { "-normal" });
             if (ServerSettings.HasKey("PluginsPath")) {
                 string pluginspath = ServerSettings.GetSetting("PluginsPath");
                 if (Directory.Exists(pluginspath)) {
@@ -162,10 +147,10 @@ namespace MCForge.Interface {
                 if (Directory.Exists(commandspath)) {
                     DLLFiles = Directory.GetFiles(commandspath, "*.dll");
                     foreach (string s in DLLFiles)
-                        LoadDLL(s, new string[] { "-normal" });
+                        LoadDLL(s, null);
                 }
             }
         }
-        
+
     }
 }

@@ -18,9 +18,9 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 
-namespace CommandDll.Moderation
+namespace MCForge.Commands.Moderation
 {
-    class CmdBan : ICommand
+    public class CmdBan : ICommand
     {
         public string Name { get { return "Ban"; } }
         public CommandTypes Type { get { return CommandTypes.Mod; } }

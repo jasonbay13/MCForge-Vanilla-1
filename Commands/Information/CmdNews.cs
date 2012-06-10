@@ -19,7 +19,7 @@ using MCForge.Interface.Command;
 using MCForge.Utils;
 using System.Drawing;
 
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdNews : ICommand
     {

@@ -18,7 +18,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 
-namespace CommandDll.Moderation
+namespace MCForge.Commands.Moderation
 {
     class CmdUnIPBan : ICommand
     {

@@ -16,7 +16,7 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using System.IO;
 
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdCrashServer : ICommand
     {

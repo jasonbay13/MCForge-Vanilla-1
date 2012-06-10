@@ -16,7 +16,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge;
 
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdNotify: ICommand
     {

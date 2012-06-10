@@ -22,7 +22,7 @@ using MCForge.API.Events;
 using MCForge.Entity;
 using MCForge.World;
 
-namespace CommandDll.Building {
+namespace MCForge.Commands.Building {
     public class CmdLine : ICommand {
         public string Name {get { return "Line"; }}
         public CommandTypes Type {get {return CommandTypes.Building;}}

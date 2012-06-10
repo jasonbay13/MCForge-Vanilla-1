@@ -15,7 +15,7 @@ permissions and limitations under the Licenses.
 using MCForge.Entity;
 using MCForge.Interface.Command;
 
-namespace CommandDll.Moderation
+namespace MCForge.Commands.Moderation
 {
     class CmdBanKick : ICommand
     {

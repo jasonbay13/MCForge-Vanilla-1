@@ -21,7 +21,7 @@ using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
 
-namespace CommandDll {
+namespace MCForge.Commands {
     public class CmdInfo : ICommand {
         public string Name { get { return "Info"; } }
         public CommandTypes Type { get { return CommandTypes.Information; } }
@@ -54,7 +54,7 @@ namespace CommandDll {
             p.OnPlayerChat.Normal += (sender, eventargs) => {
                 sender.ExtraData.CreateIfNotExist("LastCmd", "");
                 if (eventargs.Message.ToLower() == "yes" && sender.ExtraData["LastCmd"] == "info")
-                    Command.all["devs"].Use(p, new string[0]);
+                    Command.All["devs"].Use(p, new string[0]);
                 eventargs.Cancel();
                 eventargs.Unregister();
             };

@@ -37,7 +37,7 @@ namespace Plugins.AntiGriefingPlugin {
         public void OnLoad(string[] args) {
             Player.OnAllPlayersConnect.Normal += new MCForge.API.Events.Event<Player, MCForge.API.Events.ConnectionEventArgs>.EventHandler(OnAllPlayersConnect_Normal);
             Player.OnAllPlayersBlockChange.Normal += new Event<Player, BlockChangeEventArgs>.EventHandler(OnAllPlayersBlockChange_Normal);
-            Player.OnAllPlayersChat.Normal += new Event<Player, ChatEventArgs>.EventHandler(OnAllPlayersChat_Normal);
+            //Player.OnAllPlayersChat.Normal += new Event<Player, ChatEventArgs>.EventHandler(OnAllPlayersChat_Normal);
             Player.OnAllPlayersCommand.Normal += new Event<Player, CommandEventArgs>.EventHandler(OnAllPlayersCommand_Normal);
         }
 
@@ -135,18 +135,20 @@ namespace Plugins.AntiGriefingPlugin {
             if (hasPlayerInfo(p) && getPlayerInfo(p).kicked)
                 args.Cancel();
         }
-
         void OnAllPlayersBlockChange_Normal(Player sender, BlockChangeEventArgs args) {
+
             string username = Helper.GetOwner(new Vector3S(args.X, args.Z, args.Y), sender.Level.Name);
             if (username == null) //no owner, ADD ALL THE BLOCKS
                 return;
 
-            foreach (var value in AllowList)
-                if ((value.Key != username || !value.Value.Contains(sender)) && sender.Group.Permission > (byte)PermissionLevel.Operator) {
-                    sender.SendMessage("U silly head, you didnt make this. Ask " + username + " to add you to list");
-                    args.Cancel();
-                }
+            if ((AllowList.Count == 0 && username != sender.Username) || (AllowList.ContainsKey(username) &&
+                !AllowList[username].Contains(sender) &&
+                sender.Group.Permission > (byte)PermissionLevel.Operator &&
+                args.Action != ActionType.Place)) {
 
+                sender.SendMessage("U silly head, you didnt make this. Ask " + username + " to add you to list");
+                args.Cancel();
+            }
 
             if (!hasPlayerInfo(sender)) {
                 players.Add(new PlayerInfo(sender));

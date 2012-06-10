@@ -20,7 +20,7 @@ using MCForge.Interface.Command;
 using MCForge.World;
 using MCForge.Utils;
 
-namespace CommandDll {
+namespace MCForge.Commands {
     public class CmdMeasure : ICommand {
         public string Name { get { return "Measure"; } }
         public CommandTypes Type { get { return CommandTypes.Information; } }

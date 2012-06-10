@@ -20,7 +20,7 @@ using MCForge.Utils;
 using MCForge.World;
 using MCForge.World.Blocks;
 
-namespace CommandDll {
+namespace MCForge.Commands {
     public class CmdMode : ICommand {
         public string Name { get { return "Mode"; } }
         public CommandTypes Type { get { return CommandTypes.Misc; } }

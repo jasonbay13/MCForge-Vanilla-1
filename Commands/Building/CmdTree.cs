@@ -20,7 +20,7 @@ using MCForge.Groups;
 using MCForge.World;
 using MCForge.API.Events;
 
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdTree : ICommand
     {

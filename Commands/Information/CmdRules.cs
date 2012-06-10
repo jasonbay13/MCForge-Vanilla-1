@@ -18,7 +18,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
 
-namespace CommandDll {
+namespace MCForge.Commands {
     public class CmdRules : ICommand {
         public string Name { get { return "Rules"; } }
         public CommandTypes Type { get { return CommandTypes.Information; } }

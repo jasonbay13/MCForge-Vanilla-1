@@ -17,7 +17,7 @@ using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Interface.Command;
 
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdSetRank : ICommand
     {

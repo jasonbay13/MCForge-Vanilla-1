@@ -16,7 +16,7 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
-namespace CommandDll
+namespace MCForge.Commands
 {
     public class CmdUnload : ICommand
     {

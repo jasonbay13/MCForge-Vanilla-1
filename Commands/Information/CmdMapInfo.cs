@@ -21,7 +21,7 @@ using MCForge.Interface.Command;
 using MCForge.World;
 using MCForge.Utils;
 
-namespace CommandDll {
+namespace MCForge.Commands {
     public class CmdMapInfo : ICommand {
         public string Name { get { return "MapInfo"; } }
         public CommandTypes Type { get { return CommandTypes.Information; } }

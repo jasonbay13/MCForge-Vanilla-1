@@ -17,7 +17,7 @@ using MCForge.Entity;
 using MCForge.Interface.Plugin;
 using MCForge.Utils;
 
-namespace CommandDll.Information
+namespace MCForge.Commands.Information
 {
     public class CmdMessageHandler : ICommand
     {

@@ -17,7 +17,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
 
-namespace CommandDll.Moderation
+namespace MCForge.Commands.Moderation
 {
     public class CmdWhois : ICommand
     {

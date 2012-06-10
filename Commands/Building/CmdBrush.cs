@@ -12,7 +12,7 @@ using MCForge.World.Drawing;
 using System.Reflection;
 using MCForge.Core;
 
-namespace CommandDll.Building {
+namespace MCForge.Commands.Building {
     public class CmdBrush : ICommand {
 
         #region ICommand Members
