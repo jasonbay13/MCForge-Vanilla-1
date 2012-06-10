@@ -57,6 +57,9 @@ namespace CommandDll
                     case "bush":
                         p.ExtraData.ChangeOrCreate("TreeType", TreeType.Bush);
                         break;
+                    case "pine":
+                        p.ExtraData.ChangeOrCreate("TreeType", TreeType.Pine);
+                        break;
                     default:
                         p.SendMessage("Invalid tree type!"); 
                         return;
