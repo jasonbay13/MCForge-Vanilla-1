@@ -178,6 +178,7 @@ namespace MCForge.Gui {
             this.shutdownMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
             this.shutdownMenuItem.Size = new System.Drawing.Size(184, 22);
             this.shutdownMenuItem.Text = "Shutdown";
+            this.shutdownMenuItem.Click += new System.EventHandler(this.shutdownMenuItem_Click);
             // 
             // restartMenuItem
             // 

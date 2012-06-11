@@ -217,6 +217,10 @@ namespace MCForge.Gui {
 
         #endregion
 
+        private void shutdownMenuItem_Click(object sender, System.EventArgs e) {
+            Close();
+        }
+
 
 
 

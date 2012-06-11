@@ -45,11 +45,9 @@ namespace MCForge.Entity {
                         UniversalChat(p.Color + p.Username + Server.DefaultColor + " has disconnected.");
                         p.GlobalDie();
                     }
-                    if (Server.reviewlist.Contains(p))
-                    {
+                    if (Server.reviewlist.Contains(p)) {
                         Server.reviewlist.Remove(p);
-                        foreach (Player pl in Server.reviewlist.ToArray())
-                        {
+                        foreach (Player pl in Server.reviewlist.ToArray()) {
                             int position = Server.reviewlist.IndexOf(pl);
                             if (position == 0) { pl.SendMessage("You're next in the review queue!"); continue; }
                             pl.SendMessage(position == 1 ? "There is 1 player in front of you!" : "There are " + position + " players in front of you!");
@@ -171,8 +169,7 @@ namespace MCForge.Entity {
             Gotos_Are_The_Devil:
                 if (Server.PlayerCount >= ServerSettings.GetSettingInt("MaxPlayers") && !Server.vips.Contains(Username) && !Server.devs.Contains(Username)) {
                     int LoopAmount = 0;
-                    while (Server.PlayerCount >= ServerSettings.GetSettingInt("MaxPlayers"))
-                    {
+                    while (Server.PlayerCount >= ServerSettings.GetSettingInt("MaxPlayers")) {
                         LoopAmount++;
                         Thread.Sleep(1000);
                         packet pa = new packet();
@@ -297,7 +294,7 @@ namespace MCForge.Entity {
                 return;
             }
             //Record to database
-            Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Block, Date) VALUES (" + UID + ", " + x + ", " + y + ", " + z + ", '" + Level.Name.MySqlEscape() + "', '" + (action == 0 ? "true" : "false") + "', '" + newType.ToString() + "','"+ DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "')");
+            Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Block, Date) VALUES (" + UID + ", " + x + ", " + y + ", " + z + ", '" + Level.Name.MySqlEscape() + "', '" + (action == 0 ? "true" : "false") + "', '" + newType.ToString() + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "')");
             if (action == 0) //Deleting
             {
                 Level.BlockChange(x, z, y, 0, (fake) ? null : this);
@@ -357,8 +354,7 @@ namespace MCForge.Entity {
 
             incomingText = Regex.Replace(incomingText, @"\s\s+", " ");
 
-            if (incomingText.StartsWith("/womid"))
-            {
+            if (incomingText.StartsWith("/womid")) {
                 UsingWom = true;
                 WOM.SendDetail(this); //Will make this editable later ?
                 return;
@@ -373,12 +369,10 @@ namespace MCForge.Entity {
                 return;
 
             if (incomingText[0] == '/' && incomingText.Length == 1) {
-                if (ExtraData.ContainsKey("LastCmd"))
-                {
+                if (ExtraData.ContainsKey("LastCmd")) {
                     incomingText = "/" + ExtraData["LastCmd"];
                 }
-                else
-                {
+                else {
                     SendMessage("You need to specify a command!");
                     return;
                 }
@@ -524,8 +518,7 @@ namespace MCForge.Entity {
             {
                 string groupname = Group.Name;
                 incomingText = incomingText.Remove(0, 1);
-                if (incomingText == "")
-                {
+                if (incomingText == "") {
                     return;
                 }
                 if (!groupname.EndsWith("ed") && !groupname.EndsWith("s")) {
@@ -538,8 +531,7 @@ namespace MCForge.Entity {
             if (incomingText[0] == '!') //Level chat
             {
                 incomingText = incomingText.Remove(0, 1);
-                if (incomingText == "")
-                {
+                if (incomingText == "") {
                     return;
                 }
                 LevelChat(this, "&a<&f" + Level.Name + "&a> " + DisplayName + ":&f " + incomingText);
@@ -551,8 +543,7 @@ namespace MCForge.Entity {
             if (incomingText[0] == '+' || (bool)ExtraData.GetIfExist("AdminChat")) //Admin chat
             {
                 incomingText = incomingText.Remove(0, 1);
-                if (incomingText == "")
-                {
+                if (incomingText == "") {
                     return;
                 }
                 UniversalChatAdmins("&a<&fTo Admins&a> " + Group.Color + Username + ": &f" + incomingText);
@@ -591,18 +582,19 @@ namespace MCForge.Entity {
 
                 incomingText = incomingText.Remove(0, 1);
                 Player to = Player.Find(incomingText.Split(' ')[0]);
-                incomingText = incomingText.Remove(0, to.Username.Length);
                 if (to == null) {
                     SendMessage("Player not found!");
                     return;
                 }
+
+                incomingText = incomingText.Remove(0, to.Username.Length);
                 //no whispering nicknames
                 SendMessage("[>] <" + to.Username + ">&f " + incomingText.Trim());
                 to.SendMessage("[<] " + Username + ":&f " + incomingText.Trim());
                 return;
             }
             //TODO: remove to place better
-            Logger.Log("<" + Username + " as " + DisplayName + "> " + incomingText);
+            Logger.Log(Username != DisplayName ? "<" + Username + " as " + DisplayName + "> " + incomingText : "<" + Username + "> " + incomingText);
             var voiceString = (string)ExtraData.GetIfExist("VoiceString") ?? "";
             var mColor = Color ?? Group.Color;
             var mPrefix = (string)ExtraData.GetIfExist("Prefix") ?? "";

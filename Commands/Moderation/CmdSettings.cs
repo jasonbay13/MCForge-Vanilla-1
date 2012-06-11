@@ -18,10 +18,8 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils.Settings;
 
-namespace MCForge.Commands.Moderation
-{
-    class CmdSettings : ICommand
-    {
+namespace MCForge.Commands.Moderation {
+    public class CmdSettings : ICommand {
         public string Name { get { return "Settings"; } }
         public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "headdetect"; } }
@@ -29,30 +27,24 @@ namespace MCForge.Commands.Moderation
         public string CUD { get { return ""; } }
         public byte Permission { get { return 100; } }
 
-        public void Use(Player p, string[] args)
-        {
-            if (args.Length < 1)
-            {
+        public void Use(Player p, string[] args) {
+            if (args.Length < 1) {
                 Help(p);
                 return;
             }
-            if (args.Length > 2)
-            {
-                if (args[0].ToLower() == "help")
-                {
+            if (args.Length > 2) {
+                if (args[0].ToLower() == "help") {
                     if (ServerSettings.HasKey(args[1]))
                         p.SendMessage(ServerSettings.GetDescription(args[1]));
                     else
                         p.SendMessage("Key doesn't exist");
                     return;
                 }
-                else if (ServerSettings.HasKey(args[0]))
-                {
+                else if (ServerSettings.HasKey(args[0])) {
                     ServerSettings.SetSetting(args[0], values: String.Join(" ", args, 1, args.Count()));
                     return;
                 }
-                else
-                {
+                else {
                     Help(p);
                     return;
                 }
@@ -63,8 +55,7 @@ namespace MCForge.Commands.Moderation
                 p.SendMessage(String.Format("Value for {0} is {1}", args[0], ServerSettings.GetSetting(args[0])));
         }
 
-        public void Help(Player p)
-        {
+        public void Help(Player p) {
             p.SendMessage("Usage: /settings <key> [value]");
             p.SendMessage("To get a value, do not add a value at the end of the command.");
             p.SendMessage("To set a value, add a value at the end of the command.");
@@ -72,8 +63,7 @@ namespace MCForge.Commands.Moderation
             p.SendMessage("To get a description of a setting, type /settings help <key>.");
         }
 
-        public void Initialize()
-        {
+        public void Initialize() {
             Command.AddReference(this, "settings");
         }
     }
