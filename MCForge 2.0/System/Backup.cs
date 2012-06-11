@@ -44,8 +44,8 @@ namespace MCForge.Core {
         public static void BackupLogs() {
             CheckDirs();
 
-            if (File.Exists(FileUtils.LogsPath + Logger.DateFormat))
-                File.Copy(FileUtils.LogsPath + Logger.DateFormat, FileUtils.BackupsPath + DateFormat + "-backup/" + DateTime.Now.ToString("hhmmss") + "logs.log");
+            if (File.Exists(FileUtils.LogsPath + Logger.CurrentLogFile))
+                File.Copy(FileUtils.LogsPath + Logger.CurrentLogFile, FileUtils.BackupsPath + DateFormat + "-backup/" + DateTime.Now.ToString("hhmmss") + "logs.log");
         }
 
         public static void BackupLevel(Level s) {

@@ -7,6 +7,7 @@ using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using MCForge.Utils;
 
 namespace MCForge.Gui.Components {
 
@@ -14,6 +15,7 @@ namespace MCForge.Gui.Components {
     /// A richtextbox that colors incoming text using mincraft color codes.
     /// </summary>
     public partial class ColoredLogReader : StyledRichTextBox {
+
 
         private string Date {
             get {
@@ -38,16 +40,16 @@ namespace MCForge.Gui.Components {
         /// Appends the log.
         /// </summary>
         /// <param name="text">The text to log.</param>
-        public void AppendLog(string text) {
+        public void AppendLog(string text, Color forGround) {
             if (InvokeRequired) {
-                Invoke((MethodInvoker)delegate { AppendLog(text); });
+                Invoke((MethodInvoker)delegate { AppendLog(text, forGround); });
                 return;
             }
 
-            AppendLog(Date, Color.Gray, Color.White);
+            Append(Date, Color.Gray, Color.White);
 
             if (!text.Contains('&') && !text.Contains('%')) {
-                AppendLog(text, Color.Black, Color.White);
+                Append(text, Color.Black, Color.White);
                 return;
             }
 
@@ -58,9 +60,11 @@ namespace MCForge.Gui.Components {
                 if (String.IsNullOrWhiteSpace(split))
                     continue;
                 Color? color = GetColorFromChar(split[0]);
-                AppendLog(color != null ? split.Substring(1) : split, color ?? Color.Black, Color.White);
+                Append(color != null ? split.Substring(1) : split, color ?? Color.Black, Color.White);
             }
 
+
+            Refresh();
         }
 
         /// <summary>
@@ -69,9 +73,9 @@ namespace MCForge.Gui.Components {
         /// <param name="text">The text to log.</param>
         /// <param name="foreColor">Color of the foreground.</param>
         /// <param name="bgColor">Color of the background.</param>
-        public void AppendLog(string text, Color foreColor, Color bgColor) {
+        private void Append(string text, Color foreColor, Color bgColor) {
             if (InvokeRequired) {
-                Invoke((MethodInvoker)delegate { AppendLog(text, foreColor, bgColor); });
+                Invoke((MethodInvoker)delegate { Append(text, foreColor, bgColor); });
                 return;
             }
 
@@ -85,10 +89,18 @@ namespace MCForge.Gui.Components {
 
         }
 
-        
+        public void AppendUrl(string url) {
+            AppendText(GetUrl(url));
+        }
+
+        public string GetUrl(string url) {
+            return url;
+        }
+
+
         private void ColoredReader_LinkClicked(object sender, System.Windows.Forms.LinkClickedEventArgs e) {
-            if(!e.LinkText.StartsWith("http://www.minecraft.net/classic/play/")){
-                if(MessageBox.Show("Never open links from people that you don't trust!", "Warning!!", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+            if (!e.LinkText.StartsWith("http://www.minecraft.net/classic/play/")) {
+                if (MessageBox.Show("Never open links from people that you don't trust!", "Warning!!", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
                     return;
             }
 
@@ -105,10 +117,10 @@ namespace MCForge.Gui.Components {
                 return;
             }
 
-
-            Select(Text.Length - 1, 0);
+            Select(Text.Length, 0);
             ScrollToCaret();
         }
+
 
         /// <summary>
         /// Gets a color from a char.

@@ -130,91 +130,147 @@ namespace MCForge.Gui {
             txtChat.Clear();
         }
 
-        #endregion
-
-        #region EventHandlers
-
-
-        void OnConnect(Player sender, ConnectionEventArgs args) {
-            if (lstPlayers.InvokeRequired) {
-                lstPlayers.Invoke((MethodInvoker)delegate { OnConnect(sender, args); });
-                return;
-            }
-
-                lstPlayers.Items.Add(sender.Username);
-            
-        }
-
-        void OnDisconnect(Player sender, ConnectionEventArgs args) {
-            if (lstPlayers.InvokeRequired) {
-                lstPlayers.Invoke((MethodInvoker)delegate { OnDisconnect(sender, args); });
-                return;
-            }
-
-                lstPlayers.Items.Remove(sender.Username);
-            
-        }
-
-        void OnLog(object sender, LogEventArgs args) {
-
-                if (splashScreen != null && !splashScreen.IsDisposed) {
-                    splashScreen.Log(args.Message);
-                    return;
-                }
-
-                if (args.LogType == LogType.Debug)
-                    return;
-
-                if (args.LogType == LogType.Normal)
-                    txtLog.AppendLog(args.Message + Environment.NewLine);
-                else
-                    txtLog.AppendLog(args.Message + Environment.NewLine, args.TextColor, Color.White);
-
-                txtLog.ScrollToEnd();
-            
-        }
-
-        void OnErrorLog(object sender, LogEventArgs args) {
-                if (splashScreen != null && !splashScreen.IsDisposed) {
-                    switch (Popups.PopupError.Create(args.Message)) {
-                        case DialogResult.Ignore:
-                            break;
-                        case System.Windows.Forms.DialogResult.Retry:
-                            //TODO: report bug
-                            break;
-                        case System.Windows.Forms.DialogResult.Cancel:
-                            //TODO: dispose of stuff
-                            return;
-                    }
-                }
-
-                txtLog.AppendLog(args.Message + Environment.NewLine, Color.Red, Color.White);
-
-            
-        }
-
-        void OnCompletedStartUp() {
-            if (InvokeRequired) {
-                Invoke((MethodInvoker)OnCompletedStartUp);
-                return;
-            }
-
-                splashScreen.Dispose();
-                splashScreen = null;
-
-                this.ShowDialog();
-                this.BringToFront();
-                Server.OnServerFinishSetup -= OnCompletedStartUp;
-            
-        }
-
-
-
-        #endregion
-
         private void shutdownMenuItem_Click(object sender, System.EventArgs e) {
             Close();
         }
+
+        #endregion
+
+        //Every Event handler from the library needs to be invoked before it inteacts with the UI
+        #region EventHandlers
+
+
+
+
+        void OnConnect(Player sender, ConnectionEventArgs args) {
+#if !DEBUG
+            try {
+#endif
+
+            if (lstPlayers.InvokeRequired) {
+                BeginInvoke((MethodInvoker)delegate { OnConnect(sender, args); });
+                return;
+            }
+
+            lstPlayers.Items.Add(sender.Username);
+
+#if !DEBUG   
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
+            catch (NotImplementedException) { }
+#endif
+
+        }
+
+        void OnDisconnect(Player sender, ConnectionEventArgs args) {
+
+#if !DEBUG
+            try {
+#endif
+
+            if (lstPlayers.InvokeRequired) {
+                BeginInvoke((MethodInvoker)delegate { OnDisconnect(sender, args); });
+                return;
+            }
+
+            lstPlayers.Items.Remove(sender.Username);
+
+#if !DEBUG   
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
+            catch (NotImplementedException) { }
+#endif
+
+        }
+
+        void OnLog(object sender, LogEventArgs args) {
+#if !DEBUG
+            try {
+#endif
+            if (InvokeRequired) {
+                BeginInvoke((MethodInvoker)delegate { OnLog(sender, args); });
+                return;
+            }
+
+            if (splashScreen != null && !splashScreen.IsDisposed) {
+                splashScreen.Log(args.Message);
+                return;
+            }
+
+            if (args.LogType == LogType.Debug)
+                return;
+
+            txtLog.AppendLog(args.Message + Environment.NewLine, args.LogType == LogType.Normal ? Color.Black : args.TextColor);
+            txtLog.ScrollToEnd();
+#if !DEBUG   
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
+            catch (NotImplementedException) { }
+#endif
+
+        }
+
+        void OnErrorLog(object sender, LogEventArgs args) {
+#if !DEBUG
+            try {
+#endif
+            if (splashScreen != null && !splashScreen.IsDisposed) {
+                switch (Popups.PopupError.Create(args.Message)) {
+                    case DialogResult.Ignore:
+                        break;
+                    case System.Windows.Forms.DialogResult.Retry:
+                        //TODO: report bug
+                        break;
+                    case System.Windows.Forms.DialogResult.Cancel:
+                        //TODO: dispose of stuff
+                        return;
+                }
+            }
+
+            txtLog.AppendLog("%c" + args.Message + Environment.NewLine, Color.Black);
+
+#if !DEBUG   
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
+            catch (NotImplementedException) { }
+#endif
+
+        }
+
+        void OnCompletedStartUp() {
+#if !DEBUG
+            try {
+#endif
+
+            if (InvokeRequired) {
+                BeginInvoke((MethodInvoker)OnCompletedStartUp);
+                return;
+            }
+
+            splashScreen.Dispose();
+            splashScreen = null;
+
+            this.ShowDialog();
+            this.BringToFront();
+            Server.OnServerFinishSetup -= OnCompletedStartUp;
+
+#if !DEBUG   
+            }
+            catch (ObjectDisposedException) { }
+            catch (InvalidOperationException) { }
+            catch (NotImplementedException) { }
+#endif
+        }
+
+
+
+        #endregion
+
+
 
 
 

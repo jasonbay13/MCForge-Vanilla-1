@@ -37,7 +37,7 @@ namespace MCForge.Utils {
         private static DateTime _lastTime;
 
 
-        internal static string DateFormat {
+        public static string CurrentLogFile {
             get { return _lastTime.ToString("MM-dd-yyyy") + "-MCForge.log"; }
         }
 
@@ -61,7 +61,7 @@ namespace MCForge.Utils {
 
             _lastTime = DateTime.Now;
             FileUtils.CreateDirIfNotExist(FileUtils.LogsPath);
-            FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + DateFormat, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS: " + Environment.OSVersion + Environment.NewLine);
+            FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + CurrentLogFile, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS: " + Environment.OSVersion + Environment.NewLine);
 
         }
 
@@ -129,10 +129,10 @@ namespace MCForge.Utils {
             count++;
             if (_lastTime.Day != DateTime.Now.Day) {
                 _lastTime = DateTime.Now;
-                FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + DateFormat, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS:" + Environment.OSVersion + ", ARCH:" + (Environment.Is64BitOperatingSystem ? "x64" :  "x86") + ", CULTURE: " + CultureInfo.CurrentCulture +  Environment.NewLine);
+                FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + CurrentLogFile, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS:" + Environment.OSVersion + ", ARCH:" + (Environment.Is64BitOperatingSystem ? "x64" :  "x86") + ", CULTURE: " + CultureInfo.CurrentCulture +  Environment.NewLine);
             }
 
-            using (var writer = new StreamWriter(FileUtils.LogsPath + DateFormat, true)) {
+            using (var writer = new StreamWriter(FileUtils.LogsPath + CurrentLogFile, true)) {
                 writer.WriteLine(log);
                 writer.Close();
             }
