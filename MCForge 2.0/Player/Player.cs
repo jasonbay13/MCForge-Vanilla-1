@@ -297,7 +297,10 @@ namespace MCForge.Entity {
                         Logger.LogError(ex);
                     }
                     if (ExtraData.ContainsKey("LastCmd"))
-                        ExtraData["LastCmd"] = name;
+                    {
+                        if ((string)(ExtraData["LastCmd"]) != String.Join(" ", args))
+                            ExtraData["LastCmd"] = String.Join(" ", args);
+                    }
                     else
                         ExtraData.Add("LastCmd", name);
                 });
