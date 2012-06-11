@@ -529,9 +529,6 @@ namespace MCForge.Core {
         /// Saves all of the levels and groups
         /// </summary>
         public static void SaveAll() {
-            if (ServerSettings.GetSetting("DatabaseType").ToLower() == "sqlite" && ServerSettings.GetSettingBoolean("SQLite-InMemory")) {
-                ((SQLite)Database.SQL).Save();
-            }
             foreach (var l in Level.Levels)
                 l.SaveToBinary();
             foreach (var g in Groups.PlayerGroup.Groups)

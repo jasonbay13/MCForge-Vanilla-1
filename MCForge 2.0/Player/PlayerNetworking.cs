@@ -372,10 +372,16 @@ namespace MCForge.Entity {
             if (incomingText.Length == 0)
                 return;
 
-            //Fixes crash
             if (incomingText[0] == '/' && incomingText.Length == 1) {
-                SendMessage("You didn't specify a command!");
-                return;
+                if (ExtraData.ContainsKey("LastCmd"))
+                {
+                    incomingText = "/" + ExtraData["LastCmd"];
+                }
+                else
+                {
+                    SendMessage("You need to specify a command!");
+                    return;
+                }
             }
 
             //Get rid of whitespace
@@ -517,7 +523,11 @@ namespace MCForge.Entity {
             if (incomingText[0] == '*') //Rank chat
             {
                 string groupname = Group.Name;
-                incomingText = incomingText.Trim().TrimStart('*');
+                incomingText = incomingText.Remove(0, 1);
+                if (incomingText == "")
+                {
+                    return;
+                }
                 if (!groupname.EndsWith("ed") && !groupname.EndsWith("s")) {
                     groupname += "s";
                 } //Plural
@@ -527,7 +537,11 @@ namespace MCForge.Entity {
             }
             if (incomingText[0] == '!') //Level chat
             {
-                incomingText = incomingText.Trim().TrimStart('!');
+                incomingText = incomingText.Remove(0, 1);
+                if (incomingText == "")
+                {
+                    return;
+                }
                 LevelChat(this, "&a<&f" + Level.Name + "&a> " + DisplayName + ":&f " + incomingText);
                 Logger.Log("<" + Level.Name + " Chat> " + Username + " as " + DisplayName + ": " + incomingText);
                 return;
@@ -536,7 +550,11 @@ namespace MCForge.Entity {
             ExtraData.CreateIfNotExist("AdminChat", false);
             if (incomingText[0] == '+' || (bool)ExtraData.GetIfExist("AdminChat")) //Admin chat
             {
-                incomingText = incomingText.TrimStart().TrimStart('+');
+                incomingText = incomingText.Remove(0, 1);
+                if (incomingText == "")
+                {
+                    return;
+                }
                 UniversalChatAdmins("&a<&fTo Admins&a> " + Group.Color + Username + ": &f" + incomingText);
                 if (Group.Permission < ServerSettings.GetSettingInt("AdminChatPermission")) {
                     SendMessage("&a<&fTo Admins&a> " + Group.Color + Username + ": &f" + incomingText);

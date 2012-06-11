@@ -10,9 +10,9 @@ using System;
 using System.Windows.Forms;
 using System.Data;
 using System.Data.SQLite;
-using System.IO;
 using MCForge.Utils.Settings;
 using MCForge.Utils;
+using System.IO;
 
 namespace MCForge.SQL {
     /// <summary>
@@ -63,7 +63,7 @@ namespace MCForge.SQL {
             backup.Start();
         }
         private void SaveTo(SQLiteConnection source, SQLiteConnection destination) {
-       //     source.BackupDatabase(destination, "main", "main", -1, callback, 10);
+           // source.BackupDatabase(destination, "main", "main", -1, callback, 10);
             source.Close();
             source.Dispose();
         }
@@ -171,32 +171,28 @@ namespace MCForge.SQL {
                     _closed = false;
                 }
                 catch (Exception e) { Logger.Log(e.Message); Logger.Log(e.StackTrace); }
-            }
-        }
+			}
+		}
+		
+		public void Close(bool dispose)
+		{
+			if (!_closed)
+			{
+				conn.Close();
+				if (dispose)
+					conn.Dispose();
+				_closed = true;
+			}
+		}
+		
+		public override void Dispose()
+		{
+			if (!_disposed)
+			{
+				Close(true);
+				base.Dispose();
+			}
+		}
 
-        public void Close(bool dispose) {
-            if (!_closed) {
-                if (backup != null) {
-                    backup.Dispose();
-                    backup = null;
-                }
-                conn.Close();
-                if (dispose)
-                    conn.Dispose();
-                _closed = true;
-            }
-        }
-
-        public override void Dispose() {
-            if (!_disposed) {
-                if (backup != null) {
-                    backup.Dispose();
-                    backup = null;
-                }
-                Close(true);
-                base.Dispose();
-            }
-        }
-
-    }
+	}
 }
