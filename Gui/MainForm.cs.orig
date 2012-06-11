@@ -130,8 +130,7 @@ namespace MCForge.Gui {
             txtChat.Clear();
         }
 
-        private void shutdownMenuItem_Click(object sender, System.EventArgs e) 
-        {
+        private void shutdownMenuItem_Click(object sender, System.EventArgs e) {
             Close();
         }
 

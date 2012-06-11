@@ -48,17 +48,6 @@ namespace MCForge.Gui {
             this.unloadEmptyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.killPhysicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.pluginsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.serverMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.shutdownMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.restartMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.propertiesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.kickEverybodyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stopPhysicsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.unloadEmptyLevelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.shutdownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tbLevels = new System.Windows.Forms.TabPage();
             this.tbPlayers = new System.Windows.Forms.TabPage();
@@ -66,23 +55,34 @@ namespace MCForge.Gui {
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lstPlayersBig = new System.Windows.Forms.ListBox();
             this.tbMain = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.mPlayerGroupBox = new System.Windows.Forms.GroupBox();
+            this.lstPlayers = new System.Windows.Forms.ListBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lstLevels = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.cmbChatType = new System.Windows.Forms.ComboBox();
             this.txtChat = new System.Windows.Forms.TextBox();
-            this.txtLog = new MCForge.Gui.Components.ColoredLogReader(this.components);
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.lstLevels = new System.Windows.Forms.ListBox();
-            this.mPlayerGroupBox = new System.Windows.Forms.GroupBox();
-            this.lstPlayers = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.menuItem2 = new System.Windows.Forms.MenuItem();
+            this.menuItem3 = new System.Windows.Forms.MenuItem();
+            this.menuItem4 = new System.Windows.Forms.MenuItem();
+            this.menuItem5 = new System.Windows.Forms.MenuItem();
+            this.menuItem6 = new System.Windows.Forms.MenuItem();
+            this.menuItem7 = new System.Windows.Forms.MenuItem();
+            this.menuItem8 = new System.Windows.Forms.MenuItem();
+            this.menuItem9 = new System.Windows.Forms.MenuItem();
+            this.txtLog = new MCForge.Gui.Components.ColoredLogReader(this.components);
             this.nfMain = new MCForge.Gui.Components.NewsFeeder(this.components);
-            this.menuStrip1.SuspendLayout();
             this.tbPlayers.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tbMain.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.mPlayerGroupBox.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -139,88 +139,6 @@ namespace MCForge.Gui {
             this.killPhysicsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.killPhysicsToolStripMenuItem.Text = "Kill Physics";
             // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pluginsMenuItem,
-            this.serverMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(964, 24);
-            this.menuStrip1.TabIndex = 9;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // pluginsMenuItem
-            // 
-            this.pluginsMenuItem.Name = "pluginsMenuItem";
-            this.pluginsMenuItem.Size = new System.Drawing.Size(58, 20);
-            this.pluginsMenuItem.Text = "Plugins";
-            // 
-            // serverMenuItem
-            // 
-            this.serverMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.shutdownMenuItem,
-            this.restartMenuItem,
-            this.propertiesMenuItem,
-            this.toolStripSeparator2,
-            this.kickEverybodyToolStripMenuItem,
-            this.stopPhysicsToolStripMenuItem,
-            this.unloadEmptyLevelsToolStripMenuItem,
-            this.saveAllToolStripMenuItem1});
-            this.serverMenuItem.Name = "serverMenuItem";
-            this.serverMenuItem.Size = new System.Drawing.Size(51, 20);
-            this.serverMenuItem.Text = "Server";
-            // 
-            // shutdownMenuItem
-            // 
-            this.shutdownMenuItem.Name = "shutdownMenuItem";
-            this.shutdownMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F4)));
-            this.shutdownMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.shutdownMenuItem.Text = "Shutdown";
-            this.shutdownMenuItem.Click += new System.EventHandler(this.shutdownMenuItem_Click);
-            // 
-            // restartMenuItem
-            // 
-            this.restartMenuItem.Name = "restartMenuItem";
-            this.restartMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.restartMenuItem.Text = "Restart";
-            // 
-            // propertiesMenuItem
-            // 
-            this.propertiesMenuItem.Name = "propertiesMenuItem";
-            this.propertiesMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.propertiesMenuItem.Text = "Properties";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(181, 6);
-            // 
-            // kickEverybodyToolStripMenuItem
-            // 
-            this.kickEverybodyToolStripMenuItem.Name = "kickEverybodyToolStripMenuItem";
-            this.kickEverybodyToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.kickEverybodyToolStripMenuItem.Text = "Kick Everybody";
-            // 
-            // stopPhysicsToolStripMenuItem
-            // 
-            this.stopPhysicsToolStripMenuItem.Name = "stopPhysicsToolStripMenuItem";
-            this.stopPhysicsToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.stopPhysicsToolStripMenuItem.Text = "Stop Physics";
-            // 
-            // unloadEmptyLevelsToolStripMenuItem
-            // 
-            this.unloadEmptyLevelsToolStripMenuItem.Name = "unloadEmptyLevelsToolStripMenuItem";
-            this.unloadEmptyLevelsToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.unloadEmptyLevelsToolStripMenuItem.Text = "Unload Empty Levels";
-            // 
-            // saveAllToolStripMenuItem1
-            // 
-            this.saveAllToolStripMenuItem1.Name = "saveAllToolStripMenuItem1";
-            this.saveAllToolStripMenuItem1.Size = new System.Drawing.Size(184, 22);
-            this.saveAllToolStripMenuItem1.Text = "Save All";
-            // 
             // shutdownToolStripMenuItem
             // 
             this.shutdownToolStripMenuItem.Name = "shutdownToolStripMenuItem";
@@ -232,7 +150,7 @@ namespace MCForge.Gui {
             this.tbLevels.Location = new System.Drawing.Point(4, 24);
             this.tbLevels.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tbLevels.Name = "tbLevels";
-            this.tbLevels.Size = new System.Drawing.Size(956, 486);
+            this.tbLevels.Size = new System.Drawing.Size(1084, 373);
             this.tbLevels.TabIndex = 3;
             this.tbLevels.Text = "Levels";
             this.tbLevels.UseVisualStyleBackColor = true;
@@ -244,142 +162,79 @@ namespace MCForge.Gui {
             this.tbPlayers.Location = new System.Drawing.Point(4, 24);
             this.tbPlayers.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tbPlayers.Name = "tbPlayers";
-            this.tbPlayers.Size = new System.Drawing.Size(956, 486);
+            this.tbPlayers.Size = new System.Drawing.Size(1084, 352);
             this.tbPlayers.TabIndex = 2;
             this.tbPlayers.Text = "Players";
             this.tbPlayers.UseVisualStyleBackColor = true;
             // 
             // grpInfo
             // 
-            this.grpInfo.Location = new System.Drawing.Point(546, 3);
+            this.grpInfo.Dock = System.Windows.Forms.DockStyle.Right;
+            this.grpInfo.Location = new System.Drawing.Point(588, 0);
             this.grpInfo.Name = "grpInfo";
-            this.grpInfo.Size = new System.Drawing.Size(402, 480);
+            this.grpInfo.Size = new System.Drawing.Size(496, 352);
             this.grpInfo.TabIndex = 1;
             this.grpInfo.TabStop = false;
             this.grpInfo.Text = "$Name info";
             // 
             // groupBox3
             // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.lstPlayersBig);
-            this.groupBox3.Font = new System.Drawing.Font("Ubuntu", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.Location = new System.Drawing.Point(9, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(531, 481);
+            this.groupBox3.Size = new System.Drawing.Size(573, 349);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Player List";
             // 
             // lstPlayersBig
             // 
-            this.lstPlayersBig.Font = new System.Drawing.Font("Ubuntu", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstPlayersBig.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstPlayersBig.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstPlayersBig.FormattingEnabled = true;
-            this.lstPlayersBig.ItemHeight = 16;
-            this.lstPlayersBig.Location = new System.Drawing.Point(7, 23);
+            this.lstPlayersBig.Location = new System.Drawing.Point(3, 16);
             this.lstPlayersBig.Name = "lstPlayersBig";
-            this.lstPlayersBig.Size = new System.Drawing.Size(516, 452);
+            this.lstPlayersBig.Size = new System.Drawing.Size(567, 330);
             this.lstPlayersBig.TabIndex = 0;
             // 
             // tbMain
             // 
+            this.tbMain.Controls.Add(this.groupBox4);
             this.tbMain.Controls.Add(this.groupBox2);
-            this.tbMain.Controls.Add(this.groupBox1);
-            this.tbMain.Controls.Add(this.mPlayerGroupBox);
             this.tbMain.Location = new System.Drawing.Point(4, 24);
             this.tbMain.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tbMain.Name = "tbMain";
             this.tbMain.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tbMain.Size = new System.Drawing.Size(956, 486);
+            this.tbMain.Size = new System.Drawing.Size(1084, 373);
             this.tbMain.TabIndex = 0;
             this.tbMain.Text = "Main";
             this.tbMain.UseVisualStyleBackColor = true;
             // 
-            // groupBox2
+            // groupBox4
             // 
-            this.groupBox2.Controls.Add(this.cmbChatType);
-            this.groupBox2.Controls.Add(this.txtChat);
-            this.groupBox2.Controls.Add(this.txtLog);
-            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(7, 4);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox2.Size = new System.Drawing.Size(707, 476);
-            this.groupBox2.TabIndex = 14;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Chat";
-            // 
-            // cmbChatType
-            // 
-            this.cmbChatType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbChatType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbChatType.FormattingEnabled = true;
-            this.cmbChatType.Items.AddRange(new object[] {
-            "Chat",
-            "OpChat",
-            "AdminChat"});
-            this.cmbChatType.Location = new System.Drawing.Point(588, 445);
-            this.cmbChatType.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cmbChatType.Name = "cmbChatType";
-            this.cmbChatType.Size = new System.Drawing.Size(111, 21);
-            this.cmbChatType.TabIndex = 14;
-            // 
-            // txtChat
-            // 
-            this.txtChat.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtChat.ForeColor = System.Drawing.Color.Gray;
-            this.txtChat.Location = new System.Drawing.Point(7, 446);
-            this.txtChat.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.txtChat.Name = "txtChat";
-            this.txtChat.Size = new System.Drawing.Size(573, 20);
-            this.txtChat.TabIndex = 13;
-            this.txtChat.Text = "Enter a message or a command";
-            this.txtChat.Enter += new System.EventHandler(this.txtChat_Enter);
-            this.txtChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Chat);
-            // 
-            // txtLog
-            // 
-            this.txtLog.BackColor = System.Drawing.Color.White;
-            this.txtLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLog.Location = new System.Drawing.Point(7, 21);
-            this.txtLog.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.txtLog.Name = "txtLog";
-            this.txtLog.ReadOnly = true;
-            this.txtLog.Size = new System.Drawing.Size(693, 419);
-            this.txtLog.TabIndex = 12;
-            this.txtLog.Text = "";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.lstLevels);
-            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(721, 247);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(224, 232);
-            this.groupBox1.TabIndex = 13;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Levels";
-            // 
-            // lstLevels
-            // 
-            this.lstLevels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lstLevels.FormattingEnabled = true;
-            this.lstLevels.Location = new System.Drawing.Point(7, 22);
-            this.lstLevels.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.lstLevels.Name = "lstLevels";
-            this.lstLevels.Size = new System.Drawing.Size(209, 199);
-            this.lstLevels.TabIndex = 0;
+            this.groupBox4.Controls.Add(this.mPlayerGroupBox);
+            this.groupBox4.Controls.Add(this.groupBox1);
+            this.groupBox4.Dock = System.Windows.Forms.DockStyle.Right;
+            this.groupBox4.Location = new System.Drawing.Point(819, 4);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(262, 365);
+            this.groupBox4.TabIndex = 15;
+            this.groupBox4.TabStop = false;
             // 
             // mPlayerGroupBox
             // 
+            this.mPlayerGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.mPlayerGroupBox.Controls.Add(this.lstPlayers);
             this.mPlayerGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mPlayerGroupBox.Location = new System.Drawing.Point(721, 4);
+            this.mPlayerGroupBox.Location = new System.Drawing.Point(3, 11);
             this.mPlayerGroupBox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.mPlayerGroupBox.Name = "mPlayerGroupBox";
             this.mPlayerGroupBox.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.mPlayerGroupBox.Size = new System.Drawing.Size(224, 242);
+            this.mPlayerGroupBox.Size = new System.Drawing.Size(256, 186);
             this.mPlayerGroupBox.TabIndex = 9;
             this.mPlayerGroupBox.TabStop = false;
             this.mPlayerGroupBox.Text = "Players";
@@ -387,29 +242,180 @@ namespace MCForge.Gui {
             // lstPlayers
             // 
             this.lstPlayers.BackColor = System.Drawing.Color.White;
+            this.lstPlayers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstPlayers.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lstPlayers.FormattingEnabled = true;
-            this.lstPlayers.Location = new System.Drawing.Point(8, 21);
+            this.lstPlayers.Location = new System.Drawing.Point(3, 17);
             this.lstPlayers.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.lstPlayers.Name = "lstPlayers";
-            this.lstPlayers.Size = new System.Drawing.Size(208, 212);
+            this.lstPlayers.Size = new System.Drawing.Size(250, 165);
             this.lstPlayers.TabIndex = 0;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lstLevels);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.Location = new System.Drawing.Point(3, 205);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox1.Size = new System.Drawing.Size(256, 157);
+            this.groupBox1.TabIndex = 13;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Levels";
+            // 
+            // lstLevels
+            // 
+            this.lstLevels.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstLevels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstLevels.FormattingEnabled = true;
+            this.lstLevels.Location = new System.Drawing.Point(3, 17);
+            this.lstLevels.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.lstLevels.Name = "lstLevels";
+            this.lstLevels.Size = new System.Drawing.Size(250, 136);
+            this.lstLevels.TabIndex = 0;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.cmbChatType);
+            this.groupBox2.Controls.Add(this.txtChat);
+            this.groupBox2.Controls.Add(this.txtLog);
+            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox2.Location = new System.Drawing.Point(3, 4);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox2.Size = new System.Drawing.Size(813, 428);
+            this.groupBox2.TabIndex = 14;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Chat";
+            // 
+            // cmbChatType
+            // 
+            this.cmbChatType.Cursor = System.Windows.Forms.Cursors.No;
+            this.cmbChatType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbChatType.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbChatType.FormattingEnabled = true;
+            this.cmbChatType.Items.AddRange(new object[] {
+            "Chat",
+            "OpChat",
+            "AdminChat"});
+            this.cmbChatType.Location = new System.Drawing.Point(39, 0);
+            this.cmbChatType.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cmbChatType.Name = "cmbChatType";
+            this.cmbChatType.Size = new System.Drawing.Size(118, 21);
+            this.cmbChatType.TabIndex = 14;
+            // 
+            // txtChat
+            // 
+            this.txtChat.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.txtChat.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtChat.ForeColor = System.Drawing.Color.Gray;
+            this.txtChat.Location = new System.Drawing.Point(3, 404);
+            this.txtChat.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtChat.Name = "txtChat";
+            this.txtChat.Size = new System.Drawing.Size(807, 20);
+            this.txtChat.TabIndex = 13;
+            this.txtChat.Text = "Enter a message or a command";
+            this.txtChat.Enter += new System.EventHandler(this.txtChat_Enter);
+            this.txtChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Chat);
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tbMain);
             this.tabControl1.Controls.Add(this.tbPlayers);
             this.tabControl1.Controls.Add(this.tbLevels);
-            this.tabControl1.Location = new System.Drawing.Point(0, 31);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(964, 514);
+            this.tabControl1.Size = new System.Drawing.Size(1092, 380);
             this.tabControl1.TabIndex = 8;
+            // 
+            // mainMenu1
+            // 
+            this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem1,
+            this.menuItem2});
+            // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 0;
+            this.menuItem1.Text = "Plugins";
+            // 
+            // menuItem2
+            // 
+            this.menuItem2.Index = 1;
+            this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem3,
+            this.menuItem4,
+            this.menuItem5,
+            this.menuItem6,
+            this.menuItem7,
+            this.menuItem8,
+            this.menuItem9});
+            this.menuItem2.Text = "Server";
+            // 
+            // menuItem3
+            // 
+            this.menuItem3.Index = 0;
+            this.menuItem3.Shortcut = System.Windows.Forms.Shortcut.AltF4;
+            this.menuItem3.Tag = "";
+            this.menuItem3.Text = "Shutdown";
+            this.menuItem3.Click += new System.EventHandler(this.shutdownMenuItem_Click);
+            // 
+            // menuItem4
+            // 
+            this.menuItem4.Index = 1;
+            this.menuItem4.Text = "Restart";
+            // 
+            // menuItem5
+            // 
+            this.menuItem5.Index = 2;
+            this.menuItem5.Text = "Properties";
+            // 
+            // menuItem6
+            // 
+            this.menuItem6.Index = 3;
+            this.menuItem6.Text = "Kick Everybody";
+            // 
+            // menuItem7
+            // 
+            this.menuItem7.Index = 4;
+            this.menuItem7.Text = "Stop Physics";
+            // 
+            // menuItem8
+            // 
+            this.menuItem8.Index = 5;
+            this.menuItem8.Text = "Unload Empty Levels";
+            // 
+            // menuItem9
+            // 
+            this.menuItem9.Index = 6;
+            this.menuItem9.Text = "Save All";
+            // 
+            // txtLog
+            // 
+            this.txtLog.BackColor = System.Drawing.Color.White;
+            this.txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLog.Location = new System.Drawing.Point(3, 17);
+            this.txtLog.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ReadOnly = true;
+            this.txtLog.Size = new System.Drawing.Size(807, 407);
+            this.txtLog.TabIndex = 12;
+            this.txtLog.Text = "";
             // 
             // nfMain
             // 
             this.nfMain.BackColor = System.Drawing.Color.White;
+            this.nfMain.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.nfMain.Items.Add("1234");
             this.nfMain.Items.Add("1234");
             this.nfMain.Items.Add("12334");
@@ -419,11 +425,11 @@ namespace MCForge.Gui {
             this.nfMain.Items.Add("dsfdcv3e1r");
             this.nfMain.Items.Add("123 r13424");
             this.nfMain.Items.Add("c1c34");
-            this.nfMain.Location = new System.Drawing.Point(0, 551);
+            this.nfMain.Location = new System.Drawing.Point(0, 380);
             this.nfMain.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.nfMain.Name = "nfMain";
             this.nfMain.ReadOnly = true;
-            this.nfMain.Size = new System.Drawing.Size(964, 24);
+            this.nfMain.Size = new System.Drawing.Size(1092, 24);
             this.nfMain.TabIndex = 7;
             this.nfMain.Text = "Connecting...";
             // 
@@ -431,34 +437,30 @@ namespace MCForge.Gui {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(964, 574);
-            this.Controls.Add(this.menuStrip1);
+            this.ClientSize = new System.Drawing.Size(1092, 404);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.nfMain);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Lucida Sans Unicode", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximizeBox = false;
+            this.Menu = this.mainMenu1;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MCForge Server";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             this.tbPlayers.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.tbMain.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.mPlayerGroupBox.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.mPlayerGroupBox.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -475,17 +477,6 @@ namespace MCForge.Gui {
         private System.Windows.Forms.ToolStripMenuItem unloadEmptyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem killPhysicsToolStripMenuItem;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem pluginsMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem serverMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem shutdownMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem restartMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem propertiesMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem kickEverybodyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem stopPhysicsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem unloadEmptyLevelsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveAllToolStripMenuItem1;
         private System.Windows.Forms.TabPage tbLevels;
         private System.Windows.Forms.TabPage tbPlayers;
         private System.Windows.Forms.TabPage tbMain;
@@ -493,13 +484,24 @@ namespace MCForge.Gui {
         private System.Windows.Forms.ComboBox cmbChatType;
         private System.Windows.Forms.TextBox txtChat;
         private Components.ColoredLogReader txtLog;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.ListBox lstLevels;
-        private System.Windows.Forms.GroupBox mPlayerGroupBox;
-        private System.Windows.Forms.ListBox lstPlayers;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ListBox lstPlayersBig;
         private System.Windows.Forms.GroupBox grpInfo;
+        private System.Windows.Forms.MainMenu mainMenu1;
+        private System.Windows.Forms.MenuItem menuItem1;
+        private System.Windows.Forms.MenuItem menuItem2;
+        private System.Windows.Forms.MenuItem menuItem3;
+        private System.Windows.Forms.MenuItem menuItem4;
+        private System.Windows.Forms.MenuItem menuItem5;
+        private System.Windows.Forms.MenuItem menuItem6;
+        private System.Windows.Forms.MenuItem menuItem7;
+        private System.Windows.Forms.MenuItem menuItem8;
+        private System.Windows.Forms.MenuItem menuItem9;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox mPlayerGroupBox;
+        private System.Windows.Forms.ListBox lstPlayers;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ListBox lstLevels;
     }
 }
