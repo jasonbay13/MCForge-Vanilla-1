@@ -66,12 +66,5 @@ namespace MCForge.Gui.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
-        internal static byte[] Ubuntu {
-            get {
-                object obj = ResourceManager.GetObject("Ubuntu", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

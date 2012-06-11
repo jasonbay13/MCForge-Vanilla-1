@@ -13,15 +13,21 @@ namespace MCForge.Gui.Components {
     /// <summary>
     /// A richtextbox that colors incoming text using mincraft color codes.
     /// </summary>
-    public partial class ColoredReader : StyledRichTextBox {
+    public partial class ColoredLogReader : StyledRichTextBox {
 
-        public ColoredReader() {
+        private string Date {
+            get {
+                return "[" + DateTime.Now.ToString("T") + "] ";
+            }
+        }
+
+        public ColoredLogReader() {
             InitializeComponent();
             ReadOnly = true;
             BackColor = Color.White;
         }
 
-        public ColoredReader(IContainer container) {
+        public ColoredLogReader(IContainer container) {
             container.Add(this);
             InitializeComponent();
             ReadOnly = true;
@@ -37,6 +43,8 @@ namespace MCForge.Gui.Components {
                 Invoke((MethodInvoker)delegate { AppendLog(text); });
                 return;
             }
+
+            AppendLog(Date, Color.Gray, Color.White);
 
             if (!text.Contains('&') && !text.Contains('%')) {
                 AppendLog(text, Color.Black, Color.White);
@@ -74,6 +82,17 @@ namespace MCForge.Gui.Components {
             AppendText(text);
             SelectionBackColor = BackColor;
             SelectionColor = ForeColor;
+
+        }
+
+        
+        private void ColoredReader_LinkClicked(object sender, System.Windows.Forms.LinkClickedEventArgs e) {
+            if(!e.LinkText.StartsWith("http://www.minecraft.net/classic/play/")){
+                if(MessageBox.Show("Never open links from people that you don't trust!", "Warning!!", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+                    return;
+            }
+
+            Process.Start(e.LinkText);
 
         }
 

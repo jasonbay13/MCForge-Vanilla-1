@@ -63,7 +63,7 @@ namespace MCForge.SQL {
             backup.Start();
         }
         private void SaveTo(SQLiteConnection source, SQLiteConnection destination) {
-            source.BackupDatabase(destination, "main", "main", -1, callback, 10);
+       //     source.BackupDatabase(destination, "main", "main", -1, callback, 10);
             source.Close();
             source.Dispose();
         }

@@ -14,6 +14,7 @@ namespace MCForge.Gui.Components {
 
         public NewsFeeder() {
             InitializeComponent();
+            
         }
 
         public NewsFeeder(IContainer container) {

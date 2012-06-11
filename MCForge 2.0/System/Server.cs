@@ -240,6 +240,8 @@ namespace MCForge.Core {
 
             Backup.StartBackup();
 
+            Logger.LogError(new Exception("Jesus love you too much, computer can't handle it"));
+
             Database.init();
 
             CreateCoreFiles();

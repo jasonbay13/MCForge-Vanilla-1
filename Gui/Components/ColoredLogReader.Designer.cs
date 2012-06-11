@@ -1,5 +1,5 @@
 ﻿namespace MCForge.Gui.Components {
-    partial class ColoredReader {
+    partial class ColoredLogReader {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -24,7 +24,9 @@
         /// </summary>
         private void InitializeComponent() {
             components = new System.ComponentModel.Container();
+            this.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(ColoredReader_LinkClicked);
         }
+
 
         #endregion
     }

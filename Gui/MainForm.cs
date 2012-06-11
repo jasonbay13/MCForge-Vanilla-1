@@ -27,90 +27,87 @@ using MCForge.Interface;
 using MCForge.Entity;
 using MCForge.API.Events;
 using MCForge.Gui.API;
+using MCForge.World;
 
 namespace MCForge.Gui {
     internal partial class MainForm : Form {
+
         private MCForgeGuiManager pluginManager;
         private LogoForm splashScreen;
+        private readonly object ObjectLocker = new object();
+
         public MainForm() {
+
+            InitializeComponent();
+            this.Visible = false;
+            pluginManager = new MCForgeGuiManager(pluginsToolStripMenuItem);
 
             //Splash Form
             new Thread(new ThreadStart(() => {
                 splashScreen = new LogoForm();
                 splashScreen.ShowDialog();
             })).Start();
-            InitializeComponent();
-            Hide();
-            pluginManager = new MCForgeGuiManager(pluginsToolStripMenuItem);
-        }
 
-        private void frmMain_Load(object sender, System.EventArgs e) {
-            this.Visible = false;
-            pluginManager.Init();
-            pluginManager.AttachItems();
-            Logger.OnRecieveLog += (obj, args) => {
 
-                if (!splashScreen.IsDisposed) {
-                    splashScreen.Log(args.Message);
-                    return;
-                }
+            //Event Handlers
+            Logger.OnRecieveLog += OnLog;
+            Logger.OnRecieveErrorLog += OnErrorLog;
+            Server.OnServerFinishSetup += OnCompletedStartUp;
 
-                if (args.LogType == LogType.Debug)
-                    return;
-
-                if (args.LogType == LogType.Normal)
-                    coloredReader1.AppendLog(args.Message + Environment.NewLine);
-                else
-                    coloredReader1.AppendLog(args.Message + Environment.NewLine, args.TextColor, Color.White);
-
-                coloredReader1.ScrollToEnd();
-            };
-
-            Server.OnServerFinishSetup += () => {
-                splashScreen.Dispose();
-                if (InvokeRequired) {
-                    Invoke((MethodInvoker)Show);
-                }
-                else {
-                    Show();
-                }
-            };
-            Player.OnAllPlayersConnect.Important += OnConnect;
-            Player.OnAllPlayersDisconnect.Important += OnDisconnect;
-
-            chatButtonChange.Text = "Chat";
-            newsFeeder1.StartRead();
-
-            new Thread(new ThreadStart(Server.Init)).Start();
-        }
-        private void Chat(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.Enter) {
-                if (String.IsNullOrWhiteSpace(chatBox.Text)) {
-                    Logger.Log("Please specify a valid message!" + Environment.NewLine);
-                    return;
-                }
-
-                if (chatButtonChange.Text == "OpChat") {
-                    Player.UniversalChatOps("&a<&fTo Ops&a> %a[%fConsole%a]:%f " + chatBox.Text);
-                    Logger.Log("<OpChat> <Console> " + chatBox.Text);
-                    chatBox.Clear();
-                    return;
-                }
-
-                if (chatButtonChange.Text == "AdminChat") {
-                    Player.UniversalChatAdmins("&a<&fTo Admins&a> %a[%fConsole%a]:%f " + chatBox.Text);
-                    Logger.Log("<AdminChat> <Console> " + chatBox.Text);
-                    chatBox.Clear();
-                    return;
-                }
-
-                Player.UniversalChat("&a[&fConsole&a]:&f " + chatBox.Text);
-                Logger.Log("&5[&1Console&5]: &1 " + chatBox.Text);
-                chatBox.Clear(); return;
+            try {
+                new Thread(new ThreadStart(Server.Init)).Start();
+            }
+            catch (Exception e) {
+                Logger.LogError(e);
             }
         }
 
-        private void frmMain_FormClosing(object sender, FormClosingEventArgs e) {
+        private void frmMain_Load(object sender, System.EventArgs e) {
+
+            //Custom Component Init
+            cmbChatType.Text = "Chat";
+            nfMain.StartRead();
+            pluginManager.Init();
+            pluginManager.AttachItems();
+
+            //Gui Handlers
+            Player.OnAllPlayersConnect.Important += OnConnect;
+            Player.OnAllPlayersDisconnect.Important += OnDisconnect;
+            //TODO: Level.OnLevelLoad += OnLevelLoad; 
+            //TODO: Level.OnLevelUnload += OnLevelUnload;
+        }
+
+        #region Gui Handles
+
+        void Chat(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.Enter) {
+                if (String.IsNullOrWhiteSpace(txtChat.Text)) {
+                    Logger.Log("Please specify a valid message!", Color.Red, Color.White, LogType.Warning);
+                    return;
+                }
+
+                if (cmbChatType.Text == "OpChat") {
+                    Player.UniversalChatOps("&a<&fTo Ops&a> %a[%fConsole%a]:%f " + txtChat.Text);
+                    Logger.Log("<OpChat> <Console> " + txtChat.Text);
+                    txtChat.Clear();
+                    return;
+                }
+
+                if (cmbChatType.Text == "AdminChat") {
+                    Player.UniversalChatAdmins("&a<&fTo Admins&a> %a[%fConsole%a]:%f " + txtChat.Text);
+                    Logger.Log("<AdminChat> <Console> " + txtChat.Text);
+                    txtChat.Clear();
+                    return;
+                }
+
+                Player.UniversalChat("&a[&fConsole&a]:&f " + txtChat.Text);
+                Logger.Log("&5[&1Console&5]: &1" + txtChat.Text);
+                txtChat.Clear(); return;
+            }
+
+        }
+
+        void frmMain_FormClosing(object sender, FormClosingEventArgs e) {
             switch (MessageBox.Show("Would you like to save all?", "Save?", MessageBoxButtons.YesNoCancel)) {
                 case DialogResult.Yes:
                     Server.SaveAll();
@@ -129,24 +126,98 @@ namespace MCForge.Gui {
             }
         }
 
+        private void txtChat_Enter(object sender, System.EventArgs e) {
+            txtChat.ForeColor = Color.Black;
+            txtChat.Clear();
+        }
+
+        #endregion
+
         #region EventHandlers
 
+
         void OnConnect(Player sender, ConnectionEventArgs args) {
-            if (mPlayersListBox.InvokeRequired) {
-                mPlayersListBox.Invoke((MethodInvoker)delegate { OnConnect(sender, args); });
+            if (lstPlayers.InvokeRequired) {
+                lstPlayers.Invoke((MethodInvoker)delegate { OnConnect(sender, args); });
                 return;
             }
-            mPlayersListBox.Items.Add(sender.Username);
+
+            lock (ObjectLocker) {
+                lstPlayers.Items.Add(sender.Username);
+            }
         }
 
         void OnDisconnect(Player sender, ConnectionEventArgs args) {
-            if (mPlayersListBox.InvokeRequired) {
-                mPlayersListBox.Invoke((MethodInvoker)delegate { OnDisconnect(sender, args); });
+            if (lstPlayers.InvokeRequired) {
+                lstPlayers.Invoke((MethodInvoker)delegate { OnDisconnect(sender, args); });
                 return;
             }
-            mPlayersListBox.Items.Remove(sender.Username);
+
+            lock (ObjectLocker) {
+                lstPlayers.Items.Remove(sender.Username);
+            }
         }
+
+        void OnLog(object sender, LogEventArgs args) {
+
+            lock (ObjectLocker) {
+                if (splashScreen != null && !splashScreen.IsDisposed) {
+                    splashScreen.Log(args.Message);
+                    return;
+                }
+
+                if (args.LogType == LogType.Debug)
+                    return;
+
+                if (args.LogType == LogType.Normal)
+                    txtLog.AppendLog(args.Message + Environment.NewLine);
+                else
+                    txtLog.AppendLog(args.Message + Environment.NewLine, args.TextColor, Color.White);
+
+                txtLog.ScrollToEnd();
+            }
+        }
+
+        void OnErrorLog(object sender, LogEventArgs args) {
+            lock (ObjectLocker) {
+                if (splashScreen != null && !splashScreen.IsDisposed) {
+                    switch (Popups.PopupError.Create(args.Message)) {
+                        case DialogResult.Ignore:
+                            break;
+                        case System.Windows.Forms.DialogResult.Retry:
+                            //TODO: report bug
+                            break;
+                        case System.Windows.Forms.DialogResult.Cancel:
+                            //TODO: dispose of stuff
+                            return;
+                    }
+                }
+
+                txtLog.AppendLog(args.Message + Environment.NewLine, Color.Red, Color.White);
+
+            }
+        }
+
+        void OnCompletedStartUp() {
+            if (InvokeRequired) {
+                Invoke((MethodInvoker)OnCompletedStartUp);
+                return;
+            }
+
+                splashScreen.Dispose();
+                splashScreen = null;
+
+                this.ShowDialog();
+                this.BringToFront();
+                Server.OnServerFinishSetup -= OnCompletedStartUp;
+            
+        }
+
+
+
         #endregion
+
+
 
 
     }

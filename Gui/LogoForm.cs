@@ -27,6 +27,9 @@ namespace MCForge.Gui {
 
 
         public void Log(string text) {
+            if (IsDisposed)
+                return;
+
             if (InvokeRequired) {
                 Invoke((MethodInvoker)delegate { Log(text); });
                 return;
