@@ -331,6 +331,9 @@ namespace MCForge.Entity {
                 MoveEventArgs eargs = new MoveEventArgs(new Vector3S(fromPosition), new Vector3S(Pos));
                 eargs = OnPlayerMove.Call(this, eargs, OnAllPlayersMove);
                 if (eargs.Canceled) {
+                    Pos = eargs.FromPosition;
+                    oldPos = eargs.FromPosition;
+                    SendSpawn(this);
                     return;
                 }
                 else {
