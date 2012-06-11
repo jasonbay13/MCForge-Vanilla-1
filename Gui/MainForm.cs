@@ -130,14 +130,48 @@ namespace MCForge.Gui {
             txtChat.Clear();
         }
 
-        private void shutdownMenuItem_Click(object sender, System.EventArgs e) 
-        {
+        #region Menu Items
+
+        private void shutdownMenuItem_Click(object sender, System.EventArgs e) {
             Close();
+        }
+
+        private void itmRestart_Click(object sender, System.EventArgs e) {
+            Close();
+            Server.Restart();
+        }
+
+        private void itmProperties_Click(object sender, System.EventArgs e) {
+            //TODO Open Settings
+        }
+
+        private void itmKickAll_Click(object sender, System.EventArgs e) {
+            foreach (var p in Server.Players)
+                p.Kick("Kicked by the console");
+        }
+
+        private void itmStopPhysics_Click(object sender, System.EventArgs e) {
+            //TODO:
+        }
+
+        private void itmUnload_Click(object sender, System.EventArgs e) {
+            //TODO:
+        }
+
+        private void itmSaveAll_Click(object sender, System.EventArgs e) {
+            Server.SaveAll();
+            Backup.BackupAll();
         }
 
         #endregion
 
-        //Every Event handler from the library needs to be invoked before it inteacts with the UI
+        #region Context menu Items
+
+        #endregion
+
+        #endregion
+
+        //Every Event handler from the library needs to be invoked before it interacts with the UI
         #region EventHandlers
 
 
@@ -270,6 +304,18 @@ namespace MCForge.Gui {
 
 
         #endregion
+
+        
+
+        
+
+        
+
+        
+
+
+
+
 
 
 

@@ -89,15 +89,6 @@ namespace MCForge.Gui.Components {
 
         }
 
-        public void AppendUrl(string url) {
-            AppendText(GetUrl(url));
-        }
-
-        public string GetUrl(string url) {
-            return url;
-        }
-
-
         private void ColoredReader_LinkClicked(object sender, System.Windows.Forms.LinkClickedEventArgs e) {
             if (!e.LinkText.StartsWith("http://www.minecraft.net/classic/play/")) {
                 if (MessageBox.Show("Never open links from people that you don't trust!", "Warning!!", MessageBoxButtons.OKCancel) == DialogResult.Cancel)
