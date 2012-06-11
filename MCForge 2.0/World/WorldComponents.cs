@@ -43,10 +43,11 @@ namespace MCForge.World {
         }
         public static void GenerateTree(Player p, ushort x, ushort z, ushort y, TreeType type, bool gothrough = false)
         {
-            byte air = Block.BlockList.AIR, 
-                 sap = Block.BlockList.SAPLING, 
-                 trunk = Block.BlockList.WOOD, 
-                 leaf = Block.BlockList.LEAVES;
+            byte air = Block.BlockList.AIR,
+                 sap = Block.BlockList.SAPLING,
+                 trunk = Block.BlockList.WOOD,
+                 leaf = Block.BlockList.LEAVES,
+                 green = Block.BlockList.GREEN_CLOTH;
 
             #region Normal
             if (type == TreeType.Classic) {
@@ -200,6 +201,27 @@ namespace MCForge.World {
                             else { p.Level.BlockChange(xxx, zzz, yyy, leaf); }
                         }
                     }
+                }
+            }
+            #endregion
+            #region Cactus
+            if (type == TreeType.Cactus) {
+                byte height = (byte)MathUtils.Random.Next(3, 6);
+                ushort yy;
+                for (yy = 0; yy <= height; yy++) { 
+                    if (gothrough || p.Level.GetBlock((ushort)x,(ushort)z, (ushort)(y+yy)) == air) { p.Level.BlockChange(x, z, (ushort)(y + yy), green); }
+                }
+                int ix = 0, iz = 0;
+                switch (MathUtils.Random.Next(1, 3)) {
+                    case 1: ix = -1; break;
+                    case 2: 
+                    default: iz = -1; break;
+                }
+                for (yy = height; yy <= MathUtils.Random.Next(height + 2, height + 5); yy++) {
+                    if (gothrough || p.Level.GetBlock(x + ix, z + iz, y + yy) == air) {  p.Level.BlockChange((ushort)(x + ix), (ushort)(z + iz), (ushort)(y + yy), green); }
+                }
+                for (yy = height; yy <= MathUtils.Random.Next(height + 2, height + 5); yy++) {
+                    if (gothrough || p.Level.GetBlock(x + ix, z + iz, y + yy) == air) { p.Level.BlockChange((ushort)(x - ix), (ushort)(z - iz), (ushort)(y + yy), green); }
                 }
             }
             #endregion

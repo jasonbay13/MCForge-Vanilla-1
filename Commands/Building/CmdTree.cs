@@ -17,6 +17,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.Utils;
 using MCForge.Groups;
+using MCForge.Utils.Settings;
 using MCForge.World;
 using MCForge.API.Events;
 
@@ -49,8 +50,8 @@ namespace MCForge.Commands
                         break;
                     case "cactus":
                     case "cacti":
-                        p.SendMessage("Not implemented!"); return;
-                        //break;
+                        p.ExtraData.ChangeOrCreate("TreeType", TreeType.Cactus);
+                        break;
                     case "notch":
                         p.ExtraData.ChangeOrCreate("TreeType", TreeType.Notch);
                         break;
@@ -71,8 +72,8 @@ namespace MCForge.Commands
         }
         public void BlockChange(Player p, BlockChangeEventArgs args) {
             p.OnPlayerBlockChange.Normal -= BlockChange;
+            WorldComponent.GenerateTree(p, args.X, args.Z, args.Y, (TreeType)p.ExtraData["TreeType"], ServerSettings.GetSettingBoolean("TreesGoThrough"));
             args.Cancel();
-            WorldComponent.GenerateTree(p, args.X, args.Z, args.Y, (TreeType)p.ExtraData["TreeType"], false);
             p.ExtraData.Remove("TreeType");
         }
         public void Help(Player p)

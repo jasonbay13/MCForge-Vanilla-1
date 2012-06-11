@@ -142,8 +142,10 @@ namespace MCForge.Gui
             // 
             // coloredReader1
             // 
+            this.coloredReader1.BackColor = System.Drawing.Color.White;
             this.coloredReader1.Location = new System.Drawing.Point(12, 28);
             this.coloredReader1.Name = "coloredReader1";
+            this.coloredReader1.ReadOnly = true;
             this.coloredReader1.Size = new System.Drawing.Size(576, 383);
             this.coloredReader1.TabIndex = 8;
             this.coloredReader1.Text = "";

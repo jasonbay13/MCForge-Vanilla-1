@@ -235,7 +235,7 @@ namespace MCForge.Entity {
                 Load();
 
                 foreach (string w in ServerSettings.GetSetting("welcomemessage").Split(new string[] { "<br>" }, StringSplitOptions.RemoveEmptyEntries))
-                    SendMessage(ConvertVariables(this, w));
+                    SendMessage(w);
 
             }
             catch (Exception e) {
@@ -992,26 +992,13 @@ namespace MCForge.Entity {
                 }
             });
         }
-
-        static string ConvertVariables(Player p, string text) {
-            if (text.Contains("$name")) {
-                if (ServerSettings.GetSettingBoolean("$Before$Name")) { text = text.Replace("$name", "$" + p.Username); }
-                else { text = text.Replace("$name", p.Username); }
-            }
-            if (text.Contains("$money")) { text = text.Replace("$money", p.money.ToString()); }
-            if (text.Contains("$" + Server.Moneys)) { text = text.Replace("$" + Server.Moneys, p.money.ToString()); }
-            if (text.Contains("$rank")) { text = text.Replace("$rank", p.Group.Name); }
-            if (text.Contains("$ip")) { text = text.Replace("$ip", p.Ip); }
-            if (text.Contains("$server")) { text = text.Replace("$server", ServerSettings.GetSetting("ServerName")); }
-            return text;
-        }
         /// <summary>
         /// Send a message to everyone, on every world
         /// </summary>
         /// <param name="text">The message to send.</param>
         public static void UniversalChat(string text) {
             Server.ForeachPlayer(p => {
-                p.SendMessage(ConvertVariables(p, text));
+                p.SendMessage(text);
             });
 
         }
@@ -1022,7 +1009,7 @@ namespace MCForge.Entity {
         public static void UniversalChatOps(string message) {
             Server.ForeachPlayer(p => {
                 if (p.Group.Permission >= ServerSettings.GetSettingInt("OpChatPermission")) {
-                    p.SendMessage(ConvertVariables(p, message));
+                    p.SendMessage(message);
                 }
             });
         }
@@ -1033,7 +1020,7 @@ namespace MCForge.Entity {
         public static void UniversalChatAdmins(string message) {
             Server.ForeachPlayer(p => {
                 if (p.Group.Permission >= ServerSettings.GetSettingInt("AdminChatPermission")) {
-                    p.SendMessage(ConvertVariables(p, message));
+                    p.SendMessage(message);
                 }
             });
         }
@@ -1045,7 +1032,7 @@ namespace MCForge.Entity {
         public static void RankChat(Player from, string message) {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p.Group.Permission == from.Group.Permission) {
-                    p.SendMessage(ConvertVariables(p, message));
+                    p.SendMessage(message);
                 }
             });
         }
@@ -1056,7 +1043,7 @@ namespace MCForge.Entity {
         /// <param name="message">The message to be sent</param>
         public static void LevelChat(Player from, string message) {
             Server.ForeachPlayer(delegate(Player p) {
-                if (p.Level == from.Level) { p.SendMessage(ConvertVariables(p, message)); }
+                if (p.Level == from.Level) { p.SendMessage(message); }
             });
         }
         private void CloseConnection() {

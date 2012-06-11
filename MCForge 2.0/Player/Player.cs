@@ -328,8 +328,17 @@ namespace MCForge.Entity {
         /// </summary>
         /// <param name="message">The message to send</param>
 		public override void SendMessage(string message)
-		{
-			SendMessage(id, message);
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder(message);
+            sb.Replace("$name", ServerSettings.GetSettingBoolean("$Before$Name") ? "$" + Username : Username);
+            sb.Replace("$color", Color);
+            sb.Replace("$rcolor", Group.Color);
+            sb.Replace("$server", ServerSettings.GetSetting("ServerName"));
+            sb.Replace("$money", money.ToString());
+            sb.Replace("$" + Server.Moneys, money.ToString());
+            sb.Replace("$rank", Group.Name);
+            sb.Replace("$ip", Ip);
+			SendMessage(id, sb.ToString());
 		}
         
         #region Database Saving/Loading
