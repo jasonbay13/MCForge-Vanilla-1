@@ -34,7 +34,6 @@ namespace MCForge.Gui {
 
         private MCForgeGuiManager pluginManager;
         private LogoForm splashScreen;
-        private readonly object ObjectLocker = new object();
 
         public MainForm() {
 
@@ -142,9 +141,8 @@ namespace MCForge.Gui {
                 return;
             }
 
-            lock (ObjectLocker) {
                 lstPlayers.Items.Add(sender.Username);
-            }
+            
         }
 
         void OnDisconnect(Player sender, ConnectionEventArgs args) {
@@ -153,14 +151,12 @@ namespace MCForge.Gui {
                 return;
             }
 
-            lock (ObjectLocker) {
                 lstPlayers.Items.Remove(sender.Username);
-            }
+            
         }
 
         void OnLog(object sender, LogEventArgs args) {
 
-            lock (ObjectLocker) {
                 if (splashScreen != null && !splashScreen.IsDisposed) {
                     splashScreen.Log(args.Message);
                     return;
@@ -175,11 +171,10 @@ namespace MCForge.Gui {
                     txtLog.AppendLog(args.Message + Environment.NewLine, args.TextColor, Color.White);
 
                 txtLog.ScrollToEnd();
-            }
+            
         }
 
         void OnErrorLog(object sender, LogEventArgs args) {
-            lock (ObjectLocker) {
                 if (splashScreen != null && !splashScreen.IsDisposed) {
                     switch (Popups.PopupError.Create(args.Message)) {
                         case DialogResult.Ignore:
@@ -195,7 +190,7 @@ namespace MCForge.Gui {
 
                 txtLog.AppendLog(args.Message + Environment.NewLine, Color.Red, Color.White);
 
-            }
+            
         }
 
         void OnCompletedStartUp() {
