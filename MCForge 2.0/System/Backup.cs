@@ -5,7 +5,7 @@ using System.Text;
 using MCForge.Utils;
 using MCForge.World;
 using System.IO;
-using System.Timers;
+using System.Threading;
 using MCForge.Utils.Settings;
 
 namespace MCForge.Core {
@@ -19,6 +19,7 @@ namespace MCForge.Core {
         private static Timer _timer;
 
         public static void BackupAll() {
+            Logger.Log("Backed up at " + DateTime.Now.ToString("T"));
             CheckDirs();
 
             BackupLevels();
@@ -68,10 +69,7 @@ namespace MCForge.Core {
             if (!ServerSettings.GetSettingBoolean("BackupFiles"))
                 return;
 
-            _timer = new Timer(ServerSettings.GetSettingInt("BackupInterval") * 1000);
-            _timer.Elapsed += (obj, e) => {
-                BackupAll();
-            };
+            _timer = new Timer((e) => {BackupAll(); }, null, 0, ServerSettings.GetSettingInt("BackupInterval") * 1000);
         }
         static Backup() {
             _lastTime = DateTime.Now;

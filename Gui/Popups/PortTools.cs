@@ -15,14 +15,20 @@ using System.Net.Sockets;
 namespace MCForge.Gui.Popups {
     public partial class PortTools : Form {
 
-        private BackgroundWorker mWorker;
+        private BackgroundWorker mWorkerChecker;
+        private BackgroundWorker mWorkerForwarder;
 
         public PortTools() {
             InitializeComponent();
-            mWorker = new BackgroundWorker();
-            mWorker.WorkerSupportsCancellation = true;
-            mWorker.DoWork += new DoWorkEventHandler(mWorker_DoWork);
-            mWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(mWorker_RunWorkerCompleted);
+            mWorkerChecker = new BackgroundWorker();
+            mWorkerChecker.WorkerSupportsCancellation = true;
+            mWorkerChecker.DoWork += new DoWorkEventHandler(mWorker_DoWork);
+            mWorkerChecker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(mWorker_RunWorkerCompleted);
+
+            mWorkerForwarder = new BackgroundWorker();
+            mWorkerForwarder.WorkerSupportsCancellation = true;
+            mWorkerForwarder.DoWork += new DoWorkEventHandler(mWorkerForwarder_DoWork);
+            mWorkerForwarder.RunWorkerCompleted += new RunWorkerCompletedEventHandler(mWorkerForwarder_RunWorkerCompleted);
         }
 
         private void linkManually_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
@@ -48,7 +54,7 @@ namespace MCForge.Gui.Popups {
             btnCheck.Enabled = false;
             txtPort.Enabled = false;
             lblStatus.Text = "Checking...";
-            mWorker.RunWorkerAsync(port);
+            mWorkerChecker.RunWorkerAsync(port);
         }
 
         void mWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
@@ -103,7 +109,8 @@ namespace MCForge.Gui.Popups {
         }
 
         private void PortChecker_FormClosing(object sender, FormClosingEventArgs e) {
-            mWorker.CancelAsync();
+            mWorkerChecker.CancelAsync();
+            mWorkerForwarder.CancelAsync();
         }
 
         private void linkHelpForward_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
@@ -121,24 +128,10 @@ namespace MCForge.Gui.Popups {
             catch {
                 txtPortForward.Text = "25565";
             }
-
-            try {
-                if (!UPnP.Discover()) {
-                    lblForward.Text = "Your router does not support UPnP, you must manually forward the port";
-                    lblForward.ForeColor = Color.Red;
-                }
-                else {
-
-                    UPnP.ForwardPort(port, ProtocolType.Tcp, "MCForgeServer");
-                    lblForward.Text = "Port forwarded automatically using UPnP";
-                    lblForward.ForeColor = Color.Green;
-
-                }
-            }
-            catch {
-                lblForward.Text = "Something Weird just happened, try again.";
-                lblForward.ForeColor = Color.Black;
-            }
+            btnDelete.Enabled = false;
+            btnForward.Enabled = false;
+            txtPortForward.Enabled = false;
+            mWorkerForwarder.RunWorkerAsync(new object[] { port, true });
         }
 
         private void btnDelete_Click(object sender, EventArgs e) {
@@ -153,22 +146,68 @@ namespace MCForge.Gui.Popups {
                 txtPortForward.Text = "25565";
             }
 
+            btnDelete.Enabled = false;
+            btnForward.Enabled = false;
+            txtPortForward.Enabled = false;
+            mWorkerForwarder.RunWorkerAsync(new object[] { port, false });
+
+        }
+
+        void mWorkerForwarder_DoWork(object sender, DoWorkEventArgs e) {
+            int port = (int)((object[])e.Argument)[0];
+            bool adding = (bool)((object[])e.Argument)[1];
             try {
                 if (!UPnP.Discover()) {
-                    lblForward.Text = "Your router does not support UPnP";
-                    lblForward.ForeColor = Color.Red;
+                    e.Result = 0;
+                    return;
                 }
                 else {
 
-                    UPnP.DeleteForwardingRule(port, ProtocolType.Tcp);
-                    lblForward.Text = "Port Deleted";
-                    lblForward.ForeColor = Color.Green;
+                    if (adding) {
+                        UPnP.ForwardPort(port, ProtocolType.Tcp, "MCForgeServer");
+                        e.Result = 1;
+                    }
+                    else {
+                        UPnP.DeleteForwardingRule(port, ProtocolType.Tcp);
+                        e.Result = 3;
+                    }
+                    return;
 
                 }
             }
             catch {
-                lblForward.Text = "Was that port forwarded?.";
-                lblForward.ForeColor = Color.Black;
+                e.Result = 2;
+                return;
+            }
+        }
+
+        void mWorkerForwarder_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
+            if (e.Cancelled)
+                return;
+
+            btnDelete.Enabled = true;
+            btnForward.Enabled = true;
+            txtPortForward.Enabled = true;
+
+            int result = (int)e.Result;
+
+            switch (result) {
+                case 0:
+                    lblForward.Text = "Your router does not support UPnP";
+                    lblForward.ForeColor = Color.Red;
+                    return;
+                case 1:
+                    lblForward.Text = "Port forwarded automatically using UPnP";
+                    lblForward.ForeColor = Color.Green;
+                    return;
+                case 2:
+                    lblForward.Text = "Something Weird just happened, try again.";
+                    lblForward.ForeColor = Color.Black;
+                    return;
+                case 3:
+                    lblForward.Text = "Deleted Port Forward Rule.";
+                    lblForward.ForeColor = Color.Green;
+                    return;
             }
         }
     }

@@ -132,10 +132,12 @@ namespace MCForge.Utils {
                 FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + CurrentLogFile, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS:" + Environment.OSVersion + ", ARCH:" + (Environment.Is64BitOperatingSystem ? "x64" :  "x86") + ", CULTURE: " + CultureInfo.CurrentCulture +  Environment.NewLine);
             }
 
-            using (var writer = new StreamWriter(FileUtils.LogsPath + CurrentLogFile, true)) {
-                writer.WriteLine(log);
-                writer.Close();
+            try {
+                using (var writer = new StreamWriter(FileUtils.LogsPath + CurrentLogFile, true)) {
+                    writer.WriteLine(log);
+                }
             }
+            catch { }
             count--;
         }
 
