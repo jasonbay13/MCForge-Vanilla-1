@@ -37,6 +37,7 @@ namespace MCForge.World {
              new Yellow(),
              new GreenYellow(),
              new Green(),
+             new SpringGreen(),
              new Cyan(),
              new Blue(),
              new BlueViolet(),
@@ -377,9 +378,6 @@ namespace MCForge.World {
             /// Unknown Block
             /// </summary>
             public const byte UNKNOWN = 255;
-            /// <summary>
-
         }
-
     }
 }
