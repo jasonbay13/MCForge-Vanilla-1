@@ -13,21 +13,14 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using MCForge.Utils;
 using System.Threading;
-using MCForge.Core;
-using MCForge.Interface;
-using MCForge.Entity;
+using System.Windows.Forms;
 using MCForge.API.Events;
+using MCForge.Core;
+using MCForge.Entity;
 using MCForge.Gui.API;
-using MCForge.World;
+using MCForge.Utils;
 
 namespace MCForge.Gui {
     internal partial class MainForm : Form {
@@ -78,31 +71,40 @@ namespace MCForge.Gui {
 
         #region Gui Handles
 
-        void Chat(object sender, KeyEventArgs e) {
+        public void Chat(object sender, KeyEventArgs e) {
+            
             if (e.KeyCode == Keys.Enter) {
                 if (String.IsNullOrWhiteSpace(txtChat.Text)) {
                     Logger.Log("Please specify a valid message!", Color.Red, Color.White, LogType.Warning);
-                    return;
+                    txtChat.ForeColor = Color.Gray;
+                    txtChat.Text = "Enter a message or a command";
                 }
-
+                if (txtChat.Text == "Enter a message or a command" && txtChat.ForeColor == Color.Gray) { return; }
                 if (cmbChatType.Text == "OpChat") {
                     Player.UniversalChatOps("&a<&fTo Ops&a> %a[%fConsole%a]:%f " + txtChat.Text);
-                    Logger.Log("<OpChat> <Console> " + txtChat.Text);
-                    txtChat.Clear();
+                    Logger.Log("<OpChat> &5[&1Console&5]: &1" + txtChat.Text);
+                    txtChat.ForeColor = Color.Gray;
+                    txtChat.Text = "Enter a message or a command";
                     return;
                 }
 
                 if (cmbChatType.Text == "AdminChat") {
                     Player.UniversalChatAdmins("&a<&fTo Admins&a> %a[%fConsole%a]:%f " + txtChat.Text);
-                    Logger.Log("<AdminChat> <Console> " + txtChat.Text);
-                    txtChat.Clear();
+                    Logger.Log("<AdminChat> &5[&1Console&5]: &1" + txtChat.Text);
+                    txtChat.ForeColor = Color.Gray;
+                    txtChat.Text = "Enter a message or a command";
                     return;
                 }
 
                 Player.UniversalChat("&a[&fConsole&a]:&f " + txtChat.Text);
                 Logger.Log("&5[&1Console&5]: &1" + txtChat.Text);
-                txtChat.Clear(); return;
+                txtChat.ForeColor = Color.Gray;
+                txtChat.Text = "Enter a message or a command";
+                return;
             }
+            if (e.KeyCode == Keys.Down) { cmbChatType.SelectedIndex = cmbChatType.SelectedIndex + 1 == cmbChatType.Items.Count ? 0 : cmbChatType.SelectedIndex + 1; }
+            if (e.KeyCode == Keys.Up) { cmbChatType.SelectedIndex = cmbChatType.SelectedIndex == 0 ? cmbChatType.Items.Count - 1 : cmbChatType.SelectedIndex - 1; }
+            if (txtChat.Text == "Enter a message or a command" && txtChat.ForeColor == Color.Gray) { txtChat.Clear(); txtChat.ForeColor = Color.Black; }
 
         }
 
@@ -144,7 +146,11 @@ namespace MCForge.Gui {
         private void itmProperties_Click(object sender, System.EventArgs e) {
             //TODO Open Settings
         }
-
+        private void Focus(object sender, System.EventArgs e) {
+            txtChat.Focus();
+            txtChat.Select(txtChat.Text.Length, 0);
+            //textBox1.Select(textBox1.Text.Length, 0);
+        }
         private void itmKickAll_Click(object sender, System.EventArgs e) {
             foreach (var p in Server.Players)
                 p.Kick("Kicked by the console");
@@ -197,7 +203,6 @@ namespace MCForge.Gui {
 #endif
 
         }
-
         void OnDisconnect(Player sender, ConnectionEventArgs args) {
 
 #if !DEBUG
@@ -219,7 +224,6 @@ namespace MCForge.Gui {
 #endif
 
         }
-
         void OnLog(object sender, LogEventArgs args) {
 #if !DEBUG
             try {
@@ -247,7 +251,6 @@ namespace MCForge.Gui {
 #endif
 
         }
-
         void OnErrorLog(object sender, LogEventArgs args) {
 #if !DEBUG
             try {
@@ -275,7 +278,6 @@ namespace MCForge.Gui {
 #endif
 
         }
-
         void OnCompletedStartUp() {
 #if !DEBUG
             try {

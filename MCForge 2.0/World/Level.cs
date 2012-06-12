@@ -286,7 +286,7 @@ namespace MCForge.World {
         /// Loads all levels.
         /// </summary>
         public static void LoadAllLevels() {
-
+            FileUtils.CreateDirIfNotExist("levels");
             string[] files = Directory.GetFiles("levels\\", "*.lvl");
             foreach (string file in files) {
                 //Don't judge >.>

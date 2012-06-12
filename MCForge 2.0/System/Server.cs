@@ -306,6 +306,7 @@ namespace MCForge.Core {
             //Directories first
             FileUtils.CreateDirIfNotExist("bans");
             FileUtils.CreateDirIfNotExist("text");
+            FileUtils.CreateDirIfNotExist("levels");
 
             FileUtils.CreateFileIfNotExist("text/badwords.txt");
             FileUtils.CreateFileIfNotExist("text/replacementwords.txt");
