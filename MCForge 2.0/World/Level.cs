@@ -289,8 +289,12 @@ namespace MCForge.World {
             FileUtils.CreateDirIfNotExist("levels");
             string[] files = Directory.GetFiles("levels\\", "*.lvl");
             foreach (string file in files) {
+                Level lvl = LoadLevel(file.Substring(7, file.Length - 11));
+
+                if (lvl == null)
+                    continue;
                 //Don't judge >.>
-                Levels.Add(LoadLevel(file.Substring(7, file.Length - 11)));
+                Levels.Add(lvl);
             }
             
         }

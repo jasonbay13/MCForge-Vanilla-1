@@ -21,12 +21,14 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Gui.API;
 using MCForge.Utils;
+using MCForge.Gui.Popups;
 
 namespace MCForge.Gui {
     internal partial class MainForm : Form {
 
         private MCForgeGuiManager pluginManager;
         private LogoForm splashScreen;
+        private bool Restarting;
 
         public MainForm() {
 
@@ -72,7 +74,7 @@ namespace MCForge.Gui {
         #region Gui Handles
 
         public void Chat(object sender, KeyEventArgs e) {
-            
+
             if (e.KeyCode == Keys.Enter) {
                 if (String.IsNullOrWhiteSpace(txtChat.Text)) {
                     Logger.Log("Please specify a valid message!", Color.Red, Color.White, LogType.Warning);
@@ -109,22 +111,23 @@ namespace MCForge.Gui {
         }
 
         void frmMain_FormClosing(object sender, FormClosingEventArgs e) {
-            switch (MessageBox.Show("Would you like to save all?", "Save?", MessageBoxButtons.YesNoCancel)) {
-                case DialogResult.Yes:
-                    Server.SaveAll();
-                    Server.Stop();
-                    System.Diagnostics.Process pr = System.Diagnostics.Process.GetCurrentProcess();
-                    pr.Kill();
-                    break;
-                case DialogResult.No:
-                    Server.Stop();
-                    System.Diagnostics.Process pro = System.Diagnostics.Process.GetCurrentProcess();
-                    pro.Kill();
-                    break;
-                case DialogResult.Cancel:
-                    e.Cancel = true;
-                    return;
-            }
+            if (!Restarting)
+                switch (MessageBox.Show("Would you like to save all?", "Save?", MessageBoxButtons.YesNoCancel)) {
+                    case DialogResult.Yes:
+                        Server.SaveAll();
+                        Server.Stop();
+                        System.Diagnostics.Process pr = System.Diagnostics.Process.GetCurrentProcess();
+                        pr.Kill();
+                        break;
+                    case DialogResult.No:
+                        Server.Stop();
+                        System.Diagnostics.Process pro = System.Diagnostics.Process.GetCurrentProcess();
+                        pro.Kill();
+                        break;
+                    case DialogResult.Cancel:
+                        e.Cancel = true;
+                        return;
+                }
         }
 
         private void txtChat_Enter(object sender, System.EventArgs e) {
@@ -139,6 +142,7 @@ namespace MCForge.Gui {
         }
 
         private void itmRestart_Click(object sender, System.EventArgs e) {
+            Restarting = true;
             Close();
             Server.Restart();
         }
@@ -156,7 +160,7 @@ namespace MCForge.Gui {
                 p.Kick("Kicked by the console");
         }
 
-        private  void itmStopPhysics_Click(object sender, System.EventArgs e) {
+        private void itmStopPhysics_Click(object sender, System.EventArgs e) {
             //TODO:
         }
 
@@ -167,6 +171,10 @@ namespace MCForge.Gui {
         private void itmSaveAll_Click(object sender, System.EventArgs e) {
             Server.SaveAll();
             Backup.BackupAll();
+        }
+
+        private void portMenuItem_Click(object sender, System.EventArgs e) {
+            new PortTools().ShowDialog();
         }
 
         #endregion
@@ -307,13 +315,15 @@ namespace MCForge.Gui {
 
         #endregion
 
-        
 
-        
 
-        
 
-        
+
+
+
+
+
+
 
 
 

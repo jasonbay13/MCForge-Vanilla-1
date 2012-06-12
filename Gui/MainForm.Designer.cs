@@ -60,6 +60,7 @@ namespace MCForge.Gui {
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.cmbChatType = new System.Windows.Forms.ComboBox();
             this.txtChat = new System.Windows.Forms.TextBox();
+            this.txtLog = new MCForge.Gui.Components.ColoredLogReader(this.components);
             this.mPlayerGroupBox = new System.Windows.Forms.GroupBox();
             this.lstPlayers = new System.Windows.Forms.ListBox();
             this.ctxPlayer = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -83,7 +84,8 @@ namespace MCForge.Gui {
             this.itmStopPhysics = new System.Windows.Forms.MenuItem();
             this.itmUnload = new System.Windows.Forms.MenuItem();
             this.itmSaveAll = new System.Windows.Forms.MenuItem();
-            this.txtLog = new MCForge.Gui.Components.ColoredLogReader(this.components);
+            this.menuItem3 = new System.Windows.Forms.MenuItem();
+            this.portMenuItem = new System.Windows.Forms.MenuItem();
             this.nfMain = new MCForge.Gui.Components.NewsFeeder(this.components);
             this.tbPlayers.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -178,9 +180,9 @@ namespace MCForge.Gui {
             // 
             // grpInfo
             // 
-            this.grpInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.grpInfo.Location = new System.Drawing.Point(359, 0);
             this.grpInfo.Name = "grpInfo";
             this.grpInfo.Size = new System.Drawing.Size(480, 442);
@@ -190,8 +192,8 @@ namespace MCForge.Gui {
             // 
             // groupBox3
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox3.Controls.Add(this.lstPlayersBig);
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.Location = new System.Drawing.Point(9, 3);
@@ -252,9 +254,9 @@ namespace MCForge.Gui {
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.cmbChatType);
             this.groupBox2.Controls.Add(this.txtChat);
             this.groupBox2.Controls.Add(this.txtLog);
@@ -288,8 +290,8 @@ namespace MCForge.Gui {
             // 
             // txtChat
             // 
-            this.txtChat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtChat.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.txtChat.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtChat.ForeColor = System.Drawing.Color.Gray;
             this.txtChat.Location = new System.Drawing.Point(3, 401);
@@ -301,10 +303,25 @@ namespace MCForge.Gui {
             this.txtChat.Click += new System.EventHandler(this.txtChat_Enter);
             this.txtChat.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Chat);
             // 
+            // txtLog
+            // 
+            this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLog.BackColor = System.Drawing.Color.White;
+            this.txtLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLog.Location = new System.Drawing.Point(3, 17);
+            this.txtLog.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ReadOnly = true;
+            this.txtLog.Size = new System.Drawing.Size(562, 376);
+            this.txtLog.TabIndex = 12;
+            this.txtLog.Text = "";
+            // 
             // mPlayerGroupBox
             // 
-            this.mPlayerGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.mPlayerGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.mPlayerGroupBox.Controls.Add(this.lstPlayers);
             this.mPlayerGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mPlayerGroupBox.Location = new System.Drawing.Point(577, 4);
@@ -398,9 +415,9 @@ namespace MCForge.Gui {
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tbMain);
             this.tabControl1.Controls.Add(this.tbPlayers);
             this.tabControl1.Controls.Add(this.tbLevels);
@@ -415,7 +432,8 @@ namespace MCForge.Gui {
             // 
             this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem1,
-            this.menuItem2});
+            this.menuItem2,
+            this.menuItem3});
             // 
             // menuItem1
             // 
@@ -485,25 +503,23 @@ namespace MCForge.Gui {
             this.itmSaveAll.Text = "Save All";
             this.itmSaveAll.Click += new System.EventHandler(this.itmSaveAll_Click);
             // 
-            // txtLog
+            // menuItem3
             // 
-            this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLog.BackColor = System.Drawing.Color.White;
-            this.txtLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLog.Location = new System.Drawing.Point(3, 17);
-            this.txtLog.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.txtLog.Name = "txtLog";
-            this.txtLog.ReadOnly = true;
-            this.txtLog.Size = new System.Drawing.Size(562, 376);
-            this.txtLog.TabIndex = 12;
-            this.txtLog.Text = "";
+            this.menuItem3.Index = 2;
+            this.menuItem3.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.portMenuItem});
+            this.menuItem3.Text = "Tools";
+            // 
+            // portMenuItem
+            // 
+            this.portMenuItem.Index = 0;
+            this.portMenuItem.Text = "Port Tools";
+            this.portMenuItem.Click += new System.EventHandler(this.portMenuItem_Click);
             // 
             // nfMain
             // 
-            this.nfMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.nfMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.nfMain.BackColor = System.Drawing.Color.White;
             this.nfMain.Items.Add("1234");
             this.nfMain.Items.Add("1234");
@@ -602,5 +618,7 @@ namespace MCForge.Gui {
         private System.Windows.Forms.ToolStripMenuItem demoteMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setrankMenuItem;
         private System.Windows.Forms.ToolStripComboBox setRankComboBoxItem;
+        private System.Windows.Forms.MenuItem menuItem3;
+        private System.Windows.Forms.MenuItem portMenuItem;
     }
 }
