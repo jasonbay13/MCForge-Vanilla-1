@@ -27,6 +27,7 @@ using MCForge.SQL;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
+using MCForge.World.Blocks;
 
 namespace MCForge.Entity {
     /// <summary>
@@ -229,6 +230,7 @@ namespace MCForge.Entity {
 
         private Random playerRandom;
 
+        public List<BlockChange> BlockChanges;
 
         #endregion
 
@@ -248,6 +250,7 @@ namespace MCForge.Entity {
                 Socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
 
                 playerRandom = new Random();
+                BlockChanges = new List<BlockChange>();
 
             }
             catch (Exception e) {
@@ -537,32 +540,9 @@ namespace MCForge.Entity {
             Logger.Log("Too many players O_O");
             return 254;
         }
+     
         private void UpgradeConnectionToPlayer() {
             Server.UpgradeConnectionToPlayer(this);
-
-            //TODO Update form list
-        }
-
-        /// <summary>
-        /// Rainbows some text
-        /// </summary>
-        /// <param name="strin">The string input</param>
-        /// <returns>Outputs some colorful RAIIIIIINBBBBBBOWWWWWWW text</returns>
-        public static string Rainbow(string strin)
-        {
-            string rainbowString = "4c6eb3912ad5";
-            string rainbow = "";
-            int loop = 0;
-
-            for (int i = 0; i < strin.Length; i++)
-            {
-                rainbow = rainbow + "&" + rainbowString[loop].ToString() + strin[i].ToString();
-                if (loop == rainbowString.Length - 1)
-                    loop = 0;
-                else
-                    loop++;
-            }
-            return rainbow;
         }
 
         #region Verification Stuffs

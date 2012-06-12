@@ -45,6 +45,8 @@ namespace MCForge.Entity {
                         UniversalChat(p.Color + p.Username + Server.DefaultColor + " has disconnected.");
                         p.GlobalDie();
                     }
+
+                    // http://i3.kym-cdn.com/entries/icons/original/000/007/423/untitle.JPG
                     if (Server.reviewlist.Contains(p)) {
                         Server.reviewlist.Remove(p);
                         foreach (Player pl in Server.reviewlist.ToArray()) {
@@ -295,6 +297,8 @@ namespace MCForge.Entity {
             }
             //Record to database
             Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Block, Date) VALUES (" + UID + ", " + x + ", " + y + ", " + z + ", '" + Level.Name.MySqlEscape() + "', '" + (action == 0 ? "true" : "false") + "', '" + newType.ToString() + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "')");
+            byte blockFrom = Level.GetBlock(x, z, y);
+
             if (action == 0) //Deleting
             {
                 Level.BlockChange(x, z, y, 0, (fake) ? null : this);
@@ -303,6 +307,8 @@ namespace MCForge.Entity {
             {
                 Level.BlockChange(x, z, y, newType, (fake) ? null : this);
             }
+            
+            BlockChanges.Add(new World.Blocks.BlockChange(new Vector3S(x, z, y), blockFrom, newType, action == 0));
         }
         private void HandleIncomingPos(byte[] message) {
             if (!IsLoggedIn)

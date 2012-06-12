@@ -36,7 +36,7 @@ namespace MCForge.Commands.Moderation {
 
         public void Use(Player p, string[] args) {
 
-            int _time = 0;
+            int _time = 30;
             Player who = null;
 
             if (args.Length < 1) {
@@ -53,13 +53,38 @@ namespace MCForge.Commands.Moderation {
                     p.SendMessage("That not a number silly head");
                     return;
                 }
-            }
 
-            
+            }
 
 
             if (p.Group.Permission < (byte)PermissionLevel.Operator) {
-                
+                if (who != p) {
+                    p.SendMessage("You cannot undo other peoples stuff");
+                    return;
+                }
+            }
+
+
+        }
+
+        void Undo(Player p, int time = 30) {
+            if (p == null || p.BlockChanges.Count < 0)
+                return;
+
+            int timeToLook = p.BlockChanges[p.BlockChanges.Count - 1].Time.Second - time;
+
+            if (timeToLook < 0)
+                timeToLook = p.BlockChanges[0].Time.Second;
+
+            for (int i = 0; i < p.BlockChanges.Count ; i++) {
+                var bChange = p.BlockChanges[i];
+
+                if (bChange.Time.Second >= timeToLook) {
+                    for (int j = p.BlockChanges.Count; j > i; j--) {
+                        p.Level.BlockChange(bChange.Position, bChange.BlockFrom);
+                    }
+                    //return;
+                }
             }
         }
 

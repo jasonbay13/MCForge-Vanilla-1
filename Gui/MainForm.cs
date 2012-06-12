@@ -150,7 +150,7 @@ namespace MCForge.Gui {
                 p.Kick("Kicked by the console");
         }
 
-        private void itmStopPhysics_Click(object sender, System.EventArgs e) {
+        private  void itmStopPhysics_Click(object sender, System.EventArgs e) {
             //TODO:
         }
 

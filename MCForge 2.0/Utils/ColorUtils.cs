@@ -94,5 +94,27 @@ namespace MCForge.Utils {
                     return true;
             return false;
         }
+
+                /// <summary>
+        /// Rainbows some text
+        /// </summary>
+        /// <param name="strin">The string input</param>
+        /// <returns>Outputs some colorful RAIIIIIINBBBBBBOWWWWWWW text</returns>
+        public static string Rainbow(string strin)
+        {
+            string rainbowString = "4c6eb3912ad5";
+            string rainbow = "";
+            int loop = 0;
+
+            for (int i = 0; i < strin.Length; i++)
+            {
+                rainbow = rainbow + "&" + rainbowString[loop].ToString() + strin[i].ToString();
+                if (loop == rainbowString.Length - 1)
+                    loop = 0;
+                else
+                    loop++;
+            }
+            return rainbow;
+        }
     }
 }

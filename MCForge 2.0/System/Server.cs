@@ -100,8 +100,9 @@ namespace MCForge.Core {
         /// <summary>
         /// Get the current list of online players, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
         /// </summary>
-        public static List<Player> Players = new List<Player>();
+        public readonly static List<Player> Players = new List<Player>();
         public static int PlayerCount { get { return Players.Count; } }
+
         /// <summary>
         /// Get the current list of bots, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
         /// </summary>
@@ -253,6 +254,7 @@ namespace MCForge.Core {
                 ServerSettings.SetSetting("Main-Level", null, "main");
             }
             Level.Levels.Add(Mainlevel);
+            Level.LoadAllLevels();
 
             Logger.Log("Loading Bans", LogType.Debug);
             Logger.Log("IPBANS", LogType.Debug);

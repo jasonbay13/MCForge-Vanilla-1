@@ -160,6 +160,7 @@
     <Compile Include="Utils\Vector3D.cs" />
     <Compile Include="Utils\Vector3S.cs" />
     <Compile Include="Player\WOM.cs" />
+    <Compile Include="World\Blocks\BlockChange.cs" />
     <Compile Include="World\Blocks\Custom\Griefer_stone.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\ActiveLava.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\ActiveWater.cs" />
@@ -239,6 +240,8 @@
     <Compile Include="System\Server.cs" />
     <Compile Include="World\Blocks\Physics\PhysicsBlock.cs" />
     <Compile Include="System\Settings\ServerSettings.cs" />
+    <Compile Include="World\Loading and Saving\IMap.cs" />
+    <Compile Include="World\Loading and Saving\MCForgeOldMap.cs" />
     <Compile Include="World\WorldComponents.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
