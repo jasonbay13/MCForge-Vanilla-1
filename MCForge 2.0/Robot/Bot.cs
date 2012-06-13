@@ -24,7 +24,6 @@ using MCForge.World;
 using System.Collections;
 using AStar;
 
-//This namespace should get it's own directory
 namespace MCForge.Robot
 {
     public sealed partial class Bot

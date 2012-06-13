@@ -9,14 +9,17 @@ using MCForge.Utils.Settings;
 
 namespace MCForge.Gui {
     class Program {
+
+
         static void Main(string[] args) {
             ServerSettings.Init();
 
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new LogoForm());
-            Application.Run(new MainForm());
+
+            MainForm mForm = new MainForm();
+            Application.Run();
         }
     }
 }

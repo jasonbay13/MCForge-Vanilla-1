@@ -187,11 +187,11 @@ namespace MCForge.Core {
 
         }
 
-        public byte[] GetMessage() {
+        /*public byte[] GetMessage() { //Useless? Just disables packet editing pretty much by removing the first byte :|
             byte[] ret = new byte[bytes.Length - 1];
             Array.Copy(bytes, 1, ret, 0, ret.Length);
             return ret;
-        }
+        }*/
 
 		#region == Host <> Network ==
 		public static byte[] HTNO(ushort x)

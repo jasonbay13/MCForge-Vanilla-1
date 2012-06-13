@@ -56,11 +56,11 @@
   <ItemGroup>
     <Compile Include="API\MCForgeGui.cs" />
     <Compile Include="API\MCForgeGuiManager.cs" />
-    <Compile Include="Components\ColoredReader.cs">
+    <Compile Include="Components\ColoredLogReader.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Components\ColoredReader.Designer.cs">
-      <DependentUpon>ColoredReader.cs</DependentUpon>
+    <Compile Include="Components\ColoredLogReader.Designer.cs">
+      <DependentUpon>ColoredLogReader.cs</DependentUpon>
     </Compile>
     <Compile Include="Components\NativeMethods.cs" />
     <Compile Include="Components\NewsFeeder.cs">
@@ -87,6 +87,18 @@
     <Compile Include="MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Popups\PopupError.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popups\PopupError.Designer.cs">
+      <DependentUpon>PopupError.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popups\PortTools.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Popups\PortTools.Designer.cs">
+      <DependentUpon>PortTools.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -97,7 +109,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <EmbeddedResource Include="Resources\Ubuntu.ttf" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCForge 2.0\MCForge.csproj">
@@ -106,6 +117,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="License.txt" />
     <Content Include="Resources\mcforge_spinner.png" />
     <None Include="Resources\mcforge_logo.png" />
     <EmbeddedResource Include="LogoForm.resx">
@@ -115,9 +127,16 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <Content Include="MCForge.ico" />
+    <EmbeddedResource Include="Popups\PopupError.resx">
+      <DependentUpon>PopupError.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popups\PortTools.resx">
+      <DependentUpon>PortTools.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

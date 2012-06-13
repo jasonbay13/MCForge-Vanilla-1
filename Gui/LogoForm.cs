@@ -27,6 +27,9 @@ namespace MCForge.Gui {
 
 
         public void Log(string text) {
+            if (IsDisposed)
+                return;
+
             if (InvokeRequired) {
                 Invoke((MethodInvoker)delegate { Log(text); });
                 return;
@@ -36,7 +39,7 @@ namespace MCForge.Gui {
             using (var image = new Bitmap(imageOrigional)) {
                 using (var graphics = Graphics.FromImage(image)) {
                     var message = StringUtils.Truncate(text, 21);
-                    graphics.TextRenderingHint = TextRenderingHint.SingleBitPerPixel;
+                    graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
                     graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                     graphics.DrawString(message, ubuntuFont, WhiteBrush, 50, 240);
                 }

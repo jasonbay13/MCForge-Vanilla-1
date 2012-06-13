@@ -6,6 +6,7 @@ using System.IO;
 using MCForge.Core;
 using System.Web.Configuration;
 using System.Reflection;
+using System.Globalization;
 
 namespace MCForge.Utils {
     /// <summary>
@@ -36,7 +37,7 @@ namespace MCForge.Utils {
         private static DateTime _lastTime;
 
 
-        internal static string DateFormat {
+        public static string CurrentLogFile {
             get { return _lastTime.ToString("MM-dd-yyyy") + "-MCForge.log"; }
         }
 
@@ -60,7 +61,7 @@ namespace MCForge.Utils {
 
             _lastTime = DateTime.Now;
             FileUtils.CreateDirIfNotExist(FileUtils.LogsPath);
-            FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + DateFormat, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS: " + Environment.OSVersion + Environment.NewLine);
+            FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + CurrentLogFile, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS: " + Environment.OSVersion + Environment.NewLine);
 
         }
 
@@ -105,7 +106,6 @@ namespace MCForge.Utils {
         /// <param name="logType">The log type</param>
         public static void Log(string message, Color textColor, Color bgColor, LogType logType = LogType.Normal) {
             _flushQueue.Enqueue(new LogEventArgs(message, logType, textColor, bgColor));
-            WriteLog(message);
         }
 
         /// <summary>
@@ -114,9 +114,9 @@ namespace MCForge.Utils {
         /// <param name="e">Exception to be logged</param>
         public static void LogError(Exception e) {
             _flushErrorQueue.Enqueue(new LogEventArgs(e.Message + "\n" + e.StackTrace, LogType.Error));
-            WriteLog("-------[Error]-------\n\r " + e.Message + "\n" + e.StackTrace + "\n\r---------------------");
         }
-        public static int count = 0;
+
+        private static int count;
         /// <summary>
         /// Writes the log message to the log file
         /// </summary>
@@ -129,13 +129,15 @@ namespace MCForge.Utils {
             count++;
             if (_lastTime.Day != DateTime.Now.Day) {
                 _lastTime = DateTime.Now;
-                FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + DateFormat, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS:" + Environment.OSVersion + Environment.NewLine);
+                FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + CurrentLogFile, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS:" + Environment.OSVersion + ", ARCH:" + (Environment.Is64BitOperatingSystem ? "x64" :  "x86") + ", CULTURE: " + CultureInfo.CurrentCulture +  Environment.NewLine);
             }
 
-            using (var writer = new StreamWriter(FileUtils.LogsPath + DateFormat, true)) {
-                writer.WriteLine(log);
-                writer.Close();
+            try {
+                using (var writer = new StreamWriter(FileUtils.LogsPath + CurrentLogFile, true)) {
+                    writer.WriteLine(log);
+                }
             }
+            catch { }
             count--;
         }
 
@@ -143,8 +145,10 @@ namespace MCForge.Utils {
             while (_flushMessages) {
                 Thread.Sleep(20);
                 if (_flushQueue.Count > 0) {
+                    var arg = _flushQueue.Dequeue();
                     if (OnRecieveLog != null)
-                        OnRecieveLog(null, _flushQueue.Dequeue());
+                        OnRecieveLog(null, arg);
+                                WriteLog(arg.Message);
                 }
 
             }
@@ -154,8 +158,10 @@ namespace MCForge.Utils {
             while (_flushErrorMessages) {
                 Thread.Sleep(20);
                 if (_flushErrorQueue.Count > 0) {
+                    var arg = _flushErrorQueue.Dequeue();
                     if (OnRecieveErrorLog != null)
-                        OnRecieveErrorLog(null, _flushErrorQueue.Dequeue());
+                        OnRecieveErrorLog(null,arg );
+                     WriteLog("-------[Error]-------\n\r " + arg.Message + "\n\r---------------------");
                 }
 
             }

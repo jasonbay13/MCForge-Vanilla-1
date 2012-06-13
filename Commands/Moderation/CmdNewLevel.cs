@@ -64,7 +64,8 @@ namespace MCForge.Commands
             }
 
             if (temp == null) { p.SendMessage("Level creation failed"); return; } // something is wrong if you get this
-            Level.AddLevel(temp);
+            Level.Levels.Add(temp);
+            temp.SaveToBinary();
             Player.UniversalChat("Created level " + args[0] + "!");
         }
 

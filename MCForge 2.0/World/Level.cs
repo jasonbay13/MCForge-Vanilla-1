@@ -24,12 +24,15 @@ using MCForge.Robot;
 using MCForge.World.Blocks;
 using MCForge.Utils;
 using System.Drawing;
+using MCForge.World.Loading_and_Saving;
 
 namespace MCForge.World {
     /// <summary>
     /// This class is used for loading/saving/handling/manipulation of server levels.
     /// </summary>
     public class Level {
+
+        internal const long MAGIC_NUMBER = 28542713840690029;
         //As a note, the coordinates are right, it is xzy, its based on the users view, not the map itself.
         //WIDTH = X, LENGTH = Z, DEPTH = Y
         //NEST ORDER IS XZY
@@ -73,6 +76,7 @@ namespace MCForge.World {
                 if (_TotalBlocks == 0) _TotalBlocks = Size.x * Size.z * Size.y;
                 return _TotalBlocks;
             }
+            set { _TotalBlocks = value; }
         }
         /// <summary>
         /// This is the size of the level
@@ -97,7 +101,11 @@ namespace MCForge.World {
         /// </summary>
         public Dictionary<object, object> ExtraData;
 
-        private Level(Vector3S size) {
+        /// <summary>
+        /// Empty level with null/default values that need to be assigned after initialized
+        /// </summary>
+        /// <param name="size">Base size of map (can be changed)</param>
+        public Level(Vector3S size) {
             Size = size;
             //data = new byte[Size.x, Size.z, Size.y];
             Data = new byte[TotalBlocks];
@@ -168,8 +176,12 @@ namespace MCForge.World {
         /// Load a level.
         /// </summary>
         /// <returns>The loaded level</returns>
+        //TODO: Load all the types of levels (old mcforge, new mcforge, fcraft, minecpp, etc...)
         public static Level LoadLevel(string levelName) {
-            string Name = "levels//" + levelName + ".lvl";
+            if (FindLevel(levelName) != null)
+                return null;
+
+            string Name = "levels\\" + levelName + ".lvl";
             Level finalLevel = new Level(new Vector3S(32, 32, 32));
             finalLevel.Name = levelName;
             try {
@@ -181,53 +193,9 @@ namespace MCForge.World {
 
                 using (Binary) {
                     long v = Binary.ReadInt64();
-                    if (v != 28542713840690029) //The magic number
+                    if (v != MAGIC_NUMBER) //The magic number
                     {
-                        Logger.Log("Not a new MCForge Level! Attemping to load old MCForge level format!", Color.Red, Color.Black, LogType.Debug);
-                        Binary.Dispose();
-                        FileStream fs = File.OpenRead(Name);
-                        try {
-                            GZipStream gs = new GZipStream(fs, CompressionMode.Decompress);
-                            byte[] ver = new byte[2];
-                            gs.Read(ver, 0, ver.Length);
-                            ushort version = BitConverter.ToUInt16(ver, 0);
-                            if (version == 1874) //Is a old MCForge level!
-                            {
-                                #region Old MCForge Level
-                                ushort[] vars = new ushort[6];
-                                byte[] rot = new byte[2];
-                                byte[] header = new byte[16]; gs.Read(header, 0, header.Length);
-
-                                vars[0] = BitConverter.ToUInt16(header, 0); //X
-                                vars[1] = BitConverter.ToUInt16(header, 2); //Z
-                                vars[2] = BitConverter.ToUInt16(header, 4); //Y
-                                vars[3] = BitConverter.ToUInt16(header, 6); //SpawnX
-                                vars[4] = BitConverter.ToUInt16(header, 8); //SpawnZ
-                                vars[5] = BitConverter.ToUInt16(header, 10); //SpawnY
-
-                                rot[0] = header[12]; //SpawnHeading
-                                rot[1] = header[13]; //SpawnYaw
-
-                                finalLevel.Size = new Vector3S((short)vars[0], (short)vars[1], (short)vars[2]);
-
-                                finalLevel.SpawnPos = new Vector3S((short)vars[3], (short)vars[4], (short)vars[5]);
-
-                                finalLevel.SpawnRot = new byte[2] { rot[0], rot[1] };
-
-                                finalLevel._TotalBlocks = finalLevel.Size.x * finalLevel.Size.z * finalLevel.Size.y;
-                                byte[] blocks = new byte[finalLevel.Size.x * finalLevel.Size.z * finalLevel.Size.y];
-                                gs.Read(blocks, 0, blocks.Length);
-                                finalLevel.Data = new byte[finalLevel._TotalBlocks];
-                                for (int x = 0; x < finalLevel.Size.x; x++)
-                                    for (int y = 0; y < finalLevel.Size.y; y++)
-                                        for (int z = 0; z < finalLevel.Size.z; z++)
-                                            try { finalLevel.SetBlock(x, z, y, (byte)OldMCForgeToNewMCForge.Convert(blocks[finalLevel.PosToInt((ushort)x, (ushort)z, (ushort)y)])); } //Converts all custom blocks to normal blocks.
-                                            catch { continue; }
-                                gs.Close();
-                                #endregion
-                            }
-                        }
-                        catch { return null; }
+                        return new MCForgeOldMap().Load(Name);
                     }
                     else //Is a new MCForge level!
                     {
@@ -276,6 +244,7 @@ namespace MCForge.World {
                 }
                 Binary.Dispose();
                 finalLevel.HandleMetaData();
+                Logger.Log("[Level] " + levelName + " was loaded");
                 return finalLevel;
             }
             catch (Exception e) { Logger.Log(e.Message); Logger.Log(e.StackTrace); } return null;
@@ -311,6 +280,23 @@ namespace MCForge.World {
                 Binary.Dispose();
             }
             return true;
+        }
+
+        /// <summary>
+        /// Loads all levels.
+        /// </summary>
+        public static void LoadAllLevels() {
+            FileUtils.CreateDirIfNotExist("levels");
+            string[] files = Directory.GetFiles("levels\\", "*.lvl");
+            foreach (string file in files) {
+                Level lvl = LoadLevel(file.Substring(7, file.Length - 11));
+
+                if (lvl == null)
+                    continue;
+                //Don't judge >.>
+                Levels.Add(lvl);
+            }
+            
         }
 
         /// <summary>
@@ -533,6 +519,28 @@ namespace MCForge.World {
             /// Inspired from the Nether
             /// </summary>
             Hell
+        }
+
+        public enum SaveTypes {
+            /// <summary>
+            /// New MCForge File Format
+            /// </summary>
+            MCForge2,
+
+            /// <summary>
+            /// Old MCForge Level Format
+            /// </summary>
+            MCForge, 
+
+            /// <summary>
+            /// fCraft Level Format
+            /// </summary>
+            fCraft,
+            /// <summary>
+            /// Mine c++ Level Format
+            /// </summary>
+            MineCPP,
+            Minecraft
         }
 
         /// <summary>

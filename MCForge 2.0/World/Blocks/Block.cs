@@ -37,6 +37,7 @@ namespace MCForge.World {
              new Yellow(),
              new GreenYellow(),
              new Green(),
+             new SpringGreen(),
              new Cyan(),
              new Blue(),
              new BlueViolet(),
@@ -143,9 +144,8 @@ namespace MCForge.World {
             return (blockToCheck < 50);
         }
 
-        public static bool CanWalkThrough(byte blockToCheck)
-        {
-            return ( blockToCheck == BlockList.AIR ||
+        public static bool CanWalkThrough(byte blockToCheck) {
+            return (blockToCheck == BlockList.AIR ||
                 blockToCheck == BlockList.WATER ||
                 blockToCheck == BlockList.LAVA ||
                 blockToCheck == BlockList.ACTIVE_LAVA ||
@@ -156,16 +156,14 @@ namespace MCForge.World {
                 blockToCheck == BlockList.BROWN_MUSHROOM);
         }
 
-        public static bool CanEscalate(byte blockToCheck)
-        {
+        public static bool CanEscalate(byte blockToCheck) {
             return (blockToCheck == BlockList.WATER ||
                 blockToCheck == BlockList.LAVA ||
                 blockToCheck == BlockList.ACTIVE_LAVA ||
                 blockToCheck == BlockList.ACTIVE_WATER);
         }
 
-        public static bool IsOPBlock(byte blockToCheck)
-        {
+        public static bool IsOPBlock(byte blockToCheck) {
             return blockToCheck == Block.BlockList.BEDROCK;
         }
 
@@ -377,9 +375,6 @@ namespace MCForge.World {
             /// Unknown Block
             /// </summary>
             public const byte UNKNOWN = 255;
-            /// <summary>
-
         }
-
     }
 }
