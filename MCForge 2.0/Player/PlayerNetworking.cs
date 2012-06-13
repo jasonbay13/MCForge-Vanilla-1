@@ -262,9 +262,18 @@ namespace MCForge.Entity {
                 return;
             }
 
-            byte currentType = Level.GetBlock(x, z, y);
-            if (!Block.IsValidBlock(currentType)) {
-                Kick("HACKED CLIENT!");
+            byte currentType = 50;
+            if (y < Level.Size.y)
+            {
+                currentType = Level.GetBlock(x, z, y);
+                if (!Block.IsValidBlock(currentType))
+                {
+                    Kick("HACKED CLIENT!");
+                    return;
+                }
+            }
+            else
+            {
                 return;
             }
 
