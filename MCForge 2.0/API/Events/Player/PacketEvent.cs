@@ -32,7 +32,7 @@ namespace MCForge.API.Events {
         /// <summary>
         /// Packet data
         /// </summary>
-        public byte[] Data { get; private set; }
+        public byte[] Data { get; set; }
         /// <summary>
         /// Gets the packet was incoming or is outgoing
         /// </summary>
