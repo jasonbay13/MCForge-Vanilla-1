@@ -640,7 +640,12 @@ namespace MCForge.Entity {
         #endregion
         #region Outgoing Packets
         public void SendPacket(packet pa) {
-            if (!OnPlayerSendPacket.Call(this, new PacketEventArgs(pa.GetMessage(), false, (packet.types)pa.bytes[0]), OnAllPlayersSendPacket).Canceled) {
+            PacketEventArgs args = OnPlayerSendPacket.Call(this, new PacketEventArgs(pa.bytes, false, (packet.types)pa.bytes[0]), OnAllPlayersSendPacket);
+            bool Canceled = args.Canceled;
+            if (args.Data.Length == pa.bytes.Length)
+                pa.bytes = args.Data;
+            if (!Canceled)
+            {
                 try {
                     lastPacket = (packet.types)pa.bytes[0];
                 }
