@@ -49,6 +49,7 @@ namespace MCForge.Core {
             cp = new ConsolePlayer(cio);
             while (true) {
                 string input = Console.ReadLine();
+                if (input == null) { Server.Stop(); return; }
                 if (input.Trim().StartsWith("/")) {
                     if (input.Trim().Length > 1) {
                         string name = input.Trim().Substring(1);
