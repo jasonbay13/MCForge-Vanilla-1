@@ -348,7 +348,7 @@ namespace MCForge.Entity {
                 if (eargs.Canceled) {
                     Pos = eargs.FromPosition;
                     oldPos = eargs.FromPosition;
-                    SendSpawn(this);
+                    SendThisPlayerTheirOwnPos();
                     return;
                 }
                 else {
