@@ -185,7 +185,7 @@ namespace MCForge.Core {
                 }
             }
             if (hidePackets.Contains((byte)args.Type)) return;
-            Logger.Log(((args.Incoming) ? "Incoming" : "Outgoing") + " Packet " + (packet.types)(byte)args.Type + "(" + (byte)args.Type + ") for player " + sender.Username, ((args.Incoming) ? Color.Green : Color.Red), Color.Black);
+            Logger.Log(((args.Incoming) ? "Incoming" : "Outgoing") + " Packet " + (Packet.Types)(byte)args.Type + "(" + (byte)args.Type + ") for player " + sender.Username, ((args.Incoming) ? Color.Green : Color.Red), Color.Black);
         }
 
         /// <summary>

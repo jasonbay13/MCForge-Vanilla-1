@@ -54,7 +54,7 @@ namespace MCForge.Commands.Moderation
                     //p.SendMessage("> Logged in " + found.timesOnline + " times, " + found.timesKicked + " of which ended in a kick.");
                     //p.SendMessage("> " + found.numAwarded + "/" + Server.numAwards + " awards.");
                     p.SendMessage("> the IP of " + found.Ip);
-                    if (Server.devs.Contains(found.Username))
+                    if (Server.Devs.Contains(found.Username))
                         p.SendMessage("> " + found.Username + " is an MCForge Developer.");
                 }
             }

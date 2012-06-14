@@ -37,8 +37,8 @@ namespace MCForge.Commands
                 return;
             }
             Vector3S meep = new Vector3S((short)(p.Level.SpawnPos.x * 32), (short)(p.Level.SpawnPos.z * 32 + 51), (short)(p.Level.SpawnPos.y * 32));
-            packet pa = new packet();
-            pa.Add(packet.types.SendTeleport);
+            Packet pa = new Packet();
+            pa.Add(Packet.Types.SendTeleport);
             pa.Add(unchecked((byte)-1)); //If the ID is not greater than one it doesn't work :c
             pa.Add(meep.x);
             pa.Add(meep.y);

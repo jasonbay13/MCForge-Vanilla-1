@@ -371,6 +371,7 @@ namespace MCForge.World {
             /// Obsidian Block
             /// </summary>
             public const byte OBSIDIAN = 49;
+
             /// <summary>
             /// Unknown Block
             /// </summary>

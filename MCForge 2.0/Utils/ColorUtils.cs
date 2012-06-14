@@ -79,6 +79,13 @@ namespace MCForge.Utils {
             return ConsoleColor.Black;
         }
 
+        /// <summary>
+        /// Determines whether [is valid minecraft color code] [the specified value].
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        ///   <c>true</c> if [is valid minecraft color code] [the specified value]; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsValidMinecraftColorCode(string value) {
             if (value.Length != 2) {
                 return false;
@@ -91,6 +98,19 @@ namespace MCForge.Utils {
                     return true;
             for (char i = '1'; i <= '9'; i++)
                 if (value[1] == i)
+                    return true;
+            return false;
+        }
+
+        /// <summary>
+        /// Determines if the specified message has bad color codes
+        /// </summary>
+        /// <param name="message">The message to check.</param>
+        /// <returns> <c>true</c> if the message has a bad color; otherwise, <c>false</c>.</returns>
+        public static bool MessageHasBadColorCodes(string message) {
+            var split = message.Split(new[] { '%', '&' });
+            foreach (var value in split)
+                if (String.IsNullOrWhiteSpace(value))
                     return true;
             return false;
         }

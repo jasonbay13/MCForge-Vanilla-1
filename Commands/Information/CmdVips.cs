@@ -33,7 +33,7 @@ namespace MCForge.Commands
             p.SendMessage("VIPs are players who can join the server when it's full!");
             p.SendMessage("MCForge Developers are automatically VIPs!");
             string send = Colors.yellow + ServerSettings.GetSetting("ServerName") + " VIPs: ";
-            foreach (string s in Server.vips)
+            foreach (string s in Server.VIPs)
                 send += s + Colors.white + ", ";
             p.SendMessage(send.Remove(send.Length - 2, 2));
         }

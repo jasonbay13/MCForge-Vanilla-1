@@ -39,7 +39,7 @@ namespace MCForge.Commands {
             string[] rules = File.ReadAllLines("text/rules.txt");
             who.SendMessage("Server rules:");
             foreach (string rule in rules) { who.SendMessage(rule); }
-            if (!(bool)who.ExtraData["ReadRules"] && !Server.agreed.Contains(who.Username)) { p.ExtraData["ReadRules"] = true; } //Need this for /agree
+            if (!(bool)who.ExtraData["ReadRules"] && !Server.AgreedPlayers.Contains(who.Username)) { p.ExtraData["ReadRules"] = true; } //Need this for /agree
             if (who != p) { p.SendMessage("Sent rules to " + who.Username); }
         }
         public void Help(Player p) {

@@ -30,7 +30,7 @@ namespace MCForge.Commands
 		{
 			Server.ForeachPlayer(delegate(Player pl)
 			{
-				p.SendMessage(pl.Username + " " + pl.id);
+				p.SendMessage(pl.Username + " " + pl.ID);
 			});
 		}
 		public void Help(Player p)

@@ -20,7 +20,7 @@ namespace MCForge.API.Events {
         /// </summary>
         /// <param name="data">The packet data</param>
         /// <param name="incoming">True for incoming, false for outgoing packet.</param>
-        public PacketEventArgs(byte[] data, bool incoming, packet.types type) {
+        public PacketEventArgs(byte[] data, bool incoming, Packet.Types type) {
             this.Data = data;
             this.Incoming = incoming;
             this.Type = type;
@@ -28,7 +28,7 @@ namespace MCForge.API.Events {
         /// <summary>
         /// The packet type
         /// </summary>
-        public packet.types Type { get; private set; }
+        public Packet.Types Type { get; private set; }
         /// <summary>
         /// Packet data
         /// </summary>

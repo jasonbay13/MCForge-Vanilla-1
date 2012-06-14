@@ -29,14 +29,14 @@ namespace MCForge.Commands
 
         public void Use(Player p, string[] args)
         {
-            if (Server.moderation)
+            if (Server.Moderation)
             {
-                Server.moderation = false;
+                Server.Moderation = false;
                 Player.UniversalChat("Chat moderation has been disabled!"); return;
             }
             else
             {
-                Server.moderation = true;
+                Server.Moderation = true;
                 Player.UniversalChat("Chat moderation has been enabled!"); return;
             }
         }

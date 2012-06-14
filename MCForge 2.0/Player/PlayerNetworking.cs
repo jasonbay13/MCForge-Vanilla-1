@@ -47,10 +47,10 @@ namespace MCForge.Entity {
                     }
 
                     // http://i3.kym-cdn.com/entries/icons/original/000/007/423/untitle.JPG
-                    if (Server.reviewlist.Contains(p)) {
-                        Server.reviewlist.Remove(p);
-                        foreach (Player pl in Server.reviewlist.ToArray()) {
-                            int position = Server.reviewlist.IndexOf(pl);
+                    if (Server.ReviewList.Contains(p)) {
+                        Server.ReviewList.Remove(p);
+                        foreach (Player pl in Server.ReviewList.ToArray()) {
+                            int position = Server.ReviewList.IndexOf(pl);
                             if (position == 0) { pl.SendMessage("You're next in the review queue!"); continue; }
                             pl.SendMessage(position == 1 ? "There is 1 player in front of you!" : "There are " + position + " players in front of you!");
                         }
@@ -104,7 +104,7 @@ namespace MCForge.Entity {
                     Buffer.BlockCopy(buffer, length + 1, tempbuffer, 0, buffer.Length - length - 1);
 
                     buffer = tempbuffer;
-                    if (!OnPlayerReceivePacket.Call(this, new PacketEventArgs(message, true, (packet.types)msg), OnAllPlayersReceivePacket).Canceled) {
+                    if (!OnPlayerReceivePacket.Call(this, new PacketEventArgs(message, true, (Packet.Types)msg), OnAllPlayersReceivePacket).Canceled) {
                         ThreadPool.QueueUserWorkItem(delegate {
                             switch (msg) {
                                 case 0: HandleLogin(message); break;
@@ -136,7 +136,7 @@ namespace MCForge.Entity {
                 if (IsLoggedIn) return;
                 byte version = message[0];
                 Username = enc.GetString(message, 1, 64).Trim();
-                _DisplayName = Username;
+                _displayName = Username;
                 string BanReason = null;
                 bool banned = false;
 
@@ -151,9 +151,9 @@ namespace MCForge.Entity {
                 else IsVerified = true;
                 if (version != ServerSettings.Version) { SKick("Wrong Version!"); return; }
                 try {
-                    Server.TempBan tb = Server.tempbans.Find(ban => ban.name.ToLower() == Username.ToLower());
+                    Server.TempBan tb = Server.TempBansList.Find(ban => ban.name.ToLower() == Username.ToLower());
                     if (DateTime.Now > tb.allowed) {
-                        Server.tempbans.Remove(tb);
+                        Server.TempBansList.Remove(tb);
                     }
                     else {
                         SKick("You're still tempbanned!");
@@ -169,13 +169,13 @@ namespace MCForge.Entity {
                     return;
                 }
             Gotos_Are_The_Devil:
-                if (Server.PlayerCount >= ServerSettings.GetSettingInt("MaxPlayers") && !Server.vips.Contains(Username) && !Server.devs.Contains(Username)) {
+                if (Server.PlayerCount >= ServerSettings.GetSettingInt("MaxPlayers") && !Server.VIPs.Contains(Username) && !Server.Devs.Contains(Username)) {
                     int LoopAmount = 0;
                     while (Server.PlayerCount >= ServerSettings.GetSettingInt("MaxPlayers")) {
                         LoopAmount++;
                         Thread.Sleep(1000);
-                        packet pa = new packet();
-                        pa.Add(packet.types.MOTD);
+                        Packet pa = new Packet();
+                        pa.Add(Packet.Types.MOTD);
                         pa.Add(ServerSettings.Version);
                         pa.Add("Waiting in queue, waiting for " + LoopAmount + " seconds", 64);
                         pa.Add(Server.PlayerCount + " players are online right now out of " + ServerSettings.GetSettingInt("MaxPlayers") + "!", 64);
@@ -208,7 +208,7 @@ namespace MCForge.Entity {
                 else
                     Level = Level;
 
-                id = FreeId();
+                ID = FreeId();
                 if (Server.PlayerCount >= ServerSettings.GetSettingInt("MaxPlayers"))
                     goto Gotos_Are_The_Devil;                                          //Gotos are literally the devil, but it works here so two players dont login at once
                 UpgradeConnectionToPlayer();
@@ -244,9 +244,9 @@ namespace MCForge.Entity {
         private void HandleBlockchange(byte[] message) {
             if (!IsLoggedIn) return;
 
-            ushort x = packet.NTHO(message, 0);
-            ushort y = packet.NTHO(message, 2);
-            ushort z = packet.NTHO(message, 4);
+            ushort x = Packet.NTHO(message, 0);
+            ushort y = Packet.NTHO(message, 2);
+            ushort z = Packet.NTHO(message, 4);
             byte action = message[6];
             byte newType = message[7];
             HandleBlockchange(x, y, z, action, newType, false);
@@ -325,15 +325,15 @@ namespace MCForge.Entity {
 
             byte thisid = message[0];
 
-            if (thisid != 0xFF && thisid != id && thisid != 0) {
+            if (thisid != 0xFF && thisid != ID && thisid != 0) {
                 //TODO Player.GlobalMessageOps("Player sent a malformed packet!");
                 Kick("Hacked Client!");
                 return;
             }
 
-            ushort x = packet.NTHO(message, 1);
-            ushort y = packet.NTHO(message, 3);
-            ushort z = packet.NTHO(message, 5);
+            ushort x = Packet.NTHO(message, 1);
+            ushort y = Packet.NTHO(message, 3);
+            ushort z = Packet.NTHO(message, 5);
             byte rotx = message[7];
             byte roty = message[8];
             Vector3S fromPosition = new Vector3S(oldPos.x, oldPos.z, Pos.y);
@@ -364,7 +364,7 @@ namespace MCForge.Entity {
             string incomingText = enc.GetString(message, 1, 64).Trim();
 
             byte incomingID = message[0];
-            if (incomingID != 0xFF && incomingID != id && incomingID != 0) {
+            if (incomingID != 0xFF && incomingID != ID && incomingID != 0) {
                 Player.UniversalChatOps("Player " + Username + ", sent a malformed packet!");
                 Kick("Hacked Client!");
                 return;
@@ -403,25 +403,10 @@ namespace MCForge.Entity {
 
             //Meep is used above for //Command
 
-            FileUtils.CreateFileIfNotExist("text/badwords.txt");
-            FileUtils.CreateFileIfNotExist("text/replacementwords.txt");
-
-            string textz = File.ReadAllText("text/replacementwords.txt");
-            if (textz == "") {
-                File.WriteAllText("text/replacementwords.txt", "Pepper");
-            }
-
-            var w = File.ReadAllLines("text/replacementwords.txt");
-            foreach (var str in w)
-                replacement.Add(str);
-
-            string[] badwords = File.ReadAllLines("text/badwords.txt");
-            string[] replacementwords = File.ReadAllLines("text/replacementwords.txt");
-
-            foreach (string word in badwords) {
+            foreach (string word in Server.BadWordsList) {
 
                 if (incomingText.Contains(word))
-                    incomingText = Regex.Replace(incomingText, word, replacement[playerRandom.Next(0, replacement.Count)]);
+                    incomingText = Regex.Replace(incomingText, word, Server.ReplacementWordsList[playerRandom.Next(0, Server.ReplacementWordsList.Count)]);
 
             }
 
@@ -434,7 +419,7 @@ namespace MCForge.Entity {
 
             ExtraData.CreateIfNotExist("Voiced", false);
             var isVoiced = (bool)ExtraData.GetIfExist("Voiced");
-            if (Server.moderation && !isVoiced && !Server.devs.Contains<string>(Username)) {
+            if (Server.Moderation && !isVoiced && !Server.Devs.Contains<string>(Username)) {
                 SendMessage("You can't talk during chat moderation!");
                 return;
             }
@@ -442,8 +427,8 @@ namespace MCForge.Entity {
             ExtraData.CreateIfNotExist("Jokered", false);
             var isJokered = (bool)ExtraData.GetIfExist("Jokered");
             if (isJokered) {
-                int a = playerRandom.Next(0, Server.jokermessages.Count);
-                incomingText = Server.jokermessages[a];
+                int a = playerRandom.Next(0, Server.JokerMessages.Count);
+                incomingText = Server.JokerMessages[a];
             }
 
             //Message appending stuff.
@@ -485,8 +470,8 @@ namespace MCForge.Entity {
             incomingText = eargs.Message;
 
             //TODO: add this to a different plugin, its a mess right here, and i hate it
-            if (Server.voting) {
-                if (Server.kickvote && Server.kicker == this) {
+            if (Server.Voting) {
+                if (Server.KickVote && Server.Kicker == this) {
                     SendMessage("You're not allowed to vote!");
                     return;
                 }
@@ -639,20 +624,20 @@ namespace MCForge.Entity {
 
         #endregion
         #region Outgoing Packets
-        public void SendPacket(packet pa) {
-            PacketEventArgs args = OnPlayerSendPacket.Call(this, new PacketEventArgs(pa.bytes, false, (packet.types)pa.bytes[0]), OnAllPlayersSendPacket);
+        public void SendPacket(Packet pa) {
+            PacketEventArgs args = OnPlayerSendPacket.Call(this, new PacketEventArgs(pa.bytes, false, (Packet.Types)pa.bytes[0]), OnAllPlayersSendPacket);
             bool Canceled = args.Canceled;
             if (args.Data.Length == pa.bytes.Length)
                 pa.bytes = args.Data;
             if (!Canceled)
             {
                 try {
-                    lastPacket = (packet.types)pa.bytes[0];
+                    lastPacket = (Packet.Types)pa.bytes[0];
                 }
                 catch (Exception e) { Logger.LogError(e); }
                 for (int i = 0; i < 3; i++) {
                     try {
-                        lastPacket = (packet.types)pa.bytes[0];
+                        lastPacket = (Packet.Types)pa.bytes[0];
                     }
                     catch (Exception e) { Logger.LogError(e); }
                     for (int z = 0; z < 3; z++) {
@@ -678,13 +663,14 @@ namespace MCForge.Entity {
                 message = message.Replace("%" + ch, "&" + ch);
                 message = message.Replace("&" + ch + " &", "&");
             }
+
             if (!String.IsNullOrWhiteSpace(message) && message.IndexOf("^detail.user") == -1)
                 message = Server.DefaultColor + message;
 
             try {
                 foreach (string line in LineWrapping(message)) {
-                    packet pa = new packet();
-                    pa.Add(packet.types.Message);
+                    Packet pa = new Packet();
+                    pa.Add(Packet.Types.Message);
                     pa.Add(PlayerID);
                     pa.Add(line, 64);
                     SendPacket(pa);
@@ -696,14 +682,14 @@ namespace MCForge.Entity {
 
         }
         private void SendMotd() {
-            SendPacket(IsAdmin ? MOTD_Admin : MOTD_NonAdmin);
+            SendPacket(IsAdmin ? MOTDAdmin : MOTDNonAdmin);
         }
         private void SendMap() {
 
             try {
                 SendPacket(mapSendStartPacket); //Send the pre-fab map start packet
 
-                packet pa = new packet(); //Create a packet to handle the data for the map
+                Packet pa = new Packet(); //Create a packet to handle the data for the map
                 pa.Add(Level.TotalBlocks); //Add the total amount of blocks to the packet
                 byte[] blocks = new byte[Level.TotalBlocks]; //Temporary byte array so we dont have to keep modding the packet array
 
@@ -724,21 +710,21 @@ namespace MCForge.Entity {
                 for (int i = 1; pa.bytes.Length > 0; ++i) {
                     short length = (short)Math.Min(pa.bytes.Length, 1024);
                     byte[] send = new byte[1027];
-                    packet.HTNO(length).CopyTo(send, 0);
+                    Packet.HTNO(length).CopyTo(send, 0);
                     Buffer.BlockCopy(pa.bytes, 0, send, 2, length);
                     byte[] tempbuffer = new byte[pa.bytes.Length - length];
                     Buffer.BlockCopy(pa.bytes, length, tempbuffer, 0, pa.bytes.Length - length);
                     pa.bytes = tempbuffer;
                     send[1026] = (byte)(i * 100 / number);
 
-                    packet Send = new packet(send);
-                    Send.AddStart(new byte[1] { (byte)packet.types.MapData });
+                    Packet Send = new Packet(send);
+                    Send.AddStart(new byte[1] { (byte)Packet.Types.MapData });
 
                     SendPacket(Send);
                 }
 
-                pa = new packet();
-                pa.Add(packet.types.MapEnd);
+                pa = new Packet();
+                pa.Add(Packet.Types.MapEnd);
                 pa.Add((short)Level.Size.x);
                 pa.Add((short)Level.Size.y);
                 pa.Add((short)Level.Size.z);
@@ -753,12 +739,12 @@ namespace MCForge.Entity {
         public void SendSpawn(Player p) {
             byte ID = 0xFF;
             if (p != this)
-                ID = p.id;
+                ID = p.ID;
 
-            packet pa = new packet();
-            pa.Add(packet.types.SendSpawn);
+            Packet pa = new Packet();
+            pa.Add(Packet.Types.SendSpawn);
             pa.Add((byte)ID);
-            pa.Add(p._DisplayName, 64);
+            pa.Add(p._displayName, 64);
             pa.Add(p.Pos.x);
             pa.Add(p.Pos.y);
             pa.Add(p.Pos.z);
@@ -776,8 +762,8 @@ namespace MCForge.Entity {
         public void SendBlockChange(ushort x, ushort z, ushort y, byte type) {
             if (x < 0 || y < 0 || z < 0 || x >= Level.Size.x || y >= Level.Size.y || z >= Level.Size.z) return;
 
-            packet pa = new packet();
-            pa.Add(packet.types.SendBlockchange);
+            Packet pa = new Packet();
+            pa.Add(Packet.Types.SendBlockchange);
             pa.Add(x);
             pa.Add(y);
             pa.Add(z);
@@ -789,8 +775,8 @@ namespace MCForge.Entity {
         }
         private void SendKick(string message) {
 
-            packet pa = new packet();
-            pa.Add(packet.types.SendKick);
+            Packet pa = new Packet();
+            pa.Add(Packet.Types.SendKick);
             pa.Add(message, 64);
             SendPacket(pa);
         }
@@ -833,8 +819,8 @@ namespace MCForge.Entity {
         /// Exactly what the function name is, it might be useful to change this players pos first ;)
         /// </summary>
         public void SendThisPlayerTheirOwnPos() {
-            packet pa = new packet();
-            pa.Add(packet.types.SendTeleport);
+            Packet pa = new Packet();
+            pa.Add(Packet.Types.SendTeleport);
             pa.Add((byte)255);
             pa.Add(Pos.x);
             pa.Add(Pos.y);
@@ -872,8 +858,8 @@ namespace MCForge.Entity {
             _pos.y = (_pos.y < 0) ? (short)32 : (_pos.y > Level.Size.y * 32) ? (short)(Level.Size.y * 32 - 32) : (_pos.y > 32767) ? (short)32730 : _pos.y;
 
 
-            packet pa = new packet();
-            pa.Add(packet.types.SendTeleport);
+            Packet pa = new Packet();
+            pa.Add(Packet.Types.SendTeleport);
             pa.Add(unchecked((byte)-1)); //If the ID is not greater than one it doesn't work :c
             pa.Add(_pos.x);
             pa.Add(_pos.y);
@@ -911,10 +897,10 @@ namespace MCForge.Entity {
             }
             bool teleport = ForceTp || (Math.Abs(diffX) >= 127 || Math.Abs(diffY) >= 127 || Math.Abs(diffZ) >= 127);
 
-            packet pa = new packet();
+            Packet pa = new Packet();
             if (teleport) {
-                pa.Add(packet.types.SendTeleport);
-                pa.Add(id);
+                pa.Add(Packet.Types.SendTeleport);
+                pa.Add(ID);
                 pa.Add(tempPos.x);
                 pa.Add(tempPos.y);
                 pa.Add(tempPos.z);
@@ -924,21 +910,21 @@ namespace MCForge.Entity {
                 bool rotupdate = diffR0 != 0 || diffR1 != 0;
                 bool posupdate = diffX != 0 || diffY != 0 || diffZ != 0;
                 if (rotupdate && posupdate) {
-                    pa.Add(packet.types.SendPosANDRotChange);
-                    pa.Add(id);
+                    pa.Add(Packet.Types.SendPosANDRotChange);
+                    pa.Add(ID);
                     pa.Add((sbyte)diffX);
                     pa.Add((sbyte)diffY);
                     pa.Add((sbyte)diffZ);
                     pa.Add(tempRot);
                 }
                 else if (rotupdate) {
-                    pa.Add(packet.types.SendRotChange);
-                    pa.Add(id);
+                    pa.Add(Packet.Types.SendRotChange);
+                    pa.Add(ID);
                     pa.Add(tempRot);
                 }
                 else if (posupdate) {
-                    pa.Add(packet.types.SendPosChange);
-                    pa.Add(id);
+                    pa.Add(Packet.Types.SendPosChange);
+                    pa.Add(ID);
                     pa.Add((sbyte)(diffX));
                     pa.Add((sbyte)(diffY));
                     pa.Add((sbyte)(diffZ));
@@ -1000,7 +986,7 @@ namespace MCForge.Entity {
         /// Kill this player for everyone.
         /// </summary>
         public void GlobalDie() {
-            packet pa = new packet(new byte[2] { (byte)packet.types.SendDie, id });
+            Packet pa = new Packet(new byte[2] { (byte)Packet.Types.SendDie, ID });
             Server.ForeachPlayer(p => {
                 if (p != this) {
                     p.SendPacket(pa);

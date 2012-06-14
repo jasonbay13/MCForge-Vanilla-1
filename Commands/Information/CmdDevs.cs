@@ -30,7 +30,7 @@ namespace MCForge.Commands
         public void Use(Player p, string[] args)
         {
             string send = Colors.yellow + "MCForge Development Team: ";
-            foreach (string s in Server.devs)
+            foreach (string s in Server.Devs)
                 send += s + Colors.white + ", ";
             p.SendMessage(send.Remove(send.Length - 2, 2));
         }

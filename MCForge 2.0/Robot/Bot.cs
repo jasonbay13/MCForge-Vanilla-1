@@ -65,7 +65,7 @@ namespace MCForge.Robot
         public Bot(string Username, Vector3S Position, byte[] Rotation, Level level, bool FollowPlayers, bool BreakBlocks, bool Jumping)
         {
             Player = new Player();
-            Player._DisplayName = Username;
+            Player.DisplayName = Username;
             Player.IsLoggedIn = false;
             Player.IsBot = true;
             Player.Username = Username;
@@ -73,7 +73,7 @@ namespace MCForge.Robot
             Player.oldPos = new Vector3S(Position.x, Position.z, Position.y);
             Player.Rot = Rotation;
             Player.Level = level;
-            Player.id = FreeId();
+            Player.ID = FreeId();
             Server.Bots.Add(this);
             SpawnThisBotToOtherPlayers(this);
             this.FollowPlayers = FollowPlayers;
@@ -238,8 +238,8 @@ namespace MCForge.Robot
         {
             List<byte> usedIds = new List<byte>();
 
-            Server.ForeachPlayer(p => usedIds.Add(p.id));
-            Server.ForeachBot(p => usedIds.Add(p.Player.id));
+            Server.ForeachPlayer(p => usedIds.Add(p.ID));
+            Server.ForeachBot(p => usedIds.Add(p.Player.ID));
 
             for (byte i = 1; i < ServerSettings.GetSettingInt("maxplayers"); ++i)
             {

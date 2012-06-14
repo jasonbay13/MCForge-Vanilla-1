@@ -37,7 +37,7 @@ namespace MCForge.Commands
             if (args.Length == 1) { who = Player.Find(args[0]); }
             else { who = Player.Find(args[1]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
-            if (Server.devs.Contains(who.Username)) { p.SendMessage("You can't joker a MCForge Developer!"); return; }
+            if (Server.Devs.Contains(who.Username)) { p.SendMessage("You can't joker a MCForge Developer!"); return; }
             CheckEmpty();
 
             who.ExtraData.CreateIfNotExist("Jokered", false);
@@ -65,13 +65,13 @@ namespace MCForge.Commands
         }
         void CheckEmpty()
         {
-            if (Server.jokermessages.Count == 0)
+            if (Server.JokerMessages.Count == 0)
             {
                 string text = "I am a pony" + Environment.NewLine + "Rainbow Dash <3" + Environment.NewLine + "I like trains!";
                 File.WriteAllText("text/jokermessages.txt", text);
-                Server.jokermessages.Add("I am a pony");
-                Server.jokermessages.Add("Rainbow Dash <3");
-                Server.jokermessages.Add("I like trains!");
+                Server.JokerMessages.Add("I am a pony");
+                Server.JokerMessages.Add("Rainbow Dash <3");
+                Server.JokerMessages.Add("I like trains!");
             }
         }
     }

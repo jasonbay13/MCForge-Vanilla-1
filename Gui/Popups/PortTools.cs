@@ -172,7 +172,6 @@ namespace MCForge.Gui.Popups {
                         e.Result = 3;
                     }
                     return;
-
                 }
             }
             catch {

@@ -28,40 +28,53 @@ using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
 using MCForge.World.Blocks;
+using System.Text;
 
 namespace MCForge.Entity {
     /// <summary>
     /// The player class, this contains all player information.
     /// </summary>
     public partial class Player : Sender {
+
         #region Variables
 
         //TODO: Change all o dis
-        internal static readonly System.Text.ASCIIEncoding enc = new System.Text.ASCIIEncoding();
+        internal static readonly ASCIIEncoding enc = new ASCIIEncoding();
         internal static readonly MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-        private  static readonly packet pingPacket = new packet(new byte[1] { (byte)packet.types.SendPing });
-        private  static readonly packet mapSendStartPacket = new packet(new byte[1] { (byte)packet.types.MapStart });
+        private  static readonly Packet pingPacket = new Packet(new byte[1] { (byte)Packet.Types.SendPing });
+        private  static readonly Packet mapSendStartPacket = new Packet(new byte[1] { (byte)Packet.Types.MapStart });
         private static byte ForceTpCounter = 0;
 
-        private  static packet MOTD_NonAdmin = new packet();
-        private  static packet MOTD_Admin = new packet();
+        private  static Packet MOTDNonAdmin = new Packet();
+        private  static Packet MOTDAdmin = new Packet();
         private  static void CheckMotdPackets() {
-            if (MOTD_NonAdmin.bytes == null) {
-                MOTD_NonAdmin.Add(packet.types.MOTD);
-                MOTD_NonAdmin.Add(ServerSettings.Version);
-                MOTD_NonAdmin.Add(ServerSettings.GetSetting("ServerName"), 64);
-                MOTD_NonAdmin.Add(ServerSettings.GetSetting("motd"), 64);
-                MOTD_NonAdmin.Add((byte)0);
-                MOTD_Admin = MOTD_NonAdmin;
-                MOTD_Admin.bytes[130] = 100;
+            if (MOTDNonAdmin.bytes == null) {
+                MOTDNonAdmin.Add(Packet.Types.MOTD);
+                MOTDNonAdmin.Add(ServerSettings.Version);
+                MOTDNonAdmin.Add(ServerSettings.GetSetting("ServerName"), 64);
+                MOTDNonAdmin.Add(ServerSettings.GetSetting("motd"), 64);
+                MOTDNonAdmin.Add((byte)0);
+                MOTDAdmin = MOTDNonAdmin;
+                MOTDAdmin.bytes[130] = 100;
             }
         }
 
+        /// <summary>
+        /// Gets the socket.
+        /// </summary>
         public Socket Socket { get; private  set; }
-        public TcpClient Client { get; private  set; }
-        private  packet.types lastPacket = packet.types.SendPing;
 
-        public bool IsBot = false;
+        /// <summary>
+        /// Gets the client.
+        /// </summary>
+        public TcpClient Client { get; private  set; }
+
+        private  Packet.Types lastPacket = Packet.Types.SendPing;
+
+        /// <summary>
+        ///  Gets or sets if player is a bot
+        /// </summary>
+        public bool IsBot { get; set; }
 
         /// <summary>
         /// If the player is on wom client
@@ -69,20 +82,28 @@ namespace MCForge.Entity {
         public bool UsingWom { get; set; }
 
         /// <summary>
-        /// The player's money.
-        /// </summary>
-        //public int money = 0;
-
-        /// <summary>
         /// Checks if the player is the server owner.
         /// </summary>
         public bool IsOwner { get { return Username.ToLower() == Server.Owner.ToLower(); } }
 
-        public string _DisplayName = "";
+        private string _displayName = "";
+
+        /// <summary>
+        /// Gets or sets the display name.
+        /// </summary>
+        /// <value>
+        /// The display name.
+        /// </value>
         public string DisplayName
         {
-            get { return _DisplayName; }
-            set { _DisplayName = value; this.GlobalDie(); SpawnThisPlayerToOtherPlayers(); }
+            get { 
+                return _displayName; 
+            }
+            set { 
+                _displayName = value; 
+                this.GlobalDie(); 
+                SpawnThisPlayerToOtherPlayers(); 
+            }
         }
 
         /// <summary>
@@ -94,21 +115,37 @@ namespace MCForge.Entity {
         /// This is the UID for the player in the database
         /// </summary>
         internal long UID = 0;
-        
-        public DateTime FirstLogin;
-        
-        public DateTime LastLogin;
-        
-        public int money;
+
+        /// <summary>
+        /// Gets or sets the first login.
+        /// </summary>
+        /// <value>
+        /// The first login.
+        /// </value>
+        public DateTime FirstLogin { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last login.
+        /// </summary>
+        /// <value>
+        /// The last login.
+        /// </value>
+        public DateTime LastLogin { get; set; }
+
+        /// <summary>
+        /// Gets or sets the money.
+        /// </summary>
+        /// <value>
+        /// The money.
+        /// </value>
+        public int Money { get; set; }
+
         /// <summary>
         /// This is the player's IP Address
         /// </summary>
-        public string Ip;
-        /// <summary>
-        /// The player's stored message (For appending)
-        /// </summary>
-        private string _storedMessage = "";
+        public string Ip { get; set; }
 
+        private string _storedMessage = "";
         private byte[] buffer = new byte[0];
         private byte[] tempBuffer = new byte[0xFFF];
 
@@ -131,6 +168,12 @@ namespace MCForge.Entity {
         /// </summary>
         public bool IsBeingKicked { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether use of static commands is enabled.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [static commands enabled]; otherwise, <c>false</c>.
+        /// </value>
         public bool StaticCommandsEnabled { get; set; }
 
         private Level _level;
@@ -153,7 +196,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// The players MC Id, this changes each time the player logs in
         /// </summary>
-        public byte id { get; set; }
+        public byte ID { get; set; }
         /// <summary>
         /// The players current position
         /// </summary>
@@ -194,10 +237,6 @@ namespace MCForge.Entity {
         /// </summary>
         public bool IsHeadFlipped { get; set; }
 
-        /// <summary>
-        /// Holds replacement messages for profan filter
-        /// </summary>
-        public static readonly List<string> replacement = new List<string>();
 
         /// <summary>
         /// Dictionary for housing extra data, great for giving player objects to pass
@@ -283,7 +322,7 @@ namespace MCForge.Entity {
                 ThreadPool.QueueUserWorkItem(delegate {
                     ICommand cmd = Command.Commands[name];
                     if (ServerSettings.GetSettingBoolean("AgreeingToRules")) {
-                        if (!Server.agreed.Contains(Username) && Group.Permission < 80 && name != "rules" && name != "agree" && name != "disagree") {
+                        if (!Server.AgreedPlayers.Contains(Username) && Group.Permission < 80 && name != "rules" && name != "agree" && name != "disagree") {
                             SendMessage("You need to /agree to the /rules before you can use commands!"); return;
                         }
                     }
@@ -332,16 +371,20 @@ namespace MCForge.Entity {
         /// <param name="message">The message to send</param>
 		public override void SendMessage(string message)
         {
+            if (ColorUtils.MessageHasBadColorCodes(message)) {
+                Logger.Log("Bad message sent from " + Username);
+                return;
+            }
             System.Text.StringBuilder sb = new System.Text.StringBuilder(message);
             sb.Replace("$name", ServerSettings.GetSettingBoolean("$Before$Name") ? "$" + Username : Username);
             sb.Replace("$color", Color);
             sb.Replace("$rcolor", Group.Color);
             sb.Replace("$server", ServerSettings.GetSetting("ServerName"));
-            sb.Replace("$money", money.ToString());
-            sb.Replace("$" + Server.Moneys, money.ToString());
+            sb.Replace("$money", Money.ToString());
+            sb.Replace("$" + Server.Moneys, Money.ToString());
             sb.Replace("$rank", Group.Name);
             sb.Replace("$ip", Ip);
-			SendMessage(id, sb.ToString());
+			SendMessage(ID, sb.ToString());
 		}
         
         #region Database Saving/Loading
@@ -351,7 +394,7 @@ namespace MCForge.Entity {
 		{
 			Logger.Log("Saving " + Username + " to the database", LogType.Debug);
 			List<string> commands = new List<string>();
-			commands.Add("UPDATE _players SET money=" + money + ", lastlogin='" + LastLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', firstlogin='" + FirstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE UID=" + UID);
+			commands.Add("UPDATE _players SET money=" + Money + ", lastlogin='" + LastLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', firstlogin='" + FirstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE UID=" + UID);
 			commands.Add("UPDATE _players SET color='" + Color + "' WHERE UID=" + UID);
 			DataSaved.Call(this, new DataSavedEventArgs(UID));
 			Database.executeQuery(commands.ToArray());
@@ -365,7 +408,7 @@ namespace MCForge.Entity {
 			{
 				FirstLogin = DateTime.Now;
 				LastLogin = DateTime.Now;
-				money = 0;
+				Money = 0;
 				Database.executeQuery("INSERT INTO _players (Name, IP, firstlogin, lastlogin, money, color) VALUES ('" + Username + "', '" + Ip + "', '" + FirstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + LastLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', 0, '" + Color + "')");
 				DataTable temp = Database.fillData("SELECT * FROM _players WHERE Name='" + Username + "'");
 				if (temp.Rows.Count != 0)
@@ -377,7 +420,7 @@ namespace MCForge.Entity {
 				UID = int.Parse(playerdb.Rows[0]["UID"].ToString());
 				FirstLogin = DateTime.Parse(playerdb.Rows[0]["firstlogin"].ToString());
 				LastLogin = DateTime.Now;
-				money = int.Parse(playerdb.Rows[0]["money"].ToString());
+				Money = int.Parse(playerdb.Rows[0]["money"].ToString());
 				Color = playerdb.Rows[0]["color"].ToString();
 				//TODO Add total login and total Blocks
 			}
@@ -528,8 +571,8 @@ namespace MCForge.Entity {
         private  byte FreeId() {
             List<byte> usedIds = new List<byte>();
 
-            Server.ForeachPlayer(p => usedIds.Add(p.id));
-            Server.ForeachBot(p => usedIds.Add(p.Player.id));
+            Server.ForeachPlayer(p => usedIds.Add(p.ID));
+            Server.ForeachBot(p => usedIds.Add(p.Player.ID));
 
             for (byte i = 1; i < ServerSettings.GetSettingInt("maxplayers"); ++i)
             {

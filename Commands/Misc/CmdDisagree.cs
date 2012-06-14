@@ -33,7 +33,7 @@ namespace MCForge.Commands
         {
             if (!ServerSettings.GetSettingBoolean("AgreeingToRules")) { p.SendMessage("Agreeing to rules is disabled on this server!"); return; }
             p.ExtraData.CreateIfNotExist("ReadRules", false);
-            if (Server.agreed.Contains(p.Username)) { p.SendMessage("You have already agreed to the rules!"); return; }
+            if (Server.AgreedPlayers.Contains(p.Username)) { p.SendMessage("You have already agreed to the rules!"); return; }
             if (!(bool)p.ExtraData["ReadRules"]) { p.SendMessage("You need to read the /rules before you can disagree!"); return; }
             p.Kick("Kicked for disagreeing to the rules!");
         }

@@ -32,16 +32,16 @@ namespace MCForge.Commands
 
         public void Use(Player p, string[] args)
         {
-            if (Server.voting) { p.SendMessage("A vote is already in progress!"); return; }
+            if (Server.Voting) { p.SendMessage("A vote is already in progress!"); return; }
             Player who = null;
             if (args.Length == 0) { who = null; }
             else { who = Player.Find(args[0]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
-            if (Server.devs.Contains(who.Username)) { p.SendMessage("You can't votekick a MCForge Developer!"); return; }
-            Server.kicker = who;
+            if (Server.Devs.Contains(who.Username)) { p.SendMessage("You can't votekick a MCForge Developer!"); return; }
+            Server.Kicker = who;
             ResetVotes();
-            Server.voting = true;
-            Server.kickvote = true;
+            Server.Voting = true;
+            Server.KickVote = true;
             Player.UniversalChat("VOTE: Kick " + who.Username + "?");
             Player.UniversalChat("Use: %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + "to vote!");
             Thread.Sleep(15000);
@@ -53,7 +53,7 @@ namespace MCForge.Commands
                 pl.ExtraData.CreateIfNotExist("Voted", false);
                 pl.ExtraData["Voted"] = false;
 			});
-            Server.voting = false;
+            Server.Voting = false;
             ResetVotes();
         }
 

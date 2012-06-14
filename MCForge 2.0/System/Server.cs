@@ -81,10 +81,10 @@ namespace MCForge.Core {
         /// <summary>
         /// Get whether the server is currently fully started or not
         /// </summary>
-        public static bool Started = false;
-        private static System.Timers.Timer UpdateTimer;
-        private static int HeartbeatInterval = 300;
-        private static int HeartbeatIntervalCurrent = 0;
+        public static bool Started { get; set; }
+
+
+        private static System.Threading.Timer UpdateTimer;
         private static int GroupsaveInterval = 3000;
         private static int GroupsaveIntervalCurrent = 0;
         private static int PingInterval = 10;
@@ -92,21 +92,40 @@ namespace MCForge.Core {
         private static int BotInterval = 25;
         private static int BotIntervalCurrent = 0;
         public static bool DebugMode { get; set; }
+
+        //Defaq is this?
         public struct TempBan { public string name; public DateTime allowed; }
-        public static List<TempBan> tempbans = new List<TempBan>();
-        public static DateTime StartTime = DateTime.Now;
+
+        /// <summary>
+        /// List of players who are temporarly banned
+        /// </summary>
+        public static List<TempBan> TempBansList = new List<TempBan>();
+
+        /// <summary>
+        /// Start time of the server
+        /// </summary>
+        public readonly static DateTime StartTime = DateTime.Now;
+
         internal static List<Player> Connections = new List<Player>();
 
         /// <summary>
         /// Get the current list of online players, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
         /// </summary>
         public readonly static List<Player> Players = new List<Player>();
+
+        /// <summary>
+        /// Gets the player count.
+        /// </summary>
         public static int PlayerCount { get { return Players.Count; } }
 
         /// <summary>
         /// Get the current list of bots, note that if you're doing a foreach on this always add .ToArray() to the end, it solves a LOT of issues
         /// </summary>
         public static List<Bot> Bots = new List<Bot>();
+
+        /// <summary>
+        /// Gets the bot count.
+        /// </summary>
         public static int BotCount { get { return Bots.Count; } }
 
         /// <summary>
@@ -120,50 +139,64 @@ namespace MCForge.Core {
         /// <summary>
         /// The list of MCForge developers.
         /// </summary>
-        public static readonly string[] devs = new string[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "headdetect", "Gamemakergm", "cazzar", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "ninedrafted", "Nerketur", "Serado", "501st_Commander" };
+        public static readonly string[] Devs = new[] { "EricKilla", "Merlin33069", "Snowl", "gamezgalaxy", "headdetect", "Gamemakergm", "cazzar", "givo", "jasonbay13", "Alem_Zupa", "7imekeeper", "ninedrafted", "Nerketur", "Serado", "501st_Commander" };
         /// <summary>
         /// List of VIPs
         /// </summary>
-        public static List<string> vips = new List<string>();
+        public readonly static List<string> VIPs = new List<string>();
         /// <summary>
         /// List of players that need to be reviewed
         /// </summary>
-        public static List<Player> reviewlist = new List<Player>();
+        public readonly static List<Player> ReviewList = new List<Player>();
         /// <summary>
         /// List of players that agreed to the rules
         /// </summary>
-        public static List<string> agreed = new List<string>();
+        public readonly static List<string> AgreedPlayers = new List<string>();
 
-        public static List<string> jokermessages = new List<string>();
+        /// <summary>
+        /// A list of words to replace
+        /// </summary>
+        public readonly static List<string> ReplacementWordsList = new List<string>();
+
+        /// <summary>
+        /// A list of bad words
+        /// </summary>
+        public readonly static List<string> BadWordsList = new List<string>();
+
+        /// <summary>
+        /// A list of joker messages
+        /// </summary>
+        public static List<string> JokerMessages = new List<string>();
         /// <summary>
         /// The main level of the server, where players spawn when they first join
         /// </summary>
-        public static Level Mainlevel;
+        public static Level Mainlevel { get; set; }
         /// <summary>
         /// Determines if the chat moderation is enabled
         /// </summary>
-        public static bool moderation;
+        public static bool Moderation { get; set; }
         //Voting
-        /// <summary>
-        /// Is the server in voting mode?
-        /// </summary>
-        public static bool voting;
+        /// <value>
+        ///   <c>true</c> if voting mode is active; otherwise, <c>false</c>.
+        /// </value>
+        public static bool Voting { get; set; }
         /// <summary>
         /// Is it a kickvote?
         /// </summary>
-        public static bool kickvote;
+        public static bool KickVote { get; set; }
         /// <summary>
         /// Amount of yes votes.
         /// </summary>
-        public static int YesVotes;
+        public static int YesVotes { get; set; }
         /// <summary>
         /// Amount of no votes.
         /// </summary>
-        public static int NoVotes;
+        public static int NoVotes { get; set; }
         /// <summary>
         /// The player who's getting, if it's /votekick
         /// </summary>
-        public static Player kicker;
+        //RAAAAAGE
+        public static Player Kicker { get; set; }
         /// <summary>
         /// The minecraft.net URL of the server
         /// </summary>
@@ -172,11 +205,11 @@ namespace MCForge.Core {
         /// <summary>
         /// Internet utilies
         /// </summary>
-        public static InetUtils InternetUtils;
+        public static InetUtils InternetUtils { get; set; }
         /// <summary>
         /// The IRC client for the server
         /// </summary>
-        public static IRC IRC = null;
+        public static IRC IRC { get; set; }
         /// <summary>
         /// The default color
         /// </summary>
@@ -207,24 +240,39 @@ namespace MCForge.Core {
         public delegate object TimedMethodDelegate(object dataPass);
         static List<TimedMethod> TimedMethodList = new List<TimedMethod>();
 
+        /// <summary>
+        ///  A silly little iterator for looping over the players in the server
+        /// </summary>
+        /// <param name="p">The player.</param>
         public delegate void ForeachPlayerDelegate(Player p);
 
+        /// <summary>
+        ///  A silly little iterator for looping over the bots in the server
+        /// </summary>
+        /// <param name="p">The bot.</param>
         public delegate void ForeachBotDelegate(Bot p);
 
+        /// <summary>
+        ///  When the server finishes setting up
+        /// </summary>
         public delegate void ServerFinishSetup();
 
+        /// <summary>
+        /// Occurs when [on server finish setup].
+        /// </summary>
         public static event ServerFinishSetup OnServerFinishSetup;
 
+        /// <summary>
+        /// Inits this instance.
+        /// </summary>
         public static void Init() {
             Logger.WriteLog("--------- Server Started at " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + " ---------");
             Logger.Log("Debug mode started", LogType.Debug);
             //TODO Add debug messages
             //TODO load the level if it exists
             Block.InIt();
-            UpdateTimer = new System.Timers.Timer(100);
-            UpdateTimer.Elapsed += delegate { Update(); };
             Logger.Log("Starting update timer", LogType.Debug);
-            UpdateTimer.Start();
+            UpdateTimer = new System.Threading.Timer((e) => Update(), null, 0, 100);
             Logger.Log("Log timer started", LogType.Debug);
             Logger.Log("Loading DLL's", LogType.Debug);
             LoadAllDlls.Init();
@@ -239,6 +287,14 @@ namespace MCForge.Core {
 
             Groups.PlayerGroup.Load();
 
+            Mainlevel = Level.LoadLevel(ServerSettings.GetSetting("Main-Level"));
+            if (Mainlevel == null) {
+                Mainlevel = Level.CreateLevel(new Vector3S(256, 128, 64), Level.LevelTypes.Flat);
+                ServerSettings.SetSetting("Main-Level", null, "main");
+            }
+            Level.Levels.Add(Mainlevel);
+            Level.LoadAllLevels();
+
             Backup.StartBackup();
 
             Database.init();
@@ -247,14 +303,6 @@ namespace MCForge.Core {
 
             InternetUtils = new InetUtils();
             InetUtils.InternetAvailable = InetUtils.CanConnectToInternet();
-
-            Mainlevel = Level.LoadLevel(ServerSettings.GetSetting("Main-Level"));
-            if (Mainlevel == null) {
-                Mainlevel = Level.CreateLevel(new Vector3S(256, 128, 64), Level.LevelTypes.Flat);
-                ServerSettings.SetSetting("Main-Level", null, "main");
-            }
-            Level.Levels.Add(Mainlevel);
-            Level.LoadAllLevels();
 
             Logger.Log("Loading Bans", LogType.Debug);
             Logger.Log("IPBANS", LogType.Debug);
@@ -277,9 +325,7 @@ namespace MCForge.Core {
             catch { }
         }
 
-        [Obsolete("Causes problems on mono", false)]
         static void Update() {
-            HeartbeatIntervalCurrent++;
             GroupsaveIntervalCurrent++;
             PingIntervalCurrent++;
             BotIntervalCurrent++;
@@ -321,14 +367,18 @@ namespace MCForge.Core {
 
             FileUtils.CreateFileIfNotExist("ranks/vips.txt", "#Vips are the players who can join the server when it's full!" + Environment.NewLine + "#Each name should be in a new line, whithout # at the start!");
 
+            BadWordsList.AddRange(File.ReadAllLines("text/badwords.txt"));
+            ReplacementWordsList.AddRange(File.ReadAllLines("text/replacementwords.txt"));
 
             try {
                 string[] lines = File.ReadAllLines("text/agreed.txt");
-                foreach (string pl in lines) { agreed.Add(pl); }
+                foreach (string pl in lines) { AgreedPlayers.Add(pl); }
                 lines = File.ReadAllLines("ranks/vips.txt");
-                foreach (string line in lines) { if (line.Trim()[0] != '#') { vips.Add(line); } }
+                foreach (string line in lines) { if (line.Trim()[0] != '#') { VIPs.Add(line); } }
             }
             catch { Logger.Log("Error reading agreed players and vips!", LogType.Error); }
+
+
         }
         /// <summary>
         /// Loops through online players, it is quite pointless. It would be more effecent to just use Server.Players.ForEach(stuff in here);
@@ -496,10 +546,11 @@ namespace MCForge.Core {
             ShuttingDown = true;
 
             if (UpdateTimer != null)
-                UpdateTimer.Stop();
+                UpdateTimer.Dispose();
 
             if (listener != null)
                 listener.Stop();
+
             Logger.DeInit();
         }
 

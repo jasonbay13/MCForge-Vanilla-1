@@ -35,12 +35,12 @@ namespace MCForge.Commands
             Player who = Player.Find(args[0]);
             if (who == null) { p.SendMessage("Cannot find player!"); return; }
             DateTime allowed = DateTime.Now; int num;
-            if (Server.devs.Contains(who.Username)) { p.SendMessage("Cannot ban a MCForge Developer!"); return; }
+            if (Server.Devs.Contains(who.Username)) { p.SendMessage("Cannot ban a MCForge Developer!"); return; }
             #region =Name=
             if (args.Length == 1) {
                 Server.TempBan tb = new Server.TempBan();
                 tb.name = who.Username; tb.allowed = DateTime.Now.AddHours(1);
-                Server.tempbans.Add(tb);
+                Server.TempBansList.Add(tb);
                 who.Kick("Tempbanned for 1 hour!");
                 Player.UniversalChat(who.Username + " has been tempbanned for 1 hour!");
             }
@@ -66,7 +66,7 @@ namespace MCForge.Commands
                     case "min":                  
                         Server.TempBan tb1 = new Server.TempBan();
                         tb1.name = who.Username; tb1.allowed = DateTime.Now.AddMinutes(Int32.Parse(args[1]));
-                        Server.tempbans.Add(tb1);
+                        Server.TempBansList.Add(tb1);
                         string sipl1 = Int32.Parse(args[1]) == 1 ? "minute" : "minutes";
                         Player.UniversalChat(who.Username + " has been tempbanned for " + args[1] + " " + sipl1 + "!");
                         who.Kick("Tempbanned for " + args[1] + " " + sipl1 + "!");
@@ -76,7 +76,7 @@ namespace MCForge.Commands
                     case "hrs":                       
                         Server.TempBan tb2 = new Server.TempBan();
                         tb2.name = who.Username; tb2.allowed = DateTime.Now.AddHours(Int32.Parse(args[1]));
-                        Server.tempbans.Add(tb2);
+                        Server.TempBansList.Add(tb2);
                         string sipl2 = Int32.Parse(args[1]) == 1 ? "hour" : "hours";
                         Player.UniversalChat(who.Username + " has been tempbanned for " + args[1] + " " + sipl2 + "!");
                         who.Kick("Tempbanned for " + args[1] + " " + sipl2 + "!");

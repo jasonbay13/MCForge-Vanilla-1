@@ -25,7 +25,7 @@ namespace PluginsDLL {
         List<Viewer> viewing = new List<Viewer>();
         public void ShowMessage(Player p, string message) {
             if (_isUnloading) return;
-            int i = viewing.FindIndex(v => { return v.p.id == p.id; });
+            int i = viewing.FindIndex(v => { return v.p.ID == p.ID; });
             if (i >= 0) {
                 viewing[i].message = Prepare(message);
                 viewing[i].MessagePos = 0;

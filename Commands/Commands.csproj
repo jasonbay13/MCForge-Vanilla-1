@@ -8,7 +8,7 @@
     <ProjectGuid>{28D68717-95A5-4ACF-B232-EB2FDE8B8AD5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Command</RootNamespace>
+    <RootNamespace>MCForge.Commands</RootNamespace>
     <AssemblyName>Commands</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -61,6 +61,7 @@
     <Compile Include="Misc\CmdNickname.cs" />
     <Compile Include="Misc\CmdRun.cs" />
     <Compile Include="Misc\CmdNotify.cs" />
+    <Compile Include="Moderation\CmdDeleteLvl.cs" />
     <Compile Include="Moderation\CmdFollow.cs" />
     <Compile Include="Moderation\CmdHide.cs" />
     <Compile Include="Moderation\CmdRestart.cs" />

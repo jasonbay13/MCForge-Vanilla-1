@@ -40,7 +40,33 @@ namespace MCForge.World {
         /// <summary>
         /// List of levels on the server (loaded)
         /// </summary>
-        public readonly static List<Level> Levels = new List<Level>();
+        public static List<Level> Levels { get; set; }
+
+        /// <summary>
+        /// Gets the unloaded levels.
+        /// </summary>
+        public static List<string> UnloadedLevels {
+            get {
+                string[] temp = Directory.GetFiles(FileUtils.LevelsPath, "*lvl");
+
+                for (int i = 0; i < temp.Length; i++) {
+                    temp[i] = temp[i].Replace(".lvl", "");
+                    temp[i] = temp[i].Replace(FileUtils.LevelsPath, "");
+                }
+
+                List<string> args = temp.ToList<string>();
+
+                foreach (var lvl in Levels)
+                    if (args.Contains(lvl.Name))
+                        args.Remove(lvl.Name);
+                return args;
+            }
+        }
+
+        static Level() {
+            Levels = new List<Level>();
+        }
+
         public int PhysicsTick = 100;
         /// <summary>
         /// This delegate is used for looping through the blocks in a level in an automated fashion, and each cycle returns the position in xzy format
@@ -109,7 +135,7 @@ namespace MCForge.World {
             Size = size;
             //data = new byte[Size.x, Size.z, Size.y];
             Data = new byte[TotalBlocks];
-
+            BackupLevel = true;
             ExtraData = new Dictionary<object, object>();
         }
 
@@ -250,6 +276,13 @@ namespace MCForge.World {
             catch (Exception e) { Logger.Log(e.Message); Logger.Log(e.StackTrace); } return null;
         }
 
+        /// <summary>
+        /// Unloads this instance.
+        /// </summary>
+        public void Unload() {
+            SaveToBinary();
+            Levels.Remove(this);
+        }
 
         /// <summary>
         /// Saves this world to a given directory
@@ -296,7 +329,7 @@ namespace MCForge.World {
                 //Don't judge >.>
                 Levels.Add(lvl);
             }
-            
+
         }
 
         /// <summary>
@@ -530,7 +563,7 @@ namespace MCForge.World {
             /// <summary>
             /// Old MCForge Level Format
             /// </summary>
-            MCForge, 
+            MCForge,
 
             /// <summary>
             /// fCraft Level Format
@@ -632,7 +665,35 @@ namespace MCForge.World {
                 catch (Exception e) { Logger.LogError(e); }
             }
         }
-        public override string ToString ( ) {
+
+        private List<Player> _playerList;
+
+        /// <summary>
+        /// Gets or sets the players in this level.
+        /// </summary>
+        /// <value>
+        /// The players.
+        /// </value>
+        public List<Player> Players {
+            get {
+
+                if (_playerList == null)
+                    _playerList = new List<Player>();
+
+                _playerList.Clear();
+
+                foreach (var p in Server.Players)
+                    if (p.Level == this)
+                        _playerList.Add(p);
+
+                return _playerList;
+            }
+            set {
+                _playerList = value;
+            }
+        }
+
+        public override string ToString() {
             return Name;
         }
     }

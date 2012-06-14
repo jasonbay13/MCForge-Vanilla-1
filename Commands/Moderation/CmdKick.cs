@@ -64,7 +64,7 @@ namespace MCForge.Commands.Moderation
                 if (who == null) { p.SendMessage("Player \"" + args[0] + "\" not found!"); return; }
                 if (who.Group.Permission > p.Group.Permission) { p.SendMessage("You cannot kick your superiors!"); Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " tried to kick " + who.Color + who.Username + Server.DefaultColor + " but failed!"); return; }
                 if (who == p) { p.Kick(p.Username + " kicked himself!"); return; }
-                if (Server.devs.ContainsIgnoreCase(who.Username)) { p.SendMessage("You cannot kick a developer!"); Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " tried to kick an MCForge developer!"); return; }
+                if (Server.Devs.ContainsIgnoreCase(who.Username)) { p.SendMessage("You cannot kick a developer!"); Player.UniversalChat(p.Color + p.Username + Server.DefaultColor + " tried to kick an MCForge developer!"); return; }
                     who.Kick(kickmsg.Trim() != "" ? kickmsg : "Kicked by " + p.Username + "!");
             }
         }

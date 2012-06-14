@@ -34,7 +34,7 @@ namespace MCForge.Commands
             if (args.Length == 0) { who = p; }
             else { who = Player.Find(args[0]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
-            if (Server.devs.Contains(who.Username)) { p.SendMessage("Cannot change MCForge Developer's voice status!"); return; }
+            if (Server.Devs.Contains(who.Username)) { p.SendMessage("Cannot change MCForge Developer's voice status!"); return; }
 
             who.ExtraData.CreateIfNotExist("Voiced", false);
             who.ExtraData.CreateIfNotExist("VoiceString", "");

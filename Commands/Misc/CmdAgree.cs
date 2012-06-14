@@ -35,9 +35,9 @@ namespace MCForge.Commands
         {
             if (!ServerSettings.GetSettingBoolean("AgreeingToRules")) { p.SendMessage("Agreeing to rules is disabled on this server!"); return; }
             p.ExtraData.CreateIfNotExist("ReadRules", false);
-            if (Server.agreed.Contains(p.Username)) { p.SendMessage("You have already agreed to the rules!"); return; }
+            if (Server.AgreedPlayers.Contains(p.Username)) { p.SendMessage("You have already agreed to the rules!"); return; }
             if (!(bool)p.ExtraData["ReadRules"]) { p.SendMessage("You need to read the /rules before you can agree!"); return; }
-            Server.agreed.Add(p.Username);
+            Server.AgreedPlayers.Add(p.Username);
             if (!File.Exists("text/agreed.txt")) { File.Create("text/agreed.txt").Close(); }
             File.AppendAllText("text/agreed.txt", p.Username + Environment.NewLine); 
             p.SendMessage("Congratulations! You have agreed to the rules. You're now able to use commands!");

@@ -34,9 +34,9 @@ namespace MCForge.Commands
         {
             if (args.Length == 0) { p.SendMessage("You have to specify the vote message!"); return; }
             string message = null; foreach (string s in args) { message += s + " "; }
-            if (Server.voting) { p.SendMessage("A vote is already in progress!"); return; }
+            if (Server.Voting) { p.SendMessage("A vote is already in progress!"); return; }
             ResetVotes();
-            Server.voting = true;
+            Server.Voting = true;
             Player.UniversalChat("VOTE: " + message);
             Player.UniversalChat("Use: %aYes " + Server.DefaultColor + "or %cNo " + Server.DefaultColor + "to vote!");
             Thread.Sleep(15000);
@@ -46,7 +46,7 @@ namespace MCForge.Commands
                 pl.ExtraData.CreateIfNotExist("Voted", false);
                 pl.ExtraData["Voted"] = false;
 			});
-            Server.voting = false;
+            Server.Voting = false;
             ResetVotes();
         }
 

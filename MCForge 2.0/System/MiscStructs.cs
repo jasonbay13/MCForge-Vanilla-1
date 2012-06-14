@@ -85,16 +85,16 @@ namespace MCForge.Core {
         }
     }
 
-	public struct packet
+	public struct Packet
 	{
 		public byte[] bytes;
 
 		#region Constructors
-		public packet(byte[] data)
+		public Packet(byte[] data)
 		{
 			bytes = data;
 		}
-		public packet(packet p)
+		public Packet(Packet p)
 		{
 			bytes = p.bytes;
 		}
@@ -134,7 +134,7 @@ namespace MCForge.Core {
 		{
 			Add(new byte[1] { a });
 		}
-		public void Add(types a)
+		public void Add(Types a)
 		{
 			Add((byte)a);
 		}
@@ -210,7 +210,7 @@ namespace MCForge.Core {
 		}
 		#endregion
 
-		public enum types: byte
+		public enum Types: byte
 		{
 			Message = 13,
 			MOTD = 0,
@@ -232,8 +232,8 @@ namespace MCForge.Core {
         
 	}
     public static class typesHelper {
-        public static string ToString(this packet.types t) {
-            return Enum.GetName(typeof(packet.types), t);
+        public static string ToString(this Packet.Types t) {
+            return Enum.GetName(typeof(Packet.Types), t);
         }
     }
 }

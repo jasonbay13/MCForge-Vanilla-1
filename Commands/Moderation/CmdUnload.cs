@@ -16,10 +16,8 @@ using MCForge.Core;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge.World;
-namespace MCForge.Commands
-{
-    public class CmdUnload : ICommand
-    {
+namespace MCForge.Commands {
+    public class CmdUnload : ICommand {
         public string Name { get { return "Unload"; } }
         public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "Snowl"; } }
@@ -27,22 +25,17 @@ namespace MCForge.Commands
         public string CUD { get { return ""; } }
         public byte Permission { get { return 0; } }
 
-        public void Use(Player p, string[] args)
-        {
+        public void Use(Player p, string[] args) {
             Level isLoaded = Level.FindLevel(args[0]);
-            if (isLoaded.Name.ToLower() == Server.Mainlevel.Name.ToLower())
-            {
-                p.SendMessage("You cannot unload the main level.");
-                return;
-            }
-            if (isLoaded == null)
-            {
+            if (isLoaded == null) {
                 p.SendMessage(args[0] + " is already unloaded.");
             }
-            else
-            {
-                foreach (Player z in Server.Players.ToArray())
-                {
+            else {
+                if (isLoaded.Name.ToLower() == Server.Mainlevel.Name.ToLower()) {
+                    p.SendMessage("You cannot unload the main level.");
+                    return;
+                }
+                foreach (Player z in Server.Players.ToArray()) {
                     if (z.Level == isLoaded)
                         z.Level = Server.Mainlevel;
                 }
@@ -51,13 +44,11 @@ namespace MCForge.Commands
             }
         }
 
-        public void Help(Player p)
-        {
+        public void Help(Player p) {
             p.SendMessage("/unload <level> - Unloads <level>.");
         }
 
-        public void Initialize()
-        {
+        public void Initialize() {
             Command.AddReference(this, "unload");
         }
     }

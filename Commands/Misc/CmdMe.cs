@@ -31,7 +31,7 @@ namespace MCForge.Commands
         {
             p.ExtraData.CreateIfNotExist("Muted", false);
 
-            if (Server.voting) { 
+            if (Server.Voting) { 
                 p.SendMessage("Cannot use /me while voting is in progress!"); 
                 return; 
             }
