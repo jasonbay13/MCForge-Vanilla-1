@@ -56,6 +56,7 @@
     <Compile Include="Building\CmdTree.cs" />
     <Compile Include="Building\CmdWrite.cs" />
     <Compile Include="Information\CmdAbout.cs" />
+    <Compile Include="Information\CmdLevels.cs" />
     <Compile Include="Information\CmdVips.cs" />
     <Compile Include="Misc\CmdFlipHead.cs" />
     <Compile Include="Misc\CmdNickname.cs" />
