@@ -92,7 +92,7 @@ namespace MCForge.Commands
             who.ExtraData["TitleColor"] = "&c";
             who.ExtraData["Title"] = message;
             who.SetPrefix();
-            Player.UniversalChat(who.Color + who.Username + Server.DefaultColor + " had thier title set to &b[&c" + message + "&b]");
+            Player.UniversalChat(who.Color + who.Username + Server.DefaultColor + " had their title set to &b[&c" + message + "&b]");
             //TODO Save to database.
         }
 
