@@ -100,9 +100,12 @@ namespace MCForge.Entity {
                 return _displayName; 
             }
             set { 
-                _displayName = value; 
-                this.GlobalDie(); 
-                SpawnThisPlayerToOtherPlayers(); 
+                _displayName = value;
+                if (IsLoggedIn)
+                {
+                    this.GlobalDie();
+                    SpawnThisPlayerToOtherPlayers();
+                }
             }
         }
 

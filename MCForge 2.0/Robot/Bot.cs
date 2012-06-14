@@ -65,8 +65,8 @@ namespace MCForge.Robot
         public Bot(string Username, Vector3S Position, byte[] Rotation, Level level, bool FollowPlayers, bool BreakBlocks, bool Jumping)
         {
             Player = new Player();
-            Player.DisplayName = Username;
             Player.IsLoggedIn = false;
+            Player.DisplayName = Username;
             Player.IsBot = true;
             Player.Username = Username;
             Player.Pos = Position;
@@ -76,6 +76,7 @@ namespace MCForge.Robot
             Player.ID = FreeId();
             Server.Bots.Add(this);
             SpawnThisBotToOtherPlayers(this);
+            Player.IsLoggedIn = true;
             this.FollowPlayers = FollowPlayers;
             this.BreakBlocks = BreakBlocks;
             this.Jumping = Jumping;

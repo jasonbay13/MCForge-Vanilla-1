@@ -35,8 +35,6 @@ namespace MCForge.Commands.Information
             try
             {
                 string message = "";
-                string message2 = "";
-                bool Once = false;
                 Level.Levels.ForEach(delegate(Level level)
                 {
                     message += ", " + level.Name;
