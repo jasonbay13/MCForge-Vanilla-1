@@ -535,6 +535,10 @@ namespace MCForge.Core {
             foreach (var g in Groups.PlayerGroup.Groups)
                 g.SaveGroup();
 
+            if (ServerSettings.GetSettingBoolean("SQLite-InMemory")) {
+                ((SQLite)Database.SQL).Save();
+            }
+
         }
     }
 }

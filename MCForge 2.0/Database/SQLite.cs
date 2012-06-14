@@ -6,13 +6,18 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+#define NOT_USING_SQLite_Interop_dll
 using System;
 using System.Windows.Forms;
 using System.Data;
 using System.Data.SQLite;
+using System.Diagnostics;
+using System.Collections.Specialized;
+using System.IO;
+using System.Timers;
 using MCForge.Utils.Settings;
 using MCForge.Utils;
-using System.IO;
+using Timer = System.Timers.Timer;
 
 namespace MCForge.SQL {
     /// <summary>
@@ -33,8 +38,10 @@ namespace MCForge.SQL {
                     SQLiteConnection loader = new SQLiteConnection("Data Source =\"" + dbpath + "\"; Version =3; Pooling =" + ServerSettings.GetSetting("SQLite-Pooling") + "; Max Pool Size =1000;");
                     loader.Open();
                     SaveTo(loader, conn);
+                    loader.Close();
                 }
                 backup = new Timer();
+                
                 try {
                     int interval = int.Parse(ServerSettings.GetSetting("BackupInterval"));
                     backup.Interval = interval * 1000;
@@ -42,8 +49,9 @@ namespace MCForge.SQL {
                 catch {
                     backup.Interval = 300 * 1000;
                 }
-                backup.Tick += new EventHandler(backup_Tick);
+                backup.Elapsed += new ElapsedEventHandler(backup_Tick);
                 backup.Start();
+                backup.Enabled = true;
             }
             else {
                 Logger.Log("Using file database");
@@ -59,56 +67,53 @@ namespace MCForge.SQL {
 
         void backup_Tick(object sender, EventArgs e) {
             backup.Stop();
+            Logger.Log("Database backup ...");
             Save();
             backup.Start();
         }
         private void SaveTo(SQLiteConnection source, SQLiteConnection destination) {
-           // source.BackupDatabase(destination, "main", "main", -1, callback, 10);
-            source.Close();
-            source.Dispose();
-        }
-        ///    <summary>
-        ///    Raised between each backup step.
-        ///    </summary>
-        ///    <param name="source">
-        ///    The source database connection.
-        ///    </param>
-        ///    <param name="sourceName">
-        ///    The source database name.
-        ///    </param>
-        ///    <param name="destination">
-        ///    The destination database connection.
-        ///    </param>
-        ///    <param name="destinationName">
-        ///    The destination database name.
-        ///    </param>
-        ///    <param name="pages">
-        ///    The number of pages copied with each step.
-        ///    </param>
-        ///    <param name="remainingPages">
-        ///    The number of pages remaining to be copied.
-        ///    </param>
-        ///    <param name="totalPages">
-        ///    The total number of pages in the source database.
-        ///    </param>
-        ///    <param name="retry">
-        ///    Set to true if the operation needs to be retried due to database
-        ///    locking issues; otherwise, set to false.
-        ///    </param>
-        ///    <returns>
-        ///    True to continue with the backup process or false to halt the backup
-        ///    process, rolling back any changes that have been made so far.
-        ///    </returns>
-        bool callback(SQLiteConnection source, string sourceName, SQLiteConnection destination, string destinationName, int pages, int remainingPages, int totalPages, bool retry) {
-            if (!retry) {
-                if (source.DataSource == "memory") {
-                    Logger.Log("Database Save: " + (totalPages - remainingPages + 1) + "/" + totalPages);
-                }
-                else {
-                    Logger.Log("Database Load: " + (totalPages - remainingPages + 1) + "/" + totalPages);
+
+#if USING_SQLite_Interop_dll
+            bool saving = source.DataSource == "";
+            SQLiteCommand cmdSource = new SQLiteCommand(source);
+            cmdSource.CommandText = "Select * FROM sqlite_master WHERE type=='table'";
+            SQLiteDataReader masterReader = cmdSource.ExecuteReader();
+            while (masterReader.Read()) {
+                //sqlite_sequence,
+                NameValueCollection nvc = masterReader.GetValues();
+                if (nvc["name"] != "sqlite_sequence") {
+                    Stopwatch s = new Stopwatch();
+                    s.Start();
+                    SQLiteCommand cmdDest = new SQLiteCommand(destination);
+                    cmdDest.CommandText = "DROP TABLE IF EXISTS " + nvc["name"];
+                    cmdDest.ExecuteNonQuery();
+                    cmdDest.CommandText = nvc["sql"];
+                    cmdDest.ExecuteNonQuery();
+                    SQLiteCommand cmdSrc = new SQLiteCommand(source);
+                    cmdSrc.CommandText = "SELECT * FROM " + nvc["name"] + " ORDER BY _ROWID_";
+                    SQLiteDataReader dataReader = cmdSrc.ExecuteReader();
+                    while (dataReader.Read()) {
+                        NameValueCollection nvcRow = dataReader.GetValues();
+                        string insert = "INSERT INTO " + nvc["name"] + " VALUES (";
+                        bool valid = false;
+                        for (int i = 0; i < nvcRow.Keys.Count; i++) {
+                            insert += "\"" + nvcRow[i] + "\"";
+                            if (i + 1 != nvcRow.Keys.Count)
+                                insert += ", ";
+                            if (nvcRow[i] != "") valid = true;
+                        }
+                        if (valid) {
+                            cmdDest.CommandText = insert + ")";
+                            cmdDest.ExecuteNonQuery();
+                        }
+                    }
+                    s.Stop();
+                    Logger.Log("Table " + nvc["name"] + ((saving)?" saved (":" loaded (") + s.Elapsed + ")");
                 }
             }
-            return true;
+#else
+            Logger.Log("Can't save DB from memory to filesystem");
+#endif
         }
         public void Save() {
             if (ServerSettings.GetSettingBoolean("SQLite-InMemory")) {
@@ -116,6 +121,7 @@ namespace MCForge.SQL {
                 SQLiteConnection saver = new SQLiteConnection("Data Source =\"" + dbpath + "\"; Version =3; Pooling =" + ServerSettings.GetSetting("SQLite-Pooling") + "; Max Pool Size =1000;");
                 saver.Open();
                 SaveTo(conn, saver);
+                saver.Close();
                 Logger.Log("Database saved");
             }
         }
@@ -171,28 +177,32 @@ namespace MCForge.SQL {
                     _closed = false;
                 }
                 catch (Exception e) { Logger.Log(e.Message); Logger.Log(e.StackTrace); }
-			}
-		}
-		
-		public void Close(bool dispose)
-		{
-			if (!_closed)
-			{
-				conn.Close();
-				if (dispose)
-					conn.Dispose();
-				_closed = true;
-			}
-		}
-		
-		public override void Dispose()
-		{
-			if (!_disposed)
-			{
-				Close(true);
-				base.Dispose();
-			}
-		}
+            }
+        }
 
-	}
+        public void Close(bool dispose) {
+            if (!_closed) {
+                if (backup != null) {
+                    backup.Dispose();
+                    backup = null;
+                }
+                conn.Close();
+                if (dispose)
+                    conn.Dispose();
+                _closed = true;
+            }
+        }
+
+        public override void Dispose() {
+            if (!_disposed) {
+                if (backup != null) {
+                    backup.Dispose();
+                    backup = null;
+                }
+                Close(true);
+                base.Dispose();
+            }
+        }
+
+    }
 }
