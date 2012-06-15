@@ -600,10 +600,10 @@ namespace MCForge.Entity {
             Logger.Log(Username != DisplayName ? "<" + Username + " as " + DisplayName + "> " + incomingText : "<" + Username + "> " + incomingText);
             var voiceString = (string)ExtraData.GetIfExist("VoiceString") ?? "";
             var mColor = Color ?? Group.Color;
-            var mPrefix = (string)ExtraData.GetIfExist("Prefix") ?? "";
+            var mPrefix = (string)ExtraData.GetIfExist("Title") ?? "";
             string msg = voiceString +
-                          mColor +
                           mPrefix +
+                          mColor +
                           DisplayName +
                           ": &f" +
                           incomingText;
