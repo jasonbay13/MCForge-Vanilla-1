@@ -68,7 +68,7 @@ namespace MCForge.Commands
             }
             else
             {
-                who.ExtraData["Title"] = "[" + title "&f] ";
+                who.ExtraData["Title"] = "[" + title + "&f] ";
                 message = "set to &b[" + title + "]";
             }
             who.SetPrefix();
