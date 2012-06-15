@@ -35,7 +35,7 @@ namespace MCForge.Groups
                     writer.WriteElementString("permission", group.Permission.ToString());
                     writer.WriteElementString("color", group.Colour.ToString().Remove(0, 1));
                     writer.WriteElementString("maxblockchanges", group.MaxBlockChange.ToString());
-                    writer.WriteElementString("file", group.File);
+                    writer.WriteElementString("file", group.File.Replace("ranks/", ""));
                     //{
                     //    writer.WriteStartElement("players");
                     //    foreach (string s in group.players)
@@ -75,10 +75,10 @@ namespace MCForge.Groups
 									try { group.MaxBlockChange = int.Parse(reader.ReadString()); } catch { }
 									break;
 							}
-						} else {
+						} else if (group.Name != null){
                             try { group.add(); group = new PlayerGroup(); }
                             catch { Logger.Log("Failed to add a group!", LogType.Error); }
-							break;
+							//break;
 						}
 					}
 			} catch {}

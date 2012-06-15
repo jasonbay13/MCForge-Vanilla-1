@@ -69,5 +69,10 @@ namespace MCForge.Utils {
 
             Logger.Log(string.Format("[File] \"{0}\" was created", fileLoc));
         }
+
+        public static bool FileExists(string fileLoc)
+        {
+            return File.Exists(fileLoc);
+        }
     }
 }
