@@ -374,10 +374,10 @@ namespace MCForge.Entity {
         /// <param name="message">The message to send</param>
 		public override void SendMessage(string message)
         {
-            if (ColorUtils.MessageHasBadColorCodes(message)) {
+            /*if (ColorUtils.MessageHasBadColorCodes(message)) { //This triggers with something like SendMessage(Colors.red + "-----------------Zombie Store---------------");, need to fix
                 Logger.Log("Bad message sent from " + Username);
                 return;
-            }
+            }*/
             System.Text.StringBuilder sb = new System.Text.StringBuilder(message);
             sb.Replace("$name", ServerSettings.GetSettingBoolean("$Before$Name") ? "$" + Username : Username);
             sb.Replace("$color", Color);
