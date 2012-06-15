@@ -42,16 +42,18 @@ namespace MCForge.Robot
         public List<Location> Waypoint = new List<Location>();
         public int shouldCheckAgainLoopInt = 1000;
         public int intLoop = 0;
-        public bool shouldCheckAgain { 
-            get {
+        public bool shouldCheckAgain
+        {
+            get
+            {
                 if (shouldCheckAgainLoopInt > 999 || shouldCheckAgainLoopInt >= Waypoint.Count)
                 {
                     shouldCheckAgainLoopInt = 0;
                     return true;
                 }
                 else
-                    return false; 
-            } 
+                    return false;
+            }
         }
 
         /// <summary>
@@ -158,6 +160,11 @@ namespace MCForge.Robot
                             Block Block1 = Bot.Player.Level.GetBlock(TemporaryLocation / 32);
                             Block Block2 = Bot.Player.Level.GetBlock((TemporaryLocation.x / 32), (TemporaryLocation.z / 32), (TemporaryLocation.y / 32) - 1);
                             Block BlockUnderneath = Bot.Player.Level.GetBlock((TemporaryLocation.x / 32), (TemporaryLocation.z / 32), (TemporaryLocation.y / 32) - 2);
+                            Block BlockAbove = Bot.Player.Level.GetBlock((TemporaryLocation.x / 32), (TemporaryLocation.z / 32), (TemporaryLocation.y / 32) + 1);
+
+                            Vector3S delta = new Vector3S((short)Math.Abs(ClosestLocation.x - TemporaryLocation.x),
+                                (short)Math.Abs(ClosestLocation.z - TemporaryLocation.z),
+                                (short)Math.Abs(ClosestLocation.y - TemporaryLocation.y));
 
                             if (Block.CanWalkThrough(BlockUnderneath) && Block.CanWalkThrough(Block2)
                                 && !Block.CanEscalate(Block1) && !Block.CanEscalate(Block2))
@@ -176,10 +183,21 @@ namespace MCForge.Robot
                                 TemporaryLocation.y += 21;
                                 Bot.shouldCheckAgainLoopInt = 1000;
                             }
+                            else if (Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath) && ClosestLocation.y > TemporaryLocation.y)
+                            {
+                                TemporaryLocation.y += 21;
+                                Bot.shouldCheckAgainLoopInt = 1000;
+                                Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) - 2), 1);
+                            }
+                            else if (!Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath))
+                            {
+                                Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) + 1), 0);
+                            }
 
                             MoveEventArgs eargs = new MoveEventArgs(TemporaryLocation, Bot.Player.Pos);
                             bool cancel = OnBotMove.Call(Bot, eargs).Canceled;
-                            if (cancel){
+                            if (cancel)
+                            {
                                 TemporaryLocation = TempLocation;
                             }
                         }
@@ -199,8 +217,8 @@ namespace MCForge.Robot
         {
             bool Calculate = true;
 
-            RouteFinder routeFinder = new RouteFinder(0, 0, Bot.Player.Level.Size.x, Bot.Player.Level.Size.z, true); 
-            routeFinder.InitialLocation = new Location((Bot.Player.Pos.x / 32), (Bot.Player.Pos.z / 32)); 
+            RouteFinder routeFinder = new RouteFinder(0, 0, Bot.Player.Level.Size.x, Bot.Player.Level.Size.z, true);
+            routeFinder.InitialLocation = new Location((Bot.Player.Pos.x / 32), (Bot.Player.Pos.z / 32));
             try
             {
                 routeFinder.AddGoal(new Location((ClosestLocation.x / 32), (ClosestLocation.z / 32)));

@@ -15,8 +15,9 @@ namespace MCForge.World.Loading_and_Saving {
             get { return Level.SaveTypes.MCForge; }
         }
 
-        public Level Load(string path) {
+        public Level Load(string levelName, string path) {
             Level finalLevel = new Level(new Vector3S(32, 32, 32));
+            finalLevel.Name = levelName;
             using (FileStream fs = File.OpenRead(path)) {
                 using (GZipStream gs = new GZipStream(fs, CompressionMode.Decompress)) {
                     byte[] ver = new byte[2];
@@ -57,6 +58,8 @@ namespace MCForge.World.Loading_and_Saving {
 
                 }
             }
+            finalLevel.HandleMetaData();
+            Logger.Log("[Level] " + levelName + " was loaded");
             return finalLevel;
         }
 

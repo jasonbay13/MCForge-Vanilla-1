@@ -221,7 +221,8 @@ namespace MCForge.World {
                     long v = Binary.ReadInt64();
                     if (v != MAGIC_NUMBER) //The magic number
                     {
-                        return new MCForgeOldMap().Load(Name);
+                        Binary.Dispose();
+                        return new MCForgeOldMap().Load(levelName, Name);
                     }
                     else //Is a new MCForge level!
                     {
