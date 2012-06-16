@@ -59,6 +59,7 @@
     <Compile Include="Information\CmdLevels.cs" />
     <Compile Include="Information\CmdVips.cs" />
     <Compile Include="Misc\CmdFlipHead.cs" />
+    <Compile Include="Misc\CmdMessageBlock.cs" />
     <Compile Include="Misc\CmdNickname.cs" />
     <Compile Include="Misc\CmdRun.cs" />
     <Compile Include="Misc\CmdNotify.cs" />

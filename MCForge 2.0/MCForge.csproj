@@ -112,6 +112,8 @@
     <Compile Include="Groups\CommandPermissionOverrides.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
+    <Compile Include="Interfaces\Block\Block.cs" />
+    <Compile Include="Interfaces\Block\IBlock.cs" />
     <Compile Include="Interfaces\IIOProvider.cs" />
     <Compile Include="Interfaces\Plugin\IPlugin.cs" />
     <Compile Include="Player\ConsolePlayer.cs" />
@@ -151,6 +153,7 @@
     <Compile Include="System\Settings\LevelSettings.cs" />
     <Compile Include="System\UPnP.cs" />
     <Compile Include="Utils\ColorUtils.cs" />
+    <Compile Include="Utils\ExtraData.cs" />
     <Compile Include="Utils\InetUtils.cs" />
     <Compile Include="Utils\MathUtils.cs" />
     <Compile Include="Utils\MiscUtils.cs" />

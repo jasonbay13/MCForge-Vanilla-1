@@ -88,17 +88,78 @@ namespace MCForge.Utils {
         }
 
         /// <summary>
-        /// Convert the list into a string
+        /// Converts the dictionary to a string
+        /// </summary>
+        /// <param name="dict"><The dictionary/param>
+        /// <returns>A string representing the dictionary</returns>
+        public static string ToString(this Dictionary<string, string> dict) {
+            string ret = "";
+            foreach (string key in dict.Keys)
+                ret += key.ToString() + ":" + dict[key].ToString() + "\n";
+            return ret;
+        }
+
+        /// <summary>
+        /// Converts a string representing a dictionary to this dictionary
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <param name="hexKeyValues">The string representing a dictionary</param>
+        public static void AddHexstrings(this Dictionary<string, string> dict, string hexKeyValues) {
+            string[] keyvalue = hexKeyValues.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in keyvalue) {
+                string[] kv = s.Split(':');
+                dict[kv[0].FromHexString()] = kv[1].FromHexString();
+            }
+        }
+
+        /// <summary>
+        /// Converts the list into a string
         /// </summary>
         /// <param name="list"></param>
         /// <returns>The string value of the list</returns>
-        public static string ListToString(this List<string> list) {
+        public static string ToString(this List<string> list) {
             string ret = "";
             foreach (string item in list) {
-                ret += item + "\n";
+
+                ret += item.ToString() + "\n";
             }
             return ret;
         }
+        /// <summary>
+        /// Adds multiple hexadecimal strings splitted by \n as normal strings to this list
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="hexs">Multiple hexadecimal string splitted by \n</param>
+        public static void AddHexstrings(this List<string> list, string hexs) {
+            string[] hex = hexs.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in hex)
+                list.Add(s.FromHexString());
+        }
+
+        /// <summary>
+        /// Converts a string to a hexadecimal string
+        /// </summary>
+        /// <param name="s">The string</param>
+        /// <returns>The hexadecimal string</returns>
+        public static string ToString(this string s) {
+            string ret = "";
+            foreach (char c in s)
+                ret += Convert.ToString((byte)c, 16);
+            return ret;
+        }
+        
+        /// <summary>
+        /// Converts a hexadecimal string to a normal string
+        /// </summary>
+        /// <param name="hex">The hexadecimal string</param>
+        /// <returns>The string</returns>
+        public static string FromHexString(this string hex) {
+            string ret = "";
+            for (int i = 1; i < hex.Length; i+=2)
+                ret += (char)Convert.ToByte(hex[i - 1] + "" + hex[i], 16);
+            return ret;
+        }
+
 
         /// <summary>
         /// Save data to the database

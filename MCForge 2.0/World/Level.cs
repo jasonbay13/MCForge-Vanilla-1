@@ -25,6 +25,7 @@ using MCForge.World.Blocks;
 using MCForge.Utils;
 using System.Drawing;
 using MCForge.World.Loading_and_Saving;
+using MCForge.Interfaces.Block;
 
 namespace MCForge.World {
     /// <summary>
@@ -125,7 +126,7 @@ namespace MCForge.World {
         /// <summary>
         /// Data to store with in the level
         /// </summary>
-        public Dictionary<object, object> ExtraData;
+        public ExtraData<object, object> ExtraData;
 
         /// <summary>
         /// Empty level with null/default values that need to be assigned after initialized
@@ -136,7 +137,7 @@ namespace MCForge.World {
             //data = new byte[Size.x, Size.z, Size.y];
             Data = new byte[TotalBlocks];
             BackupLevel = true;
-            ExtraData = new Dictionary<object, object>();
+            ExtraData = new ExtraData<object, object>();
         }
 
         /// <summary>
@@ -301,7 +302,7 @@ namespace MCForge.World {
                 Binary.Write(SpawnPos.x + "!" + SpawnPos.y + "!" + SpawnPos.z); //Unused
                 Binary.Write(SpawnRot[0] + "~" + SpawnRot[1]); //Unused
                 Binary.Write(ExtraData.Count);
-                foreach (var pair in ExtraData) {
+                foreach (KeyValuePair<object,object> pair in ExtraData) {
                     Binary.Write(pair.Key.ToString());
                     Binary.Write(pair.Value.ToString());
                 }
@@ -369,7 +370,15 @@ namespace MCForge.World {
         public void BlockChange(ushort x, ushort z, ushort y, byte block, Player p = null) {
             if (y == Size.y) return;
             byte currentType = GetBlock(x, z, y);
-
+            if (currentType == 255) {
+                    if (MCForge.Interfaces.Block.Block.DoAction(p, x, z, y, block, this)) {
+                        //may the action caused the block to change, sending to all
+                        block = MCForge.Interfaces.Block.Block.GetVisibleType(x, z, y, this);
+                        Player.GlobalBlockchange(this, x, z, y, block);
+                        return;
+                    }
+                    MCForge.Interfaces.Block.Block.RemoveBlock(new Vector3S(x, z, y), this);
+            }
             if (block == currentType) return;
 
             SetBlock(x, z, y, block);

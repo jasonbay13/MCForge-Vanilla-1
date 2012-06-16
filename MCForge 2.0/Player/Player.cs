@@ -209,6 +209,17 @@ namespace MCForge.Entity {
         /// </summary>
         public Vector3S oldPos;
         /// <summary>
+        /// The block below the player
+        /// </summary>
+        public Vector3S belowBlock {
+            get {
+                Vector3S ret = new Vector3S(Pos);
+                ret.y -= 64;
+                ret = ret / 32;
+                return ret;
+            }
+        }
+        /// <summary>
         /// The players current rotation
         /// </summary>
         public byte[] Rot { get; set; }
