@@ -131,13 +131,13 @@
     <Compile Include="Remote\Networking\Packets\PacketPing.cs" />
     <Compile Include="Remote\Networking\PacketWriter.cs" />
     <Compile Include="Remote\RemoteManager.cs" />
-    <Compile Include="Robot\AStar.cs" />
     <Compile Include="Robot\Bot.cs" />
     <Compile Include="Player\PlayerNetworking.cs" />
     <Compile Include="Robot\BotMap.cs" />
-    <Compile Include="Robot\Location.cs" />
-    <Compile Include="Robot\Node.cs" />
-    <Compile Include="Robot\RouteFinder.cs" />
+    <Compile Include="Robot\Breadcrumb.cs" />
+    <Compile Include="Robot\MinHeap.cs" />
+    <Compile Include="Robot\PathFinder.cs" />
+    <Compile Include="Robot\Point3D.cs" />
     <Compile Include="System\Backup.cs" />
     <Compile Include="System\FileUtils.cs" />
     <Compile Include="System\Heartbeat\Heart.cs" />

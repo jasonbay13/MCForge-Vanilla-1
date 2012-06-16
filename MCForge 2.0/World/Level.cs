@@ -317,7 +317,8 @@ namespace MCForge.World {
         }
 
         /// <summary>
-        /// Loads all levels.
+        /// Loads all levels.ls
+        /// 
         /// </summary>
         public static void LoadAllLevels() {
             FileUtils.CreateDirIfNotExist("levels");
