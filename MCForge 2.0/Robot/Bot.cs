@@ -41,6 +41,8 @@ namespace MCForge.Robot
         public int WaypointAmount = 999;
         public int shouldCheckAgainLoopInt = 1000;
         public int intLoop = 0;
+        public BotMap LevelMap;
+
         public bool shouldCheckAgain
         {
             get
@@ -81,6 +83,7 @@ namespace MCForge.Robot
             this.FollowPlayers = FollowPlayers;
             this.BreakBlocks = BreakBlocks;
             this.Jumping = Jumping;
+            this.LevelMap = new BotMap(level);
         }
 
         /// <summary>
@@ -150,10 +153,10 @@ namespace MCForge.Robot
 
                             TemporaryLocation.x += (short)((Pathfound.x - TemporaryLocation.x) / 2);
                             TemporaryLocation.z += (short)((Pathfound.z - TemporaryLocation.z) / 2);
-                            TemporaryLocation.y += (short)((Pathfound.y - TemporaryLocation.y) / 2);
+                            //TemporaryLocation.y += (short)((Pathfound.y - TemporaryLocation.y) / 2);
                             #endregion
 
-                            /*Block Block1 = Bot.Player.Level.GetBlock(TemporaryLocation / 32);
+                            Block Block1 = Bot.Player.Level.GetBlock(TemporaryLocation / 32);
                             Block Block2 = Bot.Player.Level.GetBlock((TemporaryLocation.x / 32), (TemporaryLocation.z / 32), (TemporaryLocation.y / 32) - 1);
                             Block BlockUnderneath = Bot.Player.Level.GetBlock((TemporaryLocation.x / 32), (TemporaryLocation.z / 32), (TemporaryLocation.y / 32) - 2);
                             Block BlockAbove = Bot.Player.Level.GetBlock((TemporaryLocation.x / 32), (TemporaryLocation.z / 32), (TemporaryLocation.y / 32) + 1);
@@ -179,7 +182,7 @@ namespace MCForge.Robot
                                 TemporaryLocation.y += 21;
                                 Bot.shouldCheckAgainLoopInt = 1000;
                             }
-                            else if (Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath) && ClosestLocation.y > TemporaryLocation.y)
+                            else if (Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath) && Pathfound.y > TemporaryLocation.y && !Block.IsOPBlock(BlockUnderneath))
                             {
                                 TemporaryLocation.y += 21;
                                 Bot.shouldCheckAgainLoopInt = 1000;
@@ -188,7 +191,13 @@ namespace MCForge.Robot
                             else if (!Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath))
                             {
                                 Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) + 1), 0);
-                            }*/
+                            }
+
+                            if (Block.CanWalkThrough(BlockUnderneath) && !Block.CanWalkThrough(Bot.Player.Level.GetBlock((Bot.Player.oldPos.x / 32), (Bot.Player.oldPos.z / 32), (Bot.Player.oldPos.y / 32) - 2))
+                                && !Block.IsOPBlock(BlockUnderneath))
+                            {
+                                Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) - 2), 1);
+                            }
 
                             MoveEventArgs eargs = new MoveEventArgs(TemporaryLocation, Bot.Player.Pos);
                             bool cancel = OnBotMove.Call(Bot, eargs).Canceled;
@@ -207,7 +216,7 @@ namespace MCForge.Robot
 
         public static BreadCrumb Pathfind(Bot Bot, Vector3S ClosestLocation)
         {
-            return PathFinder.FindPath(Bot.Player.Level, new Point3D((Bot.Player.Pos.x / 32), (Bot.Player.Pos.y / 32), (Bot.Player.Pos.z / 32)),
+            return PathFinder.FindPath(Bot.Player.Level, Bot.LevelMap, new Point3D((Bot.Player.Pos.x / 32), (Bot.Player.Pos.y / 32), (Bot.Player.Pos.z / 32)),
                 new Point3D((ClosestLocation.x / 32), (ClosestLocation.y / 32), (ClosestLocation.z / 32)));
         }
 

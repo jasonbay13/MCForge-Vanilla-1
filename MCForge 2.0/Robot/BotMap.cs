@@ -17,7 +17,7 @@ using MCForge.Utils;
 using MCForge.World;
 
 namespace MCForge.Robot {
-    class BotMap {
+    public class BotMap {
         public BotMap(Level l) {
             AirMap = new bool[l.Size.x, l.Size.z, l.Size.y];//return x + z * Size.x + y * Size.x * Size.z;
             for (int i = 0; i < l.Data.Length; i++) {
@@ -32,7 +32,7 @@ namespace MCForge.Robot {
                 }
             }*/
         }
-        bool[, ,] AirMap;
+        public bool[, ,] AirMap;
         bool[, ,] PosMap;
         bool isAir(byte block) {
             return block == Block.BlockList.AIR;

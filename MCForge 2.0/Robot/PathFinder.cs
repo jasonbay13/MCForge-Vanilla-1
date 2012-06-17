@@ -21,17 +21,17 @@ namespace MCForge.Robot
         /// Method that switfly finds the best path from start to end.
         /// </summary>
         /// <returns>The starting breadcrumb traversable via .next to the end or null if there is no path</returns>        
-        public static BreadCrumb FindPath(Level world, Point3D start, Point3D end)
+        public static BreadCrumb FindPath(Level world, BotMap bm, Point3D start, Point3D end)
         {
             //note we just flip start and end here so you don't have to.            
-            return FindPathReversed(world, end, start);
+            return FindPathReversed(world, bm, end, start);
         }
 
         /// <summary>
         /// Method that switfly finds the best path from start to end. Doesn't reverse outcome
         /// </summary>
         /// <returns>The end breadcrump where each next is a step back)</returns>
-        private static BreadCrumb FindPathReversed(Level world, Point3D start, Point3D end)
+        private static BreadCrumb FindPathReversed(Level world, BotMap level, Point3D start, Point3D end)
         {
             MinHeap<BreadCrumb> openList = new MinHeap<BreadCrumb>(256);
             BreadCrumb[, ,] brWorld = new BreadCrumb[world.Size.x, world.Size.y, world.Size.z];
@@ -57,7 +57,8 @@ namespace MCForge.Robot
                 for (int i = 0; i < surrounding.Length; i++)
                 {
                     tmp = current.position + surrounding[i];
-                    if (world.GetBlock(tmp.X, tmp.Z, tmp.Y) == Block.BlockList.AIR)
+                    bool block = level.AirMap[tmp.X, tmp.Z, tmp.Y]; //Check if block is air
+                    if (block == true)
                     {
                         //Check if we've already examined a neighbour, if not create a new node for it.
                         if (brWorld[tmp.X, tmp.Y, tmp.Z] == null)
