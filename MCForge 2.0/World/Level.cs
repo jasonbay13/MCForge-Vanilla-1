@@ -25,7 +25,7 @@ using MCForge.World.Blocks;
 using MCForge.Utils;
 using System.Drawing;
 using MCForge.World.Loading_and_Saving;
-using MCForge.Interfaces.Block;
+using MCForge.Interfaces.Blocks;
 
 namespace MCForge.World {
     /// <summary>
@@ -371,13 +371,13 @@ namespace MCForge.World {
             if (y == Size.y) return;
             byte currentType = GetBlock(x, z, y);
             if (currentType == 255) {
-                    if (MCForge.Interfaces.Block.Block.DoAction(p, x, z, y, block, this)) {
+                    if (MCForge.Interfaces.Blocks.Block.DoAction(p, x, z, y, block, this)) {
                         //may the action caused the block to change, sending to all
-                        block = MCForge.Interfaces.Block.Block.GetVisibleType(x, z, y, this);
+                        block = MCForge.Interfaces.Blocks.Block.GetVisibleType(x, z, y, this);
                         Player.GlobalBlockchange(this, x, z, y, block);
                         return;
                     }
-                    MCForge.Interfaces.Block.Block.RemoveBlock(new Vector3S(x, z, y), this);
+                    MCForge.Interfaces.Blocks.Block.RemoveBlock(new Vector3S(x, z, y), this);
             }
             if (block == currentType) return;
 

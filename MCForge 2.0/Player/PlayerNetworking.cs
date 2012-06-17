@@ -700,7 +700,7 @@ namespace MCForge.Entity {
                     //TODO ADD CHECKING
                     if (block == 255) {
                         Vector3S vpos=Level.IntToPos(pos);
-                        block = MCForge.Interfaces.Block.Block.GetVisibleType((ushort)vpos.x, (ushort)vpos.z, (ushort)vpos.y, Level);
+                        block = MCForge.Interfaces.Blocks.Block.GetVisibleType((ushort)vpos.x, (ushort)vpos.z, (ushort)vpos.y, Level);
                     }
                     blocks[pos] = block;
                 });
@@ -770,7 +770,7 @@ namespace MCForge.Entity {
             pa.Add(x);
             pa.Add(y);
             pa.Add(z);
-            if (type == 255) type = MCForge.Interfaces.Block.Block.GetVisibleType(x, z, y, this.Level);
+            if (type == 255) type = MCForge.Interfaces.Blocks.Block.GetVisibleType(x, z, y, this.Level);
             //if (type > 49) type = Block.CustomBlocks[type].VisibleType;
             pa.Add(type);
 

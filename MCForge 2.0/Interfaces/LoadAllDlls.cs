@@ -20,7 +20,7 @@ using System.IO;
 using System.Reflection;
 using MCForge.Interface.Plugin;
 using MCForge.Interface.Command;
-using MCForge.Interfaces.Block;
+using MCForge.Interfaces.Blocks;
 using MCForge.Core;
 using MCForge.Utils;
 using System.Drawing;
