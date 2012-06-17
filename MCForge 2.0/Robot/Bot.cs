@@ -42,6 +42,7 @@ namespace MCForge.Robot
         public int shouldCheckAgainLoopInt = 1000;
         public int intLoop = 0;
         public BotMap LevelMap;
+        public Dictionary<string, int> BlackListPlayers;
 
         public bool shouldCheckAgain
         {
@@ -84,6 +85,7 @@ namespace MCForge.Robot
             this.BreakBlocks = BreakBlocks;
             this.Jumping = Jumping;
             this.LevelMap = new BotMap(level);
+            this.BlackListPlayers = new Dictionary<string, int>();
         }
 
         /// <summary>
@@ -97,6 +99,7 @@ namespace MCForge.Robot
                 if (Bot.Movement)
                 {
                     Vector3S TemporaryLocation = new Vector3S(Bot.Player.Pos.x, Bot.Player.Pos.z, Bot.Player.Pos.y);
+                    string PlayerName = "";
                     if (Bot.FollowPlayers)
                     {
                         #region Find Closest Player
@@ -110,10 +113,18 @@ namespace MCForge.Robot
                                 bool cancel = OnBotTargetPlayer.Call(Bot, eargs).Canceled;
                                 if (!cancel)
                                 {
-                                    HitAPlayer = true;
-                                    if (p.Pos - Bot.Player.Pos < ClosestLocation - Bot.Player.Pos)
+                                    if (Bot.BlackListPlayers.ContainsKey(p.Username))
                                     {
+                                        if (Math.Abs(Bot.BlackListPlayers[p.Username] - Bot.shouldCheckAgainLoopInt) > 100)
+                                        {
+                                            Bot.BlackListPlayers.Remove(p.Username);
+                                        }
+                                    }
+                                    if (p.Pos - Bot.Player.Pos < ClosestLocation - Bot.Player.Pos && !Bot.BlackListPlayers.ContainsKey(p.Username))
+                                    {
+                                        HitAPlayer = true;
                                         ClosestLocation = new Vector3S(p.Pos);
+                                        PlayerName = p.Username;
                                     }
                                 }
                             }
@@ -138,7 +149,16 @@ namespace MCForge.Robot
                                 Pathfound.z = (short)(Bot.Waypoint.position.Z * 32);
                                 Pathfound.y = (short)(Bot.Waypoint.position.Y * 32);
                             }
-                            catch { Bot.shouldCheckAgainLoopInt = 0; }
+                            catch
+                            {
+                                Bot.shouldCheckAgainLoopInt = 0;
+                                try
+                                {
+                                    Bot.BlackListPlayers.Add(PlayerName, Bot.shouldCheckAgainLoopInt);
+                                }
+                                catch { }
+                                break;
+                            }
 
                             if (Bot.intLoop >= 1) //Slows down the bots so they arent insta-propogate, it slows them a bit too much though, need to fix
                             {                     //Also makes them a bit less accurate than instant, but much more accurate than Vector2D.Move()
@@ -205,6 +225,10 @@ namespace MCForge.Robot
                             {
                                 TemporaryLocation = TempLocation;
                             }
+                        }
+                        else
+                        {
+                            Bot.shouldCheckAgainLoopInt += 1;
                         }
                     }
 

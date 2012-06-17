@@ -208,7 +208,7 @@ namespace MCForge.World {
             if (FindLevel(levelName) != null)
                 return null;
 
-            string Name = "levels\\" + levelName + ".lvl";
+            string Name = "levels//" + levelName + ".lvl";
             Level finalLevel = new Level(new Vector3S(32, 32, 32));
             finalLevel.Name = levelName;
             try {
@@ -292,7 +292,7 @@ namespace MCForge.World {
         /// </summary>
         /// <remarks>The resulting files are not compatible with the official Minecraft software.</remarks>
         public bool SaveToBinary() {
-            string Name = "levels\\" + this.Name + ".lvl";
+            string Name = "levels//" + this.Name + ".lvl";
             if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             var Binary = new BinaryWriter(File.Open(Name, FileMode.Create));
 
@@ -318,12 +318,12 @@ namespace MCForge.World {
         }
 
         /// <summary>
-        /// Loads all levels.ls
+        /// Loads all levels.
         /// 
         /// </summary>
         public static void LoadAllLevels() {
             FileUtils.CreateDirIfNotExist("levels");
-            string[] files = Directory.GetFiles("levels\\", "*.lvl");
+            string[] files = Directory.GetFiles("levels//", "*.lvl");
             foreach (string file in files) {
                 Level lvl = LoadLevel(file.Substring(7, file.Length - 11));
 
