@@ -44,7 +44,11 @@ namespace MCForge.Robot
             current.cost = 0;
 
             BreadCrumb finish = new BreadCrumb(end);
-            brWorld[current.position.X, current.position.Y, current.position.Z] = current;
+            try
+            {
+                brWorld[current.position.X, current.position.Y, current.position.Z] = current;
+            }
+            catch { return current; }
             openList.Add(current);
 
             while (openList.Count > 0)
@@ -57,7 +61,12 @@ namespace MCForge.Robot
                 for (int i = 0; i < surrounding.Length; i++)
                 {
                     tmp = current.position + surrounding[i];
-                    bool block = level.AirMap[tmp.X, tmp.Z, tmp.Y]; //Check if block is air
+                    bool block = false;
+                    try
+                    {
+                        block = level.AirMap[tmp.X, tmp.Z, tmp.Y]; //Check if block is air
+                    }
+                    catch { }
                     if (block == true)
                     {
                         //Check if we've already examined a neighbour, if not create a new node for it.
