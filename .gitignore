@@ -8,6 +8,7 @@
 /Upgrader/bin/
 /Upgrader/obj/
 *.suo
+*.vsp
 *.user
 MCForge 2.0/MCForge.xml
 
