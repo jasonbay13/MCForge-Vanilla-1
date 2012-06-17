@@ -108,10 +108,14 @@ namespace MCForge.Utils {
         /// <param name="message">The message to check.</param>
         /// <returns> <c>true</c> if the message has a bad color; otherwise, <c>false</c>.</returns>
         public static bool MessageHasBadColorCodes(string message) {
-            var split = message.Split(new[] { '%', '&' });
-            foreach (var value in split)
-                if (String.IsNullOrWhiteSpace(value))
-                    return true;
+            /*var split = message.Split(new[] { '%', '&' });
+            for(int i = 0; i < split.Length; i++) {
+                var value = split[i];
+                if (!IsValidMinecraftColorCode('%' + value))
+                    continue;
+
+
+            }*/
             return false;
         }
 

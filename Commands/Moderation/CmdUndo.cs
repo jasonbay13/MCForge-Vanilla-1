@@ -45,6 +45,10 @@ namespace MCForge.Commands.Moderation {
             if (args.Length == 1) {
                 try {
                     _time = int.Parse(args[0]);
+                    if (_time < 1) {
+                        p.SendMessage("The time must be greater than 1");
+                        return;
+                    }
                 }
                 catch {
                     p.SendMessage("That not a number silly head");
@@ -62,16 +66,20 @@ namespace MCForge.Commands.Moderation {
                 }
 
                 if (args[1].ToLower() == "all") {
-                    
-                    _time = int.MaxValue;
-                    return;
-                }
 
-                try {
-                    _time = int.Parse(args[1]);
+                    _time = int.MaxValue;
                 }
-                catch {
-                    p.SendMessage("That is not a valid numba");
+                else {
+                    try {
+                        _time = int.Parse(args[1]);
+                        if (_time < 1) {
+                            p.SendMessage("The time must be greater than 1");
+                            return;
+                        }
+                    }
+                    catch {
+                        p.SendMessage("That is not a valid numba");
+                    }
                 }
             }
 
@@ -82,7 +90,7 @@ namespace MCForge.Commands.Moderation {
                 }
             }
             Undo(who, _time);
-            p.SendMessage(Server.DefaultColor + "Undid " +who.Color + who.Username + Server.DefaultColor + " for &c" + _time + Server.DefaultColor + " seconds");
+            p.SendMessage(Server.DefaultColor + "Undid " + who.Color + who.Username + Server.DefaultColor + " for &c" + _time + Server.DefaultColor + " seconds");
         }
 
         void Undo(Player p, int time = 30) {
@@ -97,22 +105,24 @@ namespace MCForge.Commands.Moderation {
                 timeToLook = int.MaxValue;
 
 
-            for (int i = 0; i < p.BlockChanges.Count; i++) {
+            for (int i = p.BlockChanges.Count - 1; i > 0; i++) {
                 var bChange = p.BlockChanges[i];
 
-                if (bChange.Time.Second >= timeToLook) {
-                    for (int j = p.BlockChanges.Count; j > i; j--) {
-                        p.Level.BlockChange(bChange.Position, bChange.BlockFrom);
-                    }
+                if (bChange.Time.Second < timeToLook)
+                    continue;
+
+                for (int j = 0; j < i; j++) {
+                    p.Level.BlockChange(bChange.Position, bChange.BlockFrom);
                 }
+                return;
             }
         }
 
         public void Help(Player p) {
-            p.SendMessage(Server.DefaultColor +"/undo <player> <seconds> - Undoes the block changes for <player> in the past <seconds>");
-            p.SendMessage(Server.DefaultColor +"/undo <player> all - Undoes as much as it can.");
-            p.SendMessage(Server.DefaultColor +"/undo <seconds> - Unodes the block changes for yourself in the past <seconds>");
-            p.SendMessage(Server.DefaultColor + "/undo - Undoes the block changes for yourself in the past &c30 " + Server.DefaultColor + " seconds");
+            p.SendMessage(Server.DefaultColor + "/undo <player> <seconds> - Undoes the block changes for <player> in the past <seconds>");
+            p.SendMessage(Server.DefaultColor + "/undo <player> all - Undoes as much as it can.");
+            p.SendMessage(Server.DefaultColor + "/undo <seconds> - Unodes the block changes for yourself in the past <seconds>");
+            p.SendMessage(Server.DefaultColor + "/undo - Undoes the block changes for yourself in the past&c 30 " + Server.DefaultColor + " seconds");
         }
 
         public void Initialize() {

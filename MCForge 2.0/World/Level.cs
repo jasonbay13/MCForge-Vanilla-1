@@ -107,25 +107,25 @@ namespace MCForge.World {
         /// <summary>
         /// This is the size of the level
         /// </summary>
-        public Vector3S Size;
+        public Vector3S Size { get; set; }
         /// <summary>
         /// Levels current Spawn position
         /// </summary>
-        public Vector3S SpawnPos;
+        public Vector3S SpawnPos { get; set; }
         /// <summary>
         /// Levels current Spawn ROT
         /// </summary>
-        public byte[] SpawnRot;
+        public byte[] SpawnRot { get; set; }
 
         /// <summary>
         /// This holds the map data for the entire map
         /// </summary>
-        public byte[] Data;
+        public byte[] Data { get; set; }
 
         /// <summary>
         /// Data to store with in the level
         /// </summary>
-        public Dictionary<object, object> ExtraData;
+        public Dictionary<object, object> ExtraData { get; private set; }
 
         /// <summary>
         /// Empty level with null/default values that need to be assigned after initialized
