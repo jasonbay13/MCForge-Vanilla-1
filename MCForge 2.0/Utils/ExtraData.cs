@@ -13,6 +13,11 @@ namespace MCForge.Utils {
             }
             set {
                 if (key == null) return;
+                if (value == null) {
+                    if (base.ContainsKey(key))
+                        base.Remove(key);
+                    return;
+                }
                 if (!base.ContainsKey(key)) base.Add(key, value);
                 else base[key] = value;
             }

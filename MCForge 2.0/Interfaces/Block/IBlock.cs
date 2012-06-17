@@ -8,6 +8,7 @@ using MCForge.World;
 
 namespace MCForge.Interfaces.Blocks {
     public interface IBlock {
+        //TODO: Add OnPlayerIsInBlock(..) for portals
         /// <summary>
         /// The name of this block. Used to create from commands.
         /// </summary>
@@ -38,8 +39,9 @@ namespace MCForge.Interfaces.Blocks {
         /// <summary>
         /// Gets called when physics should be updated.
         /// </summary>
-        /// <param name="ticks">The elapsed milliseconds since last tick.</param>
-        void PhysicsTick(int millisecodns);
+        /// <param name="blockPositions">All block positions of this block type</param>
+        /// <param name="level">The level</param>
+        void PhysicsTick(Vector3S[] blockPositions, Level level);
         /// <summary>
         /// Initializes the block type
         /// </summary>

@@ -24,7 +24,7 @@ namespace MCForge.Interfaces.Blocks {
                     b.OnPlayerStepsOn(sender, sender.belowBlock, sender.Level);
             }
         }
-        private static ExtraData<string, IBlock> Blocks = new ExtraData<string, IBlock>();
+        internal static ExtraData<string, IBlock> Blocks = new ExtraData<string, IBlock>();
         /// <summary>
         /// Get the names of all plugins
         /// </summary>
@@ -148,6 +148,16 @@ namespace MCForge.Interfaces.Blocks {
         /// <param name="plugin">The block d that this reference... references, you should most likely use 'this'</param>    
         public static void AddReference(IBlock block) {
             Blocks[block.Name] = block;
+            foreach (Level l in Level.Levels) {
+                if (l.ExtraData["IBlocks" + block.Name] != null && l.ExtraData["IBlocks" + block.Name].GetType() == typeof(string)) {
+                    string hexs = (string)l.ExtraData["IBlocks" + block.Name];
+                    l.ExtraData["IBlocks" + block.Name] = new List<string>();
+                    ((List<string>)l.ExtraData["IBlocks" + block.Name]).AddHexstrings(hexs);
+                }
+                else if (l.ExtraData["IBlocks" + block.Name] == null) {
+                    l.ExtraData["IBlocks" + block.Name] = new List<string>();
+                }
+            }
         }
         /// <summary>
         /// Gets a block by interface.
@@ -193,6 +203,9 @@ namespace MCForge.Interfaces.Blocks {
         }
         public static void SetBlock(IBlock block, Vector3S blockPosition, Level level) {
             level.ExtraData["IBlocks" + blockPosition.ToString()] = block.Name;
+            if (level.ExtraData["IBlocks" + block.Name] == null)
+                level.ExtraData["IBlocks" + block.Name] = new List<string>();
+            ((List<string>)level.ExtraData["IBlocks" + block.Name]).Add(blockPosition.ToString());
             level.SetBlock(blockPosition, 255);
         }
         public static void RemoveBlock(Vector3S blockPosition, Level level) {
@@ -200,9 +213,35 @@ namespace MCForge.Interfaces.Blocks {
             string name = (string)level.ExtraData["IBlocks" + blockPosition.ToString()];
             if (name != null && Blocks[name] != null) Blocks[name].OnRemove(blockPosition, level);
             level.ExtraData.Remove("IBlocks" + blockPosition.ToString());
+            ((List<string>)level.ExtraData["IBlocks" + name]).Remove(blockPosition.ToString());
         }
         public static IBlock GetBlock(string name) {
             return Blocks[name];
+        }
+        public static Vector3S[] GetPositions(string name, Level level) {
+            if (level.ExtraData["IBlocks" + name] != null && level.ExtraData["IBlocks" + name].GetType() == typeof(string)) {
+                string hexs = (string)level.ExtraData["IBlocks" + name];
+                level.ExtraData["IBlocks" + name] = new List<string>();
+                ((List<string>)level.ExtraData["IBlocks" + name]).AddHexstrings(hexs);
+            }
+            List<string> pos = ((List<string>)level.ExtraData["IBlocks" + name]);
+            if (pos != null) {
+                Vector3S[] ret = new Vector3S[pos.Count];
+                for (int i = 0; i < ret.Length; i++) {
+                    ret[i] = new Utils.Vector3S();
+                    ret[i].FromString(pos[i]);
+                }
+                return ret;
+            }
+            return new Vector3S[0];
+        }
+        public static void DoTick(Level level) {
+            foreach (string name in Blocks.Keys) {
+                Blocks[name].PhysicsTick(GetPositions(name, level), level);
+            }
+        }
+        public static void SendBlock(Vector3S blockPosition, Level l) {
+            Player.GlobalBlockchange(l, (ushort)blockPosition.x, (ushort)blockPosition.z, (ushort)blockPosition.y, GetBlock(blockPosition, l).GetDisplayType(blockPosition, l));
         }
     }
 }

@@ -5,10 +5,12 @@ using MCForge.Utils;
 using MCForge.World;
 using MCForge.Interfaces.Blocks;
 
-namespace MCForge.Commands.Misc {
+namespace MCForge.Commands {
     public class CmdMessageBlock : ICommand {
+        public CmdMessageBlock() {
+        }
         public string Name {
-            get { return "MessageBlock"; }
+            get { return "CMDMessageBlock"; }
         }
 
         public CommandTypes Type {
@@ -61,7 +63,7 @@ namespace MCForge.Commands.Misc {
         }
     }
 
-    public class MessageBlock :IBlock {
+    public class MessageBlock : IBlock {
 
         public string Name {
             get { return "MessageBlock"; }
@@ -96,10 +98,6 @@ namespace MCForge.Commands.Misc {
             return true;
         }
 
-        public void PhysicsTick(int millisecodns) {
-
-        }
-
         public void Initialize() {
             MCForge.Interfaces.Blocks.Block.AddReference(this);
         }
@@ -118,6 +116,9 @@ namespace MCForge.Commands.Misc {
         public void OnRemove(Vector3S blockPosition, Level level) {
             level.ExtraData.Remove(Name + blockPosition + "block");
             level.ExtraData.Remove(Name + blockPosition + "message");
+        }
+
+        public void PhysicsTick(Vector3S[] blockPositions, Level level) {
         }
     }
 }

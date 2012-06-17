@@ -190,5 +190,11 @@ namespace MCForge.Utils {
         public override string ToString() {
             return String.Format("x:{0} z:{1} y:{2}", x, z, y);
         }
+        public void FromString(string str) {
+            string[] split = str.Split(new char[] { ':', ' ' });
+            x = short.Parse(split[1]);
+            z = short.Parse(split[3]);
+            y = short.Parse(split[5]);
+        }
     }
 }

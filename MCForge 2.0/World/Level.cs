@@ -26,6 +26,8 @@ using MCForge.Utils;
 using System.Drawing;
 using MCForge.World.Loading_and_Saving;
 using MCForge.Interfaces.Blocks;
+using System.Threading;
+using MCForge.Utils.Settings;
 
 namespace MCForge.World {
     /// <summary>
@@ -138,7 +140,21 @@ namespace MCForge.World {
             Data = new byte[TotalBlocks];
             BackupLevel = true;
             ExtraData = new ExtraData<object, object>();
+            if (ServerSettings.HasKey("PhysicsInterval")) {
+                physicsSleep = ServerSettings.GetSettingInt("PhysicsInterval");
+
+            }
+            else physicsSleep = 100;
+            physics = new Thread(() => {
+                while (!Server.ShuttingDown) {
+                    Thread.Sleep(physicsSleep);
+                    MCForge.Interfaces.Blocks.Block.DoTick(this);
+                }
+            });
+            physics.Start();
         }
+        int physicsSleep;
+        Thread physics;
 
         /// <summary>
         /// Create a level with a specified type and a specified size
@@ -254,6 +270,17 @@ namespace MCForge.World {
                             finalLevel.ExtraData[key] = value;
                         }
 
+                        foreach (string name in MCForge.Interfaces.Blocks.Block.Blocks.Keys) {
+                            if (finalLevel.ExtraData["IBlocks" + name] != null && finalLevel.ExtraData["IBlocks" + name].GetType() == typeof(string)) {
+                                string hexs = (string)finalLevel.ExtraData["IBlocks" + name];
+                                finalLevel.ExtraData["IBlocks" + name] = new List<string>();
+                                ((List<string>)finalLevel.ExtraData["IBlocks" + name]).AddHexstrings(hexs);
+                            }
+                            else if (finalLevel.ExtraData["IBlocks" + name] == null) {
+                                finalLevel.ExtraData["IBlocks" + name] = new List<string>();
+                            }
+                        }
+
                         finalLevel._TotalBlocks = Binary.ReadInt32();
                         int ByteLength = Binary.ReadInt32();
                         byte[] b = Decompress(Binary.ReadBytes(ByteLength));
@@ -275,7 +302,8 @@ namespace MCForge.World {
                 Logger.Log("[Level] " + levelName + " was loaded");
                 return finalLevel;
             }
-            catch (Exception e) { Logger.Log(e.Message); Logger.Log(e.StackTrace); } return null;
+            catch (Exception e) { 
+                Logger.Log(e.Message); Logger.Log(e.StackTrace); } return null;
         }
 
         /// <summary>
@@ -283,6 +311,7 @@ namespace MCForge.World {
         /// </summary>
         public void Unload() {
             SaveToBinary();
+            physics.Abort();
             Levels.Remove(this);
         }
 
@@ -302,9 +331,18 @@ namespace MCForge.World {
                 Binary.Write(SpawnPos.x + "!" + SpawnPos.y + "!" + SpawnPos.z); //Unused
                 Binary.Write(SpawnRot[0] + "~" + SpawnRot[1]); //Unused
                 Binary.Write(ExtraData.Count);
-                foreach (KeyValuePair<object,object> pair in ExtraData) {
-                    Binary.Write(pair.Key.ToString());
-                    Binary.Write(pair.Value.ToString());
+                lock (ExtraData) {
+                    foreach (KeyValuePair<object, object> pair in ExtraData) {
+                        if (pair.Key != null && pair.Value != null) {
+                            Binary.Write(pair.Key.ToString());
+                            if (pair.Value.GetType() == typeof(List<string>)) {
+                                List<string> tmp = (List<string>)pair.Value;
+                                Binary.Write(MiscUtils.ToString(tmp));
+                            }
+                            else
+                                Binary.Write(pair.Value.ToString());
+                        }
+                    }
                 }
                 Binary.Write(_TotalBlocks);
                 Binary.Write(Compress(Data).Length);
@@ -312,6 +350,8 @@ namespace MCForge.World {
                 Binary.Write("EOF"); //EOF makes sure the entire file saved.
             }
             finally {
+                Binary.Flush();
+                Binary.Close();
                 Binary.Dispose();
             }
             return true;

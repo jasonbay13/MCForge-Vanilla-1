@@ -111,6 +111,12 @@ namespace MCForge.Utils {
                 dict[kv[0].FromHexString()] = kv[1].FromHexString();
             }
         }
+        public static string ToString(this object o) {
+            if (o.GetType() == typeof(List<string>)) {
+                return MiscUtils.ToString((List<string>)o);
+            }
+            return o.ToString();
+        }
 
         /// <summary>
         /// Converts the list into a string
@@ -120,8 +126,7 @@ namespace MCForge.Utils {
         public static string ToString(this List<string> list) {
             string ret = "";
             foreach (string item in list) {
-
-                ret += item.ToString() + "\n";
+                ret += MiscUtils.ToHexString(item) + "\n";
             }
             return ret;
         }
@@ -141,7 +146,7 @@ namespace MCForge.Utils {
         /// </summary>
         /// <param name="s">The string</param>
         /// <returns>The hexadecimal string</returns>
-        public static string ToString(this string s) {
+        public static string ToHexString(this string s) {
             string ret = "";
             foreach (char c in s)
                 ret += Convert.ToString((byte)c, 16);
@@ -231,5 +236,14 @@ namespace MCForge.Utils {
             return false;
         }
 
+
+        public static IEnumerable<Vector3S> GetNeighboors(this Vector3S[] group, Vector3S self) {
+            foreach (Vector3S v in group) {
+                if (v.x == self.x || v.z == self.z || v.y == self.y) {
+                    if ((v - self).Length == 1)
+                        yield return v;
+                }
+            }
+        }
     }
 }
