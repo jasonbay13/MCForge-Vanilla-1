@@ -293,7 +293,7 @@ namespace MCForge.Core {
                 ServerSettings.SetSetting("Main-Level", null, "main");
             }
             Level.Levels.Add(Mainlevel);
-            Level.LoadAllLevels();
+            //Level.LoadAllLevels();
 
             Backup.StartBackup();
 

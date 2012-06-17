@@ -100,9 +100,12 @@ namespace MCForge.Entity {
                 return _displayName; 
             }
             set { 
-                _displayName = value; 
-                this.GlobalDie(); 
-                SpawnThisPlayerToOtherPlayers(); 
+                _displayName = value;
+                if (IsLoggedIn)
+                {
+                    this.GlobalDie();
+                    SpawnThisPlayerToOtherPlayers();
+                }
             }
         }
 
@@ -205,6 +208,17 @@ namespace MCForge.Entity {
         /// The players last known position
         /// </summary>
         public Vector3S oldPos;
+        /// <summary>
+        /// The block below the player
+        /// </summary>
+        public Vector3S belowBlock {
+            get {
+                Vector3S ret = new Vector3S(Pos);
+                ret.y -= 64;
+                ret = ret / 32;
+                return ret;
+            }
+        }
         /// <summary>
         /// The players current rotation
         /// </summary>
@@ -371,10 +385,10 @@ namespace MCForge.Entity {
         /// <param name="message">The message to send</param>
 		public override void SendMessage(string message)
         {
-            if (ColorUtils.MessageHasBadColorCodes(message)) {
+            /*if (ColorUtils.MessageHasBadColorCodes(message)) { //This triggers with something like SendMessage(Colors.red + "-----------------Zombie Store---------------");, need to fix
                 Logger.Log("Bad message sent from " + Username);
                 return;
-            }
+            }*/
             System.Text.StringBuilder sb = new System.Text.StringBuilder(message);
             sb.Replace("$name", ServerSettings.GetSettingBoolean("$Before$Name") ? "$" + Username : Username);
             sb.Replace("$color", Color);

@@ -50,12 +50,13 @@ namespace MCForge.Commands {
                     pe.Level = Server.Mainlevel;
                 lvl.Unload();
             }
-
-            Backup.BackupLevel(args[0], "-deleted");
+            
 
             foreach (var trashCan in Level.UnloadedLevels)
-                if (trashCan.ToLower() == args[0].ToLower())
+                if (trashCan.ToLower() == args[0].ToLower()){
+                    Backup.BackupLevel(trashCan, "-deleted");
                     File.Delete(FileUtils.LevelsPath + trashCan + ".lvl");
+                }
 
             Player.UniversalChat("Level \"" + args[0] + "\" was deleted");
         }

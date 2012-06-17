@@ -146,6 +146,23 @@ namespace MCForge.Groups
                     }
                 }
 
+                string file1 = File;
+                if (!Directory.Exists(Path.GetDirectoryName(file1)))
+                    Directory.CreateDirectory(Path.GetDirectoryName(file1));
+                if (!System.IO.File.Exists(file1))
+                {
+                    System.IO.File.Create(file1).Close();
+                    Logger.Log("[Groups] " + File + " was created", System.Drawing.Color.DarkGreen, System.Drawing.Color.Black);
+                }
+                try
+                {
+                    Permission = byte.Parse(Permission.ToString());
+                }
+                catch
+                {
+                    throw new ArgumentException("Permission has to be above 0 and below 255");
+                }
+
                 LoadGroup();
                 Groups.Add(this);
             }
@@ -316,19 +333,18 @@ namespace MCForge.Groups
         /// <remarks></remarks>
         public static void InitDefaultGroups()
         {
-            PlayerGroupProperties.Load();
-            //foreach (PlayerGroup g in PlayerGroup.groups)
-            //{
-            //    Logger.Log("[Group] " + g.name + " Initialized");
-            //}
-            Groups.Clear();
-            new PlayerGroup((byte)PermissionLevel.Guest, "Guest", Colors.white, "guests.txt");
-            new PlayerGroup((byte)PermissionLevel.Builder, "Builder", Colors.green, "builders.txt");
-            new PlayerGroup((byte)PermissionLevel.AdvBuilder, "AdvBuilder", Colors.lime, "advbuilders.txt");
-            new PlayerGroup((byte)PermissionLevel.Operator, "Operator", Colors.purple, "ops.txt");
-            new PlayerGroup((byte)PermissionLevel.SuperOP, "SuperOp", Colors.maroon, "superops.txt");
-            new PlayerGroup((byte)PermissionLevel.Owner, "Owner", Colors.blue, "owners.txt");
-            PlayerGroupProperties.Save();
+            if (FileUtils.FileExists(FileUtils.PropertiesPath + "groups.xml"))
+                PlayerGroupProperties.Load();
+            if (PlayerGroup.Groups.Count <= 0)
+            {
+                new PlayerGroup((byte)PermissionLevel.Guest, "Guest", Colors.white, "guests.txt");
+                new PlayerGroup((byte)PermissionLevel.Builder, "Builder", Colors.green, "builders.txt");
+                new PlayerGroup((byte)PermissionLevel.AdvBuilder, "AdvBuilder", Colors.lime, "advbuilders.txt");
+                new PlayerGroup((byte)PermissionLevel.Operator, "Operator", Colors.purple, "ops.txt");
+                new PlayerGroup((byte)PermissionLevel.SuperOP, "SuperOp", Colors.maroon, "superops.txt");
+                new PlayerGroup((byte)PermissionLevel.Owner, "Owner", Colors.blue, "owners.txt");
+                PlayerGroupProperties.Save();
+            }
         }
 
         /// <summary>

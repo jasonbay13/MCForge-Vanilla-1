@@ -68,12 +68,12 @@ namespace MCForge.Commands
             }
             else
             {
-                who.ExtraData["Title"] = title;
+                who.ExtraData["Title"] = "[" + title + "&f] ";
                 message = "set to &b[" + title + "]";
             }
             who.SetPrefix();
             Player.UniversalChat(who.Color + who.Username + Server.DefaultColor + " had their title " + message);
-            //TODO Save to database.
+            p.ExtraData.Save(p, "Title");
         }
         public void Help(Player p)
         {

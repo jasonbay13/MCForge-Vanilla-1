@@ -8,7 +8,7 @@ namespace MCForge.World.Loading_and_Saving {
 
         Level.SaveTypes Type {get; }
 
-        Level Load(string path);
+        Level Load(string levelName, string path);
 
     }
 }

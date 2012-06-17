@@ -22,7 +22,6 @@ using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
 using System.Collections;
-using AStar;
 
 namespace MCForge.Robot
 {
@@ -38,20 +37,22 @@ namespace MCForge.Robot
         bool Movement = true;
 
         //AStar Variables
-        public BotMap2D LevelMap;
-        public List<Location> Waypoint = new List<Location>();
+        public BreadCrumb Waypoint = null;
+        public int WaypointAmount = 999;
         public int shouldCheckAgainLoopInt = 1000;
         public int intLoop = 0;
-        public bool shouldCheckAgain { 
-            get {
-                if (shouldCheckAgainLoopInt > 999 || shouldCheckAgainLoopInt >= Waypoint.Count)
+        public bool shouldCheckAgain
+        {
+            get
+            {
+                if (shouldCheckAgainLoopInt > 999 || shouldCheckAgainLoopInt == WaypointAmount)
                 {
                     shouldCheckAgainLoopInt = 0;
                     return true;
                 }
                 else
-                    return false; 
-            } 
+                    return false;
+            }
         }
 
         /// <summary>
@@ -65,8 +66,8 @@ namespace MCForge.Robot
         public Bot(string Username, Vector3S Position, byte[] Rotation, Level level, bool FollowPlayers, bool BreakBlocks, bool Jumping)
         {
             Player = new Player();
-            Player.DisplayName = Username;
             Player.IsLoggedIn = false;
+            Player.DisplayName = Username;
             Player.IsBot = true;
             Player.Username = Username;
             Player.Pos = Position;
@@ -76,10 +77,10 @@ namespace MCForge.Robot
             Player.ID = FreeId();
             Server.Bots.Add(this);
             SpawnThisBotToOtherPlayers(this);
+            Player.IsLoggedIn = true;
             this.FollowPlayers = FollowPlayers;
             this.BreakBlocks = BreakBlocks;
             this.Jumping = Jumping;
-            LevelMap = new BotMap2D(level, Position.y);
         }
 
         /// <summary>
@@ -124,19 +125,15 @@ namespace MCForge.Robot
 
                             #region AStar
 
-                            if (Bot.shouldCheckAgain)
+                            if (Bot.shouldCheckAgain || Bot.Waypoint == null)
                             {
                                 Bot.Waypoint = Pathfind(Bot, ClosestLocation);
-                                if (Bot.Waypoint == null) //Hit the player!
-                                {
-                                    Bot.Waypoint = new List<Location>();
-                                    Bot.Waypoint.Add(new Location(Pathfound.x / 32, Pathfound.z / 32));
-                                }
                             }
                             try
                             {
-                                Pathfound.x = (short)(Bot.Waypoint[Bot.shouldCheckAgainLoopInt].X * 32);
-                                Pathfound.z = (short)(Bot.Waypoint[Bot.shouldCheckAgainLoopInt].Y * 32);
+                                Pathfound.x = (short)(Bot.Waypoint.position.X * 32);
+                                Pathfound.z = (short)(Bot.Waypoint.position.Z * 32);
+                                Pathfound.y = (short)(Bot.Waypoint.position.Y * 32);
                             }
                             catch { Bot.shouldCheckAgainLoopInt = 0; }
 
@@ -144,6 +141,7 @@ namespace MCForge.Robot
                             {                     //Also makes them a bit less accurate than instant, but much more accurate than Vector2D.Move()
                                 Bot.intLoop = 0;
                                 Bot.shouldCheckAgainLoopInt++;
+                                Bot.Waypoint = Bot.Waypoint.next;
                             }
                             else
                             {
@@ -152,11 +150,17 @@ namespace MCForge.Robot
 
                             TemporaryLocation.x += (short)((Pathfound.x - TemporaryLocation.x) / 2);
                             TemporaryLocation.z += (short)((Pathfound.z - TemporaryLocation.z) / 2);
+                            TemporaryLocation.y += (short)((Pathfound.y - TemporaryLocation.y) / 2);
                             #endregion
 
-                            Block Block1 = Bot.Player.Level.GetBlock(TemporaryLocation / 32);
+                            /*Block Block1 = Bot.Player.Level.GetBlock(TemporaryLocation / 32);
                             Block Block2 = Bot.Player.Level.GetBlock((TemporaryLocation.x / 32), (TemporaryLocation.z / 32), (TemporaryLocation.y / 32) - 1);
                             Block BlockUnderneath = Bot.Player.Level.GetBlock((TemporaryLocation.x / 32), (TemporaryLocation.z / 32), (TemporaryLocation.y / 32) - 2);
+                            Block BlockAbove = Bot.Player.Level.GetBlock((TemporaryLocation.x / 32), (TemporaryLocation.z / 32), (TemporaryLocation.y / 32) + 1);
+
+                            Vector3S delta = new Vector3S((short)Math.Abs(ClosestLocation.x - TemporaryLocation.x),
+                                (short)Math.Abs(ClosestLocation.z - TemporaryLocation.z),
+                                (short)Math.Abs(ClosestLocation.y - TemporaryLocation.y));
 
                             if (Block.CanWalkThrough(BlockUnderneath) && Block.CanWalkThrough(Block2)
                                 && !Block.CanEscalate(Block1) && !Block.CanEscalate(Block2))
@@ -175,63 +179,36 @@ namespace MCForge.Robot
                                 TemporaryLocation.y += 21;
                                 Bot.shouldCheckAgainLoopInt = 1000;
                             }
+                            else if (Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath) && ClosestLocation.y > TemporaryLocation.y)
+                            {
+                                TemporaryLocation.y += 21;
+                                Bot.shouldCheckAgainLoopInt = 1000;
+                                Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) - 2), 1);
+                            }
+                            else if (!Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath))
+                            {
+                                Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) + 1), 0);
+                            }*/
 
                             MoveEventArgs eargs = new MoveEventArgs(TemporaryLocation, Bot.Player.Pos);
                             bool cancel = OnBotMove.Call(Bot, eargs).Canceled;
-                            if (cancel){
+                            if (cancel)
+                            {
                                 TemporaryLocation = TempLocation;
                             }
                         }
                     }
 
-                    if (TemporaryLocation.y != Bot.Player.Pos.y)
-                    {
-                        Bot.LevelMap = new BotMap2D(Bot.Player.Level, TemporaryLocation.y);
-                    }
                     Bot.Player.Pos = TemporaryLocation;
                     Bot.Player.UpdatePosition(true); //Pls leave this true, bots dont appear properly otherwise
                 }
             }
         }
 
-        public static List<Location> Pathfind(Bot Bot, Vector3S ClosestLocation)
+        public static BreadCrumb Pathfind(Bot Bot, Vector3S ClosestLocation)
         {
-            bool Calculate = true;
-
-            RouteFinder routeFinder = new RouteFinder(0, 0, Bot.Player.Level.Size.x, Bot.Player.Level.Size.z, true); 
-            routeFinder.InitialLocation = new Location((Bot.Player.Pos.x / 32), (Bot.Player.Pos.z / 32)); 
-            try
-            {
-                routeFinder.AddGoal(new Location((ClosestLocation.x / 32), (ClosestLocation.z / 32)));
-            }
-            catch { Calculate = false; }
-
-            if (Calculate)
-            {
-                for (int x = 0; x < Bot.Player.Level.Size.x; x++)
-                {
-                    for (int z = 0; z < Bot.Player.Level.Size.z; z++)
-                    {
-                        Location loc = new Location(x, z);
-
-                        if (Bot.LevelMap.GetMap(x, z) == -1)
-                        {
-                            routeFinder.AddObstacle(loc);
-                            /*
-                             * TODO - If his path is invalid... stop targeting that player.
-                             * Sometimes the bot walks through walls... why?
-                             * Change location (which is pretty close, but changing it causes issues) to Vector2S
-                             * */
-                        }
-                    }
-                }
-
-                List<Location> LocationList = routeFinder.CalculateRoute();
-
-                return routeFinder.CalculateRoute();
-            }
-
-            return null;
+            return PathFinder.FindPath(Bot.Player.Level, new Point3D((Bot.Player.Pos.x / 32), (Bot.Player.Pos.y / 32), (Bot.Player.Pos.z / 32)),
+                new Point3D((ClosestLocation.x / 32), (ClosestLocation.y / 32), (ClosestLocation.z / 32)));
         }
 
         protected byte FreeId()
