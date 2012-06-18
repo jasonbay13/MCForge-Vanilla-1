@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.Interface;
@@ -217,6 +218,12 @@ namespace MCForge.Interfaces.Blocks {
         }
         public static IBlock GetBlock(string name) {
             return Blocks[name];
+        }
+        public static IEnumerable<Tuple<string,Vector3S>> GetNeighborsNames(Vector3S blockPos, Level level) {
+            foreach (Vector3S v in blockPos.GetNeighbors()) {
+                string name =(string)level.ExtraData["IBlocks" + blockPos];
+                if (name != null) yield return new Tuple<string, Vector3S>(name, v);
+            }
         }
         public static Vector3S[] GetPositions(string name, Level level) {
             if (level.ExtraData["IBlocks" + name] != null && level.ExtraData["IBlocks" + name].GetType() == typeof(string)) {

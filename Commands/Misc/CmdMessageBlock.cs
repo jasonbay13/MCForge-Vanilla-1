@@ -10,7 +10,7 @@ namespace MCForge.Commands {
         public CmdMessageBlock() {
         }
         public string Name {
-            get { return "CMDMessageBlock"; }
+            get { return "MessageBlock"; }
         }
 
         public CommandTypes Type {

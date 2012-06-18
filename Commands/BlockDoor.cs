@@ -34,22 +34,25 @@ namespace MCForge.Commands {
         public void PhysicsTick(Utils.Vector3S[] blockPositions, World.Level level) {
             List<Vector3S> ticked = new List<Vector3S>();
             foreach (Vector3S blockPos in blockPositions) {
-                if (ticked.Contains(blockPos)) continue;
+                if (ticked.Contains(blockPos, blockPos)) continue;
                 ticked.Add(blockPos);
                 if (level.ExtraData[Name + blockPos + "tick"] != null && level.ExtraData[Name + blockPos + "tick"].GetType() == typeof(string)) {
                     level.ExtraData[Name + blockPos + "tick"] = int.Parse((string)level.ExtraData[Name + blockPos + "tick"]);
                 }
                 if (level.ExtraData[Name + blockPos + "tick"] != null) {
                     if ((int)level.ExtraData[Name + blockPos + "tick"] == 0) {
+                        Console.WriteLine(blockPos);
                         level.ExtraData[Name + blockPos + "open"] = "true";
                         Block.SendBlock(blockPos, level);
                         level.ExtraData[Name + blockPos + "tick"] = (int)level.ExtraData[Name + blockPos + "tick"] + 1;
-                        foreach (Vector3S v in blockPositions.GetNeighboors(blockPos)) {
-                            ticked.Add(v);
-                            if ((string)level.ExtraData[Name + blockPos + "opener"] != (string)level.ExtraData[Name + v + "opener"]) {
-                                level.ExtraData[Name + v + "opener"] = (string)level.ExtraData[Name + blockPos + "opener"];
-                                level.ExtraData[Name + v + "tick"] = 0;
-                                ticked.Add(v);
+                        foreach (Tuple<string, Vector3S> sv in Block.GetNeighborsNames(blockPos, level)) {
+                            if (sv.Item1 == Name) {
+                                Console.WriteLine("! " + sv.Item2);
+                                if ((string)level.ExtraData[Name + blockPos + "opener"] != (string)level.ExtraData[Name + sv.Item2 + "opener"]) {
+                                    level.ExtraData[Name + sv.Item2 + "opener"] = (string)level.ExtraData[Name + blockPos + "opener"];
+                                    level.ExtraData[Name + sv.Item2 + "tick"] = 0;
+                                    ticked.Add(sv.Item2);
+                                }
                             }
                         }
                     }

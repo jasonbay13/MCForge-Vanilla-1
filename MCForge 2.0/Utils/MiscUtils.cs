@@ -235,15 +235,14 @@ namespace MCForge.Utils {
             }
             return false;
         }
-
-
-        public static IEnumerable<Vector3S> GetNeighboors(this Vector3S[] group, Vector3S self) {
-            foreach (Vector3S v in group) {
-                if (v.x == self.x || v.z == self.z || v.y == self.y) {
-                    if ((v - self).Length == 1)
-                        yield return v;
-                }
-            }
+        public static IEnumerable<Vector3S> GetNeighbors(this Vector3S v) {
+            yield return new Vector3S((short)(v.x + 1), v.z, v.y);
+            yield return new Vector3S(v.x, (short)(v.z + 1), v.y);
+            yield return new Vector3S(v.x, v.z, (short)(v.y + 1));
+            yield return new Vector3S((short)(v.x - 1), v.z, v.y);
+            yield return new Vector3S(v.x, (short)(v.z - 1), v.y);
+            yield return new Vector3S(v.x, v.z, (short)(v.y - 1));
+        }
         }
     }
 }
