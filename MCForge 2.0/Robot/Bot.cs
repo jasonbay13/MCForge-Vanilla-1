@@ -209,7 +209,7 @@ namespace MCForge.Robot
                                 Bot.shouldCheckAgainLoopInt = 1000;
                                 Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) - 2), 1);
                             }
-                            else if (!Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath)) 
+                            else if (!Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath) && !Block.IsOPBlock(BlockAbove)) 
                             {
                                 Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) + 1), 0);
                             }

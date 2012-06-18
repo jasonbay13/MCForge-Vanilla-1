@@ -69,6 +69,11 @@ namespace MCForge.Commands {
             get { return "MessageBlock"; }
         }
 
+        public void PhysicsTick(int i)
+        {
+
+        }
+
         public byte GetDisplayType(Vector3S blockPosition, Level level) {
             byte ret = 0;
             try {
