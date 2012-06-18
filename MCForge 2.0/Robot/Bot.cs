@@ -86,6 +86,7 @@ namespace MCForge.Robot
             this.Jumping = Jumping;
             this.LevelMap = new BotMap(level);
             this.BlackListPlayers = new Dictionary<string, int>();
+            Player.OnAllPlayersBlockChange.Important += OnBlockChange;
         }
 
         /// <summary>
@@ -197,7 +198,7 @@ namespace MCForge.Robot
                                 TemporaryLocation.y += 21;
                                 Bot.shouldCheckAgainLoopInt = 1000;
                             }
-                            else if (Block.CanEscalate(Block1) && Block.CanEscalate(Block2))
+                            else if (Block.CanEscalate(Block1) && Block.CanEscalate(Block2) && Pathfound.y > TemporaryLocation.y)
                             {
                                 TemporaryLocation.y += 21;
                                 Bot.shouldCheckAgainLoopInt = 1000;
@@ -208,13 +209,13 @@ namespace MCForge.Robot
                                 Bot.shouldCheckAgainLoopInt = 1000;
                                 Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) - 2), 1);
                             }
-                            else if (!Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath))
+                            else if (!Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath)) 
                             {
                                 Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) + 1), 0);
                             }
 
                             if (Block.CanWalkThrough(BlockUnderneath) && !Block.CanWalkThrough(Bot.Player.Level.GetBlock((Bot.Player.oldPos.x / 32), (Bot.Player.oldPos.z / 32), (Bot.Player.oldPos.y / 32) - 2))
-                                && !Block.IsOPBlock(BlockUnderneath))
+                                && !Block.IsOPBlock(BlockUnderneath) && Pathfound.y > TemporaryLocation.y)
                             {
                                 Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) - 2), 1);
                             }
@@ -242,6 +243,18 @@ namespace MCForge.Robot
         {
             return PathFinder.FindPath(Bot.Player.Level, Bot.LevelMap, new Point3D((Bot.Player.Pos.x / 32), (Bot.Player.Pos.y / 32), (Bot.Player.Pos.z / 32)),
                 new Point3D((ClosestLocation.x / 32), (ClosestLocation.y / 32), (ClosestLocation.z / 32)));
+        }
+
+        public void OnBlockChange(Player p, BlockChangeEventArgs args)
+        {
+            if (args.Action == ActionType.Place)
+            {
+                LevelMap.AirMap[args.X, args.Z, args.Y] = false;
+            }
+            else if (args.Action == ActionType.Delete)
+            {
+                LevelMap.AirMap[args.X, args.Z, args.Y] = true;
+            }
         }
 
         protected byte FreeId()
