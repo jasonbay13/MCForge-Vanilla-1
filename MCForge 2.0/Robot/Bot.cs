@@ -245,6 +245,11 @@ namespace MCForge.Robot
                 new Point3D((ClosestLocation.x / 32), (ClosestLocation.y / 32), (ClosestLocation.z / 32)));
         }
 
+        public void Unload()
+        {
+            Player.OnAllPlayersBlockChange.Important -= OnBlockChange;
+        }
+
         public void OnBlockChange(Player p, BlockChangeEventArgs args)
         {
             if (args.Action == ActionType.Place)

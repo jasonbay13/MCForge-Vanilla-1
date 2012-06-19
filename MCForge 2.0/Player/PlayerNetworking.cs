@@ -686,6 +686,7 @@ namespace MCForge.Entity {
         private void SendMap() {
 
             try {
+                IsLoading = true;
                 SendPacket(mapSendStartPacket); //Send the pre-fab map start packet
 
                 Packet pa = new Packet(); //Create a packet to handle the data for the map
