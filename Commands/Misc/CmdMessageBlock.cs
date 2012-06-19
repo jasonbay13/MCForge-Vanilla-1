@@ -10,7 +10,7 @@ namespace MCForge.Commands {
         public CmdMessageBlock() {
         }
         public string Name {
-            get { return "CMDMessageBlock"; }
+            get { return "MessageBlock"; }
         }
 
         public CommandTypes Type {
@@ -67,11 +67,6 @@ namespace MCForge.Commands {
 
         public string Name {
             get { return "MessageBlock"; }
-        }
-
-        public void PhysicsTick(int i)
-        {
-
         }
 
         public byte GetDisplayType(Vector3S blockPosition, Level level) {
