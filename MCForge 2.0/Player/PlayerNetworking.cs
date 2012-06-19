@@ -199,6 +199,10 @@ namespace MCForge.Entity {
                     if (g.Players.Contains(Username.ToLower()))
                         Group = g;
 
+                ExtraData.CreateIfNotExist("HasMarked", false);
+                ExtraData.CreateIfNotExist("Mark1", new Vector3S());
+                ExtraData.CreateIfNotExist("Mark2", new Vector3S());
+
                 SendMotd();
                 IsLoading = true;
                 //SendMap(); changing the level value will send the map
