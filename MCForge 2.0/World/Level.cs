@@ -129,10 +129,10 @@ namespace MCForge.World {
         /// <summary>
         /// This is the current Save Version for this MCForge version
         /// </summary>
-        public static const byte Version = 1;
+        public const byte Version = 1;
         
         public PlayerGroup visit = PlayerGroup.Default;
-        public byte[] Data { get; set; }
+        //public byte[] Data { get; set; } Lolwut
 
         /// <summary>
         /// Data to store with in the level
@@ -295,9 +295,9 @@ namespace MCForge.World {
                         		}
                         	}
                         	catch { Binary.Dispose(); return null; }
-                            string key = Binary.ReadString();
-                            string value = Binary.ReadString();
-                            finalLevel.ExtraData[key] = value;
+                            //string key = Binary.ReadString();
+                            //string value = Binary.ReadString();
+                            //finalLevel.ExtraData[key] = value; (MotherofDuplicates)
                         }
 
                         foreach (string name in MCForge.Interfaces.Blocks.Block.Blocks.Keys) {
@@ -310,18 +310,21 @@ namespace MCForge.World {
                                 finalLevel.ExtraData["IBlocks" + name] = new List<string>();
                             }
                         }
-                        finalLevel._TotalBlocks = Binary.ReadInt32();
+                        /*finalLevel._TotalBlocks = Binary.ReadInt32();
                         int ByteLength = Binary.ReadInt32();
                         byte[] b = Decompress(Binary.ReadBytes(ByteLength));
                         finalLevel.Data = new byte[finalLevel._TotalBlocks];
                         finalLevel.Data = b;
-                        try {
+                        try
+                        {
                             string EOF = Binary.ReadString();
-                            if (EOF != "EOF") {
+                            if (EOF != "EOF")
+                            {
                                 Binary.Dispose();
                                 return null;
                             }
                         }
+                        WHAT IS THIS MADNESS*/
                         #endregion
                     }
                 }

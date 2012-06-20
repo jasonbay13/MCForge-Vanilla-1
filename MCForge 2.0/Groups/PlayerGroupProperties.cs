@@ -16,7 +16,7 @@ namespace MCForge.Groups
         static string PropertiesPath = FileUtils.PropertiesPath + "groups.xml";
         public static void Save()
         {
-           FileUtils.CreateDirIfNotExist(FileUtils.PropertiesPath);
+            FileUtils.CreateDirIfNotExist(FileUtils.PropertiesPath);
 
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
@@ -53,46 +53,61 @@ namespace MCForge.Groups
 
         public static void Load()
         {
-			try {
-				PlayerGroup group = new PlayerGroup();
-				bool makedefault = false;
-				using (XmlReader reader = XmlReader.Create(PropertiesPath))
-					while (reader.Read()) {
-						if (reader.IsStartElement()) {
-							switch (reader.Name.ToLower()) {
-								case "name":
-									group.Name = reader.ReadString();
-									break;
-								case "permission":
-									try { group.Permission = byte.Parse(reader.ReadString()); } catch { }
-									break;
-								case "color":
-									group.Colour = '&' + reader.ReadString();
-									break;
-								case "file":
-									group.File = reader.ReadString();
-									break;
-								case "maxblockchanges":
-									try { group.MaxBlockChange = int.Parse(reader.ReadString()); } catch { }
-									break;
-								case "default":
-									if (reader.ReadString() == "true")
-										makedefault = true;
-							}
-					} else if (String.IsNullOrEmpty(group.Name)){
-                            try { group.add(); 
-							if (makedefault)
-								PlayerGroup.Default = group;
-							makedefault = false;
-							group = new PlayerGroup(); 
-						}
-						} else {
+            try
+            {
+                PlayerGroup group = new PlayerGroup();
+                bool makedefault = false;
+                using (XmlReader reader = XmlReader.Create(PropertiesPath))
+                    while (reader.Read())
+                    {
+                        if (reader.IsStartElement())
+                        {
+                            switch (reader.Name.ToLower())
+                            {
+                                case "name":
+                                    group.Name = reader.ReadString();
+                                    break;
+                                case "permission":
+                                    try { group.Permission = byte.Parse(reader.ReadString()); }
+                                    catch { }
+                                    break;
+                                case "color":
+                                    group.Colour = '&' + reader.ReadString();
+                                    break;
+                                case "file":
+                                    group.File = reader.ReadString();
+                                    break;
+                                case "maxblockchanges":
+                                    try { group.MaxBlockChange = int.Parse(reader.ReadString()); }
+                                    catch { }
+                                    break;
+                                case "default":
+                                    if (reader.ReadString() == "true")
+                                        makedefault = true;
+                                    break;
+                            }
+                        }
+                        else if (String.IsNullOrEmpty(group.Name))
+                        {
+                            try
+                            {
+                                group.add();
+                                if (makedefault)
+                                    PlayerGroup.Default = group;
+                                makedefault = false;
+                                group = new PlayerGroup();
+                            }
                             catch { Logger.Log("Failed to add a group!", LogType.Error); }
-							//break;
-						}
-					}
-			} catch {}
+                        }
+                        else
+                        {
+                            //break;
+                        }
+                    }
+            }
+            catch { }
             CommandPermissionOverrides.Load();
-        } 
+
+        }
     }
 }

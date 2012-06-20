@@ -32,105 +32,118 @@ namespace MCForge.Commands
 
         public void Use(Player p, string[] args)
         {
-            if (args.Length > 2)
+            switch (args.Length)
             {
-                p.SendMessage("Invalid arguments!");
-                return;
-            }
-            else if (args.Length == 0)
-            {
-                Vector3S meep = new Vector3S((short)(0.5 + p.Level.SpawnPos.x * 32), (short)(0.5 + p.Level.SpawnPos.z * 32), (short)(1 + p.Level.SpawnPos.y * 32));
-                p.SendToPos(meep, p.Level.SpawnRot);
-            }
-            else if (args.Length == 1)
-            {
-                Player who = Player.Find(args[0]);
-                if (who == null || who.IsHidden)
-                {
-                    p.SendMessage("Player: " + args[0] + " not found!");
-                    return;
-                }
-                else if (who == p)
-                {
-                    p.SendMessage("Why are you trying to teleport yourself to yourself?");
-                    return;
-                }
-                else if (!ServerSettings.GetSettingBoolean("AllowHigherRankTp") && p.Group.Permission < who.Group.Permission)
-                {
-                    p.SendMessage("You cannot teleport to a player of higher rank!");
-                    return;
-                }
-                else
-                {
-                    if (p.Level != who.Level)
+                case 0:
+                    Vector3S meep = new Vector3S((short)(0.5 + p.Level.SpawnPos.x * 32), (short)(0.5 + p.Level.SpawnPos.z * 32), (short)(1 + p.Level.SpawnPos.y * 32));
+                    p.SendToPos(meep, p.Level.SpawnRot);
+                    break;
+                case 1:
+                    Player who = Player.Find(args[0]);
+                    if (who == null || who.IsHidden)
                     {
-                        //Need goto here
-                        if (who.IsLoading)
-                        {
-                            p.SendMessage("Waiting for " + who.Color + who.Username + Server.DefaultColor + " to spawn...");
-                            while (who.IsLoading) 
-                                Thread.Sleep(5);
-                            
-                        }
+                        p.SendMessage("Player: " + args[0] + " not found!");
+                        return;
                     }
-                }
-                p.SendToPos(who.Pos, who.Rot);
-                return;
-            }
-            else
-            {
-                Player one = Player.Find(args[0]);
-                Player two = Player.Find(args[1]);
-                if (one == null || two == null)
-                {
-                    //Hehe
-                    p.SendMessage((one == null && two == null) ? "Players: " + args[0] + " and " + args[1] + " not found!" : "Player: " + ((one == null) ? args[0] : args[1]) + " not found!");
-                    return;
-                }
-                else if (one == p && two == p || one == p)
-                {
-                    p.SendMessage((two == p) ? "Why are you trying to teleport yourself to yourself?" : "Why not just use /tp " + args[1] + "?");
-                    return;
-                }
-                else if (two == p)
-                {
-                    p.SendMessage("Why not just use /summon " + args[0] + "?");
-                    return;
-                }
-                else if (p.Group.Permission < one.Group.Permission)
-                {
-                    p.SendMessage("You cannot force a player of higher rank to tp to another player!");
-                }
-                else
-                {
-                    if (one.Level != two.Level)
+                    else if (who == p)
                     {
-                        //Need goto here
-                        if (two.IsLoading)
+                        p.SendMessage("Why are you trying to teleport yourself to yourself?");
+                        return;
+                    }
+                    else if (!ServerSettings.GetSettingBoolean("AllowHigherRankTp") && p.Group.Permission < who.Group.Permission)
+                    {
+                        p.SendMessage("You cannot teleport to a player of higher rank!");
+                        return;
+                    }
+                    else
+                    {
+                        if (p.Level != who.Level)
                         {
-                            p.SendMessage("Waiting for " + two.Color+ two.Username + Server.DefaultColor + " to spawn...");
-                            while (two.IsLoading) {
-                                Thread.Sleep(5);
+                            //Need goto here
+                            if (who.IsLoading)
+                            {
+                                p.SendMessage("Waiting for " + who.Color + who.Username + Server.DefaultColor + " to spawn...");
+                                while (who.IsLoading)
+                                    Thread.Sleep(5);
+
                             }
                         }
                     }
-                }
-                one.SendToPos(two.Pos, two.Rot);
-                p.SendMessage(one.Username + " has been succesfully teleported to " + two.Username + "!");
-                return;
+                    p.SendToPos(who.Pos, who.Rot);
+                    break;
+                case 2:
+                    Player one = Player.Find(args[0]);
+                    Player two = Player.Find(args[1]);
+                    if (one == null || two == null)
+                    {
+                        //Hehe
+                        p.SendMessage((one == null && two == null) ? "Players: " + args[0] + " and " + args[1] + " not found!" : "Player: " + ((one == null) ? args[0] : args[1]) + " not found!");
+                        return;
+                    }
+                    else if (one == p && two == p || one == p)
+                    {
+                        p.SendMessage((two == p) ? "Why are you trying to teleport yourself to yourself?" : "Why not just use /tp " + args[1] + "?");
+                        return;
+                    }
+                    else if (two == p)
+                    {
+                        p.SendMessage("Why not just use /summon " + args[0] + "?");
+                        return;
+                    }
+                    else if (p.Group.Permission < one.Group.Permission)
+                    {
+                        p.SendMessage("You cannot force a player of higher rank to tp to another player!");
+                    }
+                    else
+                    {
+                        if (one.Level != two.Level)
+                        {
+                            //Need goto here
+                            if (two.IsLoading)
+                            {
+                                p.SendMessage("Waiting for " + two.Color + two.Username + Server.DefaultColor + " to spawn...");
+                                while (two.IsLoading)
+                                {
+                                    Thread.Sleep(5);
+                                }
+                            }
+                        }
+                    }
+                    one.SendToPos(two.Pos, two.Rot);
+                    p.SendMessage(one.Username + " has been succesfully teleported to " + two.Username + "!");
+                    break;
+                case 3:
+                    short x, z, y;
+                    bool[] intParse = { short.TryParse(args[0], out x), short.TryParse(args[1], out z), short.TryParse(args[2], out y) };
+                    if (intParse.Contains<bool>(false))
+                    {
+                        p.SendMessage("One of your coordinates was har.");
+                        return;
+                    }
+                    else
+                    {
+                        p.SendToPos(new Vector3S(x, z, y), p.Rot);
+                        p.SendMessage(string.Format("Succesfully teleported to {0}, {1}, {2}!", x, z, y));
+                    }
+                    break;
+                default:
+                    p.SendMessage("Invalid arguments!");
+                    break;
             }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/tp <player1> [player2] - Teleports yourself to a player.");
+            p.SendMessage("/teleport <x> <z> <y> - Telports you to a coordinate.");
+            p.SendMessage("/teleport <player1> [player2] - Teleports yourself to a player.");
             p.SendMessage("[player2] is optional, but if present will send player1 to the player2.");
             p.SendMessage("If <player> is blank, you are sent to spawn");
+            p.SendMessage("Shortcut: /tp");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, "tp");
+            Command.AddReference(this, "tp", "teleport");
         }
     }
 }

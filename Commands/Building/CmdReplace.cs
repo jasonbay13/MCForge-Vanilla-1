@@ -62,7 +62,7 @@ namespace MCForge.Commands
             if ((bool)sender.ExtraData["HasMarked"])
                 cpos.pos = (Vector3S)sender.ExtraData["Mark1"];
             else
-                cpos.pos = new Vector3S(args.X, args.Y, args.Z);
+                cpos.pos = new Vector3S(args.X, args.Z, args.Y);
             args.Unregister();
             args.Cancel();
             sender.SetDatapass("CmdReplace_cpos", cpos);

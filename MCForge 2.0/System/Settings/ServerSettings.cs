@@ -54,7 +54,7 @@ namespace MCForge.Utils.Settings {
                     new SettingNode("ShowFirstRunScreen", "true", "Whether or not to show the first run screen when the server is started."),
                     new SettingNode("UsingConsole", "true", "Set to \"false\" if you want GUI. If using mono set to \"true\"."),
                     new SettingNode("ShutdownMessage", "Server shutting down!", "Message to show when server is shutting down"),
-                    new SettingNode("WelcomeMessage", "Welcome $name to $server<br>enjoy your stay", "Welcome message, to signify a line break use \"<br>\""),
+                    new SettingNode("WelcomeMessage", "Welcome $name to $server<br>Enjoy your stay", "Welcome message, to signify a line break use \"<br>\""),
                     new SettingNode("ConfigPath", "config/", "File path for group player properties, do not mess with unless you know what you are doing"),
                     new SettingNode("MessageAppending", "true", "allow use of message appending, ex using \">\" at the end of your message will allow you to finish your statement on a new chat segment"),
                     new SettingNode("DefaultGroup", "guest", "The name of the default group, if it doesn't exist it will cause problems"),
