@@ -49,6 +49,14 @@ namespace MCForge.Entity
        }
 
        /// <summary>
+       /// Send initial login message to a player using the WOM client (World of Minecraft)
+       /// </summary>
+       /// <param name="p"></param>
+       public static void SendDetail(Player p, string message)
+       {
+           p.SendMessage("^detail.user=%e" + message);
+       }
+       /// <summary>
        /// Sends a message to a client
        /// </summary>
        /// <param name="message"></param>

@@ -26,7 +26,7 @@ namespace Plugins.WomPlugin {
         };
         private readonly List<SettingNode> _values = new List<SettingNode>() {
             new SettingNode("LevelName", "main", null),
-            new SettingNode("ConfigPath", ServerSettings.GetSetting("configpath") + "main.cgf", null),
+            new SettingNode("ConfigPath", ServerSettings.GetSetting("configpath") + "main.cfg", null),
         };
 
         public List<Level> LevelsWithTextures { get; private set; }
@@ -36,16 +36,30 @@ namespace Plugins.WomPlugin {
         }
 
         public override void OnLoad() {
+            Logger.Log("[WoM] WomSettings loaded!");
             LevelsWithTextures = new List<Level>();
-            if (!Directory.Exists(ServerSettings.GetSetting("configpath") + "wom/")) {
-
+            string path = (ServerSettings.GetSetting("configpath") + "wom/");
+            if (!Directory.Exists(path)) {
+                Logger.Log("[WoM] Config folder not found. Creating");
+                Directory.CreateDirectory(ServerSettings.GetSetting("configpath") + "wom/");
             }
-            else {
+           
+                foreach (Level l in Level.Levels)
+                {
+                    if (!Directory.Exists(path + l + ".wom.property"))
+                    {
+                        Logger.Log("[WoM] Cfg for " + l + " not found. Creating");
+                        CreateFile(l, path);
+                        LevelsWithTextures.Add(l);
+                    }
+                }
+
                 foreach (var s in Directory.GetFiles(ServerSettings.GetSetting("configpath") + "wom/", "*.wom.property"))
+                {
                     LoadFile(s);
+                    Logger.Log("[WoM] Config found. Loading: " + s);
+                }
             }
-
-        }
 
         public void LoadFile(string path) {
             if (!path.EndsWith(".wom.property"))
@@ -62,6 +76,19 @@ namespace Plugins.WomPlugin {
             //}
             // LevelsWithTextures.Add(
 
+        }
+        public void CreateFile(Level l, string path)
+        {
+            if (Directory.Exists(path + ".wom.property"))
+            {
+                return;
+            }
+            else
+            {
+                using (var writer = File.CreateText(l + path + ".wom.property"))
+                    foreach (var node in _values)
+                        writer.WriteLine(node.Key + " = " + node.Value);
+            }
         }
 
         public void CreateConfigFile(string path) {

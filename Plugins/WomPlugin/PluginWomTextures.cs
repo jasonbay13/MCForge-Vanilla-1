@@ -38,7 +38,7 @@ namespace Plugins.WomPlugin {
         }
 
         public string Author {
-            get { return "headdetect"; }
+            get { return "headdetect and Gamemakergm"; }
         }
 
         public int Version {
@@ -51,22 +51,28 @@ namespace Plugins.WomPlugin {
 
         private WomSettings WomSettings { get; set; }
         public void OnLoad(string[] args1) {
+            Server.OnServerFinishSetup += new Server.ServerFinishSetup(OnLoadDone);
+        }
+        void OnLoadDone()
+        {
+            MCForge.Utils.Logger.Log("[WomTextures] Succesfully initiated!");
             WomSettings = new WomSettings();
             WomSettings.OnLoad();
-            //OnReceivePacket.Register(OnData);
-            Player.OnAllPlayersChat.Normal += ((sender, args) => SendDetailToPlayer(sender, "This is a detail, deal &4With &3It"));
-        }
 
+            Player.OnAllPlayersSendPacket.Normal += new Event<Player, PacketEventArgs>.EventHandler(OnData);
+            //OnReceivePacket.Register(OnData);
+            Player.OnAllPlayersChat.Normal += ((sender, args) =>
+                SendDetailToPlayer(sender, "This is a detail, deal &4With &3It"));
+        }
         private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
-       /* void OnData(OnReceivePacket args) {
+        
+        void OnData(Player p, PacketEventArgs args) {
             if (args.Data.Length < 0)
                 return;
             if (args.Data[0] != (byte)'G')
                 return;
-
-
             args.Cancel();
-            var netStream = new NetworkStream(args.Player.Socket);
+            var netStream = new NetworkStream(p.Socket);
             using (var Reader = new StreamReader(netStream)) //Not used but it likes it...
             using (var Writer = new StreamWriter(netStream)) {
                 var line = Encoding.UTF8.GetString(args.Data, 0, args.Data.Length).Split('\n')[0];
@@ -81,7 +87,7 @@ namespace Plugins.WomPlugin {
                     var player = Player.Find(username);
                     if (player != null)
                         player.ExtraData.Add("UsingWom", true);
-
+                        
                     if (lvl == null) {
                         Writer.Write("HTTP/1.1 404 Not Found");
                         Writer.Flush();
@@ -114,9 +120,9 @@ namespace Plugins.WomPlugin {
                     Writer.Flush();
                 }
             }
-            args.Player.Kick("");
+            p.Kick("");
         }
-        */
+        
         public void OnUnload() {
             throw new NotImplementedException();
         }

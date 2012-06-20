@@ -56,6 +56,10 @@ namespace MCForge.Commands.Moderation
                     p.SendMessage("> the IP of " + found.Ip);
                     if (Server.Devs.Contains(found.Username))
                         p.SendMessage("> " + found.Username + " is an MCForge Developer.");
+                    if (p.UsingWom)
+                    {
+                        p.SendMessage("> " + found.Username + " is using World of Minecraft.");
+                    }
                 }
             }
             else

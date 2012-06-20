@@ -55,7 +55,8 @@ namespace MCForge.Commands {
 
         public void Help(Player p) {
             p.SendMessage("/messageblock [message]");
-            p.SendMessage("Creates a message block");
+            p.SendMessage("Creates a message block.");
+            p.SendMessage("Shortcut: /mb");
         }
 
         public void Initialize() {

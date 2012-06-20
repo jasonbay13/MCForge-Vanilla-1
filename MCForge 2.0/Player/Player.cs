@@ -45,9 +45,9 @@ namespace MCForge.Entity {
         private  static readonly Packet mapSendStartPacket = new Packet(new byte[1] { (byte)Packet.Types.MapStart });
         private static byte ForceTpCounter = 0;
 
-        private  static Packet MOTDNonAdmin = new Packet();
-        private  static Packet MOTDAdmin = new Packet();
-        private  static void CheckMotdPackets() {
+        private static Packet MOTDNonAdmin = new Packet();
+        private static Packet MOTDAdmin = new Packet();
+        private static void CheckMotdPackets() {
             if (MOTDNonAdmin.bytes == null) {
                 MOTDNonAdmin.Add(Packet.Types.MOTD);
                 MOTDNonAdmin.Add(ServerSettings.Version);
