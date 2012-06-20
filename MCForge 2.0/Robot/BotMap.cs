@@ -35,7 +35,7 @@ namespace MCForge.Robot {
         public bool[, ,] AirMap;
         bool[, ,] PosMap;
         bool isAir(byte block) {
-            return block == Block.BlockList.AIR;
+            return Block.CanWalkThrough(block);
         }
         bool onlyAirBetween(Vector3S start, Vector3S end) {
             Vector3D s = new Vector3D(start);

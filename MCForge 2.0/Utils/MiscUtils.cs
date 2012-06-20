@@ -243,6 +243,5 @@ namespace MCForge.Utils {
             yield return new Vector3S(v.x, (short)(v.z - 1), v.y);
             yield return new Vector3S(v.x, v.z, (short)(v.y - 1));
         }
-        }
     }
 }

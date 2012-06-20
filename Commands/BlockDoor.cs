@@ -32,7 +32,7 @@ namespace MCForge.Commands {
         }
         public int TicksOpen = 15;
         public void PhysicsTick(Utils.Vector3S[] blockPositions, World.Level level) {
-            List<Vector3S> ticked = new List<Vector3S>();
+        /*    List<Vector3S> ticked = new List<Vector3S>();
             foreach (Vector3S blockPos in blockPositions) {
                 if (ticked.Contains(blockPos, blockPos)) continue;
                 ticked.Add(blockPos);
@@ -66,7 +66,7 @@ namespace MCForge.Commands {
                         level.ExtraData[Name + blockPos + "tick"] = ((int)level.ExtraData[Name + blockPos + "tick"]) + 1;
                     }
                 }
-            }
+            }*/
         }
 
 
