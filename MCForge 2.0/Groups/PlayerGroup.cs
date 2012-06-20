@@ -105,7 +105,9 @@ namespace MCForge.Groups
         /// The maximum amount of blocks this group can change.
         /// </summary>
         public int MaxBlockChange { get { return _maxblockchange; } set { _maxblockchange = value; } }
-
+        
+        public static PlayerGroup Default;
+        
         string _file;
         /// <summary>
         /// The filename to save the group list into. when setting it des not contain the "ranks/" part
