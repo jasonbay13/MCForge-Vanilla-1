@@ -50,7 +50,6 @@ namespace Plugins.WomPlugin {
                     {
                         Logger.Log("[WoM] Cfg for " + l + " not found. Creating");
                         CreateFile(l, path);
-                        LevelsWithTextures.Add(l);
                     }
                 }
 
@@ -69,13 +68,21 @@ namespace Plugins.WomPlugin {
                 Logger.Log(String.Format("{0} was formatted incorrectly, this file will not be loaded", path), Color.Red, Color.Black);
                 return;
             }
-            //var level = Level.FindLevel(lines[0].Split('=')[1].Trim());
-            //if(level == null){
-            //    Logger.Log(String.Format("{0} was formatted incorrectly (level not found), this file will not be loaded", path), ConsoleColor.Red, ConsoleColor.Black);
-            //    return;
-            //}
-            // LevelsWithTextures.Add(
-
+            var level = Level.FindLevel(lines[0].Split('=')[1].Trim());
+            if(level == null){
+                Logger.Log(String.Format("{0} was formatted incorrectly (level not found), this file will not be loaded", path), Color.Red, Color.Black);
+                return;
+            }
+            LevelsWithTextures.Add(level);
+            var cfg = lines[1].Split('=')[1].Trim();
+            if (cfg == null)
+            {
+                return;
+            }
+            else
+            {
+                level.ExtraData["WomConfig"] = cfg;
+            }
         }
         public void CreateFile(Level l, string path)
         {
@@ -85,7 +92,7 @@ namespace Plugins.WomPlugin {
             }
             else
             {
-                using (var writer = File.CreateText(l + path + ".wom.property"))
+                using (var writer = File.CreateText(path + l + ".wom.property"))
                     foreach (var node in _values)
                         writer.WriteLine(node.Key + " = " + node.Value);
             }

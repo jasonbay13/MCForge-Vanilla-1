@@ -16,20 +16,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MCForge;
 using System.Timers;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Net.Sockets;
+using System.Threading;
+using MCForge;
+using MCForge.API;
+using MCForge.API.Events;
+using MCForge.World;
 using MCForge.Interface.Plugin;
 using MCForge.Entity;
 using MCForge.Core;
 using MCForge.Utils.Settings;
-using System.IO;
-using MCForge.API;
-using System.Text.RegularExpressions;
-using System.Net.Sockets;
-using MCForge.API.Events;
-using System.Threading;
-using MCForge.World;
-
+using MCForge.Utils;
 namespace Plugins.WomPlugin {
     public class PluginWomTextures : IPlugin {
 
@@ -60,12 +60,12 @@ namespace Plugins.WomPlugin {
             WomSettings.OnLoad();
 
             Player.OnAllPlayersSendPacket.Normal += new Event<Player, PacketEventArgs>.EventHandler(OnData);
-            //OnReceivePacket.Register(OnData);
+
             Player.OnAllPlayersChat.Normal += ((sender, args) =>
                 SendDetailToPlayer(sender, "This is a detail, deal &4With &3It"));
         }
+
         private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
-        
         void OnData(Player p, PacketEventArgs args) {
             if (args.Data.Length < 0)
                 return;
@@ -76,10 +76,10 @@ namespace Plugins.WomPlugin {
             using (var Reader = new StreamReader(netStream)) //Not used but it likes it...
             using (var Writer = new StreamWriter(netStream)) {
                 var line = Encoding.UTF8.GetString(args.Data, 0, args.Data.Length).Split('\n')[0];
-
                 var match = Parser.Match(line);
 
                 if (match.Success) {
+                    Logger.Log("[WoM] Match!");
                     var lvl = Level.FindLevel(match.Groups[1].Value);
                     var userNameLine = Encoding.UTF8.GetString(args.Data, 0, args.Data.Length).Split('\n')[3];
                     var username = userNameLine.Remove(0, "X-WoM-Username: ".Length).Replace("\r", "");
