@@ -55,6 +55,7 @@ namespace MCForge.Groups
         {
 			try {
 				PlayerGroup group = new PlayerGroup();
+				bool makedefault = false;
 				using (XmlReader reader = XmlReader.Create(PropertiesPath))
 					while (reader.Read()) {
 						if (reader.IsStartElement()) {
@@ -74,9 +75,18 @@ namespace MCForge.Groups
 								case "maxblockchanges":
 									try { group.MaxBlockChange = int.Parse(reader.ReadString()); } catch { }
 									break;
+								case "default":
+									if (reader.ReadString() == "true")
+										makedefault = true;
 							}
-						} else if (group.Name != null){
-                            try { group.add(); group = new PlayerGroup(); }
+					} else if (String.IsNullOrEmpty(group.Name)){
+                            try { group.add(); 
+							if (makedefault)
+								PlayerGroup.Default = group;
+							makedefault = false;
+							group = new PlayerGroup(); 
+						}
+						} else {
                             catch { Logger.Log("Failed to add a group!", LogType.Error); }
 							//break;
 						}

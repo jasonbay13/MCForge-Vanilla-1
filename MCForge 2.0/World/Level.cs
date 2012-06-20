@@ -25,6 +25,7 @@ using MCForge.World.Blocks;
 using MCForge.Utils;
 using System.Drawing;
 using MCForge.World.Loading_and_Saving;
+using MCForge.Groups;
 using MCForge.Interfaces.Blocks;
 using System.Threading;
 using MCForge.Utils.Settings;
@@ -123,6 +124,14 @@ namespace MCForge.World {
         /// <summary>
         /// This holds the map data for the entire map
         /// </summary>
+        public byte[] Data;
+        
+        /// <summary>
+        /// This is the current Save Version for this MCForge version
+        /// </summary>
+        public static const byte Version = 1;
+        
+        public PlayerGroup visit = PlayerGroup.Default;
         public byte[] Data { get; set; }
 
         /// <summary>
@@ -244,27 +253,48 @@ namespace MCForge.World {
                     else //Is a new MCForge level!
                     {
                         #region New MCForge Level
-                        string s = Binary.ReadString();
-                        int x = Convert.ToInt32(s.Split('@')[0]);
-                        int y = Convert.ToInt32(s.Split('@')[1]);
-                        int z = Convert.ToInt32(s.Split('@')[2]);
-                        finalLevel.Size = new Vector3S((short)x, (short)z, (short)y);
-
-                        s = Binary.ReadString();
-                        x = Convert.ToInt32(s.Split('!')[0]);
-                        y = Convert.ToInt32(s.Split('!')[1]);
-                        z = Convert.ToInt32(s.Split('!')[2]);
-                        finalLevel.SpawnPos = new Vector3S((short)x, (short)z, (short)y);
-
-                        s = Binary.ReadString();
-                        int heading = Convert.ToInt32(s.Split('~')[0]);
-                        int yaw = Convert.ToInt32(s.Split('~')[1]);
-                        finalLevel.SpawnRot = new byte[2] { (byte)heading, (byte)yaw };
-
-                        int count = Binary.ReadInt32();
-
-                        for (int i = 0; i < count; i++) //Metadata for blocks
+                        byte version = Binary.ReadByte();
+                        if (version == 1)
                         {
+                        	string s = Binary.ReadString();
+                        	int x = Convert.ToInt32(s.Split('@')[0]);
+                        	int y = Convert.ToInt32(s.Split('@')[1]);
+                        	int z = Convert.ToInt32(s.Split('@')[2]);
+                        	finalLevel.Size = new Vector3S((short)x, (short)z, (short)y);
+
+                        	s = Binary.ReadString();
+                        	x = Convert.ToInt32(s.Split('!')[0]);
+                        	y = Convert.ToInt32(s.Split('!')[1]);
+                        	z = Convert.ToInt32(s.Split('!')[2]);
+                        	finalLevel.SpawnPos = new Vector3S((short)x, (short)z, (short)y);
+
+                        	s = Binary.ReadString();
+                        	int heading = Convert.ToInt32(s.Split('~')[0]);
+                        	int yaw = Convert.ToInt32(s.Split('~')[1]);
+                        	finalLevel.SpawnRot = new byte[2] { (byte)heading, (byte)yaw };
+
+                        	int count = Binary.ReadInt32();
+
+                        	for (int i = 0; i < count; i++) //Metadata for blocks
+                        	{
+                        		string key = Binary.ReadString();
+                        		string value = Binary.ReadString();
+                        		finalLevel.ExtraData[key] = value;
+                        	}
+
+                        	finalLevel._TotalBlocks = Binary.ReadInt32();
+                        	int ByteLength = Binary.ReadInt32();
+                        	byte[] b = Decompress(Binary.ReadBytes(ByteLength));
+                        	finalLevel.Data = new byte[finalLevel._TotalBlocks];
+                        	finalLevel.Data = b;
+                        	try {
+                        		string EOF = Binary.ReadString();
+                        		if (EOF != "EOF") {
+                        			Binary.Dispose();
+                        			return null;
+                        		}
+                        	}
+                        	catch { Binary.Dispose(); return null; }
                             string key = Binary.ReadString();
                             string value = Binary.ReadString();
                             finalLevel.ExtraData[key] = value;
@@ -280,7 +310,6 @@ namespace MCForge.World {
                                 finalLevel.ExtraData["IBlocks" + name] = new List<string>();
                             }
                         }
-
                         finalLevel._TotalBlocks = Binary.ReadInt32();
                         int ByteLength = Binary.ReadInt32();
                         byte[] b = Decompress(Binary.ReadBytes(ByteLength));
@@ -293,7 +322,6 @@ namespace MCForge.World {
                                 return null;
                             }
                         }
-                        catch { Binary.Dispose(); return null; }
                         #endregion
                     }
                 }
