@@ -79,13 +79,14 @@ namespace MCForge.Groups
 									if (reader.ReadString() == "true")
 										makedefault = true;
 							}
-<<<<<<< HEAD
-						} else if (group.Name != null){
-                            try { group.add(); group = new PlayerGroup(); }
-=======
+					} else if (String.IsNullOrEmpty(group.Name)){
+                            try { group.add(); 
+							if (makedefault)
+								PlayerGroup.Default = group;
+							makedefault = false;
+							group = new PlayerGroup(); 
+						}
 						} else {
-                            try { group.add(); PlayerGroup.Default = group; makedefault = false; group = new PlayerGroup(); }
->>>>>>> Pervist, Perbuild, and level version
                             catch { Logger.Log("Failed to add a group!", LogType.Error); }
 							//break;
 						}
