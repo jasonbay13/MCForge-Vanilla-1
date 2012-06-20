@@ -24,11 +24,11 @@ using MCForge.Robot;
 using MCForge.World.Blocks;
 using MCForge.Utils;
 using System.Drawing;
-<<<<<<< HEAD
 using MCForge.World.Loading_and_Saving;
-=======
 using MCForge.Groups;
->>>>>>> Pervist, Perbuild, and level version
+using MCForge.Interfaces.Blocks;
+using System.Threading;
+using MCForge.Utils.Settings;
 
 namespace MCForge.World {
     /// <summary>
@@ -111,15 +111,15 @@ namespace MCForge.World {
         /// <summary>
         /// This is the size of the level
         /// </summary>
-        public Vector3S Size;
+        public Vector3S Size { get; set; }
         /// <summary>
         /// Levels current Spawn position
         /// </summary>
-        public Vector3S SpawnPos;
+        public Vector3S SpawnPos { get; set; }
         /// <summary>
         /// Levels current Spawn ROT
         /// </summary>
-        public byte[] SpawnRot;
+        public byte[] SpawnRot { get; set; }
 
         /// <summary>
         /// This holds the map data for the entire map
@@ -132,11 +132,12 @@ namespace MCForge.World {
         public static const byte Version = 1;
         
         public PlayerGroup visit = PlayerGroup.Default;
+        public byte[] Data { get; set; }
 
         /// <summary>
         /// Data to store with in the level
         /// </summary>
-        public Dictionary<object, object> ExtraData;
+        public ExtraData<object, object> ExtraData  { get; private set; }
 
         /// <summary>
         /// Empty level with null/default values that need to be assigned after initialized
@@ -147,8 +148,22 @@ namespace MCForge.World {
             //data = new byte[Size.x, Size.z, Size.y];
             Data = new byte[TotalBlocks];
             BackupLevel = true;
-            ExtraData = new Dictionary<object, object>();
+            ExtraData = new ExtraData<object, object>();
+            if (ServerSettings.HasKey("PhysicsInterval")) {
+                physicsSleep = ServerSettings.GetSettingInt("PhysicsInterval");
+
+            }
+            else physicsSleep = 100;
+            physics = new Thread(() => {
+                while (!Server.ShuttingDown) {
+                    Thread.Sleep(physicsSleep);
+                    MCForge.Interfaces.Blocks.Block.DoTick(this);
+                }
+            });
+            physics.Start();
         }
+        int physicsSleep;
+        Thread physics;
 
         /// <summary>
         /// Create a level with a specified type and a specified size
@@ -218,7 +233,7 @@ namespace MCForge.World {
             if (FindLevel(levelName) != null)
                 return null;
 
-            string Name = "levels\\" + levelName + ".lvl";
+            string Name = "levels//" + levelName + ".lvl";
             Level finalLevel = new Level(new Vector3S(32, 32, 32));
             finalLevel.Name = levelName;
             try {
@@ -280,6 +295,32 @@ namespace MCForge.World {
                         		}
                         	}
                         	catch { Binary.Dispose(); return null; }
+                            string key = Binary.ReadString();
+                            string value = Binary.ReadString();
+                            finalLevel.ExtraData[key] = value;
+                        }
+
+                        foreach (string name in MCForge.Interfaces.Blocks.Block.Blocks.Keys) {
+                            if (finalLevel.ExtraData["IBlocks" + name] != null && finalLevel.ExtraData["IBlocks" + name].GetType() == typeof(string)) {
+                                string hexs = (string)finalLevel.ExtraData["IBlocks" + name];
+                                finalLevel.ExtraData["IBlocks" + name] = new List<string>();
+                                ((List<string>)finalLevel.ExtraData["IBlocks" + name]).AddHexstrings(hexs);
+                            }
+                            else if (finalLevel.ExtraData["IBlocks" + name] == null) {
+                                finalLevel.ExtraData["IBlocks" + name] = new List<string>();
+                            }
+                        }
+                        finalLevel._TotalBlocks = Binary.ReadInt32();
+                        int ByteLength = Binary.ReadInt32();
+                        byte[] b = Decompress(Binary.ReadBytes(ByteLength));
+                        finalLevel.Data = new byte[finalLevel._TotalBlocks];
+                        finalLevel.Data = b;
+                        try {
+                            string EOF = Binary.ReadString();
+                            if (EOF != "EOF") {
+                                Binary.Dispose();
+                                return null;
+                            }
                         }
                         #endregion
                     }
@@ -289,7 +330,8 @@ namespace MCForge.World {
                 Logger.Log("[Level] " + levelName + " was loaded");
                 return finalLevel;
             }
-            catch (Exception e) { Logger.Log(e.Message); Logger.Log(e.StackTrace); } return null;
+            catch (Exception e) { 
+                Logger.Log(e.Message); Logger.Log(e.StackTrace); } return null;
         }
 
         /// <summary>
@@ -297,6 +339,7 @@ namespace MCForge.World {
         /// </summary>
         public void Unload() {
             SaveToBinary();
+            physics.Abort();
             Levels.Remove(this);
         }
 
@@ -306,7 +349,7 @@ namespace MCForge.World {
         /// </summary>
         /// <remarks>The resulting files are not compatible with the official Minecraft software.</remarks>
         public bool SaveToBinary() {
-            string Name = "levels\\" + this.Name + ".lvl";
+            string Name = "levels//" + this.Name + ".lvl";
             if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             var Binary = new BinaryWriter(File.Open(Name, FileMode.Create));
 
@@ -316,9 +359,18 @@ namespace MCForge.World {
                 Binary.Write(SpawnPos.x + "!" + SpawnPos.y + "!" + SpawnPos.z); //Unused
                 Binary.Write(SpawnRot[0] + "~" + SpawnRot[1]); //Unused
                 Binary.Write(ExtraData.Count);
-                foreach (var pair in ExtraData) {
-                    Binary.Write(pair.Key.ToString());
-                    Binary.Write(pair.Value.ToString());
+                lock (ExtraData) {
+                    foreach (KeyValuePair<object, object> pair in ExtraData) {
+                        if (pair.Key != null && pair.Value != null) {
+                            Binary.Write(pair.Key.ToString());
+                            if (pair.Value.GetType() == typeof(List<string>)) {
+                                List<string> tmp = (List<string>)pair.Value;
+                                Binary.Write(MiscUtils.ToString(tmp));
+                            }
+                            else
+                                Binary.Write(pair.Value.ToString());
+                        }
+                    }
                 }
                 Binary.Write(_TotalBlocks);
                 Binary.Write(Compress(Data).Length);
@@ -326,6 +378,8 @@ namespace MCForge.World {
                 Binary.Write("EOF"); //EOF makes sure the entire file saved.
             }
             finally {
+                Binary.Flush();
+                Binary.Close();
                 Binary.Dispose();
             }
             return true;
@@ -333,10 +387,11 @@ namespace MCForge.World {
 
         /// <summary>
         /// Loads all levels.
+        /// 
         /// </summary>
         public static void LoadAllLevels() {
             FileUtils.CreateDirIfNotExist("levels");
-            string[] files = Directory.GetFiles("levels\\", "*.lvl");
+            string[] files = Directory.GetFiles("levels//", "*.lvl");
             foreach (string file in files) {
                 Level lvl = LoadLevel(file.Substring(7, file.Length - 11));
 
@@ -383,7 +438,15 @@ namespace MCForge.World {
         public void BlockChange(ushort x, ushort z, ushort y, byte block, Player p = null) {
             if (y == Size.y) return;
             byte currentType = GetBlock(x, z, y);
-
+            if (currentType == 255) {
+                    if (MCForge.Interfaces.Blocks.Block.DoAction(p, x, z, y, block, this)) {
+                        //may the action caused the block to change, sending to all
+                        block = MCForge.Interfaces.Blocks.Block.GetVisibleType(x, z, y, this);
+                        Player.GlobalBlockchange(this, x, z, y, block);
+                        return;
+                    }
+                    MCForge.Interfaces.Blocks.Block.RemoveBlock(new Vector3S(x, z, y), this);
+            }
             if (block == currentType) return;
 
             SetBlock(x, z, y, block);

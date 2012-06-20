@@ -279,7 +279,7 @@ namespace MCForge.Core {
             Logger.Log("Finished loading DLL's", LogType.Debug);
             Logger.Log("Sending Heartbeat..", LogType.Debug);
 
-            Thread HeartThread = new Thread(new ThreadStart(Heartbeat.ActivateHeartBeat));
+            HeartThread = new Thread(new ThreadStart(Heartbeat.ActivateHeartBeat));
             HeartThread.Start();
 
             CmdReloadCmds reload = new CmdReloadCmds();
@@ -293,7 +293,7 @@ namespace MCForge.Core {
                 ServerSettings.SetSetting("Main-Level", null, "main");
             }
             Level.Levels.Add(Mainlevel);
-            Level.LoadAllLevels();
+            //Level.LoadAllLevels();
 
             Backup.StartBackup();
 
@@ -324,7 +324,7 @@ namespace MCForge.Core {
             }
             catch { }
         }
-
+        static Thread HeartThread;
         static void Update() {
             GroupsaveIntervalCurrent++;
             PingIntervalCurrent++;
@@ -550,6 +550,7 @@ namespace MCForge.Core {
 
             if (listener != null)
                 listener.Stop();
+            HeartThread.Abort();
 
             Logger.DeInit();
         }
@@ -581,7 +582,7 @@ namespace MCForge.Core {
         /// Saves all of the levels and groups
         /// </summary>
         public static void SaveAll() {
-            foreach (var l in Level.Levels)
+            foreach (Level l in Level.Levels)
                 l.SaveToBinary();
             foreach (var g in Groups.PlayerGroup.Groups)
                 g.SaveGroup();

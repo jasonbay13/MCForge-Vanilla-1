@@ -40,6 +40,8 @@ namespace MCForge.Commands
                 p.ExtraData["WhisperingTo"] = null;
             if (p.ExtraData.ContainsKey("ModeBlock"))
                 p.ExtraData["ModeBlock"] = null;
+            if (p.ExtraData.ContainsKey("HasMarked"))
+                p.ExtraData["HasMarked"] = false;
         }
 
         public void Help(Player p)

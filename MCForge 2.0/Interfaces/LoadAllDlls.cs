@@ -20,6 +20,7 @@ using System.IO;
 using System.Reflection;
 using MCForge.Interface.Plugin;
 using MCForge.Interface.Command;
+using MCForge.Interfaces.Blocks;
 using MCForge.Core;
 using MCForge.Utils;
 using System.Drawing;
@@ -73,16 +74,18 @@ namespace MCForge.Interface {
                                     Logger.Log("[Command]: " + instance.Name + " Initialized!", LogType.Debug);
                                 }
                             }
-                            else {
-                                typeInterface = ClassType.GetInterface("IPlugin", true);
-                                if (typeInterface != null) {
-                                    IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                    if (!Plugin.Plugin.OnPluginLoad.Call(instance, new PluginLoadEventArgs(true)).Canceled) {
-                                        instance.OnLoad(args);
-                                        Plugin.Plugin.AddReference(instance);
-                                        Logger.Log("[Plugin]: " + instance.Name + " Initialized!", LogType.Debug);
-                                    }
+                            typeInterface = ClassType.GetInterface("IPlugin", true);
+                            if (typeInterface != null) {
+                                IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
+                                if (!Plugin.Plugin.OnPluginLoad.Call(instance, new PluginLoadEventArgs(true)).Canceled) {
+                                    instance.OnLoad(args);
+                                    Plugin.Plugin.AddReference(instance);
+                                    Logger.Log("[Plugin]: " + instance.Name + " Initialized!", LogType.Debug);
                                 }
+                            }
+                            typeInterface = ClassType.GetInterface("IBlock", true);
+                            if (typeInterface != null) {
+                                LoadBlock(ClassType, DLLAssembly);
                             }
                         }
                     }
@@ -91,33 +94,59 @@ namespace MCForge.Interface {
             catch {
             } //Stops loading bad DLL files
         }
-        public static void LoadDLL(string s, string[] args, bool plugin) {
+        private static void LoadPlugin(Type classType, Assembly DLLAssembly, string[] args) {
+            Type typeInterface = classType.GetInterface("IPlugin", true);
+            if (typeInterface != null) {
+                IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(classType.ToString()));
+                if (!Plugin.Plugin.OnPluginLoad.Call(instance, new PluginLoadEventArgs(true)).Canceled) {
+                    instance.OnLoad(args);
+                    Plugin.Plugin.AddReference(instance);
+                    Logger.Log("[Plugin]: " + instance.Name + " Initialized!", LogType.Debug);
+                }
+            }
+        }
+        private static void LoadBlock(Type classType,Assembly DLLAssembly) {
+            Type typeInterface = classType.GetInterface("IBlock", true);
+            if (typeInterface != null) {
+                IBlock instance = (IBlock)Activator.CreateInstance(DLLAssembly.GetType(classType.ToString()));
+                instance.Initialize();
+                Block.AddReference(instance);
+                Logger.Log("[Block]: " + instance.Name + " Initialized!", LogType.Debug);
+
+            }
+        }
+        private static void LoadCommand(Type classType,Assembly DLLAssembly) {
+            Type typeInterface = classType.GetInterface("ICommand", true);
+            if (typeInterface != null) {
+                ICommand instance = (ICommand)Activator.CreateInstance(DLLAssembly.GetType(classType.ToString()));
+                if (!Command.Command.OnCommandLoad.Call(instance, new CommandLoadEventArgs(true)).Canceled) {
+                    instance.Initialize();
+                    Logger.Log("[Command]: " + instance.Name + " Initialized!", LogType.Debug);
+                }
+            }
+        }
+        public static void LoadDLL(string s, string[] args, Type i=null) {
             Assembly DLLAssembly = LoadFile(s); //Prevents the dll from being in use inside windows
             try {
                 foreach (Type ClassType in DLLAssembly.GetTypes()) {
                     if (ClassType.IsPublic) {
                         if (!ClassType.IsAbstract) {
-                            if (plugin) {
-                                Type typeInterface = ClassType.GetInterface("IPlugin", true);
-                                if (typeInterface != null) {
-                                    IPlugin instance = (IPlugin)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                    if (!Plugin.Plugin.OnPluginLoad.Call(instance, new PluginLoadEventArgs(true)).Canceled) {
-                                        instance.OnLoad(args);
-                                        Plugin.Plugin.AddReference(instance);
-                                        Logger.Log("[Plugin]: " + instance.Name + " Initialized!", LogType.Debug);
-                                    }
-                                }
+                            if (i!=null&&i.Name=="IPlugin") {
+                                LoadPlugin(ClassType,DLLAssembly, args);
+                            }
+                            else if (i != null && i.Name == "IBlock") {
+                                LoadBlock(ClassType,DLLAssembly);
+                            }
+                            else if (i != null && i.Name == "ICommand") {
+                                LoadCommand(ClassType, DLLAssembly);
                             }
                             else {
-                                Type typeInterface = ClassType.GetInterface("ICommand", true);
-
-                                if (typeInterface != null) {
-                                    ICommand instance = (ICommand)Activator.CreateInstance(DLLAssembly.GetType(ClassType.ToString()));
-                                    if (!Command.Command.OnCommandLoad.Call(instance, new CommandLoadEventArgs(true)).Canceled) {
-                                        instance.Initialize();
-                                        Logger.Log("[Command]: " + instance.Name + " Initialized!", LogType.Debug);
-                                    }
-                                }
+                                if (ClassType == typeof(IPlugin))
+                                    LoadPlugin(ClassType, DLLAssembly, args);
+                                else if (ClassType == typeof(IBlock))
+                                    LoadBlock(ClassType, DLLAssembly);
+                                else if (ClassType == typeof(ICommand))
+                                    LoadCommand(ClassType, DLLAssembly);
                             }
                         }
                     }

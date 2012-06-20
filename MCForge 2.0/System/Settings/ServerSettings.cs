@@ -88,7 +88,8 @@ namespace MCForge.Utils.Settings {
                     new SettingNode("AdminChatPermission", "100", "Determines what rank can use the admin chat"),
                     new SettingNode("DefaultColor", "&a", "Determines the server's default color"),
                     new SettingNode("BackupFiles", "true", "If set to true, files will be backed up to the backup folder"),
-                    new SettingNode("BackupInterval", "300", "the interval to backup your files (in seconds)")
+                    new SettingNode("BackupInterval", "300", "the interval to backup your files (in seconds)"),
+                    new SettingNode("PhysicsInterval","100","the interval to do physics ticks in milliseconds")
                };
 
 

@@ -39,6 +39,7 @@ namespace MCForge.Commands.Misc
             if (who.Money + amt > 16777215) { p.SendMessage("Players cannot have more than 16777215 " + Server.Moneys + "."); return; }
             if (amt < 0) { p.SendMessage("Cannot take negative amounts of " + Server.Moneys + "."); return; }
             who.Money += amt;
+            who.Save();
             Player.UniversalChat(who.Color + who.Username + Server.DefaultColor + " was given &3" + amt + Server.DefaultColor + " " + Server.Moneys + ".");
         }
         public void Help(Player p)

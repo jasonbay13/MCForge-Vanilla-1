@@ -112,6 +112,8 @@
     <Compile Include="Groups\CommandPermissionOverrides.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
+    <Compile Include="Interfaces\Block\Block.cs" />
+    <Compile Include="Interfaces\Block\IBlock.cs" />
     <Compile Include="Interfaces\IIOProvider.cs" />
     <Compile Include="Interfaces\Plugin\IPlugin.cs" />
     <Compile Include="Player\ConsolePlayer.cs" />
@@ -131,13 +133,13 @@
     <Compile Include="Remote\Networking\Packets\PacketPing.cs" />
     <Compile Include="Remote\Networking\PacketWriter.cs" />
     <Compile Include="Remote\RemoteManager.cs" />
-    <Compile Include="Robot\AStar.cs" />
     <Compile Include="Robot\Bot.cs" />
     <Compile Include="Player\PlayerNetworking.cs" />
     <Compile Include="Robot\BotMap.cs" />
-    <Compile Include="Robot\Location.cs" />
-    <Compile Include="Robot\Node.cs" />
-    <Compile Include="Robot\RouteFinder.cs" />
+    <Compile Include="Robot\Breadcrumb.cs" />
+    <Compile Include="Robot\MinHeap.cs" />
+    <Compile Include="Robot\PathFinder.cs" />
+    <Compile Include="Robot\Point3D.cs" />
     <Compile Include="System\Backup.cs" />
     <Compile Include="System\FileUtils.cs" />
     <Compile Include="System\Heartbeat\Heart.cs" />
@@ -151,6 +153,7 @@
     <Compile Include="System\Settings\LevelSettings.cs" />
     <Compile Include="System\UPnP.cs" />
     <Compile Include="Utils\ColorUtils.cs" />
+    <Compile Include="Utils\ExtraData.cs" />
     <Compile Include="Utils\InetUtils.cs" />
     <Compile Include="Utils\MathUtils.cs" />
     <Compile Include="Utils\MiscUtils.cs" />

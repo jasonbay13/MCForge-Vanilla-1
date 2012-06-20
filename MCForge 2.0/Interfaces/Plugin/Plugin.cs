@@ -57,7 +57,7 @@ namespace MCForge.Interface.Plugin {
                         try {
                             ip.OnUnload();
                         }
-                        catch { Logger.Log(ip.Name + " cannot be unloaded", LogType.Warning); }
+                        catch { Logger.Log("[Plugin] "+ip.Name + " cannot be unloaded", LogType.Warning); }
                         Plugins.Remove(ip);
                         return true;
                     }
@@ -80,7 +80,7 @@ namespace MCForge.Interface.Plugin {
                     {
                         ip.OnUnload();
                     }
-                    catch { Logger.Log(ip.Name + " cannot be unloaded", LogType.Warning); }
+                    catch { Logger.Log("[Plugin]"+ip.Name + " cannot be unloaded", LogType.Warning); }
                     Plugins.Remove(ip);
                 }
             }
@@ -125,7 +125,7 @@ namespace MCForge.Interface.Plugin {
                 else
                 {
                     unload(p.Name);
-                    Logger.Log("Unloaded " + p.Name);
+                    Logger.Log("[Plugin] Unloaded " + p.Name);
                 }
             }
 
@@ -136,15 +136,15 @@ namespace MCForge.Interface.Plugin {
             {
                 ret++;
                 if (name == "")
-                    LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                    LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, typeof(IPlugin));
                 else if (ignoreCase)
                 {
                     if (s.ToLower() == name.ToLower())
-                        LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                        LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, typeof(IPlugin));
                 }
                 else
                     if (s == name)
-                        LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                        LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, typeof(IPlugin));
             }
             if (ServerSettings.HasKey("PluginsPath"))
             {
@@ -155,15 +155,15 @@ namespace MCForge.Interface.Plugin {
                     foreach (string s in DLLFiles)
                     {
                         if (name == "")
-                            LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                            LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, typeof(IPlugin));
                         else if (ignoreCase)
                         {
                             if (s.ToLower() == name.ToLower())
-                                LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                                LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, typeof(IPlugin));
                         }
                         else
                             if (s == name)
-                                LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, true);
+                                LoadAllDlls.LoadDLL(s, new string[] { "-normal" }, typeof(IPlugin));
                         ret++;
                     }
                 }

@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlockDoor.cs" />
     <Compile Include="Building\CmdBrush.cs" />
     <Compile Include="Building\CmdClick.cs" />
     <Compile Include="Building\CmdCuboid.cs" />
@@ -55,10 +56,12 @@
     <Compile Include="Bots\CmdBot.cs" />
     <Compile Include="Building\CmdTree.cs" />
     <Compile Include="Building\CmdWrite.cs" />
+    <Compile Include="Building\CmdSelect.cs" />
     <Compile Include="Information\CmdAbout.cs" />
     <Compile Include="Information\CmdLevels.cs" />
     <Compile Include="Information\CmdVips.cs" />
     <Compile Include="Misc\CmdFlipHead.cs" />
+    <Compile Include="Misc\CmdMessageBlock.cs" />
     <Compile Include="Misc\CmdNickname.cs" />
     <Compile Include="Misc\CmdRun.cs" />
     <Compile Include="Misc\CmdNotify.cs" />

@@ -5,7 +5,7 @@ using System.Text;
 using MCForge.Core;
 
 namespace MCForge.Utils {
-    public class Vector3S {
+    public class Vector3S : IEqualityComparer<Vector3S>{
         public short x;
         public short y;
         public short z;
@@ -189,6 +189,20 @@ namespace MCForge.Utils {
         }
         public override string ToString() {
             return String.Format("x:{0} z:{1} y:{2}", x, z, y);
+        }
+        public void FromString(string str) {
+            string[] split = str.Split(new char[] { ':', ' ' });
+            x = short.Parse(split[1]);
+            z = short.Parse(split[3]);
+            y = short.Parse(split[5]);
+        }
+
+        public bool Equals(Vector3S x, Vector3S y) {
+            return x == y;
+        }
+
+        public int GetHashCode(Vector3S obj) {
+            throw new NotImplementedException();
         }
     }
 }
