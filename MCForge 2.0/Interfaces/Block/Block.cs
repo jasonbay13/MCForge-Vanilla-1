@@ -5,7 +5,6 @@ using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.Interface;
 using MCForge.Entity;
-using MCForge.Utils;
 using MCForge.World;
 using MCForge.API.Events;
 
