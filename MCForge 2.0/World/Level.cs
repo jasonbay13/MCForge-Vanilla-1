@@ -145,6 +145,8 @@ namespace MCForge.World {
         /// <param name="size">Base size of map (can be changed)</param>
         public Level(Vector3S size) {
             Size = size;
+            SpawnPos = size / 2;
+            SpawnRot = new byte[] { 128, 128 };
             //data = new byte[Size.x, Size.z, Size.y];
             Data = new byte[TotalBlocks];
             BackupLevel = true;
