@@ -45,9 +45,13 @@
     <Compile Include="AntiGriefing\PlayerInfo.cs" />
     <Compile Include="AntiGriefing\PluginAntiGrief.cs" />
     <Compile Include="PluginMessageViewer.cs" />
-    <Compile Include="WomPlugin\PluginWomTextures.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WomPlugin\WomSettings.cs" />
+    <Compile Include="WomPlugin\PluginWomTextures.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WomPlugin\WomSettings.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCForge 2.0\MCForge.csproj">
@@ -55,6 +59,7 @@
       <Name>MCForge</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

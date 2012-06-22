@@ -1,4 +1,18 @@
-﻿using System;
+﻿/*
+Copyright 2011 MCForge
+Dual-licensed under the Educational Community License, Version 2.0 and
+the GNU General Public License, Version 3 (the "Licenses"); you may
+not use this file except in compliance with the Licenses. You may
+obtain a copy of the Licenses at
+http://www.opensource.org/licenses/ecl2.php
+http://www.gnu.org/licenses/gpl-3.0.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the Licenses are distributed on an "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the Licenses for the specific language governing
+permissions and limitations under the Licenses.
+*/﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +23,16 @@ using MCForge.Utils;
 using System.Drawing;
 using MCForge.Utils.Settings;
 
-namespace Plugins.WomPlugin {
-    class WomSettings : ExtraSettings {
-        private readonly List<SettingNode> _cgfvalues = new List<MCForge.Utils.Settings.SettingNode>() {
-            new SettingNode("server.name", ServerSettings.GetSetting("ServerName"), null),
-            new SettingNode("server.detail", ServerSettings.GetSetting("motd"), null),
-            new SettingNode("detail.user", "User line", null),
+namespace Plugins.WomPlugin
+{
+    class WomSettings : ExtraSettings
+    {
+        private readonly List<SettingNode> _cfgvalues = new List<SettingNode>() {
+            //new SettingNode("server.name", ServerSettings.GetSetting("ServerName"), null),
+            //new SettingNode("server.detail", ServerSettings.GetSetting("motd"), null),
+            new SettingNode("server.name", "Rawr!", null),
+            new SettingNode("server.detail", "Okay", null),
+            new SettingNode("detail.user", "Har Har", null),
             new SettingNode("environment.fog", "1377559", null),
             new SettingNode("environment.sky", "1377559", null),
             new SettingNode("environment.cloud", "1377559", null),
@@ -24,96 +42,87 @@ namespace Plugins.WomPlugin {
             new SettingNode("environment.side", "7c0fdebeb6637929b9b3170680fa7a79b656c3f7", null),
             new SettingNode("server.sendwomid","true", null),
         };
-        private readonly List<SettingNode> _values = new List<SettingNode>() {
-            new SettingNode("LevelName", "main", null),
-            new SettingNode("ConfigPath", ServerSettings.GetSetting("configpath") + "main.cfg", null),
-        };
-
+        //Concept of the level name is the cfg name.
+        /*private readonly List<SettingNode> _values = new List<SettingNode>() {
+            //new SettingNode("LevelName", "main", null),
+            //new SettingNode("ConfigPath", ServerSettings.GetSetting("configpath") + "main.cfg", null),
+        };*/
+        public override string SettingsName { get { return "WomSettings"; } }
         public List<Level> LevelsWithTextures { get; private set; }
+        public string path = ServerSettings.GetSetting("configpath") + "wom/";
 
-        public override string SettingsName {
-            get { return "WomSettings"; }
-        }
 
-        public override void OnLoad() {
+        public override void OnLoad()
+        {
             Logger.Log("[WoM] WomSettings loaded!");
             LevelsWithTextures = new List<Level>();
-            string path = (ServerSettings.GetSetting("configpath") + "wom/");
-            if (!Directory.Exists(path)) {
+            if (!Directory.Exists(path))
+            {
                 Logger.Log("[WoM] Config folder not found. Creating");
-                Directory.CreateDirectory(ServerSettings.GetSetting("configpath") + "wom/");
+                Directory.CreateDirectory(path);
             }
-           
-                foreach (Level l in Level.Levels)
+            foreach (Level l in Level.Levels)
+            {
+                if (!Directory.Exists(path + l.Name + ".cfg"))
                 {
-                    if (!Directory.Exists(path + l + ".wom.property"))
-                    {
-                        Logger.Log("[WoM] Cfg for " + l + " not found. Creating");
-                        CreateFile(l, path);
-                    }
-                }
-
-                foreach (var s in Directory.GetFiles(ServerSettings.GetSetting("configpath") + "wom/", "*.wom.property"))
-                {
-                    LoadFile(s);
-                    Logger.Log("[WoM] Config found. Loading: " + s);
+                    Logger.Log("[WoM] Cfg for " + l.Name + " not found. Creating");
+                    CreateConfigFile(l);
                 }
             }
 
-        public void LoadFile(string path) {
-            if (!path.EndsWith(".wom.property"))
-                return;
-            var lines = File.ReadAllLines(path);
-            if (lines.Count() != 2) {
-                Logger.Log(String.Format("{0} was formatted incorrectly, this file will not be loaded", path), Color.Red, Color.Black);
-                return;
+            foreach (var s in Directory.GetFiles(path, "*.cfg"))
+            {
+                Logger.Log("[WoM] Config found. Loading: " + s);
+                LoadFile(s);
             }
-            var level = Level.FindLevel(lines[0].Split('=')[1].Trim());
-            if(level == null){
-                Logger.Log(String.Format("{0} was formatted incorrectly (level not found), this file will not be loaded", path), Color.Red, Color.Black);
+        }
+
+        public void LoadFile(string levelPath)
+        {
+            if (!levelPath.EndsWith(".cfg"))
+                return;
+            var levelName = Path.GetFileNameWithoutExtension(levelPath);
+            Level level = Level.FindLevel(levelName);
+            if (level == null)
+            {
+                Logger.Log(String.Format("{0} was formatted incorrectly (level not found), this file will not be loaded", levelPath), Color.Red, Color.Black);
+            }
+            string[] lines = File.ReadAllLines(levelPath);
+            if (lines.Count() != 11)
+            {
+                Logger.Log(String.Format("{0} was formatted incorrectly, this file will not be loaded", levelPath), Color.Red, Color.Black);
                 return;
             }
             LevelsWithTextures.Add(level);
-            var cfg = lines[1].Split('=')[1].Trim();
-            if (cfg == null)
-            {
-                return;
-            }
-            else
-            {
-                level.ExtraData["WomConfig"] = cfg;
-            }
-        }
-        public void CreateFile(Level l, string path)
-        {
-            if (Directory.Exists(path + ".wom.property"))
-            {
-                return;
-            }
-            else
-            {
-                using (var writer = File.CreateText(path + l + ".wom.property"))
-                    foreach (var node in _values)
-                        writer.WriteLine(node.Key + " = " + node.Value);
-            }
+            //Check for valid numbers here
+            level.ExtraData.CreateIfNotExist<object, object>("WomConfig", lines);
+            level.ExtraData["WomConfig"] = lines;
+            Logger.Log("[WoM] Succesfully loaded!");
         }
 
-        public void CreateConfigFile(string path) {
-            using (var writer = File.CreateText(path)) {
-                foreach (var node in _cgfvalues) {
+        public void CreateConfigFile(Level l)
+        {
+            using (var writer = File.CreateText(path + l.Name + ".cfg"))
+            {
+                foreach (var node in _cfgvalues)
+                {
                     writer.WriteLine(node.Key + " = " + node.Value);
                 }
+                writer.Close();
             }
         }
-        
-        public override void Save() {
+
+        public override void Save()
+        {
 
         }
-        public override List<MCForge.Utils.Settings.SettingNode> Values {
-            get { return _values; }
+        public override List<SettingNode> Values
+        {
+            get { return _cfgvalues; }
         }
 
-        public override string PropertiesPath {
+        public override string PropertiesPath
+        {
             get { return ""; }
         }
     }
