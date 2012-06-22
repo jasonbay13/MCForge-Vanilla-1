@@ -130,7 +130,7 @@ namespace MCForge.World {
         /// Converts a byte to a Block
         /// </summary>
         public static implicit operator Block(byte b) {
-            if (b > 49)
+            if (b >= 49)
                 return UnknownBlock;
             return Blocks[b];
         }

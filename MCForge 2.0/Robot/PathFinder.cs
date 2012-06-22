@@ -61,13 +61,15 @@ namespace MCForge.Robot
                 for (int i = 0; i < surrounding.Length; i++)
                 {
                     tmp = current.position + surrounding[i];
-                    bool block = false;
+                    if ((tmp.X <= -1 || tmp.Y <= -1 || tmp.Z <= -1) || (tmp.X >= level.Size.x || tmp.Y >= level.Size.y || tmp.Z >= level.Size.z))
+                        break;
+                    tribool block = false;
                     try
                     {
                         block = level.AirMap[tmp.X, tmp.Z, tmp.Y]; //Check if block is air
                     }
                     catch { }
-                    if (block == true)
+                    if (block != tribool.Unknown)
                     {
                         //Check if we've already examined a neighbour, if not create a new node for it.
                         if (brWorld[tmp.X, tmp.Y, tmp.Z] == null)
@@ -95,6 +97,10 @@ namespace MCForge.Robot
                             if (current.position.Z != node.position.Z)
                             {
                                 diff += 1;
+                            }
+                            if (block == false) //Solid but breakable, allows bot to go through solid areas
+                            {
+                                diff += 50;
                             }
                             cost = current.cost + diff + node.position.GetDistanceSquared(end);
 

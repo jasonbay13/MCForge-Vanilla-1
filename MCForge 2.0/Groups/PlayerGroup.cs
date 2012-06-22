@@ -323,7 +323,6 @@ namespace MCForge.Groups
             Groups.Clear();
             InitDefaultGroups();
 
-
             foreach (PlayerGroup g in Groups)
             {
                 Logger.Log("[Group] " + g.Name + " Initialized");

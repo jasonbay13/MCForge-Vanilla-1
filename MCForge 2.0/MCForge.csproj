@@ -158,6 +158,7 @@
     <Compile Include="Utils\MathUtils.cs" />
     <Compile Include="Utils\MiscUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
+    <Compile Include="Utils\TriBool.cs" />
     <Compile Include="Utils\Vector2D.cs" />
     <Compile Include="Utils\Vector2S.cs" />
     <Compile Include="Utils\Vector3D.cs" />

@@ -220,6 +220,13 @@ namespace MCForge.Robot
                                 Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) - 2), 1);
                             }
 
+                            if ((!Block.IsOPBlock(Block1) && !Block.IsOPBlock(Block2)) && (!Block.CanWalkThrough(Block1) && !Block.CanWalkThrough(Block2)) &&
+                                (Block1 != Block.BlockList.UNKNOWN && Block2 != Block.BlockList.UNKNOWN))
+                            {
+                                Bot.Player.Level.BlockChange(TemporaryLocation / 32, 0);
+                                Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) - 1), 0);
+                            }
+
                             MoveEventArgs eargs = new MoveEventArgs(TemporaryLocation, Bot.Player.Pos);
                             bool cancel = OnBotMove.Call(Bot, eargs).Canceled;
                             if (cancel)

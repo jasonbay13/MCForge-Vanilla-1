@@ -212,8 +212,12 @@ namespace MCForge.Interfaces.Blocks {
             level.SetBlock(blockPosition, 0);
             string name = (string)level.ExtraData["IBlocks" + blockPosition.ToString()];
             if (name != null && Blocks[name] != null) Blocks[name].OnRemove(blockPosition, level);
-            level.ExtraData.Remove("IBlocks" + blockPosition.ToString());
-            ((List<string>)level.ExtraData["IBlocks" + name]).Remove(blockPosition.ToString());
+            try
+            {
+                level.ExtraData.Remove("IBlocks" + blockPosition.ToString());
+                ((List<string>)level.ExtraData["IBlocks" + name]).Remove(blockPosition.ToString());
+            }
+            catch { }
         }
         public static IBlock GetBlock(string name) {
             return Blocks[name];
