@@ -23,10 +23,8 @@ using MCForge.Utils;
 using System.Drawing;
 using MCForge.Utils.Settings;
 
-namespace Plugins.WomPlugin
-{
-    class WomSettings : ExtraSettings
-    {
+namespace Plugins.WomPlugin {
+    class WomSettings : ExtraSettings {
         private readonly List<SettingNode> _cfgvalues = new List<SettingNode>() {
             //new SettingNode("server.name", ServerSettings.GetSetting("ServerName"), null),
             //new SettingNode("server.detail", ServerSettings.GetSetting("motd"), null),
@@ -48,81 +46,62 @@ namespace Plugins.WomPlugin
             //new SettingNode("ConfigPath", ServerSettings.GetSetting("configpath") + "main.cfg", null),
         };*/
         public override string SettingsName { get { return "WomSettings"; } }
+
         public List<Level> LevelsWithTextures { get; private set; }
-        public string path = ServerSettings.GetSetting("configpath") + "wom/";
+
+        private readonly string ConfigPath = ServerSettings.GetSetting("configpath") + "wom/";
 
 
-        public override void OnLoad()
-        {
+        public override void OnLoad() {
+
             Logger.Log("[WoM] WomSettings loaded!");
             LevelsWithTextures = new List<Level>();
-            if (!Directory.Exists(path))
-            {
-                Logger.Log("[WoM] Config folder not found. Creating");
-                Directory.CreateDirectory(path);
-            }
-            foreach (Level l in Level.Levels)
-            {
-                if (!Directory.Exists(path + l.Name + ".cfg"))
-                {
+
+            FileUtils.CreateDirIfNotExist(ConfigPath);
+
+            foreach (Level l in Level.Levels) {
+                if (!Directory.Exists(ConfigPath + l.Name + ".cfg")) {
                     Logger.Log("[WoM] Cfg for " + l.Name + " not found. Creating");
                     CreateConfigFile(l);
                 }
             }
 
-            foreach (var s in Directory.GetFiles(path, "*.cfg"))
-            {
+            foreach (var s in Directory.GetFiles(ConfigPath, "*.cfg")) {
                 Logger.Log("[WoM] Config found. Loading: " + s);
                 LoadFile(s);
             }
         }
 
-        public void LoadFile(string levelPath)
-        {
+        public void LoadFile(string levelPath) {
             if (!levelPath.EndsWith(".cfg"))
                 return;
             var levelName = Path.GetFileNameWithoutExtension(levelPath);
             Level level = Level.FindLevel(levelName);
-            if (level == null)
-            {
-                Logger.Log(String.Format("{0} was formatted incorrectly (level not found), this file will not be loaded", levelPath), Color.Red, Color.Black);
+            if (level == null) {
+                Logger.Log(String.Format("{0} was formatted incorrectly (level not found), this file will not be loaded", levelPath), LogType.Error);
             }
             string[] lines = File.ReadAllLines(levelPath);
-            if (lines.Count() != 11)
-            {
-                Logger.Log(String.Format("{0} was formatted incorrectly, this file will not be loaded", levelPath), Color.Red, Color.Black);
-                return;
-            }
             LevelsWithTextures.Add(level);
-            //Check for valid numbers here
-            level.ExtraData.CreateIfNotExist<object, object>("WomConfig", lines);
-            level.ExtraData["WomConfig"] = lines;
+            level.ExtraData.ChangeOrCreate<object, object>("WomConfig", lines);
             Logger.Log("[WoM] Succesfully loaded!");
         }
 
-        public void CreateConfigFile(Level l)
-        {
-            using (var writer = File.CreateText(path + l.Name + ".cfg"))
-            {
-                foreach (var node in _cfgvalues)
-                {
+        public void CreateConfigFile(Level l) {
+            using (var writer = File.CreateText(ConfigPath + l.Name + ".cfg")) {
+                foreach (var node in _cfgvalues) {
                     writer.WriteLine(node.Key + " = " + node.Value);
                 }
-                writer.Close();
             }
         }
 
-        public override void Save()
-        {
+        public override void Save() {
 
         }
-        public override List<SettingNode> Values
-        {
+        public override List<SettingNode> Values {
             get { return _cfgvalues; }
         }
 
-        public override string PropertiesPath
-        {
+        public override string PropertiesPath {
             get { return ""; }
         }
     }

@@ -63,13 +63,13 @@ namespace MCForge.Robot
                     tmp = current.position + surrounding[i];
                     if ((tmp.X <= -1 || tmp.Y <= -1 || tmp.Z <= -1) || (tmp.X >= level.Size.x || tmp.Y >= level.Size.y || tmp.Z >= level.Size.z))
                         break;
-                    tribool block = false;
+                    TriBool block = false;
                     try
                     {
                         block = level.AirMap[tmp.X, tmp.Z, tmp.Y]; //Check if block is air
                     }
                     catch { }
-                    if (block != tribool.Unknown)
+                    if (block != TriBool.Unknown)
                     {
                         //Check if we've already examined a neighbour, if not create a new node for it.
                         if (brWorld[tmp.X, tmp.Y, tmp.Z] == null)

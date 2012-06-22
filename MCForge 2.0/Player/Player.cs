@@ -766,7 +766,7 @@ namespace MCForge.Entity {
         /// </summary>
         public static PacketEvent OnAllPlayersSendPacket = new PacketEvent();
         
-        public static ReceivePacket OnReceivePacket = new ReceivePacket();
+        public static PacketEvent OnReceivePacket = new PacketEvent();
         
         Dictionary<string,object> datapasses=new Dictionary<string,object>();
         /// <summary>

@@ -19,7 +19,7 @@ namespace MCForge.Gui {
             Application.SetCompatibleTextRenderingDefault(false);
 
             MainForm mForm = new MainForm();
-            Application.Run();
+            //Application.Run();
         }
     }
 }

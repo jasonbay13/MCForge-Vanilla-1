@@ -5,31 +5,31 @@ using System.Text;
 
 namespace MCForge.Utils
 {
-    public struct tribool : IEquatable<tribool>
+    public struct TriBool : IEquatable<TriBool>
     {
-        public static tribool True { get { return new tribool(true); } }
-        public static tribool False { get { return new tribool(false); } }
-        public static tribool Unknown { get { return new tribool(); } }
+        public static TriBool True { get { return new TriBool(true); } }
+        public static TriBool False { get { return new TriBool(false); } }
+        public static TriBool Unknown { get { return new TriBool(); } }
         enum triboolState { Unknown = 0, True = 1, False = 2 }
 
         private readonly triboolState state;
-        public tribool(bool state)
+        public TriBool(bool state)
         {
             this.state = state ? triboolState.True : triboolState.False;
         }
-        public static bool operator true(tribool value)
+        public static bool operator true(TriBool value)
         {
             return value.state == triboolState.True;
         }
-        public static bool operator false(tribool value)
+        public static bool operator false(TriBool value)
         {
             return value.state == triboolState.False;
         }
-        public static bool operator ==(tribool x, tribool y)
+        public static bool operator ==(TriBool x, TriBool y)
         {
             return x.state == y.state;
         }
-        public static bool operator !=(tribool x, tribool y)
+        public static bool operator !=(TriBool x, TriBool y)
         {
             return x.state != y.state;
         }
@@ -39,9 +39,9 @@ namespace MCForge.Utils
         }
         public override bool Equals(object obj)
         {
-            return (obj != null && obj is tribool) ? Equals((tribool)obj) : false;
+            return (obj != null && obj is TriBool) ? Equals((TriBool)obj) : false;
         }
-        public bool Equals(tribool value)
+        public bool Equals(TriBool value)
         {
             return value == this;
         }
@@ -49,11 +49,11 @@ namespace MCForge.Utils
         {
             return state.GetHashCode();
         }
-        public static implicit operator tribool(bool value)
+        public static implicit operator TriBool(bool value)
         {
-            return new tribool(value);
+            return new TriBool(value);
         }
-        public static explicit operator bool(tribool value)
+        public static explicit operator bool(TriBool value)
         {
             switch (value.state)
             {

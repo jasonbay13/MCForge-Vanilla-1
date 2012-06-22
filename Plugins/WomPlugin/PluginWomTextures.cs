@@ -30,137 +30,79 @@ using MCForge.Entity;
 using MCForge.Core;
 using MCForge.Utils.Settings;
 using MCForge.Utils;
-namespace Plugins.WomPlugin
-{
-    public class PluginWomTextures : IPlugin
-    {
+namespace Plugins.WomPlugin {
+    public class PluginWomTextures : IPlugin {
 
-        public string Name
-        {
+        public string Name {
             get { return "WomTextures"; }
         }
 
-        public string Author
-        {
+        public string Author {
             get { return "headdetect and Gamemakergm"; }
         }
 
-        public int Version
-        {
+        public int Version {
             get { return 1; }
         }
 
-        public string CUD
-        {
-            get { return "com.headdetect.womtextures"; }
+        public string CUD {
+            get { return ""; }
         }
 
         private WomSettings WomSettings { get; set; }
-        public void OnLoad(string[] args1)
-        {
-            Server.OnServerFinishSetup += new Server.ServerFinishSetup(OnLoadDone);
+        public void OnLoad(string[] args1) {
+            Server.OnServerFinishSetup += OnLoadDone;
         }
-        void OnLoadDone()
-        {
-            MCForge.Utils.Logger.Log("[WomTextures] Succesfully initiated!");
+        //Wait for server to finish so we make sure all of the levels are loaded
+        void OnLoadDone() {
+            Logger.Log("[WomTextures] Succesfully initiated!");
             WomSettings = new WomSettings();
             WomSettings.OnLoad();
 
-            //Player.OnReceivePacket.Normal += new Event<Player,ReceivePacketEventArgs>.EventHandler(Magic);
-            Player.OnAllPlayersReceivePacket.Normal += new Event<Player, PacketEventArgs>.EventHandler(OnData);
-            //Player.OnAllPlayersReceiveUnknownPacket.Normal += new Event<Player, PacketEventArgs>.EventHandler(OnUnknown);
+            Server.OnServerFinishSetup -= OnLoadDone;
+            Player.OnAllPlayersReceiveUnknownPacket.Normal += new Event<Player, PacketEventArgs>.EventHandler(OnIncomingData);
+            Player.OnAllPlayersSendPacket.Normal += new Event<Player, PacketEventArgs>.EventHandler(OnOutgoingData);
 
             Player.OnAllPlayersChat.Normal += ((sender, args) =>
                 SendDetailToPlayer(sender, "This is a detail, deal &4With &3It"));
         }
 
-        void OnUnknown(Player p, PacketEventArgs args)
-        {
-            Logger.Log("[UnknownWoM] " + args.Type);
-            string meep = "";
-            foreach (var data in args.Data)
-            {
-                meep += data + ", ";
-            }
-            ASCIIEncoding enc = new ASCIIEncoding();
-            string incomingText = enc.GetString(args.Data);
-            meep += (Environment.NewLine + "[UnknownWoM]IncomingText: " + incomingText);
-            Logger.Log(meep);
-        }
-
         private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
 
-        void OnData(Player p, PacketEventArgs args)
-        {
+        void OnIncomingData(Player p, PacketEventArgs args) {
             if (args.Data.Length < 0)
-            {
                 return;
-            }
-            else if (args.Data[0] != (byte)'G')
-            {
+
+            if (args.Data[0] != (byte)'G')
                 return;
-            }
-            else
-            {
 
-                args.Cancel();
-                ServeCfg(p, args.Data);
-            }
-            if (args.Type == Packet.Types.MOTD)
-            {
-                string ip = "";
-                using (System.Net.WebClient wb = new System.Net.WebClient())
-                {
-                    ip = wb.DownloadString("http://www.mcforge.net/serverdata/ip.php");
-                }
-                args.Cancel();
-                Packet pa = new Packet();
-                pa.Add(Packet.Types.MOTD);
-                pa.Add((byte)7);
-                pa.Add("har har", 64);
-                pa.Add(ServerSettings.GetSetting("MOTD") + "&0cfg=" + ip + ":" + ServerSettings.GetSetting("Port") + "/" + p.Level.Name + "~motd", 64);
-                pa.Add((byte)0);
-                p.SendPacket(pa);
-            }
+            args.Cancel();
 
-        }
-        
-        void ServeCfg(Player p, byte[] buffer)
-        {
-            var netStream = new NetworkStream(p.Socket);
-            using (var Reader = new StreamReader(netStream)) //Not used but it likes it...
-            using (var Writer = new StreamWriter(netStream))
-            {
-                var line = Encoding.UTF8.GetString(buffer, 0, buffer.Length).Split('\n')[0];
+            var netStream = p.Client.GetStream();
+            using (var Writer = new StreamWriter(netStream)) {
+                var line = Encoding.UTF8.GetString(args.Data, 0, args.Data.Length).Split('\n')[0];
                 var match = Parser.Match(line);
 
-                if (match.Success)
-                {
-                    Logger.Log("[WoM] Match!");
+                if (match.Success) {
                     var lvl = Level.FindLevel(match.Groups[1].Value);
-                    var userNameLine = Encoding.UTF8.GetString(buffer, 0, buffer.Length).Split('\n')[3];
+                    var userNameLine = Encoding.UTF8.GetString(args.Data, 0, args.Data.Length).Split('\n')[3];
                     var username = userNameLine.Remove(0, "X-WoM-Username: ".Length).Replace("\r", "");
-                    Thread.CurrentThread.Join(2000);
                     var player = Player.Find(username);
                     if (player != null)
                         player.ExtraData.Add("UsingWom", true);
 
-                    if (lvl == null)
-                    {
+                    if (lvl == null) {
                         Writer.Write("HTTP/1.1 404 Not Found");
                         Writer.Flush();
                     }
-                    else
-                    {
-                        if (!lvl.ExtraData.ContainsKey("WomConfig"))
-                        {
-                            Writer.Write("HTTP/1.1 Internal Server Error");
+                    else {
+                        if (!lvl.ExtraData.ContainsKey("WomConfig")) {
+                            Writer.Write("HTTP/1.1 500 Internal Server Error");
                             Writer.Flush();
                         }
-                        else
-                        {
-                            var Config = (string)lvl.ExtraData["WomConfig"];
-                            var bytes = Encoding.UTF8.GetBytes(Config);
+                        else {
+                            var Config = (string[])lvl.ExtraData["WomConfig"];
+                            var bytes = Encoding.UTF8.GetBytes(Config.ToString<string>());
                             Writer.WriteLine("HTTP/1.1 200 OK");
                             Writer.WriteLine("Date: " + DateTime.UtcNow.ToString("R"));
                             Writer.WriteLine("Server: Apache/2.2.21 (CentOS)");
@@ -170,24 +112,43 @@ namespace Plugins.WomPlugin
                             Writer.WriteLine("Connection: close");
                             Writer.WriteLine("Content-Type: text/plain");
                             Writer.WriteLine();
-                            Writer.WriteLine(Config);
+                            foreach (var entry in Config)
+                                Writer.WriteLine(entry);
                         }
                     }
 
                 }
 
-                else
-                {
+                else {
                     Writer.Write("HTTP/1.1 400 Bad Request");
                     Writer.Flush();
                 }
             }
-            //p.Kick("");
         }
 
-        public void OnUnload()
-        {
-            throw new NotImplementedException();
+        void OnOutgoingData(Player p, PacketEventArgs e) {
+            if (e.Type != Packet.Types.MOTD)
+                return;
+#if DEBUG
+            string ip = "127.0.0.1";
+#else
+            string ip = InetUtils.GrabWebpage("http://www.mcforge.net/serverdata/ip.php");
+#endif
+            Packet pa = new Packet();
+            pa.Add(Packet.Types.MOTD);
+            pa.Add((byte)7);
+            pa.Add(ServerSettings.GetSetting("ServerName"), 64);
+            pa.Add(ServerSettings.GetSetting("MOTD") + " &0cfg=" + ip + ":" + ServerSettings.GetSetting("Port") + "/" + p.Level.Name, 64);
+            pa.Add((byte)0);
+
+            e.Data = pa.bytes;
+        }
+
+
+
+        public void OnUnload() {
+            Player.OnAllPlayersSendPacket.Normal -= OnOutgoingData;
+            Player.OnAllPlayersReceivePacket.Normal -= OnIncomingData;
         }
 
         #region Static Helper Methods
@@ -199,8 +160,7 @@ namespace Plugins.WomPlugin
         /// </summary>
         /// <param name="player">Player to send detail to</param>
         /// <param name="detail">Detail message to send </param>
-        public static void SendDetailToPlayer(Player player, string detail)
-        {
+        public static void SendDetailToPlayer(Player player, string detail) {
             if (!player.ExtraData.ContainsKey("UsingWom"))
                 return;
             player.SendMessage(String.Format("^detail.user={0}", detail));
@@ -210,8 +170,7 @@ namespace Plugins.WomPlugin
         /// 
         /// </summary>
         /// <param name="detail"></param>
-        public static void SendDetailToAll(string detail)
-        {
+        public static void SendDetailToAll(string detail) {
             Server.Players.ForEach(p => SendDetailToPlayer(p, detail));
         }
         #endregion

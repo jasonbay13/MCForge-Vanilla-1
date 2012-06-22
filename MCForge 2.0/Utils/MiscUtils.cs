@@ -130,6 +130,19 @@ namespace MCForge.Utils {
             }
             return ret;
         }
+
+       /// <summary>
+        /// Converts the list into a string
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns>The string value of the list</returns>
+        public static string ToString<T>(this T[] array) {
+            string ret = "";
+            foreach (T item in array) {
+                ret += item.ToString() + "\n";
+            }
+            return ret;
+        }
         /// <summary>
         /// Adds multiple hexadecimal strings splitted by \n as normal strings to this list
         /// </summary>

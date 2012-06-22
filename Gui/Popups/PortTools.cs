@@ -157,7 +157,7 @@ namespace MCForge.Gui.Popups {
             int port = (int)((object[])e.Argument)[0];
             bool adding = (bool)((object[])e.Argument)[1];
             try {
-                if (!UPnP.Discover()) {
+                if (!UPnP.CanUseUpnp) {
                     e.Result = 0;
                     return;
                 }

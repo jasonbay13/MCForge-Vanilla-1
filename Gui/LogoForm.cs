@@ -111,5 +111,15 @@ namespace MCForge.Gui {
         }
 
         #endregion
+
+        internal void Shutdown() {
+            if (InvokeRequired) {
+                BeginInvoke((MethodInvoker)Shutdown);
+                return;
+            }
+
+            Close();
+            Dispose();
+        }
     }
 }

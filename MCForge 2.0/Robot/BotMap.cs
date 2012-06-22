@@ -19,14 +19,14 @@ using MCForge.World;
 namespace MCForge.Robot {
     public class BotMap {
         public BotMap(Level l) {
-            AirMap = new tribool[l.Size.x, l.Size.z, l.Size.y];//return x + z * Size.x + y * Size.x * Size.z;
+            AirMap = new TriBool[l.Size.x, l.Size.z, l.Size.y];//return x + z * Size.x + y * Size.x * Size.z;
             Size = l.Size;
             for (int i = 0; i < l.Data.Length; i++) {
                 Vector3S pos = l.IntToPos(i);
                 if (isAir(l.GetBlock(i)))
                     AirMap[pos.x, pos.z, pos.y] = true;
                 else if (Block.IsOPBlock(l.GetBlock(i)))
-                    AirMap[pos.x, pos.z, pos.y] = tribool.Unknown;
+                    AirMap[pos.x, pos.z, pos.y] = TriBool.Unknown;
                 else
                     AirMap[pos.x, pos.z, pos.y] = false;
             }
@@ -38,7 +38,7 @@ namespace MCForge.Robot {
                 }
             }*/
         }
-        public tribool[, ,] AirMap;
+        public TriBool[, ,] AirMap;
         public Vector3S Size = new Vector3S(0, 0, 0);
         bool[, ,] PosMap;
         bool isAir(byte block) {
@@ -48,7 +48,7 @@ namespace MCForge.Robot {
             Vector3D s = new Vector3D(start);
             Vector3D e = new Vector3D(end);
             while ((s - e).Length > 1) {
-                if (AirMap[(int)s.x, (int)s.z, (int)s.y] == tribool.True) return false;
+                if (AirMap[(int)s.x, (int)s.z, (int)s.y] == TriBool.True) return false;
             }
             return true;
         }

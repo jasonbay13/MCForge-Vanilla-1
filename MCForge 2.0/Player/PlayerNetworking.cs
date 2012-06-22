@@ -69,6 +69,10 @@ namespace MCForge.Entity {
                 p.CloseConnection();
                 return;
             }
+            catch (ObjectDisposedException) {
+                p.CloseConnection();
+                return;
+            }
             catch (Exception e) {
                 p.Kick("Error!");
                 Logger.LogError(e);
@@ -87,9 +91,9 @@ namespace MCForge.Entity {
                     case 8: length = 9; break; // input
                     case 13: length = 65; break; // chat
                     default: {
-                            ReceivePacketEventArgs args = new ReceivePacketEventArgs(buffer);
-                            OnReceivePacket.Call(this, args);
-                            if (args.Canceled)
+                            PacketEventArgs args = new PacketEventArgs(buffer, true, (Packet.Types)msg);
+                            bool canceled = OnPlayerReceiveUnknownPacket.Call(this, args, OnAllPlayersReceiveUnknownPacket).Canceled;
+                            if (canceled)
                                 return new byte[1];
                             Kick("Unhandled message id \"" + msg + "\"!");
                             return new byte[0];
@@ -205,7 +209,6 @@ namespace MCForge.Entity {
 
                 SendMotd();
                 IsLoading = true;
-                //SendMap(); changing the level value will send the map
                 IsLoggedIn = true;
                 if (Level == null)
                     Level = Server.Mainlevel;
@@ -267,16 +270,14 @@ namespace MCForge.Entity {
             }
 
             byte currentType = 50;
-            if (y < Level.Size.y)
-            {
+            if (y < Level.Size.y) {
                 currentType = Level.GetBlock(x, z, y);
                 if (!Block.IsValidBlock(currentType) && currentType != 255) {
                     Kick("HACKED SERVER!");
                     return;
                 }
             }
-            else
-            {
+            else {
                 return;
             }
 
@@ -319,7 +320,7 @@ namespace MCForge.Entity {
             {
                 Level.BlockChange(x, z, y, newType, (fake) ? null : this);
             }
-            
+
             BlockChanges.Add(new World.Blocks.BlockChange(new Vector3S(x, z, y), blockFrom, newType, action == 0));
         }
         private void HandleIncomingPos(byte[] message) {
@@ -344,7 +345,7 @@ namespace MCForge.Entity {
             Pos.x = (short)x;
             Pos.y = (short)y;
             Pos.z = (short)z;
-            Rot = new byte[2] { rotx, roty };
+            Rot = new byte[] { rotx, roty };
             if (!(fromPosition.x == Pos.x && fromPosition.y == Pos.y && fromPosition.z == Pos.z)) {
                 MoveEventArgs eargs = new MoveEventArgs(new Vector3S(fromPosition), new Vector3S(Pos));
                 eargs = OnPlayerMove.Call(this, eargs, OnAllPlayersMove);
@@ -628,12 +629,11 @@ namespace MCForge.Entity {
         #endregion
         #region Outgoing Packets
         public void SendPacket(Packet pa) {
-            PacketEventArgs args = OnPlayerSendPacket.Call(this, new PacketEventArgs(pa.bytes, false, (Packet.Types)pa.bytes[0]), OnAllPlayersSendPacket);
-            bool Canceled = args.Canceled;
-            if (args.Data.Length == pa.bytes.Length)
+            PacketEventArgs args = new PacketEventArgs(pa.bytes, false, (Packet.Types)pa.bytes[0]);
+            bool Canceled = OnPlayerSendPacket.Call(this, args, OnAllPlayersSendPacket).Canceled;
+            if (pa.bytes != args.Data)
                 pa.bytes = args.Data;
-            if (!Canceled)
-            {
+            if (!Canceled) {
                 try {
                     lastPacket = (Packet.Types)pa.bytes[0];
                 }
@@ -704,7 +704,7 @@ namespace MCForge.Entity {
                     block = Level.Data[pos];
                     //TODO ADD CHECKING
                     if (block == 255) {
-                        Vector3S vpos=Level.IntToPos(pos);
+                        Vector3S vpos = Level.IntToPos(pos);
                         block = MCForge.Interfaces.Blocks.Block.GetVisibleType((ushort)vpos.x, (ushort)vpos.z, (ushort)vpos.y, Level);
                     }
                     blocks[pos] = block;
