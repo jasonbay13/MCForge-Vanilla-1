@@ -83,7 +83,6 @@ namespace MCForge.Core {
         /// </summary>
         public static bool Started { get; set; }
 
-
         private static System.Threading.Timer UpdateTimer;
         private static int GroupsaveInterval = 3000;
         private static int GroupsaveIntervalCurrent = 0;

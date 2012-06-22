@@ -141,7 +141,7 @@
     <Compile Include="Robot\PathFinder.cs" />
     <Compile Include="Robot\Point3D.cs" />
     <Compile Include="System\Backup.cs" />
-    <Compile Include="System\FileUtils.cs" />
+    <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="System\Heartbeat\Heart.cs" />
     <Compile Include="System\Heartbeat\Heartbeat.cs" />
     <Compile Include="System\Heartbeat\MBeat.cs" />

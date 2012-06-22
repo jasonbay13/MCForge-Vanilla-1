@@ -14,20 +14,15 @@ permissions and limitations under the Licenses.
 */﻿
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using MCForge.World;
 using MCForge.Core;
 using MCForge.Utils;
-using System.Drawing;
 using MCForge.Utils.Settings;
 
 namespace Plugins.WomPlugin {
     class WomSettings : ExtraSettings {
         private readonly List<SettingNode> _cfgvalues = new List<SettingNode>() {
-            //new SettingNode("server.name", ServerSettings.GetSetting("ServerName"), null),
-            //new SettingNode("server.detail", ServerSettings.GetSetting("motd"), null),
             new SettingNode("server.name", "Rawr!", null),
             new SettingNode("server.detail", "Okay", null),
             new SettingNode("detail.user", "Har Har", null),
@@ -40,17 +35,9 @@ namespace Plugins.WomPlugin {
             new SettingNode("environment.side", "7c0fdebeb6637929b9b3170680fa7a79b656c3f7", null),
             new SettingNode("server.sendwomid","true", null),
         };
-        //Concept of the level name is the cfg name.
-        /*private readonly List<SettingNode> _values = new List<SettingNode>() {
-            //new SettingNode("LevelName", "main", null),
-            //new SettingNode("ConfigPath", ServerSettings.GetSetting("configpath") + "main.cfg", null),
-        };*/
         public override string SettingsName { get { return "WomSettings"; } }
-
         public List<Level> LevelsWithTextures { get; private set; }
-
         private readonly string ConfigPath = ServerSettings.GetSetting("configpath") + "wom/";
-
 
         public override void OnLoad() {
 
