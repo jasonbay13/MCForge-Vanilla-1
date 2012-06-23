@@ -108,9 +108,6 @@ namespace MCForge.Utils {
                     one = Color.Yellow;
                     break;
             }
-            if ((logType == LogType.Debug && Server.DebugMode))
-                Log(message, one, Color.Black, logType);
-            else
                 Log(message, one, Color.Black, logType);
         }
 
@@ -122,7 +119,10 @@ namespace MCForge.Utils {
         /// <param name="bgColor">Color of the background</param> 
         /// <param name="logType">The log type</param>
         public static void Log(string message, Color textColor, Color bgColor, LogType logType = LogType.Normal) {
-            _flushQueue.Enqueue(new LogEventArgs("[" + DateTime.Now.ToString("T") + "] " + message, logType, textColor, bgColor));
+            if (logType == LogType.Debug && Server.DebugMode)
+                _flushQueue.Enqueue(new LogEventArgs("[" + DateTime.Now.ToString("T") + "] " + message, logType, textColor, bgColor));
+            else if (logType != LogType.Debug)
+                _flushQueue.Enqueue(new LogEventArgs("[" + DateTime.Now.ToString("T") + "] " + message, logType, textColor, bgColor));
         }
 
         /// <summary>
