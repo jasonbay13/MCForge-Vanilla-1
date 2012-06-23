@@ -50,49 +50,5 @@ namespace MCForge.Groups
                 writer.WriteEndDocument();
             }
         }
-
-        public static void Load()
-        {
-            try
-            {
-                PlayerGroup group = new PlayerGroup();
-                using (XmlReader reader = XmlReader.Create(PropertiesPath))
-                    while (reader.Read())
-                    {
-                        if (reader.IsStartElement())
-                        {
-                            switch (reader.Name.ToLower())
-                            {
-                                case "name":
-                                    group.Name = reader.ReadString();
-                                    break;
-                                case "permission":
-                                    try { group.Permission = byte.Parse(reader.ReadString()); }
-                                    catch { }
-                                    break;
-                                case "color":
-                                    group.Colour = '&' + reader.ReadString();
-                                    break;
-                                case "file":
-                                    group.File = reader.ReadString();
-                                    break;
-                                case "maxblockchanges":
-                                    try { group.MaxBlockChange = int.Parse(reader.ReadString()); }
-                                    catch { }
-                                    break;
-                            }
-                        }
-                        else if (group.Name != null)
-                        {
-                            try { 
-                                group.add(); group = new PlayerGroup(); }
-                            catch { Logger.Log("Failed to add a group!", LogType.Error); }
-                            //break;
-                        }
-                    }
-            }
-            catch { }
-            CommandPermissionOverrides.Load();
-        } 
     }
 }

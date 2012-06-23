@@ -36,17 +36,6 @@ using MCForge_.SQL;
 
 namespace MCForge_
 {
-	public enum LevelPermission //int is default
-    {
-        Banned = -20,
-        Guest = 0,
-        Builder = 30,
-        AdvBuilder = 50,
-        Operator = 80,
-        Admin = 100,
-        Nobody = 120,
-        Null = 150
-    }
 	
 	
     public class Server
@@ -324,6 +313,10 @@ namespace MCForge_
         //Dont kill me ._.
         public void Log(string message) {
         	Console.WriteLine(message);
+        }
+        
+        public static void ErrorLog(Exception e) {
+        	Console.WriteLine(e.ToString());
         }
 
         public static void LoadAllSettings()
