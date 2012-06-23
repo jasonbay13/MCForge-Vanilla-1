@@ -30,6 +30,7 @@ using MCForge.World;
 using MCForge.World.Blocks;
 using System.Text;
 
+
 namespace MCForge.Entity {
     /// <summary>
     /// The player class, this contains all player information.
@@ -41,8 +42,8 @@ namespace MCForge.Entity {
         //TODO: Change all o dis
         internal static readonly ASCIIEncoding enc = new ASCIIEncoding();
         internal static readonly MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-        private  static readonly Packet pingPacket = new Packet(new byte[1] { (byte)Packet.Types.SendPing });
-        private  static readonly Packet mapSendStartPacket = new Packet(new byte[1] { (byte)Packet.Types.MapStart });
+        private static readonly Packet pingPacket = new Packet(new byte[1] { (byte)Packet.Types.SendPing });
+        private static readonly Packet mapSendStartPacket = new Packet(new byte[1] { (byte)Packet.Types.MapStart });
         private static byte ForceTpCounter = 0;
 
         private static Packet MOTDNonAdmin = new Packet();
@@ -62,14 +63,14 @@ namespace MCForge.Entity {
         /// <summary>
         /// Gets the socket.
         /// </summary>
-        public Socket Socket { get; private  set; }
+        public Socket Socket { get; private set; }
 
         /// <summary>
         /// Gets the client.
         /// </summary>
-        public TcpClient Client { get; private  set; }
+        public TcpClient Client { get; private set; }
 
-        private  Packet.Types lastPacket = Packet.Types.SendPing;
+        private Packet.Types lastPacket = Packet.Types.SendPing;
 
         /// <summary>
         ///  Gets or sets if player is a bot
@@ -94,15 +95,13 @@ namespace MCForge.Entity {
         /// <value>
         /// The display name.
         /// </value>
-        public string DisplayName
-        {
-            get { 
-                return _displayName; 
+        public string DisplayName {
+            get {
+                return _displayName;
             }
-            set { 
+            set {
                 _displayName = value;
-                if (IsLoggedIn)
-                {
+                if (IsLoggedIn) {
                     this.GlobalDie();
                     SpawnThisPlayerToOtherPlayers();
                 }
@@ -113,7 +112,7 @@ namespace MCForge.Entity {
         /// This is the player's username
         /// </summary>       
         public string Username { get; set; }
-        
+
         /// <summary>
         /// This is the UID for the player in the database
         /// </summary>
@@ -155,7 +154,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// The player's color
         /// </summary>
-        public string Color { get; set;}
+        public string Color { get; set; }
 
         /// <summary>
         /// True if the player is currently loading a map
@@ -255,7 +254,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// Dictionary for housing extra data, great for giving player objects to pass
         /// </summary>
-        public readonly Dictionary<object, object> ExtraData = new Dictionary<object, object>();
+        public readonly ExtraData<object, object> ExtraData = new ExtraData<object, object>();
         /// <summary>
         /// This delegate is used for when a command wants to be activated the first time a player places a block
         /// </summary>
@@ -312,13 +311,12 @@ namespace MCForge.Entity {
             }
         }
 
-        public Player()
-        {
+        public Player() {
 
         }
 
         #region Special Chat Handlers
-        private  void HandleCommand(string[] args) {
+        private void HandleCommand(string[] args) {
             string[] sendArgs = new string[0];
             if (args.Length > 1) {
                 sendArgs = new string[args.Length - 1];
@@ -344,7 +342,7 @@ namespace MCForge.Entity {
                         SendMessage(Colors.red + "You cannot use /" + name + "!");
                         return;
                     }
-                    try { 
+                    try {
                         cmd.Use(this, sendArgs);
                         OnCommandEnd.Call(this, new CommandEndEventArgs(cmd, sendArgs), OnAllCommandEnd);
                     }
@@ -352,8 +350,7 @@ namespace MCForge.Entity {
                         Logger.Log("[Error] An error occured when " + Username + " tried to use " + name + "!", System.Drawing.Color.Red, System.Drawing.Color.Black);
                         Logger.LogError(ex);
                     }
-                    if (ExtraData.ContainsKey("LastCmd"))
-                    {
+                    if (ExtraData.ContainsKey("LastCmd")) {
                         if ((string)(ExtraData["LastCmd"]) != String.Join(" ", args))
                             ExtraData["LastCmd"] = String.Join(" ", args);
                     }
@@ -372,19 +369,21 @@ namespace MCForge.Entity {
         internal static void GlobalUpdate() {
             ForceTpCounter++;
 
-            Server.ForeachPlayer(delegate(Player p) {
-                if (ForceTpCounter == 100) { if (!p.IsHidden) p.UpdatePosition(true); }
-                else { if (!p.IsHidden) p.UpdatePosition(false); }
-            });
+            //TODO: Add ForceTpCounter setting
+            if (ForceTpCounter == 100) {
+                Server.ForeachPlayer(delegate(Player p) {
+                    if (!p.IsHidden) p.UpdatePosition(true);
+                });
+                ForceTpCounter = 0;
+            }
         }
-        
-        
+
+
         /// <summary>
         /// Send this player a message
         /// </summary>
         /// <param name="message">The message to send</param>
-		public override void SendMessage(string message)
-        {
+        public override void SendMessage(string message) {
             /*if (ColorUtils.MessageHasBadColorCodes(message)) { //This triggers with something like SendMessage(Colors.red + "-----------------Zombie Store---------------");, need to fix
                 Logger.Log("Bad message sent from " + Username);
                 return;
@@ -398,94 +397,85 @@ namespace MCForge.Entity {
             sb.Replace("$" + Server.Moneys, Money.ToString());
             sb.Replace("$rank", Group.Name);
             sb.Replace("$ip", Ip);
-			SendMessage(ID, sb.ToString());
-		}
-        
+            SendMessage(ID, sb.ToString());
+        }
+
         #region Database Saving/Loading
-		
-        
-		public void Save()
-		{
-			Logger.Log("Saving " + Username + " to the database", LogType.Debug);
-			List<string> commands = new List<string>();
-			commands.Add("UPDATE _players SET money=" + Money + ", lastlogin='" + LastLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', firstlogin='" + FirstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE UID=" + UID);
-			commands.Add("UPDATE _players SET color='" + Color + "' WHERE UID=" + UID);
-			DataSaved.Call(this, new DataSavedEventArgs(UID));
-			Database.executeQuery(commands.ToArray());
-		}
-		
-		public void Load()
-		{
-			Logger.Log("Loading " + Username + " from the database", LogType.Debug);
-			DataTable playerdb = Database.fillData("SELECT * FROM _players WHERE Name='" + Username + "'");
-			if (playerdb.Rows.Count == 0)
-			{
-				FirstLogin = DateTime.Now;
-				LastLogin = DateTime.Now;
-				Money = 0;
-				Database.executeQuery("INSERT INTO _players (Name, IP, firstlogin, lastlogin, money, color) VALUES ('" + Username + "', '" + Ip + "', '" + FirstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + LastLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', 0, '" + Color + "')");
-				DataTable temp = Database.fillData("SELECT * FROM _players WHERE Name='" + Username + "'");
-				if (temp.Rows.Count != 0)
-					UID = int.Parse(temp.Rows[0]["UID"].ToString());
-				temp.Dispose();
-			}
-			else
-			{
-				UID = int.Parse(playerdb.Rows[0]["UID"].ToString());
-				FirstLogin = DateTime.Parse(playerdb.Rows[0]["firstlogin"].ToString());
-				LastLogin = DateTime.Now;
-				Money = int.Parse(playerdb.Rows[0]["money"].ToString());
-				Color = playerdb.Rows[0]["color"].ToString();
-				//TODO Add total login and total Blocks
-			}
-			playerdb.Dispose();
-			LoadExtra();
-			//Because milk
-			this.OnPlayerDisconnect.Important += delegate { 
-				Save();
-			};
-		}
-		
-		#endregion
-		
-		#region Extra Data Saving/Loading
-		/// <summary>
-		/// Load all the players extra data from the database
-		/// </summary>
-		public static void LoadAllExtra()
-		{
-			Server.Players.ForEach(p =>
-			                       {
-			                       	p.LoadExtra();
-			                       });
-		}
-		/// <summary>
-		/// Load the players extra data from the database
-		/// </summary>
-		public void LoadExtra()
-		{
-			DataTable tbl = Database.fillData("SELECT * FROM extra WHERE UID=" + UID);
-			for (int i = 0; i < tbl.Rows.Count; i++)
-			{
-				ExtraData.Add(tbl.Rows[i]["key"], tbl.Rows[i]["value"]);
-			}
-			tbl.Dispose();
-		}
-		/// <summary>
-		/// Check to see if the key is in the table already
-		/// </summary>
-		/// <param name="key">The key to check</param>
-		/// <returns>If true, then they key is in the table and doesnt need to be added, if false, then the key needs to be added</returns>
-		internal bool IsInTable(object key)
-		{
-			DataTable temp = Database.fillData("SELECT * FROM extra WHERE key='" + key.ToString() + "' AND UID=" + UID);
-			bool return1 = false;
-			if (temp.Rows.Count >= 1)
-				return1 = true;
-			temp.Dispose();
-			return return1;
-		}
-			#endregion
+
+
+        public void Save() {
+            Logger.Log("Saving " + Username + " to the database", LogType.Debug);
+            List<string> commands = new List<string>();
+            commands.Add("UPDATE _players SET money=" + Money + ", lastlogin='" + LastLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', firstlogin='" + FirstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "' WHERE UID=" + UID);
+            commands.Add("UPDATE _players SET color='" + Color + "' WHERE UID=" + UID);
+            DataSaved.Call(this, new DataSavedEventArgs(UID));
+            Database.executeQuery(commands.ToArray());
+        }
+
+        public void Load() {
+            Logger.Log("Loading " + Username + " from the database", LogType.Debug);
+            DataTable playerdb = Database.fillData("SELECT * FROM _players WHERE Name='" + Username + "'");
+            if (playerdb.Rows.Count == 0) {
+                FirstLogin = DateTime.Now;
+                LastLogin = DateTime.Now;
+                Money = 0;
+                Database.executeQuery("INSERT INTO _players (Name, IP, firstlogin, lastlogin, money, color) VALUES ('" + Username + "', '" + Ip + "', '" + FirstLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + LastLogin.ToString("yyyy-MM-dd HH:mm:ss") + "', 0, '" + Color + "')");
+                DataTable temp = Database.fillData("SELECT * FROM _players WHERE Name='" + Username + "'");
+                if (temp.Rows.Count != 0)
+                    UID = int.Parse(temp.Rows[0]["UID"].ToString());
+                temp.Dispose();
+            }
+            else {
+                UID = int.Parse(playerdb.Rows[0]["UID"].ToString());
+                FirstLogin = DateTime.Parse(playerdb.Rows[0]["firstlogin"].ToString());
+                LastLogin = DateTime.Now;
+                Money = int.Parse(playerdb.Rows[0]["money"].ToString());
+                Color = playerdb.Rows[0]["color"].ToString();
+                //TODO Add total login and total Blocks
+            }
+            playerdb.Dispose();
+            LoadExtra();
+            //Because milk
+            this.OnPlayerDisconnect.Important += delegate {
+                Save();
+            };
+        }
+
+        #endregion
+
+        #region Extra Data Saving/Loading
+        /// <summary>
+        /// Load all the players extra data from the database
+        /// </summary>
+        public static void LoadAllExtra() {
+            Server.Players.ForEach(p => {
+                p.LoadExtra();
+            });
+        }
+        /// <summary>
+        /// Load the players extra data from the database
+        /// </summary>
+        public void LoadExtra() {
+            DataTable tbl = Database.fillData("SELECT * FROM extra WHERE UID=" + UID);
+            for (int i = 0; i < tbl.Rows.Count; i++) {
+                ExtraData.Add(tbl.Rows[i]["key"], tbl.Rows[i]["value"]);
+            }
+            tbl.Dispose();
+        }
+        /// <summary>
+        /// Check to see if the key is in the table already
+        /// </summary>
+        /// <param name="key">The key to check</param>
+        /// <returns>If true, then they key is in the table and doesnt need to be added, if false, then the key needs to be added</returns>
+        internal bool IsInTable(object key) {
+            DataTable temp = Database.fillData("SELECT * FROM extra WHERE key='" + key.ToString() + "' AND UID=" + UID);
+            bool return1 = false;
+            if (temp.Rows.Count >= 1)
+                return1 = true;
+            temp.Dispose();
+            return return1;
+        }
+        #endregion
 
         #region PluginStuff
         /// <summary>
@@ -520,7 +510,7 @@ namespace MCForge.Entity {
         /// <param name="type"></param>
         public void Click(ushort x, ushort z, ushort y, byte type) {
             HandleBlockchange(x, y, z, (byte)ActionType.Place, type, true);
-            BlockChangeEventArgs eargs=new BlockChangeEventArgs(x, y, z, ActionType.Place, type);
+            BlockChangeEventArgs eargs = new BlockChangeEventArgs(x, y, z, ActionType.Place, type);
             bool canceled = OnPlayerBlockChange.Call(this, eargs, OnAllPlayersBlockChange).Canceled;
             if (canceled) // If any event canceled us
                 return;
@@ -540,7 +530,7 @@ namespace MCForge.Entity {
         }
         #endregion
 
-        private  static List<string> LineWrapping(string message) {
+        private static List<string> LineWrapping(string message) {
             List<string> lines = new List<string>();
             message = Regex.Replace(message, @"(&[0-9a-f])+(&[0-9a-f])", "$2");
             message = Regex.Replace(message, @"(&[0-9a-f])+$", "");
@@ -582,14 +572,13 @@ namespace MCForge.Entity {
             } return lines;
         }
 
-        private  byte FreeId() {
+        private byte FreeId() {
             List<byte> usedIds = new List<byte>();
 
             Server.ForeachPlayer(p => usedIds.Add(p.ID));
             Server.ForeachBot(p => usedIds.Add(p.Player.ID));
 
-            for (byte i = 1; i < ServerSettings.GetSettingInt("maxplayers"); ++i)
-            {
+            for (byte i = 1; i < ServerSettings.GetSettingInt("maxplayers"); ++i) {
                 if (usedIds.Contains(i)) continue;
                 return i;
             }
@@ -597,13 +586,13 @@ namespace MCForge.Entity {
             Logger.Log("Too many players O_O");
             return 254;
         }
-     
+
         private void UpgradeConnectionToPlayer() {
             Server.UpgradeConnectionToPlayer(this);
         }
 
         #region Verification Stuffs
-        private  void CheckMultipleConnections() {
+        private void CheckMultipleConnections() {
 
             //Not a good idea, wom uses 2 connections when getting textures
             if (Server.Connections.Count < 2)
@@ -621,14 +610,14 @@ namespace MCForge.Entity {
                 }
             });
         }
-        private  bool CheckIfBanned() {
+        private bool CheckIfBanned() {
             if (Server.IPBans.Contains(Ip)) {
                 Kick("You're Banned!");
                 return true;
             }
             return false;
         }
-        private  bool VerifyAccount(string name, string verify) {
+        private bool VerifyAccount(string name, string verify) {
             if (!ServerSettings.GetSettingBoolean("offline") && Ip != "127.0.0.1") {
                 if (Server.PlayerCount >= ServerSettings.GetSettingInt("maxplayers")) {
                     SKick("Server is full, please try again later!");
@@ -636,12 +625,11 @@ namespace MCForge.Entity {
                 }
 
                 if (verify == null || verify == "" || verify == "--" || (verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0') && verify != BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.Salt + name))).Replace("-", "").ToLower().TrimStart('0'))) {
-        			if (ServerSettings.GetSettingBoolean("VerifyNames"))
-        			{
-        			SKick("Account could not be verified, try again.");
-                    //Logger.Log("'" + verify + "' != '" + BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.salt + name))).Replace("-", "").ToLower().TrimStart('0') + "'");
-                    return false;
-        			}
+                    if (ServerSettings.GetSettingBoolean("VerifyNames")) {
+                        SKick("Account could not be verified, try again.");
+                        //Logger.Log("'" + verify + "' != '" + BitConverter.ToString(md5.ComputeHash(enc.GetBytes(ServerSettings.salt + name))).Replace("-", "").ToLower().TrimStart('0') + "'");
+                        return false;
+                    }
                 }
             }
             if (name.Length > 16 || !ValidName(name)) {
@@ -716,6 +704,14 @@ namespace MCForge.Entity {
         /// </summary>
         public static MoveEvent OnAllPlayersMove = new MoveEvent();
         /// <summary>
+        /// Gets called when this players rotation is changed
+        /// </summary>
+        public RotateEvent OnPlayerRotate = new RotateEvent();
+        /// <summary>
+        /// Gets called when any players rotation is changed
+        /// </summary>
+        public static RotateEvent OnAllPlayersRotate = new RotateEvent();
+        /// <summary>
         /// Gets called when this player changes a block.
         /// </summary>
         public BlockChangeEvent OnPlayerBlockChange = new BlockChangeEvent();
@@ -734,7 +730,7 @@ namespace MCForge.Entity {
         public static CommandEndEvent OnAllCommandEnd = new CommandEndEvent();
 
 
-        private readonly Dictionary<string,object> DataPasses=new Dictionary<string,object>();
+        private readonly Dictionary<string, object> DataPasses = new Dictionary<string, object>();
 
         //I don't see why we cant use ExtraData... a string is an object....
         /// <summary>
@@ -765,16 +761,16 @@ namespace MCForge.Entity {
         /// Gets called when a packet is sent to any player.
         /// </summary>
         public static PacketEvent OnAllPlayersSendPacket = new PacketEvent();
-        
+
         public static ReceivePacket OnReceivePacket = new ReceivePacket();
-        
-        Dictionary<string,object> datapasses=new Dictionary<string,object>();
+
+        Dictionary<string, object> datapasses = new Dictionary<string, object>();
         /// <summary>
         /// Gets a datapass object and removes it from the list.
         /// </summary>
         /// <param name="key">The key to access the datapass object.</param>
         /// <returns>A datapass object.</returns>
-        public object GetDatapass(string key){
+        public object GetDatapass(string key) {
             return DataPasses.GetIfExist<string, object>(key);
         }
         /// <summary>
@@ -782,12 +778,31 @@ namespace MCForge.Entity {
         /// </summary>
         /// <param name="key">The key to set the datapass object to.</param>
         /// <param name="data">The datapass object.</param>
-        public void SetDatapass(string key, object data){
+        public void SetDatapass(string key, object data) {
             DataPasses.ChangeOrCreate<string, object>(key, data);
         }
         #endregion
-
+        public Vector3S GetBlockFromView() {
+            double hori = (Math.PI / 128) * Rot[0];
+            double vert = (Math.PI / 128) * Rot[1];
+            double cosHori = Math.Cos(hori);
+            double sinHori = Math.Sin(hori);
+            double cosVert = Math.Cos(vert);
+            double sinVert = Math.Sin(vert);
+            double length = 0.1; //TODO: Adjust length after first possible block is found to the distance (Player.Pos-FirstBlock).Length
+            for (double i = 1; i < ((Rot[0] < 64 || Rot[0] > 192) ? Level.Size.z - Pos.z / 32 : Pos.z / 32); i += length) {
+                double h = i / cosHori;
+                double x = -sinHori * h;
+                h = h / cosVert;
+                double y = sinVert * h;
+                short X = (short)(Math.Round((double)(Pos.x - 16) / 32 + x * ((Rot[0] < 64 || Rot[0] > 192) ? -1 : 1)));
+                short Z = (short)(Math.Round((double)(Pos.z - 16) / 32 + i * ((Rot[0] < 64 || Rot[0] > 192) ? -1 : 1)));
+                short Y = (short)(Math.Round((double)(Pos.y - 32) / 32 + y * ((Rot[0] < 64 || Rot[0] > 192) ? -1 : 1)));
+                Vector3S ret = new Vector3S(X, Z, Y);
+                if (Level.GetBlock(ret) != 0)
+                    return ret;
+            }
+            return null;
+        }
     }
-
-
 }

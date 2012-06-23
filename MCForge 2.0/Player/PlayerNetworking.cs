@@ -339,26 +339,40 @@ namespace MCForge.Entity {
             ushort z = Packet.NTHO(message, 5);
             byte rotx = message[7];
             byte roty = message[8];
-            Vector3S fromPosition = new Vector3S(oldPos.x, oldPos.z, Pos.y);
-            //oldPos = fromPosition;
+            oldPos = new Vector3S(Pos);
+            Vector3S fromPosition = new Vector3S(oldPos.x, oldPos.z, oldPos.y);
             Pos.x = (short)x;
             Pos.y = (short)y;
             Pos.z = (short)z;
+            oldRot = Rot;
             Rot = new byte[2] { rotx, roty };
+            bool needsOwnPos = false;
             if (!(fromPosition.x == Pos.x && fromPosition.y == Pos.y && fromPosition.z == Pos.z)) {
                 MoveEventArgs eargs = new MoveEventArgs(new Vector3S(fromPosition), new Vector3S(Pos));
                 eargs = OnPlayerMove.Call(this, eargs, OnAllPlayersMove);
                 if (eargs.Canceled) {
-                    Pos = eargs.FromPosition;
-                    oldPos = eargs.FromPosition;
-                    SendThisPlayerTheirOwnPos();
-                    return;
+                    Pos = fromPosition;
+                    oldPos = fromPosition;
+                    needsOwnPos = true;
                 }
                 else {
                     Pos = eargs.ToPosition;
                     oldPos = eargs.FromPosition;
                 }
             }
+            if (oldRot[0] != Rot[0] || oldRot[1] != Rot[1]) {
+                RotateEventArgs eargs = new RotateEventArgs(Rot[0], Rot[1]);
+                eargs = OnPlayerRotate.Call(this, eargs, OnAllPlayersRotate);
+                if (eargs.Canceled) {
+                    Rot = eargs.Rot;
+                    needsOwnPos = true;
+                }
+                else {
+                    Rot = eargs.Rot;
+                }
+            }
+            if (needsOwnPos)
+                SendThisPlayerTheirOwnPos();
             UpdatePosition(false);
         }
         private void HandleChat(byte[] message) {
@@ -983,7 +997,7 @@ namespace MCForge.Entity {
                     p.SendBlockChange(x, z, y, block);
             });
         }
-        internal static void GlobalBlockchange(Level l, ushort x, ushort z, ushort y, byte block) {
+        public static void GlobalBlockchange(Level l, ushort x, ushort z, ushort y, byte block) {
             Server.ForeachPlayer(delegate(Player p) {
                 if (p.Level == l)
                     p.SendBlockChange(x, z, y, block);
