@@ -12,6 +12,7 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
+using MCForge.Utils;
 using MCForge.Entity;
 using MCForge.Interface.Command;
 using MCForge;
@@ -34,9 +35,15 @@ namespace MCForge.Commands
             {
                 tosend += str + " ";
             }
-            if (tosend.Length >= 44) { p.SendMessage("You can only send messages with 41 characters or less"); return; } //gah ill make it send the rest below another time
+            if (tosend.Length >= 44) { p.SendMessage("You can only send messages with 44 characters or less"); return; } //gah ill make it send the rest below another time
 
-            WOM.NotifyClient(tosend);
+            MCForge.Core.Server.ForeachPlayer(pl =>
+            {
+                if ((bool)(pl.ExtraData.GetIfExist<object, object>("UsingWoM") ?? false))
+                {
+                    p.SendMessage("^detail.user.alert=" + tosend);
+                }
+            });
         }
 
         public void Help(Player p)
@@ -51,4 +58,3 @@ namespace MCForge.Commands
         }
     }
 }
-

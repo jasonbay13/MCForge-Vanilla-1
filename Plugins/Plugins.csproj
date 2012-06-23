@@ -49,6 +49,8 @@
     <Compile Include="WomPlugin\PluginWomTextures.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WomPlugin\WOM.cs" />
+    <Compile Include="WomPlugin\WoMPluginSettings.cs" />
     <Compile Include="WomPlugin\WomSettings.cs">
       <SubType>Code</SubType>
     </Compile>

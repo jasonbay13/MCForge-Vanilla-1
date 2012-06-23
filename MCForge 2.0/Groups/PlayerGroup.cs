@@ -75,7 +75,6 @@ namespace MCForge.Groups
         /// </summary>
         public static List<PlayerGroup> Groups = new List<PlayerGroup>();
 
-
         /// <summary>
         /// A list of all the players in the group (includes offline players)
         /// </summary>
@@ -378,6 +377,22 @@ namespace MCForge.Groups
                     return g;
             }
 
+            return null;
+        }
+        /// <summary>
+        /// Finds the specified group whose permission is the given int.
+        /// </summary>
+        /// <param name="perm">The permission of the group.</param>
+        /// <returns></returns>
+        public static PlayerGroup FindPermInt(int perm)
+        {
+            foreach (PlayerGroup g in PlayerGroup.Groups)
+            {
+                if (g.Permission == perm)
+                {
+                    return g;
+                }
+            }
             return null;
         }
     }

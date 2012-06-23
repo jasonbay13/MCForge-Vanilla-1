@@ -170,4 +170,176 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{28D68717-95A5-4ACF-B232-EB2FDE8B8AD5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MCForge.Commands</RootNamespace>
+    <AssemblyName>Commands</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\MCForge 2.0\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RegisterForComInterop>false</RegisterForComInterop>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\MCForge 2.0\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BlockDoor.cs" />
+    <Compile Include="Building\CmdBrush.cs" />
+    <Compile Include="Building\CmdClick.cs" />
+    <Compile Include="Building\CmdCuboid.cs" />
+    <Compile Include="Building\CmdLayer.cs" />
+    <Compile Include="Building\CmdLine.cs" />
+    <Compile Include="Building\CmdPlace.cs" />
+    <Compile Include="Building\CmdReplace.cs" />
+    <Compile Include="Building\CmdReplaceAll.cs" />
+    <Compile Include="Building\CmdReplaceNot.cs" />
+    <Compile Include="Building\CmdStatic.cs" />
+    <Compile Include="Bots\CmdBot.cs" />
+    <Compile Include="Building\CmdTree.cs" />
+    <Compile Include="Building\CmdWrite.cs" />
+    <Compile Include="Building\CmdSelect.cs" />
+    <Compile Include="Information\CmdAbout.cs" />
+    <Compile Include="Information\CmdLevels.cs" />
+    <Compile Include="Information\CmdVips.cs" />
+    <Compile Include="Misc\CmdFlipHead.cs" />
+    <Compile Include="Misc\CmdMessageBlock.cs" />
+    <Compile Include="Misc\CmdNickname.cs" />
+    <Compile Include="Misc\CmdRun.cs" />
+    <Compile Include="Misc\CmdNotify.cs" />
+    <Compile Include="Moderation\CmdDeleteLvl.cs" />
+    <Compile Include="Moderation\CmdFollow.cs" />
+    <Compile Include="Moderation\CmdHide.cs" />
+    <Compile Include="Moderation\CmdRestart.cs" />
+    <Compile Include="Moderation\CmdShutdown.cs" />
+    <Compile Include="Moderation\CmdUndo.cs" />
+    <Compile Include="Moderation\CmdUnload.cs" />
+    <Compile Include="Information\CmdMapInfo.cs" />
+    <Compile Include="Information\CmdInfo.cs" />
+    <Compile Include="Misc\CmdAbort.cs" />
+    <Compile Include="Misc\CmdAscend.cs" />
+    <Compile Include="Misc\CmdDescend.cs" />
+    <Compile Include="Misc\CmdMode.cs" />
+    <Compile Include="Moderation\CmdBan.cs" />
+    <Compile Include="Moderation\CmdBanInfo.cs" />
+    <Compile Include="Moderation\CmdBanKick.cs" />
+    <Compile Include="Moderation\CmdDemote.cs" />
+    <Compile Include="Moderation\CmdEditBan.cs" />
+    <Compile Include="Moderation\CmdGoto.cs" />
+    <Compile Include="Moderation\CmdIPBan.cs" />
+    <Compile Include="Moderation\CmdLoad.cs" />
+    <Compile Include="Moderation\CmdNewLevel.cs" />
+    <Compile Include="Moderation\CmdPatrol.cs" />
+    <Compile Include="Information\CmdPlayers.cs" />
+    <Compile Include="Information\CmdViewranks.cs" />
+    <Compile Include="Misc\CmdAdminChat.cs" />
+    <Compile Include="Misc\CmdOpChat.cs" />
+    <Compile Include="Misc\CmdPay.cs" />
+    <Compile Include="Misc\CmdRob.cs" />
+    <Compile Include="Misc\CmdSteal.cs" />
+    <Compile Include="Misc\CmdTake.cs" />
+    <Compile Include="Misc\CmdGive.cs" />
+    <Compile Include="Misc\CmdPass.cs" />
+    <Compile Include="Misc\CmdResetPassword.cs" />
+    <Compile Include="Misc\CmdSetPass.cs" />
+    <Compile Include="Misc\CmdWhisper.cs" />
+    <Compile Include="Moderation\CmdColor.cs" />
+    <Compile Include="Moderation\CmdPromote.cs" />
+    <Compile Include="Moderation\CmdReview.cs" />
+    <Compile Include="Moderation\CmdRainbowTitle.cs" />
+    <Compile Include="Moderation\CmdSave.cs" />
+    <Compile Include="Moderation\CmdSettings.cs" />
+    <Compile Include="Information\CmdHelp.cs" />
+    <Compile Include="Information\CmdImpersonate.cs" />
+    <Compile Include="Misc\CmdSummon.cs" />
+    <Compile Include="Misc\CmdCrashserver.cs" />
+    <Compile Include="Misc\CmdHacks.cs" />
+    <Compile Include="Moderation\CmdSetRank.cs" />
+    <Compile Include="Moderation\CmdSetSpawn.cs" />
+    <Compile Include="Misc\CmdFly.cs" />
+    <Compile Include="CmdDatapassExample.cs" />
+    <Compile Include="Information\CmdDevs.cs" />
+    <Compile Include="Information\CmdIds.cs" />
+    <Compile Include="Information\CmdNews.cs" />
+    <Compile Include="Information\CmdLastCmd.cs" />
+    <Compile Include="Information\CmdMeasure.cs" />
+    <Compile Include="Information\CmdCalculate.cs" />
+    <Compile Include="Information\CmdMessageHandler.cs" />
+    <Compile Include="Information\CmdOpRules.cs" />
+    <Compile Include="Information\CmdRules.cs" />
+    <Compile Include="Misc\CmdAgree.cs" />
+    <Compile Include="Misc\CmdDisagree.cs" />
+    <Compile Include="Misc\CmdJoker.cs" />
+    <Compile Include="Misc\CmdMe.cs" />
+    <Compile Include="Misc\CmdVote.cs" />
+    <Compile Include="Moderation\CmdKick.cs" />
+    <Compile Include="Moderation\CmdModerate.cs" />
+    <Compile Include="Moderation\CmdMute.cs" />
+    <Compile Include="Moderation\CmdSay.cs" />
+    <Compile Include="Moderation\CmdTColor.cs" />
+    <Compile Include="Moderation\CmdTempban.cs" />
+    <Compile Include="Moderation\CmdTitle.cs" />
+    <Compile Include="Moderation\CmdUnban.cs" />
+    <Compile Include="Moderation\CmdVoice.cs" />
+    <Compile Include="Moderation\CmdVoteKick.cs" />
+    <Compile Include="Misc\CmdSpawn.cs" />
+    <Compile Include="Misc\CmdTeleport.cs" />
+    <Compile Include="Moderation\CmdWhois.cs" />
+    <Compile Include="Information\CmdMuted.cs" />
+    <Compile Include="Moderation\CmdPlugins.cs" />
+    <Compile Include="Moderation\CmdUnIPBan.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CmdTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MCForge 2.0\MCForge.csproj">
+      <Project>{EDC9892F-BBA2-4043-9FD9-94C0BA7D9552}</Project>
+      <Name>MCForge</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\Plugins.csproj">
+      <Project>{48C20652-75A0-487A-926D-53696D1F7DB4}</Project>
+      <Name>Plugins</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="README.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>
