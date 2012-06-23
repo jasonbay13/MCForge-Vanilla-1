@@ -17,7 +17,7 @@
 */
 using System;
 
-namespace MCForge
+namespace MCForge_
 {
     public static class c
     {

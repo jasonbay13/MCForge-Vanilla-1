@@ -25,7 +25,7 @@ using MySql.Data.MySqlClient;
 using MySql.Data.Types;
 //using System.Data.SQLite;
 
-namespace MCForge
+namespace MCForge_
 {
     namespace SQL
     {
@@ -38,7 +38,10 @@ namespace MCForge
 
             public static string connString { get { return String.Format(connStringFormat, Server.MySQLHost, Server.MySQLPort, Server.MySQLUsername, Server.MySQLPassword, Server.DatabasePooling); } }
 
-            public static void execute(string queryString, bool createDB = false) {
+            public static void execute(string queryString) {
+            	execute(queryString, false);
+            }
+            public static void execute(string queryString, bool createDB) {
                 using (var conn = new MySqlConnection(connString)) {
                     conn.Open();
                     if (!createDB) {

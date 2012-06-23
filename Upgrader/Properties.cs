@@ -22,11 +22,14 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MCForge
+namespace MCForge_
 {
     public static class SrvProperties
     {
-        public static void Load(string givenPath, bool skipsalt = false)
+    	public static void Load(string givenPath) {
+    		Load(givenPath, false);
+    	}
+        public static void Load(string givenPath, bool skipsalt)
         {
             if (File.Exists(givenPath))
             {

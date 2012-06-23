@@ -24,7 +24,7 @@ using System.Text;
 using System.IO;
 using System.Data.SQLite;
 
-namespace MCForge
+namespace MCForge_
 {
     namespace SQL
     {
