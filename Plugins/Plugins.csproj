@@ -46,10 +46,13 @@
     <Compile Include="AntiGriefing\PluginAntiGrief.cs" />
     <Compile Include="PluginMessageViewer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WomPlugin\PluginWomTextures.cs">
+    <Compile Include="WoMPlugin\Gamemakergm.cs" />
+    <Compile Include="WoMPlugin\PluginWoMTextures.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WomPlugin\WomSettings.cs">
+    <Compile Include="WoMPlugin\WOM.cs" />
+    <Compile Include="WoMPlugin\WoMPluginSettings.cs" />
+    <Compile Include="WoMPlugin\WoMSettings.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

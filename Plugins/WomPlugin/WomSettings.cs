@@ -20,76 +20,99 @@ using MCForge.Core;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
 
-namespace Plugins.WomPlugin {
-    class WomSettings : ExtraSettings {
+namespace Plugins.WoMPlugin
+{
+    class WoMSettings : ExtraSettings
+    {
+        #region Variables
+        public List<Level> LevelsWithTextures { get; private set; }
+        //private readonly string ConfigPath = ServerSettings.GetSetting("configpath") + "wom/";
         private readonly List<SettingNode> _cfgvalues = new List<SettingNode>() {
-            new SettingNode("server.name", "Rawr!", null),
-            new SettingNode("server.detail", "Okay", null),
-            new SettingNode("detail.user", "Har Har", null),
-            new SettingNode("environment.fog", "1377559", null),
-            new SettingNode("environment.sky", "1377559", null),
-            new SettingNode("environment.cloud", "1377559", null),
-            new SettingNode("environment.level", "0", null),
+            new SettingNode("server.name", ServerSettings.GetSetting("ServerName"), "The name of your server. (Top right line)"),
+            new SettingNode("server.detail", ServerSettings.GetSetting("MOTD"), "The MOTD of the server. (Second line)"),
+            new SettingNode("detail.user", "Welcome to my server!", "The User Detail Line text. (Third line)"),
+            new SettingNode("server.sendwomid","true", "Causes the client to send the server a /womid (VERSION) message upon load."),
+            new SettingNode("environment.fog", "1377559", "The RGB value (Decimal, not Hex) of the colour to use for the fog."),
+            new SettingNode("environment.sky", "1377559", "The RGB value (Decimal, not Hex) of the colour to use for the sky."),
+            new SettingNode("environment.cloud", "1377559", "The RGB value (Decimal, not Hex) of the colour to use for the clouds."),
+            new SettingNode("environment.level", "0", "The elevation of \"ground level\" to use for this map. (Affects where the \"sea\" is on the map."),
             new SettingNode("environment.edge", "685cfceb13ccee86d3b93f163f4ac6e4a28347bf", null),
             new SettingNode("environment.terrain", "f3dac271d7bce9954baad46e183a6a910a30d13b", null),
             new SettingNode("environment.side", "7c0fdebeb6637929b9b3170680fa7a79b656c3f7", null),
-            new SettingNode("server.sendwomid","true", null),
         };
-        public override string SettingsName { get { return "WomSettings"; } }
-        public List<Level> LevelsWithTextures { get; private set; }
-        private readonly string ConfigPath = ServerSettings.GetSetting("configpath") + "wom/";
+        #endregion
+        #region ExtraSettings Members
+        public override string SettingsName { get { return "WoMSettings"; } }
 
-        public override void OnLoad() {
-
-            Logger.Log("[WoM] WomSettings loaded!");
+        public override void OnLoad()
+        {
             LevelsWithTextures = new List<Level>();
+            FileUtils.CreateDirIfNotExist(PropertiesPath);
 
-            FileUtils.CreateDirIfNotExist(ConfigPath);
-
-            foreach (Level l in Level.Levels) {
-                if (!Directory.Exists(ConfigPath + l.Name + ".cfg")) {
-                    Logger.Log("[WoM] Cfg for " + l.Name + " not found. Creating");
+            foreach (Level l in Level.Levels)
+            {
+                if (!FileUtils.FileExists(PropertiesPath + l.Name + ".cfg"))
+                {
+                    if (Server.DebugMode)
+                    {
+                        Logger.Log("[WoMTextures] Cfg file for " + l.Name + " not found. Creating.");
+                    }
                     CreateConfigFile(l);
                 }
             }
 
-            foreach (var s in Directory.GetFiles(ConfigPath, "*.cfg")) {
-                Logger.Log("[WoM] Config found. Loading: " + s);
+            foreach (var s in Directory.GetFiles(PropertiesPath, "*.cfg"))
+            {
                 LoadFile(s);
             }
         }
 
-        public void LoadFile(string levelPath) {
+        public override void Save()
+        {
+
+        }
+        public override List<SettingNode> Values
+        {
+            get { return _cfgvalues; }
+        }
+
+        public override string PropertiesPath
+        {
+            get { return ServerSettings.GetSetting("configpath") + "WoMTexturing/"; }
+        }
+        #endregion
+        #region WoMSettings File Stuff
+        private void LoadFile(string levelPath)
+        {
             if (!levelPath.EndsWith(".cfg"))
                 return;
             var levelName = Path.GetFileNameWithoutExtension(levelPath);
             Level level = Level.FindLevel(levelName);
-            if (level == null) {
+            if (level == null)
+            {
                 Logger.Log(String.Format("{0} was formatted incorrectly (level not found), this file will not be loaded", levelPath), LogType.Error);
+                return;
             }
             string[] lines = File.ReadAllLines(levelPath);
             LevelsWithTextures.Add(level);
-            level.ExtraData.ChangeOrCreate<object, object>("WomConfig", lines);
-            Logger.Log("[WoM] Succesfully loaded!");
+            level.ExtraData.ChangeOrCreate<object, object>("WoMConfig", lines);
+            if (Server.DebugMode)
+            {
+                Logger.Log("[WoMTextures] Loaded " + levelPath + " succesfully!");
+            }
         }
 
-        public void CreateConfigFile(Level l) {
-            using (var writer = File.CreateText(ConfigPath + l.Name + ".cfg")) {
-                foreach (var node in _cfgvalues) {
+        private void CreateConfigFile(Level l)
+        {
+            using (var writer = File.CreateText(PropertiesPath + l.Name + ".cfg"))
+            {
+                foreach (var node in _cfgvalues)
+                {
                     writer.WriteLine(node.Key + " = " + node.Value);
                 }
             }
         }
+        #endregion
 
-        public override void Save() {
-
-        }
-        public override List<SettingNode> Values {
-            get { return _cfgvalues; }
-        }
-
-        public override string PropertiesPath {
-            get { return ""; }
-        }
     }
 }
