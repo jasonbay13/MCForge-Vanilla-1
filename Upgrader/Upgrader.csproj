@@ -81,6 +81,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CMDCONVERT.cs" />
     <Compile Include="FileUtils.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="IMap.cs" />
