@@ -33,34 +33,27 @@ namespace Plugins.WoMPlugin
 {
     public class PluginWoMTextures : IPlugin
     {
-
-        public string Name
-        {
-            get { return "WoMTextures"; }
-        }
-
-        public string Author
-        {
-            get { return "headdetect and Gamemakergm"; }
-        }
-
-        public int Version
-        {
-            get { return 1; }
-        }
-
-        public string CUD
-        {
-            get { return ""; }
-        }
-
-        private WoMSettings WomSettings { get; set; }
-        private WoMPluginSettings PluginSettings { get; set; }
-
+        #region IPlugin members
+        public string Name { get { return "WoMTextures"; } }
+        public string Author { get { return "headdetect and Gamemakergm"; } }
+        public int Version { get { return 1; } }
+        public string CUD { get { return ""; } }
+        
         public void OnLoad(string[] args1)
         {
             Server.OnServerFinishSetup += OnLoadDone;
         }
+        public void OnUnload()
+        {
+            Player.OnAllPlayersSendPacket.Normal -= OnOutgoingData;
+            Player.OnAllPlayersReceivePacket.Normal -= OnIncomingData;
+        }
+        #endregion
+        #region Plugin Variables
+        private WoMSettings WomSettings { get; set; }
+        private WoMPluginSettings PluginSettings { get; set; }
+        #endregion
+        #region WoM Handling
         //Wait for server to finish so we make sure all of the levels are loaded
         void OnLoadDone()
         {
@@ -73,12 +66,7 @@ namespace Plugins.WoMPlugin
 
             Server.OnServerFinishSetup -= OnLoadDone;
             Player.OnAllPlayersReceiveUnknownPacket.Normal += new Event<Player, PacketEventArgs>.EventHandler(OnIncomingData);
-            Player.OnAllPlayersSendPacket.High += new Event<Player, PacketEventArgs>.EventHandler(OnOutgoingData);
-           
-            /*Player.OnAllPlayersChat.Normal += ((sender, args) =>
-            {
-                WOM.GlobalSendJoin("Meep");
-            });*/
+            Player.OnAllPlayersSendPacket.Normal += new Event<Player, PacketEventArgs>.EventHandler(OnOutgoingData);
         }
 
         private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
@@ -197,10 +185,6 @@ namespace Plugins.WoMPlugin
             }
             else { return; }
         }
-        public void OnUnload()
-        {
-            Player.OnAllPlayersSendPacket.Normal -= OnOutgoingData;
-            Player.OnAllPlayersReceivePacket.Normal -= OnIncomingData;
-        }
+        #endregion
     }
 }
