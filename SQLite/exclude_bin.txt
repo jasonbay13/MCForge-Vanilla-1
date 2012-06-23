@@ -1,0 +1,6 @@
+*.done
+*.exp
+*.lib
+*.map
+*EnvDTE.*
+*Microsoft.*
