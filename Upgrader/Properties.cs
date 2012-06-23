@@ -22,11 +22,77 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MCForge
+namespace MCForge_
 {
     public static class SrvProperties
     {
-        public static void Load(string givenPath, bool skipsalt = false)
+    	public static void ConvertSettings()
+    	{
+    		List<string> lines = new List<string>();
+    		//TODO As more default options are added, we must convert them here
+    		lines.Add("servername=" + Server.name);
+    		lines.Add("wom-alternate_name=" + Server.Server_ALT);
+    		lines.Add("port=" + Server.port);
+    		lines.Add("use-upnp=false");
+    		lines.Add("motd=" + Server.motd);
+    		lines.Add("maxplayers=" + Server.players);
+    		lines.Add("public=" + Server.pub);
+    		lines.Add("verifynames=" + Server.verify);
+    		lines.Add("wom-server_description=" + Server.Server_Disc);
+    		lines.Add("wom-server_flags=" + Server.Server_Flag);
+    		lines.Add("moneyname=" + Server.moneys);
+    		lines.Add("serverowner=" + Server.server_owner);
+    		lines.Add("verifying=" + Server.verifyadmins);
+    		lines.Add("verifygroup=operator");
+    		lines.Add("Enable-Remote=false");
+    		lines.Add("Remote-IP=0.0.0.0");
+    		lines.Add("Remote-Port=5050");
+    		lines.Add("showfirstrunscreen=true");
+    		lines.Add("usingconsole=" + Server.mono);
+    		lines.Add("shutdownmessage=" + Server.customShutdownMessage);
+    		lines.Add("welcomemessage=Welcome $name to $server<br>Enjoy your stay");
+    		lines.Add("configpath=config/");
+    		lines.Add("messageappending=true");
+    		lines.Add("defaultgroup=" + Server.defaultRank);
+    		lines.Add("allowhigherranktp=" + Server.higherranktp);
+    		lines.Add("main-level=" + Server.level);
+    		lines.Add("databasetype=" + ((Server.useMySQL) ? "mysql" : "sqlite"));
+    		lines.Add("mysql-ip=" + Server.MySQLHost);
+    		lines.Add("mysql-port=" + Server.MySQLPort);
+    		lines.Add("mysql-username=" + Server.MySQLUsername);
+    		lines.Add("mysql-password=" + Server.MySQLPassword);
+    		lines.Add("mysql-pooling=" + Server.DatabasePooling);
+    		lines.Add("mysql-dbname=" + Server.MySQLDatabaseName);
+    		lines.Add("sqlite-inmemory=True");
+    		lines.Add("sqlite-filepath=_mcforge.db");
+    		lines.Add("sqlite-pooling=True");
+    		lines.Add("database-queuing=False");
+    		lines.Add("database-flush_interval=20");
+    		lines.Add("irc-enabled=" + Server.irc);
+    		lines.Add("irc-server=" + Server.ircServer);
+    		lines.Add("irc-port=" + Server.ircPort);
+    		lines.Add("irc-nickname=" + Server.ircNick);
+    		lines.Add("irc-channel=" + Server.ircChannel);
+    		lines.Add("irc-opchannel=" + Server.ircOpChannel);
+    		lines.Add("irc-nickserv=" + Server.ircPassword);
+    		lines.Add("agreeingtorules=" + Server.agreetorulesonentry);
+    		lines.Add("$before$name=" + Server.dollardollardollar);
+    		lines.Add("treesgothrough=false");
+    		lines.Add("reviewmoderatorperm=80");
+    		lines.Add("opchatpermission=80");
+    		lines.Add("adminchatpermission=100");
+    		lines.Add("defaultcolor=" + Server.DefaultColor);
+    		lines.Add("backupfiles=true");
+    		lines.Add("backupinterval=" + Server.backupInterval);
+    		lines.Add("physicsinterval=100");
+    		File.WriteAllLines("properties/server.properties", lines.ToArray());
+    		lines.Clear();
+    		
+    	}
+    	public static void Load(string givenPath) {
+    		Load(givenPath, false);
+    	}
+        public static void Load(string givenPath, bool skipsalt)
         {
             if (File.Exists(givenPath))
             {

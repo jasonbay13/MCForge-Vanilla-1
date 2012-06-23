@@ -57,7 +57,7 @@ namespace MCForge.Utils.Settings {
                     new SettingNode("ConfigPath", "config/", "File path for group player properties, do not mess with unless you know what you are doing"),
                     new SettingNode("MessageAppending", "true", "allow use of message appending, ex using \">\" at the end of your message will allow you to finish your statement on a new chat segment"),
                     new SettingNode("DefaultGroup", "guest", "The name of the default group, if it doesn't exist it will cause problems"),
-                    new SettingNode("Offline", "false", "if set to true, it will skip authentication, causing a major security flaw"),
+                    //new SettingNode("Offline", "false", "if set to true, it will skip authentication, causing a major security flaw"), Isnt this just verify names?
                     new SettingNode("AllowHigherRankTp", "true", "Allow players of a lower rank to teleport to a user of a higher rank"),
                     new SettingNode("Main-Level", "main", "The name of the main level. If tihs is empty or doesn't exist, it will generate a flat level."),
                     new SettingNode("DatabaseType", "sqlite", "The type of database you want to use (mysql/sqlite)"),

@@ -32,9 +32,9 @@ using System.Data;
 using System.Security.Cryptography;
 //using MySql.Data.MySqlClient;
 //using MySql.Data.Types;
-using MCForge.SQL;
+using MCForge_.SQL;
 
-namespace MCForge
+namespace MCForge_
 {
 	public enum LevelPermission //int is default
     {
