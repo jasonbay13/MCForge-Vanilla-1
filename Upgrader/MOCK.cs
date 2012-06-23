@@ -13,6 +13,7 @@ using System.Data;
 using MCForge_.SQL;
 using System.IO;
 using MCForge.World;
+using MCForge.Groups;
 
 /// <summary>
 /// This will be used to trick older version of MCForge to run the upgrader
@@ -177,6 +178,33 @@ namespace MCForge_.Gui
 				Console.ForegroundColor = ConsoleColor.Green;
 				Console.WriteLine("Converting Properties..");
 				SrvProperties.ConvertSettings();
+				Console.WriteLine("Converting Groups..");
+				try {
+					Group.InitAll();
+					foreach (Group g in Group.GroupList) {
+						try {
+							PlayerGroup pg = new PlayerGroup((int)g.Permission, g.name, g.color, g.fileName);
+							pg.SaveGroup();
+							Console.WriteLine("Group " + g.name + " converted!");
+							PlayerGroup.Groups.Add(pg);
+						}
+						catch (Exception e) {
+							Console.ForegroundColor = ConsoleColor.Red;
+							Console.WriteLine("Error converting the group " + g.name + " !");
+							Console.WriteLine(e.ToString());
+							Console.ForegroundColor = ConsoleColor.Green;
+						}
+					}
+					Console.WriteLine("Saving new Groups..");
+					PlayerGroupProperties.Save();
+					File.Delete("properties/ranks.properties");
+				}
+				catch (Exception e) { 
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.WriteLine("Error converting groups!");
+					Console.WriteLine(e.ToString());
+					Console.ForegroundColor = ConsoleColor.Green;
+				}
 			}
 			catch (Exception e) { Console.WriteLine(e.ToString()); Console.ReadKey(true); }
 			Console.ReadKey(true);

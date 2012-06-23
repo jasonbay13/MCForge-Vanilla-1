@@ -81,13 +81,19 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileUtils.cs" />
+    <Compile Include="Group.cs" />
     <Compile Include="IMap.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="MathUtils.cs" />
     <Compile Include="MCForgeOldMap.cs" />
+    <Compile Include="MiscStructs.cs" />
     <Compile Include="MOCK.cs" />
     <Compile Include="MOCK2.cs" />
     <Compile Include="OldMCForgeToNewMCForge.cs" />
+    <Compile Include="PlayerGroup.cs" />
+    <Compile Include="PlayerGroupProperties.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
