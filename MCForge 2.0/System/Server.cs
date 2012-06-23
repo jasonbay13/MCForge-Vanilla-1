@@ -83,7 +83,6 @@ namespace MCForge.Core {
         /// </summary>
         public static bool Started { get; set; }
 
-
         private static System.Threading.Timer UpdateTimer;
         private static int GroupsaveInterval = 3000;
         private static int GroupsaveIntervalCurrent = 0;
@@ -293,7 +292,7 @@ namespace MCForge.Core {
                 ServerSettings.SetSetting("Main-Level", null, "main");
             }
             Level.Levels.Add(Mainlevel);
-            //Level.LoadAllLevels();
+            Level.LoadAllLevels();
 
             Backup.StartBackup();
 
@@ -424,7 +423,7 @@ namespace MCForge.Core {
         private static void StartListening() {
             try {
                 if (ServerSettings.GetSettingBoolean("Use-UPnP")) {
-                    if (!UPnP.Discover()) {
+                    if (!UPnP.CanUseUpnp) {
                         Logger.Log("Your router does not support UPnP. You must port forward.", LogType.Error);
                     }
                     else {

@@ -1,4 +1,18 @@
-﻿using System;
+﻿/*
+Copyright 2012 MCForge
+Dual-licensed under the Educational Community License, Version 2.0 and
+the GNU General Public License, Version 3 (the "Licenses"); you may
+not use this file except in compliance with the Licenses. You may
+obtain a copy of the Licenses at
+http://www.opensource.org/licenses/ecl2.php
+http://www.gnu.org/licenses/gpl-3.0.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the Licenses are distributed on an "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the Licenses for the specific language governing
+permissions and limitations under the Licenses.
+*/
+using System;
 using System.Threading;
 using System.Collections.Generic;
 using System.Drawing;
@@ -94,7 +108,7 @@ namespace MCForge.Utils {
                     one = Color.Yellow;
                     break;
             }
-            Log(message, one, Color.Black, logType);
+                Log(message, one, Color.Black, logType);
         }
 
         /// <summary>
@@ -105,7 +119,10 @@ namespace MCForge.Utils {
         /// <param name="bgColor">Color of the background</param> 
         /// <param name="logType">The log type</param>
         public static void Log(string message, Color textColor, Color bgColor, LogType logType = LogType.Normal) {
-            _flushQueue.Enqueue(new LogEventArgs(message, logType, textColor, bgColor));
+            if (logType == LogType.Debug && Server.DebugMode)
+                _flushQueue.Enqueue(new LogEventArgs("[" + DateTime.Now.ToString("T") + "] " + message, logType, textColor, bgColor));
+            else if (logType != LogType.Debug)
+                _flushQueue.Enqueue(new LogEventArgs("[" + DateTime.Now.ToString("T") + "] " + message, logType, textColor, bgColor));
         }
 
         /// <summary>

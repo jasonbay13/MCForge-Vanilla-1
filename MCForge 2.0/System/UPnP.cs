@@ -1,4 +1,18 @@
-﻿using System;
+﻿/*
+Copyright 2012 MCForge
+Dual-licensed under the Educational Community License, Version 2.0 and
+the GNU General Public License, Version 3 (the "Licenses"); you may
+not use this file except in compliance with the Licenses. You may
+obtain a copy of the Licenses at
+http://www.opensource.org/licenses/ecl2.php
+http://www.gnu.org/licenses/gpl-3.0.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the Licenses are distributed on an "AS IS"
+BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the Licenses for the specific language governing
+permissions and limitations under the Licenses.
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,12 +22,17 @@ using System.Xml;
 using System.IO;
 using System.Diagnostics;
 
-
 //This upnp class comes from http://www.codeproject.com/Articles/27992/NAT-Traversal-with-UPnP-in-C, Modified for use with MCForge
 
 namespace MCForge.Core {
 
     public class UPnP {
+
+        public static bool CanUseUpnp { get; private set; }
+
+        static UPnP() {
+            CanUseUpnp = Discover();
+        }
 
         private const string req = "M-SEARCH * HTTP/1.1\r\n" +
                                                             "HOST: 239.255.255.250:1900\r\n" +
@@ -27,7 +46,7 @@ namespace MCForge.Core {
             set { _timeout = value; }
         }
         static string _descUrl, _serviceUrl, _eventUrl;
-        public static bool Discover() {
+        private static bool Discover() {
             Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             s.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
             byte[] data = Encoding.ASCII.GetBytes(req);
@@ -35,28 +54,32 @@ namespace MCForge.Core {
             byte[] buffer = new byte[0x1000];
 
             DateTime start = DateTime.Now;
-
-            do {
-                s.SendTo(data, ipe);
-                s.SendTo(data, ipe);
-                s.SendTo(data, ipe);
-
-                int length = 0;
+            try {
                 do {
-                    length = s.Receive(buffer);
+                    s.SendTo(data, ipe);
+                    s.SendTo(data, ipe);
+                    s.SendTo(data, ipe);
 
-                    string resp = Encoding.ASCII.GetString(buffer, 0, length);
-                    if (resp.Contains("upnp:rootdevice")) {
-                        resp = resp.Substring(resp.ToLower().IndexOf("location:") + 9);
-                        resp = resp.Substring(0, resp.IndexOf("\r")).Trim();
-                        if (!string.IsNullOrEmpty(_serviceUrl = GetServiceUrl(resp))) {
-                            _descUrl = resp;
-                            return true;
+                    int length = 0;
+                    do {
+                        length = s.Receive(buffer);
+
+                        string resp = Encoding.ASCII.GetString(buffer, 0, length);
+                        if (resp.Contains("upnp:rootdevice")) {
+                            resp = resp.Substring(resp.ToLower().IndexOf("location:") + 9);
+                            resp = resp.Substring(0, resp.IndexOf("\r")).Trim();
+                            if (!string.IsNullOrEmpty(_serviceUrl = GetServiceUrl(resp))) {
+                                _descUrl = resp;
+                                return true;
+                            }
                         }
-                    }
-                } while (length > 0);
-            } while (start.Subtract(DateTime.Now) < _timeout);
-            return false;
+                    } while (length > 0);
+                } while (start.Subtract(DateTime.Now) < _timeout);
+                return false;
+            }
+            catch {
+                return false;
+            }
         }
 
         private static string GetServiceUrl(string resp) {

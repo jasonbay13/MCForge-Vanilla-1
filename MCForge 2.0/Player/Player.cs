@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2011 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -29,7 +29,6 @@ using MCForge.Utils.Settings;
 using MCForge.World;
 using MCForge.World.Blocks;
 using System.Text;
-
 
 namespace MCForge.Entity {
     /// <summary>
@@ -116,7 +115,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// This is the UID for the player in the database
         /// </summary>
-        internal long UID = 0;
+        public long UID = 0;
 
         /// <summary>
         /// Gets or sets the first login.
@@ -282,7 +281,7 @@ namespace MCForge.Entity {
 
         private Random playerRandom;
 
-        public List<BlockChange> BlockChanges;
+        //public List<BlockChange> BlockChanges; Go away
 
         #endregion
 
@@ -302,7 +301,7 @@ namespace MCForge.Entity {
                 Socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
 
                 playerRandom = new Random();
-                BlockChanges = new List<BlockChange>();
+                //BlockChanges = new List<BlockChange>();
 
             }
             catch (Exception e) {
@@ -368,7 +367,6 @@ namespace MCForge.Entity {
 
         internal static void GlobalUpdate() {
             ForceTpCounter++;
-
             //TODO: Add ForceTpCounter setting
             if (ForceTpCounter == 100) {
                 Server.ForeachPlayer(delegate(Player p) {

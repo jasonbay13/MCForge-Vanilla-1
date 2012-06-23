@@ -132,7 +132,6 @@ namespace MCForge.World {
         public const byte Version = 1;
         
         public PlayerGroup visit = PlayerGroup.Default;
-        //public byte[] Data { get; set; } Lolwut
 
         /// <summary>
         /// Data to store with in the level
@@ -235,7 +234,7 @@ namespace MCForge.World {
             if (FindLevel(levelName) != null)
                 return null;
 
-            string Name = "levels//" + levelName + ".lvl";
+            string Name = "levels\\" + levelName + ".lvl";
             Level finalLevel = new Level(new Vector3S(32, 32, 32));
             finalLevel.Name = levelName;
             try {
@@ -297,9 +296,6 @@ namespace MCForge.World {
                         		}
                         	}
                         	catch { Binary.Dispose(); return null; }
-                            //string key = Binary.ReadString();
-                            //string value = Binary.ReadString();
-                            //finalLevel.ExtraData[key] = value; (MotherofDuplicates)
                         }
 
                         foreach (string name in MCForge.Interfaces.Blocks.Block.Blocks.Keys) {
@@ -312,21 +308,6 @@ namespace MCForge.World {
                                 finalLevel.ExtraData["IBlocks" + name] = new List<string>();
                             }
                         }
-                        /*finalLevel._TotalBlocks = Binary.ReadInt32();
-                        int ByteLength = Binary.ReadInt32();
-                        byte[] b = Decompress(Binary.ReadBytes(ByteLength));
-                        finalLevel.Data = new byte[finalLevel._TotalBlocks];
-                        finalLevel.Data = b;
-                        try
-                        {
-                            string EOF = Binary.ReadString();
-                            if (EOF != "EOF")
-                            {
-                                Binary.Dispose();
-                                return null;
-                            }
-                        }
-                        WHAT IS THIS MADNESS*/
                         #endregion
                     }
                 }
@@ -354,7 +335,7 @@ namespace MCForge.World {
         /// </summary>
         /// <remarks>The resulting files are not compatible with the official Minecraft software.</remarks>
         public bool SaveToBinary() {
-            string Name = "levels//" + this.Name + ".lvl";
+            string Name = "levels\\" + this.Name + ".lvl";
             if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             var Binary = new BinaryWriter(File.Open(Name, FileMode.Create));
 
@@ -396,11 +377,11 @@ namespace MCForge.World {
         /// </summary>
         public static void LoadAllLevels() {
             FileUtils.CreateDirIfNotExist("levels");
-            string[] files = Directory.GetFiles("levels//", "*.lvl");
+            string[] files = Directory.GetFiles("levels\\", "*.lvl");
             foreach (string file in files) {
                 Level lvl = LoadLevel(file.Substring(7, file.Length - 11));
 
-                if (lvl == null)
+                if (lvl == null || Levels.Contains(lvl))
                     continue;
                 //Don't judge >.>
                 Levels.Add(lvl);
@@ -573,6 +554,7 @@ namespace MCForge.World {
                 return Data[pos];
             else {
                 Logger.Log("Out of bounds in Level.GetBlock(int pos)", LogType.Error);
+                Logger.Log("Tried to get block at " + pos + " pos!", LogType.Error);
                 return Block.BlockList.UNKNOWN; //Unknown Block
             }
         }

@@ -12,7 +12,6 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -75,7 +74,6 @@ namespace MCForge.Groups
         /// A list of all the available groups 
         /// </summary>
         public static List<PlayerGroup> Groups = new List<PlayerGroup>();
-
 
         /// <summary>
         /// A list of all the players in the group (includes offline players)
@@ -323,10 +321,9 @@ namespace MCForge.Groups
             Groups.Clear();
             InitDefaultGroups();
 
-
             foreach (PlayerGroup g in Groups)
             {
-                Logger.Log("[Group] " + g.Name + " Initialized");
+                Logger.Log("[Group] " + g.Name + " Initialized", LogType.Debug);
             }
         }
         /// <summary>
@@ -380,6 +377,22 @@ namespace MCForge.Groups
                     return g;
             }
 
+            return null;
+        }
+        /// <summary>
+        /// Finds the specified group whose permission is the given int.
+        /// </summary>
+        /// <param name="perm">The permission of the group.</param>
+        /// <returns></returns>
+        public static PlayerGroup FindPermInt(int perm)
+        {
+            foreach (PlayerGroup g in PlayerGroup.Groups)
+            {
+                if (g.Permission == perm)
+                {
+                    return g;
+                }
+            }
             return null;
         }
     }

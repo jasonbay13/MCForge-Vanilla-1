@@ -57,6 +57,7 @@ namespace MCForge.Gui {
         }
 
         private void frmMain_Load(object sender, System.EventArgs e) {
+            txtLog.AppendLog("Url Found: " + Server.URL + Environment.NewLine, Color.Black);
 
             //Custom Component Init
             cmbChatType.Text = "Chat";
@@ -292,14 +293,12 @@ namespace MCForge.Gui {
 #endif
 
             if (InvokeRequired) {
-                BeginInvoke((MethodInvoker)OnCompletedStartUp);
+                Invoke((MethodInvoker)OnCompletedStartUp);
                 return;
             }
+            splashScreen.Shutdown();
 
-            splashScreen.Dispose();
-            splashScreen = null;
-
-            this.ShowDialog();
+            new Thread(new ThreadStart(() => Application.Run(this))).Start();
             this.BringToFront();
             Server.OnServerFinishSetup -= OnCompletedStartUp;
 

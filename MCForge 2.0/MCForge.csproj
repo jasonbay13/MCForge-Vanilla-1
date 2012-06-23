@@ -142,7 +142,7 @@
     <Compile Include="Robot\PathFinder.cs" />
     <Compile Include="Robot\Point3D.cs" />
     <Compile Include="System\Backup.cs" />
-    <Compile Include="System\FileUtils.cs" />
+    <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="System\Heartbeat\Heart.cs" />
     <Compile Include="System\Heartbeat\Heartbeat.cs" />
     <Compile Include="System\Heartbeat\MBeat.cs" />
@@ -159,11 +159,11 @@
     <Compile Include="Utils\MathUtils.cs" />
     <Compile Include="Utils\MiscUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
+    <Compile Include="Utils\TriBool.cs" />
     <Compile Include="Utils\Vector2D.cs" />
     <Compile Include="Utils\Vector2S.cs" />
     <Compile Include="Utils\Vector3D.cs" />
     <Compile Include="Utils\Vector3S.cs" />
-    <Compile Include="Player\WOM.cs" />
     <Compile Include="World\Blocks\BlockChange.cs" />
     <Compile Include="World\Blocks\Custom\Griefer_stone.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\ActiveLava.cs" />
@@ -275,7 +275,7 @@
     <Content Include="README.txt" />
     <Content Include="MCForge.ico" />
     <Content Include="sqlite3.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="System.Data.SQLite.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
