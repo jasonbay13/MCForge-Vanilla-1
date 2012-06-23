@@ -46,7 +46,6 @@
     <Compile Include="AntiGriefing\PluginAntiGrief.cs" />
     <Compile Include="PluginMessageViewer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WoMPlugin\Gamemakergm.cs" />
     <Compile Include="WoMPlugin\PluginWoMTextures.cs">
       <SubType>Code</SubType>
     </Compile>
