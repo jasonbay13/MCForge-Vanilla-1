@@ -6,7 +6,6 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-#define USING_SQLite_Interop_dll
 using System;
 using System.Windows.Forms;
 using System.Data;
@@ -72,8 +71,6 @@ namespace MCForge.SQL {
             backup.Start();
         }
         private void SaveTo(SQLiteConnection source, SQLiteConnection destination) {
-
-#if USING_SQLite_Interop_dll
             bool saving = source.DataSource == "";
             SQLiteCommand cmdSource = new SQLiteCommand(source);
             cmdSource.CommandText = "Select * FROM sqlite_master WHERE type=='table'";
@@ -111,9 +108,6 @@ namespace MCForge.SQL {
                     Logger.Log("Table " + nvc["name"] + ((saving)?" saved (":" loaded (") + s.Elapsed + ")");
                 }
             }
-#else
-            Logger.Log("Can't save DB from memory to filesystem");
-#endif
         }
         public void Save() {
             if (ServerSettings.GetSettingBoolean("SQLite-InMemory")) {
