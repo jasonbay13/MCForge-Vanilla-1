@@ -93,6 +93,7 @@
     <Compile Include="API\Events\Player\DataSavedEvent.cs" />
     <Compile Include="API\Events\Player\MoveEvent.cs" />
     <Compile Include="API\Events\Player\PacketEvent.cs" />
+    <Compile Include="API\Events\Player\RotateEvent.cs" />
     <Compile Include="API\Events\Remote\RemoteConnectEvent.cs" />
     <Compile Include="API\Events\Remote\RemoteDisconnectEvent.cs" />
     <Compile Include="API\Events\Remote\RemoteLoginEvent.cs" />
