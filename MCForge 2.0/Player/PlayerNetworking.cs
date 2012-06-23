@@ -322,7 +322,7 @@ namespace MCForge.Entity {
                 Level.BlockChange(x, z, y, newType, (fake) ? null : this);
             }
 
-            BlockChanges.Add(new World.Blocks.BlockChange(new Vector3S(x, z, y), blockFrom, newType, action == 0));
+            //BlockChanges.Add(new World.Blocks.BlockChange(new Vector3S(x, z, y), blockFrom, newType, action == 0));
         }
         private void HandleIncomingPos(byte[] message) {
             if (!IsLoggedIn)

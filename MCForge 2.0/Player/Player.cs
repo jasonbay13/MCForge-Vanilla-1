@@ -283,7 +283,7 @@ namespace MCForge.Entity {
 
         private Random playerRandom;
 
-        public List<BlockChange> BlockChanges;
+        //public List<BlockChange> BlockChanges; Go away
 
         #endregion
 
@@ -303,7 +303,7 @@ namespace MCForge.Entity {
                 Socket.BeginReceive(tempBuffer, 0, tempBuffer.Length, SocketFlags.None, new AsyncCallback(Incoming), this);
 
                 playerRandom = new Random();
-                BlockChanges = new List<BlockChange>();
+                //BlockChanges = new List<BlockChange>();
 
             }
             catch (Exception e) {
