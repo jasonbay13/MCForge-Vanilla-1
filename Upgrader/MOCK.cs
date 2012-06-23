@@ -150,8 +150,6 @@ namespace MCForge_.Gui
 					}
 				}
 				Console.ForegroundColor = ConsoleColor.Green;
-				Console.WriteLine("Downloading Upgrade files...");
-				//TODO Download MCForge.dll
 				foreach (string level in Directory.GetFiles("levels", "*.lvl"))
 				{
 					try {
@@ -176,7 +174,9 @@ namespace MCForge_.Gui
 					}
 					
 				}
-				
+				Console.ForegroundColor = ConsoleColor.Green;
+				Console.WriteLine("Converting Properties..");
+				SrvProperties.ConvertSettings();
 			}
 			catch (Exception e) { Console.WriteLine(e.ToString()); Console.ReadKey(true); }
 			Console.ReadKey(true);
