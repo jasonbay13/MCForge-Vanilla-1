@@ -324,7 +324,7 @@ namespace MCForge.Groups
 
             foreach (PlayerGroup g in Groups)
             {
-                Logger.Log("[Group] " + g.Name + " Initialized");
+                Logger.Log("[Group] " + g.Name + " Initialized", LogType.Debug);
             }
         }
         /// <summary>
