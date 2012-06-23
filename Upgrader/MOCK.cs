@@ -198,6 +198,8 @@ namespace MCForge_.Gui
 					Console.WriteLine("Saving new Groups..");
 					PlayerGroupProperties.Save();
 					File.Delete("properties/ranks.properties");
+					Console.WriteLine("Converting Command Permissions..");
+					CMDCONVERT.CONVERTCMD();
 				}
 				catch (Exception e) { 
 					Console.ForegroundColor = ConsoleColor.Red;
