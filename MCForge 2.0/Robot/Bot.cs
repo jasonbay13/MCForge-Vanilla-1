@@ -227,6 +227,11 @@ namespace MCForge.Robot
                                 Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) - 1), 0);
                             }
 
+                            if (!Block.CanWalkThrough(BlockUnderneath) && (Pathfound.y / 32) < (TemporaryLocation.y / 32) && !Block.IsOPBlock(BlockUnderneath))
+                            {
+                                Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) - 2), 0);
+                            }
+
                             MoveEventArgs eargs = new MoveEventArgs(TemporaryLocation, Bot.Player.Pos);
                             bool cancel = OnBotMove.Call(Bot, eargs).Canceled;
                             if (cancel)
