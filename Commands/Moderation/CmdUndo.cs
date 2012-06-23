@@ -16,10 +16,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data;
+using MCForge.SQL;
 using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Core;
+using MCForge.Utils;
 
 namespace MCForge.Commands.Moderation {
     public class CmdUndo : ICommand {
@@ -65,7 +68,7 @@ namespace MCForge.Commands.Moderation {
                     }
                 }
                 catch {
-                    p.SendMessage("That not a number silly head");
+                    p.SendMessage("That is not a vaild number");
                     return;
                 }
             }
@@ -92,7 +95,7 @@ namespace MCForge.Commands.Moderation {
                         }
                     }
                     catch {
-                        p.SendMessage("That is not a valid numba");
+                        p.SendMessage("That is not a valid number");
                     }
                 }
             }
@@ -108,18 +111,39 @@ namespace MCForge.Commands.Moderation {
         }
 
         void Undo(Player p, int time = 30) {
-            if (p == null || p.BlockChanges.Count < 0)
+            if (p == null)
                 return;
+            
+            DataTable blockchanges = Database.fillData("SElECT * FROM Blocks WHERE UID=" + p.UID);
+            if (blockchanges.Rows.Count > 0)  {
+            	DateTime timeToLook = DateTime.Parse(blockchanges.Rows[blockchanges.Rows.Count - 1]["Date"].ToString()).AddSeconds(time * -1); //Because
 
-            long timeToLook = p.BlockChanges[p.BlockChanges.Count - 1].Time.Second - time;
-
-            if (timeToLook < 0)
-                timeToLook = p.BlockChanges[0].Time.Second;
-            else if (timeToLook > int.MaxValue)
-                timeToLook = int.MaxValue;
-
-
-            for (int i = p.BlockChanges.Count - 1; i > 0; i++) {
+            	/*if (timeToLook < 0)
+            		timeToLook = p.BlockChanges[0].Time.Second;
+            	else if (timeToLook > int.MaxValue)
+            		timeToLook = int.MaxValue;*/
+            	int x = 0;
+            	int y = 0;
+            	int z = 0;
+            	byte was = 0;
+            	for (int i = blockchanges.Rows.Count - 1; i > 0; i--) {
+            		var bChange = DateTime.Parse(blockchanges.Rows[i]["Date"].ToString());
+            		
+            		x = int.Parse(blockchanges.Rows[i]["X"].ToString());
+            		y = int.Parse(blockchanges.Rows[i]["Y"].ToString());
+            		z = int.Parse(blockchanges.Rows[i]["Z"].ToString());
+            		was = byte.Parse(blockchanges.Rows[i]["Was"].ToString());
+            		if (bChange < timeToLook)
+            			continue;
+            		for (int j = 0; j < i; j++) {
+            			p.Level.BlockChange((ushort)x, (ushort)z, (ushort)y, was);
+            		}
+            	}
+            }
+            
+            blockchanges.Dispose();
+            
+            /*for (int i = p.BlockChanges.Count - 1; i > 0; i++) {
                 var bChange = p.BlockChanges[i];
 
                 if (bChange.Time.Second < timeToLook)
@@ -129,7 +153,7 @@ namespace MCForge.Commands.Moderation {
                     p.Level.BlockChange(bChange.Position, bChange.BlockFrom);
                 }
                 return;
-            }
+            }*/
         }
 
         public void Help(Player p) {

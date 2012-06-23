@@ -308,9 +308,10 @@ namespace MCForge.Entity {
                 });
                 return;
             }
-            //Record to database
-            Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Block, Date) VALUES (" + UID + ", " + x + ", " + y + ", " + z + ", '" + Level.Name.MySqlEscape() + "', '" + (action == 0 ? "true" : "false") + "', '" + newType.ToString() + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "')");
             byte blockFrom = Level.GetBlock(x, z, y);
+            //Record to database
+            Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Block, Date, Was) VALUES (" + UID + ", " + x + ", " + y + ", " + z + ", '" + Level.Name.MySqlEscape() + "', '" + (action == 0 ? "true" : "false") + "', '" + newType.ToString() + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + blockFrom.ToString() + "')");
+
 
             if (action == 0) //Deleting
             {

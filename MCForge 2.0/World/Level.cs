@@ -554,6 +554,7 @@ namespace MCForge.World {
                 return Data[pos];
             else {
                 Logger.Log("Out of bounds in Level.GetBlock(int pos)", LogType.Error);
+                Logger.Log("Tried to get block at " + pos + " pos!", LogType.Error);
                 return Block.BlockList.UNKNOWN; //Unknown Block
             }
         }

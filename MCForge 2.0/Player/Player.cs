@@ -117,7 +117,7 @@ namespace MCForge.Entity {
         /// <summary>
         /// This is the UID for the player in the database
         /// </summary>
-        internal long UID = 0;
+        public long UID = 0;
 
         /// <summary>
         /// Gets or sets the first login.
