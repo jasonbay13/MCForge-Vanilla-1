@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.
 		{64D2BDDC-F51C-487E-A4CB-6AA2A4E2D284} = {64D2BDDC-F51C-487E-A4CB-6AA2A4E2D284}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Upgrader", "Upgrader\Upgrader.csproj", "{C6A905BC-860B-416A-B71D-4E8146282812}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Upgrader", "Upgrader\Upgrader.csproj", "{12597DB0-7C34-4DE1-88EA-9250FF3372EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
