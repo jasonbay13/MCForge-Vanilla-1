@@ -22,7 +22,7 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Core;
-using MCForge.Utils;
+using MCForge.World;
 
 namespace MCForge.Commands.Moderation {
     public class CmdUndo : ICommand {
@@ -56,7 +56,7 @@ namespace MCForge.Commands.Moderation {
 
             int _time = 30;
             Player who = p;
-
+            long UID = -1;
 
             //undo <seconds>
             if (args.Length == 1) {
@@ -74,12 +74,17 @@ namespace MCForge.Commands.Moderation {
             }
 
 
-            if (args.Length == 2) {
+            else if (args.Length == 2) {
                 who = Player.Find(args[0]);
 
                 if (who == null) {
-                    p.SendMessage("Player doesn't exist");
-                    return;
+                	//Try getting offline player
+                	DataTable playerDb = Database.fillData("SELECT * FROM _players WHERE Name='" + args[0] + "'");
+                	if (playerDb.Rows.Count == 0) {
+                		p.SendMessage("Player doesn't exist");
+                		return;
+                	}
+                	UID = long.Parse(playerDb.Rows[0]["UID"].ToString());
                 }
 
                 if (args[1].ToLower() == "all") {
@@ -106,15 +111,24 @@ namespace MCForge.Commands.Moderation {
                     return;
                 }
             }
-            Undo(who, _time);
-            p.SendMessage(Server.DefaultColor + "Undid " + who.Color + who.Username + Server.DefaultColor + " for &c" + _time + Server.DefaultColor + " seconds");
+            if (UID != -1)
+            {
+            	Undo(UID, _time, p.Level);
+            	Player.UniversalChat(Server.DefaultColor + "Undid " + args[0] + " for &c" + _time + Server.DefaultColor + " seconds");
+            }
+            else
+            {
+            	Undo(who, _time);
+            	Player.UniversalChat(Server.DefaultColor + "Undid " + who.Color + who.Username + Server.DefaultColor + " for &c" + _time + Server.DefaultColor + " seconds");
+            }
         }
 
-        void Undo(Player p, int time = 30) {
-            if (p == null)
-                return;
-            
-            DataTable blockchanges = Database.fillData("SElECT * FROM Blocks WHERE UID=" + p.UID);
+        
+        void Undo (long UID, int time, Level l)
+        {
+        	if (UID == -1)
+        		return;
+        	DataTable blockchanges = Database.fillData("SElECT * FROM Blocks WHERE UID=" + UID);
             if (blockchanges.Rows.Count > 0)  {
             	DateTime timeToLook = DateTime.Parse(blockchanges.Rows[blockchanges.Rows.Count - 1]["Date"].ToString()).AddSeconds(time * -1); //Because
 
@@ -136,24 +150,15 @@ namespace MCForge.Commands.Moderation {
             		if (bChange < timeToLook)
             			continue;
             		for (int j = 0; j < i; j++) {
-            			p.Level.BlockChange((ushort)x, (ushort)z, (ushort)y, was);
+            			l.BlockChange((ushort)x, (ushort)z, (ushort)y, was);
             		}
             	}
             }
             
             blockchanges.Dispose();
-            
-            /*for (int i = p.BlockChanges.Count - 1; i > 0; i++) {
-                var bChange = p.BlockChanges[i];
-
-                if (bChange.Time.Second < timeToLook)
-                    continue;
-
-                for (int j = 0; j < i; j++) {
-                    p.Level.BlockChange(bChange.Position, bChange.BlockFrom);
-                }
-                return;
-            }*/
+        }
+        void Undo(Player p, int time = 30) {
+        	Undo(p.UID, time, p.Level);
         }
 
         public void Help(Player p) {
