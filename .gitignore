@@ -26,3 +26,7 @@ Console/obj/
 
 /Gui - WPF/bin
 /Gui - WPF/obj
+
+/SQLite/*.sdf
+/SQLite/bin/
+/SQLite/obj/

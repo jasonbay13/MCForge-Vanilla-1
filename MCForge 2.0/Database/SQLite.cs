@@ -6,7 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-#define NOT_USING_SQLite_Interop_dll
+#define USING_SQLite_Interop_dll
 using System;
 using System.Windows.Forms;
 using System.Data;

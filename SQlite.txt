@@ -1,0 +1,5 @@
+To build System.Data.SQLite.dll you need to use Visual C++ Command Prompt (Visual C++ 2010 Express -> Extras) and execute the following command in the SQLite folder or you run buildSQLite.bat from this directory.
+MSBuild.exe System.Data.SQLite\System.Data.SQLite.2010.csproj /t:Rebuild /p:Configuration=Release /p:UseInteropDll=false /p:UseSqliteStandard=true
+
+The sqlite3.dll is Version 3.7.13 for 32-bit x86 and is downloadable at:
+http://www.sqlite.org/sqlite-dll-win32-x86-3071300.zip
