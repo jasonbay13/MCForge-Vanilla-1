@@ -234,7 +234,7 @@ namespace MCForge.World {
             if (FindLevel(levelName) != null)
                 return null;
 
-            string Name = "levels\\" + levelName + ".lvl";
+            string Name = "levels/" + levelName + ".lvl";
             Level finalLevel = new Level(new Vector3S(32, 32, 32));
             finalLevel.Name = levelName;
             try {
@@ -254,7 +254,7 @@ namespace MCForge.World {
                     else //Is a new MCForge level!
                     {
                         #region New MCForge Level
-                        byte version = Binary.ReadByte();
+                        byte version = 1;// Binary.ReadByte();
                         if (version == 1)
                         {
                         	string s = Binary.ReadString();
@@ -297,7 +297,7 @@ namespace MCForge.World {
                         	}
                         	catch { Binary.Dispose(); return null; }
                         }
-
+                        //TODO: Move to HandleMetaData
                         foreach (string name in MCForge.Interfaces.Blocks.Block.Blocks.Keys) {
                             if (finalLevel.ExtraData["IBlocks" + name] != null && finalLevel.ExtraData["IBlocks" + name].GetType() == typeof(string)) {
                                 string hexs = (string)finalLevel.ExtraData["IBlocks" + name];
@@ -335,7 +335,7 @@ namespace MCForge.World {
         /// </summary>
         /// <remarks>The resulting files are not compatible with the official Minecraft software.</remarks>
         public bool SaveToBinary() {
-            string Name = "levels\\" + this.Name + ".lvl";
+            string Name = "levels/" + this.Name + ".lvl";
             if (!Directory.Exists("levels")) Directory.CreateDirectory("levels");
             var Binary = new BinaryWriter(File.Open(Name, FileMode.Create));
 
@@ -377,7 +377,7 @@ namespace MCForge.World {
         /// </summary>
         public static void LoadAllLevels() {
             FileUtils.CreateDirIfNotExist("levels");
-            string[] files = Directory.GetFiles("levels\\", "*.lvl");
+            string[] files = Directory.GetFiles("levels/", "*.lvl");
             foreach (string file in files) {
                 Level lvl = LoadLevel(file.Substring(7, file.Length - 11));
 

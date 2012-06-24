@@ -333,7 +333,8 @@ namespace MCForge.Groups
         public static void InitDefaultGroups()
         {
             if (FileUtils.FileExists(FileUtils.PropertiesPath + "groups.xml"))
-                PlayerGroupProperties.Load();
+                //PlayerGroupProperties.Load();
+                ;
             if (PlayerGroup.Groups.Count <= 0)
             {
                 new PlayerGroup((byte)PermissionLevel.Guest, "Guest", Colors.white, "guests.txt");

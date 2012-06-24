@@ -70,24 +70,26 @@ namespace MCForge.Commands {
 
         //TODO: fix if target is to close at origin
         IEnumerable<Vector3S> BlockString(string text, Vector3S origin, Vector3S target, Vector3S lvlSize) {
-            Font font = SystemFonts.DefaultFont;
+            Font font = new Font("Sans-serief",12);
             Image tmp = new Bitmap(1000, 1000);
             Bitmap img = new Bitmap((int)Graphics.FromImage(tmp).MeasureString(text, font).Width, (int)Graphics.FromImage(tmp).MeasureString(text, font).Height);
             tmp = null;
             Graphics g = Graphics.FromImage(img);
             g.FillRectangle(Brushes.White, 0, 0, img.Width, img.Height);
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SingleBitPerPixel;
             g.DrawString(text, font, Brushes.Black, new PointF(0, 0));
             List<Vector3S> path = new List<Vector3S>();
             foreach (Vector3S p in origin.PathTo(target)) {
                 path.Add(p);
             }
+            if (path.Count < 2) yield break;
             for (int x = 0; x < img.Width; x++) {
                 for (int y = 0; y < img.Height; y++) {
                     if (img.GetPixel(x, y).ToArgb() != Color.White.ToArgb()) {
                         Vector3S ret = new Vector3S();
-                        ret.x = (short)(origin.x + (x / path.Count) * (path[path.Count - 1].x - origin.x) + (path[x % path.Count].x - origin.x));
-                        ret.y = (short)(origin.y + (x / path.Count) * (path[path.Count - 1].y - origin.y) + (path[x % path.Count].y - origin.y) + img.Height - y);
-                        ret.z = (short)(origin.z + (x / path.Count) * (path[path.Count - 1].z - origin.z) + (path[x % path.Count].z - origin.z));
+                        ret.x = (short)(origin.x + ((path[x % path.Count].x - origin.x) + (path[path.Count - 1].x - origin.x + path[1].x - origin.x) * (x / path.Count)));
+                        ret.y = (short)(origin.y + ((path[x % path.Count].y - origin.y) + (path[path.Count - 1].y - origin.y + path[1].y - origin.y) * (x / path.Count)) + img.Height - y);
+                        ret.z = (short)(origin.z + ((path[x % path.Count].z - origin.z) + (path[path.Count - 1].z - origin.z + path[1].z - origin.z) * (x / path.Count)));
                         if (ret.x < lvlSize.x && ret.y < lvlSize.y && ret.z < lvlSize.z && ret.x >= 0 && ret.y >= 0 && ret.z >= 0)
                             yield return ret;
                     }
