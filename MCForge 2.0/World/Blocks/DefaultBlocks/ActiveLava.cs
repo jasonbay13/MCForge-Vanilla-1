@@ -20,7 +20,7 @@ namespace MCForge.World.Blocks
     {
         public override byte VisibleBlock
         {
-            get { return 8; }
+            get { return 10; }
         }
 
         public override string Name
