@@ -209,7 +209,7 @@ namespace MCForge.Core {
                     break;
                 case "debug":
                     Server.DebugMode = true;
-                    return false;
+                    return true;
                 case "abort-setup":
                     return true;
             }
