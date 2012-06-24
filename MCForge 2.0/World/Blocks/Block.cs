@@ -166,7 +166,7 @@ namespace MCForge.World {
                 blockToCheck == BlockList.ACTIVE_WATER ||
                 blockToCheck == BlockList.RED_FLOWER ||
                 blockToCheck == BlockList.RED_MUSHROOM ||
-                blockToCheck == BlockList.RED_FLOWER ||
+                blockToCheck == BlockList.YELLOW_FLOWER ||
                 blockToCheck == BlockList.BROWN_MUSHROOM);
         }
 
