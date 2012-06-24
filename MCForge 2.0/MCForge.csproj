@@ -16,6 +16,8 @@
     <FileAlignment>512</FileAlignment>
     <NoStdLib>False</NoStdLib>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DelaySign>False</DelaySign>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,7 +34,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>PdbOnly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -41,13 +43,10 @@
     <DocumentationFile>bin\Release\MCForge.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <DebugSymbols>true</DebugSymbols>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>MCForge.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <RegisterForComInterop>False</RegisterForComInterop>
@@ -55,11 +54,13 @@
     <BaseAddress>4194304</BaseAddress>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
     <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data">

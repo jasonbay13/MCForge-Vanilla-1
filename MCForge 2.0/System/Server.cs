@@ -230,6 +230,15 @@ namespace MCForge.Core {
                 ServerSettings.SetSetting("DefaultColor", null, colo);
             }
         }
+        
+        /// <summary>
+        /// The server version
+        /// </summary>
+        public static Version Version {
+        	get {
+        		return Assembly.GetEntryAssembly().GetName().Version;
+        	}
+        }
 
         /// <summary>
         /// This delegate is used when a command or plugin needs to call a method after a certain amount of time
