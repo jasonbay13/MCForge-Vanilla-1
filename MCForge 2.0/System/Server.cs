@@ -51,7 +51,7 @@ namespace MCForge.Core {
         /// <summary>
         /// The miniumum rank that needs to verify.
         /// </summary>
-        public static Groups.PlayerGroup VerifyGroup = Groups.PlayerGroup.Find(ServerSettings.GetSetting("VerifyGroup"));
+        public static Groups.PlayerGroup VerifyGroup;
         /// <summary>
         /// Do people need to use /pass?
         /// </summary>
@@ -66,6 +66,10 @@ namespace MCForge.Core {
             get { return ServerSettings.GetSetting("ServerOwner"); }
             set { ServerSettings.SetSetting("ServerOwner", value); }
         }
+        /// <summary>
+        /// If the server is using mono
+        /// </summary>
+        public static bool OnMono { get { return (Type.GetType("Mono.Runtime") != null); } }
         /// <summary>
         /// The rank that can destroy griefer_stone without getting kicked
         /// </summary>
@@ -285,6 +289,7 @@ namespace MCForge.Core {
             reload.Initialize();
 
             Groups.PlayerGroup.Load();
+            VerifyGroup = Groups.PlayerGroup.Find(ServerSettings.GetSetting("VerifyGroup"));
 
             Mainlevel = Level.LoadLevel(ServerSettings.GetSetting("Main-Level"));
             if (Mainlevel == null) {

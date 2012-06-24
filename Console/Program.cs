@@ -36,14 +36,13 @@ namespace MCForge.Core {
         /// </summary>
         [STAThread]
         static void Main(string[] args) {
+            ServerSettings.Init();
             bool checker = CheckArgs(args);
-            if (!checker)
-                ServerSettings.Init();
-            else
-                Logger.Log("Aborting setup..", LogType.Critical);
-
             Console.Title = ServerSettings.GetSetting("ServerName") + " - MCForge 6"; //Don't know what MCForge version we are using yet.
-            new Thread(new ThreadStart(Server.Init)).Start();
+            if (!checker)
+                new Thread(new ThreadStart(Server.Init)).Start();
+            else
+                Logger.Log("Aborting Setup..", LogType.Critical);
             Logger.OnRecieveLog += new EventHandler<LogEventArgs>(Server.OnLog);
             Logger.OnRecieveErrorLog += new EventHandler<LogEventArgs>(Logger_OnRecieveErrorLog);
             cp = new ConsolePlayer(cio);

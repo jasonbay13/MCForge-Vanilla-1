@@ -20,6 +20,9 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using MCForge.Utils.Settings;
+using MCForge.Utils.Settings;
+using MCForge.Utils.Settings;
+using MCForge.Utils.Settings;
 
 namespace MCForge.Utils.Settings {
     /// <summary>
@@ -36,6 +39,7 @@ namespace MCForge.Utils.Settings {
                     new SettingNode("ServerName", "[MCForge] Default", "Name of your server"),
                     new SettingNode("Wom-Alternate_Name", "[MCForge] Default", "Name of your server on WoM direct"),
                     new SettingNode("Port", "25565", null),
+                    new SettingNode("Main-Level", "main", "The name of the main level. If tihs is empty or doesn't exist, it will generate a flat level."),
                     new SettingNode("Enable-Remote", "false", "If true, it will create a listener for remote consoles to connect to"),
                     new SettingNode("Remote-IP", "0.0.0.0", "The ip to bind the listener to, if you are using a different ip. Don't touch if you don't know what it does"),
                     new SettingNode("Remote-Port", "5050", "The port the remote will connnect to"),
@@ -57,9 +61,16 @@ namespace MCForge.Utils.Settings {
                     new SettingNode("ConfigPath", "config/", "File path for group player properties, do not mess with unless you know what you are doing"),
                     new SettingNode("MessageAppending", "true", "allow use of message appending, ex using \">\" at the end of your message will allow you to finish your statement on a new chat segment"),
                     new SettingNode("DefaultGroup", "guest", "The name of the default group, if it doesn't exist it will cause problems"),
+                    new SettingNode("Check-Core-Updates", "true", "Check for core updates"),
+                    new SettingNode("Check-Misc-Updates", "true", "Check for plugin and command updates"),
+                    new SettingNode("Auto-Update", "false", "If enabled, commands, plugins, and the core will automatically update WITH notification (Ignored if silent-update is enabled)"),
+                    new SettingNode("Silent-Update", "true", "If enabled, commands and plugins will be updated without notification"),
+                    new SettingNode("Ask-Before-Core", "true", "If enabled, the server will ask before updating the core (Ignored if auto-update or silent-core-update is enabled)"),
+                    new SettingNode("Ask-Before-Misc", "false", "If enabled, the server will ask before updating plugins and commands (Ignored if auto-update or silent-update is enabled)"),
+                    new SettingNode("Silent-Core-Update", "false", "If enabled, the server will attempt to udpate when server activity is low"),
+                    new SettingNode("Updatecheck-Interval", "10", "How often to check for updates (in minutes)"),
                     //new SettingNode("Offline", "false", "if set to true, it will skip authentication, causing a major security flaw"), Isnt this just verify names?
                     new SettingNode("AllowHigherRankTp", "true", "Allow players of a lower rank to teleport to a user of a higher rank"),
-                    new SettingNode("Main-Level", "main", "The name of the main level. If tihs is empty or doesn't exist, it will generate a flat level."),
                     new SettingNode("DatabaseType", "sqlite", "The type of database you want to use (mysql/sqlite)"),
                     new SettingNode("MySQL-IP", "127.0.0.1", "The IP of the sql (mysql/sqlite) database"),
                     new SettingNode("MySQL-Port", "3306", "The port for the mysql database (sqlite does not need a port, leave this blank)"),
