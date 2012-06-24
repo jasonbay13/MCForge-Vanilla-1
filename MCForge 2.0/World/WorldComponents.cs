@@ -246,7 +246,7 @@ namespace MCForge.World {
         East,
         West,
         North,
-        Sourth,
+        South,
         Up,
         Down
     }
