@@ -71,6 +71,7 @@
     <Compile Include="Moderation\CmdDeleteLvl.cs" />
     <Compile Include="Moderation\CmdFollow.cs" />
     <Compile Include="Moderation\CmdHide.cs" />
+    <Compile Include="Moderation\CmdPerVisit.cs" />
     <Compile Include="Moderation\CmdRestart.cs" />
     <Compile Include="Moderation\CmdShutdown.cs" />
     <Compile Include="Moderation\CmdUndo.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Information\CmdMuted.cs" />
     <Compile Include="Moderation\CmdPlugins.cs" />
     <Compile Include="Moderation\CmdUnIPBan.cs" />
+    <Compile Include="Moderation\CmdPerBuildMax.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CmdTest.cs" />
   </ItemGroup>

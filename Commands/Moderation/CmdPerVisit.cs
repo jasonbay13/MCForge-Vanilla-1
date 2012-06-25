@@ -18,12 +18,13 @@ using MCForge.Interface.Command;
 using System;
 using MCForge.API.Events;
 using MCForge.Groups;
+using MCForge.World;
 
 namespace MCForge.Commands
 {
-    public class CmdPerBuild : ICommand
+    public class CmdPerVisit : ICommand
     {
-        public string Name { get { return "PerBuild"; } }
+        public string Name { get { return "PerVisit"; } }
         public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "cazzar"; } }
         public int Version { get { return 1; } }
@@ -32,25 +33,33 @@ namespace MCForge.Commands
 
         public void Use(Player p, string[] args)
         {
-            if (args.Length < 1)
+            if (args.Length < 2)
             {
                 Help(p);
                 return;
             }
 
-            byte perBuild = 0;
+            byte perVisit = 0;
             PlayerGroup g = null;
+            Level l = null;
+            l = Level.FindLevel(args[0]);
+
+            if (l == null)
+            {
+                p.SendMessage("Level not found!");
+                return; //no need to continue (troll)
+            }
 
             try
             {
-                perBuild = byte.Parse(args[0]);
+                perVisit = byte.Parse(args[1]);
             }
             catch
             {
                 try
                 {
-                    g = PlayerGroup.Find(args[0]);
-                    perBuild = g.Permission;
+                    g = PlayerGroup.Find(args[1]);
+                    perVisit = g.Permission;
                 }
                 catch
                 {
@@ -59,58 +68,72 @@ namespace MCForge.Commands
                 }
             }
 
-            if (perBuild > p.Group.Permission)
+            if (perVisit > p.Group.Permission)
             {
                 p.SendMessage("You cannot set the build permission to a greater rank or permission than yours");
                 return;
             }
 
-            if (p.Level.ExtraData.ContainsKey("perbuild"))
+            if (l.ExtraData.ContainsKey("pervisit"))
             {
-                p.Level.ExtraData["perbuild"] = perBuild;
+                l.ExtraData["pervisit"] = perVisit;
             }
             else
-                p.Level.ExtraData.Add("perbuild", perBuild);
+                l.ExtraData.Add("pervisit", perVisit);
 
             if (g != null)
             {
-                p.SendMessage("Successfully put " + Colors.gold + p.Level.Name + Server.DefaultColor + "'s build permission to " + g.Color + g.Name);
+                p.SendMessage("Successfully put " + Colors.gold + l.Name + Server.DefaultColor + "'s visit permission to " + g.Color + g.Name);
             }
             else
             {
-                p.SendMessage("Successfully put " + Colors.gold + p.Level.Name + Server.DefaultColor + "'s build permission to " + Colors.red + perBuild);
+                p.SendMessage("Successfully put " + Colors.gold + l.Name + Server.DefaultColor + "'s visit permission to " + Colors.red + perVisit);
             }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/perbuild [permission/rankname] - sets the minimum permission to build on the current map");
+            p.SendMessage("/pervisit [map] [permission/rankname] - sets the minimum permission to visit map");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, "perbuild");
-            Player.OnAllPlayersBlockChange.Normal += new Event<Player, BlockChangeEventArgs>.EventHandler(OnAllPlayersBlockChange_Normal);
+            Command.AddReference(this, "pervisit");
+            Player.OnAllPlayersCommand.Normal += new Event<Player, CommandEventArgs>.EventHandler(OnAllPlayersCommand_Normal);
         }
-        public void OnAllPlayersBlockChange_Normal(Player sender, BlockChangeEventArgs evt)
+        public void OnAllPlayersCommand_Normal(Player sender, CommandEventArgs evt)
         {
-            byte perBuild = 0;
+            byte PerVisit = 0;
+            Level l = null;
 
-            if (sender.Level.ExtraData.ContainsKey("perbuild"))
+            ICommand cmdran = null;
+            try
+            {
+                cmdran = Command.All[evt.Command];
+            }
+            catch { cmdran = null; }
+            if (cmdran == null)
+                return; // no use running this unless it exists
+            else if (cmdran != Command.All["goto"])
+                return; //yet again, no use to run this if the command aint /goto or a variant
+
+            l = Level.FindLevel(evt.Args[0]);
+
+            if (l.ExtraData.ContainsKey("pervisit"))
             {
                 try
                 {
-                    perBuild = (byte)sender.Level.ExtraData["perbuild"];
+                    PerVisit = (byte)l.ExtraData["pervisit"];
                 }
                 catch
                 {
-                    perBuild = 0;
+                    PerVisit = 0;
                 }
             }
 
-            if (sender.Group.Permission < perBuild)
+            if (sender.Group.Permission <= PerVisit)
             {
-                sender.SendMessage("You cannot build here");
+                sender.SendMessage("You cannot visit this map!");
                 evt.Cancel();
             }
         }

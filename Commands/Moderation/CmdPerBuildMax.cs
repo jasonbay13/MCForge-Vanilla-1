@@ -21,9 +21,9 @@ using MCForge.Groups;
 
 namespace MCForge.Commands
 {
-    public class CmdPerBuild : ICommand
+    public class CmdPerBuildMax : ICommand
     {
-        public string Name { get { return "PerBuild"; } }
+        public string Name { get { return "PerBuildMax"; } }
         public CommandTypes Type { get { return CommandTypes.Mod; } }
         public string Author { get { return "cazzar"; } }
         public int Version { get { return 1; } }
@@ -38,77 +38,77 @@ namespace MCForge.Commands
                 return;
             }
 
-            byte perBuild = 0;
+            byte perBuildMax = byte.MaxValue;
             PlayerGroup g = null;
 
             try
             {
-                perBuild = byte.Parse(args[0]);
+                perBuildMax = byte.Parse(args[0]);
             }
             catch
             {
                 try
                 {
                     g = PlayerGroup.Find(args[0]);
-                    perBuild = g.Permission;
+                    perBuildMax = g.Permission;
                 }
                 catch
                 {
-                    p.SendMessage("Error parsing new build permission");
+                    p.SendMessage("Error parsing new max build permission");
                     return;
                 }
             }
 
-            if (perBuild > p.Group.Permission)
+            if (perBuildMax > p.Group.Permission)
             {
-                p.SendMessage("You cannot set the build permission to a greater rank or permission than yours");
+                p.SendMessage("You cannot set the max build permission to a greater rank or permission than yours");
                 return;
             }
 
             if (p.Level.ExtraData.ContainsKey("perbuild"))
             {
-                p.Level.ExtraData["perbuild"] = perBuild;
+                p.Level.ExtraData["perbuildmax"] = perBuildMax;
             }
             else
-                p.Level.ExtraData.Add("perbuild", perBuild);
+                p.Level.ExtraData.Add("perbuildmax", perBuildMax);
 
             if (g != null)
             {
-                p.SendMessage("Successfully put " + Colors.gold + p.Level.Name + Server.DefaultColor + "'s build permission to " + g.Color + g.Name);
+                p.SendMessage("Successfully put " + Colors.gold + p.Level.Name + Server.DefaultColor + "'s maximum build permission to " + g.Color + g.Name);
             }
             else
             {
-                p.SendMessage("Successfully put " + Colors.gold + p.Level.Name + Server.DefaultColor + "'s build permission to " + Colors.red + perBuild);
+                p.SendMessage("Successfully put " + Colors.gold + p.Level.Name + Server.DefaultColor + "'s maximum build permission to " + Colors.red + perBuildMax);
             }
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/perbuild [permission/rankname] - sets the minimum permission to build on the current map");
+            p.SendMessage("/perbuildmax [permission/rankname] - sets the maximum permission to build on the current map");
         }
 
         public void Initialize()
         {
-            Command.AddReference(this, "perbuild");
+            Command.AddReference(this, "perbuildmax");
             Player.OnAllPlayersBlockChange.Normal += new Event<Player, BlockChangeEventArgs>.EventHandler(OnAllPlayersBlockChange_Normal);
         }
         public void OnAllPlayersBlockChange_Normal(Player sender, BlockChangeEventArgs evt)
         {
-            byte perBuild = 0;
+            byte perBuildMax = byte.MaxValue;
 
-            if (sender.Level.ExtraData.ContainsKey("perbuild"))
+            if (sender.Level.ExtraData.ContainsKey("perbuildmax"))
             {
                 try
                 {
-                    perBuild = (byte)sender.Level.ExtraData["perbuild"];
+                    perBuildMax = (byte)sender.Level.ExtraData["perbuildmax"];
                 }
                 catch
                 {
-                    perBuild = 0;
+                    perBuildMax = byte.MaxValue;
                 }
             }
 
-            if (sender.Group.Permission < perBuild)
+            if (sender.Group.Permission > perBuildMax)
             {
                 sender.SendMessage("You cannot build here");
                 evt.Cancel();
