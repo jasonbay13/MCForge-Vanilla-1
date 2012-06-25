@@ -19,7 +19,6 @@ using MCForge.World;
 using MCForge.Core;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
-using MCForge.Groups;
 
 namespace Plugins.WoMPlugin
 {
@@ -32,8 +31,10 @@ namespace Plugins.WoMPlugin
 
         public override string SettingsName { get { return "WoMPluginSettings"; } }
 
-        public override void OnLoad() {
-            if(!FileUtils.FileExists(PropertiesPath)){
+        public override void OnLoad()
+        {
+            if (!FileUtils.FileExists(PropertiesPath))
+            {
                 using (var writer = File.CreateText(PropertiesPath))
                 {
                     foreach (var node in nodes)
@@ -47,7 +48,13 @@ namespace Plugins.WoMPlugin
 
         public override void Save()
         {
-
+            using (var writer = File.CreateText(PropertiesPath))
+            {
+                foreach (var node in Values)
+                {
+                    writer.WriteLine(node.Key + " = " + node.Value);
+                }
+            }
         }
         public override List<SettingNode> Values
         {

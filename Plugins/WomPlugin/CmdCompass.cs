@@ -23,7 +23,7 @@ using MCForge.World;
 
 namespace Plugins.WoMPlugin
 {
-    public class WoMCompass : ICommand
+    public class CmdCompass : ICommand
     {
         public string Name { get { return "WoMCompass"; } }
         public CommandTypes Type { get { return CommandTypes.Custom; } }
@@ -39,12 +39,14 @@ namespace Plugins.WoMPlugin
             {
                 case 0:
                     p.ExtraData["WoMCompass"] = !(bool)(p.ExtraData.GetIfExist<object, object>("WoMCompass") ?? false);
-                    if ((bool)p.ExtraData["WoMCompass"] == true) { 
+                    if ((bool)p.ExtraData["WoMCompass"] == true)
+                    {
                         p.SendMessage("Compass activated!");
-                        WOM.SendDetail(p, "Look around to activate the Compass!"); 
+                        WOM.SendDetail(p, "Look around to activate the Compass!");
                     }
-                    else { 
-                        p.SendMessage("Compass deactivated!"); 
+                    else
+                    {
+                        p.SendMessage("Compass deactivated!");
                         DeactiveMessage(p);
                     }
                     break;

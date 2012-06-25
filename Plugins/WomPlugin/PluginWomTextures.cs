@@ -248,7 +248,12 @@ namespace Plugins.WoMPlugin
             sb.Replace("$world", p.Level.Name);
             sb.Replace("$yaw", p.Rot[0].ToString());
             sb.Replace("$pitch", p.Rot[1].ToString());
-            sb.Replace("$belowPos", ((p.belowBlock).ToString()) ?? "Har");
+            sb.Replace("$belowPos", ((p.belowBlock).ToString()) ?? "Null.");
+            if (detail.Contains("$ExtraData"))
+            {
+                string toCheck = detail.Substring(detail.IndexOf('[') + 1, detail.IndexOf(']') - detail.IndexOf('[') - 1);
+                sb.Replace("$ExtraData[" + toCheck + "]", (string)(p.ExtraData.GetIfExist<object, object>(toCheck)));
+            }
             return sb.ToString();
         }
     }
