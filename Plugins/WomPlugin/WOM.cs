@@ -19,6 +19,7 @@ using System.Text;
 using MCForge.Entity;
 using MCForge.Core;
 using MCForge.Utils;
+using MCForge.World;
 
 namespace Plugins.WoMPlugin
 {
@@ -63,11 +64,32 @@ namespace Plugins.WoMPlugin
         {
             if ((bool)(p.ExtraData.GetIfExist<object, object>("UsingWoM") ?? false))
             {
+                message = PluginWoMTextures.ConvertVars(p, message);
                 p.SendMessage("^detail.user=%e" + message);
             }
         }
+
         /// <summary>
-        /// Sends the specified player the specified detail.
+        /// Sends the specified detail to all players in the specified level.
+        /// </summary>
+        /// <param name="l">Level to send to.</param>
+        /// <param name="message">Message to send.</param>
+        public static void LevelSendDetail(Level l, string message)
+        {
+            Server.ForeachPlayer(p =>
+            {
+                if (l == p.Level)
+                {
+                    message = PluginWoMTextures.ConvertVars(p, message);
+                    if ((bool)(p.ExtraData.GetIfExist<object, object>("UsingWoM") ?? false))
+                    {
+                        p.SendMessage("^detail.user=%e" + message);
+                    }
+                }
+            });
+        }
+        /// <summary>
+        /// Sends all players in the server the specified detail.
         /// </summary>
         /// <param name="p">Player to send to.</param>
         /// <param name="message">The message to send.</param>
@@ -75,6 +97,7 @@ namespace Plugins.WoMPlugin
         {
             Server.ForeachPlayer(p =>
             {
+                message = PluginWoMTextures.ConvertVars(p, message);
                 if ((bool)(p.ExtraData.GetIfExist<object, object>("UsingWoM") ?? false))
                 {
                     p.SendMessage("^detail.user=%e" + message);
@@ -89,9 +112,29 @@ namespace Plugins.WoMPlugin
         {
             Server.ForeachPlayer(p =>
             {
+                message = PluginWoMTextures.ConvertVars(p, message);
                 if ((bool)(p.ExtraData.GetIfExist<object, object>("UsingWoM") ?? false))
                 {
                     p.SendMessage("^detail.user.alert=" + message);
+                }
+            });
+        }
+        /// <summary>
+        /// Sends an alert to all players in a specified level.
+        /// </summary>
+        /// <param name="l">Level to send to.</param>
+        /// <param name="message">Message to send.</param>
+        public static void LevelSendAlert(Level l, string message)
+        {
+            Server.ForeachPlayer(p =>
+            {
+                if (l == p.Level)
+                {
+                    message = PluginWoMTextures.ConvertVars(p, message);
+                    if ((bool)(p.ExtraData.GetIfExist<object, object>("UsingWoM") ?? false))
+                    {
+                        p.SendMessage("^detail.user.alert=" + message);
+                    }
                 }
             });
         }
@@ -102,10 +145,11 @@ namespace Plugins.WoMPlugin
         /// <param name="message">The message.</param>
         public static void SendAlert(Player p, string message)
         {
-                if ((bool)(p.ExtraData.GetIfExist<object, object>("UsingWoM") ?? false))
-                {
-                    p.SendMessage("^detail.user.alert=" + message);
-                }
+            if ((bool)(p.ExtraData.GetIfExist<object, object>("UsingWoM") ?? false))
+            {
+                message = PluginWoMTextures.ConvertVars(p, message);
+                p.SendMessage("^detail.user.alert=" + message);
+            }
         }
     }
 }

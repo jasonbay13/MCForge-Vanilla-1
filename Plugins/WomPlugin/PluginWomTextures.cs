@@ -38,7 +38,7 @@ namespace Plugins.WoMPlugin
         public string Author { get { return "headdetect and Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
-        
+
         public void OnLoad(string[] args1)
         {
             Server.OnServerFinishSetup += OnLoadDone;
@@ -50,23 +50,32 @@ namespace Plugins.WoMPlugin
         }
         #endregion
         #region Plugin Variables
-        private WoMSettings WomSettings { get; set; }
-        private WoMPluginSettings PluginSettings { get; set; }
+        public static WoMPluginSettings PluginSettings { get; set; }
+        public static Dictionary<Level, CFGSettings> CFGDict = new Dictionary<Level, CFGSettings>();
+        private string compass = " -NW- | -N- | -NE- | -E- | -SE- | -S- | -SW- | -W- |";
         #endregion
         #region WoM Handling
         //Wait for server to finish so we make sure all of the levels are loaded
         void OnLoadDone()
         {
             Logger.Log("[WoMTextures] Succesfully initiated!");
-            WomSettings = new WoMSettings();
-            WomSettings.OnLoad();
+            FileUtils.CreateDirIfNotExist(ServerSettings.GetSetting("configpath") + "WoMTexturing/");
 
+            foreach (Level l in Level.Levels)
+            {
+                //This allows us to get a setting from any level cfg.
+                CFGSettings s = new CFGSettings(l);
+                CFGDict.CreateIfNotExist<Level, CFGSettings>(l, s);
+                s.OnLoad();
+            }
             PluginSettings = new WoMPluginSettings();
             PluginSettings.OnLoad();
 
             Server.OnServerFinishSetup -= OnLoadDone;
+            //Need on level load event to add to dictionary and serve cfg.
             Player.OnAllPlayersReceiveUnknownPacket.Normal += new Event<Player, PacketEventArgs>.EventHandler(OnIncomingData);
             Player.OnAllPlayersSendPacket.Normal += new Event<Player, PacketEventArgs>.EventHandler(OnOutgoingData);
+            Player.OnAllPlayersRotate.Normal += new Event<Player, RotateEventArgs>.EventHandler(OnRotate);
         }
 
         private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
@@ -122,8 +131,8 @@ namespace Plugins.WoMPlugin
                         }
                         else
                         {
-                            var Config = (string[])lvl.ExtraData["WoMConfig"];
-                            var bytes = Encoding.UTF8.GetBytes(Config.ToString<string>());
+                            var config = (string[])lvl.ExtraData["WoMConfig"];
+                            var bytes = Encoding.UTF8.GetBytes(config.ToString<string>());
                             Writer.WriteLine("HTTP/1.1 200 OK");
                             Writer.WriteLine("Date: " + DateTime.UtcNow.ToString("R"));
                             Writer.WriteLine("Server: Apache/2.2.21 (CentOS)");
@@ -133,7 +142,7 @@ namespace Plugins.WoMPlugin
                             Writer.WriteLine("Connection: close");
                             Writer.WriteLine("Content-Type: text/plain");
                             Writer.WriteLine();
-                            foreach (var entry in Config)
+                            foreach (var entry in config)
                                 Writer.WriteLine(entry);
                         }
                     }
@@ -146,15 +155,20 @@ namespace Plugins.WoMPlugin
                 }
             }
         }
+
         void OnOutgoingData(Player p, PacketEventArgs e)
         {
             if (e.Type == Packet.Types.MOTD)
             {
-#if DEBUG
-                string ip = "127.0.0.1";
-#else
-            string ip = InetUtils.GrabWebpage("http://www.mcforge.net/serverdata/ip.php");
-#endif
+                string ip;
+                if (Server.DebugMode)
+                {
+                    ip = "127.0.0.1";
+                }
+                else
+                {
+                    ip = InetUtils.GrabWebpage("http://www.mcforge.net/serverdata/ip.php");
+                }
                 Packet pa = new Packet();
                 pa.Add(Packet.Types.MOTD);
                 pa.Add((byte)7);
@@ -179,12 +193,66 @@ namespace Plugins.WoMPlugin
                     {
                         e.Cancel();
                         WOM.GlobalSendLeave(incoming.Substring(1, incoming.Length - incoming.IndexOf("has disconnected")));
-
                     }
+                }
+            }
+            else if (e.Type == Packet.Types.SendPing)
+            {
+                if (!(bool)(p.ExtraData.GetIfExist<object, object>("WoMCompass") ?? false))
+                {
+                    CFGSettings a = (CFGSettings)CFGDict.GetIfExist<Level, CFGSettings>(p.Level);
+                    WOM.SendDetail(p, a.GetSetting("detail.user"));
                 }
             }
             else { return; }
         }
-        #endregion
+
+        string SubstringLoop(int start)
+        {
+            int l = 19; //Length of substring
+            if (start + l > compass.Length)
+            {
+                string sub = compass.Substring(start, compass.Length - start);
+                sub += compass.Substring(0, l - (compass.Length - start));
+                return sub;
+            }
+            return compass.Substring(start, l);
+        }
+
+        void OnRotate(Player p, RotateEventArgs args)
+        {
+            if (!(bool)(p.ExtraData.GetIfExist<object, object>("WoMCompass") ?? false)) { return; }
+            else
+            {
+                WOM.SendDetail(p, "(" + SubstringLoop(p.Rot[0] / (int)(255 / (compass.Length - 1))) + ")");
+            }
+        }
+
+        public static string ConvertVars(Player p, string detail)
+        {
+            StringBuilder sb = new StringBuilder(detail);
+            sb.Replace("$name", ServerSettings.GetSettingBoolean("$Before$Name") ? "$" + p.Username : p.Username);
+            sb.Replace("$color", p.Color);
+            sb.Replace("$rcolor", p.Group.Color);
+            sb.Replace("$server", ServerSettings.GetSetting("ServerName"));
+            sb.Replace("$money", p.Money.ToString());
+            sb.Replace("$" + Server.Moneys, p.Money.ToString());
+            sb.Replace("$rank", p.Group.Name);
+            sb.Replace("$ip", p.Ip);
+            sb.Replace("$time", DateTime.Now.ToString("HH:mm tt"));
+            sb.Replace("$date", DateTime.Today.ToShortDateString());
+            sb.Replace("$x", p.Pos.x.ToString());
+            sb.Replace("$z", p.Pos.z.ToString());
+            sb.Replace("$y", p.Pos.y.ToString());
+            sb.Replace("$level", p.Level.Name);
+            sb.Replace("$world", p.Level.Name);
+            sb.Replace("$yaw", p.Rot[0].ToString());
+            sb.Replace("$pitch", p.Rot[1].ToString());
+            sb.Replace("$belowPos", ((p.belowBlock).ToString()) ?? "Har");
+            return sb.ToString();
+        }
     }
 }
+        #endregion
+
+

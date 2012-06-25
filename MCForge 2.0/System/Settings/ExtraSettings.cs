@@ -48,7 +48,7 @@ namespace MCForge.Utils.Settings {
         /// <param name="key">The key</param>
         /// <returns>The setting value</returns>
         /// <remarks>Returns the first value if multiple values are present</remarks>
-        public  string GetSetting(string key) {
+        public string GetSetting(string key) {
             key = key.ToLower();
             return GetSettingArray(key)[0];
         }

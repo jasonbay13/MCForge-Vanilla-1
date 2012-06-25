@@ -77,11 +77,6 @@ namespace MCForge.Entity {
         public bool IsBot { get; set; }
 
         /// <summary>
-        /// If the player is on wom client
-        /// </summary>
-        public bool UsingWom { get; set; }
-
-        /// <summary>
         /// Checks if the player is the server owner.
         /// </summary>
         public bool IsOwner { get { return Username.ToLower() == Server.Owner.ToLower(); } }

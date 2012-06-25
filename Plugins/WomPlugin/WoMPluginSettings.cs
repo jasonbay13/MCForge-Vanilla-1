@@ -19,6 +19,7 @@ using MCForge.World;
 using MCForge.Core;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
+using MCForge.Groups;
 
 namespace Plugins.WoMPlugin
 {
