@@ -95,6 +95,8 @@ namespace MCForge_.Gui
 								MySQL.execute("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Date) VALUES (" + UID + ", " + x + ", " + y + ", " + z + ", '" + name + "', '" + finaldel + "', '" + time + "')");
 							}
 							//TODO Add zones, mb, and portals once those are in
+                            //Snowl panned them to be in the Level.ExtraData 
+                            //(it allows for portability of the .lvl so you can move it from server to server without requiring MySQL)
 						}
 						catch {
 							Console.ForegroundColor = ConsoleColor.Red;

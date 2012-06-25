@@ -34,14 +34,17 @@ namespace MCForge.Commands
 
         public void Use(Player p, string[] args)
         {
-            if (args.Length == 0) {
+            if (args.Length == 0)
+            {
                 if (Level.UnloadedLevels.Count == 0) { p.SendMessage("There are no unloaded levels!"); return; }
                 p.SendMessage("Unloaded levels:&4" + string.Join(", ", Level.UnloadedLevels));
                 if (Level.UnloadedLevels.Count > 50) { p.SendMessage("Use &b/unloaded <1/2/3> " + Server.DefaultColor + " for a more structured list!"); }
                 return;
             }
-            if (args.Length == 1) {
-                if (StringUtils.IsNumeric(args[0])) {
+            if (args.Length == 1)
+            {
+                if (StringUtils.IsNumeric(args[0]))
+                {
                     int end = int.Parse(args[0]) * 50, start = end - 50;
                     if (end >= Level.UnloadedLevels.Count) { end = Level.UnloadedLevels.Count - 1; }
                     string send = "";
@@ -49,32 +52,33 @@ namespace MCForge.Commands
                     if (send == "") { p.SendMessage(String.Format("There are no{0}unloaded levels!", int.Parse(args[0]) == 1 ? " " : " more ")); return; }
                     p.SendMessage("Unloaded levels from &b" + start + Server.DefaultColor + " to &b" + end + Server.DefaultColor + ": &4" + send);
                 }
-                else if (args[0].ToLower() == "count") {
+                else if (args[0].ToLower() == "count")
+                {
                     int count = Level.UnloadedLevels.Count;
                     p.SendMessage(String.Format("There {0} {1} unloaded level{2}!", count == 1 ? "is" : "are", count == 0 ? "no" : count.ToString(), count == 1 ? "" : "s"));
                 }
-                else {
+                else
+                {
                     string send = string.Join(", ", Level.UnloadedLevels.FindAll(name => name.Contains(args[0])));
                     if (send == "") { p.SendMessage("There are no unloaded levels containing &b" + args[0] + Server.DefaultColor + "!"); return; }
                     p.SendMessage("Unloaded levels containing &b" + args[0] + Server.DefaultColor + ": &4" + send);
                 }
             }
-            if (args.Length == 2) {
-                if (StringUtils.IsNumeric(args[1])) {
-                    try
-                    {
-                        string filter = args[0], send = "";
-                        int end = int.Parse(args[1]) * 50, start = end - 50;
-                        List<string> filtered = Level.UnloadedLevels.FindAll(name => name.Contains(filter));
-                        //if (end >= filtered.Count) { end = filtered.Count - 1; }
-                        for (int i = start - 1; i < end; i++) { send += i == end ? filtered[i] : filtered[i] + ", "; }
-                        if (send == "") { p.SendMessage(String.Format("There are no {0}unloaded levels containing &b" + filter + Server.DefaultColor + "!", int.Parse(args[1]) == 1 ? "" : "more ")); return; }
-                        p.SendMessage("Unloaded levels containing &b" + filter + Server.DefaultColor + "from &b" + start + Server.DefaultColor + " to &b" + end + Server.DefaultColor + ": &4" + send);
-                    }
-                    catch (Exception ex) { Logger.Log("HERE BITCH " + ex); }
-                    }
-                
-                else if (args[1] == "count") {
+            if (args.Length == 2)
+            {
+                if (StringUtils.IsNumeric(args[1]))
+                {
+                    string filter = args[0], send = "";
+                    int end = int.Parse(args[1]) * 50, start = end - 50;
+                    List<string> filtered = Level.UnloadedLevels.FindAll(name => name.Contains(filter));
+                    //if (end >= filtered.Count) { end = filtered.Count - 1; }
+                    for (int i = start - 1; i < end; i++) { send += i == end ? filtered[i] : filtered[i] + ", "; }
+                    if (send == "") { p.SendMessage(String.Format("There are no {0}unloaded levels containing &b" + filter + Server.DefaultColor + "!", int.Parse(args[1]) == 1 ? "" : "more ")); return; }
+                    p.SendMessage("Unloaded levels containing &b" + filter + Server.DefaultColor + "from &b" + start + Server.DefaultColor + " to &b" + end + Server.DefaultColor + ": &4" + send);
+                }
+
+                else if (args[1] == "count")
+                {
                     int count = Level.UnloadedLevels.FindAll(name => name.Contains(args[0])).Count;
                     p.SendMessage(String.Format("There {0} {1} unloaded level{2} containing &b" + args[0] + Server.DefaultColor + "!", count == 1 ? "is" : "are", count == 0 ? "no" : count.ToString(), count == 1 ? "" : "s"));
                 }
