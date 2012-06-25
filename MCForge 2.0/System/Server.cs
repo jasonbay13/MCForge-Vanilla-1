@@ -281,7 +281,8 @@ namespace MCForge.Core {
             LoadAllDlls.Init();
             Logger.Log("Finished loading DLL's", LogType.Debug);
             Logger.Log("Sending Heartbeat..", LogType.Debug);
-
+            Logger.Log("Auto-Updater Starting..", LogType.Debug);
+            Updater.InIt();
             HeartThread = new Thread(new ThreadStart(Heartbeat.ActivateHeartBeat));
             HeartThread.Start();
 

@@ -9,6 +9,7 @@
 using System;
 using System.Net;
 using System.Reflection;
+using System.Threading;
 using MCForge.Utils.Settings;
 using MCForge.Utils;
 using MCForge.API.Events;
@@ -30,6 +31,8 @@ namespace MCForge.Core
 		private static bool plugupdate = false;
 		
 		private static bool coreupdate = false;
+		
+		private static bool coreupdated = false;
 		
 		/// <summary>
 		/// If enabled, will check for core updates
@@ -120,7 +123,15 @@ namespace MCForge.Core
         }
         
         internal static void InIt() {
-            Server.AddTimedMethod(Tick, checkinterval * 60000, -1, null);
+            Thread check = new Thread(new ThreadStart(delegate
+                                                      {
+                                                          while(true)
+                                                          {
+                                                            Tick();
+                                                            Thread.Sleep(checkinterval * 60000);
+                                                          }
+                                                      }));
+            check.Start();
             Player.OnAllPlayersCommand.SystemLvl += new Event<Player, CommandEventArgs>.EventHandler(OnAllPlayersCommand_SystemLvl);
         }
 
@@ -132,117 +143,151 @@ namespace MCForge.Core
                         ManualUpdate(sender);
                     else
                         sender.SendMessage("No updates are ready for install..");
+                    args.Cancel();
                 }
             }
         }
         private static void ReloadCommands() {
+            Logger.Log("Reloading Plugins and Commands", LogType.Debug);
             Plugin.unloadAll();
 			Command.Commands.Clear();
 			LoadAllDlls.InitCommandsAndPlugins();
 			new MCForge.Interface.Command.CmdReloadCmds().Initialize();
         }
         private static void ManualUpdate(Player p) {
-            if (cmdupdate) {
-                p.SendMessage("Updating Commands..");
-                //TODO Download commands
-            }
-            
-            if (plugupdate) {
-                p.SendMessage("Downloading Plugins..");
-                //TODO Download plugins
-            }
-            
-            if (!coreupdate && (plugupdate || cmdupdate)) {
-                p.SendMessage("Reloading Commands and Plugins");
-                ReloadCommands();
-            }
-            
-            else if (coreupdate) {
-                if (Server.OnMono) {
-                    //Linux will allow us to replace the core dll while its running..
+            using (WebClient wc = new WebClient()) {
+                if (cmdupdate) {
+                    p.SendMessage("Updating Commands..");
+                    wc.DownloadFile("http://update.mcforge.net/DLL/Commands.dll", "Commands.dll");
                 }
-                else {
-                    //Windows will require an external updater
+                
+                if (plugupdate) {
+                    p.SendMessage("Downloading Plugins..");
+                    wc.DownloadFile("http://update.mcforge.net/DLL/Commands.dll", "Plugins.dll");
+                }
+                
+                if (!coreupdate && (plugupdate || cmdupdate)) {
+                    p.SendMessage("Reloading Commands and Plugins");
+                    ReloadCommands();
+                }
+                
+                else if (coreupdate) {
+                    if (Server.OnMono) {
+                        wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
+                        Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "MCForge has been updated!");
+                        Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Updates will be applied next restart.");
+                        Logger.Log("MCForge has been updated!", LogType.Critical);
+                        Logger.Log("Updates will be applied next restart.", LogType.Critical);
+                        coreupdated = true;
+                    }
+                    else {
+                        //TODO Windows you suck
+                    }
                 }
             }
+            cmdupdate = false;
+            plugupdate = false;
+            coreupdate = false;
         }
         
-        //UNDONE Needs to download updates
-        private static object Tick(object datapass) {
+        //UNDONE Windows needs to update
+        private static object Tick() {
             using (WebClient wc = new WebClient()) {
                 if (checkmisc) {
-                    //Check commands first
-                    Version cmdv = LoadAllDlls.LoadFile("Plugins.dll").GetName().Version;
-                    Version clastest = new Version(wc.DownloadString("http://update.mcforge.net/cmdv.txt"));
-                    if (clastest > cmdv) {
-                        if (silentupdate) {
-                            //TODO Download update
-                        }
-                        else if (autoupdate) {
-                            Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "An update for the Core Commands are available!");
-                            Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Downloading update..");
-                            //TODO Download update
-                        }
-                        else if (askbeforemisc) {
-                            cmdupdate = true;
-                            Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "An update for the Core Commands are available!");
-                            Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "To update, type /update");
+                    bool updated = false;
+                    if (!cmdupdate) {
+                        //Check commands first
+                        Logger.Log("Checking Commands for updates", LogType.Debug);
+                        Version cmdv = LoadAllDlls.LoadFile("Plugins.dll").GetName().Version;
+                        Version clastest = new Version(wc.DownloadString("http://update.mcforge.net/cmdv.txt"));
+                        if (clastest > cmdv) {
+                            updated = true;
+                            Logger.Log("Updates found, updating", LogType.Debug);
+                            if (silentupdate) {
+                                wc.DownloadFile("http://update.mcforge.net/DLL/Commands.dll", "Commands.dll");
+                            }
+                            else if (autoupdate) {
+                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "An update for the Core Commands are available!");
+                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Downloading update..");
+                                wc.DownloadFile("http://update.mcforge.net/DLL/Commands.dll", "Commands.dll");
+                            }
+                            else if (askbeforemisc) {
+                                cmdupdate = true;
+                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "An update for the Core Commands are available!");
+                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "To update, type /update");
+                            }
                         }
                     }
-                    //Check plugin system
-                    Version plugv = LoadAllDlls.LoadFile("Plugins.dll").GetName().Version;
-                    Version plastest = new Version(wc.DownloadString("http://update.mcforge.net/plugv.txt"));
-                    if (plastest > plugv) {
-                        if (silentupdate) {
-                            //TODO Download update
-                        }
-                        else if (autoupdate) {
-                            Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "An update for the Core Plugins are available!");
-                            Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Downloading update..");
-                            //TODO Download update
-                        }
-                        else if (askbeforemisc) {
-                            plugupdate = true;
-                            Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "An update for the Core Plugins are available!");
-                            Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "To update, type /update");
+                    if (!plugupdate) {
+                        //Check plugin system
+                        Logger.Log("Checking Plugins for updates", LogType.Debug);
+                        Version plugv = LoadAllDlls.LoadFile("Plugins.dll").GetName().Version;
+                        Version plastest = new Version(wc.DownloadString("http://update.mcforge.net/plugv.txt"));
+                        if (plastest > plugv) {
+                            updated = true;
+                            Logger.Log("Updates found, updating", LogType.Debug);
+                            if (silentupdate) {
+                                wc.DownloadFile("http://update.mcforge.net/DLL/Plugins.dll", "Plugins.dll");
+                            }
+                            else if (autoupdate) {
+                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "An update for the Core Plugins are available!");
+                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Downloading update..");
+                                wc.DownloadFile("http://update.mcforge.net/DLL/Commands.dll", "Plugins.dll");
+                            }
+                            else if (askbeforemisc) {
+                                plugupdate = true;
+                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "An update for the Core Plugins are available!");
+                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "To update, type /update");
+                            }
                         }
                     }
                     
                     //Reload the system if new updates were installed
-                    if ((silentupdate || autoupdate) && (clastest > cmdv || plastest > plugv))
+                    if ((silentupdate || autoupdate) && updated)
                         ReloadCommands();
                 }
                 
-                if (checkcore) {
-                    
+                if (checkcore && !coreupdated) {
+                    Logger.Log("Checking Core for updates", LogType.Debug);
                     //Check core
                     if (coreupdate && silentcoreupdate) {
                         if (Server.PlayerCount < (int)((double)(ServerSettings.GetSettingInt("MaxPlayers") / 4))) {
                             if (Server.OnMono) {
-                                
+                                wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
                             }
                             else {
-                                
+                                //TODO Windows you suck
                             }
                         }
                     }
                     Version corel = new Version(wc.DownloadString("http://update.mcforge.net/corev.txt"));
                     if (corel > Version) {
+                        Logger.Log("Updates found, updating", LogType.Debug);
                         coreupdate = true;
                         if (silentcoreupdate) {
                             if (Server.PlayerCount < (int)((double)(ServerSettings.GetSettingInt("MaxPlayers") / 4))) {
                                 if (Server.OnMono) {
-                                    
+                                    wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
                                 }
                                 else {
-                                    
+                                    //TODO Windows you suck
                                 }
                             }
                         }
                         else if (autoupdate) {
                             Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "An update for the Core is available!");
                             Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Downloading update..");
-                            //TODO Update the core
+                            if (Server.OnMono) {
+                                wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
+                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "MCForge has been updated!");
+                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Updates will be applied next restart.");
+                                Logger.Log("MCForge has been updated!", LogType.Critical);
+                                Logger.Log("Updates will be applied next restart.", LogType.Critical);
+                                coreupdated = true;
+                            }
+                            else {
+                                //TODO Windows you suck
+                            }
                         }
                         else {
                             Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "An update for the Core is available!");
