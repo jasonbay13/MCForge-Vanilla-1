@@ -60,6 +60,7 @@
     <Compile Include="Building\CmdSelect.cs" />
     <Compile Include="Information\CmdAbout.cs" />
     <Compile Include="Information\CmdLevels.cs" />
+    <Compile Include="Moderation\CmdPerBuild.cs" />
     <Compile Include="Information\CmdVips.cs" />
     <Compile Include="Misc\CmdCursor.cs" />
     <Compile Include="Misc\CmdFlipHead.cs" />
