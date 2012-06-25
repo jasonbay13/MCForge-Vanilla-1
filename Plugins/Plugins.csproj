@@ -12,6 +12,7 @@
     <AssemblyName>Plugins</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,7 +25,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -62,12 +62,12 @@
     <Compile Include="PluginMessageViewer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WomPlugin\CFGSettings.cs" />
+    <Compile Include="WomPlugin\CmdCompass.cs" />
     <Compile Include="WomPlugin\CmdNotify.cs" />
     <Compile Include="WomPlugin\PluginWomTextures.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="WomPlugin\WOM.cs" />
-    <Compile Include="WomPlugin\CmdCompass.cs" />
     <Compile Include="WomPlugin\WoMPluginSettings.cs" />
   </ItemGroup>
   <ItemGroup>
