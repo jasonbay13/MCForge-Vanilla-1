@@ -254,7 +254,7 @@ namespace MCForge.World {
                     else //Is a new MCForge level!
                     {
                         #region New MCForge Level
-                        byte version = 1;// Binary.ReadByte();
+                        byte version = Binary.ReadByte();
                         if (version == 1)
                         {
                         	string s = Binary.ReadString();
@@ -341,6 +341,7 @@ namespace MCForge.World {
 
             try {
                 Binary.Write(0x6567726f66636d); //Magic Number to make sure it is a compatible file.
+                Binary.Write(Version); //The level saving version
                 Binary.Write(Size.x + "@" + Size.y + "@" + Size.z);
                 Binary.Write(SpawnPos.x + "!" + SpawnPos.y + "!" + SpawnPos.z); //Unused
                 Binary.Write(SpawnRot[0] + "~" + SpawnRot[1]); //Unused
