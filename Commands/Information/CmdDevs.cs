@@ -24,21 +24,21 @@ namespace MCForge.Commands
         public CommandTypes Type { get { return CommandTypes.Information; } }
         public string Author { get { return "Arrem"; } }
         public int Version { get { return 1; } }
-        public string CUD { get { return ""; } }
+        public string CUD { get { return "com.mcforge.developers"; } }
         public byte Permission { get { return 0; } }
 
         public void Use(Player p, string[] args)
         {
-            string send = Colors.yellow + "MCForge Development Team: ";
+            string send = Colors.yellow + "MCForge Development Team: &9";
             foreach (string s in Server.Devs)
-                send += s + Colors.white + ", ";
+                send += s + Colors.white + ", &9";
             p.SendMessage(send.Remove(send.Length - 2, 2));
         }
 
         public void Help(Player p)
         {
-            p.SendMessage("/devs - Shows the MCForge Development Team");
-            p.SendMessage("Shortcut: /developers");
+            p.SendMessage("/developers - Shows the MCForge Development Team");
+            p.SendMessage("Shortcut: /devs");
         }
 
         public void Initialize()

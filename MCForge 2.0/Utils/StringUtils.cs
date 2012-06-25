@@ -50,7 +50,15 @@ namespace MCForge.Utils {
             }
             return source;
         }
-
+        /// <summary>
+        /// Checks if a string is numeric
+        /// </summary>
+        /// <param name="s">The string to check</param>
+        /// <returns></returns>
+        public static bool IsNumeric(string s) {
+            int parser;
+            return int.TryParse(s, out parser);
+        }
         /// <summary>
         /// Change the specified string to title case
         /// EX: String = "foo bar"

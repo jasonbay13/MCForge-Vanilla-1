@@ -51,13 +51,9 @@ namespace MCForge.Entity
                         UniversalChat(p.Color + p.Username + Server.DefaultColor + " has disconnected.");
                         p.GlobalDie();
                     }
-
-                    // http://i3.kym-cdn.com/entries/icons/original/000/007/423/untitle.JPG
-                    if (Server.ReviewList.Contains(p))
-                    {
+                    if (Server.ReviewList.Contains(p)) {
                         Server.ReviewList.Remove(p);
-                        foreach (Player pl in Server.ReviewList.ToArray())
-                        {
+                        foreach (Player pl in Server.ReviewList.ToArray()) {
                             int position = Server.ReviewList.IndexOf(pl);
                             if (position == 0) { pl.SendMessage("You're next in the review queue!"); continue; }
                             pl.SendMessage(position == 1 ? "There is 1 player in front of you!" : "There are " + position + " players in front of you!");

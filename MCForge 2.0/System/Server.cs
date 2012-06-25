@@ -298,7 +298,8 @@ namespace MCForge.Core {
                 ServerSettings.SetSetting("Main-Level", null, "main");
             }
             Level.Levels.Add(Mainlevel);
-            Level.LoadAllLevels();
+            //http://www.mcforge.net/forums/images/smilies/nobig.jpg
+            //Level.LoadAllLevels(); WHY WHY WHY WHY WHY WHY WHY WHY
 
             Backup.StartBackup();
 
