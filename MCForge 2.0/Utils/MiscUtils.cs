@@ -203,9 +203,9 @@ namespace MCForge.Utils {
             var cleanedMessage = key.ToString().MySqlEscape();
             if (dict.ContainsKey(cleanedMessage)) {
                 if (!p.IsInTable(cleanedMessage))
-                    Database.executeQuery("INSERT INTO extra (key, value, UID) VALUES ('" + cleanedMessage + "', '" + dict[cleanedMessage].ToString() + "', " + p.UID + ")");
+                    Database.executeQuery("INSERT INTO extra (setting, value, UID) VALUES ('" + cleanedMessage + "', '" + dict[cleanedMessage].ToString() + "', " + p.UID + ")");
                 else
-                    Database.executeQuery("UPDATE extra SET value='" + dict[cleanedMessage].ToString() + "' WHERE key='" + cleanedMessage + "' AND UID=" + p.UID);
+                    Database.executeQuery("UPDATE extra SET value='" + dict[cleanedMessage].ToString() + "' WHERE setting='" + cleanedMessage + "' AND UID=" + p.UID);
             }
         }
 
