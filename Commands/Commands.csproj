@@ -152,6 +152,7 @@
     <Compile Include="Moderation\CmdPlugins.cs" />
     <Compile Include="Moderation\CmdUnIPBan.cs" />
     <Compile Include="Moderation\CmdPerBuildMax.cs" />
+    <Compile Include="Moderation\PerVisitMax.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CmdTest.cs" />
   </ItemGroup>

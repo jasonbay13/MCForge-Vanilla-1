@@ -90,9 +90,10 @@ namespace MCForge.Commands
         public void Initialize()
         {
             Command.AddReference(this, "perbuild");
-            Player.OnAllPlayersBlockChange.Normal += new Event<Player, BlockChangeEventArgs>.EventHandler(OnAllPlayersBlockChange_Normal);
+            Player.OnAllPlayersBlockChange.Important += new Event<Player, BlockChangeEventArgs>.EventHandler(OnAllPlayersBlockChange);
+            Player.OnAllPlayersCommand.Important += new Event<Player, CommandEventArgs>.EventHandler(OnCommand);
         }
-        public void OnAllPlayersBlockChange_Normal(Player sender, BlockChangeEventArgs evt)
+        public void OnAllPlayersBlockChange(Player sender, BlockChangeEventArgs evt)
         {
             byte perBuild = 0;
 
@@ -112,6 +113,41 @@ namespace MCForge.Commands
             {
                 sender.SendMessage("You cannot build here");
                 evt.Cancel();
+            }
+        }
+
+        public void OnCommand(Player sender, CommandEventArgs e)
+        {
+            ICommand cmd = null;
+            try
+            {
+                cmd = Command.All[e.Command];
+            }
+            catch
+            {
+                return;
+            }
+
+            byte perBuild = 0;
+
+            if (sender.Level.ExtraData.ContainsKey("perbuild"))
+            {
+                try
+                {
+                    perBuild = (byte)sender.Level.ExtraData["perbuild"];
+                }
+                catch
+                {
+                    perBuild = 0;
+                }
+            }
+
+            if (cmd == null) return;
+
+            if (cmd.Type == CommandTypes.Building && sender.Group.Permission < perBuild)
+            {
+                sender.SendMessage("You cannot use building commands on this level!");
+                e.Cancel();
             }
         }
     }
