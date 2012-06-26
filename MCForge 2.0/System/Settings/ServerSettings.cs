@@ -63,6 +63,7 @@ namespace MCForge.Utils.Settings {
                     new SettingNode("DefaultGroup", "guest", "The name of the default group, if it doesn't exist it will cause problems"),
                     new SettingNode("Check-Core-Updates", "true", "Check for core updates"),
                     new SettingNode("Check-Misc-Updates", "true", "Check for plugin and command updates"),
+                    new SettingNode("Allow-Patch-Updates", "true", "Allow MCForge to download Patch updates to fix security flaws or other problems while updating."),
                     new SettingNode("Auto-Update", "false", "If enabled, commands, plugins, and the core will automatically update WITH notification (Ignored if silent-update is enabled)"),
                     new SettingNode("Silent-Update", "true", "If enabled, commands and plugins will be updated without notification"),
                     new SettingNode("Ask-Before-Core", "true", "If enabled, the server will ask before updating the core (Ignored if auto-update or silent-core-update is enabled)"),

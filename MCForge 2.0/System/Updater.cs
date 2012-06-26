@@ -18,6 +18,7 @@ using MCForge.Groups;
 using MCForge.Interface;
 using MCForge.Interface.Plugin;
 using MCForge.Interface.Command;
+using System.Diagnostics;
 
 namespace MCForge.Core
 {
@@ -40,6 +41,12 @@ namespace MCForge.Core
 		public static bool checkcore {
 		    get {
 		        return bool.Parse(ServerSettings.GetSetting("Check-Core-Updates"));
+		    }
+		}
+		
+		public static bool allowpatch {
+		    get {
+		        return bool.Parse(ServerSettings.GetSetting("Allow-Patch-Updates"));
 		    }
 		}
 		
@@ -173,15 +180,32 @@ namespace MCForge.Core
                 
                 else if (coreupdate) {
                     if (Server.OnMono) {
-                        wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
-                        Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "MCForge has been updated!");
-                        Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Updates will be applied next restart.");
-                        Logger.Log("MCForge has been updated!", LogType.Critical);
-                        Logger.Log("Updates will be applied next restart.", LogType.Critical);
-                        coreupdated = true;
+                        if (!allowpatch) {
+                            wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
+                            Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "MCForge has been updated!");
+                            Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Updates will be applied next restart.");
+                            Logger.Log("MCForge has been updated!", LogType.Critical);
+                            Logger.Log("Updates will be applied next restart.", LogType.Critical);
+                            coreupdated = true;
+                        }
+                        else {
+                            string args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                            Process process = new Process();
+                            process.StartInfo.FileName = "Updater.exe";
+                            process.StartInfo.Arguments = args;
+                            process.Start();
+                            System.Environment.Exit(0);
+                        }
                     }
                     else {
-                        //TODO Windows you suck
+                        string args = "";
+                        if (allowpatch)
+                            args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                        Process process = new Process();
+                        process.StartInfo.FileName = "Updater.exe";
+                        process.StartInfo.Arguments = args;
+                        process.Start();
+                        System.Environment.Exit(0);
                     }
                 }
             }
@@ -253,10 +277,27 @@ namespace MCForge.Core
                     if (coreupdate && silentcoreupdate) {
                         if (Server.PlayerCount < (int)((double)(ServerSettings.GetSettingInt("MaxPlayers") / 4))) {
                             if (Server.OnMono) {
-                                wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
+                                string args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                                if (allowpatch && args != "")
+                                {
+                                    Process process = new Process();
+                                    process.StartInfo.FileName = "Updater.exe";
+                                    process.StartInfo.Arguments = args;
+                                    process.Start();
+                                    System.Environment.Exit(0);
+                                }
+                                else
+                                    wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
                             }
                             else {
-                                //TODO Windows you suck
+                                string args = "";
+                                if (allowpatch)
+                                    args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                                Process process = new Process();
+                                process.StartInfo.FileName = "Updater.exe";
+                                process.StartInfo.Arguments = args;
+                                process.Start();
+                                System.Environment.Exit(0);
                             }
                         }
                     }
@@ -267,10 +308,27 @@ namespace MCForge.Core
                         if (silentcoreupdate) {
                             if (Server.PlayerCount < (int)((double)(ServerSettings.GetSettingInt("MaxPlayers") / 4))) {
                                 if (Server.OnMono) {
-                                    wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
+                                    string args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                                    if (allowpatch && args != "")
+                                    {
+                                        Process process = new Process();
+                                        process.StartInfo.FileName = "Updater.exe";
+                                        process.StartInfo.Arguments = args;
+                                        process.Start();
+                                        System.Environment.Exit(0);
+                                    }
+                                    else
+                                        wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
                                 }
                                 else {
-                                    //TODO Windows you suck
+                                    string args = "";
+                                    if (allowpatch)
+                                        args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                                    Process process = new Process();
+                                    process.StartInfo.FileName = "Updater.exe";
+                                    process.StartInfo.Arguments = args;
+                                    process.Start();
+                                    System.Environment.Exit(0);
                                 }
                             }
                         }
@@ -278,15 +336,33 @@ namespace MCForge.Core
                             Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "An update for the Core is available!");
                             Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Downloading update..");
                             if (Server.OnMono) {
-                                wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
-                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "MCForge has been updated!");
-                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Updates will be applied next restart.");
-                                Logger.Log("MCForge has been updated!", LogType.Critical);
-                                Logger.Log("Updates will be applied next restart.", LogType.Critical);
-                                coreupdated = true;
+                                string args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                                if (allowpatch && args != "")
+                                {
+                                    Process process = new Process();
+                                    process.StartInfo.FileName = "Updater.exe";
+                                    process.StartInfo.Arguments = args;
+                                    process.Start();
+                                    System.Environment.Exit(0);
+                                }
+                                else {
+                                    wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
+                                    Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "MCForge has been updated!");
+                                    Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Updates will be applied next restart.");
+                                    Logger.Log("MCForge has been updated!", LogType.Critical);
+                                    Logger.Log("Updates will be applied next restart.", LogType.Critical);
+                                    coreupdated = true;
+                                }
                             }
                             else {
-                                //TODO Windows you suck
+                                string args = "";
+                                if (allowpatch)
+                                    args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                                Process process = new Process();
+                                process.StartInfo.FileName = "Updater.exe";
+                                process.StartInfo.Arguments = args;
+                                process.Start();
+                                System.Environment.Exit(0);
                             }
                         }
                         else {
