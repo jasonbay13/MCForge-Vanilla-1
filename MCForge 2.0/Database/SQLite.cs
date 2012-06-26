@@ -35,7 +35,7 @@ namespace MCForge.SQL {
         protected bool _closed = true;
         public override void onLoad() {
             if (ServerSettings.GetSettingBoolean("SQLite-InMemory")) {
-                Logger.Log("Using memory database");
+                Logger.Log("Using memory database", LogType.Debug);
                 string dbpath = Application.StartupPath + "/" + ServerSettings.GetSetting("SQLite-Filepath");
                 connString = "Data Source = :memory:; Version = 3; Pooling =" + ServerSettings.GetSetting("SQLite-Pooling") + "; Max Pool Size =1000;";
                 Open();
@@ -59,7 +59,7 @@ namespace MCForge.SQL {
                 backup.Enabled = true;
             }
             else {
-                Logger.Log("Using file database");
+                Logger.Log("Using file database", LogType.Debug);
                 connString = "Data Source =\"" + Application.StartupPath + "/" + ServerSettings.GetSetting("SQLite-Filepath") + "\"; Version =3; Pooling =" + ServerSettings.GetSetting("SQLite-Pooling") + "; Max Pool Size =1000;";
                 Open();
             }

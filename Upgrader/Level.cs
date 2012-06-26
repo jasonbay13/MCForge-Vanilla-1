@@ -201,6 +201,7 @@ namespace MCForge.World {
 
             try {
                 Binary.Write(0x6567726f66636d); //Magic Number to make sure it is a compatible file.
+                Binary.Write(1); //The version
                 Binary.Write(Size.x + "@" + Size.y + "@" + Size.z);
                 Binary.Write(SpawnPos.x + "!" + SpawnPos.y + "!" + SpawnPos.z); //Unused
                 Binary.Write(SpawnRot[0] + "~" + SpawnRot[1]); //Unused
