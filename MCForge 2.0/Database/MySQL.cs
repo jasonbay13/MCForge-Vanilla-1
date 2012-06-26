@@ -67,8 +67,12 @@ namespace MCForge.SQL
 		{
 			try {
 				for (int i = 0; i < queryString.Length; i++) {
-					using (MySqlCommand cmd = new MySqlCommand(queryString[i], conn))
-						cmd.ExecuteNonQuery();
+		            using (MySqlCommand cmd = new MySqlCommand(queryString[i], conn))
+		            {
+		                if (queryString[i].IndexOf("CREATE DATABASE") != -1)
+		                    conn.ChangeDatabase(ServerSettings.GetSetting("MySQL-DBName"));
+		                cmd.ExecuteNonQuery();
+		            }
 				}
 			}
 			catch (Exception e)
