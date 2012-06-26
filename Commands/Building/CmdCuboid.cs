@@ -40,36 +40,38 @@ namespace MCForge.Commands
             main.cuboidType = SolidType.solid;
             switch (args.Length)
             {
-                case 0:
+                case -1:
+                    p.SendMessage("Invalid block or type!");
+                    return;
+                case 0: // No arguments
                     break;
                 case 1: // Block or Type ONLY
                     if (ValidSolidType(args[0]) || ValidBlockName(args[0]))
                         break;
-                    p.SendMessage("Invalid block or type!");
-                    return;
+                    goto case -1;
                 case 2: // Block AND Type
                     if (ValidSolidType(args[0]) || ValidSolidType(args[1]))
                         if (ValidBlockName(args[0]) || ValidBlockName(args[1]))
                             break;
-                    p.SendMessage("Invalid block or type!");
-                    return;
-                case 6:
+                    goto case -1;
+                case 6: // Coordinates ONLY
                     main.block = 1;
                     ParseCoordinates(p, args);
                     return;
-                case 7:
+                case 7: //Coordinates with Block OR Type
                     if (ValidSolidType(args[6]) || ValidBlockName(args[6]))
                         ParseCoordinates(p, args);
                     else
-                        p.SendMessage("Invalid block!");
+                        goto case -1;
                     return;
-                case 8:
+                case 8: //Coordinates with Block AND Type
                     if (ValidSolidType(args[6]) || ValidSolidType(args[7]))
                         if (ValidBlockName(args[6]) || ValidBlockName(args[7]))
+                        {
                             ParseCoordinates(p, args);
-                    else
-                        p.SendMessage("Invalid block or type!");
-                    return;
+                            return;
+                        }
+                    goto case -1;
                 default:
                     p.SendMessage("Invalid number of arguments!");
                     Help(p);
