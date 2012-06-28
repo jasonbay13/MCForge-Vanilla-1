@@ -1,5 +1,7 @@
 #MCForge Vanilla
 
+![MCForge Logo](http://www.mcforge.net/templates/enterprise/images/logo.png)
+
 Minecraft Classic Custom Server Software
 
 ##Important stuff for Modders / Forkers

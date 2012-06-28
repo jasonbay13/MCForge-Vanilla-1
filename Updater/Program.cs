@@ -79,7 +79,10 @@ namespace Updater
                         upgrade = bool.Parse(s.Split('=')[1].Trim());
                         break;
                     case "action":
-                        dlactions.Add(s.Split('=')[1].Trim());
+                        string value = s.Split('=')[1].Trim();
+                        if (value.IndexOf("http://") == -1)
+                            value = updateserver + "/Patch/" + value;
+                        dlactions.Add(value);
                         break;
                 }
             }
