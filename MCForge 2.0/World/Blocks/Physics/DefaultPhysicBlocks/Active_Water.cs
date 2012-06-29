@@ -30,14 +30,16 @@ namespace MCForge.World.Physics
         {
             get { return 80; }
         }
-        public Active_Water(int x, int y, int z, Level l)
-            : base(x, y, z, l)
+        public Active_Water(int x, int y, int z)
+            : base(x, y, z)
         {
-
         }
-        public override void Tick()
+        public override void Tick(Level l)
         {
-            throw new NotImplementedException();
+            if (l.GetBlock(X, Z, Y - 1) == Block.BlockList.AIR) {
+                Add(l, new Active_Water(X, Y - 1, Z));
+                l.BlockChange((ushort)X, (ushort)Z, (ushort)(Y - 1), this);
+            }
         }
     }
 }

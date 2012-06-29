@@ -29,6 +29,7 @@ using MCForge.Groups;
 using MCForge.Interfaces.Blocks;
 using System.Threading;
 using MCForge.Utils.Settings;
+using MCForge.World.Physics;
 
 namespace MCForge.World {
     /// <summary>
@@ -70,6 +71,8 @@ namespace MCForge.World {
         static Level() {
             Levels = new List<Level>();
         }
+        
+        public List<PhysicsBlock> pblocks = new List<PhysicsBlock>();
 
         public int PhysicsTick = 100;
         /// <summary>
@@ -425,6 +428,13 @@ namespace MCForge.World {
         public void BlockChange(ushort x, ushort z, ushort y, byte block, Player p = null) {
             if (y == Size.y) return;
             byte currentType = GetBlock(x, z, y);
+            if (block == 0) {
+                pblocks.ForEach(pb =>
+                                {
+                                    if (pb.X == x && pb.Y == y && pb.Z == z)
+                                        pblocks.Remove(pb);
+                                });
+            }
             if (currentType == 255) {
                     if (MCForge.Interfaces.Blocks.Block.DoAction(p, x, z, y, block, this)) {
                         //may the action caused the block to change, sending to all

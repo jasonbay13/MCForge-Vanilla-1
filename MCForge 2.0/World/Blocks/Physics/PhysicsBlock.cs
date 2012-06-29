@@ -31,20 +31,13 @@ namespace MCForge.World.Physics
         protected static Thread TimerTick;
 
         /// <summary>
-        /// A list of blocks
-        /// </summary>
-        protected static List<PhysicsBlock> Blocks = new List<PhysicsBlock>();
-
-        /// <summary>
         /// The on tick method
         /// </summary>
-        public abstract void Tick();
+        public abstract void Tick(Level l);
 
         int _x;
         int _y;
         int _z;
-        Level _l;
-        public virtual Level l { get { return _l; } }
         //TODO
         //Check to see if the new value is out of bound or not.
         /// <summary>
@@ -68,6 +61,7 @@ namespace MCForge.World.Physics
         /// The Z.
         /// </value>
         public virtual int Z { get { return _z; } set { _z = value; } }
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="PhysicsBlock"/> class.
         /// </summary>
@@ -75,22 +69,34 @@ namespace MCForge.World.Physics
         /// <param name="y">The y.</param>
         /// <param name="z">The z.</param>
         /// <param name="l">The l.</param>
-        public PhysicsBlock(int x, int y, int z, Level l) { this.X = x; this.Y = y; this.Z = z; this._l = l; }
+        public PhysicsBlock(int x, int y, int z) { this.X = x; this.Y = y; this.Z = z; }
+        
         /// <summary>
-        /// Removes this instance.
+        /// Remove this block from physics tick
         /// </summary>
-        public void Remove()
+        public void Remove(Level l) 
         {
-            Blocks.Remove(this);
+            l.pblocks.Remove(this);
         }
+        
         /// <summary>
-        /// Adds the block.
+        /// Add a block to the physics tick
         /// </summary>
-        /// <param name="block">The block.</param>
-        public void AddBlock(PhysicsBlock block)
+        /// <param name="l"></param>
+        public void Add(Level l, PhysicsBlock b)
         {
-            Blocks.Add(block);
+            l.pblocks.Add(this);
         }
+        
+        /// <summary>
+        /// Add a physicsblock to the custom block list
+        /// </summary>
+        /// <param name="b"></param>
+        public static void Add(PhysicsBlock b)
+        {
+            Block.Add(b);
+        }
+        
         /// <summary>
         /// Initializes physics block class
         /// </summary>
@@ -102,7 +108,10 @@ namespace MCForge.World.Physics
                     {
                         Level.Levels.ForEach(l =>
                         {
-                            Blocks.ForEach(b => { if (b.l == l) b.Tick(); });
+                            l.pblocks.ForEach(b => 
+                                {
+                                    b.Tick(l);
+                                });
                             Thread.Sleep(l.PhysicsTick);
                         });
                         Thread.Sleep(5);

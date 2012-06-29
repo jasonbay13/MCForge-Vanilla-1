@@ -75,7 +75,7 @@ namespace MCForge.World {
              new MossyCobbleStone(),
              new Obsidian()
     };
-        private static readonly List<Block> CustomBlockList = new List<Block>();
+        internal static readonly List<Block> CustomBlockList = new List<Block>();
         public abstract byte VisibleBlock { get; }
         public abstract string Name { get; }
         public abstract byte Permission { get; }
@@ -122,6 +122,16 @@ namespace MCForge.World {
                     return block;
             return UnknownBlock;
 
+        }
+        
+        public static Block NameToBlockType(string name) {
+            foreach (Block block in Blocks)
+                if (block.Name == name)
+                    return block;
+            foreach (Block block in CustomBlockList)
+                if (block.Name == name)
+                    return block;
+            return UnknownBlock;
         }
 
         /// <summary>

@@ -17,6 +17,7 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.World;
 using MCForge.Utils;
+using MCForge.World.Physics;
 
 namespace MCForge.Commands
 {
@@ -32,7 +33,7 @@ namespace MCForge.Commands
 
         public void Use(Player p, string[] args)
         {
-            byte b = Block.BlockList.UNKNOWN;
+            Block b = Block.BlockList.UNKNOWN;
             ushort x, z, y;
             Vector3S pos = p.Pos;
             try
@@ -79,6 +80,8 @@ namespace MCForge.Commands
             }
             p.Level.BlockChange(x, z, y, b);
             p.SendMessage("An " + ((Block)b).Name + " block was placed at (" + x + ", " + z + ", " + y + ").");
+            if (b.GetType() == typeof(PhysicsBlock))
+                p.Level.pblocks.Add(((PhysicsBlock)b));
         }
         public void Help(Player p)
         {
