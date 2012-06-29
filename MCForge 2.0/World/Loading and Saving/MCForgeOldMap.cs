@@ -38,8 +38,9 @@ namespace MCForge.World.Loading_and_Saving {
                     gs.Read(ver, 0, ver.Length);
                     ushort version = BitConverter.ToUInt16(ver, 0);
 
-                    if (version != 1874) //Is a old MCForge level!
-                        throw new Exception(path + " is not a valid MCForge Level");
+                    //if (version != 1874) //Is a old MCForge level!
+                    //    throw new Exception(path + " is not a valid MCForge Level");
+                    // Older levels WILL STILL WORK WITH THIS so you don't need this check. .dat files won't load though.
 
                     ushort[] vars = new ushort[6];
                     byte[] rot = new byte[2];

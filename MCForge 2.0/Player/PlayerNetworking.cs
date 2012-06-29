@@ -993,13 +993,7 @@ namespace MCForge.Entity
             pa.Add(_pos.z);
             pa.Add(Rot);
 
-            Server.ForeachPlayer(delegate(Player p)
-            {
-                if (p.Level == Level && p.IsLoggedIn && !p.IsLoading)
-                {
-                    p.SendPacket(pa);
-                }
-            });
+            SendPacket(pa);
         }
 
         internal void UpdatePosition(bool ForceTp)
@@ -1026,7 +1020,7 @@ namespace MCForge.Entity
             {
                 return; //No changes
             }
-            bool teleport = ForceTp || (Math.Abs(diffX) >= 127 || Math.Abs(diffY) >= 127 || Math.Abs(diffZ) >= 127);
+            bool teleport = ForceTp || (Math.Abs(diffX) >= 127 || Math.Abs(diffY) >= 127 || Math.Abs(diffZ) >= 127) || true; //Leave true untill issue 38 is fixed!
 
             Packet pa = new Packet();
             if (teleport)
