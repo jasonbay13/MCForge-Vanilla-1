@@ -34,6 +34,7 @@ namespace MCForge.World.Physics
             : base(x, y, z)
         {
         }
+        public Active_Water() {}
         public override void Tick(Level l)
         {
             if (l.GetBlock(X, Z, Y - 1) == Block.BlockList.AIR) {

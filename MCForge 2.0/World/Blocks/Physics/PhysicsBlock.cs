@@ -71,6 +71,8 @@ namespace MCForge.World.Physics
         /// <param name="l">The l.</param>
         public PhysicsBlock(int x, int y, int z) { this.X = x; this.Y = y; this.Z = z; }
         
+        public PhysicsBlock() : base() {}
+        
         /// <summary>
         /// Remove this block from physics tick
         /// </summary>
