@@ -52,6 +52,7 @@ namespace MCForge.Utils.Settings {
                     new SettingNode("Wom-Server_Flags", "[MCForge]", null),
                     new SettingNode("MoneyName", "moneys", "The name of the server currency."),
                     new SettingNode("ServerOwner", "Notch", "The username of the server owner."),
+                    new SettingNode("LoadAllLevels", "false", "Load all levels on startup."),
                     new SettingNode("Verifying", "false", "Do people need to use /pass upon login?"),
                     new SettingNode("VerifyGroup", "operator", "The name of the minimum group that needs to verify using /pass."),
                     new SettingNode("ShowFirstRunScreen", "true", "Whether or not to show the first run screen when the server is started."),

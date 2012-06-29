@@ -30,7 +30,16 @@ namespace MCForge.Commands
         public byte Permission { get { return 0; } }
         public void Use(Player p, string[] args)
         {
-            if (args.Length == 0) { Help(p); }
+            if (args.Length == 0)
+            {
+                string send = "Current groups: ";
+                foreach (PlayerGroup z in PlayerGroup.Groups)
+                {
+                    send = send + z.Color + z.Name + Server.DefaultColor + ", ";
+                }
+                p.SendMessage(send);
+                return;
+            }
             PlayerGroup group = PlayerGroup.Find(args[0]);
             if (group == null) { p.SendMessage("The rank \"" + args[0] + "\" doesn't exist!"); return; }
             try

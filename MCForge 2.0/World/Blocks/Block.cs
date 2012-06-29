@@ -177,7 +177,8 @@ namespace MCForge.World {
                 blockToCheck == BlockList.RED_FLOWER ||
                 blockToCheck == BlockList.RED_MUSHROOM ||
                 blockToCheck == BlockList.YELLOW_FLOWER ||
-                blockToCheck == BlockList.BROWN_MUSHROOM);
+                blockToCheck == BlockList.BROWN_MUSHROOM ||
+                blockToCheck == BlockList.SAPLING);
         }
 
         public static bool CanEscalate(byte blockToCheck) {
