@@ -38,9 +38,9 @@ namespace MCForge.Robot
 
         //AStar Variables
         public BreadCrumb Waypoint = null;
-        public int WaypointAmount = 999;
         public int shouldCheckAgainLoopInt = 1000;
         public int intLoop = 0;
+        public Vector3S LastPos = new Vector3S(0, 0, 0);
         public BotMap LevelMap;
         public Dictionary<string, int> BlackListPlayers;
 
@@ -48,7 +48,7 @@ namespace MCForge.Robot
         {
             get
             {
-                if (shouldCheckAgainLoopInt > 999 || shouldCheckAgainLoopInt == WaypointAmount)
+                if (shouldCheckAgainLoopInt > 999)
                 {
                     shouldCheckAgainLoopInt = 0;
                     return true;
@@ -126,6 +126,10 @@ namespace MCForge.Robot
                                         HitAPlayer = true;
                                         ClosestLocation = new Vector3S(p.Pos);
                                         PlayerName = p.Username;
+                                        if (Math.Abs((ClosestLocation.x / 32) - (Bot.LastPos.x / 32)) >= 12 || Math.Abs((ClosestLocation.z / 32) - (Bot.LastPos.z / 32)) >= 12)
+                                        {
+                                            Bot.shouldCheckAgainLoopInt = 1000;
+                                        }
                                     }
                                 }
                             }
@@ -143,6 +147,7 @@ namespace MCForge.Robot
                             if (Bot.shouldCheckAgain || Bot.Waypoint == null)
                             {
                                 Bot.Waypoint = Pathfind(Bot, ClosestLocation);
+                                Bot.LastPos = ClosestLocation;
                             }
                             try
                             {
@@ -152,7 +157,7 @@ namespace MCForge.Robot
                             }
                             catch
                             {
-                                Bot.shouldCheckAgainLoopInt = 0;
+                                Bot.shouldCheckAgainLoopInt = 1000;
                                 try
                                 {
                                     Bot.BlackListPlayers.Add(PlayerName, Bot.shouldCheckAgainLoopInt);
@@ -161,10 +166,9 @@ namespace MCForge.Robot
                                 break;
                             }
 
-                            if (Bot.intLoop >= 1) //Slows down the bots so they arent insta-propogate, it slows them a bit too much though, need to fix
+                            if (Bot.intLoop >= 2) //Slows down the bots so they arent insta-propogate, it slows them a bit too much though, need to fix
                             {                     //Also makes them a bit less accurate than instant, but much more accurate than Vector2D.Move()
                                 Bot.intLoop = 0;
-                                Bot.shouldCheckAgainLoopInt++;
                                 Bot.Waypoint = Bot.Waypoint.next;
                             }
                             else
@@ -190,26 +194,22 @@ namespace MCForge.Robot
                                 && !Block.CanEscalate(Block1) && !Block.CanEscalate(Block2))
                             {
                                 TemporaryLocation.y -= 21;
-                                Bot.shouldCheckAgainLoopInt = 1000;
                             }
 
                             if (Block.CanWalkThrough(Block1) && !Block.CanWalkThrough(Block2) && !Block.CanWalkThrough(BlockUnderneath))
                             {
                                 TemporaryLocation.y += 21;
-                                Bot.shouldCheckAgainLoopInt = 1000;
                             }
                             else if (Block.CanEscalate(Block1) && Block.CanEscalate(Block2) && Pathfound.y > TemporaryLocation.y)
                             {
                                 TemporaryLocation.y += 21;
-                                Bot.shouldCheckAgainLoopInt = 1000;
                             }
                             else if (Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath) && Pathfound.y > TemporaryLocation.y && !Block.IsOPBlock(BlockUnderneath))
                             {
                                 TemporaryLocation.y += 21;
-                                Bot.shouldCheckAgainLoopInt = 1000;
                                 Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) - 2), 1);
                             }
-                            else if (!Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath) && !Block.IsOPBlock(BlockAbove)) 
+                            else if (!Block.CanWalkThrough(BlockAbove) && !Block.CanWalkThrough(BlockUnderneath) && !Block.IsOPBlock(BlockAbove))
                             {
                                 Bot.Player.Level.BlockChange((ushort)(TemporaryLocation.x / 32), (ushort)(TemporaryLocation.z / 32), (ushort)((TemporaryLocation.y / 32) + 1), 0);
                             }
@@ -238,10 +238,6 @@ namespace MCForge.Robot
                             {
                                 TemporaryLocation = TempLocation;
                             }
-                        }
-                        else
-                        {
-                            Bot.shouldCheckAgainLoopInt += 1;
                         }
                     }
 
