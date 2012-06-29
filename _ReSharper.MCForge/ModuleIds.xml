@@ -1,0 +1,8 @@
+<Modules>
+  <Module PersistentId="EDC9892F-BBA2-4043-9FD9-94C0BA7D9552" ModuleId="MCForge" />
+  <Module PersistentId="12597DB0-7C34-4DE1-88EA-9250FF3372EB" ModuleId="Upgrader" />
+  <Module PersistentId="2BA59FB7-13B4-42A7-A915-F68B2032EE7C" ModuleId="Console" />
+  <Module PersistentId="48C20652-75A0-487A-926D-53696D1F7DB4" ModuleId="Plugins" />
+  <Module PersistentId="28D68717-95A5-4ACF-B232-EB2FDE8B8AD5" ModuleId="Commands" />
+  <Module PersistentId="64D2BDDC-F51C-487E-A4CB-6AA2A4E2D284" ModuleId="Gui" />
+</Modules>

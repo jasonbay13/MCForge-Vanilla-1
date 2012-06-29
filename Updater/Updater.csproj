@@ -59,7 +59,9 @@
     <Compile Include="Action\Default Actions\Download Action.cs" />
     <Compile Include="Action\Default Actions\Normal Update.cs" />
     <Compile Include="Action\IAction.cs" />
-    <Compile Include="MainForm.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
@@ -81,10 +83,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Action" />
-    <Folder Include="Action\Default Actions" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>

@@ -138,7 +138,7 @@ namespace MCForge.Core
                                                             Thread.Sleep(checkinterval * 60000);
                                                           }
                                                       }));
-            check.Start();
+            //check.Start();
             Player.OnAllPlayersCommand.SystemLvl += new Event<Player, CommandEventArgs>.EventHandler(OnAllPlayersCommand_SystemLvl);
         }
 

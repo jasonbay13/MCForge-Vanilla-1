@@ -18,6 +18,8 @@ using System.Net.Sockets;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using MCForge.Interface.Command;
+using MCForge.Interfaces;
 using MCForge.Utils;
 using MCForge.Core;
 using MCForge.Entity;
@@ -46,6 +48,8 @@ namespace MCForge.Core
         string line;
         public List<string> ircControllers;
         string[] splitLine;
+        private static ConsolePlayer cp;
+        private static CommandIO cio = new CommandIO();
 
         public IRC() { }
 
@@ -81,6 +85,8 @@ namespace MCForge.Core
             swrite.Flush();
             swrite.WriteLine("NICK {0}", nickname);
             swrite.Flush();
+
+            cp = new ConsolePlayer(cio);
 
             while (botOn)
             {
@@ -137,6 +143,27 @@ namespace MCForge.Core
                             swrite.WriteLine("PRIVMSG {0} :" + "The url for the server is: " + Server.URL,
                                          replyChannel);
                             swrite.Flush();
+                        }
+                        else if (GetSpokenLine(line).StartsWith("!"))
+                        {
+                            if (line.Trim().Length > 1)
+                            {
+                                string name = line.Trim().Substring(1);
+                                ICommand c = Command.Find(name);
+                                if (c != null)
+                                {
+                                    int i = line.Trim().IndexOf(" ");
+                                    if (i > 0)
+                                    {
+                                        string[] cargs = line.Trim().Substring(i + 1).Split(' ');
+                                        c.Use(cp, cargs);
+                                    }
+                                    else
+                                    {
+                                        c.Use(cp, new string[0]);
+                                    }
+                                }
+                            }
                         }
                         else if (line.ToLower().Contains("privmsg") && splitLine[1] != "005")
                         {
@@ -254,5 +281,20 @@ namespace MCForge.Core
             }
         }
 
+        class CommandIO : IIOProvider
+        {
+            public string ReadLine()
+            {
+                if (Console.CursorLeft != 0) Console.WriteLine();
+                Console.Write("CIO input: ");
+                return "lol";
+            }
+
+            public void WriteLine(string line)
+            {
+                if (Console.CursorLeft != 0) Console.WriteLine();
+                Console.WriteLine("CIO output: " + line);
+            }
+        }
     }
 }
