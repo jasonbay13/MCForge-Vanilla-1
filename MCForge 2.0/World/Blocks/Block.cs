@@ -33,7 +33,9 @@ namespace MCForge.World {
              new Wood(),
              new Shrub(),
              new Adminium(),
+             new Active_Water(),
              new Water(),
+             new Active_Lava(),
              new Lava(),
              new Sand(),
              new Gravel(),
@@ -71,9 +73,7 @@ namespace MCForge.World {
              new TNT(),
              new Bookcase(),
              new MossyCobbleStone(),
-             new Obsidian(),
-             new Active_Water(),
-             new Active_Lava()
+             new Obsidian()
     };
         internal static readonly List<Block> CustomBlockList = new List<Block>();
         public abstract byte VisibleBlock { get; }
