@@ -28,6 +28,7 @@ using MCForge.SQL;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
+using MCForge.World.Physics;
 
 namespace MCForge.Core {
     public static class Server {
@@ -285,7 +286,8 @@ namespace MCForge.Core {
             Updater.InIt();
             HeartThread = new Thread(new ThreadStart(Heartbeat.ActivateHeartBeat));
             HeartThread.Start();
-
+            Logger.Log("Starting Physics Tick..", LogType.Debug);
+            PhysicsBlock.InIt();
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
 

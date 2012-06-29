@@ -80,8 +80,12 @@ namespace MCForge.Commands
             }
             p.Level.BlockChange(x, z, y, b);
             p.SendMessage("An " + ((Block)b).Name + " block was placed at (" + x + ", " + z + ", " + y + ").");
-            if (b.GetType() == typeof(PhysicsBlock))
+            if (b.GetType() == typeof(PhysicsBlock)) {
+                ((PhysicsBlock)b).X = x;
+                ((PhysicsBlock)b).Y = y;
+                ((PhysicsBlock)b).Z = z;
                 p.Level.pblocks.Add(((PhysicsBlock)b));
+            }
         }
         public void Help(Player p)
         {

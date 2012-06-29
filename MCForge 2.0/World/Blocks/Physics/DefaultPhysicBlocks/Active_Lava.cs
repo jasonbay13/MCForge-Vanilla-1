@@ -35,6 +35,7 @@ namespace MCForge.World.Physics
         {
 
         }
+        public Active_Lava() {}
         public override void Tick(Level l)
         {
             throw new NotImplementedException();

@@ -171,8 +171,6 @@
     <Compile Include="Utils\Vector3S.cs" />
     <Compile Include="World\Blocks\BlockChange.cs" />
     <Compile Include="World\Blocks\Custom\Griefer_stone.cs" />
-    <Compile Include="World\Blocks\DefaultBlocks\ActiveLava.cs" />
-    <Compile Include="World\Blocks\DefaultBlocks\ActiveWater.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Black.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Blue.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\BlueViolet.cs" />
