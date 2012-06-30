@@ -295,28 +295,28 @@ namespace MCForge.Core
         public static void ClassicToIRC(StringBuilder sb)
         {
             if (sb == null) throw new ArgumentNullException("sb");
-            sb.Replace("&0", "1");
-            sb.Replace("&1", "2");
-            sb.Replace("&2", "3");
-            sb.Replace("&3", "10");
-            sb.Replace("&4", "4");
-            sb.Replace("&5", "6");
-            sb.Replace("&6", "8");
-            sb.Replace("&7", "15");
-            sb.Replace("&8", "14");
-            sb.Replace("&9", "12");
-            sb.Replace("&a", "9");
-            sb.Replace("&b", "11");
-            sb.Replace("&c", "4");
-            sb.Replace("&d", "13");
-            sb.Replace("&e", "7");
-            sb.Replace("&f", "0");
-            sb.Replace("&A", "9");
-            sb.Replace("&B", "11");
-            sb.Replace("&C", "4");
-            sb.Replace("&D", "13");
-            sb.Replace("&E", "7");
-            sb.Replace("&F", "0");
+            sb.Replace("&0", '\x03' + "1");
+            sb.Replace("&1", '\x03' + "2");
+            sb.Replace("&2", '\x03' + "3");
+            sb.Replace("&3", '\x03' + "10");
+            sb.Replace("&4", '\x03' + "4");
+            sb.Replace("&5", '\x03' + "6");
+            sb.Replace("&6", '\x03' + "8");
+            sb.Replace("&7", '\x03' + "15");
+            sb.Replace("&8", '\x03' + "14");
+            sb.Replace("&9", '\x03' + "12");
+            sb.Replace("&a", '\x03' + "9");
+            sb.Replace("&b", '\x03' + "11");
+            sb.Replace("&c", '\x03' + "4");
+            sb.Replace("&d", '\x03' + "13");
+            sb.Replace("&e", '\x03' + "7");
+            sb.Replace("&f", '\x03' + "0");
+            sb.Replace("&A", '\x03' + "9");
+            sb.Replace("&B", '\x03' + "11");
+            sb.Replace("&C", '\x03' + "4");
+            sb.Replace("&D", '\x03' + "13");
+            sb.Replace("&E", '\x03' + "7");
+            sb.Replace("&F", '\x03' + "0");
         }
 
         public static string IRCToClassic(string message)
@@ -330,28 +330,28 @@ namespace MCForge.Core
         public static void IRCToClassic(StringBuilder sb)
         {
             if (sb == null) throw new ArgumentNullException("sb");
-            sb.Replace("1", "&0");
-            sb.Replace("2", "&1");
-            sb.Replace("3", "&2");
-            sb.Replace("10", "&3");
-            sb.Replace("4", "&4");
-            sb.Replace("6", "&5");
-            sb.Replace("8", "&6");
-            sb.Replace("15", "&7");
-            sb.Replace("14","&8");
-            sb.Replace("12","&9");
-            sb.Replace("9", "&a");
-            sb.Replace("11", "&b");
-            sb.Replace("4", "&c");
-            sb.Replace("13", "&d");
-            sb.Replace("7", "&e");
-            sb.Replace("0","&f");
-            sb.Replace("9", "&A");
-            sb.Replace("11","&B");
-            sb.Replace("4", "&C");
-            sb.Replace("13", "&D");
-            sb.Replace("7", "&E");
-            sb.Replace("0", "&F");
+            sb.Replace('\x03' + "1", "&0");
+            sb.Replace('\x03' + "2", "&1");
+            sb.Replace('\x03' + "3", "&2");
+            sb.Replace('\x03' + "10", "&3");
+            sb.Replace('\x03' + "4", "&4");
+            sb.Replace('\x03' + "6", "&5");
+            sb.Replace('\x03' + "8", "&6");
+            sb.Replace('\x03' + "15", "&7");
+            sb.Replace('\x03' + "14","&8");
+            sb.Replace('\x03' + "12","&9");
+            sb.Replace('\x03' + "9", "&a");
+            sb.Replace('\x03' + "11", "&b");
+            sb.Replace('\x03' + "4", "&c");
+            sb.Replace('\x03' + "13", "&d");
+            sb.Replace('\x03' + "7", "&e");
+            sb.Replace('\x03' + "0","&f");
+            sb.Replace('\x03' + "9", "&A");
+            sb.Replace('\x03' + "11","&B");
+            sb.Replace('\x03' + "4", "&C");
+            sb.Replace('\x03' + "13", "&D");
+            sb.Replace('\x03' + "7", "&E");
+            sb.Replace('\x03' + "0", "&F");
         }
 
         class CommandIO : IIOProvider
