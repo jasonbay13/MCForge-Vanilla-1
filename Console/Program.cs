@@ -226,5 +226,10 @@ namespace MCForge.Core {
             if (Console.CursorLeft != 0) Console.WriteLine();
             Console.WriteLine("CIO output: " + line);
         }
+
+        public void WriteLine(string line, string replyChannel)
+        {
+            
+        }
     }
 }

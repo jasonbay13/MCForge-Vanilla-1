@@ -18,6 +18,7 @@ using System.Net.Sockets;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using MCForge.Interface.Command;
 using MCForge.Interfaces;
 using MCForge.Utils;
@@ -36,7 +37,7 @@ namespace MCForge.Core
         string server = "";
         string password = "";
         int port = -1;
-        string channel = "";
+        public string channel = "";
         public string opChannel = "";
         StreamWriter swrite;
         StreamReader sread;
@@ -146,20 +147,22 @@ namespace MCForge.Core
                         }
                         else if (GetSpokenLine(line).StartsWith("!"))
                         {
-                            if (line.Trim().Length > 1)
+                            if (GetSpokenLine(line).Trim().Length > 1)
                             {
-                                string name = line.Trim().Substring(1);
+                                string name = GetSpokenLine(line).Trim().Substring(1);
                                 ICommand c = Command.Find(name);
                                 if (c != null)
                                 {
-                                    int i = line.Trim().IndexOf(" ");
+                                    int i = GetSpokenLine(line).Trim().IndexOf(" ");
                                     if (i > 0)
                                     {
-                                        string[] cargs = line.Trim().Substring(i + 1).Split(' ');
+                                        string[] cargs = GetSpokenLine(line).Trim().Substring(i + 1).Split(' ');
+                                        cp.replyChannel = replyChannel;
                                         c.Use(cp, cargs);
                                     }
                                     else
                                     {
+                                        cp.replyChannel = replyChannel;
                                         c.Use(cp, new string[0]);
                                     }
                                 }
@@ -171,8 +174,8 @@ namespace MCForge.Core
                             {
                                 try
                                 {
-                                    Player.UniversalChat("[IRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
-                                    Logger.Log("[IRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
+                                    Player.UniversalChat("[IRC] <" + GetUsernameSpeaking(line) + ">: " + IRCToClassic(GetSpokenLine(line)));
+                                    Logger.Log("[IRC] <" + GetUsernameSpeaking(line) + ">: " + IRCToClassic(GetSpokenLine(line)));
                                 }
                                 catch { }
                             }
@@ -180,8 +183,8 @@ namespace MCForge.Core
                             {
                                 try
                                 {
-                                    Player.UniversalChatOps("[OPIRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
-                                    Logger.Log("[OPIRC] <" + GetUsernameSpeaking(line) + ">: " + GetSpokenLine(line));
+                                    Player.UniversalChatOps("[OPIRC] <" + GetUsernameSpeaking(line) + ">: " + IRCToClassic(GetSpokenLine(line)));
+                                    Logger.Log("[OPIRC] <" + GetUsernameSpeaking(line) + ">: " + IRCToClassic(GetSpokenLine(line)));
                                 }
                                 catch { }
                             }
@@ -229,14 +232,14 @@ namespace MCForge.Core
         public void SendMessage(string str)
         {
             if (!connected) return;
-            swrite.WriteLine("PRIVMSG {0} :" + str, channel);
+            swrite.WriteLine("PRIVMSG {0} :" + ClassicToIRC(str), channel);
             swrite.Flush();
         }
 
         public void SendUserMessage(string str, string channel)
         {
             if (!connected) return;
-            swrite.WriteLine("PRIVMSG {0} :" + str, channel);
+            swrite.WriteLine("PRIVMSG {0} :" + ClassicToIRC(str), channel);
             swrite.Flush();
         }
 
@@ -281,19 +284,91 @@ namespace MCForge.Core
             }
         }
 
+        public static string ClassicToIRC(string message)
+        {
+            if (message == null) throw new ArgumentNullException("message");
+            StringBuilder sb = new StringBuilder(message);
+            ClassicToIRC(sb);
+            return sb.ToString();
+        }
+
+        public static void ClassicToIRC(StringBuilder sb)
+        {
+            if (sb == null) throw new ArgumentNullException("sb");
+            sb.Replace("&0", "1");
+            sb.Replace("&1", "2");
+            sb.Replace("&2", "3");
+            sb.Replace("&3", "10");
+            sb.Replace("&4", "4");
+            sb.Replace("&5", "6");
+            sb.Replace("&6", "8");
+            sb.Replace("&7", "15");
+            sb.Replace("&8", "14");
+            sb.Replace("&9", "12");
+            sb.Replace("&a", "9");
+            sb.Replace("&b", "11");
+            sb.Replace("&c", "4");
+            sb.Replace("&d", "13");
+            sb.Replace("&e", "7");
+            sb.Replace("&f", "0");
+            sb.Replace("&A", "9");
+            sb.Replace("&B", "11");
+            sb.Replace("&C", "4");
+            sb.Replace("&D", "13");
+            sb.Replace("&E", "7");
+            sb.Replace("&F", "0");
+        }
+
+        public static string IRCToClassic(string message)
+        {
+            if (message == null) throw new ArgumentNullException("message");
+            StringBuilder sb = new StringBuilder(message);
+            IRCToClassic(sb);
+            return sb.ToString();
+        }
+
+        public static void IRCToClassic(StringBuilder sb)
+        {
+            if (sb == null) throw new ArgumentNullException("sb");
+            sb.Replace("1", "&0");
+            sb.Replace("2", "&1");
+            sb.Replace("3", "&2");
+            sb.Replace("10", "&3");
+            sb.Replace("4", "&4");
+            sb.Replace("6", "&5");
+            sb.Replace("8", "&6");
+            sb.Replace("15", "&7");
+            sb.Replace("14","&8");
+            sb.Replace("12","&9");
+            sb.Replace("9", "&a");
+            sb.Replace("11", "&b");
+            sb.Replace("4", "&c");
+            sb.Replace("13", "&d");
+            sb.Replace("7", "&e");
+            sb.Replace("0","&f");
+            sb.Replace("9", "&A");
+            sb.Replace("11","&B");
+            sb.Replace("4", "&C");
+            sb.Replace("13", "&D");
+            sb.Replace("7", "&E");
+            sb.Replace("0", "&F");
+        }
+
         class CommandIO : IIOProvider
         {
             public string ReadLine()
             {
-                if (Console.CursorLeft != 0) Console.WriteLine();
-                Console.Write("CIO input: ");
-                return "lol";
+                return "";
             }
 
-            public void WriteLine(string line)
+            public void WriteLine(string s)
             {
-                if (Console.CursorLeft != 0) Console.WriteLine();
-                Console.WriteLine("CIO output: " + line);
+                
+            }
+
+            public void WriteLine(string line, string replyChannel)
+            {
+                Server.IRC.SendUserMessage(line, replyChannel);
             }
         }
     }

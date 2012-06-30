@@ -144,9 +144,13 @@ namespace MCForge.Entity {
             return null;
         }
         private IIOProvider IO;
+        public string replyChannel =  "";
 
         public override void SendMessage(string message) {
-            IO.WriteLine(message);
+            if (String.IsNullOrWhiteSpace(replyChannel))
+                IO.WriteLine(message);
+            else
+                IO.WriteLine(message, replyChannel);
         }
     }
 }
