@@ -6,6 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+//#define UPDATE //Use this to test updater in DEBUG mode
 using System;
 using System.Net;
 using System.Reflection;
@@ -40,13 +41,19 @@ namespace MCForge.Core
 		/// </summary>
 		public static bool checkcore {
 		    get {
-		        return bool.Parse(ServerSettings.GetSetting("Check-Core-Updates"));
+#if DEBUG && !UPDATE
+                return false;
+#endif
+		        return ServerSettings.GetSettingBoolean("Check-Core-Updates");
 		    }
 		}
 		
 		public static bool allowpatch {
-		    get {
-		        return bool.Parse(ServerSettings.GetSetting("Allow-Patch-Updates"));
+            get {
+#if DEBUG && !UPDATE
+                return false;
+#endif
+		        return ServerSettings.GetSettingBoolean("Allow-Patch-Updates");
 		    }
 		}
 		
@@ -54,16 +61,22 @@ namespace MCForge.Core
 		/// If enabled, will check for plugin and command updates
 		/// </summary>
 		public static bool checkmisc {
-		    get {
-		        return bool.Parse(ServerSettings.GetSetting("Check-Misc-Updates"));
+            get {
+#if DEBUG && !UPDATE
+                return false;
+#endif
+		        return ServerSettings.GetSettingBoolean("Check-Misc-Updates");
 		    }
 		}
 		/// <summary>
 		/// If true, commands, plugins, and the core will automatically update WITH notification
 		/// </summary>
 		public static bool autoupdate {
-			get {
-				return bool.Parse(ServerSettings.GetSetting("Auto-Update"));
+            get {
+#if DEBUG && !UPDATE
+                return false;
+#endif
+				return ServerSettings.GetSettingBoolean("Auto-Update");
 			}
 		}
 		
@@ -71,8 +84,11 @@ namespace MCForge.Core
 		/// If true, commands and plugins will be updated without notification
 		/// </summary>
 		public static bool silentupdate {
-			get {
-				return bool.Parse(ServerSettings.GetSetting("Silent-Update"));
+            get {
+#if DEBUG && !UPDATE
+                return false;
+#endif
+				return ServerSettings.GetSettingBoolean("Silent-Update");
 			}
 		}
 		
@@ -82,8 +98,11 @@ namespace MCForge.Core
 		/// If silentupdate or autoupdate is enabled, then this setting is ignored
 		/// </summary>
 		public static bool askbefore {
-			get {
-		        return bool.Parse(ServerSettings.GetSetting("Ask-Before-Core"));
+            get {
+#if DEBUG && !UPDATE
+                return true;
+#endif
+		        return ServerSettings.GetSettingBoolean("Ask-Before-Core");
 			}
 		}
 		
@@ -94,7 +113,10 @@ namespace MCForge.Core
 		/// </summary>
 		public static bool askbeforemisc {
 			get {
-		        return bool.Parse(ServerSettings.GetSetting("Ask-Before-Misc"));
+#if DEBUG && !UPDATE
+                return true;
+#endif
+		        return ServerSettings.GetSettingBoolean("Ask-Before-Misc");
 			}
 		}
 		
@@ -102,8 +124,11 @@ namespace MCForge.Core
 		/// If enabled, the server will attempt to udpate when server activity is low
 		/// </summary>
 		public static bool silentcoreupdate {
-		    get {
-		        return bool.Parse(ServerSettings.GetSetting("Silent-Core-Update"));
+            get {
+#if DEBUG && !UPDATE
+                return false;
+#endif
+		        return ServerSettings.GetSettingBoolean("Silent-Core-Update");
 		    }
 		}
 		
@@ -130,13 +155,19 @@ namespace MCForge.Core
         }
         
         internal static void InIt() {
+
+#if DEBUG && !UPDATE
+            return;
+#endif
             Thread check = new Thread(new ThreadStart(delegate
                                                       {
                                                           while(true)
                                                           {
                                                             if (InetUtils.CanConnectToInternet())
                                                                 Tick();
-                                                            Thread.Sleep(checkinterval * 60000);
+                                                            Thread.Sleep(checkinterval * 60000); 
+                                                             //This could keep the Process open for a long time after closing the program
+                                                             //TODO: ThreadHelper.longsleep(int millis) breaking on severshutdown after checking every 5s
                                                           }
                                                       }));
             check.Start();
