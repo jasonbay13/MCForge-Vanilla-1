@@ -106,7 +106,7 @@ namespace MCForge.World.Physics
         {
             TimerTick = new Thread(new ParameterizedThreadStart(delegate
                 {
-                    while (true)
+                    while (!Server.ShuttingDown)
                     {
                         Level.Levels.ForEach(l =>
                         {

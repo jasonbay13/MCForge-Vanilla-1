@@ -393,8 +393,22 @@ namespace MCForge.Entity
                     needsOwnPos = true;
                 }
                 else {
-                    Pos = eargs.ToPosition;
-                    oldPos = eargs.FromPosition;
+                    if (eargs.ToPosition / 32 != eargs.FromPosition / 32) {
+                        eargs = OnPlayerBigMove.Call(this, eargs, OnAllPlayersBigMove);
+                        if (eargs.Canceled) {
+                            Pos = fromPosition;
+                            oldPos = fromPosition;
+                            needsOwnPos = true;
+                        }
+                        else {
+                            Pos = eargs.ToPosition;
+                            oldPos = eargs.FromPosition;
+                        }
+                    }
+                    else {
+                        Pos = eargs.ToPosition;
+                        oldPos = eargs.FromPosition;
+                    }
                 }
             }
             if (oldRot[0] != Rot[0] || oldRot[1] != Rot[1]) {

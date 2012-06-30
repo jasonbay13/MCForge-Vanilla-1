@@ -697,6 +697,14 @@ namespace MCForge.Entity {
         /// </summary>
         public static MoveEvent OnAllPlayersMove = new MoveEvent();
         /// <summary>
+        /// Gets called when this player moves to another block.
+        /// </summary>
+        public MoveEvent OnPlayerBigMove = new MoveEvent();
+        /// <summary>
+        /// Gets called when any player moves to another block.
+        /// </summary>
+        public static MoveEvent OnAllPlayersBigMove = new MoveEvent();
+        /// <summary>
         /// Gets called when this players rotation is changed
         /// </summary>
         public RotateEvent OnPlayerRotate = new RotateEvent();
