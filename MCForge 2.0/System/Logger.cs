@@ -75,7 +75,7 @@ namespace MCForge.Utils {
 
             _lastTime = DateTime.Now;
             FileUtils.CreateDirIfNotExist(FileUtils.LogsPath);
-            FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + CurrentLogFile, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS: " + Environment.OSVersion + Environment.NewLine);
+            FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + CurrentLogFile, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS:" + Environment.OSVersion + ", ARCH:" + (Environment.Is64BitOperatingSystem ? "x64" :  "x86") + ", CULTURE: " + CultureInfo.CurrentCulture +  Environment.NewLine);
 
         }
 
@@ -119,10 +119,7 @@ namespace MCForge.Utils {
         /// <param name="bgColor">Color of the background</param> 
         /// <param name="logType">The log type</param>
         public static void Log(string message, Color textColor, Color bgColor, LogType logType = LogType.Normal) {
-            if (logType == LogType.Debug && Server.DebugMode)
-                _flushQueue.Enqueue(new LogEventArgs("[" + DateTime.Now.ToString("T") + "] " + message, logType, textColor, bgColor));
-            else if (logType != LogType.Debug)
-                _flushQueue.Enqueue(new LogEventArgs("[" + DateTime.Now.ToString("T") + "] " + message, logType, textColor, bgColor));
+                _flushQueue.Enqueue(new LogEventArgs(message, logType, textColor, bgColor));
         }
 
         /// <summary>
