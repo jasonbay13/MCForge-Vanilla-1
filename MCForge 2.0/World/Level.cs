@@ -30,6 +30,7 @@ using MCForge.Interfaces.Blocks;
 using System.Threading;
 using MCForge.Utils.Settings;
 using MCForge.World.Physics;
+using MCForge.SQL;
 
 namespace MCForge.World {
     /// <summary>
@@ -445,6 +446,10 @@ namespace MCForge.World {
                     MCForge.Interfaces.Blocks.Block.RemoveBlock(new Vector3S(x, z, y), this);
             }
             if (block == currentType) return;
+            if (p != null) {
+                byte blockFrom = GetBlock(x, z, y);
+                Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Block, Date, Was) VALUES (" + p.UID + ", " + x + ", " + y + ", " + z + ", '" + Name.MySqlEscape() + "', '" + (block == 0 ? "true" : "false") + "', '" + block.ToString() + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + blockFrom.ToString() + "')");
+            }
 
             SetBlock(x, z, y, block);
             if (p == null)

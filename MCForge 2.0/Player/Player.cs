@@ -276,8 +276,6 @@ namespace MCForge.Entity {
 
         private Random playerRandom;
 
-        //public List<BlockChange> BlockChanges; Go away
-
         #endregion
 
         internal Player(TcpClient TcpClient) {

@@ -81,7 +81,7 @@ namespace MCForge.Commands {
             //Level Blockqueue .-.
 
             buffer.ForEach(delegate(Pos pos) {
-                sender.Level.BlockChange((ushort)(pos.pos.x), (ushort)(pos.pos.z), (ushort)(pos.pos.y), FirstBlock.type2);
+                sender.Level.BlockChange((ushort)(pos.pos.x), (ushort)(pos.pos.z), (ushort)(pos.pos.y), FirstBlock.type2, sender);
             });
         }
         public void Help(Player p) {

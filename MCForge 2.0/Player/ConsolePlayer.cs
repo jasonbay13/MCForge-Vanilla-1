@@ -25,6 +25,7 @@ namespace MCForge.Entity {
         public ConsolePlayer(IIOProvider io) {
             this.IO = io;
             base.OnCommandEnd.OnRegister += new EventHandler<EventRegisterArgs>(OnRegister);
+            base.OnPlayerBigMove.OnRegister += new EventHandler<EventRegisterArgs>(OnRegister);
             base.OnPlayerBlockChange.OnRegister += new EventHandler<EventRegisterArgs>(OnRegister);
             base.OnPlayerChat.OnRegister += new EventHandler<EventRegisterArgs>(OnRegister);
             base.OnPlayerCommand.OnRegister += new EventHandler<EventRegisterArgs>(OnRegister);
@@ -33,8 +34,11 @@ namespace MCForge.Entity {
             base.OnPlayerMove.OnRegister += new EventHandler<EventRegisterArgs>(OnRegister);
             base.OnPlayerReceivePacket.OnRegister += new EventHandler<EventRegisterArgs>(OnRegister);
             base.OnPlayerReceiveUnknownPacket.OnRegister += new EventHandler<EventRegisterArgs>(OnRegister);
+            base.OnPlayerRotate.OnRegister += new EventHandler<EventRegisterArgs>(OnRegister);
+
 
             base.OnCommandEnd.OnUnregister += new EventHandler<EventRegisterArgs>(OnRegister);
+            base.OnPlayerBigMove.OnUnregister += new EventHandler<EventRegisterArgs>(OnRegister);
             base.OnPlayerBlockChange.OnUnregister += new EventHandler<EventRegisterArgs>(OnRegister);
             base.OnPlayerChat.OnUnregister += new EventHandler<EventRegisterArgs>(OnRegister);
             base.OnPlayerCommand.OnUnregister += new EventHandler<EventRegisterArgs>(OnRegister);
@@ -43,6 +47,7 @@ namespace MCForge.Entity {
             base.OnPlayerMove.OnUnregister += new EventHandler<EventRegisterArgs>(OnRegister);
             base.OnPlayerReceivePacket.OnUnregister += new EventHandler<EventRegisterArgs>(OnRegister);
             base.OnPlayerReceiveUnknownPacket.OnUnregister += new EventHandler<EventRegisterArgs>(OnRegister);
+            base.OnPlayerRotate.OnRegister += new EventHandler<EventRegisterArgs>(OnRegister);
 
         }
         void OnRegister(object sender, EventRegisterArgs args) {

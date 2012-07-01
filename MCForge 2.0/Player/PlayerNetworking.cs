@@ -350,18 +350,15 @@ namespace MCForge.Entity
                 });
                 return;
             }
-            byte blockFrom = Level.GetBlock(x, z, y);
-            //Record to database
-            Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Block, Date, Was) VALUES (" + UID + ", " + x + ", " + y + ", " + z + ", '" + Level.Name.MySqlEscape() + "', '" + (action == 0 ? "true" : "false") + "', '" + newType.ToString() + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + blockFrom.ToString() + "')");
-
+           
 
             if (action == 0) //Deleting
             {
-                Level.BlockChange(x, z, y, 0, (fake) ? null : this);
+                Level.BlockChange(x, z, y, 0, this);
             }
             else //Placing
             {
-                Level.BlockChange(x, z, y, newType, (fake) ? null : this);
+                Level.BlockChange(x, z, y, newType, this);
             }
 
             //BlockChanges.Add(new World.Blocks.BlockChange(new Vector3S(x, z, y), blockFrom, newType, action == 0));

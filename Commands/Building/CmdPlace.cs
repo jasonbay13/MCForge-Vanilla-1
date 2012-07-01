@@ -78,7 +78,7 @@ namespace MCForge.Commands
             {
                 y = (ushort)(p.Level.Size.y - 1);
             }
-            p.Level.BlockChange(x, z, y, b);
+            p.Level.BlockChange(x, z, y, b, p);
             p.SendMessage("An " + ((Block)b).Name + " block was placed at (" + x + ", " + z + ", " + y + ").");
             if (b.GetType() == typeof(PhysicsBlock)) {
                 ((PhysicsBlock)b).X = x;
