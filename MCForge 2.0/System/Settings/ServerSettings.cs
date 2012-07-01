@@ -83,7 +83,7 @@ namespace MCForge.Utils.Settings {
                     new SettingNode("SQLite-InMemory", "False", "If set to \"True\" the Database is running in memory and gets regularly backuped to SQLite-Filepath (\"True\" speeds up the server, but could loose data up to the last backup on a crash)"),
                     new SettingNode("SQLite-Filepath", "_mcforge.db", "The filepath for the database"),
                     new SettingNode("SQLite-Pooling", "True", null),
-                    new SettingNode("Database-Queuing", "False", null),
+                    new SettingNode("Database-Queuing", "True", null),
                     new SettingNode("Database-Flush_Interval", "20", null),
                     new SettingNode("IRC-Enabled", "false", "If set to true, IRC is enabled."),
                     new SettingNode("IRC-Server", "127.0.0.1", "IRC server to connect to"),

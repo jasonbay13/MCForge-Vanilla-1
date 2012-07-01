@@ -22,6 +22,7 @@ using System.IO;
 using System.Timers;
 using MCForge.Utils.Settings;
 using MCForge.Utils;
+using System.Collections.Generic;
 using Timer = System.Timers.Timer;
 
 namespace MCForge.SQL {
@@ -132,12 +133,6 @@ namespace MCForge.SQL {
             }
         }
         private bool SQLiteBackupCallback(SQLiteConnection source, string sourceName, SQLiteConnection destination, string destinationName, int pages, int remainingPages, int totalPages, bool retry) {
-            if (source.Database == "") {
-                Logger.Log("Saved " + (totalPages - remainingPages) + "/" + totalPages);
-            }
-            else {
-                Logger.Log("Loaded " + (totalPages - remainingPages) + "/" + totalPages);
-            }
             return true;
         }
 
@@ -181,6 +176,15 @@ namespace MCForge.SQL {
                 Logger.Log("Error in SQLite..", LogType.Critical);
                 Logger.Log("" + e);
                 return db;
+            }
+        }
+
+        public override IEnumerable<NameValueCollection> getData(string queryString) {
+            SQLiteCommand cmd = new SQLiteCommand(queryString, conn);
+            SQLiteDataReader r = cmd.ExecuteReader();
+            while (r.Read()) {
+                NameValueCollection nvm = r.GetValues();
+                yield return nvm;
             }
         }
 

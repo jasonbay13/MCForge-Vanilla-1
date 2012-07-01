@@ -20,6 +20,7 @@ using MCForge.Utils.Settings;
 using System.Drawing;
 using MCForge.Utils;
 using System.Threading;
+using System.Collections.Specialized;
 
 namespace MCForge.SQL
 {
@@ -109,8 +110,15 @@ namespace MCForge.SQL
 			{
                 if (Server.ShuttingDown) return;
 				Thread.Sleep(FlushWait);
-				if (commands.Count > 0)
-					executeQuery(commands.Dequeue());
+                if (commands.Count > 0) {
+                    string[] cmds;
+                    lock (commands) {
+                        Logger.Log("Flushing " + commands.Count + " commands");
+                        cmds = commands.ToArray();
+                        commands.Clear();
+                    }
+                    executeQuery(cmds);
+                }
 			}
 		}
 		
@@ -135,7 +143,7 @@ namespace MCForge.SQL
 		/// <param name="queryString">The command to execute</param>
 		public static void executeQuery(string queryString)
 		{
-			Logger.Log("Executing " + queryString, LogType.Debug);
+			//Logger.Log("Executing " + queryString, LogType.Normal);
 			if (queuecommands)
 				QueueCommand(queryString);
 			else
@@ -151,10 +159,8 @@ namespace MCForge.SQL
 		public static void executeQuery(string[] commands)
 		{
 			Logger.Log("Executing " + commands.Length + " commands..", LogType.Debug);
-			if (queuecommands)
-				QueueCommands(commands);
-			else
-				SQLType.executeQuery(commands);
+            string cmds = String.Join("; ", commands);
+				SQLType.executeQuery(cmds);
 		}
 		
 		/// <summary>
@@ -167,5 +173,10 @@ namespace MCForge.SQL
 			Logger.Log("Executing " + queryString + " (FillData)", LogType.Debug);
 			return SQLType.fillData(queryString);
 		}
+        public static IEnumerable<NameValueCollection> getData(string query) {
+            foreach (NameValueCollection nvm in SQLType.getData(query)) {
+                yield return nvm;
+            }
+        }
 	}
 }

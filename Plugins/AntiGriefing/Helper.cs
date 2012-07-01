@@ -29,8 +29,10 @@ namespace Plugins.AntiGriefing {
                     return null;
                 }
 
-                using (var playerData = Database.fillData("SELECT * FROM _players WHERE UID = " + data.Rows[0]["UID"].ToString()))
+                using (var playerData = Database.fillData("SELECT * FROM _players WHERE UID = " + data.Rows[0]["UID"].ToString())) {
+                    if (playerData.Rows.Count == 0) return null;
                     return playerData.Rows[0]["Name"].ToString();
+                }
             }
         }
 
