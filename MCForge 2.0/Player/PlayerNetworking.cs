@@ -314,15 +314,22 @@ namespace MCForge.Entity
             }
 
             bool placing = (action == 1);
-            BlockChangeEventArgs eargs = new BlockChangeEventArgs(x, y, z, (placing ? ActionType.Place : ActionType.Delete), newType);
-            bool canceled = OnPlayerBlockChange.Call(this, eargs, OnAllPlayersBlockChange).Canceled;
-            if (canceled)
+            BlockChangeEventArgs eargs = new BlockChangeEventArgs(x, z, y, (placing ? ActionType.Place : ActionType.Delete), newType, Level.GetBlock(x, z, y));
+            eargs = OnPlayerBlockChange.Call(this, eargs, OnAllPlayersBlockChange);
+            if (eargs.Canceled)
             {
                 if (!fake)
-                    SendBlockChange(x, z, y, Level.GetBlock(x, z, y));
+                    SendBlockChange(x, z, y, eargs.Current);
                 return;
             }
-
+            x = eargs.X;
+            z = eargs.Z;
+            y = eargs.Y;
+            action = (byte)((eargs.Action == ActionType.Place) ? 1 : 0);
+            placing = action == 1;
+            newType = eargs.Holding;
+            currentType = eargs.Current;
+            
             if (blockChange != null)
             {
                 if (fake)
@@ -904,6 +911,27 @@ namespace MCForge.Entity
             pa.Add(type);
 
             SendPacket(pa);
+        }
+        /// <summary>
+        /// This sends multiple blockchanges to the player only. (Not other players)
+        /// </summary>
+        /// <param name="blocks">The blocks to be sent</param>
+        /// <param name="offset">The offset of the blocks</param>
+        /// <param name="type">The type of the blocks</param>
+        public void SendBlockChange(Vector3S[] blocks, Vector3S offset, byte type) {
+            foreach (Vector3S v in blocks) {
+                SendBlockChange((ushort)(v.x + offset.x), (ushort)(v.z + offset.z), (ushort)(v.y + offset.y), type);
+            }
+        }
+        /// <summary>
+        /// This sends multiple current blocks to the player only. (Not other players)
+        /// </summary>
+        /// <param name="blocks">The blocks to be sent</param>
+        /// <param name="offset">The offset of the blocks</param>
+        public void ResendBlockChange(Vector3S[] blocks, Vector3S offset) {
+            foreach (Vector3S v in blocks) {
+                SendBlockChange((ushort)(v.x + offset.x), (ushort)(v.z + offset.z), (ushort)(v.y + offset.y), Level.GetBlock(v + offset));
+            }
         }
         private void SendKick(string message)
         {

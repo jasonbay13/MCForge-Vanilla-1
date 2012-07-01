@@ -161,17 +161,17 @@ namespace MCForge.API.Events {
             if (!stopped) {
                 args = (T2)((ICloneable)orig).Clone();
                 CallPriorityGroup(high, sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args))
+                if (ret == default(T2) && !((IEquatable<T2>)orig).Equals(args))
                     ret = (T2)((ICloneable)args).Clone();
                 if (!stopped) {
                     args = (T2)((ICloneable)orig).Clone();
                     CallPriorityGroup(normal, sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                    if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args))
+                    if (ret == default(T2) && !((IEquatable<T2>)orig).Equals(args))
                         ret = (T2)((ICloneable)args).Clone();
                     if (!stopped) {
                         args = (T2)((ICloneable)orig).Clone();
                         CallPriorityGroup(low, sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                        if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args))
+                        if (ret == default(T2) && !((IEquatable<T2>)orig).Equals(args))
                             ret = (T2)((ICloneable)args).Clone();
                     }
                 }
@@ -227,21 +227,21 @@ namespace MCForge.API.Events {
             if (!stopped) {
                 CallPriorityGroup(high, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                 other.CallPriorityGroup(other.high, sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args)) {
+                if (ret == default(T2) && !((IEquatable<T2>)orig).Equals(args)) {
                     ret = (T2)((ICloneable)args).Clone();
                     args = (T2)((ICloneable)args).Clone();
                 }
                 if (!stopped) {
                     CallPriorityGroup(normal, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                     other.CallPriorityGroup(other.normal, sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                    if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args)) {
-                        ret = (T2)((ICloneable)args).Clone();
+                    if (ret == default(T2) && !((IEquatable<T2>)orig).Equals(args)) {
+                        ret = ((T2)((ICloneable)args).Clone());
                         args = (T2)((ICloneable)args).Clone();
                     }
                     if (!stopped) {
                         CallPriorityGroup(low, sender, args, stoppable, ref stopped, cancelable, ref canceled);
                         other.CallPriorityGroup(other.low, sender, args, stoppable, ref stopped, cancelable, ref canceled);
-                        if (ret != default(T2) && !((IEquatable<T2>)orig).Equals(args)) {
+                        if (ret == default(T2) && !((IEquatable<T2>)orig).Equals(args)) {
                             ret = (T2)((ICloneable)args).Clone();
                             args = (T2)((ICloneable)args).Clone();
                         }
