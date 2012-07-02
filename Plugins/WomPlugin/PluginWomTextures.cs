@@ -145,6 +145,8 @@ namespace Plugins.WoMPlugin
                             foreach (var entry in config)
                                 Writer.WriteLine(entry);
                         }
+                        CFGSettings a = (CFGSettings)CFGDict.GetIfExist<Level, CFGSettings>(p.Level);
+                        WOM.SendDetail(player, a.GetSetting("detail.user")); //Send the detail with parsed variables.
                     }
                 }
 
@@ -194,14 +196,6 @@ namespace Plugins.WoMPlugin
                         e.Cancel();
                         WOM.GlobalSendLeave(incoming.Substring(1, incoming.Length - incoming.IndexOf("has disconnected")));
                     }
-                }
-            }
-            else if (e.Type == Packet.Types.SendPing)
-            {
-                if (!(bool)(p.ExtraData.GetIfExist<object, object>("WoMCompass") ?? false))
-                {
-                    CFGSettings a = (CFGSettings)CFGDict.GetIfExist<Level, CFGSettings>(p.Level);
-                    WOM.SendDetail(p, a.GetSetting("detail.user"));
                 }
             }
             else { return; }
