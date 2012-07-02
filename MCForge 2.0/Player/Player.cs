@@ -501,25 +501,9 @@ namespace MCForge.Entity {
         /// <param name="z"></param>
         /// <param name="y"></param>
         /// <param name="type"></param>
-        public void Click(ushort x, ushort z, ushort y, byte type) {
-            HandleBlockchange(x, y, z, (byte)ActionType.Place, type, true);
-            BlockChangeEventArgs eargs = new BlockChangeEventArgs(x, y, z, ActionType.Place, type);
-            bool canceled = OnPlayerBlockChange.Call(this, eargs, OnAllPlayersBlockChange).Canceled;
-            if (canceled) // If any event canceled us
-                return;
-            if (blockChange != null) {
-                bool placing = true;
-                BlockChangeDelegate tempBlockChange = blockChange;
-                if (!ExtraData.ContainsKey("PassBackData"))
-                    ExtraData.Add("PassBackData", null);
-                object tempPassBack = ExtraData["PassBackData"];
-
-                blockChange = null;
-                ExtraData["PassBackData"] = null;
-
-                ThreadPool.QueueUserWorkItem(delegate { tempBlockChange.Invoke(this, x, z, y, type, placing, tempPassBack); });
-                return;
-            }
+        /// <param name="placing">Optional boolean whether palcing or not</param>
+        public void Click(ushort x, ushort z, ushort y, byte type, bool placing=true) {
+            HandleBlockchange(x, y, z, (placing) ? (byte)ActionType.Place : (byte)ActionType.Delete, type, true);
         }
         #endregion
 

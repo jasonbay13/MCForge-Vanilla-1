@@ -80,7 +80,7 @@ namespace MCForge.Utils.Settings {
                     new SettingNode("MySQL-Password", "password", "The password for the mysql database"),
                     new SettingNode("MySQL-Pooling", "True", null),
                     new SettingNode("MySQL-DBName", "MCForge", "The database name for MySQL"),
-                    new SettingNode("SQLite-InMemory", "True", "If set to True the Database is running in memory an gets regularly backuped to SQLite-Filepath (True speeds up the server, but could loose data upto last backup on a crash)"),
+                    new SettingNode("SQLite-InMemory", "False", "If set to True the Database is running in memory an gets regularly backuped to SQLite-Filepath (True speeds up the server, but could loose data upto last backup on a crash)"),
                     new SettingNode("SQLite-Filepath", "_mcforge.db", "The filepath for the database"),
                     new SettingNode("SQLite-Pooling", "True", null),
                     new SettingNode("Database-Queuing", "False", null),

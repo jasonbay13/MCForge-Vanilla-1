@@ -27,7 +27,7 @@ namespace MCForge.API.Events {
     /// <summary>
     /// PlayerBlockChangeEventArgs
     /// </summary>
-    public class BlockChangeEventArgs : EventArgs, ICancelable {
+    public class BlockChangeEventArgs : EventArgs, ICancelable, ICloneable, IEquatable<BlockChangeEventArgs> {
         /// <summary>
         /// Creates a new instance
         /// </summary>
@@ -36,7 +36,7 @@ namespace MCForge.API.Events {
         /// <param name="z">The positions Z coordinate</param>
         /// <param name="action">The ActionType action</param>
         /// <param name="holding">The type of the block</param>
-        public BlockChangeEventArgs(ushort x, ushort y, ushort z, ActionType action, byte holding) : this(action, holding, x, y, z) { }
+        public BlockChangeEventArgs(ushort x, ushort z, ushort y, ActionType action, byte holding, byte current) : this(action, holding, current, x, z, y) { }
         /// <summary>
         /// Creates a new instance
         /// </summary>
@@ -45,33 +45,38 @@ namespace MCForge.API.Events {
         /// <param name="z">The positions Z coordinate</param>
         /// <param name="action">The ActionType action</param>
         /// <param name="holding">The type of the block</param>
-        public BlockChangeEventArgs(ActionType action, byte holding, ushort x, ushort y, ushort z) {
+        public BlockChangeEventArgs(ActionType action, byte holding, byte current, ushort x, ushort z, ushort y) {
             this.Action = action;
             this.Holding = holding;
+            this.Current = current;
             this.X = x;
-            this.Y = y;
             this.Z = z;
+            this.Y = y;
         }
         /// <summary>
-        /// What we arre doing with this block
+        /// What we are doing with this block.
         /// </summary>
-        public ActionType Action { get; private set; }
+        public ActionType Action { get; set; }
         /// <summary>
-        /// The block at the coordinates
+        /// The block hold during action.
         /// </summary>
-        public byte Holding { get; private set; }
+        public byte Holding { get; set; }
+        /// <summary>
+        /// The current block at the location.
+        /// </summary>
+        public byte Current { get; set; }
         /// <summary>
         /// The x coordinate of the block changed.
         /// </summary>
-        public ushort X { get; private set; }
+        public ushort X { get; set; }
         /// <summary>
         /// The y coordinate of the block changed.
         /// </summary>
-        public ushort Y { get; private set; }
+        public ushort Y { get; set; }
         /// <summary>
         /// The z coordinate of the block changed.
         /// </summary>
-        public ushort Z { get; private set; }
+        public ushort Z { get; set; }
         private bool canceled = false;
         /// <summary>
         /// Whether or not the handling should be canceled
@@ -90,6 +95,21 @@ namespace MCForge.API.Events {
         /// </summary>
         public void Allow() {
             canceled = false;
+        }
+        /// <summary>
+        /// Creates a new instance
+        /// </summary>
+        /// <returns>A new instance</returns>
+        public object Clone() {
+            return new BlockChangeEventArgs(X, Z, Y, Action, Holding, Current);
+        }
+        /// <summary>
+        /// Compares equality (ICancelable and IStoppable are not part of the comparison)
+        /// </summary>
+        /// <param name="other">The value to be compared to.</param>
+        /// <returns>Whether they are equal or not.</returns>
+        public bool Equals(BlockChangeEventArgs other) {
+            return X == other.X && Z == other.Z && Y == other.Y && Action == other.Action && Holding == other.Holding && Current == other.Current;
         }
     }
     public enum ActionType : byte {

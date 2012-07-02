@@ -6,6 +6,8 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.API.Events;
 using MCForge.Utils;
+using MCForge.Utils.Settings;
+
 namespace MCForge.Commands.Misc {
     public class CmdCursor : ICommand {
 
@@ -38,6 +40,7 @@ namespace MCForge.Commands.Misc {
                 p.OnPlayerRotate.Normal -= OnPlayerRotate_Normal;
                 p.OnPlayerMove.Normal -= OnPlayerMove_Normal;
                 p.OnPlayerBigMove.Normal -= OnPlayerBigMove_Normal;
+                p.OnPlayerBlockChange.Normal -= OnPlayerBlockChange_Normal;
                 if (p.ExtraData["Cursor"] != null) {
                     Vector3S old;
                     if (p.ExtraData["Cursor"].GetType() == typeof(Vector3S))
@@ -49,12 +52,45 @@ namespace MCForge.Commands.Misc {
                     p.SendBlockChange((ushort)old.x, (ushort)old.z, (ushort)old.y, p.Level.GetBlock(old));
                     p.ExtraData["Cursor"] = null;
                 }
+                if (p.ExtraData["CursorGlassCenter"] != null) {
+                    Vector3S old;
+                    if (p.ExtraData["CursorGlassCenter"].GetType() == typeof(Vector3S))
+                        old = (Vector3S)p.ExtraData["CursorGlassCenter"];
+                    else {
+                        old = new Vector3S();
+                        old.FromString((string)p.ExtraData["CursorGlassCenter"]);
+                    }
+                    p.ResendBlockChange(surrounder, old);
+                }
                 return;
-
             }
             p.OnPlayerRotate.Normal += OnPlayerRotate_Normal;
             p.OnPlayerMove.Normal += OnPlayerMove_Normal;
             p.OnPlayerBigMove.Normal += OnPlayerBigMove_Normal;
+            p.OnPlayerBlockChange.Normal += OnPlayerBlockChange_Normal;
+        }
+
+        void OnPlayerBlockChange_Normal(Player sender, BlockChangeEventArgs args) {
+            args.Cancel();
+            if (args.Current == 0 && args.Action == ActionType.Delete) args.Current = 20;
+            sender.OnPlayerBlockChange.Normal -= OnPlayerBlockChange_Normal;
+            if (sender.ExtraData["Cursor"] != null) {
+                Vector3S cursor;
+                if (sender.ExtraData["Cursor"].GetType() == typeof(Vector3S))
+                    cursor = (Vector3S)sender.ExtraData["Cursor"];
+                else {
+                    cursor = new Vector3S();
+                    cursor.FromString((string)sender.ExtraData["Cursor"]);
+                }
+                if (args.Action == ActionType.Place) {
+                    sender.Click((ushort)cursor.x, (ushort)cursor.z, (ushort)(cursor.y + 1), args.Holding);
+                }
+                else {
+                    sender.Click((ushort)cursor.x, (ushort)cursor.z, (ushort)(cursor.y), args.Holding, false);
+                }
+            }
+            sender.OnPlayerBlockChange.Normal += OnPlayerBlockChange_Normal;
+            Curse(sender);
         }
 
         void OnPlayerBigMove_Normal(Player sender, MoveEventArgs args) {
@@ -82,16 +118,11 @@ namespace MCForge.Commands.Misc {
                         old = new Vector3S();
                         old.FromString((string)sender.ExtraData["CursorGlassCenter"]);
                     }
-                    IEnumerable<Vector3S> blocks = old.GetNearBlocksHollow(5,5,5);
-                    foreach (Vector3S v in blocks) {
-                        sender.SendBlockChange((ushort)v.x, (ushort)v.z, (ushort)v.y, sender.Level.GetBlock(v));
-                    }
+                    sender.ResendBlockChange(surrounder, old);
                 }
                 Vector3S pos = new Vector3S((ushort)(sender.Pos.x / 32), (ushort)(sender.Pos.z / 32), (ushort)(sender.Pos.y / 32));
-                foreach (Vector3S v in pos.GetNearBlocksHollow(5, 5, 5)) {
-                    sender.SendBlockChange((ushort)v.x, (ushort)v.z, (ushort)v.y, 20);
-                }
-                sender.ExtraData["CursorGlassCenter"] = pos; //TODO: store all glass blocks here to speedup undoing
+                sender.SendBlockChange(surrounder, pos, 20);
+                sender.ExtraData["CursorGlassCenter"] = pos;
                 sender.ExtraData["cursormoveglasslocked"] = false;
             }
         }
@@ -113,9 +144,6 @@ namespace MCForge.Commands.Misc {
                 Vector3S cursor = sender.GetBlockFromView();
                 if ((object)cursor != null) {
                     sender.SendBlockChange((ushort)cursor.x, (ushort)cursor.z, (ushort)cursor.y, 21);
-#if DEBUG
-                    sender.SendMessage(cursor + " : " + sender.Rot[0] + "/" + sender.Rot[1]);
-#endif
                 }
                 sender.ExtraData["Cursor"] = cursor;
                 sender.ExtraData["cursorlocked"] = false;
@@ -124,10 +152,18 @@ namespace MCForge.Commands.Misc {
 
         public void Help(Entity.Player p) {
         }
-
+        private Vector3S[] surrounder;
+        private int radius;
         public void Initialize() {
+            radius = ServerSettings.GetSettingInt("CursorGlassRadius");
+            if (radius < 2) radius = 3;
+            List<Vector3S> l = new List<Vector3S>();
+            foreach (Vector3S v in new Vector3S().GetNearBlocksHollow(radius, radius, radius))
+                l.Add(v);
+            surrounder = l.ToArray();
             Command.AddReference(this, "cursor");
         }
 
     }
+
 }
