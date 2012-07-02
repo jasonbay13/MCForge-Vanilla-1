@@ -39,6 +39,7 @@ namespace MCForge.Commands
         public void Help(Player p)
         {
             p.SendMessage("/clearblockchanges - clears the database table of any block change info for the current map");
+            p.SendMessage("Shortcut: /cbc"); //there ya go arrem
         }
 
         public void Initialize()
