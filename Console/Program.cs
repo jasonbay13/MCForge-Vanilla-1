@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using System.Linq;
+using System.Drawing;
 using MCForge.Interface;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
@@ -25,7 +26,47 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 
 namespace MCForge.Core {
-    static class Program {
+    static class Program
+    {
+        #region console colors
+        static Dictionary<Color, ConsoleColor> ConsoleColorMaps = new Dictionary<Color, ConsoleColor>()
+    {
+        {Color.Black, ConsoleColor.Black},
+        {Color.Blue, ConsoleColor.Blue},
+        {Color.Cyan, ConsoleColor.Cyan},
+        {Color.DarkBlue, ConsoleColor.DarkBlue},
+        {Color.DarkCyan, ConsoleColor.DarkCyan},
+        {Color.DarkGray, ConsoleColor.DarkGray},
+        {Color.DarkGreen, ConsoleColor.DarkGreen},
+        {Color.DarkMagenta, ConsoleColor.DarkMagenta},
+        {Color.DarkRed, ConsoleColor.DarkRed},
+        {Color.FromArgb(204, 119, 34), ConsoleColor.DarkYellow},
+        {Color.Gray, ConsoleColor.Gray},
+        {Color.Green, ConsoleColor.Green},
+        {Color.Magenta, ConsoleColor.Magenta},
+        {Color.Red, ConsoleColor.Red},
+        {Color.White, ConsoleColor.White},
+        {Color.Yellow, ConsoleColor.Yellow}
+    };
+
+        static ConsoleColor FindNearestConsoleColor(Color color)
+        {
+            ConsoleColor bestMatch = ConsoleColor.White;
+            int bestVariance = int.MaxValue;
+
+            foreach (Color c in ConsoleColorMaps.Keys)
+            {
+                int thisVariance = Math.Abs(c.ToArgb() - color.ToArgb());
+                if (bestVariance > thisVariance)
+                {
+                    bestMatch = ConsoleColorMaps[c];
+                    bestVariance = thisVariance;
+                }
+            }
+
+            return bestMatch;
+        }
+        #endregion
         /// <summary>
         /// Handles the OnRecieveErrorLog event of the Logger control.
         /// </summary>
@@ -50,7 +91,7 @@ namespace MCForge.Core {
         private static void Logger_OnRecieveLog(object sender, LogEventArgs message)
         {
             ClearCurrentConsoleLine();
-            WriteLine(message.Message);
+            WriteLine(message.Message, FindNearestConsoleColor(message.TextColor), FindNearestConsoleColor(message.BackgroundColor));
             WriteInputLine("> ", input);
         }
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -143,7 +184,7 @@ namespace MCForge.Core {
                     WriteLine("Command not found!");
                     return; // cannot run the command
                 }
-                //not using until I can fix the NullReferenceException
+
                 cmd.Use(cp, args);
                 Logger.Log("CONSOLE used: /" + commandSplit[0]);
             }
@@ -186,6 +227,26 @@ namespace MCForge.Core {
         {
             ClearConsoleLine(Console.CursorTop + 1);
             Console.WriteLine(s);
+        }
+        public static void WriteLine(string s, ConsoleColor fg, ConsoleColor bg)
+        {
+            ConsoleColor[] old = { Console.ForegroundColor, Console.BackgroundColor };
+            Console.ForegroundColor = fg;
+            Console.BackgroundColor = bg;
+            ClearConsoleLine(Console.CursorTop);
+            Console.Write(s);
+            Console.ForegroundColor = old[0];
+            Console.BackgroundColor = old[1];
+            Console.WriteLine();
+        }
+        public static void Write(string s, ConsoleColor fg, ConsoleColor bg)
+        {
+            ConsoleColor[] old = { Console.ForegroundColor, Console.BackgroundColor };
+            Console.ForegroundColor = fg;
+            Console.BackgroundColor = bg;
+            Console.Write(s);
+            Console.ForegroundColor = old[0];
+            Console.BackgroundColor = old[1];
         }
         static void WriteInputLine(string inputline = "> ", string input = "")
         {
