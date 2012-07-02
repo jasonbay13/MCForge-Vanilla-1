@@ -6,6 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+//#define UPDATE //Use this to test updater in DEBUG mode
 using System;
 using System.Net;
 using System.Reflection;
@@ -18,6 +19,7 @@ using MCForge.Groups;
 using MCForge.Interface;
 using MCForge.Interface.Plugin;
 using MCForge.Interface.Command;
+using System.Diagnostics;
 
 namespace MCForge.Core
 {
@@ -39,7 +41,19 @@ namespace MCForge.Core
 		/// </summary>
 		public static bool checkcore {
 		    get {
-		        return bool.Parse(ServerSettings.GetSetting("Check-Core-Updates"));
+#if DEBUG && !UPDATE
+                return false;
+#endif
+		        return ServerSettings.GetSettingBoolean("Check-Core-Updates");
+		    }
+		}
+		
+		public static bool allowpatch {
+            get {
+#if DEBUG && !UPDATE
+                return false;
+#endif
+		        return ServerSettings.GetSettingBoolean("Allow-Patch-Updates");
 		    }
 		}
 		
@@ -47,16 +61,22 @@ namespace MCForge.Core
 		/// If enabled, will check for plugin and command updates
 		/// </summary>
 		public static bool checkmisc {
-		    get {
-		        return bool.Parse(ServerSettings.GetSetting("Check-Misc-Updates"));
+            get {
+#if DEBUG && !UPDATE
+                return false;
+#endif
+		        return ServerSettings.GetSettingBoolean("Check-Misc-Updates");
 		    }
 		}
 		/// <summary>
 		/// If true, commands, plugins, and the core will automatically update WITH notification
 		/// </summary>
 		public static bool autoupdate {
-			get {
-				return bool.Parse(ServerSettings.GetSetting("Auto-Update"));
+            get {
+#if DEBUG && !UPDATE
+                return false;
+#endif
+				return ServerSettings.GetSettingBoolean("Auto-Update");
 			}
 		}
 		
@@ -64,8 +84,11 @@ namespace MCForge.Core
 		/// If true, commands and plugins will be updated without notification
 		/// </summary>
 		public static bool silentupdate {
-			get {
-				return bool.Parse(ServerSettings.GetSetting("Silent-Update"));
+            get {
+#if DEBUG && !UPDATE
+                return false;
+#endif
+				return ServerSettings.GetSettingBoolean("Silent-Update");
 			}
 		}
 		
@@ -75,8 +98,11 @@ namespace MCForge.Core
 		/// If silentupdate or autoupdate is enabled, then this setting is ignored
 		/// </summary>
 		public static bool askbefore {
-			get {
-		        return bool.Parse(ServerSettings.GetSetting("Ask-Before-Core"));
+            get {
+#if DEBUG && !UPDATE
+                return true;
+#endif
+		        return ServerSettings.GetSettingBoolean("Ask-Before-Core");
 			}
 		}
 		
@@ -87,7 +113,10 @@ namespace MCForge.Core
 		/// </summary>
 		public static bool askbeforemisc {
 			get {
-		        return bool.Parse(ServerSettings.GetSetting("Ask-Before-Misc"));
+#if DEBUG && !UPDATE
+                return true;
+#endif
+		        return ServerSettings.GetSettingBoolean("Ask-Before-Misc");
 			}
 		}
 		
@@ -95,8 +124,11 @@ namespace MCForge.Core
 		/// If enabled, the server will attempt to udpate when server activity is low
 		/// </summary>
 		public static bool silentcoreupdate {
-		    get {
-		        return bool.Parse(ServerSettings.GetSetting("Silent-Core-Update"));
+            get {
+#if DEBUG && !UPDATE
+                return false;
+#endif
+		        return ServerSettings.GetSettingBoolean("Silent-Core-Update");
 		    }
 		}
 		
@@ -123,12 +155,19 @@ namespace MCForge.Core
         }
         
         internal static void InIt() {
+
+#if DEBUG && !UPDATE
+            return;
+#endif
             Thread check = new Thread(new ThreadStart(delegate
                                                       {
                                                           while(true)
                                                           {
-                                                            Tick();
-                                                            Thread.Sleep(checkinterval * 60000);
+                                                            if (InetUtils.CanConnectToInternet())
+                                                                Tick();
+                                                            Thread.Sleep(checkinterval * 60000); 
+                                                             //This could keep the Process open for a long time after closing the program
+                                                             //TODO: ThreadHelper.longsleep(int millis) breaking on severshutdown after checking every 5s
                                                           }
                                                       }));
             check.Start();
@@ -173,15 +212,32 @@ namespace MCForge.Core
                 
                 else if (coreupdate) {
                     if (Server.OnMono) {
-                        wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
-                        Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "MCForge has been updated!");
-                        Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Updates will be applied next restart.");
-                        Logger.Log("MCForge has been updated!", LogType.Critical);
-                        Logger.Log("Updates will be applied next restart.", LogType.Critical);
-                        coreupdated = true;
+                        if (!allowpatch) {
+                            wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
+                            Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "MCForge has been updated!");
+                            Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Updates will be applied next restart.");
+                            Logger.Log("MCForge has been updated!", LogType.Critical);
+                            Logger.Log("Updates will be applied next restart.", LogType.Critical);
+                            coreupdated = true;
+                        }
+                        else {
+                            string args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                            Process process = new Process();
+                            process.StartInfo.FileName = "Updater.exe";
+                            process.StartInfo.Arguments = args;
+                            process.Start();
+                            System.Environment.Exit(0);
+                        }
                     }
                     else {
-                        //TODO Windows you suck
+                        string args = "";
+                        if (allowpatch)
+                            args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                        Process process = new Process();
+                        process.StartInfo.FileName = "Updater.exe";
+                        process.StartInfo.Arguments = args;
+                        process.Start();
+                        System.Environment.Exit(0);
                     }
                 }
             }
@@ -253,10 +309,27 @@ namespace MCForge.Core
                     if (coreupdate && silentcoreupdate) {
                         if (Server.PlayerCount < (int)((double)(ServerSettings.GetSettingInt("MaxPlayers") / 4))) {
                             if (Server.OnMono) {
-                                wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
+                                string args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                                if (allowpatch && args != "")
+                                {
+                                    Process process = new Process();
+                                    process.StartInfo.FileName = "Updater.exe";
+                                    process.StartInfo.Arguments = args;
+                                    process.Start();
+                                    System.Environment.Exit(0);
+                                }
+                                else
+                                    wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
                             }
                             else {
-                                //TODO Windows you suck
+                                string args = "";
+                                if (allowpatch)
+                                    args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                                Process process = new Process();
+                                process.StartInfo.FileName = "Updater.exe";
+                                process.StartInfo.Arguments = args;
+                                process.Start();
+                                System.Environment.Exit(0);
                             }
                         }
                     }
@@ -267,10 +340,27 @@ namespace MCForge.Core
                         if (silentcoreupdate) {
                             if (Server.PlayerCount < (int)((double)(ServerSettings.GetSettingInt("MaxPlayers") / 4))) {
                                 if (Server.OnMono) {
-                                    wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
+                                    string args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                                    if (allowpatch && args != "")
+                                    {
+                                        Process process = new Process();
+                                        process.StartInfo.FileName = "Updater.exe";
+                                        process.StartInfo.Arguments = args;
+                                        process.Start();
+                                        System.Environment.Exit(0);
+                                    }
+                                    else
+                                        wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
                                 }
                                 else {
-                                    //TODO Windows you suck
+                                    string args = "";
+                                    if (allowpatch)
+                                        args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                                    Process process = new Process();
+                                    process.StartInfo.FileName = "Updater.exe";
+                                    process.StartInfo.Arguments = args;
+                                    process.Start();
+                                    System.Environment.Exit(0);
                                 }
                             }
                         }
@@ -278,15 +368,33 @@ namespace MCForge.Core
                             Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "An update for the Core is available!");
                             Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Downloading update..");
                             if (Server.OnMono) {
-                                wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
-                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "MCForge has been updated!");
-                                Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Updates will be applied next restart.");
-                                Logger.Log("MCForge has been updated!", LogType.Critical);
-                                Logger.Log("Updates will be applied next restart.", LogType.Critical);
-                                coreupdated = true;
+                                string args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                                if (allowpatch && args != "")
+                                {
+                                    Process process = new Process();
+                                    process.StartInfo.FileName = "Updater.exe";
+                                    process.StartInfo.Arguments = args;
+                                    process.Start();
+                                    System.Environment.Exit(0);
+                                }
+                                else {
+                                    wc.DownloadFile("http://update.mcforge.net/DLL/Core.dll", "MCForge.dll");
+                                    Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "MCForge has been updated!");
+                                    Player.UniversalChatOps("&2[Updater] " + Server.DefaultColor + "Updates will be applied next restart.");
+                                    Logger.Log("MCForge has been updated!", LogType.Critical);
+                                    Logger.Log("Updates will be applied next restart.", LogType.Critical);
+                                    coreupdated = true;
+                                }
                             }
                             else {
-                                //TODO Windows you suck
+                                string args = "";
+                                if (allowpatch)
+                                    args = wc.DownloadString("http://update.mcforge.net/Patch/args.txt");
+                                Process process = new Process();
+                                process.StartInfo.FileName = "Updater.exe";
+                                process.StartInfo.Arguments = args;
+                                process.Start();
+                                System.Environment.Exit(0);
                             }
                         }
                         else {

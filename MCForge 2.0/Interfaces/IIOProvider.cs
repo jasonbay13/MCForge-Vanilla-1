@@ -24,5 +24,6 @@ namespace MCForge.Interfaces {
     public interface IIOProvider {
         string ReadLine();
         void WriteLine(string line);
+        void WriteLine(string line, string replyChannel);
     }
 }

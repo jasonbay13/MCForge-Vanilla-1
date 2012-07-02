@@ -35,7 +35,7 @@ namespace MCForge.SQL {
         protected bool _closed = true;
         public override void onLoad() {
             if (ServerSettings.GetSettingBoolean("SQLite-InMemory")) {
-                Logger.Log("Using memory database");
+                Logger.Log("Using memory database", LogType.Debug);
                 string dbpath = Application.StartupPath + "/" + ServerSettings.GetSetting("SQLite-Filepath");
                 connString = "Data Source = :memory:; Version = 3; Pooling =" + ServerSettings.GetSetting("SQLite-Pooling") + "; Max Pool Size =1000;";
                 Open();
@@ -59,13 +59,13 @@ namespace MCForge.SQL {
                 backup.Enabled = true;
             }
             else {
-                Logger.Log("Using file database");
+                Logger.Log("Using file database", LogType.Debug);
                 connString = "Data Source =\"" + Application.StartupPath + "/" + ServerSettings.GetSetting("SQLite-Filepath") + "\"; Version =3; Pooling =" + ServerSettings.GetSetting("SQLite-Pooling") + "; Max Pool Size =1000;";
                 Open();
             }
             string[] commands = new string[3];
             commands[0] = "CREATE TABLE if not exists _players (UID INTEGER not null PRIMARY KEY AUTOINCREMENT, Name VARCHAR(20), IP VARCHAR(20), firstlogin DATETIME, lastlogin DATETIME, money MEDIUMINT, totallogin MEDIUMINT, totalblocks MEDIUMINT, color VARCHAR(5));";
-            commands[1] = "CREATE TABLE if not exists extra (key VARCHAR(1000), value VARCHAR(1000), UID INTEGER);";
+            commands[1] = "CREATE TABLE if not exists extra (setting TEXT, value TEXT, UID INTEGER);";
             commands[2] = "CREATE TABLE if not exists Blocks (UID INTEGER, X MEDIUMINT, Y MEDIUMINT, Z MEDIUMINT, Level VARCHAR(100),  Deleted VARCHAR(30), Block TEXT, Date DATETIME, Was TEXT);";
             executeQuery(commands);
         }

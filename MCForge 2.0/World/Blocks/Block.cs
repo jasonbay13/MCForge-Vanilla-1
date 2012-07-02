@@ -33,9 +33,9 @@ namespace MCForge.World {
              new Wood(),
              new Shrub(),
              new Adminium(),
-             new ActiveWater(),
+             new Active_Water(),
              new Water(),
-             new ActiveLava(),
+             new Active_Lava(),
              new Lava(),
              new Sand(),
              new Gravel(),
@@ -75,7 +75,7 @@ namespace MCForge.World {
              new MossyCobbleStone(),
              new Obsidian()
     };
-        private static readonly List<Block> CustomBlockList = new List<Block>();
+        internal static readonly List<Block> CustomBlockList = new List<Block>();
         public abstract byte VisibleBlock { get; }
         public abstract string Name { get; }
         public abstract byte Permission { get; }
@@ -123,6 +123,16 @@ namespace MCForge.World {
             return UnknownBlock;
 
         }
+        
+        public static Block NameToBlockType(string name) {
+            foreach (Block block in Blocks)
+                if (block.Name == name)
+                    return block;
+            foreach (Block block in CustomBlockList)
+                if (block.Name == name)
+                    return block;
+            return UnknownBlock;
+        }
 
         /// <summary>
         /// Check to see if a block from the specified name exists.
@@ -167,7 +177,8 @@ namespace MCForge.World {
                 blockToCheck == BlockList.RED_FLOWER ||
                 blockToCheck == BlockList.RED_MUSHROOM ||
                 blockToCheck == BlockList.YELLOW_FLOWER ||
-                blockToCheck == BlockList.BROWN_MUSHROOM);
+                blockToCheck == BlockList.BROWN_MUSHROOM ||
+                blockToCheck == BlockList.SAPLING);
         }
 
         public static bool CanEscalate(byte blockToCheck) {

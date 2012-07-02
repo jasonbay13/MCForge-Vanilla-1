@@ -28,6 +28,7 @@ using MCForge.SQL;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
 using MCForge.World;
+using MCForge.World.Physics;
 
 namespace MCForge.Core {
     public static class Server {
@@ -285,7 +286,8 @@ namespace MCForge.Core {
             Updater.InIt();
             HeartThread = new Thread(new ThreadStart(Heartbeat.ActivateHeartBeat));
             HeartThread.Start();
-
+            Logger.Log("Starting Physics Tick..", LogType.Debug);
+            PhysicsBlock.InIt();
             CmdReloadCmds reload = new CmdReloadCmds();
             reload.Initialize();
 
@@ -298,8 +300,8 @@ namespace MCForge.Core {
                 ServerSettings.SetSetting("Main-Level", null, "main");
             }
             Level.Levels.Add(Mainlevel);
-            //http://www.mcforge.net/forums/images/smilies/nobig.jpg
-            //Level.LoadAllLevels(); WHY WHY WHY WHY WHY WHY WHY WHY
+            if (ServerSettings.GetSettingBoolean("LoadAllLevels"))
+                Level.LoadAllLevels();
 
             Backup.StartBackup();
 
@@ -593,7 +595,7 @@ namespace MCForge.Core {
             foreach (var g in Groups.PlayerGroup.Groups)
                 g.SaveGroup();
 
-            if (ServerSettings.GetSettingBoolean("SQLite-InMemory")) {
+            if (ServerSettings.GetSettingBoolean("SQLite-InMemory") && ServerSettings.GetSetting("DatabaseType").ToLower() == "sqlite") {
                 ((SQLite)Database.SQL).Save();
             }
 

@@ -30,12 +30,13 @@ namespace MCForge.World.Physics
         {
             get { return 80; }
         }
-        public Active_Lava(int x, int y, int z, Level l)
-            : base(x, y, z, l)
+        public Active_Lava(int x, int y, int z)
+            : base(x, y, z)
         {
 
         }
-        public override void Tick()
+        public Active_Lava() {}
+        public override void Tick(Level l)
         {
             throw new NotImplementedException();
         }

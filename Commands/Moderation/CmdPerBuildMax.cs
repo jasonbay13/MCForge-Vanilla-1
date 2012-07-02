@@ -91,6 +91,7 @@ namespace MCForge.Commands
         {
             Command.AddReference(this, "perbuildmax");
             Player.OnAllPlayersBlockChange.Normal += new Event<Player, BlockChangeEventArgs>.EventHandler(OnAllPlayersBlockChange_Normal);
+            Player.OnAllPlayersCommand.Normal += new Event<Player, CommandEventArgs>.EventHandler(OnCommand);
         }
         public void OnAllPlayersBlockChange_Normal(Player sender, BlockChangeEventArgs evt)
         {
@@ -112,6 +113,41 @@ namespace MCForge.Commands
             {
                 sender.SendMessage("You cannot build here");
                 evt.Cancel();
+            }
+        }
+
+        public void OnCommand(Player sender, CommandEventArgs e)
+        {
+            ICommand cmd = null;
+            try
+            {
+                cmd = Command.All[e.Command];
+            }
+            catch
+            {
+                return;
+            }
+
+            byte perBuildMax = 0;
+
+            if (sender.Level.ExtraData.ContainsKey("perbuildmax"))
+            {
+                try
+                {
+                    perBuildMax = (byte)sender.Level.ExtraData["perbuildmax"];
+                }
+                catch
+                {
+                    perBuildMax = 0;
+                }
+            }
+
+            if (cmd == null) return;
+
+            if (cmd.Type == CommandTypes.Building && sender.Group.Permission > perBuildMax && sender.Group.CanExecute(cmd))
+            {
+                sender.SendMessage("You cannot use building commands on this level!");
+                e.Cancel();
             }
         }
     }

@@ -61,6 +61,7 @@
     <Compile Include="Information\CmdAbout.cs" />
     <Compile Include="Information\CmdLevels.cs" />
     <Compile Include="Information\CmdUnloaded.cs" />
+    <Compile Include="Moderation\CmdClearBlockChanges.cs" />
     <Compile Include="Moderation\CmdPerBuild.cs" />
     <Compile Include="Information\CmdVips.cs" />
     <Compile Include="Misc\CmdCursor.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Moderation\CmdPlugins.cs" />
     <Compile Include="Moderation\CmdUnIPBan.cs" />
     <Compile Include="Moderation\CmdPerBuildMax.cs" />
+    <Compile Include="Moderation\PerVisitMax.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CmdTest.cs" />
   </ItemGroup>

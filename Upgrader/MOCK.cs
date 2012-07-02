@@ -202,6 +202,7 @@ namespace MCForge_.Gui
 					File.Delete("properties/ranks.properties");
 					Console.WriteLine("Converting Command Permissions..");
 					CMDCONVERT.CONVERTCMD();
+					
 				}
 				catch (Exception e) { 
 					Console.ForegroundColor = ConsoleColor.Red;

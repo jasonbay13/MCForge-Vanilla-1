@@ -35,9 +35,9 @@ namespace MCForge.SQL
 			connString = string.Format("Data Source={0};Port={1};User ID={2};Password={3};Pooling={4}", ServerSettings.GetSetting("MySQL-IP"), ServerSettings.GetSetting("MySQL-Port"), ServerSettings.GetSetting("MySQL-Username"), ServerSettings.GetSetting("MySQL-Password"), ServerSettings.GetSetting("MySQL-Pooling"));
 			Open();
 			string[] commands = new string[4];
-			commands[0] = "CREATE DATABASE if not exists '" + ServerSettings.GetSetting("MySQL-DBName") + "'";
-			commands[1] = "CREATE TABLE if not exists _players (UID INTEGER not null auto_increment, Name VARCHAR(20), IP VARCHAR(20), firstlogin DATETIME, lastlogin DATETIME, money MEDIUMINT, totallogin MEDIUMINT, totalblocks MEDIUMINT, color VARCHAR(5) PRIMARY KEY (UID));";
-			commands[2] = "CREATE TABLE if not exists extra (key VARCHAR(1000), value VARCHAR(1000), UID INTEGER);";
+			commands[0] = "CREATE DATABASE if not exists `" + ServerSettings.GetSetting("MySQL-DBName") + "`";
+			commands[1] = "CREATE TABLE if not exists _players (UID INTEGER not null auto_increment, Name VARCHAR(20), IP VARCHAR(20), firstlogin DATETIME, lastlogin DATETIME, money MEDIUMINT, totallogin MEDIUMINT, totalblocks MEDIUMINT, color VARCHAR(5), PRIMARY KEY (UID));";
+			commands[2] = "CREATE TABLE if not exists extra (setting TEXT, value TEXT, UID INTEGER);";
 			commands[3] = "CREATE TABLE if not exists Blocks (UID INTEGER, X MEDIUMINT, Y MEDIUMINT, Z MEDIUMINT, Level VARCHAR(100), Deleted VARCHAR(30), Block TEXT, Date DATETIME, Was TEXT);";
 			executeQuery(commands);
 		} 
@@ -67,8 +67,12 @@ namespace MCForge.SQL
 		{
 			try {
 				for (int i = 0; i < queryString.Length; i++) {
-					using (MySqlCommand cmd = new MySqlCommand(queryString[i], conn))
-						cmd.ExecuteNonQuery();
+		            using (MySqlCommand cmd = new MySqlCommand(queryString[i], conn))
+		            {
+		                if (queryString[i].IndexOf("CREATE DATABASE") != -1)
+		                    conn.ChangeDatabase(ServerSettings.GetSetting("MySQL-DBName"));
+		                cmd.ExecuteNonQuery();
+		            }
 				}
 			}
 			catch (Exception e)

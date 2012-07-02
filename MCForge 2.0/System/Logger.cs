@@ -161,8 +161,14 @@ namespace MCForge.Utils {
                 if (_flushQueue.Count > 0) {
                     var arg = _flushQueue.Dequeue();
                     if (OnRecieveLog != null)
-                        OnRecieveLog(null, arg);
-                                WriteLog(arg.Message);
+                    {
+                        try
+                        {
+                            OnRecieveLog(null, arg);
+                            WriteLog(arg.Message);
+                        }
+                        catch { }
+                    }
                 }
 
             }

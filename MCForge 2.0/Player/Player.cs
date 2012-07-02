@@ -451,7 +451,7 @@ namespace MCForge.Entity {
         public void LoadExtra() {
             DataTable tbl = Database.fillData("SELECT * FROM extra WHERE UID=" + UID);
             for (int i = 0; i < tbl.Rows.Count; i++) {
-                ExtraData.Add(tbl.Rows[i]["key"], tbl.Rows[i]["value"]);
+                ExtraData.Add(tbl.Rows[i]["setting"], tbl.Rows[i]["value"]);
             }
             tbl.Dispose();
         }
@@ -461,7 +461,7 @@ namespace MCForge.Entity {
         /// <param name="key">The key to check</param>
         /// <returns>If true, then they key is in the table and doesnt need to be added, if false, then the key needs to be added</returns>
         internal bool IsInTable(object key) {
-            DataTable temp = Database.fillData("SELECT * FROM extra WHERE key='" + key.ToString() + "' AND UID=" + UID);
+            DataTable temp = Database.fillData("SELECT * FROM extra WHERE setting='" + key.ToString() + "' AND UID=" + UID);
             bool return1 = false;
             if (temp.Rows.Count >= 1)
                 return1 = true;
@@ -696,6 +696,14 @@ namespace MCForge.Entity {
         /// Gets called when any player moves.
         /// </summary>
         public static MoveEvent OnAllPlayersMove = new MoveEvent();
+        /// <summary>
+        /// Gets called when this player moves to another block.
+        /// </summary>
+        public MoveEvent OnPlayerBigMove = new MoveEvent();
+        /// <summary>
+        /// Gets called when any player moves to another block.
+        /// </summary>
+        public static MoveEvent OnAllPlayersBigMove = new MoveEvent();
         /// <summary>
         /// Gets called when this players rotation is changed
         /// </summary>

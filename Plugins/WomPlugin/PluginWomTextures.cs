@@ -183,7 +183,7 @@ namespace Plugins.WoMPlugin
                 if (PluginSettings.GetSettingBoolean("joinleave-alert"))
                 {
                     string incoming = Encoding.ASCII.GetString(e.Data).Trim();
-                    Logger.Log(incoming);
+                    //Logger.Log(incoming);
                     if (incoming.Contains("joined the game!"))
                     {
                         e.Cancel();

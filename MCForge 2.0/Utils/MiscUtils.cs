@@ -203,9 +203,9 @@ namespace MCForge.Utils {
             var cleanedMessage = key.ToString().MySqlEscape();
             if (dict.ContainsKey(cleanedMessage)) {
                 if (!p.IsInTable(cleanedMessage))
-                    Database.executeQuery("INSERT INTO extra (key, value, UID) VALUES ('" + cleanedMessage + "', '" + dict[cleanedMessage].ToString() + "', " + p.UID + ")");
+                    Database.executeQuery("INSERT INTO extra (setting, value, UID) VALUES ('" + cleanedMessage + "', '" + dict[cleanedMessage].ToString() + "', " + p.UID + ")");
                 else
-                    Database.executeQuery("UPDATE extra SET value='" + dict[cleanedMessage].ToString() + "' WHERE key='" + cleanedMessage + "' AND UID=" + p.UID);
+                    Database.executeQuery("UPDATE extra SET value='" + dict[cleanedMessage].ToString() + "' WHERE setting='" + cleanedMessage + "' AND UID=" + p.UID);
             }
         }
 
@@ -274,17 +274,68 @@ namespace MCForge.Utils {
 
         public static IEnumerable<Vector3S> GetNearBlocks(this Vector3S v, int radiusX, int radiusZ, int radiusY) {
             if (radiusX == radiusZ && radiusZ == radiusY) {
-                for (int x = v.x - radiusX; x < v.x + radiusX; x++) {
-                    for (int z = v.z - radiusX; z < v.z + radiusX; z++) {
-                        for (int y = v.y - radiusX; y < v.y + radiusX; y++) {
-                            Vector3S ret = new Vector3S((short)x, (short)z, (short)y);
+                for (int x = 0; x <radiusX; x++) {
+                    for (int z =0; z < radiusX; z++) {
+                        for (int y = 0; y < radiusX; y++) {
+                            Vector3S ret = new Vector3S((short)(v.x + x), (short)(v.z + z), (short)(v.y + y));
                             double l = (v - ret).Length;
-                                if(l<= radiusX)
+                            if (l <= radiusX) {
                                 yield return ret;
+                                if (x != 0) {
+                                    yield return new Vector3S((short)(v.x - x), (short)(v.z + z), (short)(v.y + y));
+                                    if (z != 0) {
+                                        yield return new Vector3S((short)(v.x - x), (short)(v.z - z), (short)(v.y + y));
+                                        if (y != 0) yield return new Vector3S((short)(v.x - x), (short)(v.z - z), (short)(v.y - y));
+                                    }
+
+                                }
+                                if (z != 0) {
+                                    yield return new Vector3S((short)(v.x + x), (short)(v.z - z), (short)(v.y + y));
+                                    if (y != 0) yield return new Vector3S((short)(v.x + x), (short)(v.z - z), (short)(v.y - y));
+                                }
+                                if (y != 0) {
+                                    yield return new Vector3S((short)(v.x + x), (short)(v.z + z), (short)(v.y - y));
+                                    if (x != 0) yield return new Vector3S((short)(v.x - x), (short)(v.z + z), (short)(v.y - y));
+                                }
+                                
+                            }
                         }
                     }
                 }
             }
         }
+
+        public static IEnumerable<Vector3S> GetNearBlocksHollow(this Vector3S v, int radiusX, int radiusZ, int radiusY) {
+            if (radiusX == radiusZ && radiusZ == radiusY) {
+                for (int x = 0; x < radiusX; x++) {
+                    for (int z = 0; z < radiusX; z++) {
+                        for (int y = 0; y < radiusX; y++) {
+                            Vector3S ret = new Vector3S((short)(v.x + x), (short)(v.z + z), (short)(v.y + y));
+                            double l = (v - ret).Length;
+                            if (l <= radiusX && l >= radiusX - 1) {
+                                yield return ret;
+                                if (x != 0) {
+                                    yield return new Vector3S((short)(v.x - x), (short)(v.z + z), (short)(v.y + y));
+                                    if (z != 0) {
+                                        yield return new Vector3S((short)(v.x - x), (short)(v.z - z), (short)(v.y + y));
+                                        if (y != 0) yield return new Vector3S((short)(v.x - x), (short)(v.z - z), (short)(v.y - y));
+                                    }
+
+                                }
+                                if (z != 0) {
+                                    yield return new Vector3S((short)(v.x + x), (short)(v.z - z), (short)(v.y + y));
+                                    if (y != 0) yield return new Vector3S((short)(v.x + x), (short)(v.z - z), (short)(v.y - y));
+                                }
+                                if (y != 0) {
+                                    yield return new Vector3S((short)(v.x + x), (short)(v.z + z), (short)(v.y - y));
+                                    if (x != 0) yield return new Vector3S((short)(v.x - x), (short)(v.z + z), (short)(v.y - y));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }
