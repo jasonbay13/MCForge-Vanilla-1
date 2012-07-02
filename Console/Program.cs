@@ -143,7 +143,8 @@ namespace MCForge.Core {
                     WriteLine("Command not found!");
                     return; // cannot run the command
                 }
-                cmd.Use(null, args);
+                //not using until I can fix the NullReferenceException
+                cmd.Use(cp, args);
                 Logger.Log("CONSOLE used: /" + commandSplit[0]);
             }
             else
