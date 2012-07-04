@@ -35,7 +35,6 @@ namespace MCForge.Commands
             Player who = Player.Find(args[0]);
             if (who == null) { p.SendMessage("Cannot find player!"); return; }
             who.ExtraData.CreateIfNotExist("Muted", false); 
-            if (Server.Devs.Contains(who.Username)) { p.SendMessage("Cannot mute a MCForge Developer!"); return; }
             if (who == p) {
                 if ((bool)who.ExtraData["Muted"]) { p.SendMessage("Cannot unmute yourself!"); }
                 else { p.SendMessage("Cannot mute yourself!"); }
