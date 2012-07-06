@@ -68,7 +68,7 @@ namespace MCForge.Commands
 
             foreach (Pos _pos in stored)
             {
-                p.Level.BlockChange((ushort)(_pos.pos.x), (ushort)(_pos.pos.z), (ushort)(_pos.pos.y), type2);
+                p.Level.BlockChange((ushort)(_pos.pos.x), (ushort)(_pos.pos.z), (ushort)(_pos.pos.y), type2, p);
             }
             p.SendMessage("&4/replaceall finished!");
         }

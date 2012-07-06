@@ -61,7 +61,7 @@ namespace MCForge.Commands.Building {
                 blocks = (new Vector3S(args.X, args.Z, args.Y)).GetNearBlocks(rx, rx, rx);
             foreach (Vector3S v in blocks) {
                 if (v.x > 0 && v.z > 0 && v.y > 0 && v.x < sender.Level.Size.x && v.z < sender.Level.Size.z && v.y < sender.Level.Size.y) {
-                    sender.Level.BlockChange(v, 1, sender);
+                    sender.Level.BlockChange(v, args.Holding, sender);
                     count++;
                 }
             }

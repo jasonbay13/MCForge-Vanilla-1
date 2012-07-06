@@ -103,7 +103,7 @@ namespace MCForge.World {
                 for (yy = 0; yy <= height; yy++) {
                     yyy = (ushort)(y + yy);
                     tile = p.Level.GetBlock(x, z, yyy);
-                    if (gothrough || tile == air || (yyy == y && tile == sap)) { p.Level.BlockChange(x, z, yyy, trunk); }
+                    if (gothrough || tile == air || (yyy == y && tile == sap)) { p.Level.BlockChange(x, z, yyy, trunk, p); }
                 }
                 for (yy = top; yy <= height + 1; yy++) {
                     dist = yy > height - 1 ? (byte)1 : (byte)2;
@@ -116,13 +116,13 @@ namespace MCForge.World {
                             if ((xxx == x & zzz == z && yy <= height) || (!gothrough && tile != air)) { continue; }
                             if (Math.Abs(xx) == dist && Math.Abs(zz) == dist) {
                                 if (yy > height) { continue; }
-                                if (MathUtils.Random.Next(2) == 0) { p.Level.BlockChange(xxx, zzz, yyy, leaf); }
+                                if (MathUtils.Random.Next(2) == 0) { p.Level.BlockChange(xxx, zzz, yyy, leaf, p); }
                             }
-                            else { p.Level.BlockChange(xxx, zzz, yyy, leaf); }
+                            else { p.Level.BlockChange(xxx, zzz, yyy, leaf, p); }
                         }
                     }
                 }
-                p.Level.BlockChange(x, z, y, trunk);
+                p.Level.BlockChange(x, z, y, trunk, p);
             }
             #endregion
             #region Swamp
@@ -133,7 +133,7 @@ namespace MCForge.World {
                 for (yy = 0; yy <= height; yy++) {
                     yyy = (ushort)(y + yy);
                     tile = p.Level.GetBlock(x, z, yyy);
-                    if (gothrough || tile == air || (yyy == y && tile == sap)) { p.Level.BlockChange(x, z, yyy, trunk); }
+                    if (gothrough || tile == air || (yyy == y && tile == sap)) { p.Level.BlockChange(x, z, yyy, trunk, p); }
                 }
                 for (yy = top; yy <= height + 1; yy++) {
                     dist = yy > height - 1 ? (byte)2 : (byte)3;
@@ -146,9 +146,9 @@ namespace MCForge.World {
                             if ((xxx == x && zzz == z && yy <= height) || (!gothrough && tile != air)) { continue; }
                             if (Math.Abs(xx) == dist && Math.Abs(zz) == dist) {
                                 if (yy > height) { continue; }
-                                if (MathUtils.Random.Next(2) == 0) { p.Level.BlockChange(xxx, zzz, yyy, leaf); }
+                                if (MathUtils.Random.Next(2) == 0) { p.Level.BlockChange(xxx, zzz, yyy, leaf, p); }
                             }
-                            else { p.Level.BlockChange(xxx, zzz, yyy, leaf); }
+                            else { p.Level.BlockChange(xxx, zzz, yyy, leaf, p); }
                         }
                     }
                 }
@@ -181,7 +181,7 @@ namespace MCForge.World {
                         }
                     }
                 }
-                p.Level.BlockChange(x, z, y, trunk);
+                p.Level.BlockChange(x, z, y, trunk, p);
             }
             #endregion
             #region Pine
@@ -192,14 +192,14 @@ namespace MCForge.World {
                 for (yy = 0; yy <= height; yy++) {
                     yyy = (ushort)(y + yy);
                     tile = p.Level.GetBlock(x, z, yyy);
-                    if (gothrough || tile == air || (yyy == y && tile == sap)) { p.Level.BlockChange(x, z, yyy, trunk); }
+                    if (gothrough || tile == air || (yyy == y && tile == sap)) { p.Level.BlockChange(x, z, yyy, trunk, p); }
                 }
                 for (yy = 0; yy <= (short)(height + 2); yy++) {
                     if (yy == 0) { continue; }
                     if (yy == 1 && MathUtils.Random.Next(2) == 1) { continue; }
                     if (yy == (height + 2)) {
                         if (MathUtils.Random.Next(2) == 1) { continue; }
-                        p.Level.BlockChange(x, z, (ushort)(y + yy), leaf); continue;
+                        p.Level.BlockChange(x, z, (ushort)(y + yy), leaf, p); continue;
                     }
                     distance = distance == 2 ? (byte)1 : (byte)2;
                     if ((ushort)(yy) >= height) { distance = 1; }
@@ -212,7 +212,7 @@ namespace MCForge.World {
                             if ((xxx == x & zzz == z && yy <= height) || (!gothrough && tile != air)) { continue; }
                             if (yy == height && height % 2 == 0) { continue; }
                             if (Math.Abs(xx) == (short)distance && Math.Abs(zz) == (short)distance) { continue; }
-                            else { p.Level.BlockChange(xxx, zzz, yyy, leaf); }
+                            else { p.Level.BlockChange(xxx, zzz, yyy, leaf, p); }
                         }
                     }
                 }
@@ -223,7 +223,7 @@ namespace MCForge.World {
                 byte height = (byte)MathUtils.Random.Next(3, 6);
                 ushort yy;
                 for (yy = 0; yy <= height; yy++) { 
-                    if (gothrough || p.Level.GetBlock((ushort)x,(ushort)z, (ushort)(y+yy)) == air) { p.Level.BlockChange(x, z, (ushort)(y + yy), green); }
+                    if (gothrough || p.Level.GetBlock((ushort)x,(ushort)z, (ushort)(y+yy)) == air) { p.Level.BlockChange(x, z, (ushort)(y + yy), green, p); }
                 }
                 int ix = 0, iz = 0;
                 switch (MathUtils.Random.Next(1, 3)) {
@@ -232,10 +232,10 @@ namespace MCForge.World {
                     default: iz = -1; break;
                 }
                 for (yy = height; yy <= MathUtils.Random.Next(height + 2, height + 5); yy++) {
-                    if (gothrough || p.Level.GetBlock(x + ix, z + iz, y + yy) == air) {  p.Level.BlockChange((ushort)(x + ix), (ushort)(z + iz), (ushort)(y + yy), green); }
+                    if (gothrough || p.Level.GetBlock(x + ix, z + iz, y + yy) == air) {  p.Level.BlockChange((ushort)(x + ix), (ushort)(z + iz), (ushort)(y + yy), green, p); }
                 }
                 for (yy = height; yy <= MathUtils.Random.Next(height + 2, height + 5); yy++) {
-                    if (gothrough || p.Level.GetBlock(x + ix, z + iz, y + yy) == air) { p.Level.BlockChange((ushort)(x - ix), (ushort)(z - iz), (ushort)(y + yy), green); }
+                    if (gothrough || p.Level.GetBlock(x + ix, z + iz, y + yy) == air) { p.Level.BlockChange((ushort)(x - ix), (ushort)(z - iz), (ushort)(y + yy), green, p); }
                 }
             }
             #endregion
