@@ -119,6 +119,9 @@ namespace MCForge.Commands
 
             l = Level.FindLevel(evt.Args[0]);
 
+            if (l == null)
+                return;
+
             if (l.ExtraData.ContainsKey("pervisit"))
             {
                 try

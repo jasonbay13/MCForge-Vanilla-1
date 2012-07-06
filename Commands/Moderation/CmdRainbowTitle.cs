@@ -55,8 +55,7 @@ namespace MCForge.Commands
             {
                 who = Player.Find(message.Split(' ')[0]);
                 if (who == null) { p.SendMessage("Could not find player."); return; }
-                if (p.Group.Permission <= who.Group.Permission) { p.SendMessage("You can't change the title of someone of equal or higher rank!"); return; }
-                if (Server.Devs.Contains(who.Username) && !Server.Devs.Contains(p.Username)) { p.SendMessage("You can't change a dev's title!"); return; }
+                if (p.Group.Permission <= who.Group.Permission) { p.SendMessage("You can't change the title of someone of equal or higher rank!"); return; }         
                 message = message.Substring(message.IndexOf(' ') + 1);
             }
             else

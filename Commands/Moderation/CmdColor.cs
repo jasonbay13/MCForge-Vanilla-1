@@ -41,9 +41,6 @@ namespace MCForge.Commands {
                 who = Player.Find(args[0]);
                 if (who == null) { p.SendMessage("Could not find player."); return; }
                 if (p.Group.Permission <= who.Group.Permission) { p.SendMessage("You can't change the color of someone of equal or higher rank!"); return; }
-                if (Server.Devs.Contains(who.Username) && !Server.Devs.Contains(p.Username)) { p.SendMessage("You can't change a dev's color!"); return; }
-
-                
 
                 color = args[1] == "del" ? who.Group.Color : Colors.Parse(args[1]);
                 if (who.Color == color) { p.SendMessage("They are already that color!"); return; }

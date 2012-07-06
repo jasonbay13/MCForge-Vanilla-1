@@ -247,8 +247,10 @@ namespace MCForge.Gui {
                 return;
             }
 
+#if DEBUG
             if (args.LogType == LogType.Debug)
-                return;
+                args.Message = "[Debug] " + args.Message;
+#endif
 
             txtLog.AppendLog(args.Message + Environment.NewLine, args.LogType == LogType.Normal ? Color.Black : args.TextColor);
             txtLog.ScrollToEnd();
@@ -298,8 +300,13 @@ namespace MCForge.Gui {
             }
             splashScreen.Shutdown();
 
-            new Thread(new ThreadStart(() => Application.Run(this))).Start();
-            this.BringToFront();
+            new Thread(new ThreadStart(() => { 
+                Application.Run(this);
+                this.Visible = true;
+                this.Show();
+                this.BringToFront(); 
+            })).Start();
+
             Server.OnServerFinishSetup -= OnCompletedStartUp;
 
 #if !DEBUG   

@@ -62,7 +62,7 @@
     <Compile Include="Components\ColoredLogReader.Designer.cs">
       <DependentUpon>ColoredLogReader.cs</DependentUpon>
     </Compile>
-    <Compile Include="Components\NativeMethods.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="Components\NewsFeeder.cs">
       <SubType>Component</SubType>
     </Compile>

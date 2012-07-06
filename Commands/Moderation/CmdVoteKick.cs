@@ -37,7 +37,6 @@ namespace MCForge.Commands
             if (args.Length == 0) { who = null; }
             else { who = Player.Find(args[0]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
-            if (Server.Devs.Contains(who.Username)) { p.SendMessage("You can't votekick a MCForge Developer!"); return; }
             Server.Kicker = who;
             ResetVotes();
             Server.Voting = true;

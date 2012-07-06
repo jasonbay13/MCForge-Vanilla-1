@@ -34,8 +34,7 @@ namespace MCForge.Commands
             if (args.Length == 0) { Help(p); return; }
             Player who = Player.Find(args[0]);
             if (who == null) { p.SendMessage("Cannot find player!"); return; }
-            DateTime allowed = DateTime.Now; int num;
-            if (Server.Devs.Contains(who.Username)) { p.SendMessage("Cannot ban a MCForge Developer!"); return; }
+            DateTime allowed = DateTime.Now; int num;  
             #region =Name=
             if (args.Length == 1) {
                 Server.TempBan tb = new Server.TempBan();

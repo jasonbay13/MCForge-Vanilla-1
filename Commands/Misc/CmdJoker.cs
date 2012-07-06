@@ -37,7 +37,6 @@ namespace MCForge.Commands
             if (args.Length == 1) { who = Player.Find(args[0]); }
             else { who = Player.Find(args[1]); }
             if (who == null) { p.SendMessage("Cannot find that player!"); return; }
-            if (Server.Devs.Contains(who.Username)) { p.SendMessage("You can't joker a MCForge Developer!"); return; }
             CheckEmpty();
 
             who.ExtraData.CreateIfNotExist("Jokered", false);
