@@ -733,7 +733,7 @@ namespace MCForge.Entity
 
         #endregion
         #region Outgoing Packets
-        public void SendPacket(Packet pa)
+        public override void SendPacket(Packet pa)
         {
             PacketEventArgs args = new PacketEventArgs(pa.bytes, false, (Packet.Types)pa.bytes[0]);
             bool Canceled = OnPlayerSendPacket.Call(this, args, OnAllPlayersSendPacket).Canceled;

@@ -157,5 +157,8 @@ namespace MCForge.Entity {
             else
                 IO.WriteLine(message, replyChannel);
         }
+        public override void SendPacket(Core.Packet pa) {
+            
+        }
     }
 }
