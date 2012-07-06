@@ -101,8 +101,8 @@ namespace MCForge.Core {
 
         static void Main(string[] args)
         {
-            cp = new ConsolePlayer(cio);
             ServerSettings.Init();
+            cp = new ConsolePlayer(cio);
             bool checker = CheckArgs(args);
             Console.Title = ServerSettings.GetSetting("ServerName") + " - MCForge 6"; //Don't know what MCForge version we are using yet.
             if (!checker)
