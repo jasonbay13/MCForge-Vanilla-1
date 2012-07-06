@@ -168,19 +168,16 @@ namespace MCForge.Core {
             }
         }
 
-        private static void Handle(string input)
-        {
+        private static void Handle(string input) {
             //check if it is a command
-            if (input.StartsWith("/"))
-            {
+            if (input.StartsWith("/")) {
                 ICommand cmd = null;
 
                 string[] commandSplit = input.Remove(0, 1).Split(' ');
                 string[] args = commandSplit.Where((val, index) => index != 0).ToArray();
                 cmd = Command.Find(commandSplit[0]);
 
-                if (cmd == null)
-                {
+                if (cmd == null) {
                     WriteLine("Command not found!");
                     return; // cannot run the command
                 }
@@ -188,8 +185,21 @@ namespace MCForge.Core {
                 cmd.Use(cp, args);
                 Logger.Log("CONSOLE used: /" + commandSplit[0]);
             }
-            else
-            {
+            else if (input.ToLower() == "!stop") {
+                Console.Write("Would you like to save all? [y/n]:");
+                if (Console.ReadLine().ToLower().StartsWith("y")) {
+                    Server.SaveAll();
+                    Server.Stop();
+                }
+                else {
+                    Server.Stop();
+                }
+                return;
+            }
+            else if (input.ToLower() == "!copyurl") {
+                System.Windows.Forms.Clipboard.SetDataObject(Server.URL, true);
+            }
+            else {
                 Player.UniversalChat(Colors.white + "[Console] " + Server.DefaultColor + input);
                 Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
                 Logger.Log("[Console] " + input, Color.Yellow, Color.Black, LogType.Normal);
