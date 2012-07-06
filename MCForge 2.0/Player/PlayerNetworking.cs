@@ -921,6 +921,18 @@ namespace MCForge.Entity
             }
         }
         /// <summary>
+        /// This sends multiple blockchanges where currently is air to the player only. (Not other players)
+        /// </summary>
+        /// <param name="blocks">The blocks to be sent</param>
+        /// <param name="offset">The offset of the blocks</param>
+        /// <param name="type">The type of the blocks</param>
+        public void SendBlockChangeWhereAir(Vector3S[] blocks, Vector3S offset, byte type) {
+            foreach (Vector3S v in blocks) {
+                if (Level.GetBlock(v + offset) == 0)
+                    SendBlockChange((ushort)(v.x + offset.x), (ushort)(v.z + offset.z), (ushort)(v.y + offset.y), type);
+            }
+        }
+        /// <summary>
         /// This sends multiple current blocks to the player only. (Not other players)
         /// </summary>
         /// <param name="blocks">The blocks to be sent</param>

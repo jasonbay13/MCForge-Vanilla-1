@@ -92,6 +92,7 @@ namespace MCForge.Core {
         }
         static string input = "";
 
+        [STAThread]
         static void Main(string[] args) {
             ServerSettings.Init();
             cp = new ConsolePlayer(cio);
