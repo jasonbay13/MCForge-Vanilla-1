@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.csproj", "{2BA59FB7-13B4-42A7-A915-F68B2032EE7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blocks", "Blocks\Blocks.csproj", "{9C3068FF-DD8E-42C9-95E3-839B0929440C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,16 @@ Global
 		{2BA59FB7-13B4-42A7-A915-F68B2032EE7C}.Release|Mixed Platforms.Build.0 = Release|x86
 		{2BA59FB7-13B4-42A7-A915-F68B2032EE7C}.Release|x86.ActiveCfg = Release|x86
 		{2BA59FB7-13B4-42A7-A915-F68B2032EE7C}.Release|x86.Build.0 = Release|x86
+		{9C3068FF-DD8E-42C9-95E3-839B0929440C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C3068FF-DD8E-42C9-95E3-839B0929440C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C3068FF-DD8E-42C9-95E3-839B0929440C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9C3068FF-DD8E-42C9-95E3-839B0929440C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9C3068FF-DD8E-42C9-95E3-839B0929440C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9C3068FF-DD8E-42C9-95E3-839B0929440C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C3068FF-DD8E-42C9-95E3-839B0929440C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C3068FF-DD8E-42C9-95E3-839B0929440C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9C3068FF-DD8E-42C9-95E3-839B0929440C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9C3068FF-DD8E-42C9-95E3-839B0929440C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
