@@ -104,22 +104,16 @@ namespace MCForge.World.Physics
         /// </summary>
         public static new void InIt()
         {
-            TimerTick = new Thread(new ParameterizedThreadStart(delegate
-                {
-                    while (!Server.ShuttingDown)
-                    {
-                        Level.Levels.ForEach(l =>
-                        {
-                            l.pblocks.ForEach(b => 
-                                {
-                                    b.Tick(l);
-                                });
-                            Thread.Sleep(l.PhysicsTick);
-                        });
-                        Thread.Sleep(5);
-                    }
-                }));
-            TimerTick.Start();
+            Level.OnAllLevelsLoad.SystemLvl += OnAllLevelsLoad_SystemLvl;
+        }
+
+        static void OnAllLevelsLoad_SystemLvl(Level sender, API.Events.LevelLoadEventArgs args) {
+            sender.PhysicsThread = new Thread(() => {
+                while (!Server.ShuttingDown) {
+                    sender.pblocks.ForEach((pb) => pb.Tick(sender));
+                    Thread.Sleep(sender.PhysicsTick);
+                }
+            });
         }
     }
 }

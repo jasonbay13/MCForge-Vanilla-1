@@ -25,7 +25,7 @@ namespace MCForge.API.Events {
     public class ConnectionEvent : Event<Player, ConnectionEventArgs> {
     }
     /// <summary>
-    /// PlayConnectionEventArgs
+    /// PlayerConnectionEventArgs
     /// </summary>
     public class ConnectionEventArgs : EventArgs, ICancelable {
         /// <summary>

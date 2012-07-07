@@ -89,6 +89,7 @@
     <Compile Include="API\Events\Event.cs" />
     <Compile Include="API\Events\ICancelable.cs" />
     <Compile Include="API\Events\IStoppable.cs" />
+    <Compile Include="API\Events\Level\LevelLoadEvent.cs" />
     <Compile Include="API\Events\Player\BlockChangeEvent.cs" />
     <Compile Include="API\Events\Player\ChatEvent.cs" />
     <Compile Include="API\Events\Player\CommandEvent.cs" />
@@ -231,6 +232,7 @@
     <Compile Include="World\Blocks\DefaultBlocks\Stone.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Water.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Wood.cs" />
+    <Compile Include="World\Blocks\Physics\DefaultPhysicBlocks\Door.cs" />
     <Compile Include="World\Drawing\CubeBrush.cs" />
     <Compile Include="World\Drawing\Fonts.cs" />
     <Compile Include="World\Drawing\IBrush.cs" />
