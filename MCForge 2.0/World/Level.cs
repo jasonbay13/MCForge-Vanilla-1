@@ -505,7 +505,7 @@ namespace MCForge.World {
         ///   <c>true</c> if [is in bounds] [the specified x]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsInBounds(int x, int z, int y) {
-            return (x > 0 && x < Size.x && y > 0 && y < Size.y && z > 0 && z < Size.z);
+            return (x >= 0 && x < Size.x && y >= 0 && y < Size.y && z >= 0 && z < Size.z);
         }
         
         /// <summary>
