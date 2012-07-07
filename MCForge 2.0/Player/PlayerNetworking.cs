@@ -1282,6 +1282,8 @@ namespace MCForge.Entity
             Server.Connections.Remove(this);
 
             Socket.Close();
+            
+            Socket.Dispose();
         }
 
         internal static void GlobalPing()
