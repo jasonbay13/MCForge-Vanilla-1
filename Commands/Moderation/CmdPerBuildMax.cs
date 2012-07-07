@@ -138,7 +138,7 @@ namespace MCForge.Commands
                 }
                 catch
                 {
-                    perBuildMax = 0;
+                    perBuildMax = byte.MaxValue;
                 }
             }
 
