@@ -69,7 +69,7 @@ namespace MCForge.World.Physics
         /// <param name="y">The y.</param>
         /// <param name="z">The z.</param>
         /// <param name="l">The l.</param>
-        public PhysicsBlock(int x, int y, int z) { this.X = x; this.Y = y; this.Z = z; }
+        public PhysicsBlock(int x, int z, int y) { this.X = x; this.Y = y; this.Z = z; }
         
         public PhysicsBlock() : base() {}
         
