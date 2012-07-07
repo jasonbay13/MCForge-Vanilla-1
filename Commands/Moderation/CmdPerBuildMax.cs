@@ -128,7 +128,7 @@ namespace MCForge.Commands
                 return;
             }
 
-            byte perBuildMax = 0;
+            byte perBuildMax = byte.MaxValue;
 
             if (sender.Level.ExtraData.ContainsKey("perbuildmax"))
             {
