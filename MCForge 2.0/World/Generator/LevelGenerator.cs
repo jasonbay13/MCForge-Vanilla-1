@@ -29,11 +29,16 @@ namespace MCForge.World.Generator {
     public sealed class LevelGenerator {
         #region Variables
         private GeneratorArgs GenArgs;
-        private Level Level;
         private PerlinNoise NoiseGenerator;
         private float[,] map, overlay, plants;
         private Random random;
 
+        public float[ , ] HeightMap {
+            get {
+                return map;
+            }
+        }
+        public Level Level {get; set;}
 
         /// <summary>
         /// Event handler for recieving progress updates
@@ -49,8 +54,6 @@ namespace MCForge.World.Generator {
         /// <param name="level">The level to generate.</param>
         public LevelGenerator(Level level) {
 
-            if (level.Size.x != level.Size.z)
-                ;// throw new ArgumentException("The x and z must be the same to use advanced level generation");
 
             //Create a standard mountain level
             GenArgs = new GeneratorArgs() {
@@ -339,8 +342,6 @@ namespace MCForge.World.Generator {
 
                         if (map[x, z] < 0f)
                             map[x, z] = 0f;
-
-
                     }
                 displace -= .0025f;
                 if (displace < minHeight)
@@ -388,7 +389,7 @@ namespace MCForge.World.Generator {
         /// <param name="angleRot">The angle rotation.</param>
         public void SetPosition(Vector3S manualPosition, Vector2S angleRot) {
             Level.SpawnPos = manualPosition;
-            Level.SpawnRot = new byte[2] { (byte)angleRot.x, (byte)angleRot.z };
+            Level.SpawnRot = new [] { (byte)angleRot.x, (byte)angleRot.z };
         }
         #endregion
 

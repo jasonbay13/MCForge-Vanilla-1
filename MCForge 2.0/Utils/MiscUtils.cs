@@ -278,7 +278,7 @@ namespace MCForge.Utils {
                     for (int z =0; z < radiusX; z++) {
                         for (int y = 0; y < radiusX; y++) {
                             Vector3S ret = new Vector3S((short)(v.x + x), (short)(v.z + z), (short)(v.y + y));
-                            double l = (v - ret).Length;
+                            double l = (v - ret).Distance;
                             if (l <= radiusX) {
                                 yield return ret;
                                 if (x != 0) {
@@ -311,7 +311,7 @@ namespace MCForge.Utils {
                     for (int z = 0; z < radiusX; z++) {
                         for (int y = 0; y < radiusX; y++) {
                             Vector3S ret = new Vector3S((short)(v.x + x), (short)(v.z + z), (short)(v.y + y));
-                            double l = (v - ret).Length;
+                            double l = (v - ret).Distance;
                             if (l <= radiusX && l >= radiusX - 1) {
                                 yield return ret;
                                 if (x != 0) {
