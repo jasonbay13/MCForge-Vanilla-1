@@ -114,6 +114,7 @@ namespace MCForge.World.Physics
                     Thread.Sleep(sender.PhysicsTick);
                 }
             });
+            sender.PhysicsThread.Start();
         }
         
         public abstract object Clone();

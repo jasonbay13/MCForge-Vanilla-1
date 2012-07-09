@@ -164,6 +164,8 @@ namespace MCForge.Utils {
                     {
                         try
                         {
+                            if (arg.LogType == LogType.Debug && !Server.DebugMode)
+                                continue;
                             OnRecieveLog(null, arg);
                             WriteLog(arg.Message);
                         }

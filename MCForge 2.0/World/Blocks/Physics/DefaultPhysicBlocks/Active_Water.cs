@@ -13,6 +13,7 @@ or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
  */
 using System;
+using MCForge.Utils;
 
 namespace MCForge.World.Physics
 {
@@ -47,6 +48,7 @@ namespace MCForge.World.Physics
         
         public override void Tick(Level l)
         {
+            Logger.Log("Tick!", LogType.Debug);
             if (l.GetBlock(X, Z, Y - 1) == Block.BlockList.AIR) {
                 Add(l, new Active_Water(X, Z, Y - 1));
                 l.BlockChange((ushort)X, (ushort)Z, (ushort)(Y - 1), this);
