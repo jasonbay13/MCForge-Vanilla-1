@@ -33,8 +33,8 @@ namespace MCForge.World.Physics
         {
             get { return 80; }
         }
-        public Active_Lava(int x, int y, int z)
-            : base(x, y, z)
+        public Active_Lava(int x, int z, int y)
+            : base(x, z, y)
         {
 
         }
