@@ -435,7 +435,11 @@ namespace MCForge.World {
         /// <param name="p">A player who doesnt need the update</param>
         public void BlockChange(ushort x, ushort y, ushort z, PhysicsBlock pb, Player p = null) {
             BlockChange(x, z, y, pb.VisibleBlock, p);
-            pblocks.Add((PhysicsBlock)pb.Clone());
+            PhysicsBlock pbb = (PhysicsBlock)pb.Clone();
+            pbb.X = x;
+            pbb.Y = y;
+            pbb.Z = z;
+            pblocks.Add(pbb);
         }
 
 
@@ -616,8 +620,9 @@ namespace MCForge.World {
             if (pos >= 0 && pos < Data.Length)
                 return Data[pos];
             else {
-                Logger.Log("Out of bounds in Level.GetBlock(int pos)", LogType.Error);
-                Logger.Log("Tried to get block at " + pos + " pos!", LogType.Error);
+                //Logger.Log("Out of bounds in Level.GetBlock(int pos)", LogType.Error);
+                //Logger.Log("Tried to get block at " + pos + " pos!", LogType.Error);
+                //^ Gets annoying with physics
                 return Block.BlockList.UNKNOWN; //Unknown Block
             }
         }

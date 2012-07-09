@@ -87,7 +87,8 @@ namespace MCForge.World.Physics
         /// <param name="l"></param>
         public void Add(Level l, PhysicsBlock b)
         {
-            l.pblocks.Add(this);
+            l.BlockChange((ushort)b.X, (ushort)b.Z, (ushort)b.Y, b.VisibleBlock);
+            l.pblocks.Add(b);
         }
         
         /// <summary>

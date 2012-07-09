@@ -48,27 +48,27 @@ namespace MCForge.World.Physics
         
         public override void Tick(Level l)
         {
-            Logger.Log("Tick!", LogType.Debug);
             if (l.GetBlock(X, Z, Y - 1) == Block.BlockList.AIR) {
                 Add(l, new Active_Water(X, Z, Y - 1));
-                l.BlockChange((ushort)X, (ushort)Z, (ushort)(Y - 1), this);
+                Remove(l);
+                //l.BlockChange((ushort)X, (ushort)Z, (ushort)(Y - 1), this);
             }
             else {
                 if (l.GetBlock(X + 1, Z, Y) == Block.BlockList.AIR) {
                     Add(l, new Active_Water(X + 1, Z, Y));
-                    l.BlockChange((ushort)(X + 1), (ushort)Z, (ushort)Y, this);
+                    //l.BlockChange((ushort)(X + 1), (ushort)Z, (ushort)Y, this);
                 }
                 if (l.GetBlock(X - 1, Z, Y) == Block.BlockList.AIR) {
                     Add(l, new Active_Water(X - 1, Z, Y));
-                    l.BlockChange((ushort)(X - 1), (ushort)Z, (ushort)Y, this);
+                    //l.BlockChange((ushort)(X - 1), (ushort)Z, (ushort)Y, this);
                 }
                 if (l.GetBlock(X, Z + 1, Y) == Block.BlockList.AIR) {
                     Add(l, new Active_Water(X, Z + 1, Y));
-                    l.BlockChange((ushort)X, (ushort)(Z + 1), (ushort)Y, this);
+                    //l.BlockChange((ushort)X, (ushort)(Z + 1), (ushort)Y, this);
                 }
                 if (l.GetBlock(X, Z - 1, Y) == Block.BlockList.AIR) {
                     Add(l, new Active_Water(X, Z - 1, Y));
-                    l.BlockChange((ushort)X, (ushort)(Z - 1), (ushort)Y, this);
+                   // l.BlockChange((ushort)X, (ushort)(Z - 1), (ushort)Y, this);
                 }
             }
         }
