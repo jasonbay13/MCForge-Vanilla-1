@@ -23,7 +23,7 @@ namespace MCForge.World.Physics
     /// <summary>
     /// Create a custom block with physics
     /// </summary>
-    public abstract class PhysicsBlock : Block
+    public abstract class PhysicsBlock : Block, ICloneable
     {
         /// <summary>
         /// The physics time.
@@ -121,5 +121,7 @@ namespace MCForge.World.Physics
                 }));
             TimerTick.Start();
         }
+        
+        public abstract object Clone();
     }
 }

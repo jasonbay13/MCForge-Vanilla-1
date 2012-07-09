@@ -35,6 +35,16 @@ namespace MCForge.World.Physics
         {
         }
         public Active_Water() {}
+        
+        public override object Clone()
+        {
+            Active_Water aw = new Active_Water();
+            aw.X = X;
+            aw.Y = Y;
+            aw.Z = Z;
+            return aw;
+        }
+        
         public override void Tick(Level l)
         {
             if (l.GetBlock(X, Z, Y - 1) == Block.BlockList.AIR) {

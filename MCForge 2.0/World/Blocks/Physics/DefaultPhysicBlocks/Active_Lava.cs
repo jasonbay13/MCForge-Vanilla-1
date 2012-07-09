@@ -39,6 +39,16 @@ namespace MCForge.World.Physics
 
         }
         public Active_Lava() { }
+        
+        public override object Clone()
+        {
+            Active_Lava al = new Active_Lava();
+            al.X = X;
+            al.Y = Y;
+            al.Z = Z;
+            return al;
+        }
+        
         public override void Tick(Level l)
         {
             /* .....-----===== Explosion =====-----..... */

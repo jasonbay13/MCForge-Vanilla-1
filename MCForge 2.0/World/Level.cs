@@ -416,6 +416,19 @@ namespace MCForge.World {
                 FEBD(i);
             }
         }
+        
+        /// <summary>
+        /// Cause a Physics block change for the level
+        /// </summary>
+        /// <param name="x">Location of x</param>
+        /// <param name="z">Location of z</param>
+        /// <param name="y">Location of y</param>
+        /// <param name="pb">The physics block</param>
+        /// <param name="p">A player who doesnt need the update</param>
+        public void BlockChange(ushort x, ushort y, ushort z, PhysicsBlock pb, Player p = null) {
+            BlockChange(x, z, y, pb.VisibleBlock, p);
+            pblocks.Add((PhysicsBlock)pb.Clone());
+        }
 
 
         /// <summary>

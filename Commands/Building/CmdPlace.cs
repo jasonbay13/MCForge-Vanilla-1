@@ -78,16 +78,11 @@ namespace MCForge.Commands
             {
                 y = (ushort)(p.Level.Size.y - 1);
             }
-            p.Level.BlockChange(x, z, y, b, p);
-            p.SendMessage("An " + ((Block)b).Name + " block was placed at (" + x + ", " + z + ", " + y + ").");
             if (b.GetType().BaseType == typeof(PhysicsBlock))
-            {
-                p.SendMessage("Playing with physics!");
-                ((PhysicsBlock)b).X = x;
-                ((PhysicsBlock)b).Y = y;
-                ((PhysicsBlock)b).Z = z;
-                p.Level.pblocks.Add(((PhysicsBlock)b));
-            }
+                p.Level.BlockChange(x, y, z, (PhysicsBlock)b, p);
+            else
+                p.Level.BlockChange(x, z, y, b, p);
+            p.SendMessage("An " + ((Block)b).Name + " block was placed at (" + x + ", " + z + ", " + y + ").");
         }
         public void Help(Player p)
         {
