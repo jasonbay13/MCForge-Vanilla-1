@@ -11,7 +11,7 @@ software distributed under the Licenses are distributed on an "AS IS"
 BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
-*/
+ */
 using System;
 
 namespace MCForge.World.Physics
@@ -50,6 +50,24 @@ namespace MCForge.World.Physics
             if (l.GetBlock(X, Z, Y - 1) == Block.BlockList.AIR) {
                 Add(l, new Active_Water(X, Z, Y - 1));
                 l.BlockChange((ushort)X, (ushort)Z, (ushort)(Y - 1), this);
+            }
+            else {
+                if (l.GetBlock(X + 1, Z, Y) == Block.BlockList.AIR) {
+                    Add(l, new Active_Water(X + 1, Z, Y));
+                    l.BlockChange((ushort)(X + 1), (ushort)Z, (ushort)Y, this);
+                }
+                if (l.GetBlock(X - 1, Z, Y) == Block.BlockList.AIR) {
+                    Add(l, new Active_Water(X - 1, Z, Y));
+                    l.BlockChange((ushort)(X - 1), (ushort)Z, (ushort)Y, this);
+                }
+                if (l.GetBlock(X, Z + 1, Y) == Block.BlockList.AIR) {
+                    Add(l, new Active_Water(X, Z + 1, Y));
+                    l.BlockChange((ushort)X, (ushort)(Z + 1), (ushort)Y, this);
+                }
+                if (l.GetBlock(X, Z - 1, Y) == Block.BlockList.AIR) {
+                    Add(l, new Active_Water(X, Z - 1, Y));
+                    l.BlockChange((ushort)X, (ushort)(Z - 1), (ushort)Y, this);
+                }
             }
         }
     }
