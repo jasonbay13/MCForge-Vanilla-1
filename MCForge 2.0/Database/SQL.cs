@@ -14,6 +14,8 @@ permissions and limitations under the Licenses.
 */
 using System;
 using System.Data;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace MCForge.SQL
 {
@@ -27,6 +29,9 @@ namespace MCForge.SQL
 		public virtual void executeQuery(string[] queryString) {}
 		public virtual void onLoad() { }
 		public virtual DataTable fillData(string queryString) { return null; }
+        public virtual IEnumerable<NameValueCollection> getData(string queryString) {
+            yield return null;
+        }
 		public virtual void Dispose()
 		{
 			if (!_disposed)

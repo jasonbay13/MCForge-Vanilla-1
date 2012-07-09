@@ -15,20 +15,20 @@ permissions and limitations under the Licenses.
 using System;
 using MCForge.Utils;
 
-namespace MCForge.Entity
-{
-	/// <summary>
-	/// The Sender can be anything from the player to the console
-	/// </summary>
-	public abstract class Sender
-	{
-		/// <summary>
-		/// Send this sender a message
-		/// </summary>
-		/// <param name="message">The message to send</param>
-		public virtual void SendMessage(string message) 
-		{
-			Logger.Log(message);
-		}
-	}
+namespace MCForge.Entity {
+    /// <summary>
+    /// The Sender can be anything from the player to the console
+    /// </summary>
+    public abstract class Sender {
+        /// <summary>
+        /// Send this sender a message
+        /// </summary>
+        /// <param name="message">The message to send</param>
+        public virtual void SendMessage(string message) {
+            Logger.Log(message);
+        }
+        public virtual void SendPacket(MCForge.Core.Packet p) {
+            Logger.Log("" + ((p.bytes != null && p.bytes.Length > 0) ? p.bytes[0] : -1));
+        }
+    }
 }

@@ -47,8 +47,6 @@ namespace MCForge.Commands
                 who = Player.Find(args[0]);
                 if (who == null) { p.SendMessage("Could not find player."); return; }
                 if (p.Group.Permission <= who.Group.Permission) { p.SendMessage("You can't change the title color of someone of equal or higher rank!"); return; }
-                //devs should be able to change their own color
-                if (Server.Devs.Contains(who.Username) && !Server.Devs.Contains(p.Username)) { p.SendMessage("You can't change a dev's title color!"); return; }
                 titleColor = args[1] == "del" ? "del" : Colors.Parse(args[1]);
                 if (who.Color == titleColor) { p.SendMessage("Their title is already that color!"); return; }
             }

@@ -350,18 +350,15 @@ namespace MCForge.Entity
                 });
                 return;
             }
-            byte blockFrom = Level.GetBlock(x, z, y);
-            //Record to database
-            Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Block, Date, Was) VALUES (" + UID + ", " + x + ", " + y + ", " + z + ", '" + Level.Name.MySqlEscape() + "', '" + (action == 0 ? "true" : "false") + "', '" + newType.ToString() + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + blockFrom.ToString() + "')");
-
+           
 
             if (action == 0) //Deleting
             {
-                Level.BlockChange(x, z, y, 0, (fake) ? null : this);
+                Level.BlockChange(x, z, y, 0, this);
             }
             else //Placing
             {
-                Level.BlockChange(x, z, y, newType, (fake) ? null : this);
+                Level.BlockChange(x, z, y, newType, this);
             }
 
             //BlockChanges.Add(new World.Blocks.BlockChange(new Vector3S(x, z, y), blockFrom, newType, action == 0));
@@ -736,7 +733,7 @@ namespace MCForge.Entity
 
         #endregion
         #region Outgoing Packets
-        public void SendPacket(Packet pa)
+        public override void SendPacket(Packet pa)
         {
             PacketEventArgs args = new PacketEventArgs(pa.bytes, false, (Packet.Types)pa.bytes[0]);
             bool Canceled = OnPlayerSendPacket.Call(this, args, OnAllPlayersSendPacket).Canceled;
@@ -921,6 +918,18 @@ namespace MCForge.Entity
         public void SendBlockChange(Vector3S[] blocks, Vector3S offset, byte type) {
             foreach (Vector3S v in blocks) {
                 SendBlockChange((ushort)(v.x + offset.x), (ushort)(v.z + offset.z), (ushort)(v.y + offset.y), type);
+            }
+        }
+        /// <summary>
+        /// This sends multiple blockchanges where currently is air to the player only. (Not other players)
+        /// </summary>
+        /// <param name="blocks">The blocks to be sent</param>
+        /// <param name="offset">The offset of the blocks</param>
+        /// <param name="type">The type of the blocks</param>
+        public void SendBlockChangeWhereAir(Vector3S[] blocks, Vector3S offset, byte type) {
+            foreach (Vector3S v in blocks) {
+                if (Level.GetBlock(v + offset) == 0)
+                    SendBlockChange((ushort)(v.x + offset.x), (ushort)(v.z + offset.z), (ushort)(v.y + offset.y), type);
             }
         }
         /// <summary>
@@ -1273,6 +1282,8 @@ namespace MCForge.Entity
             Server.Connections.Remove(this);
 
             Socket.Close();
+            
+            Socket.Dispose();
         }
 
         internal static void GlobalPing()

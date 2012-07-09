@@ -23,7 +23,7 @@ namespace MCForge.World.Physics
     /// <summary>
     /// Create a custom block with physics
     /// </summary>
-    public abstract class PhysicsBlock : Block
+    public abstract class PhysicsBlock : Block, ICloneable
     {
         /// <summary>
         /// The physics time.
@@ -69,7 +69,7 @@ namespace MCForge.World.Physics
         /// <param name="y">The y.</param>
         /// <param name="z">The z.</param>
         /// <param name="l">The l.</param>
-        public PhysicsBlock(int x, int y, int z) { this.X = x; this.Y = y; this.Z = z; }
+        public PhysicsBlock(int x, int z, int y) { this.X = x; this.Y = y; this.Z = z; }
         
         public PhysicsBlock() : base() {}
         
@@ -87,7 +87,8 @@ namespace MCForge.World.Physics
         /// <param name="l"></param>
         public void Add(Level l, PhysicsBlock b)
         {
-            l.pblocks.Add(this);
+            l.BlockChange((ushort)b.X, (ushort)b.Z, (ushort)b.Y, b.VisibleBlock);
+            l.pblocks.Add(b);
         }
         
         /// <summary>
@@ -104,22 +105,19 @@ namespace MCForge.World.Physics
         /// </summary>
         public static new void InIt()
         {
-            TimerTick = new Thread(new ParameterizedThreadStart(delegate
-                {
-                    while (!Server.ShuttingDown)
-                    {
-                        Level.Levels.ForEach(l =>
-                        {
-                            l.pblocks.ForEach(b => 
-                                {
-                                    b.Tick(l);
-                                });
-                            Thread.Sleep(l.PhysicsTick);
-                        });
-                        Thread.Sleep(5);
-                    }
-                }));
-            TimerTick.Start();
+            Level.OnAllLevelsLoad.SystemLvl += OnAllLevelsLoad_SystemLvl;
         }
+
+        static void OnAllLevelsLoad_SystemLvl(Level sender, API.Events.LevelLoadEventArgs args) {
+            sender.PhysicsThread = new Thread(() => {
+                while (!Server.ShuttingDown) {
+                    sender.pblocks.ForEach((pb) => pb.Tick(sender));
+                    Thread.Sleep(sender.PhysicsTick);
+                }
+            });
+            sender.PhysicsThread.Start();
+        }
+        
+        public abstract object Clone();
     }
 }

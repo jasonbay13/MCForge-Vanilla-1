@@ -30,6 +30,8 @@ using MCForge.Interfaces.Blocks;
 using System.Threading;
 using MCForge.Utils.Settings;
 using MCForge.World.Physics;
+using MCForge.SQL;
+using MCForge.API.Events;
 
 namespace MCForge.World {
     /// <summary>
@@ -73,7 +75,10 @@ namespace MCForge.World {
         }
         
         public List<PhysicsBlock> pblocks = new List<PhysicsBlock>();
-
+        /// <summary>
+        /// Doing thread doing the ticks for all physics blocks in this levels.
+        /// </summary>
+        public Thread PhysicsThread;
         public int PhysicsTick = 100;
         /// <summary>
         /// This delegate is used for looping through the blocks in a level in an automated fashion, and each cycle returns the position in xzy format
@@ -170,7 +175,7 @@ namespace MCForge.World {
         Thread physics;
 
         /// <summary>
-        /// Create a level with a specified type and a specified size
+        /// Create a level with a specified type and a specified size. <remarks>Calls OnLevelsLoad event.</remarks>
         /// </summary>
         /// <param name="size">The size to create the level.</param>
         /// <param name="type">The type of the level you want to create</param>
@@ -199,7 +204,7 @@ namespace MCForge.World {
                     mGen.SetPosition();
                     break;
             }
-
+            OnAllLevelsLoad.Call(newlevel, new LevelLoadEventArgs(true));
             return newlevel;
         }
 
@@ -229,7 +234,7 @@ namespace MCForge.World {
         }
 
         /// <summary>
-        /// Load a level.
+        /// Load a level. <remarks>Calls OnLevelLoadEvent.</remarks>
         /// </summary>
         /// <returns>The loaded level</returns>
         //TODO: Load all the types of levels (old mcforge, new mcforge, fcraft, minecpp, etc...)
@@ -316,6 +321,7 @@ namespace MCForge.World {
                 }
                 Binary.Dispose();
                 finalLevel.HandleMetaData();
+                Level.OnAllLevelsLoad.Call(finalLevel, new LevelLoadEventArgs(true));
                 Logger.Log("[Level] " + levelName + " was loaded");
                 return finalLevel;
             }
@@ -326,8 +332,11 @@ namespace MCForge.World {
         /// <summary>
         /// Unloads this instance.
         /// </summary>
-        public void Unload() {
-            SaveToBinary();
+        /// <param name="save">Whether the level will be saved or not.</param>
+        public void Unload(bool save = false) {
+            if (save)
+                SaveToBinary();
+            OnLevelUnload.Call(this, new LevelLoadEventArgs(false), OnAllLevelsUnload);
             physics.Abort();
             Levels.Remove(this);
         }
@@ -415,6 +424,23 @@ namespace MCForge.World {
                 FEBD(i);
             }
         }
+        
+        /// <summary>
+        /// Cause a Physics block change for the level
+        /// </summary>
+        /// <param name="x">Location of x</param>
+        /// <param name="z">Location of z</param>
+        /// <param name="y">Location of y</param>
+        /// <param name="pb">The physics block</param>
+        /// <param name="p">A player who doesnt need the update</param>
+        public void BlockChange(ushort x, ushort y, ushort z, PhysicsBlock pb, Player p = null) {
+            BlockChange(x, z, y, pb.VisibleBlock, p);
+            PhysicsBlock pbb = (PhysicsBlock)pb.Clone();
+            pbb.X = x;
+            pbb.Y = y;
+            pbb.Z = z;
+            pblocks.Add(pbb);
+        }
 
 
         /// <summary>
@@ -426,7 +452,10 @@ namespace MCForge.World {
         /// <param name="block">Block to set</param>
         /// <param name="p">A player who doesn't need the update.</param>
         public void BlockChange(ushort x, ushort z, ushort y, byte block, Player p = null) {
-            if (y == Size.y) return;
+            if (!IsInBounds(x, z, y) || y == Size.y) {
+                Logger.Log("Blockchange((ushort) " + x + ", (ushort)" + z + ", (ushort) " + y + ", (byte) " + block + ", (Player) " + p + ") is outside of level");
+                return;
+            }
             byte currentType = GetBlock(x, z, y);
             if (block == 0) {
                 pblocks.ForEach(pb =>
@@ -445,6 +474,10 @@ namespace MCForge.World {
                     MCForge.Interfaces.Blocks.Block.RemoveBlock(new Vector3S(x, z, y), this);
             }
             if (block == currentType) return;
+            if (p != null) {
+                byte blockFrom = GetBlock(x, z, y);
+                Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Block, Date, Was) VALUES (" + p.UID + ", " + x + ", " + y + ", " + z + ", '" + Name.MySqlEscape() + "', '" + (block == 0 ? "true" : "false") + "', '" + block.ToString() + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + blockFrom.ToString() + "')");
+            }
 
             SetBlock(x, z, y, block);
             if (p == null)
@@ -489,7 +522,20 @@ namespace MCForge.World {
         ///   <c>true</c> if [is in bounds] [the specified x]; otherwise, <c>false</c>.
         /// </returns>
         public bool IsInBounds(int x, int z, int y) {
-            return (x > 0 && x < Size.x && y > 0 && y < Size.y && z > 0 && z < Size.z);
+            return (x >= 0 && x < Size.x && y >= 0 && y < Size.y && z >= 0 && z < Size.z);
+        }
+        
+        /// <summary>
+        /// Determines whether the position is in bounds of the level.
+        /// </summary>
+        /// <param name="x">The x pos.</param>
+        /// <param name="z">The z pos.</param>
+        /// <param name="y">The y pos.</param>
+        /// <returns>
+        ///   <c>true</c> if [is in bounds] [the specified x]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsInBounds(uint x, uint z, uint y) {
+            return (x < Size.x && y < Size.y && z < Size.z);
         }
 
 
@@ -519,6 +565,10 @@ namespace MCForge.World {
             SetBlock(pos.x, pos.z, pos.y, block);
         }
         internal void SetBlock(int x, int z, int y, byte block) {
+            if (!IsInBounds(x,z,y)) {
+                Logger.Log("SetBlock(" + x + ", " + z + ", " + y + ") is outside of the level", LogType.Debug);
+                return;
+            }
             SetBlock(PosToInt(x, z, y), block);
         }
         internal void SetBlock(int pos, byte block) {
@@ -543,6 +593,9 @@ namespace MCForge.World {
         /// <param name="y">y pos to get</param>
         /// <returns>a byte that represents the blocktype at the given location</returns>
         public byte GetBlock(int x, int z, int y) {
+            if (!IsInBounds(x,z,y)) {
+                Logger.Log("GetBlock((int)" + x + ", (int)" + z + ", (int)" + y + ") is outside of the level", LogType.Debug);
+            }
             return GetBlock(PosToInt((ushort)x, (ushort)z, (ushort)y));
         }
         /// <summary>
@@ -553,6 +606,9 @@ namespace MCForge.World {
         /// <param name="y">y pos to get</param>
         /// <returns>a byte that represents the blocktype at the given location</returns>
         public byte GetBlock(ushort x, ushort z, ushort y) {
+            if (!IsInBounds(x,z,y)) {
+                Logger.Log("GetBlock((ushort)" + x + ", (ushort)" + z + ", (ushort)" + y + ") is outside of the level", LogType.Debug);
+            }
             return GetBlock(PosToInt(x, z, y));
         }
         /// <summary>
@@ -564,8 +620,9 @@ namespace MCForge.World {
             if (pos >= 0 && pos < Data.Length)
                 return Data[pos];
             else {
-                Logger.Log("Out of bounds in Level.GetBlock(int pos)", LogType.Error);
-                Logger.Log("Tried to get block at " + pos + " pos!", LogType.Error);
+                //Logger.Log("Out of bounds in Level.GetBlock(int pos)", LogType.Error);
+                //Logger.Log("Tried to get block at " + pos + " pos!", LogType.Error);
+                //^ Gets annoying with physics
                 return Block.BlockList.UNKNOWN; //Unknown Block
             }
         }
@@ -754,15 +811,12 @@ namespace MCForge.World {
         public List<Player> Players {
             get {
 
-                if (_playerList == null)
+                if (_playerList == null) {
                     _playerList = new List<Player>();
-
-                _playerList.Clear();
-
-                foreach (var p in Server.Players)
-                    if (p.Level == this)
-                        _playerList.Add(p);
-
+                    foreach (var p in Server.Players)
+                        if (p.Level == this)
+                            _playerList.Add(p);
+                }
                 return _playerList;
             }
             set {
@@ -773,5 +827,21 @@ namespace MCForge.World {
         public override string ToString() {
             return Name;
         }
+
+        #region Events
+        /// <summary>
+        /// Gets called when a level gets loaded.
+        /// </summary>
+        public static LevelLoadEvent OnAllLevelsLoad = new LevelLoadEvent();
+        /// <summary>
+        /// Gets called when this level gets unloaded.
+        /// </summary>
+        public LevelLoadEvent OnLevelUnload = new LevelLoadEvent();
+        /// <summary>
+        /// Gets called when a level gets unloaded.
+        /// </summary>
+        public static LevelLoadEvent OnAllLevelsUnload = new LevelLoadEvent();
+        #endregion
+
     }
 }

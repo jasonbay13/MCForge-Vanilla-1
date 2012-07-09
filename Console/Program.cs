@@ -26,8 +26,7 @@ using MCForge.Entity;
 using MCForge.Interface.Command;
 
 namespace MCForge.Core {
-    static class Program
-    {
+    static class Program {
         #region console colors
         static Dictionary<Color, ConsoleColor> ConsoleColorMaps = new Dictionary<Color, ConsoleColor>()
     {
@@ -49,16 +48,13 @@ namespace MCForge.Core {
         {Color.Yellow, ConsoleColor.Yellow}
     };
 
-        static ConsoleColor FindNearestConsoleColor(Color color)
-        {
+        static ConsoleColor FindNearestConsoleColor(Color color) {
             ConsoleColor bestMatch = ConsoleColor.White;
             int bestVariance = int.MaxValue;
 
-            foreach (Color c in ConsoleColorMaps.Keys)
-            {
+            foreach (Color c in ConsoleColorMaps.Keys) {
                 int thisVariance = Math.Abs(c.ToArgb() - color.ToArgb());
-                if (bestVariance > thisVariance)
-                {
+                if (bestVariance > thisVariance) {
                     bestMatch = ConsoleColorMaps[c];
                     bestVariance = thisVariance;
                 }
@@ -73,8 +69,7 @@ namespace MCForge.Core {
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="MCForge.Utils.LogEventArgs"/> instance containing the event data.</param>
         /// <remarks></remarks>
-        private static void Logger_OnRecieveErrorLog(object sender, LogEventArgs e)
-        {
+        private static void Logger_OnRecieveErrorLog(object sender, LogEventArgs e) {
             ClearCurrentConsoleLine();
             var prevColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Red;
@@ -88,21 +83,19 @@ namespace MCForge.Core {
         /// <param name="sender">The source of the event.</param>
         /// <param name="message">The <see cref="MCForge.Utils.LogEventArgs"/> instance containing the event data.</param>
         /// <remarks></remarks>
-        private static void Logger_OnRecieveLog(object sender, LogEventArgs message)
-        {
+        private static void Logger_OnRecieveLog(object sender, LogEventArgs message) {
             ClearCurrentConsoleLine();
             WriteLine(message.Message, FindNearestConsoleColor(message.TextColor), FindNearestConsoleColor(message.BackgroundColor));
             WriteInputLine("> ", input);
         }
-        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
         }
         static string input = "";
 
-        static void Main(string[] args)
-        {
-            cp = new ConsolePlayer(cio);
+        [STAThread]
+        static void Main(string[] args) {
             ServerSettings.Init();
+            cp = new ConsolePlayer(cio);
             bool checker = CheckArgs(args);
             Console.Title = ServerSettings.GetSetting("ServerName") + " - MCForge 6"; //Don't know what MCForge version we are using yet.
             if (!checker)
@@ -120,8 +113,7 @@ namespace MCForge.Core {
             ConsoleKeyInfo keyInfo;
             if (Console.CursorLeft < 3)
                 WriteInputLine();
-            while ((keyInfo = Console.ReadKey()) != null)
-            {
+            while ((keyInfo = Console.ReadKey()) != null) {
                 char key = keyInfo.KeyChar;
                 //handles escape
                 if (keyInfo.Key == ConsoleKey.Escape) continue;
@@ -137,14 +129,11 @@ namespace MCForge.Core {
                 // handle function keys
                 if (keyInfo.Key >= ConsoleKey.F1 && keyInfo.Key <= ConsoleKey.F24) continue;
 
-                if (keyInfo.Key != ConsoleKey.Enter)
-                {
-                    if (keyInfo.Key == ConsoleKey.Backspace && input.Length > 0)
-                    {
+                if (keyInfo.Key != ConsoleKey.Enter) {
+                    if (keyInfo.Key == ConsoleKey.Backspace && input.Length > 0) {
                         ClearConsoleLine(Console.CursorTop);
                         Console.SetCursorPosition(0, Console.CursorTop);
-                        if (!(input.Length < 1))
-                        {
+                        if (!(input.Length < 1)) {
                             input = input.Remove(input.Length - 1, 1);
                             WriteInputLine("> " + input);
                         }
@@ -153,10 +142,8 @@ namespace MCForge.Core {
                         input += key.ToString();
                     continue;
                 }
-                else
-                {
-                    if (String.IsNullOrWhiteSpace(input))
-                    {
+                else {
+                    if (String.IsNullOrWhiteSpace(input)) {
                         WriteInputLine();
                         continue;
                     }
@@ -168,19 +155,16 @@ namespace MCForge.Core {
             }
         }
 
-        private static void Handle(string input)
-        {
+        private static void Handle(string input) {
             //check if it is a command
-            if (input.StartsWith("/"))
-            {
+            if (input.StartsWith("/")) {
                 ICommand cmd = null;
 
                 string[] commandSplit = input.Remove(0, 1).Split(' ');
                 string[] args = commandSplit.Where((val, index) => index != 0).ToArray();
                 cmd = Command.Find(commandSplit[0]);
 
-                if (cmd == null)
-                {
+                if (cmd == null) {
                     WriteLine("Command not found!");
                     return; // cannot run the command
                 }
@@ -188,16 +172,28 @@ namespace MCForge.Core {
                 cmd.Use(cp, args);
                 Logger.Log("CONSOLE used: /" + commandSplit[0]);
             }
-            else
-            {
+            else if (input.ToLower() == "!stop") {
+                Console.Write("Would you like to save all? [y/n]:");
+                if (Console.ReadLine().ToLower().StartsWith("y")) {
+                    Server.SaveAll();
+                    Server.Stop();
+                }
+                else {
+                    Server.Stop();
+                }
+                return;
+            }
+            else if (input.ToLower() == "!copyurl") {
+                System.Windows.Forms.Clipboard.SetDataObject(Server.URL, true);
+            }
+            else {
                 Player.UniversalChat(Colors.white + "[Console] " + Server.DefaultColor + input);
                 Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
                 Logger.Log("[Console] " + input, Color.Yellow, Color.Black, LogType.Normal);
             }
         }
         #region Console Functions
-        private static void ClearConsoleLine(int line)
-        {
+        private static void ClearConsoleLine(int line) {
             string l = "";
             for (int i = 0; i <= Console.BufferWidth; i++)
                 l += " ";
@@ -207,29 +203,25 @@ namespace MCForge.Core {
             Console.Write(l);
             Console.SetCursorPosition(oldpos[0], oldpos[1]);
         }
-        private static void ClearCurrentConsoleLine()
-        {
+        private static void ClearCurrentConsoleLine() {
             string l = "";
             for (int i = 0; i <= Console.BufferWidth; i++)
                 l += " ";
 
             Console.SetCursorPosition(0, Console.CursorTop);
             Console.Write(l);
-            Console.SetCursorPosition(0, Console.CursorTop -1);
+            Console.SetCursorPosition(0, Console.CursorTop - 1);
         }
 
-        static void Write(string text)
-        {
+        static void Write(string text) {
             ClearConsoleLine(Console.CursorTop + 1);
             Console.Write(text);
         }
-        public static void WriteLine(string s)
-        {
+        public static void WriteLine(string s) {
             ClearConsoleLine(Console.CursorTop + 1);
             Console.WriteLine(s);
         }
-        public static void WriteLine(string s, ConsoleColor fg, ConsoleColor bg)
-        {
+        public static void WriteLine(string s, ConsoleColor fg, ConsoleColor bg) {
             ConsoleColor[] old = { Console.ForegroundColor, Console.BackgroundColor };
             Console.ForegroundColor = fg;
             Console.BackgroundColor = bg;
@@ -239,8 +231,7 @@ namespace MCForge.Core {
             Console.BackgroundColor = old[1];
             Console.WriteLine();
         }
-        public static void Write(string s, ConsoleColor fg, ConsoleColor bg)
-        {
+        public static void Write(string s, ConsoleColor fg, ConsoleColor bg) {
             ConsoleColor[] old = { Console.ForegroundColor, Console.BackgroundColor };
             Console.ForegroundColor = fg;
             Console.BackgroundColor = bg;
@@ -248,8 +239,7 @@ namespace MCForge.Core {
             Console.ForegroundColor = old[0];
             Console.BackgroundColor = old[1];
         }
-        static void WriteInputLine(string inputline = "> ", string input = "")
-        {
+        static void WriteInputLine(string inputline = "> ", string input = "") {
             if (Console.CursorLeft > 0)
                 Console.WriteLine();
             Console.SetCursorPosition(0, Console.CursorTop);
@@ -261,13 +251,11 @@ namespace MCForge.Core {
         /// </summary>
         /// <param name="args">The args</param>
         /// <returns>If returns false, run normal setup. If returns true, cancel normal setup. In this case something has already started the server.</returns>
-        static bool CheckArgs(string[] args)
-        {
+        static bool CheckArgs(string[] args) {
             if (args.Length == 0)
                 return false;
             string name = args[0];
-            switch (name)
-            {
+            switch (name) {
                 case "load-plugin":
                     if (args.Length == 1)
                         return false;
@@ -289,23 +277,19 @@ namespace MCForge.Core {
 
         private static ConsolePlayer cp;
         private static CommandIO cio = new CommandIO();
-        class CommandIO : IIOProvider
-        {
-            public string ReadLine()
-            {
+        class CommandIO : IIOProvider {
+            public string ReadLine() {
                 if (Console.CursorLeft != 0) Console.WriteLine();
                 Console.Write("CIO input: ");
                 return Console.ReadLine();
             }
 
-            public void WriteLine(string line)
-            {
+            public void WriteLine(string line) {
                 if (Console.CursorLeft != 0) Console.WriteLine();
                 Console.WriteLine("CIO output: " + line);
             }
 
-            public void WriteLine(string line, string replyChannel)
-            {
+            public void WriteLine(string line, string replyChannel) {
 
             }
         }

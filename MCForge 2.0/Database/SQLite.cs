@@ -22,6 +22,7 @@ using System.IO;
 using System.Timers;
 using MCForge.Utils.Settings;
 using MCForge.Utils;
+using System.Collections.Generic;
 using Timer = System.Timers.Timer;
 
 namespace MCForge.SQL {
@@ -78,7 +79,13 @@ namespace MCForge.SQL {
         }
         private void SaveTo(SQLiteConnection source, SQLiteConnection destination) {
             bool saving = source.DataSource == "";
-            SQLiteCommand cmdSource = new SQLiteCommand(source);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            source.BackupDatabase(destination, "main", "main", 1, this.SQLiteBackupCallback, 10);
+            sw.Stop();
+            Logger.Log("Database " + ((saving) ? "backed up" : "loaded") + " in " + sw.Elapsed);
+            return;
+            /*SQLiteCommand cmdSource = new SQLiteCommand(source);
             cmdSource.CommandText = "Select * FROM sqlite_master WHERE type=='table'";
             SQLiteDataReader masterReader = cmdSource.ExecuteReader();
             while (masterReader.Read()) {
@@ -113,7 +120,7 @@ namespace MCForge.SQL {
                     s.Stop();
                     Logger.Log("Table " + nvc["name"] + ((saving)?" saved (":" loaded (") + s.Elapsed + ")");
                 }
-            }
+            }*/
         }
         public void Save() {
             if (ServerSettings.GetSettingBoolean("SQLite-InMemory")) {
@@ -124,6 +131,9 @@ namespace MCForge.SQL {
                 saver.Close();
                 Logger.Log("Database saved");
             }
+        }
+        private bool SQLiteBackupCallback(SQLiteConnection source, string sourceName, SQLiteConnection destination, string destinationName, int pages, int remainingPages, int totalPages, bool retry) {
+            return true;
         }
 
         public override void executeQuery(string[] queryString) {
@@ -166,6 +176,15 @@ namespace MCForge.SQL {
                 Logger.Log("Error in SQLite..", LogType.Critical);
                 Logger.Log("" + e);
                 return db;
+            }
+        }
+
+        public override IEnumerable<NameValueCollection> getData(string queryString) {
+            SQLiteCommand cmd = new SQLiteCommand(queryString, conn);
+            SQLiteDataReader r = cmd.ExecuteReader();
+            while (r.Read()) {
+                NameValueCollection nvm = r.GetValues();
+                yield return nvm;
             }
         }
 

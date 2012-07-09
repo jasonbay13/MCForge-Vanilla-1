@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MCForge.ico" />
+    <Content Include="ProfilingSessions\Session20120709_171556.sdps" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

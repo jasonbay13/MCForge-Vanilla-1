@@ -18,106 +18,64 @@ using MCForge.Interface.Command;
 using MCForge.Entity;
 using MCForge.Utils;
 using MCForge.World;
-namespace MCForge.Commands
-{
-    public class CmdFly : ICommand
-    {
+using MCForge.Utils.Settings;
+namespace MCForge.Commands {
+    public class CmdFly : ICommand {
         public string Name { get { return "Fly"; } }
         public CommandTypes Type { get { return CommandTypes.Misc; } }
         public string Author { get { return "Gamemakergm"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
-        public byte Permission { get { return 30; } }
-
-        public void Use(Player p, string[] args)
-        {
+        public byte Permission { get { return 0; } }
+        public void Use(Player p, string[] args) {
             p.ExtraData.CreateIfNotExist("IsFlying", false);
-            p.ExtraData["IsFlying"]  = !(bool)p.ExtraData["IsFlying"];
-            if (!(bool)p.ExtraData["IsFlying"])
-            {
+            p.ExtraData["IsFlying"] = !(bool)p.ExtraData["IsFlying"];
+            if (!(bool)p.ExtraData["IsFlying"]) {
+                p.OnPlayerBigMove.Normal -= OnPlayerBigMove_Normal;
+                p.ResendBlockChange(glasses, (Vector3S)p.ExtraData["FlyLastPos"]);
                 return;
             }
+            p.SendBlockChangeWhereAir(glasses, p.belowBlock, 20);
+            p.ExtraData["FlyLastPos"] = p.belowBlock;
+            p.OnPlayerBigMove.Normal += OnPlayerBigMove_Normal;
             p.SendMessage("You are now flying. &cJump!");
-
-            Thread fly = new Thread(new ThreadStart(delegate
-                {
-                    Vector3S pos = p.Pos;
-                    Vector3S oldpos = p.oldPos;
-                List<Vector3S> buffer = new List<Vector3S>();
-                while ((bool)p.ExtraData["IsFlying"])
-                {
-                    Thread.Sleep(20);
-                    if (p.Pos.x == oldpos.x && p.Pos.z == oldpos.z && p.Pos.y == oldpos.y) continue;
-                    try
-                    {
-                        List<Vector3S> tempBuffer = new List<Vector3S>();
-                        List<Vector3S> toRemove = new List<Vector3S>();
-                        ushort x = (ushort)((p.Pos.x) / 32);
-                        ushort z = (ushort)((p.Pos.z) / 32);
-                        ushort y = (ushort)((p.Pos.y - 60) / 32);
-                        try
-                        {
-                            for (ushort xx = (ushort)(x - 1); xx <= x + 1; xx++)
-                            {
-                                for (ushort yy = (ushort)(y - 1); yy <= y; yy++)
-                                {
-                                    for (ushort zz = (ushort)(z - 1); zz <= z + 1; zz++)
-                                    {
-                                        if (p.Level.GetBlock(xx, zz, yy) == Block.BlockList.AIR)
-                                        {
-                                            pos.x = (short)xx; pos.y = (short)yy; pos.z = (short)zz;
-                                            tempBuffer.Add(pos);
-                                        }
-                                    }
-                                }
-                            }
-                            foreach (Vector3S cP in tempBuffer)
-                            {
-                                if (!buffer.Contains(cP))
-                                {
-                                    buffer.Add(cP);
-                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, Block.BlockList.GLASS);
-                                }
-                            }
-                            foreach (Vector3S cP in buffer)
-                            {
-                                if (!tempBuffer.Contains(cP))
-                                {
-                                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, Block.BlockList.AIR);
-                                    toRemove.Add(cP);
-                                }
-                            }
-                            foreach (Vector3S cP in toRemove)
-                            {
-                                buffer.Remove(cP);
-                            }
-                            tempBuffer.Clear();
-                            toRemove.Clear();
-                        }
-                        catch { }
-                    }
-                    catch { }
-                    //
-                    //p.Pos.CopyTo(oldpos, 0);
-                }
-
-                foreach (Vector3S cP in buffer)
-                {
-                    p.SendBlockChange((ushort)cP.x, (ushort)cP.z, (ushort)cP.y, 0); //Air
-                }
-
-                p.SendMessage("Stopped flying");
-            }));
-            fly.Start();
-           
         }
-        public void Help(Player p)
-        {
+
+        void OnPlayerBigMove_Normal(Player sender, API.Events.MoveEventArgs args) {
+            sender.ResendBlockChange(glasses, (Vector3S)sender.ExtraData["FlyLastPos"]);
+            sender.ExtraData["FlyLastPos"] = sender.belowBlock;
+            sender.SendBlockChangeWhereAir(glasses, sender.belowBlock, 20);
+        }
+        public void Help(Player p) {
             p.SendMessage("/fly - Allows you to fly");
         }
-
-        public void Initialize()
-        {
+        Vector3S[] glasses;
+        public void Initialize() {
+            string setting = ServerSettings.GetSetting("FlySize");
+            string[] split = setting.Split(' ', ',', ';', ':');
+            int xz = 5;
+            int y = 2;
+            bool midblock = ServerSettings.GetSettingBoolean("FlyMidBlock");
+            if (split.Length == 1) {
+                try { y = int.Parse(split[0]); }
+                catch { }
+            }
+            else if (split.Length > 2) {
+                try { xz = int.Parse(split[0]); }
+                catch { }
+                try { y = int.Parse(split[1]); }
+                catch { }
+            }
+            List<Vector3S> blocks = new List<Vector3S>();
+            for (int a = -xz / 2; a < xz / 2 + ((xz % 2 != 0) ? 1 : 0); a++) {
+                for (int b = -xz / 2; b < xz / 2 + ((xz % 2 != 0) ? 1 : 0); b++) {
+                    for (int c = 0; c > -y; c--) {
+                        blocks.Add(new Vector3S((short)a, (short)b, (short)c));
+                    }
+                }
+            }
+            if (midblock) blocks.Add(new Vector3S(0, 0, 1));
+            glasses = blocks.ToArray();
             Command.AddReference(this, "fly");
         }
     }

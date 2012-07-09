@@ -23,6 +23,9 @@ using MCForge.Entity;
 using MCForge.Groups;
 using MCForge.Core;
 using MCForge.World;
+using System.Diagnostics;
+using System.Collections.Specialized;
+using MCForge.Utils;
 
 namespace MCForge.Commands.Moderation {
     public class CmdUndo : ICommand {
@@ -128,34 +131,27 @@ namespace MCForge.Commands.Moderation {
         {
         	if (UID == -1)
         		return;
-        	DataTable blockchanges = Database.fillData("SElECT * FROM Blocks WHERE UID=" + UID);
-            if (blockchanges.Rows.Count > 0)  {
-            	DateTime timeToLook = DateTime.Parse(blockchanges.Rows[blockchanges.Rows.Count - 1]["Date"].ToString()).AddSeconds(time * -1); //Because
-
-            	/*if (timeToLook < 0)
-            		timeToLook = p.BlockChanges[0].Time.Second;
-            	else if (timeToLook > int.MaxValue)
-            		timeToLook = int.MaxValue;*/
+            string datetime = DateTime.Now.AddSeconds(time * -1).ToString("yyyy-MM-dd HH:mm:ss.fff");
+           // DataTable blockchanges = Database.fillData("SElECT * FROM Blocks WHERE UID=" + UID + " AND Date > '" + datetime + "' ORDER BY Date");
             	int x = 0;
             	int y = 0;
             	int z = 0;
             	byte was = 0;
-            	for (int i = blockchanges.Rows.Count - 1; i > 0; i--) {
-            		var bChange = DateTime.Parse(blockchanges.Rows[i]["Date"].ToString());
-            		
-            		x = int.Parse(blockchanges.Rows[i]["X"].ToString());
-            		y = int.Parse(blockchanges.Rows[i]["Y"].ToString());
-            		z = int.Parse(blockchanges.Rows[i]["Z"].ToString());
-            		was = byte.Parse(blockchanges.Rows[i]["Was"].ToString());
-            		if (bChange < timeToLook)
-            			continue;
-            		for (int j = 0; j < i; j++) {
-            			l.BlockChange((ushort)x, (ushort)z, (ushort)y, was);
-            		}
+                Stopwatch s = new Stopwatch();
+                s.Start();
+                int i = 0;
+            	foreach(NameValueCollection nvm in Database.getData("SElECT X, Y, Z, Was, Date FROM Blocks WHERE UID=" + UID + " AND Date > '" + datetime + "' ORDER BY Date DESC")){
+                    i++;
+                    x = int.Parse(nvm["X"].ToString());
+            		y = int.Parse(nvm["Y"].ToString());
+            		z = int.Parse(nvm["Z"].ToString());
+            		was = byte.Parse(nvm["Was"].ToString());
+                    l.BlockChange((ushort)x, (ushort)z, (ushort)y, was);
             	}
-            }
-            
-            blockchanges.Dispose();
+                Database.executeQuery("DELETE FROM Blocks WHERE DATE > '" + datetime + "'");
+                s.Stop();
+                Logger.Log("used " + s.Elapsed + " for " + i + " undos");
+           // blockchanges.Dispose();
         }
         void Undo(Player p, int time = 30) {
         	Undo(p.UID, time, p.Level);
