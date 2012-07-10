@@ -210,6 +210,49 @@ namespace MCForge_.Gui
 					Console.WriteLine(e.ToString());
 					Console.ForegroundColor = ConsoleColor.Green;
 				}
+				Console.WriteLine("Moving Files..");
+				string directory = "MCForge";
+				if (!Directory.Exists("MCForge"))
+				    Directory.CreateDirectory("MCForge");
+				else {
+				    int i = 0;
+				    while (Directory.Exists("MCForge" + i))
+				        i++;
+				    Directory.CreateDirectory("MCForge" + i);
+				    directory = "MCForge" + i;
+				}
+				Console.WriteLine("Moving Properties..");
+				try { Directory.Move("properties", directory + "/properties"); } catch(Exception e) { Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Error moving properties, you might need to do this after the upgrade!"); Console.ForegroundColor = ConsoleColor.Green; }
+				try { Console.WriteLine("Moving Levels (This could take a while).."); } catch(Exception e) { Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Error moving levels, you might need to do this after the upgrade!"); Console.ForegroundColor = ConsoleColor.Green; }
+				Directory.Move("levels", directory + "/levels");
+				if (!Server.useMySQL) {
+				    Console.WriteLine("Moving SQLite DB..");
+				    try { File.Copy(Server.apppath + "/MCForge.db", directory + "/MCForge.db"); } catch(Exception e) { Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Error copying database, you might need to do this after the upgrade!"); Console.ForegroundColor = ConsoleColor.Green; }
+				}
+				Console.WriteLine("Moving ranks..");
+				try { Directory.Move("ranks", directory + "/ranks"); } catch(Exception e) { Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Error moving ranks, you might need to do this after the upgrade!"); Console.ForegroundColor = ConsoleColor.Green; }
+				Console.WriteLine("Moving text..");
+				try { Directory.Move("text", directory + "/text");  } catch(Exception e) { Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Error moving text, you might need to do this after the upgrade!"); Console.ForegroundColor = ConsoleColor.Green; }
+				Console.WriteLine("Archiving logs..");
+				try { Directory.Move("logs", directory + "/old_logs");  } catch(Exception e) { Console.ForegroundColor = ConsoleColor.Red; Console.WriteLine("Error archiving logs, you might need to do this after the upgrade!"); Console.ForegroundColor = ConsoleColor.Green; }
+				Console.Write("Downloading Core Commands..");
+				MCForge.Downloader d = new MCForge.Downloader();
+				d.Download("http://update.mcforge.net/DLL/Commands.dll", directory + "/Command.dll");
+				d.Wait();
+				Console.Write("\nDone!");
+				d = new MCForge.Downloader();
+				Console.Write("\nDownloading Core Plugins..");
+				d.Download("http://update.mcforge.net/DLL/Plugins.dll", directory + "/Plugins.dll");
+				d.Wait();
+				Console.WriteLine("\nDone!");
+				Console.Write("\nDownloading the ");
+				Console.ForegroundColor = ConsoleColor.Red;
+				Console.Write("CORE");
+				Console.ForegroundColor = ConsoleColor.Green;
+				d = new MCForge.Downloader();
+				d.Download("http://update.mcforge.net/DLL/Core.dll", directory + "/MCForge.dll");
+				d.Wait();
+				Console.Write("\nDone!");
 			}
 			catch (Exception e) { Console.WriteLine(e.ToString()); Console.ReadKey(true); }
 			Console.ReadKey(true);
