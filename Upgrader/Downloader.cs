@@ -45,5 +45,9 @@ namespace MCForge
                 Thread.Sleep(100);
             }
         }
+        public void Reset() {
+            done = false;
+            old = 0;
+        }
     }
 }
