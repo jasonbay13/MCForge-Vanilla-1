@@ -51,7 +51,7 @@ namespace MCForge.World.Physics
             if (l.GetBlock(X, Z, Y - 1) == Block.BlockList.AIR)
             {
                 Add(l, new Gravel(X, Z, Y - 1));
-                l.SetBlock(X, Z, Y, Block.BlockList.AIR);
+                l.BlockChange((ushort)X, (ushort)Z, (ushort)Y, Block.BlockList.AIR);
                 Remove(l);
             }
         }
