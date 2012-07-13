@@ -1,4 +1,4 @@
-﻿/*
+/*
 Copyright 2011 MCForge
 Dual-licensed under the Educational Community License, Version 2.0 and
 the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -11,11 +11,13 @@ software distributed under the Licenses are distributed on an "AS IS"
 BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
-*/
+ */
+using System;
+using MCForge.Utils;
 
-namespace MCForge.World.Blocks
+namespace MCForge.World.Physics
 {
-    public class Gravel : Block
+    public class Gravel : PhysicsBlock
     {
         public override string Name
         {
@@ -28,6 +30,30 @@ namespace MCForge.World.Blocks
         public override byte Permission
         {
             get { return 0; }
+        }
+        public Gravel(int x, int z, int y)
+            : base(x, z, y)
+        {
+        }
+        public Gravel() { }
+
+        public override object Clone()
+        {
+            Gravel g = new Gravel();
+            g.X = X;
+            g.Y = Y;
+            g.Z = Z;
+            return g;
+        }
+
+        public override void Tick(Level l)
+        {
+            if (l.GetBlock(X, Z, Y - 1) == Block.BlockList.AIR)
+            {
+                Add(l, new Gravel(X, Z, Y - 1));
+                l.SetBlock(X, Z, Y, Block.BlockList.AIR);
+                Remove(l);
+            }
         }
     }
 }
