@@ -445,7 +445,11 @@ namespace MCForge.World {
                                     if (pb.X == x && pb.Y == y && pb.Z == z)
                                         pblocks.Remove(pb);
                                 });
+                if (GetBlock(x, z, y - 1) == Block.BlockList.DIRT)
+                    BlockChange(x, z, (ushort)(y - 1), Block.BlockList.GRASS, p);
             }
+            else if (!Block.CanWalkThrough(block) && GetBlock(x, z, y - 1) == Block.BlockList.GRASS)
+                    BlockChange(x, z, (ushort)(y - 1), Block.BlockList.DIRT, p);
             if (currentType == 255) {
                     if (MCForge.Interfaces.Blocks.Block.DoAction(p, x, z, y, block, this)) {
                         //may the action caused the block to change, sending to all
