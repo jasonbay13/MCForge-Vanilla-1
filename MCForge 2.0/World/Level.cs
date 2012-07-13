@@ -424,24 +424,6 @@ namespace MCForge.World {
                 FEBD(i);
             }
         }
-        
-        /// <summary>
-        /// Cause a Physics block change for the level
-        /// </summary>
-        /// <param name="x">Location of x</param>
-        /// <param name="z">Location of z</param>
-        /// <param name="y">Location of y</param>
-        /// <param name="pb">The physics block</param>
-        /// <param name="p">A player who doesnt need the update</param>
-        public void BlockChange(ushort x, ushort y, ushort z, PhysicsBlock pb, Player p = null) {
-            BlockChange(x, z, y, pb.VisibleBlock, p);
-            PhysicsBlock pbb = (PhysicsBlock)pb.Clone();
-            pbb.X = x;
-            pbb.Y = y;
-            pbb.Z = z;
-            pblocks.Add(pbb);
-        }
-
 
         /// <summary>
         /// Causes a block change for the level
@@ -487,7 +469,14 @@ namespace MCForge.World {
                 p.SendBlockChange(x, z, y, block);
             }
 
-
+            if (((Block)block).GetType().BaseType == typeof(PhysicsBlock))
+            {
+                PhysicsBlock pb = (PhysicsBlock)((PhysicsBlock)block).Clone();
+                pb.X = x;
+                pb.Y = y;
+                pb.Z = z;
+                pblocks.Add(pb);
+            }
 
             //TODO Special stuff for block changing
         }
