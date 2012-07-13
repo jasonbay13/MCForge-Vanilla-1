@@ -18,6 +18,7 @@ using System;
 using MCForge.Utils;
 using MCForge.World;
 using MCForge.Interfaces.Blocks;
+using System.Threading;
 
 namespace MCForge.Commands {
     public class CmdMessageBlock : ICommand {
@@ -134,6 +135,22 @@ namespace MCForge.Commands {
         }
 
         public void PhysicsTick(Vector3S[] blockPositions, Level level) {
+        }
+
+
+        public void OnPlayerStepsIn(Player p, Vector3S blockPosition, Level level) {
+            OnPlayerStepsOn(p, blockPosition, level);
+        }
+        private Thread logger;
+        public void OnCreate(Vector3S blockPosition, Level level, params byte[] type) {
+            if (logger == null) {
+                logger = new Thread(() => { //logging this way will reduce spam
+                    Logger.Log("Somebody tries to add a messageblock the wrong way"); 
+                    Thread.Sleep(1000);
+                    logger = null;
+                });
+                logger.Start();
+            }
         }
     }
 }

@@ -148,6 +148,7 @@
     <Compile Include="Robot\Point3D.cs" />
     <Compile Include="System\Backup.cs" />
     <Compile Include="System\Updater.cs" />
+    <Compile Include="Utils\BinaryUtils.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="System\Heartbeat\Heart.cs" />
     <Compile Include="System\Heartbeat\Heartbeat.cs" />

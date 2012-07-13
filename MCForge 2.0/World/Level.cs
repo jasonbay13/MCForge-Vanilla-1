@@ -364,7 +364,7 @@ namespace MCForge.World {
                             Binary.Write(pair.Key.ToString());
                             if (pair.Value.GetType() == typeof(List<string>)) {
                                 List<string> tmp = (List<string>)pair.Value;
-                                Binary.Write(MiscUtils.ToString(tmp));
+                                Binary.Write(StringUtils.ToHexString(tmp));
                             }
                             else
                                 Binary.Write(pair.Value.ToString());

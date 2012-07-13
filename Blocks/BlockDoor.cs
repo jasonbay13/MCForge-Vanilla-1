@@ -21,18 +21,25 @@ namespace MCForge.Commands {
         }
 
         public void OnPlayerStepsOn(Entity.Player p, Utils.Vector3S blockPosition, World.Level level) {
-            p.SendMessage("Step on: " + blockPosition);
+#if DEBUG
+            p.SendMessage("Stepped on: " + blockPosition);
+#endif
+        }
+        public void OnPlayerStepsIn(Entity.Player p, Utils.Vector3S blockPosition, World.Level level) {
+#if DEBUG
+            p.SendMessage("Stepped in: " + blockPosition);
+#endif
         }
 
         public bool OnAction(Entity.Player p, Utils.Vector3S blockPosition, byte holding, World.Level level) {
-            level.ExtraData[Name + blockPosition + "open"] = blockPosition.ToString();
-            level.ExtraData[Name + blockPosition + "opener"] = blockPosition.ToString();
+            level.ExtraData[Name + blockPosition + "open"] = blockPosition;
+            level.ExtraData[Name + blockPosition + "opener"] = blockPosition;
             level.ExtraData[Name + blockPosition + "tick"] = 0;
             return true;
         }
         public int TicksOpen = 15;
         public void PhysicsTick(Utils.Vector3S[] blockPositions, World.Level level) {
-        /*    List<Vector3S> ticked = new List<Vector3S>();
+            List<Vector3S> ticked = new List<Vector3S>();
             foreach (Vector3S blockPos in blockPositions) {
                 if (ticked.Contains(blockPos, blockPos)) continue;
                 ticked.Add(blockPos);
@@ -66,7 +73,7 @@ namespace MCForge.Commands {
                         level.ExtraData[Name + blockPos + "tick"] = ((int)level.ExtraData[Name + blockPos + "tick"]) + 1;
                     }
                 }
-            }*/
+            }
         }
 
 
@@ -81,6 +88,11 @@ namespace MCForge.Commands {
             level.ExtraData[Name + blockPosition + "tick"] = null;
             level.ExtraData[Name + blockPosition + "open"] = null;
             level.ExtraData[Name + blockPosition + "opener"] = null;
+        }
+
+
+        public void OnCreate(Vector3S blockPosition, World.Level level, params byte[] type) {
+            throw new NotImplementedException();
         }
     }
 }

@@ -22,11 +22,11 @@ using MCForge.World;
 
 namespace MCForge.Interfaces.Blocks {
     public interface IBlock {
-        //TODO: Add OnPlayerIsInBlock(..) for portals
         /// <summary>
         /// The name of this block. Used to create from commands.
         /// </summary>
         string Name { get; }
+
         /// <summary>
         /// Returns the display block type for a specific location
         /// </summary>
@@ -34,6 +34,7 @@ namespace MCForge.Interfaces.Blocks {
         /// <param name="level">The level</param>
         /// <returns>The display block type</returns>
         byte GetDisplayType(Vector3S blockPosition, Level level);
+
         /// <summary>
         /// Gets called when a player steps on this block.
         /// </summary>
@@ -41,6 +42,15 @@ namespace MCForge.Interfaces.Blocks {
         /// <param name="blockPosition">The position of the block</param>
         /// <param name="level">The level</param>
         void OnPlayerStepsOn(Player p, Vector3S blockPosition, Level level);
+
+        /// <summary>
+        /// Gets called when a player steps in this block.
+        /// </summary>
+        /// <param name="p">The player steps in this block</param>
+        /// <param name="blockPosition">The position of the block</param>
+        /// <param name="level">The level</param>
+        void OnPlayerStepsIn(Player p, Vector3S blockPosition, Level level);
+
         /// <summary>
         /// Gets called when a player creates or destroys this block, return true to prevent the block from being replaced by players
         /// </summary>
@@ -50,25 +60,51 @@ namespace MCForge.Interfaces.Blocks {
         /// <param name="level">The level</param>
         /// <returns>True to prevent the block from being replaced by players</returns>
         bool OnAction(Player p, Vector3S blockPosition, byte holding, Level level);
+
         /// <summary>
         /// Gets called when physics should be updated.
         /// </summary>
         /// <param name="blockPositions">All block positions of this block type</param>
         /// <param name="level">The level</param>
         void PhysicsTick(Vector3S[] blockPositions, Level level);
+
         /// <summary>
         /// Initializes the block type
         /// </summary>
         void Initialize();
+
         /// <summary>
         /// Gets called when the block type is unloaded.
         /// </summary>
         void OnUnload();
+
         /// <summary>
-        /// Gets called when a block is removed
+        /// Gets called when a block is removed. (not necessary th  rough players action)
         /// </summary>
         /// <param name="blockPosition">The position of the block</param>
-        /// <param name="level">the level</param>
+        /// <param name="level">The level</param>
         void OnRemove(Vector3S blockPosition, Level level);
+
+        /// <summary>
+        /// Gets called when a block of this type gets placed somewhere,
+        /// </summary>
+        /// <param name="blockPosition">The position of the block.</param>
+        /// <param name="level">The level</param>
+        /// <param name="type">The block types overgiven as $block parameters in block name.</param>
+        void OnCreate(Vector3S blockPosition, Level level, params byte[] type);
+
+        /* Introduction
+         *
+         * The blocks are stored inside the levels extradata, so everthing can be saved as part 
+         * of the level. To get even the state stored inside the level file, we need to add them 
+         * to the levels extradata as well. Make sure you use a type that os convertible to and 
+         * from a string.
+         * 
+         * The OnCreate methods byte[] type parameter are parsed out of the block name the user 
+         * passes to a command. For readability the underline sign ('_') is ingored if it is in
+         * front of a dollar sign ('$'). The text after the dollar sign is parsed up to the next 
+         * dollar sign or the end of the string and is only allowed to contain names of normal
+         * block types others will be ignored.
+         */
     }
 }

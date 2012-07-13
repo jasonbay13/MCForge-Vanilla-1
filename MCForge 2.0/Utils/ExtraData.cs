@@ -19,22 +19,34 @@ using System.Text;
 
 namespace MCForge.Utils {
     public class ExtraData<T1, T2> : Dictionary<T1, T2> {
+        private readonly object locker;
         public new T2 this[T1 key] {
             get {
                 if (null == key) return default(T2);
-                if (!base.ContainsKey(key)) return default(T2);
-                else return base[key];
+                lock (locker) {
+                    if (!base.ContainsKey(key)) return default(T2);
+                    else return base[key];
+                }
             }
             set {
                 if (key == null) return;
-                if (value == null) {
-                    if (base.ContainsKey(key))
-                        base.Remove(key);
-                    return;
+                lock (locker) {
+                    if (value == null) {
+                        if (base.ContainsKey(key))
+                            base.Remove(key);
+                        return;
+                    }
+                    if (!base.ContainsKey(key)) base.Add(key, value);
+                    else base[key] = value;
                 }
-                if (!base.ContainsKey(key)) base.Add(key, value);
-                else base[key] = value;
             }
+        }
+        public override string ToString() {
+            lock (locker) {
+                for (int i = 0; i < base.Keys.Count; i++) {
+                }
+            }
+            return "";
         }
     }
 }
