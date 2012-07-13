@@ -65,7 +65,7 @@ namespace MCForge_
     			lines.Add("mysql-pooling=" + Server.DatabasePooling);
     			lines.Add("mysql-dbname=" + Server.MySQLDatabaseName);
     			lines.Add("sqlite-inmemory=True");
-    			lines.Add("sqlite-filepath=_mcforge.db");
+    			lines.Add("sqlite-filepath=MCForge.db");
     			lines.Add("sqlite-pooling=True");
     			lines.Add("database-queuing=False");
     			lines.Add("database-flush_interval=20");

@@ -425,7 +425,6 @@ namespace MCForge.World {
             }
         }
 
-
         /// <summary>
         /// Causes a block change for the level
         /// </summary>
@@ -446,7 +445,11 @@ namespace MCForge.World {
                                     if (pb.X == x && pb.Y == y && pb.Z == z)
                                         pblocks.Remove(pb);
                                 });
+                if (GetBlock(x, z, y - 1) == Block.BlockList.DIRT)
+                    BlockChange(x, z, (ushort)(y - 1), Block.BlockList.GRASS, p);
             }
+            else if (!Block.CanWalkThrough(block) && GetBlock(x, z, y - 1) == Block.BlockList.GRASS)
+                    BlockChange(x, z, (ushort)(y - 1), Block.BlockList.DIRT, p);
             if (currentType == 255) {
                     if (MCForge.Interfaces.Blocks.Block.DoAction(p, x, z, y, block, this)) {
                         //may the action caused the block to change, sending to all
@@ -470,7 +473,14 @@ namespace MCForge.World {
                 p.SendBlockChange(x, z, y, block);
             }
 
-
+            if (((Block)block).GetType().BaseType == typeof(PhysicsBlock))
+            {
+                PhysicsBlock pb = (PhysicsBlock)((PhysicsBlock)block).Clone();
+                pb.X = x;
+                pb.Y = y;
+                pb.Z = z;
+                pblocks.Add(pb);
+            }
 
             //TODO Special stuff for block changing
         }
@@ -603,8 +613,9 @@ namespace MCForge.World {
             if (pos >= 0 && pos < Data.Length)
                 return Data[pos];
             else {
-                Logger.Log("Out of bounds in Level.GetBlock(int pos)", LogType.Error);
-                Logger.Log("Tried to get block at " + pos + " pos!", LogType.Error);
+                //Logger.Log("Out of bounds in Level.GetBlock(int pos)", LogType.Error);
+                //Logger.Log("Tried to get block at " + pos + " pos!", LogType.Error);
+                //^ Gets annoying with physics
                 return Block.BlockList.UNKNOWN; //Unknown Block
             }
         }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MCForge</RootNamespace>
     <AssemblyName>MCForge_</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -29,70 +29,49 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <OutputPath>bin\Release\</OutputPath>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <DebugType>PdbOnly</DebugType>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <DebugSymbols>false</DebugSymbols>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>3.5</OldToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>..\..\Source\General.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>
     </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
   <PropertyGroup />
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MySql.Data">
-      <HintPath>MySql.Data.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.76.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms.Ribbon, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\System.Windows.Forms.Ribbon.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -103,9 +82,13 @@
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="MySql.Data, Version=6.3.0.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+      <HintPath>MySql.Data.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CMDCONVERT.cs" />
+    <Compile Include="Downloader.cs" />
     <Compile Include="FileUtils.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="IMap.cs" />
@@ -119,11 +102,6 @@
     <Compile Include="OldMCForgeToNewMCForge.cs" />
     <Compile Include="PlayerGroup.cs" />
     <Compile Include="PlayerGroupProperties.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="SQLite.cs" />
     <Compile Include="Color.cs" />
     <Compile Include="MySQL.cs" />
@@ -134,11 +112,6 @@
     <Compile Include="Vector2S.cs" />
     <Compile Include="Vector3D.cs" />
     <Compile Include="Vector3S.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -161,11 +134,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="sqlite3.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

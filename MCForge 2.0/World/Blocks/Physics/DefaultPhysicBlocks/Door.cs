@@ -55,5 +55,13 @@ namespace MCForge.World.Physics {
         public override byte Permission {
             get { return 0; }
         }
+        public override object Clone()
+        {
+            Door d = new Door(open, closed);
+            d.X = X;
+            d.Y = Y;
+            d.Z = Z;
+            return d;
+        }
     }
 }

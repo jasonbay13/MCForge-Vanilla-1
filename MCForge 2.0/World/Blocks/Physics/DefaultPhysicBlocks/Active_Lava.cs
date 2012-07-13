@@ -33,12 +33,22 @@ namespace MCForge.World.Physics
         {
             get { return 80; }
         }
-        public Active_Lava(int x, int y, int z)
-            : base(x, y, z)
+        public Active_Lava(int x, int z, int y)
+            : base(x, z, y)
         {
 
         }
         public Active_Lava() { }
+        
+        public override object Clone()
+        {
+            Active_Lava al = new Active_Lava();
+            al.X = X;
+            al.Y = Y;
+            al.Z = Z;
+            return al;
+        }
+        
         public override void Tick(Level l)
         {
             /* .....-----===== Explosion =====-----..... */

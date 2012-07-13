@@ -176,10 +176,6 @@ namespace MCForge.World.Generator {
         /// </value>
         public float Persistence { get; set; }
 
-        /// <summary>
-        /// A constant for the max size of a map (to be used when the size is unknown)
-        /// </summary>
-        public const int MAX_SIZE = -1;
 
         public byte FlowingLiquid { get; set; }
     }
