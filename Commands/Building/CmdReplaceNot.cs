@@ -27,7 +27,7 @@ namespace MCForge.Commands
     {
         public string Name { get { return "ReplaceNot"; } }
         public CommandTypes Type { get { return CommandTypes.Building; } }
-        public string Author { get { return "Gamemakergm"; } }
+        public string Author { get { return "Gamemakergm, 7imekeeper"; } }
         public int Version { get { return 1; } }
         public string CUD { get { return ""; } }
         public byte Permission { get { return 80; } }
@@ -65,6 +65,8 @@ namespace MCForge.Commands
 
             if (ignore.Contains(args[1]))
                 ignore.Remove(args[1]);
+            if (ignore.Count < 1)
+                p.SendMessage("Next time, just use cuboid if you're not going to ignore anything!");
 
             cpos.ignore = new List<byte>();
             foreach (string name in ignore)
@@ -78,7 +80,8 @@ namespace MCForge.Commands
        
         public void Help(Player p)
         {
-            p.SendMessage("/replacenot <block> <block2> - Replaces everything but <block> with <block2> inside a selected cuboid.");
+            p.SendMessage("/replacenot <block,block2,...> <new> - Replaces everything but <block> with <new> inside a selected cuboid.");
+            p.SendMessage("If multiple<block>s are specified none of them will be replaced with <new>.");
             p.SendMessage("Shortcut: /rn");
         }
 
