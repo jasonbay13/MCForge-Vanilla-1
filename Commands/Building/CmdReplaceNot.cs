@@ -36,7 +36,7 @@ namespace MCForge.Commands
         {
             if (args.Length != 2)
             {
-                p.SendMessage("Invalid arguments!");
+                p.SendMessage("Invalid number of arguments!");
                 Help(p);
                 return;
             }
