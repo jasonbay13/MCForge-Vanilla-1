@@ -19,7 +19,7 @@ using System.Text;
 
 namespace MCForge.Utils {
     public class ExtraData<T1, T2> : Dictionary<T1, T2> {
-        private readonly object locker;
+        private readonly object locker=new object();
         public new T2 this[T1 key] {
             get {
                 if (null == key) return default(T2);

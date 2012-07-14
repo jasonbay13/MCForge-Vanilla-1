@@ -89,6 +89,7 @@ namespace MCForge.Core {
             WriteInputLine("> ", input);
         }
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
+            Logger.LogError((Exception)e.ExceptionObject);
         }
         static string input = "";
 

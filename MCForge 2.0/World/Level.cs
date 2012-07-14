@@ -462,7 +462,8 @@ namespace MCForge.World {
             if (block == currentType) return;
             if (p != null) {
                 byte blockFrom = GetBlock(x, z, y);
-                Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Block, Date, Was) VALUES (" + p.UID + ", " + x + ", " + y + ", " + z + ", '" + Name.MySqlEscape() + "', '" + (block == 0 ? "true" : "false") + "', '" + block.ToString() + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + blockFrom.ToString() + "')");
+                p.history.Add(new Tuple<short, short, short>((short)x, (short)z, (short)y), blockFrom, block);
+                //Database.QueueCommand("INSERT INTO Blocks (UID, X, Y, Z, Level, Deleted, Block, Date, Was) VALUES (" + p.UID + ", " + x + ", " + y + ", " + z + ", '" + Name.MySqlEscape() + "', '" + (block == 0 ? "true" : "false") + "', '" + block.ToString() + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + "', '" + blockFrom.ToString() + "')");
             }
 
             SetBlock(x, z, y, block);

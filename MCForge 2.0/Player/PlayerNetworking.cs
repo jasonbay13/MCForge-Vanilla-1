@@ -190,9 +190,7 @@ namespace MCForge.Entity
                 bool cancel = OnPlayerConnect.Call(this, eargs, OnAllPlayersConnect).Canceled;
                 if (cancel)
                 {
-                    if (IsLoggedIn)
-                        Kick("Disconnected by event");
-                    return;
+                    Kick("Disconnected by canceled ConnectionEventArgs!");
                 }
             Gotos_Are_The_Devil:
                 if (Server.PlayerCount >= ServerSettings.GetSettingInt("MaxPlayers") && !Server.VIPs.Contains(Username) && !Server.Devs.Contains(Username))

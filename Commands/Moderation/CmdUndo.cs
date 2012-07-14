@@ -116,7 +116,7 @@ namespace MCForge.Commands.Moderation {
             }
             if (UID != -1)
             {
-            	Undo(UID, _time, p.Level);
+            	Undo(UID, _time, p.Level, who);
             	Player.UniversalChat(Server.DefaultColor + "Undid " + args[0] + " for &c" + _time + Server.DefaultColor + " seconds");
             }
             else
@@ -127,8 +127,12 @@ namespace MCForge.Commands.Moderation {
         }
 
         
-        void Undo (long UID, int time, Level l)
+        void Undo (long UID, int time, Level l, Player online)
         {
+            if (online != null) {
+                online.history.Undo(DateTime.Now.Ticks - (time * 10000), l);
+            }
+            return;
         	if (UID == -1)
         		return;
             string datetime = DateTime.Now.AddSeconds(time * -1).ToString("yyyy-MM-dd HH:mm:ss.fff");
@@ -154,7 +158,7 @@ namespace MCForge.Commands.Moderation {
            // blockchanges.Dispose();
         }
         void Undo(Player p, int time = 30) {
-        	Undo(p.UID, time, p.Level);
+        	Undo(p.UID, time, p.Level, p);
         }
 
         public void Help(Player p) {
