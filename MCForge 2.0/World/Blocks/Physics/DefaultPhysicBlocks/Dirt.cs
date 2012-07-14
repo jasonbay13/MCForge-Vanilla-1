@@ -48,7 +48,7 @@ namespace MCForge.World.Physics
 
         public override void Tick(Level l)
         {
-            if (l.GetBlock(X, Z, Y + 1) == Block.BlockList.AIR)
+            if (Block.CanPassLight(l.GetBlock(X, Z, Y + 1)))
             {
                 l.BlockChange((ushort)X, (ushort)Z, (ushort)Y, Block.BlockList.GRASS);
                 Remove(l);
