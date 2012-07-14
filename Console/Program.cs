@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using System.Linq;
-using System.Drawing;
 using MCForge.Interface;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
@@ -94,6 +93,7 @@ namespace MCForge.Core {
 
         [STAThread]
         static void Main(string[] args) {
+            Logger.Init();
             ServerSettings.Init();
             cp = new ConsolePlayer(cio);
             bool checker = CheckArgs(args);
@@ -105,7 +105,7 @@ namespace MCForge.Core {
 
             //declare the Hooks
             //Error Logging
-            Logger.OnRecieveErrorLog += new EventHandler<LogEventArgs>(Logger_OnRecieveErrorLog);
+            Logger.OnRecieveErrorLog += new EventHandler<ErrorLogEventArgs>(Logger_OnRecieveErrorLog);
             //Normal Logs
             Logger.OnRecieveLog += new EventHandler<LogEventArgs>(Logger_OnRecieveLog);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
