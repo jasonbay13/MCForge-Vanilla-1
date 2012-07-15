@@ -8,6 +8,7 @@ using MCForge.Utils;
 using System.IO;
 using System.IO.Compression;
 using MCForge.Utils.Settings;
+using System.Threading;
 
 namespace MCForge.Utils {
     public class BlockChangeHistory {
@@ -16,15 +17,17 @@ namespace MCForge.Utils {
             get {
                 if (_basepath == null) {
                     _basepath = ServerSettings.GetSetting("BlockChangeHistoryPath");
-                    if (_basepath == null) _basepath = "";
+                    if (_basepath == null) _basepath = "" + Path.DirectorySeparatorChar;
+                    else _basepath = ""+Path.DirectorySeparatorChar;
+                    _basepath = System.Windows.Forms.Application.StartupPath + _basepath;
                 }
-                if (_basepath.Length > 0 && _basepath[_basepath.Length - 1] != '/')
-                    return _basepath + "/";
+                if (_basepath.Length > 0 && _basepath[_basepath.Length - 1] != Path.DirectorySeparatorChar)
+                    return _basepath + Path.DirectorySeparatorChar;
                 else return _basepath;
             }
         }
         string GetFullPath(Level l) {
-            return basepath + l.Name + "/" + player.UID + "/"; //TODO: make sure renaming a level moves undo histroy files to new folder.
+            return basepath + l.Name + Path.DirectorySeparatorChar + player.UID + Path.DirectorySeparatorChar; //TODO: make sure renaming a level moves undo histroy files to new folder.
         }
 
         /// <summary>
@@ -70,7 +73,8 @@ namespace MCForge.Utils {
             toChange = redoArchiveOthersUndoForAllPlayers(toChange, since, l);
             string path=GetFullPath(l);
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-            FileStream fs = new FileStream(GetFullPath(l) + DateTime.Now + futureEnding, FileMode.Create, FileAccess.Write);
+            string tmppath = GetFullPath(l) + DateTime.Now.Ticks + futureEnding;
+            FileStream fs = new FileStream(tmppath, FileMode.Create, FileAccess.Write);
             GZipStream gz = new GZipStream(fs, CompressionMode.Compress);
             BinaryWriter bw = new BinaryWriter(gz);
             foreach (Tuple<short, short, short> v in toChange.Keys) {
@@ -182,10 +186,10 @@ namespace MCForge.Utils {
             lock (lock_archive) {
                 string path = GetFullPath(l);
                 if (Directory.Exists(path)) {
-                    Tuple<long, string> partialFile = new Tuple<long, string>(0, "");
+                    Tuple<long, string> partialFile = null;
                     List<Tuple<long, string>> completeFiles = new List<Tuple<long, string>>();
                     //checking file times
-                    foreach (string s in Directory.GetFiles(path)) {
+                    foreach (string s in Directory.GetFiles(path, historyEnding)) {
                         if (s.EndsWith(historyEnding)) {
                             long filetime = 0;
                             try {
@@ -224,7 +228,7 @@ namespace MCForge.Utils {
                         }
                         gz.Close();
                         fs.Close();
-                        if (ms.Length % 16 != 0) throw new Exception("Incomplete .cbh-File: " + path + completeFiles[i]);
+                        if (ms.Length % 16 != 0) throw new Exception("Incomplete blockchange File: " + path + completeFiles[i]);
                         BinaryReader br = new BinaryReader(ms);
                         for (long pos = ms.Length - 16; pos >= 0; pos -= 16) { //start from end (newest entry is at end of file)
                             ms.Position = pos;
@@ -311,12 +315,12 @@ namespace MCForge.Utils {
         }
         private static ExtraData<Tuple<short, short, short>, Tuple<long, byte>> redoArchiveOthersUndoForAllPlayers(ExtraData<Tuple<short, short, short>, Tuple<long, byte>> ret, long since, Level l) {
             lock (lock_archive) {
-                string path = basepath + l + "/";
+                string path = basepath + l + Path.DirectorySeparatorChar;
                 if (Directory.Exists(path)) {
                     string[] dir = Directory.GetDirectories(path);
                     foreach (string playerPath in dir) {
                         //TODO: check for .. and .
-                        Tuple<long, string> partialFile = new Tuple<long, string>(0, "");
+                        Tuple<long, string> partialFile = null;
                         List<Tuple<long, string>> completeFiles = new List<Tuple<long, string>>();
 
                         //checking file times

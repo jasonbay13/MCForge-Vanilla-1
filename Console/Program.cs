@@ -106,7 +106,9 @@ namespace MCForge.Core {
 
             //declare the Hooks
             //Error Logging
+#if !DEBUG
             Logger.OnRecieveErrorLog += new EventHandler<LogEventArgs>(Logger_OnRecieveErrorLog);
+#endif
             //Normal Logs
             Logger.OnRecieveLog += new EventHandler<LogEventArgs>(Logger_OnRecieveLog);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
@@ -149,14 +151,14 @@ namespace MCForge.Core {
                         continue;
                     }
                     WriteLine("");
-                    Handle(input);
+                    if (!Handle(input)) return;
                     input = "";
                     WriteInputLine();
                 }
             }
         }
 
-        private static void Handle(string input) {
+        private static bool Handle(string input) {
             //check if it is a command
             if (input.StartsWith("/")) {
                 ICommand cmd = null;
@@ -167,7 +169,7 @@ namespace MCForge.Core {
 
                 if (cmd == null) {
                     WriteLine("Command not found!");
-                    return; // cannot run the command
+                    return true; // cannot run the command
                 }
 
                 cmd.Use(cp, args);
@@ -182,7 +184,7 @@ namespace MCForge.Core {
                 else {
                     Server.Stop();
                 }
-                return;
+                return false;
             }
             else if (input.ToLower() == "!copyurl") {
                 System.Windows.Forms.Clipboard.SetDataObject(Server.URL, true);
@@ -192,6 +194,7 @@ namespace MCForge.Core {
                 Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
                 Logger.Log("[Console] " + input, Color.Yellow, Color.Black, LogType.Normal);
             }
+            return true;
         }
         #region Console Functions
         private static void ClearConsoleLine(int line) {

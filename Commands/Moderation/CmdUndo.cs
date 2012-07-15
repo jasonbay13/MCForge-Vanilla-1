@@ -130,7 +130,7 @@ namespace MCForge.Commands.Moderation {
         void Undo (long UID, int time, Level l, Player online)
         {
             if (online != null) {
-                online.history.Undo(DateTime.Now.Ticks - (time * 10000), l);
+                online.history.Undo(DateTime.Now.AddSeconds(-time).Ticks, l);
             }
             return;
         	if (UID == -1)
