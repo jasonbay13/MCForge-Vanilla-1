@@ -26,7 +26,6 @@ using MCForge.Utils;
 using System.Drawing;
 using MCForge.World.Loading_and_Saving;
 using MCForge.Groups;
-using MCForge.Interfaces.Blocks;
 using System.Threading;
 using MCForge.Utils.Settings;
 using MCForge.World.Physics;
@@ -158,21 +157,7 @@ namespace MCForge.World {
             Data = new byte[TotalBlocks];
             BackupLevel = true;
             ExtraData = new ExtraData<object, object>();
-            if (ServerSettings.HasKey("PhysicsInterval")) {
-                physicsSleep = ServerSettings.GetSettingInt("PhysicsInterval");
-
-            }
-            else physicsSleep = 100;
-            physics = new Thread(() => {
-                while (!Server.ShuttingDown) {
-                    Thread.Sleep(physicsSleep);
-                    MCForge.Interfaces.Blocks.Block.DoTick(this);
-                }
-            });
-            physics.Start();
         }
-        int physicsSleep;
-        Thread physics;
 
         /// <summary>
         /// Create a level with a specified type and a specified size. <remarks>Calls OnLevelsLoad event.</remarks>
@@ -306,16 +291,6 @@ namespace MCForge.World {
                         	catch { Binary.Dispose(); return null; }
                         }
                         //TODO: Move to HandleMetaData
-                        foreach (string name in MCForge.Interfaces.Blocks.Block.Blocks.Keys) {
-                            if (finalLevel.ExtraData["IBlocks" + name] != null && finalLevel.ExtraData["IBlocks" + name].GetType() == typeof(string)) {
-                                string hexs = (string)finalLevel.ExtraData["IBlocks" + name];
-                                finalLevel.ExtraData["IBlocks" + name] = new List<string>();
-                                ((List<string>)finalLevel.ExtraData["IBlocks" + name]).AddHexstrings(hexs);
-                            }
-                            else if (finalLevel.ExtraData["IBlocks" + name] == null) {
-                                finalLevel.ExtraData["IBlocks" + name] = new List<string>();
-                            }
-                        }
                         #endregion
                     }
                 }
@@ -337,7 +312,6 @@ namespace MCForge.World {
             if (save)
                 SaveToBinary();
             OnLevelUnload.Call(this, new LevelLoadEventArgs(false), OnAllLevelsUnload);
-            physics.Abort();
             Levels.Remove(this);
         }
 
@@ -454,15 +428,6 @@ namespace MCForge.World {
                     BlockChange(x, z, (ushort)(y - 1), Block.BlockList.DIRT, p);
                 else if (Block.CanPassLight(block) && GetBlock(x, z, y - 1) == Block.BlockList.DIRT)
                     BlockChange(x, z, (ushort)(y - 1), Block.BlockList.GRASS, p);
-            }
-            if (currentType == 255) {
-                    if (MCForge.Interfaces.Blocks.Block.DoAction(p, x, z, y, block, this)) {
-                        //may the action caused the block to change, sending to all
-                        block = MCForge.Interfaces.Blocks.Block.GetVisibleType(x, z, y, this);
-                        Player.GlobalBlockchange(this, x, z, y, block);
-                        return;
-                    }
-                    MCForge.Interfaces.Blocks.Block.RemoveBlock(new Vector3S(x, z, y), this);
             }
             if (block == currentType) return;
             if (p != null) {

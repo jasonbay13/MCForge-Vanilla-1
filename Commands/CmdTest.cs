@@ -45,16 +45,6 @@ namespace MCForge.Commands {
 
         void OnPlayerBlockChange_Normal2(Player sender, BlockChangeEventArgs args) {
             sender.OnPlayerBlockChange.Normal -= OnPlayerBlockChange_Normal2;
-            Vector3S v = (Vector3S)sender.ExtraData["Datapass"];
-            Vector3S start = new Vector3S((v.x < args.X) ? (ushort)v.x : args.X, (v.z < args.Z) ? (ushort)v.z : args.Z, (v.y < args.Y) ? (ushort)v.y : args.Y);
-            Vector3S end = new Vector3S((v.x > args.X) ? (ushort)v.x : args.X, (v.z > args.Z) ? (ushort)v.z : args.Z, (v.y > args.Y) ? (ushort)v.y : args.Y);
-            for (int x = start.x; x <= end.x; x++) {
-                for (int z = start.z; z <= end.z; z++) {
-                    for (int y = start.y; y <= end.y; y++) {
-                        MCForge.Interfaces.Blocks.Block.SetBlock(MCForge.Interfaces.Blocks.Block.GetBlock("BlockDoor"), new Vector3S((ushort)x, (ushort)z, (ushort)y), sender.Level);
-                    }
-                }
-            }
         }
 
         public void CallBack(Player sender, MoveEventArgs args) {
