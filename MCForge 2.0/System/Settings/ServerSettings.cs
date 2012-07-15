@@ -108,7 +108,7 @@ namespace MCForge.Utils.Settings {
         /// <summary>
         /// This event is triggered when a setting node is changed in anyway
         /// </summary>
-        public static EventHandler<SettingsChangedEventArgs> OnSettingChanged;
+        public static event EventHandler<SettingsChangedEventArgs> OnSettingChanged;
 
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace MCForge.Utils.Settings {
             if (OnSettingChanged != null)
                 OnSettingChanged(null, new SettingsChangedEventArgs(key, pair.Value, string.Join(",", values)));
 
-            pair.Description = description;
+            pair.Description = description ?? pair.Description;;
             pair.Value = string.Join(",", values);
         }
 

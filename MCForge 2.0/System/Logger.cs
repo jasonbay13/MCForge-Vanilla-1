@@ -39,13 +39,13 @@ namespace MCForge.Utils {
         /// <summary>
         /// This event is called when Logger.LogError() is invoked
         /// </summary>
-        public static event EventHandler<LogEventArgs> OnRecieveErrorLog;
+        public static event EventHandler<ErrorLogEventArgs> OnRecieveErrorLog;
 
         internal static Thread _workerThread;
         internal static Queue<LogEventArgs> _flushQueue;
 
         internal static Thread _errorWorkerThread;
-        internal static Queue<LogEventArgs> _flushErrorQueue;
+        internal static Queue<ErrorLogEventArgs> _flushErrorQueue;
 
 
         private static DateTime _lastTime;
@@ -59,13 +59,13 @@ namespace MCForge.Utils {
         /// <summary>
         /// Initializes Logger object staticly
         /// </summary>
-        static Logger() {
+        public static void Init() {
 
             _flushMessages = true;
             _flushErrorMessages = true;
 
             _flushQueue = new Queue<LogEventArgs>();
-            _flushErrorQueue = new Queue<LogEventArgs>();
+            _flushErrorQueue = new Queue<ErrorLogEventArgs>();
 
             _workerThread = new Thread(Flush);
             _workerThread.Start();
@@ -75,7 +75,7 @@ namespace MCForge.Utils {
 
             _lastTime = DateTime.Now;
             FileUtils.CreateDirIfNotExist(FileUtils.LogsPath);
-            FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + CurrentLogFile, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS:" + Environment.OSVersion + ", ARCH:" + (Environment.Is64BitOperatingSystem ? "x64" :  "x86") + ", CULTURE: " + CultureInfo.CurrentCulture +  Environment.NewLine);
+            FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + CurrentLogFile, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS:" + Environment.OSVersion + ", ARCH:" + ( Environment.Is64BitOperatingSystem ? "x64" : "x86" ) + ", CULTURE: " + CultureInfo.CurrentCulture + Environment.NewLine);
 
         }
 
@@ -94,7 +94,7 @@ namespace MCForge.Utils {
         /// <param name="logType">The log type</param>
         public static void Log(string message, LogType logType = LogType.Normal) {
             Color one = Color.White;
-            switch (logType) {
+            switch ( logType ) {
                 case LogType.Critical:
                     one = Color.DarkRed;
                     break;
@@ -108,7 +108,7 @@ namespace MCForge.Utils {
                     one = Color.Yellow;
                     break;
             }
-                Log(message, one, Color.Black, logType);
+            Log(message, one, Color.Black, logType);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace MCForge.Utils {
         /// <param name="bgColor">Color of the background</param> 
         /// <param name="logType">The log type</param>
         public static void Log(string message, Color textColor, Color bgColor, LogType logType = LogType.Normal) {
-                _flushQueue.Enqueue(new LogEventArgs(message, logType, textColor, bgColor));
+            _flushQueue.Enqueue(new LogEventArgs(message, logType, textColor, bgColor));
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace MCForge.Utils {
         /// </summary>
         /// <param name="e">Exception to be logged</param>
         public static void LogError(Exception e) {
-            _flushErrorQueue.Enqueue(new LogEventArgs(e.Message + "\n" + e.StackTrace, LogType.Error));
+            _flushErrorQueue.Enqueue(new ErrorLogEventArgs(e));
         }
 
         private static int count;
@@ -136,18 +136,18 @@ namespace MCForge.Utils {
         /// </summary>
         /// <param name="log">Message to log</param>
         public static void WriteLog(string log) {
-            if (count != 0) {
+            if ( count != 0 ) {
                 int c = count;
-                while (count >= c) Thread.Sleep(200);
+                while ( count >= c ) Thread.Sleep(200);
             }
             count++;
-            if (_lastTime.Day != DateTime.Now.Day) {
+            if ( _lastTime.Day != DateTime.Now.Day ) {
                 _lastTime = DateTime.Now;
-                FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + CurrentLogFile, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS:" + Environment.OSVersion + ", ARCH:" + (Environment.Is64BitOperatingSystem ? "x64" :  "x86") + ", CULTURE: " + CultureInfo.CurrentCulture +  Environment.NewLine);
+                FileUtils.CreateFileIfNotExist(FileUtils.LogsPath + CurrentLogFile, "--MCForge: Version: " + Assembly.GetExecutingAssembly().GetName().Version + ", OS:" + Environment.OSVersion + ", ARCH:" + ( Environment.Is64BitOperatingSystem ? "x64" : "x86" ) + ", CULTURE: " + CultureInfo.CurrentCulture + Environment.NewLine);
             }
 
             try {
-                using (var writer = new StreamWriter(FileUtils.LogsPath + CurrentLogFile, true)) {
+                using ( var writer = new StreamWriter(FileUtils.LogsPath + CurrentLogFile, true) ) {
                     writer.WriteLine(log);
                 }
             }
@@ -156,15 +156,13 @@ namespace MCForge.Utils {
         }
 
         internal static void Flush() {
-            while (_flushMessages) {
+            while ( _flushMessages ) {
                 Thread.Sleep(20);
-                if (_flushQueue.Count > 0) {
+                if ( _flushQueue.Count > 0 ) {
                     var arg = _flushQueue.Dequeue();
-                    if (OnRecieveLog != null)
-                    {
-                        try
-                        {
-                            if (arg.LogType == LogType.Debug && !Server.DebugMode)
+                    if ( OnRecieveLog != null ) {
+                        try {
+                            if ( arg.LogType == LogType.Debug && !Server.DebugMode )
                                 continue;
                             OnRecieveLog(null, arg);
                             WriteLog(arg.Message);
@@ -177,13 +175,13 @@ namespace MCForge.Utils {
         }
 
         internal static void FlushErrors() {
-            while (_flushErrorMessages) {
+            while ( _flushErrorMessages ) {
                 Thread.Sleep(20);
-                if (_flushErrorQueue.Count > 0) {
+                if ( _flushErrorQueue.Count > 0 ) {
                     var arg = _flushErrorQueue.Dequeue();
-                    if (OnRecieveErrorLog != null)
-                        OnRecieveErrorLog(null,arg );
-                     WriteLog("-------[Error]-------\n\r " + arg.Message + "\n\r---------------------");
+                    if ( OnRecieveErrorLog != null )
+                        OnRecieveErrorLog(null, arg);
+                    WriteLog("-------[Error]-------\n\r " + arg.Message + "\n\r---------------------");
                 }
 
             }
@@ -270,6 +268,36 @@ namespace MCForge.Utils {
             LogType = logType;
             TextColor = textColor;
             BackgroundColor = bgColor;
+        }
+
+    }
+
+
+    /// <summary>
+    ///Log event where object holding the event
+    ///would get a string (the message)
+    /// </summary>
+    public class ErrorLogEventArgs : LogEventArgs {
+
+
+        /// <summary>
+        /// Gets or sets the exception.
+        /// </summary>
+        /// <value>
+        /// The exception.
+        /// </value>
+        public Exception Exception { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ErrorLogEventArgs"/> class.
+        /// </summary>
+        /// <param name="exception">The exception.</param>
+        public ErrorLogEventArgs(Exception exception)
+            : base(exception.Message + "\n" + exception.StackTrace, LogType.Error, Color.Red, Color.Black) {
+            if ( exception == null )
+                throw new ArgumentNullException("exception", "exception is null.");
+
+                this.Exception = exception;
         }
 
     }

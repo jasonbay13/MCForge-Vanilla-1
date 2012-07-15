@@ -35,13 +35,8 @@ namespace MCForge.Core {
 
         public static Assembly ServerAssembly { get { return Assembly.GetAssembly(typeof(Server)); } }
 
-        /// <summary>
-        /// Show the first run screen?
-        /// </summary>
-        public static bool ShowFirstRunScreen {
-            get { return ServerSettings.GetSettingBoolean("ShowFirstRunScreen"); }
-            set { ServerSettings.SetSetting("ShowFirstRunScreen", value.ToString().ToLower()); }
-        }
+        public static bool Running {get; set;}
+
         /// <summary>
         /// The name of the server currency.
         /// </summary>
@@ -270,6 +265,9 @@ namespace MCForge.Core {
         /// Inits this instance.
         /// </summary>
         public static void Init() {
+
+            Running = true;
+
             Logger.WriteLog("--------- Server Started at " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString() + " ---------");
             Logger.Log("Debug mode started", LogType.Debug);
             //TODO Add debug messages
@@ -561,6 +559,8 @@ namespace MCForge.Core {
             HeartThread.Abort();
 
             Logger.DeInit();
+
+            Running = false;
         }
 
         /// <summary>
