@@ -317,7 +317,7 @@ namespace MCForge.Entity
             if (eargs.Canceled)
             {
                 if (!fake)
-                    SendBlockChange(x, z, y, eargs.Current);
+                    SendBlockChange(x, z, y, Level.GetBlock(eargs.X, eargs.Z, eargs.Y));
                 return;
             }
             x = eargs.X;
