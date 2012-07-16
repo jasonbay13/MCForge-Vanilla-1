@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlockDoor.cs" />
     <Compile Include="Building\CmdBall.cs" />
     <Compile Include="Building\CmdBrush.cs" />
     <Compile Include="Building\CmdClick.cs" />
@@ -66,7 +65,6 @@
     <Compile Include="Information\CmdVips.cs" />
     <Compile Include="Misc\CmdCursor.cs" />
     <Compile Include="Misc\CmdFlipHead.cs" />
-    <Compile Include="Misc\CmdMessageBlock.cs" />
     <Compile Include="Misc\CmdNickname.cs" />
     <Compile Include="Misc\CmdRun.cs" />
     <Compile Include="Misc\CmdNotify.cs" />

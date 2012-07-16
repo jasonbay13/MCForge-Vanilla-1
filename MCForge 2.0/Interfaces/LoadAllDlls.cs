@@ -20,7 +20,6 @@ using System.IO;
 using System.Reflection;
 using MCForge.Interface.Plugin;
 using MCForge.Interface.Command;
-using MCForge.Interfaces.Blocks;
 using MCForge.Core;
 using MCForge.Utils;
 using System.Drawing;
@@ -83,10 +82,6 @@ namespace MCForge.Interface {
                                     Logger.Log("[Plugin]: " + instance.Name + " Initialized!", LogType.Debug);
                                 }
                             }
-                            typeInterface = ClassType.GetInterface("IBlock", true);
-                            if (typeInterface != null) {
-                                LoadBlock(ClassType, DLLAssembly);
-                            }
                         }
                     }
                 }
@@ -103,16 +98,6 @@ namespace MCForge.Interface {
                     Plugin.Plugin.AddReference(instance);
                     Logger.Log("[Plugin]: " + instance.Name + " Initialized!", LogType.Debug);
                 }
-            }
-        }
-        private static void LoadBlock(Type classType,Assembly DLLAssembly) {
-            Type typeInterface = classType.GetInterface("IBlock", true);
-            if (typeInterface != null) {
-                IBlock instance = (IBlock)Activator.CreateInstance(DLLAssembly.GetType(classType.ToString()));
-                instance.Initialize();
-                Block.AddReference(instance);
-                Logger.Log("[Block]: " + instance.Name + " Initialized!", LogType.Debug);
-
             }
         }
         private static void LoadCommand(Type classType,Assembly DLLAssembly) {
@@ -134,17 +119,12 @@ namespace MCForge.Interface {
                             if (i!=null&&i.Name=="IPlugin") {
                                 LoadPlugin(ClassType,DLLAssembly, args);
                             }
-                            else if (i != null && i.Name == "IBlock") {
-                                LoadBlock(ClassType,DLLAssembly);
-                            }
                             else if (i != null && i.Name == "ICommand") {
                                 LoadCommand(ClassType, DLLAssembly);
                             }
                             else {
                                 if (ClassType == typeof(IPlugin))
                                     LoadPlugin(ClassType, DLLAssembly, args);
-                                else if (ClassType == typeof(IBlock))
-                                    LoadBlock(ClassType, DLLAssembly);
                                 else if (ClassType == typeof(ICommand))
                                     LoadCommand(ClassType, DLLAssembly);
                             }

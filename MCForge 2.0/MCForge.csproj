@@ -96,6 +96,7 @@
     <Compile Include="API\Events\Player\CommandEndEvent.cs" />
     <Compile Include="API\Events\Player\ConnectionEvent.cs" />
     <Compile Include="API\Events\Player\DataSavedEvent.cs" />
+    <Compile Include="API\Events\Player\LevelChangeEvent.cs" />
     <Compile Include="API\Events\Player\MoveEvent.cs" />
     <Compile Include="API\Events\Player\PacketEvent.cs" />
     <Compile Include="API\Events\Player\RotateEvent.cs" />
@@ -118,8 +119,6 @@
     <Compile Include="Groups\CommandPermissionOverrides.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
-    <Compile Include="Interfaces\Block\Block.cs" />
-    <Compile Include="Interfaces\Block\IBlock.cs" />
     <Compile Include="Interfaces\IIOProvider.cs" />
     <Compile Include="Interfaces\Plugin\IPlugin.cs" />
     <Compile Include="Player\ConsolePlayer.cs" />
@@ -155,6 +154,8 @@
     <Compile Include="Robot\Point3D.cs" />
     <Compile Include="System\Backup.cs" />
     <Compile Include="System\Updater.cs" />
+    <Compile Include="Utils\BinaryUtils.cs" />
+    <Compile Include="Utils\BlockChangeHistory.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="System\Heartbeat\Heart.cs" />
     <Compile Include="System\Heartbeat\Heartbeat.cs" />
