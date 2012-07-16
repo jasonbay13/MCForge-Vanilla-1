@@ -765,6 +765,7 @@ namespace MCForge.Entity {
             DataPasses.ChangeOrCreate<string, object>(key, data);
         }
         #endregion
+
         public Vector3S GetBlockFromView() {
             double hori = (Math.PI / 128) * Rot[0];
             double vert = (Math.PI / 128) * Rot[1];

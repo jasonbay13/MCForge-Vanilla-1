@@ -732,6 +732,7 @@ namespace MCForge.Entity
         }
 
         #endregion
+
         #region Outgoing Packets
         public override void SendPacket(Packet pa)
         {
