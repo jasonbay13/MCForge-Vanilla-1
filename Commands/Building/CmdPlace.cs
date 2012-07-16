@@ -78,7 +78,7 @@ namespace MCForge.Commands
             {
                 y = (ushort)(p.Level.Size.y - 1);
             }
-            if (b.GetType().BaseType == typeof(PhysicsBlock))
+            if (b is PhysicsBlock)
                 p.Level.BlockChange(x, y, z, (PhysicsBlock)b, p);
             else
                 p.Level.BlockChange(x, z, y, b, p);
