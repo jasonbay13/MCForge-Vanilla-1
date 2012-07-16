@@ -18,7 +18,7 @@ namespace MCForge.Networking {
 
             PacketMap = new Dictionary<PacketIDs, Type>();
 
-            RegisterPacket((PacketIDs)0x00, typeof(Packets.PacketIdentification));
+            RegisterPacket(PacketIDs.Identification, typeof(Packets.PacketIdentification));
             //TODO: Register packets 
 
         }
