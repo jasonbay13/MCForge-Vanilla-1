@@ -97,22 +97,22 @@ namespace MCForge.Networking {
         /// Array of packet sizes in order. Not incuding PacketID
         /// </summary>
         public static readonly int[] PacketSizes = {
-            130, 
-            0, 
-            0,
-            1027,  
-            6,
-            8, 
-            7, 
-            73, 
-            9,
-            6, 
-            4, 
-            3, 
-            1, 
-            65,   
-            64,   
-            1  
+            130,    //0x00
+            0,      //0x01
+            0,      //0x02
+            1027,   //0x03 
+            6,      //0x04
+            8,      //0x05
+            7,      //0x06
+            73,     //0x07
+            9,      //0x08
+            6,      //0x09
+            4,      //0x10
+            3,      //0x11
+            1,      //0x12
+            65,     //0x13
+            64,     //0x14
+            1       //0x15
         };
 
         #region Utils
@@ -141,8 +141,18 @@ namespace MCForge.Networking {
         /// </summary>
         /// <param name="s">The s.</param>
         /// <returns></returns>
-        public static void CopyShort( byte[] bytes, short integer, int index) {
-            Array.Copy(bytes, index, BitConverter.GetBytes(IPAddress.HostToNetworkOrder(integer)), 0, sizeof(short));
+        public static void CopyByte(byte[] bytes, int Byte, int index)
+        {
+            Array.Copy(bytes, index, BitConverter.GetBytes(IPAddress.HostToNetworkOrder(Byte)), 0, sizeof(byte));
+        }
+
+        /// <summary>
+        /// Gets the int.
+        /// </summary>
+        /// <param name="s">The s.</param>
+        /// <returns></returns>
+        public static void CopyShort( byte[] bytes, short Short, int index) {
+            Array.Copy(bytes, index, BitConverter.GetBytes(IPAddress.HostToNetworkOrder(Short)), 0, sizeof(short));
         }
 
         /// <summary>
@@ -154,6 +164,16 @@ namespace MCForge.Networking {
             Array.Copy(bytes, index, BitConverter.GetBytes(IPAddress.HostToNetworkOrder(integer)), 0, sizeof(long));
         }
 
+        public static byte[] MakeString(String msg)
+        {
+            if (msg.Length > 64)
+                msg = msg.Substring(64);
+            byte[] a = new byte[64];
+            for (int i = 0; i < 64; i++)
+                a[i] = 0x20;
+            Array.Copy(Encoding.ASCII.GetBytes(msg), a, msg.Length);
+            return a;
+        }
 
         /// <summary>
         /// Reads the string.
