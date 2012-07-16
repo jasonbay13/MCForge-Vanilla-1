@@ -124,6 +124,7 @@
     <Compile Include="Player\ConsolePlayer.cs" />
     <Compile Include="Player\Networking\Packet.cs" />
     <Compile Include="Player\Networking\PacketIDs.cs" />
+    <Compile Include="Player\Networking\PacketQueue.cs" />
     <Compile Include="Player\Networking\PacketReader.cs" />
     <Compile Include="Player\Networking\Packets\PacketIdentification.cs" />
     <Compile Include="Player\Networking\Packets\PacketPing.cs" />
