@@ -141,6 +141,7 @@
     <Compile Include="Player\ConsolePlayer.cs" />
     <Compile Include="Player\Networking\Packet.cs" />
     <Compile Include="Player\Networking\PacketIDs.cs" />
+    <Compile Include="Player\Networking\PacketQueue.cs" />
     <Compile Include="Player\Networking\PacketReader.cs" />
     <Compile Include="Player\Networking\Packets\PacketDespawnPlayer.cs" />
     <Compile Include="Player\Networking\Packets\PacketDisconnectPlayer.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Player\Networking\Packets\PlayerPositionAndOrientation.cs" />
     <Compile Include="Player\Networking\Packets\PlayerPositionAndOrientationUpdate.cs" />
     <Compile Include="Player\Networking\PacketWriter.cs" />
+    <Compile Include="Player\NewPlayer.cs" />
     <Compile Include="Player\Sender.cs" />
     <Compile Include="Remote\Networking\PacketData.cs" />
     <Compile Include="Remote\Types\AndroidRemote.cs" />
