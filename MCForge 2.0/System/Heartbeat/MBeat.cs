@@ -33,12 +33,12 @@ namespace MCForge.Core.HeartService
 		public override string Prepare()
 		{
 			return "port=" + ServerSettings.GetSettingInt("port") +
-                "&max=" + ServerSettings.GetSettingInt("maxplayers") +
-                "&name=" + System.Web.HttpUtility.UrlEncode(ServerSettings.GetSetting("servername")) +
-                "&public=" + ServerSettings.GetSettingBoolean("public") +
-                "&version=" + ServerSettings.Version +
-                "&salt=" + System.Web.HttpUtility.UrlEncode(ServerSettings.Salt) +
-                "&users=" + Server.PlayerCount;
+				"&max=" + ServerSettings.GetSettingInt("maxplayers") +
+				"&name=" + System.Web.HttpUtility.UrlEncode(ServerSettings.GetSetting("servername")) +
+				"&public=" + ServerSettings.GetSettingBoolean("public") +
+				"&version=" + ServerSettings.Version +
+				"&salt=" + System.Web.HttpUtility.UrlEncode(ServerSettings.Salt) +
+				"&users=" + Server.PlayerCount;
 		}
 		public override string OnPump(StreamReader responseStreamReader)
 		{

@@ -17,7 +17,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
 using System.Linq;
-using System.Drawing;
 using MCForge.Interface;
 using MCForge.Utils;
 using MCForge.Utils.Settings;
@@ -94,6 +93,7 @@ namespace MCForge.Core {
 
         [STAThread]
         static void Main(string[] args) {
+            Logger.Init();
             ServerSettings.Init();
             cp = new ConsolePlayer(cio);
             bool checker = CheckArgs(args);
@@ -105,7 +105,7 @@ namespace MCForge.Core {
 
             //declare the Hooks
             //Error Logging
-            Logger.OnRecieveErrorLog += new EventHandler<LogEventArgs>(Logger_OnRecieveErrorLog);
+            Logger.OnRecieveErrorLog += new EventHandler<ErrorLogEventArgs>(Logger_OnRecieveErrorLog);
             //Normal Logs
             Logger.OnRecieveLog += new EventHandler<LogEventArgs>(Logger_OnRecieveLog);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
@@ -148,14 +148,14 @@ namespace MCForge.Core {
                         continue;
                     }
                     WriteLine("");
-                    Handle(input);
+                    if (Handle(input)) return;
                     input = "";
                     WriteInputLine();
                 }
             }
         }
 
-        private static void Handle(string input) {
+        private static bool Handle(string input) {
             //check if it is a command
             if (input.StartsWith("/")) {
                 ICommand cmd = null;
@@ -166,7 +166,7 @@ namespace MCForge.Core {
 
                 if (cmd == null) {
                     WriteLine("Command not found!");
-                    return; // cannot run the command
+                    return false; // cannot run the command
                 }
 
                 cmd.Use(cp, args);
@@ -181,7 +181,7 @@ namespace MCForge.Core {
                 else {
                     Server.Stop();
                 }
-                return;
+                return true;
             }
             else if (input.ToLower() == "!copyurl") {
                 System.Windows.Forms.Clipboard.SetDataObject(Server.URL, true);
@@ -191,6 +191,7 @@ namespace MCForge.Core {
                 Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
                 Logger.Log("[Console] " + input, Color.Yellow, Color.Black, LogType.Normal);
             }
+            return false;
         }
         #region Console Functions
         private static void ClearConsoleLine(int line) {

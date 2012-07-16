@@ -190,6 +190,10 @@ namespace MCForge.Entity {
             }
         }
         /// <summary>
+        /// The BlockChangeHistory of this player.
+        /// </summary>
+        public BlockChangeHistory history;
+        /// <summary>
         /// The players MC Id, this changes each time the player logs in
         /// </summary>
         public byte ID { get; set; }
@@ -295,6 +299,7 @@ namespace MCForge.Entity {
 
                 playerRandom = new Random();
                 //BlockChanges = new List<BlockChange>();
+                history = new BlockChangeHistory(this);
 
             }
             catch (Exception e) {
@@ -637,6 +642,9 @@ namespace MCForge.Entity {
         }
         #endregion
 
+
+        private readonly Dictionary<string, object> DataPasses = new Dictionary<string, object>();
+
         #region Events
         /// <summary>
         /// Gets called when this player sends a message.
@@ -703,18 +711,21 @@ namespace MCForge.Entity {
         /// </summary>
         public static BlockChangeEvent OnAllPlayersBlockChange = new BlockChangeEvent();
         /// <summary>
+        /// Gets called when this player moves to another level.
+        /// </summary>
+        public LevelChangeEvent OnPlayerLevelChange = new LevelChangeEvent();
+        /// <summary>
+        /// Gets called when any player moves to another level.
+        /// </summary>
+        public static LevelChangeEvent OnAllPlayersLevelChange = new LevelChangeEvent();
+        /// <summary>
         /// Gets called when the command this player called has just ended.
         /// </summary>
         public CommandEndEvent OnCommandEnd = new CommandEndEvent();
-
         /// <summary>
         /// Gets called when a command a player called has just ended.
         /// </summary>
         public static CommandEndEvent OnAllCommandEnd = new CommandEndEvent();
-
-
-        private readonly Dictionary<string, object> DataPasses = new Dictionary<string, object>();
-
         //I don't see why we cant use ExtraData... a string is an object....
         /// <summary>
         /// Gets called when this player receives a packet.

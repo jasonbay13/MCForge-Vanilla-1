@@ -181,6 +181,21 @@ namespace MCForge.World {
                 blockToCheck == BlockList.SAPLING);
         }
 
+        public static bool CanPassLight(byte blockToCheck) {
+            return (blockToCheck == BlockList.AIR ||
+                blockToCheck == BlockList.WATER ||
+                blockToCheck == BlockList.LAVA ||
+                blockToCheck == BlockList.ACTIVE_LAVA ||
+                blockToCheck == BlockList.ACTIVE_WATER ||
+                blockToCheck == BlockList.RED_FLOWER ||
+                blockToCheck == BlockList.RED_MUSHROOM ||
+                blockToCheck == BlockList.YELLOW_FLOWER ||
+                blockToCheck == BlockList.BROWN_MUSHROOM ||
+                blockToCheck == BlockList.SAPLING ||
+                blockToCheck == BlockList.GLASS ||
+                blockToCheck == BlockList.LEAVES);
+        }
+
         public static bool CanEscalate(byte blockToCheck) {
             return (blockToCheck == BlockList.WATER ||
                 blockToCheck == BlockList.LAVA ||

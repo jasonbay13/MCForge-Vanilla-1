@@ -23,8 +23,8 @@ namespace MCForge.Utils {
     /// <summary>
     /// Set of utils for manipulating strings
     /// </summary>
-    public class StringUtils {
-
+    public static class StringUtils {
+        #region common
         /// <summary>
         /// Change your string's first character to uppercase 
         /// </summary>
@@ -83,6 +83,156 @@ namespace MCForge.Utils {
             return false;
 
         }
+        #endregion
+
+        #region Extenders
+        
+        /*public static string ToString(this object o) {
+            Type t = o.GetType();
+            if (t == typeof(string)) {
+                return ToHexString((string)o);
+            }
+            if (t == typeof(List<string>)) {
+                return ToHexString((List<string>)o);
+            }
+            if (t == typeof(List<Vector3S>)) {
+                return ToHexString((List<Vector3S>)o);
+            }
+            if (t == typeof(Vector3S)) {
+                return ToHexString((Vector3S)o);
+            }
+            if (t == typeof(byte) || t == typeof(ushort) || t == typeof(uint) || t == typeof(ulong)) {
+                return ((ulong)o).ToString();
+            }
+            if (t == typeof(sbyte) || t == typeof(short) || t == typeof(int) || t == typeof(long)) {
+                return ((long)o).ToString();
+            }
+            if (t == typeof(double)) {
+                return ((double)o).ToString();
+            }
+            if (t == typeof(float)) {
+                return ((float)o).ToString();
+            }
+            if (t == typeof(bool)) {
+                return ((bool)o).ToString();
+            }
+            return o.ToString();
+        }*/
+
+        #region Vector3S&Strings
+        public static string ToHexString(this Vector3S v) {
+            return ToHexString(v.ToString());
+        }
+        /// <summary>
+        /// Converts the list into a string.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns>The string value of the list</returns>
+        public static string ToHexString(this List<Vector3S> list) {
+            string ret = "";
+            foreach (Vector3S item in list) {
+                ret += ToHexString(item) + "\n"; //using Hex to not have to care about whats Vector3S.ToString() is doing
+            }
+            return ret;
+        }
+
+        public static void FromHexString(this Vector3S v, string s) {
+            v.FromString(s.FromHexString());
+        }
+        public static void AddHexString(this List<Vector3S> list, string str) {
+            string[] split = str.Split('\n');
+            Vector3S[] vectors = new Vector3S[split.Length];
+           for(int i=0;i<vectors.Length;i++){
+               vectors[i] = new Vector3S();
+                vectors[i].FromHexString(split[i]);
+            }
+           list.AddRange(vectors); //it's faster to add them all i think
+        }
+        #endregion
+
+        #region String&String
+
+        #region String
+        /// <summary>
+        /// Converts a string to a hexadecimal string
+        /// </summary>
+        /// <param name="s">The string</param>
+        /// <returns>The hexadecimal string</returns>
+        public static string ToHexString(this string s) {
+            string ret = "";
+            foreach (char c in s)
+                ret += Convert.ToString((byte)c, 16);
+            return ret;
+        }
+
+        /// <summary>
+        /// Converts a hexadecimal string to a normal string
+        /// </summary>
+        /// <param name="hex">The hexadecimal string</param>
+        /// <returns>The string</returns>
+        public static string FromHexString(this string hex) {
+            string ret = "";
+            for (int i = 1; i < hex.Length; i += 2)
+                ret += (char)Convert.ToByte(hex[i - 1] + "" + hex[i], 16);
+            return ret;
+        }
+        #endregion
+
+        #region List
+        /// <summary>
+        /// Converts the list into a string.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns>The string value of the list</returns>
+        public static string ToHexString(this List<string> list) {
+            string ret = "";
+            foreach (string item in list) {
+                ret += ToHexString(item) + "\n";
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Adds multiple hexadecimal strings splitted by \n as normal strings to this list
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="hexs">Multiple hexadecimal string splitted by \n</param>
+        public static void AddHexstrings(this List<string> list, string hexs) {
+            string[] hex = hexs.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in hex)
+                list.Add(s.FromHexString());
+        }
+        #endregion
+
+        #region Dictionary
+        /// <summary>
+        /// Converts the dictionary to a string
+        /// </summary>
+        /// <param name="dict"><The dictionary/param>
+        /// <returns>A string representing the dictionary</returns>
+        public static string ToString(this Dictionary<string, string> dict) {
+            string ret = "";
+            foreach (string key in dict.Keys)
+                ret += key.ToString() + ":" + dict[key].ToString() + "\n";
+            return ret;
+        }
+
+        /// <summary>
+        /// Converts a string representing a dictionary to this dictionary
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <param name="hexKeyValues">The string representing a dictionary</param>
+        public static void AddHexstrings(this Dictionary<string, string> dict, string hexKeyValues) {
+            string[] keyvalue = hexKeyValues.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string s in keyvalue) {
+                string[] kv = s.Split(':');
+                dict[kv[0].FromHexString()] = kv[1].FromHexString();
+            }
+        }
+        #endregion
+
+        #endregion
+        #endregion
 
     }
 }

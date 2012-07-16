@@ -96,6 +96,7 @@
     <Compile Include="API\Events\Player\CommandEndEvent.cs" />
     <Compile Include="API\Events\Player\ConnectionEvent.cs" />
     <Compile Include="API\Events\Player\DataSavedEvent.cs" />
+    <Compile Include="API\Events\Player\LevelChangeEvent.cs" />
     <Compile Include="API\Events\Player\MoveEvent.cs" />
     <Compile Include="API\Events\Player\PacketEvent.cs" />
     <Compile Include="API\Events\Player\RotateEvent.cs" />
@@ -118,8 +119,6 @@
     <Compile Include="Groups\CommandPermissionOverrides.cs" />
     <Compile Include="Groups\PlayerGroupProperties.cs" />
     <Compile Include="Groups\PlayerGroup.cs" />
-    <Compile Include="Interfaces\Block\Block.cs" />
-    <Compile Include="Interfaces\Block\IBlock.cs" />
     <Compile Include="Interfaces\IIOProvider.cs" />
     <Compile Include="Interfaces\Plugin\IPlugin.cs" />
     <Compile Include="Player\ConsolePlayer.cs" />
@@ -148,6 +147,8 @@
     <Compile Include="Robot\Point3D.cs" />
     <Compile Include="System\Backup.cs" />
     <Compile Include="System\Updater.cs" />
+    <Compile Include="Utils\BinaryUtils.cs" />
+    <Compile Include="Utils\BlockChangeHistory.cs" />
     <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="System\Heartbeat\Heart.cs" />
     <Compile Include="System\Heartbeat\Heartbeat.cs" />
@@ -222,17 +223,17 @@
     <Compile Include="World\Blocks\DefaultBlocks\Adminium.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Air.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Cobblestone.cs" />
-    <Compile Include="World\Blocks\DefaultBlocks\Dirt.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Gold_Ore.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Grass.cs" />
-    <Compile Include="World\Blocks\DefaultBlocks\Gravel.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Lava.cs" />
-    <Compile Include="World\Blocks\DefaultBlocks\Sand.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Shrub.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Stone.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Water.cs" />
     <Compile Include="World\Blocks\DefaultBlocks\Wood.cs" />
+    <Compile Include="World\Blocks\Physics\DefaultPhysicBlocks\Dirt.cs" />
     <Compile Include="World\Blocks\Physics\DefaultPhysicBlocks\Door.cs" />
+    <Compile Include="World\Blocks\Physics\DefaultPhysicBlocks\Gravel.cs" />
+    <Compile Include="World\Blocks\Physics\DefaultPhysicBlocks\Sand.cs" />
     <Compile Include="World\Drawing\CubeBrush.cs" />
     <Compile Include="World\Drawing\Fonts.cs" />
     <Compile Include="World\Drawing\IBrush.cs" />
