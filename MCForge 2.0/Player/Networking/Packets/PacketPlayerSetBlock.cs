@@ -34,20 +34,20 @@ namespace MCForge.Networking.Packets {
             //Readonly
         }
 
-        public override void ReadPacket(PacketData packetData) {
+        public override void ReadPacket(byte[] data) {
             Position = new Vector3S(){
-                x = packetData.ReadShort(),
-                y = packetData.ReadShort(),
-                z = packetData.ReadShort()
+                x = ReadShort(data, 0),
+                y = ReadShort(data, 2),
+                z = ReadShort(data, 4)
             };
 
-            BlockDeleted = packetData.ReadByte() == 0x00;
+            BlockDeleted = data[5] == 0x00;
 
-            Block = packetData.ReadByte();
+            Block = data[6];
 
         }
 
-        public override PacketData WritePacket() {
+        public override byte[] WritePacket() {
             throw new IOException("Is a readonly packet");
         }
     }

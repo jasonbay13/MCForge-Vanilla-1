@@ -13,12 +13,12 @@ namespace MCForge.Networking.Packets {
 
         }
 
-        public override void ReadPacket(PacketData packetData) {
+        public override void ReadPacket(byte[] packetData) {
             throw new System.IO.IOException("Is Write-only packet");
         }
 
-        public override PacketData WritePacket() {
-            return new PacketData();
+        public override byte[] WritePacket() {
+            return new byte[0];
         }
     }
 }

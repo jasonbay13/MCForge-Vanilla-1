@@ -53,25 +53,23 @@ namespace MCForge.Networking.Packets {
         }
 
 
-        public override void ReadPacket(PacketData packetData) {
-            if(packetData.ReadByte() != PROTOCOL_VERSION)
+        public override void ReadPacket(byte[] packetData) {
+            if(packetData[0] != PROTOCOL_VERSION)
                 throw new IOException("Invalid Client");  
 
-            Username = packetData.ReadString();
-            VerificationKey = packetData.ReadString();
-
-            packetData.ReadByte(); //not used
+            Username = ReadString(packetData, 1);
+            VerificationKey = ReadString(packetData, 65);
         }
 
-        public override PacketData WritePacket() {
-            var packetData = new PacketData();
+        public override byte[] WritePacket() {
+            byte[] data = new byte[Packet.PacketSizes[(int)PacketID]];
 
-            packetData.WriteByte(PROTOCOL_VERSION);
-            packetData.WriteString(StringUtils.Truncate(ServerSettings.GetSetting("ServerName"), 64, string.Empty));
-            packetData.WriteString(StringUtils.Truncate(ServerSettings.GetSetting("MOTD"), 64, string.Empty));
-            packetData.WriteByte(OpByte); 
+            data[0] = PROTOCOL_VERSION;
+            CopyString(data, ServerSettings.GetSetting("ServerName"), 1);
+            CopyString(data, ServerSettings.GetSetting("MOTD"), 65);
+            data[129] = OpByte;
 
-            return packetData;
+            return data;
         }
     }
 }

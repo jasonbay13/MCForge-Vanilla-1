@@ -123,12 +123,12 @@
     <Compile Include="Interfaces\Plugin\IPlugin.cs" />
     <Compile Include="Player\ConsolePlayer.cs" />
     <Compile Include="Player\Networking\Packet.cs" />
-    <Compile Include="Player\Networking\PacketData.cs" />
     <Compile Include="Player\Networking\PacketIDs.cs" />
     <Compile Include="Player\Networking\PacketReader.cs" />
     <Compile Include="Player\Networking\Packets\PacketIdentification.cs" />
     <Compile Include="Player\Networking\Packets\PacketPing.cs" />
     <Compile Include="Player\Networking\Packets\PacketPlayerSetBlock.cs" />
+    <Compile Include="Player\Networking\PacketWriter.cs" />
     <Compile Include="Player\Sender.cs" />
     <Compile Include="Remote\Networking\PacketData.cs" />
     <Compile Include="Remote\Types\AndroidRemote.cs" />
