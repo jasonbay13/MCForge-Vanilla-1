@@ -12,6 +12,7 @@ BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the Licenses for the specific language governing
 permissions and limitations under the Licenses.
 */
+#define DEBUG
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,7 +61,12 @@ namespace MCForge.Commands.Moderation {
             int _time = 30;
             Player who = p;
             long UID = -1;
-
+#if DEBUG
+            if (args.Length == 1 && args[0] == "write") {
+                p.history.WriteOut();
+                p.SendMessage("BlockChangeHistroy written to filesystem");
+            }
+#endif
             //undo <seconds>
             if (args.Length == 1) {
                 try {

@@ -29,6 +29,12 @@ namespace MCForge.Utils {
         string GetFullPath(Level l) {
             return basepath + l.Name + Path.DirectorySeparatorChar + player.UID + Path.DirectorySeparatorChar; //TODO: make sure renaming a level moves undo histroy files to new folder.
         }
+        static string GetFullPath(long UID, Level l) {
+            return basepath + l.Name + Path.DirectorySeparatorChar + UID + Path.DirectorySeparatorChar;
+        }
+        static string GetLevelPath(Level l) {
+            return basepath + l.Name + Path.DirectorySeparatorChar;
+        }
 
         /// <summary>
         /// File ending of blockchange history files (used by undo)
@@ -40,12 +46,11 @@ namespace MCForge.Utils {
         static string futureEnding = ".bcf";
         public BlockChangeHistory(Player p) {
             player = p;
-            
         }
         Player player;
         List<long> recentTimes = new List<long>();
         /// <summary>
-        /// Item1: Position
+        /// Item1: Position&lt;x,z,y&gt;
         /// Item2: BlockOld
         /// Item3: BlockNew
         /// </summary>
@@ -165,7 +170,7 @@ namespace MCForge.Utils {
                 if (l == player.Level && recentTimes.Count > 0 && recentTimes[0] < since) {
                     int i;
                     for (i = recentTimes.Count - 1; recentTimes[i] >= since; i--) { //looping back in time
-                        ret[recentChanges[i].Item1] = new Tuple<long, byte>(recentTimes[i], recentChanges[i].Item2); //if vector already exists it gets replaced else added
+                        ret[recentChanges[i].Item1] = new Tuple<long, byte>(0, recentChanges[i].Item2); //if vector already exists it gets replaced else added
                     }
                     if (i < recentTimes.Count - 1) {
                         recentTimes.RemoveRange(i + 1, recentTimes.Count - 1 - i);
@@ -177,14 +182,18 @@ namespace MCForge.Utils {
             lock (lock_recent) {
                 if (l == player.Level) {
                     for (int i = recentTimes.Count - 1; i >= 0; i--) {
-                        ret[recentChanges[i].Item1] = new Tuple<long, byte>(recentTimes[i], recentChanges[i].Item2);
+                        ret[recentChanges[i].Item1] = new Tuple<long, byte>(0, recentChanges[i].Item2);
                     }
                     recentTimes = new List<long>();
                     recentChanges = new List<Tuple<Tuple<short, short, short>, byte, byte>>();
                 }
             }
+            return ret;
+        }
+        static ExtraData<Tuple<short, short, short>, Tuple<long, byte>> GetOriginalBlocksFromArchive(long UID, long since, Level l, ExtraData<Tuple<short, short, short>, Tuple<long, byte>> ret = null) {
+            if (ret == null) ret = new ExtraData<Tuple<short, short, short>, Tuple<long, byte>>();
             lock (lock_archive) {
-                string path = GetFullPath(l);
+                string path = GetFullPath(UID, l);
                 if (Directory.Exists(path)) {
                     Tuple<long, string> partialFile = null;
                     List<Tuple<long, string>> completeFiles = new List<Tuple<long, string>>();
@@ -307,7 +316,7 @@ namespace MCForge.Utils {
                 }
                 if (l == player.Level) {
                     for (int i = recentTimes.Count - 1; i >= 0; i--) {
-                        ret[recentChanges[i].Item1] = new Tuple<long, byte>(recentTimes[i], recentChanges[i].Item2);
+                        ret[recentChanges[i].Item1] = new Tuple<long, byte>(recentTimes[i], recentChanges[i].Item3);
                     }
                 }
             }
@@ -412,7 +421,7 @@ namespace MCForge.Utils {
         /// <summary>
         /// Needs to be called before player changes level.
         /// </summary>
-        private void WriteOut() {
+        public void WriteOut() {
             lock (lock_recent) {
                 if (recentTimes.Count > 0) {
                     lock (lock_archive) { 
