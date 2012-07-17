@@ -16,7 +16,7 @@ namespace MCForge.Networking.Packets
         /// </summary>
         /// <value>The ID of the player.</value>
         /// <remarks></remarks>
-        public Byte ID { get; set; }
+        public byte ID { get; set; }
 
         /// <summary>
         /// Gets or sets the Message.

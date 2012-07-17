@@ -46,6 +46,7 @@ namespace MCForge.Utils {
         }
 
 
+
         /// <summary>
         /// Gets the object if it exist.
         /// </summary>
@@ -184,6 +185,11 @@ namespace MCForge.Utils {
             }
             return false;
         }
+        /// <summary>
+        /// Gets the neighbors.
+        /// </summary>
+        /// <param name="v">The position.</param>
+        /// <returns></returns>
         public static IEnumerable<Vector3S> GetNeighbors(this Vector3S v) {
             yield return new Vector3S((short)(v.x + 1), v.z, v.y);
             yield return new Vector3S(v.x, (short)(v.z + 1), v.y);
@@ -194,6 +200,14 @@ namespace MCForge.Utils {
         }
 
 
+        /// <summary>
+        /// Gets the near blocks.
+        /// </summary>
+        /// <param name="v">The v.</param>
+        /// <param name="radiusX">The radius X.</param>
+        /// <param name="radiusZ">The radius Z.</param>
+        /// <param name="radiusY">The radius Y.</param>
+        /// <returns></returns>
         public static IEnumerable<Vector3S> GetNearBlocks(this Vector3S v, int radiusX, int radiusZ, int radiusY) {
             if (radiusX == radiusZ && radiusZ == radiusY) {
                 for (int x = 0; x <radiusX; x++) {
@@ -227,6 +241,14 @@ namespace MCForge.Utils {
             }
         }
 
+        /// <summary>
+        /// Gets a layer of near blocks.
+        /// </summary>
+        /// <param name="v">The v.</param>
+        /// <param name="radiusX">The radius X.</param>
+        /// <param name="radiusZ">The radius Z.</param>
+        /// <param name="radiusY">The radius Y.</param>
+        /// <returns></returns>
         public static IEnumerable<Vector3S> GetNearBlocksHollow(this Vector3S v, int radiusX, int radiusZ, int radiusY) {
             if (radiusX == radiusZ && radiusZ == radiusY) {
                 for (int x = 0; x < radiusX; x++) {

@@ -39,7 +39,7 @@ namespace MCForge.Networking.Packets
         {
             ID = packetData[0];
 
-            Message = ReadString(packetData, 2, 62); //64 or 62
+            Message = ReadString(packetData, 2, 64); //64 or 62
         }
 
         public override byte[] WritePacket()

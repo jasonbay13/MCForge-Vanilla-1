@@ -5,6 +5,7 @@ using System.Text;
 using System.Net;
 using System.IO;
 using MCForge.Utils;
+using MCForge.Networking.Packets;
 
 namespace MCForge.Networking {
 
@@ -15,11 +16,14 @@ namespace MCForge.Networking {
 
         #region Static Methods and Vars
 
+        public static readonly PacketPing Ping;
+
         private static Dictionary<PacketIDs, Type> PacketMap;
 
         static Packet() {
 
             PacketMap = new Dictionary<PacketIDs, Type>();
+            Ping = new PacketPing();
 
             RegisterPacket(PacketIDs.Identification, typeof(Packets.PacketIdentification));
             //TODO: Register packets 

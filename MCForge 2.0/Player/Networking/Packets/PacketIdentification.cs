@@ -33,6 +33,10 @@ namespace MCForge.Networking.Packets {
         /// </value>
         public string VerificationKey { get; set; }
 
+        public string FirstLine {get; set;}
+
+        public string SecondLine {get; set;}
+
         private byte OpByte;
 
         /// <summary>
@@ -50,6 +54,9 @@ namespace MCForge.Networking.Packets {
         public PacketIdentification(bool isPlayerOp)
             : base(PacketIDs.Identification) {
             OpByte = (byte)(isPlayerOp ? 0x00 : 0x64);
+
+            FirstLine =  ServerSettings.GetSetting("ServerName");
+            SecondLine = ServerSettings.GetSetting("MOTD");
         }
 
 
@@ -65,8 +72,8 @@ namespace MCForge.Networking.Packets {
             byte[] data = new byte[Packet.PacketSizes[(int)PacketID]];
 
             data[0] = PROTOCOL_VERSION;
-            CopyString(data, ServerSettings.GetSetting("ServerName"), 1);
-            CopyString(data, ServerSettings.GetSetting("MOTD"), 65);
+            CopyString(data, FirstLine, 1);
+            CopyString(data,SecondLine , 65);
             data[129] = OpByte;
 
             return data;

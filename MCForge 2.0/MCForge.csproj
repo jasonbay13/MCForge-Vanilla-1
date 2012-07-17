@@ -92,6 +92,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>System.Data.SQLite.dll</HintPath>
     </Reference>
+    <Reference Include="System.Design" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -161,6 +162,7 @@
     <Compile Include="Player\Networking\Packets\PlayerPositionAndOrientationUpdate.cs" />
     <Compile Include="Player\Networking\PacketWriter.cs" />
     <Compile Include="Player\NewPlayer.cs" />
+    <Compile Include="Player\PlayerEnumerations.cs" />
     <Compile Include="Player\Sender.cs" />
     <Compile Include="Remote\Networking\PacketData.cs" />
     <Compile Include="Remote\Types\AndroidRemote.cs" />
