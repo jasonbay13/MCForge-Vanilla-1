@@ -10,19 +10,6 @@ namespace Plugins.PlayerLog
 {
     public class Main : IPlugin
     {
-        /********************************************************************************​​​************************\
-        <+> Copyright 2012 Sinjai                                                                              <+>
-        <+>                                                                                                    <+>
-        <+> licensed under a Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.         <+>
-        <+> http://creativecommons.org/licenses/by-nc-nd/3.0/                                                  <+>
-        <+>                                                                                                    <+>
-        <+> This plugin was made for use with MCForge only.                                                    <+>
-        <+> You must attribute the work in the manner specified by the author or licensor.                     <+>
-        <+> You may not use this work for commercial purposes.                                                 <+>
-        <+> You may not alter, transform, or build upon this work.                                             <+>
-        <+>                                                                                                    <+>
-        <+> Any of the above conditions can be waived if you get written permission from the copyright holder. <+>
-        \**************************************************************************​​​******************************/
         public string Name { get { return "separatelogging"; } }
         public int Version { get { return 1; } }
         public string Author { get { return "Sinjai"; } }
