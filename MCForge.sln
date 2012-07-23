@@ -1,6 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
+# SharpDevelop 4.2.1.8805
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCForge", "MCForge 2.0\MCForge.csproj", "{EDC9892F-BBA2-4043-9FD9-94C0BA7D9552}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Commands", "Commands\Commands.csproj", "{28D68717-95A5-4ACF-B232-EB2FDE8B8AD5}"
@@ -107,6 +108,8 @@ Global
 		{2BA59FB7-13B4-42A7-A915-F68B2032EE7C}.Release|Mixed Platforms.Build.0 = Release|x86
 		{2BA59FB7-13B4-42A7-A915-F68B2032EE7C}.Release|x86.ActiveCfg = Release|x86
 		{2BA59FB7-13B4-42A7-A915-F68B2032EE7C}.Release|x86.Build.0 = Release|x86
+		{12597DB0-7C34-4DE1-88EA-9250FF3372EB}.Debug|x86.Build.0 = Debug|x86
+		{12597DB0-7C34-4DE1-88EA-9250FF3372EB}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
