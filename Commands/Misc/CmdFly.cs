@@ -32,13 +32,22 @@ namespace MCForge.Commands {
             p.ExtraData["IsFlying"] = !(bool)p.ExtraData["IsFlying"];
             if (!(bool)p.ExtraData["IsFlying"]) {
                 p.OnPlayerBigMove.Normal -= OnPlayerBigMove_Normal;
+                p.OnPlayerBlockChange.Normal -= OnPlayerBlockChange_Normal;
                 p.ResendBlockChange(glasses, (Vector3S)p.ExtraData["FlyLastPos"]);
                 return;
             }
             p.SendBlockChangeWhereAir(glasses, p.belowBlock, 20);
             p.ExtraData["FlyLastPos"] = p.belowBlock;
             p.OnPlayerBigMove.Normal += OnPlayerBigMove_Normal;
+            p.OnPlayerBlockChange.Normal += OnPlayerBlockChange_Normal;
             p.SendMessage("You are now flying. &cJump!");
+        }
+
+        void OnPlayerBlockChange_Normal(Player sender, API.Events.BlockChangeEventArgs args) {
+            if (args.Action == API.Events.ActionType.Delete && args.Current == 0) {
+                args.Cancel();
+            }
+
         }
 
         void OnPlayerBigMove_Normal(Player sender, API.Events.MoveEventArgs args) {
