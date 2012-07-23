@@ -89,6 +89,7 @@
     <Compile Include="Moderation\CmdFollow.cs" />
     <Compile Include="Moderation\CmdHide.cs" />
     <Compile Include="Moderation\CmdPerVisit.cs" />
+    <Compile Include="Moderation\CmdRedo.cs" />
     <Compile Include="Moderation\CmdRestart.cs" />
     <Compile Include="Moderation\CmdShutdown.cs" />
     <Compile Include="Moderation\CmdUndo.cs" />

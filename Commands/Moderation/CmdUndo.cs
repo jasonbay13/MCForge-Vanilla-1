@@ -65,6 +65,12 @@ namespace MCForge.Commands.Moderation {
             if (args.Length == 1 && args[0] == "write") {
                 p.history.WriteOut();
                 p.SendMessage("BlockChangeHistroy written to filesystem");
+                return;
+            }
+            if (args.Length == 1 && args[0] == "about") {
+                p.OnPlayerBlockChange.Normal += OnPlayerBlockChange_Normal;
+                p.SendMessage("Click!");
+                return;
             }
 #endif
             //undo <seconds>
@@ -132,8 +138,17 @@ namespace MCForge.Commands.Moderation {
             }
         }
 
-        
-        void Undo (long UID, int time, Level l, Player online)
+        void OnPlayerBlockChange_Normal(Player sender, API.Events.BlockChangeEventArgs args) {
+            sender.OnPlayerBlockChange.Normal -= OnPlayerBlockChange_Normal;
+            string[] about=sender.history.About(new Vector3S(args.X, args.Z, args.Y), sender.Level);
+            sender.SendMessage("ABOUT:");
+            for (int i = 0; i < about.Length; i++) {
+                sender.SendMessage(about[i]);
+            }
+        }
+
+
+        void Undo(long UID, int time, Level l, Player online)
         {
             if (online != null) {
                 online.history.Undo(DateTime.Now.AddSeconds(-time).Ticks, l);
