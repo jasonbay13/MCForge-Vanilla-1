@@ -101,7 +101,8 @@ namespace MCForge.Utils.Settings {
                     new SettingNode("DefaultColor", "&a", "Determines the server's default color"),
                     new SettingNode("BackupFiles", "true", "If set to true, files will be backed up to the backup folder"),
                     new SettingNode("BackupInterval", "300", "the interval to backup your files (in seconds)"),
-                    new SettingNode("PhysicsInterval","100","the interval to do physics ticks in milliseconds")
+                    new SettingNode("PhysicsInterval","100","the interval to do physics ticks in milliseconds"),
+                    new SettingNode("AutoTimeout","30","if during this amount of seconds no data is sent from the client to the server, the player gets kicked (use 0 to disable this behavior)")
                };
 
 

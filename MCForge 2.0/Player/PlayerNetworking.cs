@@ -43,11 +43,9 @@ namespace MCForge.Entity
             try
             {
                 int length = p.Socket.EndReceive(result);
-                if (length == 0)
-                {
+                if (length == 0) {
                     p.CloseConnection();
-                    if (!p.IsBeingKicked)
-                    {
+                    if (!p.IsBeingKicked) {
                         UniversalChat(p.Color + p.Username + Server.DefaultColor + " has disconnected.");
                         p.GlobalDie();
                     }
@@ -60,6 +58,9 @@ namespace MCForge.Entity
                         }
                     }
                     return;
+                }
+                else {
+                    p.lastReceived = DateTime.Now;
                 }
 
 
@@ -1284,5 +1285,6 @@ namespace MCForge.Entity
             Server.ForeachPlayer(p => p.SendPing());
         }
 
+        internal DateTime lastReceived;
     }
 }
