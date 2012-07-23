@@ -76,10 +76,20 @@ namespace Plugins.WoMPlugin
             Player.OnAllPlayersReceiveUnknownPacket.Normal += new Event<Player, PacketEventArgs>.EventHandler(OnIncomingData);
             Player.OnAllPlayersSendPacket.Normal += new Event<Player, PacketEventArgs>.EventHandler(OnOutgoingData);
             Player.OnAllPlayersRotate.Normal += new Event<Player, RotateEventArgs>.EventHandler(OnRotate);
+            Level.OnAllLevelsLoad.Normal += new Event<Level, LevelLoadEventArgs>.EventHandler(OnLevelLoad);
         }
 
         private readonly Regex Parser = new Regex("GET /([a-zA-Z0-9_]{1,16})(~motd)? .+", RegexOptions.Compiled);
 
+        void OnLevelLoad(Level l, LevelLoadEventArgs args)
+        {
+            //The level loaded does not have a texture file, create it. TODO: Test
+            if (CFGDict.GetIfExist<Level, CFGSettings>(l) == null)
+            {
+                CFGSettings s = new CFGSettings(l);
+                CFGDict.CreateIfNotExist<Level, CFGSettings>(l, s);
+            }
+        }
         void OnIncomingData(Player p, PacketEventArgs args)
         {
             if (args.Data.Length < 0)
@@ -227,7 +237,7 @@ namespace Plugins.WoMPlugin
             StringBuilder sb = new StringBuilder(detail);
             sb.Replace("$name", ServerSettings.GetSettingBoolean("$Before$Name") ? "$" + p.Username : p.Username);
             sb.Replace("$color", p.Color);
-            sb.Replace("$rcolor", p.Group.Color);
+            sb.Replace("$gcolor", p.Group.Color);
             sb.Replace("$server", ServerSettings.GetSetting("ServerName"));
             sb.Replace("$money", p.Money.ToString());
             sb.Replace("$" + Server.Moneys, p.Money.ToString());
