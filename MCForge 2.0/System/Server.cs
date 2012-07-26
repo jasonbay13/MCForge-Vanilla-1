@@ -382,6 +382,8 @@ namespace MCForge.Core {
             FileUtils.CreateDirIfNotExist("text");
             FileUtils.CreateDirIfNotExist("levels");
 
+            if (!File.Exists("properties/economy.properties")) Economy.CreateFile();
+
             FileUtils.CreateFileIfNotExist("text/badwords.txt");
             FileUtils.CreateFileIfNotExist("text/replacementwords.txt");
             FileUtils.CreateFileIfNotExist("text/agreed.txt");

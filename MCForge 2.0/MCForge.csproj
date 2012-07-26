@@ -187,6 +187,7 @@
     <Compile Include="Robot\PathFinder.cs" />
     <Compile Include="Robot\Point3D.cs" />
     <Compile Include="System\Backup.cs" />
+    <Compile Include="System\Economy.cs" />
     <Compile Include="System\Updater.cs" />
     <Compile Include="Utils\BinaryUtils.cs" />
     <Compile Include="Utils\BlockChangeHistory.cs" />
