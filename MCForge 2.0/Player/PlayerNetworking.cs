@@ -783,7 +783,9 @@ namespace MCForge.Entity
                 message = message.Replace("&" + ch + " &", "&");
             }
 
-            if (!String.IsNullOrWhiteSpace(message) && message.IndexOf("^detail.user") == -1)
+            //if (!String.IsNullOrWhiteSpace(message) && message.IndexOf("^detail.user") == -1) 
+            // caused ^detail.user to remove color from names in normal chat, not needed since wom only detects at beginning of string.
+            // might i suggest adding a parameter for adding default color (for womsenddetail and preventing /say to change everyones)
                 message = Server.DefaultColor + message;
 
             try
