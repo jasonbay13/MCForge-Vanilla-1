@@ -9,7 +9,7 @@ using MCForge.Utils;
 
 namespace MCForge.Commands.Building
 {
-    public class CmdSpheroid : ICommand
+    public class CmdBall : ICommand
     {
         public string Name
         {
