@@ -510,46 +510,83 @@ namespace MCForge.Entity {
         }
         #endregion
 
-        private static List<string> LineWrapping(string message) {
+        private static List<string> LineWrapping(string message)
+        {
             List<string> lines = new List<string>();
             message = Regex.Replace(message, @"(&[0-9a-f])+(&[0-9a-f])", "$2");
             message = Regex.Replace(message, @"(&[0-9a-f])+$", "");
-            int limit = 64; string color = "";
-            while (message.Length > 0) {
-                if (lines.Count > 0) { message = "> " + color + message.Trim(); }
-                if (message.Length <= limit) { lines.Add(message); break; }
-                for (int i = limit - 1; i > limit - 9; --i) {
-                    if (message[i] == ' ') {
-                        lines.Add(message.Substring(0, i)); goto Next;
-                    }
-                }
-                lines.Add(message.Substring(0, limit));
-            Next: message = message.Substring(lines[lines.Count - 1].Length);
-                if (lines.Count == 1) {
-                    limit = 60;
-                }
-                int index = lines[lines.Count - 1].LastIndexOf('&');
-                if (index != -1) {
-                    if (index < lines[lines.Count - 1].Length - 1) {
-                        char next = lines[lines.Count - 1][index + 1];
-                        if ("0123456789abcdef".IndexOf(next) != -1) { color = "&" + next; }
-                        if (index == lines[lines.Count - 1].Length - 1) {
-                            lines[lines.Count - 1] = lines[lines.Count - 1].
-                                Substring(0, lines[lines.Count - 1].Length - 2);
-                        }
-                    }
-                    else if (message.Length != 0) {
-                        char next = message[0];
-                        if ("0123456789abcdef".IndexOf(next) != -1) {
-                            color = "&" + next;
-                        }
-                        lines[lines.Count - 1] = lines[lines.Count - 1].
-                            Substring(0, lines[lines.Count - 1].Length - 1);
-                        message = message.Substring(1);
 
+            int limit = 64; string color = "";
+            while (message.Length > 0)
+            {
+                if (lines.Count > 0)
+                    message = message[0].ToString() == "&" ? "> " + message.Trim() : "> " + color + message.Trim();
+
+                if (message.IndexOf("&") == message.IndexOf("&", message.IndexOf("&") + 1) - 2)
+                    message = message.Remove(message.IndexOf("&"), 2);
+
+                if (message.Length <= limit) { lines.Add(message); break; }
+                for (int i = limit - 1; i > limit - 20; --i)
+                    if (message[i] == ' ')
+                    {
+                        lines.Add(message.Substring(0, i));
+                        goto Next;
+                    }
+
+            retry:
+                if (message.Length == 0 || limit == 0) return lines;
+
+                try
+                {
+                    if (message.Substring(limit - 2, 1) == "&" || message.Substring(limit - 1, 1) == "&")
+                    {
+                        message = message.Remove(limit - 2, 1);
+                        limit -= 2;
+                        goto retry;
+                    }
+                    else if (message[limit - 1] < 32 || message[limit - 1] > 127)
+                    {
+                        message = message.Remove(limit - 1, 1);
+                        limit -= 1;
                     }
                 }
-            } return lines;
+                catch { return lines; }
+                lines.Add(message.Substring(0, limit));
+
+            Next: message = message.Substring(lines[lines.Count - 1].Length);
+                if (lines.Count == 1) limit = 60;
+
+                int index = lines[lines.Count - 1].LastIndexOf('&');
+                if (index != -1)
+                {
+                    if (index < lines[lines.Count - 1].Length - 1)
+                    {
+                        char next = lines[lines.Count - 1][index + 1];
+                        if ("0123456789abcdef".IndexOf(next) != -1) color = "&" + next;
+                        if (index == lines[lines.Count - 1].Length - 1)
+                            lines[lines.Count - 1] = lines[lines.Count - 1].Substring(0, lines[lines.Count - 1].Length - 2);
+                    }
+                    else if (message.Length != 0)
+                    {
+                        char next = message[0];
+                        if ("0123456789abcdef".IndexOf(next) != -1)
+                            color = "&" + next;
+                        lines[lines.Count - 1] = lines[lines.Count - 1].Substring(0, lines[lines.Count - 1].Length - 1);
+                        message = message.Substring(1);
+                    }
+                }
+            }
+            for (int i = 0; i < lines.Count; i++) // Gotta do it the old fashioned way...
+            {
+                char[] temp = lines[i].ToCharArray();
+                if (temp[temp.Length - 2] == '&' || temp[temp.Length - 2] == '%')
+                {
+                    temp[temp.Length - 1] = ' ';
+                    temp[temp.Length - 2] = ' ';
+                }
+                lines[i] = new String(temp);
+            }
+            return lines;
         }
 
         private byte FreeId() {
